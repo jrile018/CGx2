@@ -7,7 +7,7 @@ use std::fmt;
 use std::fs::{self, File};
 use std::io::{Read, Seek, SeekFrom};
 use std::path::{Component, Path, PathBuf};
-use std::process::Command;
+use std::process::{Command, Stdio};
 
 const LOCK_NAME: &str = "cgx2-libtorch-closure.lock.json";
 const MAX_LOCK_BYTES: u64 = 1024 * 1024;
@@ -16,6 +16,8 @@ const MAX_LIBRARY_BYTES: u64 = 2 * 1024 * 1024 * 1024;
 const MAX_CLOSURE_BYTES: u64 = 8 * 1024 * 1024 * 1024;
 const MAX_PATH_BYTES: usize = 4096;
 const MAX_INSPECT_BYTES: usize = 1024 * 1024;
+const MAX_MAPS_BYTES: u64 = 8 * 1024 * 1024;
+const MAX_MAPPED_ELF_FILES: usize = 512;
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -69,9 +71,64 @@ impl VerifiedClosure {
         &self.facade
     }
 
-    /// Compare mapped file identity with every pinned inode after dlopen.
-    /// Linux `/proc/self/maps` is required; other platforms fail closed.
+    /// Reject already mapped conflicting modules before dlopen can run constructors.
+    pub fn verify_preloaded(&self) -> Result<(), ClosureError> {
+        self.verify_loader_environment()?;
+        self.verify_modules(false)
+    }
+
+    fn verify_loader_environment(&self) -> Result<(), ClosureError> {
+        for variable in ["LD_PRELOAD", "LD_AUDIT"] {
+            if std::env::var_os(variable).is_some_and(|value| !value.is_empty()) {
+                return Err(ClosureError::UnverifiedLoader(format!(
+                    "{variable} can interpose or redirect library loading"
+                )));
+            }
+        }
+        if let Some(value) = std::env::var_os("LD_LIBRARY_PATH") {
+            for directory in std::env::split_paths(&value) {
+                if !directory.is_absolute() || directory.as_os_str().is_empty() {
+                    return Err(ClosureError::UnverifiedLoader(
+                        "relative or empty LD_LIBRARY_PATH entry".into(),
+                    ));
+                }
+                for (pin, _) in &self.pins {
+                    for name in [
+                        pin.path.file_name().expect("validated basename"),
+                        std::ffi::OsStr::new(&pin.name),
+                    ] {
+                        let candidate = directory.join(name);
+                        match fs::symlink_metadata(&candidate) {
+                            Ok(_) => {
+                                let actual = fs::canonicalize(&candidate)
+                                    .map_err(|error| invalid(error.to_string()))?;
+                                if actual != pin.path {
+                                    return Err(invalid(format!(
+                                        "loader search path substitutes {}",
+                                        pin.name
+                                    )));
+                                }
+                            }
+                            Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+                            Err(error) => {
+                                return Err(ClosureError::UnverifiedLoader(format!(
+                                    "cannot inspect loader search path: {error}"
+                                )))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        Ok(())
+    }
+
+    /// Compare mapped file identity with every pinned inode after dlopen and before calls.
     pub fn verify_loaded(&self) -> Result<(), ClosureError> {
+        self.verify_modules(true)
+    }
+
+    fn verify_modules(&self, require_all: bool) -> Result<(), ClosureError> {
         #[cfg(not(target_os = "linux"))]
         {
             return Err(ClosureError::UnverifiedLoader(
@@ -81,37 +138,45 @@ impl VerifiedClosure {
         #[cfg(target_os = "linux")]
         {
             use std::os::unix::fs::MetadataExt;
-            let maps = fs::read_to_string("/proc/self/maps").map_err(|error| {
-                ClosureError::UnverifiedLoader(format!("cannot read /proc/self/maps: {error}"))
-            })?;
+            let maps = read_maps()?;
             let mut observed = BTreeSet::new();
-            let expected: BTreeMap<_, _> = self
-                .pins
-                .iter()
-                .map(|(pin, file)| {
-                    (
-                        pin.path
-                            .file_name()
-                            .expect("validated path")
-                            .to_string_lossy()
-                            .into_owned(),
-                        (pin, file),
-                    )
-                })
-                .collect();
-            if expected.len() != self.pins.len() {
-                return Err(invalid("duplicate mapped file basename"));
+            let mut other_elf = BTreeSet::new();
+            let mut expected = BTreeMap::new();
+            for (index, (pin, _)) in self.pins.iter().enumerate() {
+                let basename = pin
+                    .path
+                    .file_name()
+                    .and_then(|name| name.to_str())
+                    .ok_or_else(|| invalid("non-UTF8 pinned basename"))?;
+                for name in [basename, pin.name.as_str()] {
+                    if let Some(previous) = expected.insert(name.to_owned(), index) {
+                        if previous != index {
+                            return Err(invalid(format!("ambiguous mapped module name: {name}")));
+                        }
+                    }
+                }
             }
             for line in maps.lines() {
                 let fields: Vec<_> = line.split_whitespace().collect();
                 if fields.len() < 6 || !fields[5].starts_with('/') {
                     continue;
                 }
+                if fields.len() > 7
+                    || (fields.len() == 7 && fields[6] != "(deleted)")
+                    || fields[5].contains("\\040")
+                {
+                    return Err(ClosureError::UnverifiedLoader(
+                        "ambiguous /proc/self/maps path".into(),
+                    ));
+                }
                 let path = Path::new(fields[5]);
                 let Some(name) = path.file_name().and_then(|name| name.to_str()) else {
-                    continue;
+                    return Err(ClosureError::UnverifiedLoader(
+                        "non-UTF8 mapped path".into(),
+                    ));
                 };
-                if let Some((pin, file)) = expected.get(name) {
+                if let Some(&index) = expected.get(name) {
+                    let (pin, file) = &self.pins[index];
                     if fields.get(6) == Some(&"(deleted)") {
                         return Err(invalid(format!("mapped library was deleted: {name}")));
                     }
@@ -135,14 +200,42 @@ impl VerifiedClosure {
                             path.display()
                         )));
                     }
-                    observed.insert(name.to_owned());
+                    observed.insert(index);
                 } else if name.starts_with("libtorch") || name.starts_with("libc10") {
                     return Err(invalid(format!("unlocked LibTorch module loaded: {name}")));
+                } else if name.contains(".so") {
+                    other_elf.insert(path.to_path_buf());
+                    if other_elf.len() > MAX_MAPPED_ELF_FILES {
+                        return Err(ClosureError::UnverifiedLoader(
+                            "too many mapped ELF files".into(),
+                        ));
+                    }
                 }
             }
-            for name in expected.keys() {
-                if !observed.contains(name) {
-                    return Err(invalid(format!("required module not loaded: {name}")));
+            for path in other_elf {
+                let (soname, _) = elf_dynamic(&path, false).map_err(|error| {
+                    ClosureError::UnverifiedLoader(format!(
+                        "cannot identify mapped ELF {}: {error}",
+                        path.display()
+                    ))
+                })?;
+                if let Some(soname) = soname {
+                    if expected.contains_key(&soname)
+                        || soname.starts_with("libtorch")
+                        || soname.starts_with("libc10")
+                    {
+                        return Err(invalid(format!(
+                            "mapped ELF has conflicting SONAME {soname}: {}",
+                            path.display()
+                        )));
+                    }
+                }
+            }
+            if require_all {
+                for (index, (pin, _)) in self.pins.iter().enumerate() {
+                    if !observed.contains(&index) {
+                        return Err(invalid(format!("required module not loaded: {}", pin.name)));
+                    }
                 }
             }
             for (pin, file) in &self.pins {
@@ -167,6 +260,26 @@ impl VerifiedClosure {
             Ok(())
         }
     }
+}
+
+#[cfg(target_os = "linux")]
+fn read_maps() -> Result<String, ClosureError> {
+    let file = File::open("/proc/self/maps").map_err(|error| {
+        ClosureError::UnverifiedLoader(format!("cannot open /proc/self/maps: {error}"))
+    })?;
+    let mut bytes = Vec::new();
+    file.take(MAX_MAPS_BYTES + 1)
+        .read_to_end(&mut bytes)
+        .map_err(|error| {
+            ClosureError::UnverifiedLoader(format!("cannot read /proc/self/maps: {error}"))
+        })?;
+    if bytes.len() as u64 > MAX_MAPS_BYTES {
+        return Err(ClosureError::UnverifiedLoader(
+            "/proc/self/maps exceeds byte limit".into(),
+        ));
+    }
+    String::from_utf8(bytes)
+        .map_err(|_| ClosureError::UnverifiedLoader("non-UTF8 /proc/self/maps".into()))
 }
 
 /// Verify the complete ELF DT_NEEDED graph before opening the facade.
@@ -249,7 +362,7 @@ pub fn verify_libtorch_closure(
         if actual_hash != pin.sha256.to_ascii_lowercase() {
             return Err(invalid(format!("SHA-256 mismatch for {}", pin.name)));
         }
-        let (actual_soname, dependencies) = elf_dynamic(&pin.path)?;
+        let (actual_soname, dependencies) = elf_dynamic(&pin.path, true)?;
         if actual_soname != pin.soname {
             return Err(invalid(format!("SONAME mismatch for {}", pin.name)));
         }
@@ -370,20 +483,40 @@ fn hash_file(file: &mut File) -> Result<String, ClosureError> {
     Ok(format!("{:x}", digest.finalize()))
 }
 
-fn elf_dynamic(path: &Path) -> Result<(Option<String>, Vec<String>), ClosureError> {
-    let output = Command::new("readelf")
+fn elf_dynamic(
+    path: &Path,
+    enforce_search_policy: bool,
+) -> Result<(Option<String>, Vec<String>), ClosureError> {
+    let mut child = Command::new("readelf")
         .arg("-d")
         .arg(path)
-        .output()
+        .stdout(Stdio::piped())
+        .stderr(Stdio::null())
+        .spawn()
         .map_err(|error| invalid(format!("readelf unavailable: {error}")))?;
-    if !output.status.success() || output.stdout.len() > MAX_INSPECT_BYTES {
+    let mut bytes = Vec::new();
+    let read = child
+        .stdout
+        .take()
+        .expect("piped stdout")
+        .take(MAX_INSPECT_BYTES as u64 + 1)
+        .read_to_end(&mut bytes);
+    if read.is_err() || bytes.len() > MAX_INSPECT_BYTES {
+        let _ = child.kill();
+        let _ = child.wait();
+        return Err(invalid("readelf output exceeds inspection limit"));
+    }
+    if !child
+        .wait()
+        .map_err(|error| invalid(error.to_string()))?
+        .success()
+    {
         return Err(invalid(format!(
             "cannot inspect ELF dynamic section: {}",
             path.display()
         )));
     }
-    let output =
-        String::from_utf8(output.stdout).map_err(|_| invalid("non-UTF8 readelf output"))?;
+    let output = String::from_utf8(bytes).map_err(|_| invalid("non-UTF8 readelf output"))?;
     if !output.contains("Dynamic section") {
         return Err(invalid(format!(
             "no ELF dynamic section: {}",
@@ -405,6 +538,33 @@ fn elf_dynamic(path: &Path) -> Result<(Option<String>, Vec<String>), ClosureErro
                     .ok_or_else(|| invalid("malformed DT_NEEDED"))?
                     .to_owned(),
             );
+        }
+        if enforce_search_policy && line.contains("(RPATH)") {
+            return Err(invalid(format!(
+                "legacy ELF RPATH is not allowed: {}",
+                path.display()
+            )));
+        }
+        if enforce_search_policy && line.contains("(RUNPATH)") {
+            let runpath = value.ok_or_else(|| invalid("malformed DT_RUNPATH"))?;
+            for entry in runpath.split(':') {
+                let suffix = entry
+                    .strip_prefix("$ORIGIN")
+                    .or_else(|| entry.strip_prefix("${ORIGIN}"))
+                    .ok_or_else(|| invalid(format!("untrusted DT_RUNPATH: {entry}")))?;
+                if !suffix.is_empty() {
+                    let relative = suffix
+                        .strip_prefix('/')
+                        .ok_or_else(|| invalid("bad DT_RUNPATH separator"))?;
+                    if relative.is_empty()
+                        || Path::new(relative)
+                            .components()
+                            .any(|part| !matches!(part, Component::Normal(_)))
+                    {
+                        return Err(invalid(format!("untrusted DT_RUNPATH: {entry}")));
+                    }
+                }
+            }
         }
     }
     Ok((soname, needed))

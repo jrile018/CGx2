@@ -1,6 +1,6 @@
 //! Direct, version-pinned LibTorch CPU facade. No Python runtime is used.
 
-use cgx2_bind::{ClosureError, Report, checked_lock, verify_libtorch_closure};
+use cgx2_bind::{ClosureError, Report, VerifiedClosure, checked_lock, verify_libtorch_closure};
 use cgx2_ffi_native::{Error as NativeError, Library, LibraryDeclaration};
 use std::ffi::{CStr, c_char, c_void};
 use std::path::Path;
@@ -14,10 +14,16 @@ type Copy = unsafe extern "C" fn(*const c_void, *mut f64, u64) -> i32;
 type Release = unsafe extern "C" fn(*mut c_void) -> i32;
 type LastError = unsafe extern "C" fn() -> *const c_char;
 
+/// Maximum host copy: 1,048,576 float64 values (8 MiB).
+pub const MAX_COPY_ELEMENTS: usize = 1_048_576;
+
 #[derive(Debug, PartialEq, Eq)]
 pub enum Error {
     Native(NativeError),
     InvalidLength,
+    LengthLimitExceeded { reported: usize, maximum: usize },
+    ShapeMismatch { expected: usize, reported: usize },
+    UnverifiedLoader(ClosureError),
     NullHandle,
     DifferentRuntime,
     AlreadyReleased,
@@ -39,6 +45,7 @@ impl From<NativeError> for Error {
 
 struct Inner {
     _library: Library,
+    pinned: Option<VerifiedClosure>,
     create: Create,
     add: Add,
     length: Length,
@@ -48,6 +55,13 @@ struct Inner {
 }
 
 impl Inner {
+    fn check_pinned(&self) -> Result<(), Error> {
+        if let Some(closure) = &self.pinned {
+            closure.verify_loaded().map_err(Error::UnverifiedLoader)?;
+        }
+        Ok(())
+    }
+
     fn check(&self, status: i32) -> Result<(), Error> {
         if status == 0 {
             return Ok(());
@@ -63,7 +77,12 @@ impl Inner {
         Err(Error::Foreign { status, message })
     }
 
-    fn tensor(self: &Rc<Self>, status: i32, raw: *mut c_void) -> Result<Tensor, Error> {
+    fn tensor(
+        self: &Rc<Self>,
+        status: i32,
+        raw: *mut c_void,
+        expected_length: usize,
+    ) -> Result<Tensor, Error> {
         if let Err(error) = self.check(status) {
             if !raw.is_null() {
                 unsafe {
@@ -75,6 +94,7 @@ impl Inner {
         Ok(Tensor {
             inner: self.clone(),
             raw: Some(NonNull::new(raw).ok_or(Error::NullHandle)?),
+            expected_length,
         })
     }
 }
@@ -108,9 +128,13 @@ impl Torch {
                 ))
             })?;
         let verified = verify_libtorch_closure(root, binding).map_err(PinnedError::Closure)?;
-        let torch = unsafe { Self::open(verified.facade_path(), &binding.version) }
+        verified.verify_preloaded().map_err(PinnedError::Closure)?;
+        let mut torch = unsafe { Self::open(verified.facade_path(), &binding.version) }
             .map_err(PinnedError::Adapter)?;
         verified.verify_loaded().map_err(PinnedError::Closure)?;
+        Rc::get_mut(&mut torch.inner)
+            .expect("new adapter has one owner")
+            .pinned = Some(verified);
         Ok(torch)
     }
     /// `exact_version` must match the LibTorch version used to compile the facade.
@@ -130,6 +154,7 @@ impl Torch {
         // reviewed facade, after identity and exact version metadata validation.
         let inner = unsafe {
             Inner {
+                pinned: None,
                 create: library.symbol("cgx2_torch_f64_cpu")?,
                 add: library.symbol("cgx2_torch_add")?,
                 length: library.symbol("cgx2_torch_length")?,
@@ -146,16 +171,18 @@ impl Torch {
 
     /// Creates a one-dimensional CPU float64 tensor, copying `values` into LibTorch storage.
     pub fn from_f64(&self, values: &[f64]) -> Result<Tensor, Error> {
+        self.inner.check_pinned()?;
         let length = u64::try_from(values.len()).map_err(|_| Error::InvalidLength)?;
         let mut raw = std::ptr::null_mut();
         let status = unsafe { (self.inner.create)(values.as_ptr(), length, &mut raw) };
-        self.inner.tensor(status, raw)
+        self.inner.tensor(status, raw, values.len())
     }
 }
 
 pub struct Tensor {
     inner: Rc<Inner>,
     raw: Option<NonNull<c_void>>,
+    expected_length: usize,
 }
 
 impl Tensor {
@@ -167,21 +194,39 @@ impl Tensor {
         if !Rc::ptr_eq(&self.inner, &other.inner) {
             return Err(Error::DifferentRuntime);
         }
+        self.inner.check_pinned()?;
         let mut raw = std::ptr::null_mut();
         let status = unsafe { (self.inner.add)(self.ptr()?, other.ptr()?, &mut raw) };
-        self.inner.tensor(status, raw)
+        self.inner.tensor(status, raw, self.expected_length)
     }
 
     pub fn shape(&self) -> Result<[usize; 1], Error> {
+        self.inner.check_pinned()?;
         let mut length = 0;
         let status = unsafe { (self.inner.length)(self.ptr()?, &mut length) };
         self.inner.check(status)?;
         Ok([usize::try_from(length).map_err(|_| Error::InvalidLength)?])
     }
 
-    pub fn to_vec(&self) -> Result<Vec<f64>, Error> {
+    /// Copy at most `maximum` elements, also subject to [`MAX_COPY_ELEMENTS`].
+    /// The facade length must equal the length known when this handle was created.
+    pub fn to_vec_bounded(&self, maximum: usize) -> Result<Vec<f64>, Error> {
         let [length] = self.shape()?;
+        let maximum = maximum.min(MAX_COPY_ELEMENTS);
+        if length > maximum {
+            return Err(Error::LengthLimitExceeded {
+                reported: length,
+                maximum,
+            });
+        }
+        if length != self.expected_length {
+            return Err(Error::ShapeMismatch {
+                expected: self.expected_length,
+                reported: length,
+            });
+        }
         let mut output = vec![0.0; length];
+        self.inner.check_pinned()?;
         let status = unsafe {
             (self.inner.copy)(
                 self.ptr()?,
@@ -193,6 +238,12 @@ impl Tensor {
         Ok(output)
     }
 
+    /// Compatibility copy with a fixed 8 MiB upper bound. Use `to_vec_bounded`
+    /// to supply a tighter application limit.
+    pub fn to_vec(&self) -> Result<Vec<f64>, Error> {
+        self.to_vec_bounded(MAX_COPY_ELEMENTS)
+    }
+
     pub fn dtype(&self) -> &'static str {
         "float64"
     }
@@ -201,11 +252,11 @@ impl Tensor {
     }
 
     pub fn release(&mut self) -> Result<(), Error> {
+        self.inner.check_pinned()?;
         let raw = self.raw.ok_or(Error::AlreadyReleased)?;
-        self.inner
-            .check(unsafe { (self.inner.release)(raw.as_ptr()) })?;
         self.raw = None;
-        Ok(())
+        self.inner
+            .check(unsafe { (self.inner.release)(raw.as_ptr()) })
     }
 }
 

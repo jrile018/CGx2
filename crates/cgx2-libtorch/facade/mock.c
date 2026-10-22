@@ -60,7 +60,7 @@ int32_t cgx2_torch_f64_cpu(const double *values, uint64_t length, void **output)
     MockTensor *tensor = allocate();
     if (!tensor) return 1;
     tensor->length = length;
-    tensor->profile = length && values[0] <= -103 && values[0] >= -107 ? (int)-values[0] : 0;
+    tensor->profile = length && values[0] <= -103 && values[0] >= -108 ? (int)-values[0] : 0;
     if (length) memcpy(tensor->values, values, (size_t)length * sizeof(double));
     *output = tensor;
     if (length && values[0] == -101) {
@@ -92,7 +92,8 @@ int32_t cgx2_torch_length(const void *raw, uint64_t *output) {
                         tensor->profile == 104 ? "invalid device" : "invalid shape";
         return 3;
     }
-    *output = tensor->profile == 106 ? tensor->length + 1 : tensor->length;
+    *output = tensor->profile == 108 ? UINT64_MAX :
+              tensor->profile == 106 ? tensor->length + 1 : tensor->length;
     return 0;
 }
 #ifndef MOCK_MISSING_COPY

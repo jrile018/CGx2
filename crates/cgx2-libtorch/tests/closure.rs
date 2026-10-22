@@ -2,9 +2,9 @@
 
 use cgx2_bind::{
     Binding, BindingLock, ClosureLock, LibraryPin, check_package, libtorch_facade_symbols,
-    render_lock,
+    render_lock, verify_libtorch_closure,
 };
-use cgx2_libtorch::{PinnedError, Torch};
+use cgx2_libtorch::{Error, PinnedError, Torch};
 use sha2::{Digest, Sha256};
 use std::ffi::{CString, c_char, c_int, c_void};
 use std::fs;
@@ -23,6 +23,10 @@ struct Fixture {
 
 impl Fixture {
     fn new(version: &str) -> Self {
+        Self::with_constructor(version, false)
+    }
+
+    fn with_constructor(version: &str, trap: bool) -> Self {
         let root = std::env::temp_dir().join(format!(
             "cgx2-closure-{}-{}",
             std::process::id(),
@@ -48,6 +52,11 @@ impl Fixture {
                 "-fPIC",
                 "-nostdlib",
                 &format!("-DMOCK_VERSION=\"{version}\""),
+                if trap {
+                    "-DMOCK_TRAP_CONSTRUCTOR"
+                } else {
+                    "-DMOCK_NO_TRAP"
+                },
                 "-Wl,-soname,libcgx2_libtorch_facade.so",
                 "-Wl,-rpath,$ORIGIN",
                 "-L",
@@ -147,7 +156,28 @@ fn closure_accepts_and_rejects_changed_version_and_loader_substitution() {
     let tensor = torch.from_f64(&[3.0]).unwrap();
     assert_eq!(tensor.shape().unwrap(), [1]);
     assert_eq!(tensor.to_vec().unwrap(), vec![3.0]);
+    for line in fs::read_to_string("/proc/self/maps").unwrap().lines() {
+        if line.contains(&good.root.to_string_lossy().to_string())
+            && (line.contains(FACADE) || line.contains(DEP))
+        {
+            eprintln!("observed pinned module: {line}");
+        }
+    }
     drop(tensor);
+    fs::rename(
+        good.root.join(DEP),
+        good.root.join("previous-dependency.so"),
+    )
+    .unwrap();
+    fs::copy(
+        good.root.join("previous-dependency.so"),
+        good.root.join(DEP),
+    )
+    .unwrap();
+    assert!(matches!(
+        torch.from_f64(&[1.0]),
+        Err(Error::UnverifiedLoader(_))
+    ));
     drop(torch);
     drop(good);
 
@@ -160,6 +190,71 @@ fn closure_accepts_and_rejects_changed_version_and_loader_substitution() {
             .any(|d| d.code == "CGB019" && d.message.contains("SHA-256 mismatch"))
     );
     drop(altered);
+
+    let mut additional_needed = Fixture::new("2.6.0");
+    let extra_name = "libcgx2_closure_extra_needed.so";
+    let source = Path::new(env!("CARGO_MANIFEST_DIR")).join("fixtures/closure");
+    compile(
+        &[
+            "-shared",
+            "-fPIC",
+            "-nostdlib",
+            "-Wl,-soname,libcgx2_closure_extra_needed.so",
+        ],
+        &source.join("dep.c"),
+        &additional_needed.root.join(extra_name),
+    );
+    compile(
+        &[
+            "-shared",
+            "-fPIC",
+            "-nostdlib",
+            "-Wl,-soname,libcgx2_libtorch_facade.so",
+            "-Wl,-rpath,$ORIGIN",
+            "-L",
+            additional_needed.root.to_str().unwrap(),
+            "-Wl,--no-as-needed",
+            "-lcgx2_closure_dep",
+            "-lcgx2_closure_extra_needed",
+        ],
+        &source.join("facade.c"),
+        &additional_needed.root.join(FACADE),
+    );
+    additional_needed.binding.sha256 = hash(&additional_needed.root.join(FACADE));
+    additional_needed.write_locks();
+    assert!(
+        check_package(&additional_needed.root)
+            .diagnostics
+            .iter()
+            .any(|d| d.code == "CGB019" && d.message.contains("missing DT_NEEDED"))
+    );
+    drop(additional_needed);
+
+    let mut bad_search = Fixture::new("2.6.0");
+    compile(
+        &[
+            "-shared",
+            "-fPIC",
+            "-nostdlib",
+            "-Wl,-soname,libcgx2_libtorch_facade.so",
+            "-Wl,-rpath,/tmp",
+            "-L",
+            bad_search.root.to_str().unwrap(),
+            "-Wl,--no-as-needed",
+            "-lcgx2_closure_dep",
+        ],
+        &source.join("facade.c"),
+        &bad_search.root.join(FACADE),
+    );
+    bad_search.binding.sha256 = hash(&bad_search.root.join(FACADE));
+    bad_search.write_locks();
+    assert!(
+        check_package(&bad_search.root)
+            .diagnostics
+            .iter()
+            .any(|d| d.code == "CGB019" && d.message.contains("DT_RUNPATH"))
+    );
+    drop(bad_search);
 
     let missing = Fixture::new("2.6.0");
     let closure_path = missing.root.join("cgx2-libtorch-closure.lock.json");
@@ -256,6 +351,23 @@ fn closure_accepts_and_rejects_changed_version_and_loader_substitution() {
         unsafe { Torch::open_pinned(&substituted.root, "torch_cpu") },
         Err(PinnedError::Closure(_))
     ));
+
+    // A preloaded conflicting SONAME must be rejected before this facade's
+    // constructor can execute. Executing it would trap the test process.
+    let trap = Fixture::with_constructor("2.6.0", true);
+    assert!(check_package(&trap.root).passed());
+    assert!(matches!(
+        unsafe { Torch::open_pinned(&trap.root, "torch_cpu") },
+        Err(PinnedError::Closure(_))
+    ));
+}
+
+#[test]
+fn changed_dependency_after_preflight_is_rejected_before_loading() {
+    let fixture = Fixture::new("2.6.0");
+    let closure = verify_libtorch_closure(&fixture.root, &fixture.binding).unwrap();
+    fs::write(fixture.root.join(DEP), b"changed after preflight").unwrap();
+    assert!(closure.verify_preloaded().is_err());
 }
 
 #[test]

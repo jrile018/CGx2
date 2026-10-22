@@ -66,6 +66,14 @@ fn mock_facade_cpu_contract_and_raii() {
     assert_eq!(sum.dtype(), "float64");
     assert_eq!(sum.device(), "cpu");
     assert_eq!(sum.to_vec().unwrap(), [4.0, 6.0]);
+    assert_eq!(sum.to_vec_bounded(2).unwrap(), [4.0, 6.0]);
+    assert!(matches!(
+        sum.to_vec_bounded(1),
+        Err(Error::LengthLimitExceeded {
+            reported: 2,
+            maximum: 1
+        })
+    ));
     assert_eq!(mock.counter("cgx2_mock_live_count"), 3);
     left.release().unwrap();
     assert_eq!(left.release(), Err(Error::AlreadyReleased));
@@ -138,11 +146,19 @@ fn mock_facade_rejects_bad_shape_profile_and_cross_adapter_handle() {
         Err(Error::Foreign { status: 5, .. })
     ));
     let bad_length = first.from_f64(&[-106.0]).unwrap();
-    assert!(matches!(
+    assert_eq!(
         bad_length.to_vec(),
-        Err(Error::Foreign { status: 4, .. })
+        Err(Error::ShapeMismatch {
+            expected: 1,
+            reported: 2
+        })
+    );
+    let oversized = first.from_f64(&[-108.0]).unwrap();
+    assert!(matches!(
+        oversized.to_vec_bounded(8),
+        Err(Error::LengthLimitExceeded { maximum: 8, .. })
     ));
-    drop((a, b, short, bad_copy, bad_length));
+    drop((a, b, short, bad_copy, bad_length, oversized));
     assert_eq!(mock.counter("cgx2_mock_live_count"), 0);
 }
 

@@ -4,6 +4,10 @@
 #define MOCK_VERSION "2.6.0"
 #endif
 
+#ifdef MOCK_TRAP_CONSTRUCTOR
+__attribute__((constructor)) static void forbidden_constructor(void) { __builtin_trap(); }
+#endif
+
 extern int cgx2_closure_dependency(void);
 static double value;
 static int alive;
