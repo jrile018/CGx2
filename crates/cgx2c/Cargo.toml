@@ -11,4 +11,4 @@ cgx2-package = { path = "../cgx2-package" }
 sha2 = "0.10"
 
 [dev-dependencies]
-cgx2-cli = { path = "../cgx2-cli" }
+cgx2-cli = { path = "../cgx2-cli", features = ["failure-injection-test"] }

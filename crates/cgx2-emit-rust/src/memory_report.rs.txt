@@ -49,6 +49,22 @@ fn cgx2_check_report_target(path: &std::path::Path) -> Result<(), String> {
     Ok(())
 }
 
+fn cgx2_json_string(value: &str) -> String {
+    let mut out = String::from("\"");
+    for character in value.chars() {
+        match character {
+            '"' => out.push_str("\\\""),
+            '\\' => out.push_str("\\\\"),
+            '\n' => out.push_str("\\n"),
+            '\r' => out.push_str("\\r"),
+            '\t' => out.push_str("\\t"),
+            c if c < ' ' => out.push_str(&format!("\\u{:04x}", c as u32)),
+            c => out.push(c),
+        }
+    }
+    out.push('"');
+    out
+}
 fn cgx2_write_report(
     path: &std::path::Path,
     session: &Session,
@@ -57,21 +73,29 @@ fn cgx2_write_report(
     use std::io::Write;
     use std::sync::atomic::{AtomicU64, Ordering};
     static NEXT_REPORT: AtomicU64 = AtomicU64::new(0);
-
     let memory = session.memory_report().to_json();
-    let (status, code) = match result {
-        Ok(()) => ("ok", "null".to_owned()),
+    let (status, code, span, rollback) = match result {
+        Ok(()) => ("ok", "null".to_owned(), "null".to_owned(), "null".to_owned()),
         Err(message) => {
-            let code = message.split_once(" at ").map(|(code, _)| code).unwrap_or("");
-            if code.len() != 6 || !code.starts_with("CGR")
-                || !code[3..].bytes().all(|byte| byte.is_ascii_digit()) {
+            let (code, location) = message.split_once(" at ").ok_or("CGR017: unrecognized native error")?;
+            if code.len() != 6 || !code.starts_with("CGR") || !code[3..].bytes().all(|byte| byte.is_ascii_digit()) {
                 return Err("CGR017: unrecognized native error code".into());
             }
-            ("error", format!("\"{code}\""))
+            let range = location.split_once(':').map(|(range, _)| range).unwrap_or(location);
+            let (start, end) = range.split_once("..").ok_or("CGR017: missing native source span")?;
+            let start: usize = start.parse().map_err(|_| "CGR017: invalid native source span")?;
+            let end: usize = end.parse().map_err(|_| "CGR017: invalid native source span")?;
+            let rollback = CGX2_ROLLBACK.with(|value| match value.get() {
+                Some(true) => "true",
+                Some(false) => "false",
+                None => "null",
+            }).to_owned();
+            ("error", cgx2_json_string(code), format!("{{\"start\":{start},\"end\":{end}}}"), rollback)
         }
     };
+    let file = cgx2_json_string(option_env!("CGX2_SOURCE_FILE").unwrap_or("<source>"));
     let report = format!(
-        "{{\"native_report_schema_version\":1,\"status\":\"{status}\",\"diagnostic_code\":{code},\"memory\":{memory}}}\n"
+        "{{\"native_report_schema_version\":1,\"failure_report_schema_version\":1,\"status\":\"{status}\",\"diagnostic_code\":{code},\"file\":{file},\"span\":{span},\"rollback_preserved\":{rollback},\"memory\":{memory}}}\n"
     );
     if report.len() > CGX2_REPORT_LIMIT {
         return Err("CGR017: native memory report exceeds 1 MiB".into());
@@ -83,15 +107,12 @@ fn cgx2_write_report(
     );
     let temporary = path.with_file_name(name);
     let write_result = (|| -> std::io::Result<()> {
-        let mut file = std::fs::OpenOptions::new()
-            .write(true).create_new(true).open(&temporary)?;
+        let mut file = std::fs::OpenOptions::new().write(true).create_new(true).open(&temporary)?;
         file.write_all(report.as_bytes())?;
         file.sync_all()?;
         cgx2_check_report_target(path).map_err(std::io::Error::other)?;
         std::fs::rename(&temporary, path)
     })();
-    if write_result.is_err() {
-        let _ = std::fs::remove_file(&temporary);
-    }
+    if write_result.is_err() { let _ = std::fs::remove_file(&temporary); }
     write_result.map_err(|e| format!("CGR017: cannot write native memory report: {e}"))
 }

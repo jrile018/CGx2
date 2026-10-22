@@ -14,7 +14,7 @@ use std::{
     time::{SystemTime, UNIX_EPOCH},
 };
 
-const USAGE: &str = "usage: cgx2c build FILE.cg --out BINARY [--release] [--force] [--rustc PATH]\n       cgx2c emit-rust FILE.cg --out FILE.rs [--force]\n       cgx2c build --package ROOT --out BINARY [--release] [--force] [--rustc PATH]\n       cgx2c emit-rust --package ROOT --out FILE.rs [--force]";
+const USAGE: &str = "usage: cgx2c build FILE.cg --out BINARY [--release] [--force] [--rustc PATH] [--test-fail-reserve N]\n       cgx2c emit-rust FILE.cg --out FILE.rs [--force]\n       cgx2c build --package ROOT --out BINARY [--release] [--force] [--rustc PATH]\n       cgx2c emit-rust --package ROOT --out FILE.rs [--force]\n--test-fail-reserve is an explicit test-only host allocation fault for memory scripts";
 const MAX_SOURCE: u64 = 4 * 1024 * 1024;
 const MAX_GENERATED: usize = 32 * 1024 * 1024;
 const MAX_STDERR: usize = 8 * 1024;
@@ -51,6 +51,7 @@ struct Options {
     output: PathBuf,
     force: bool,
     release: bool,
+    test_fail_reserve: Option<usize>,
     rustc: OsString,
 }
 
@@ -135,6 +136,12 @@ fn run(args: Vec<OsString>) -> Result<(), CliError> {
         )
     })?;
     let needs_runtime = is_memory_script(&module);
+    if options.test_fail_reserve.is_some() && !needs_runtime {
+        return Err(CliError::new(
+            "CGXC001",
+            "--test-fail-reserve requires a memory script",
+        ));
+    }
     let generated = emit_rust(&module, &checked).map_err(|errors| {
         let d = &errors[0];
         source_error(
@@ -171,6 +178,7 @@ fn run(args: Vec<OsString>) -> Result<(), CliError> {
             &options.rustc,
             &temporary.path,
             options.release,
+            options.test_fail_reserve.is_some(),
         )?)
     } else {
         None
@@ -181,6 +189,8 @@ fn run(args: Vec<OsString>) -> Result<(), CliError> {
         &binary_path,
         options.release,
         runtime.as_ref().map(|(path, _)| path.as_path()),
+        Some(&options.source),
+        options.test_fail_reserve,
     )?;
     let built = fs::metadata(&binary_path)
         .map_err(|e| CliError::new("CGXC005", format!("rustc succeeded without a binary: {e}")))?;
@@ -261,6 +271,8 @@ fn run_package(options: &Options) -> Result<(), CliError> {
         &generated_path,
         &binary_path,
         options.release,
+        None,
+        None,
         None,
     )?;
     let built = fs::metadata(&binary_path)
@@ -353,6 +365,7 @@ fn parse_args(args: Vec<OsString>) -> Result<Options, CliError> {
     let mut output = None;
     let mut force = false;
     let mut release = false;
+    let mut test_fail_reserve = None;
     let mut rustc = None;
     let mut index = source_index + 1;
     while index < args.len() {
@@ -368,6 +381,22 @@ fn parse_args(args: Vec<OsString>) -> Result<Options, CliError> {
             Some("--release") if mode == Mode::Build && !release => {
                 release = true;
                 index += 1;
+            }
+            Some("--test-fail-reserve")
+                if mode == Mode::Build
+                    && !package
+                    && test_fail_reserve.is_none()
+                    && index + 1 < args.len() =>
+            {
+                let index_value = args[index + 1]
+                    .to_str()
+                    .and_then(|value| value.parse::<usize>().ok());
+                test_fail_reserve = Some(
+                    index_value
+                        .filter(|value| *value > 0 && *value <= 1_000_000)
+                        .ok_or_else(usage)?,
+                );
+                index += 2;
             }
             Some("--rustc") if mode == Mode::Build && rustc.is_none() && index + 1 < args.len() => {
                 rustc = Some(args[index + 1].clone());
@@ -393,6 +422,7 @@ fn parse_args(args: Vec<OsString>) -> Result<Options, CliError> {
         output,
         force,
         release,
+        test_fail_reserve,
         rustc,
     })
 }
@@ -475,6 +505,7 @@ fn compile_runtime(
     rustc: &OsString,
     staging: &Path,
     release: bool,
+    fault_injection: bool,
 ) -> Result<(PathBuf, String), CliError> {
     let source_dir = staging.join("runtime-src");
     fs::create_dir(&source_dir).map_err(|e| {
@@ -514,6 +545,9 @@ fn compile_runtime(
         })
         .arg("-o")
         .arg(&output);
+    if fault_injection {
+        command.arg("--cfg").arg("feature=\"fault-injection\"");
+    }
     run_rustc(command)?;
     Ok((output, hash))
 }
@@ -524,8 +558,17 @@ fn compile(
     output: &Path,
     release: bool,
     runtime: Option<&Path>,
+    source_file: Option<&Path>,
+    test_fail_reserve: Option<usize>,
 ) -> Result<(), CliError> {
     let mut command = Command::new(rustc);
+    if let Some(source_file) = source_file {
+        command.env("CGX2_SOURCE_FILE", source_file.to_string_lossy().as_ref());
+    }
+    if let Some(index) = test_fail_reserve {
+        command.arg("--cfg").arg("feature=\"fault-injection\"");
+        command.env("CGX2_TEST_FAIL_RESERVE", index.to_string());
+    }
     command
         .arg("--edition=2024")
         .arg(source)

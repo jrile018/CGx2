@@ -26,18 +26,37 @@ pub fn run_native_package(
 
 use cgx2_syntax::parse_module;
 
-fn execute(
+/// Opt-in failure record. `report` is present only after memory execution starts.
+pub struct RunFailure {
+    pub error: RunError,
+    pub report: Option<MemoryReport>,
+    pub rollback_preserved: Option<bool>,
+}
+
+fn no_report(error: RunError) -> RunFailure {
+    RunFailure {
+        error,
+        report: None,
+        rollback_preserved: None,
+    }
+}
+
+fn execute_with_failure(
     source: &str,
     args: &[String],
     check_scalar: bool,
-) -> Result<(RunResult, Option<MemoryReport>), Vec<RunError>> {
+    host_fail_reserve: Option<usize>,
+    observe_rollback: bool,
+) -> Result<(RunResult, Option<MemoryReport>), Vec<RunFailure>> {
     let module = parse_module(source).map_err(|diagnostics| {
         diagnostics
             .into_iter()
-            .map(|d| RunError {
-                code: d.code,
-                message: d.message,
-                span: Some(d.span),
+            .map(|d| {
+                no_report(RunError {
+                    code: d.code,
+                    message: d.message,
+                    span: Some(d.span),
+                })
             })
             .collect::<Vec<_>>()
     })?;
@@ -47,12 +66,12 @@ fn execute(
             .as_ref()
             .is_some_and(|binding| binding.route == "native")
     }) {
-        return Err(vec![RunError {
+        return Err(vec![no_report(RunError {
             code: "CGT017",
             message: "native C calls require an explicit schema 2 package and pinned binding lock"
                 .into(),
             span: Some(function.span),
-        }]);
+        })]);
     }
     let is_memory = module.statements.iter().any(eval::stmt_has_memory)
         || module
@@ -70,20 +89,59 @@ fn execute(
         cgx2_sema::check_module(&module).map_err(|diagnostics| {
             diagnostics
                 .into_iter()
-                .map(|d| RunError {
-                    code: d.code,
-                    message: d.message,
-                    span: Some(d.span),
+                .map(|d| {
+                    no_report(RunError {
+                        code: d.code,
+                        message: d.message,
+                        span: Some(d.span),
+                    })
                 })
                 .collect::<Vec<_>>()
         })?;
     }
     if is_memory {
-        let report = memory::run_module(&module).map_err(|e| vec![e])?;
+        let report = memory::run_module_with_failure(&module, host_fail_reserve, observe_rollback)
+            .map_err(|failure| {
+                vec![RunFailure {
+                    error: failure.error,
+                    report: failure.report.map(|report| *report),
+                    rollback_preserved: failure.rollback_preserved,
+                }]
+            })?;
         Ok((RunResult { value: Value::Unit }, Some(report)))
     } else {
-        Ok((eval::run_module(&module, args).map_err(|e| vec![e])?, None))
+        Ok((
+            eval::run_module(&module, args).map_err(|error| vec![no_report(error)])?,
+            None,
+        ))
     }
+}
+
+pub fn run_checked_source_with_failure(
+    source: &str,
+    args: &[String],
+) -> Result<(RunResult, Option<MemoryReport>), Vec<RunFailure>> {
+    execute_with_failure(source, args, true, None, true)
+}
+
+/// Explicit test-only host reserve fault. The one-based index matches
+/// `cgx2c build --test-fail-reserve N` for source/native parity fixtures.
+#[cfg(feature = "failure-injection-test")]
+pub fn run_checked_source_with_failure_at_reserve(
+    source: &str,
+    args: &[String],
+    index: usize,
+) -> Result<(RunResult, Option<MemoryReport>), Vec<RunFailure>> {
+    execute_with_failure(source, args, true, Some(index), true)
+}
+
+fn execute(
+    source: &str,
+    args: &[String],
+    check_scalar: bool,
+) -> Result<(RunResult, Option<MemoryReport>), Vec<RunError>> {
+    execute_with_failure(source, args, check_scalar, None, false)
+        .map_err(|failures| failures.into_iter().map(|failure| failure.error).collect())
 }
 
 pub fn run_source(source: &str, args: &[String]) -> Result<RunResult, RunError> {
@@ -92,8 +150,6 @@ pub fn run_source(source: &str, args: &[String]) -> Result<RunResult, RunError> 
         .map_err(|mut errors| errors.remove(0))
 }
 
-/// Check memory scripts before execution and return their actual CGx2 memory snapshot.
-/// Scalar scripts retain the low-level `run_source` runtime boundary.
 pub fn run_source_with_report(
     source: &str,
     args: &[String],
@@ -101,7 +157,6 @@ pub fn run_source_with_report(
     execute(source, args, false).map_err(|mut errors| errors.remove(0))
 }
 
-/// Parse and statically check before running, for user-facing commands.
 pub fn run_checked_source(
     source: &str,
     args: &[String],

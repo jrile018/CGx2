@@ -9,6 +9,38 @@ use cgx2_syntax::{CallArg, Expr, ExprKind, Module, Span, Stmt, StmtKind};
 
 use crate::RunError;
 
+pub(crate) struct MemoryFailure {
+    pub error: RunError,
+    pub report: Option<Box<MemoryReport>>,
+    pub rollback_preserved: Option<bool>,
+}
+
+type GraphSnapshot = Vec<(String, Handle, bool, Vec<Option<Handle>>)>;
+
+fn graph_snapshot(session: &Session, bindings: &HashMap<String, Binding>) -> Option<GraphSnapshot> {
+    let mut roots = Vec::new();
+    for (name, binding) in bindings {
+        let Binding::Managed(handle) = binding else {
+            continue;
+        };
+        let live = session.read_bytes(*handle).is_ok();
+        let mut references = Vec::new();
+        if live {
+            for index in 0..=1024 {
+                match session.reference(*handle, index) {
+                    Ok(reference) if index < 1024 => references.push(reference),
+                    Ok(_) => return None,
+                    Err(MemoryError::InvalidReferenceSlot) => break,
+                    Err(_) => return None,
+                }
+            }
+        }
+        roots.push((name.clone(), *handle, live, references));
+    }
+    roots.sort_by(|a, b| a.0.cmp(&b.0));
+    Some(roots)
+}
+
 const AUTO_TRIGGER_BYTES: usize = 1 << 20;
 const STEP_LIMIT: usize = 1_000_000;
 
@@ -375,6 +407,8 @@ fn execute_with_functions(
     bindings: &mut HashMap<String, Binding>,
     steps: &mut usize,
     functions: &HashMap<String, Vec<SpannedOp>>,
+    failure_rollback: &mut Option<bool>,
+    observe_rollback: bool,
 ) -> Result<(), RunError> {
     for SpannedOp { op, span } in ops {
         if *steps >= STEP_LIMIT {
@@ -385,200 +419,235 @@ fn execute_with_functions(
             ));
         }
         *steps += 1;
-        match op {
-            Op::Call { name } => {
-                let body = functions.get(name).ok_or_else(|| {
-                    error(
-                        "CGR014",
-                        format!("unknown local memory function `{name}`"),
-                        *span,
-                    )
-                })?;
-                let mut locals = HashMap::new();
-                let result = execute_with_functions(body, session, &mut locals, steps, functions);
-                let mut cleanup_error = None;
-                for binding in locals.into_values() {
-                    if let Binding::Managed(handle) = binding {
-                        if let Err(failure) = session.unroot(handle) {
-                            cleanup_error.get_or_insert_with(|| runtime(failure, *span));
+        let before = observe_rollback
+            .then(|| graph_snapshot(session, bindings))
+            .flatten();
+        let result = (|| -> Result<(), RunError> {
+            match op {
+                Op::Call { name } => {
+                    let body = functions.get(name).ok_or_else(|| {
+                        error(
+                            "CGR014",
+                            format!("unknown local memory function `{name}`"),
+                            *span,
+                        )
+                    })?;
+                    let mut locals = HashMap::new();
+                    let result = execute_with_functions(
+                        body,
+                        session,
+                        &mut locals,
+                        steps,
+                        functions,
+                        failure_rollback,
+                        observe_rollback,
+                    );
+                    let mut cleanup_error = None;
+                    for binding in locals.into_values() {
+                        if let Binding::Managed(handle) = binding {
+                            if let Err(failure) = session.unroot(handle) {
+                                cleanup_error.get_or_insert_with(|| runtime(failure, *span));
+                            }
                         }
                     }
-                }
-                result?;
-                if let Some(failure) = cleanup_error {
-                    return Err(failure);
-                }
-            }
-            Op::NoGc { budget, body } => {
-                let mut guard = session.no_gc(*budget);
-                execute_with_functions(body, &mut guard, bindings, steps, functions)?;
-            }
-            Op::Region { name, mode, limit } => {
-                let id = session
-                    .create_region(*mode, *limit)
-                    .map_err(|e| allocation(e, *span))?;
-                bindings.insert(name.clone(), Binding::Region(id));
-            }
-            Op::Owned { name, size } => {
-                let value = session
-                    .alloc_owned_bytes(*size)
-                    .map_err(|e| allocation(e, *span))?;
-                bindings.insert(name.clone(), Binding::Owned(value));
-            }
-            Op::Move { name, from } => {
-                if !matches!(binding(bindings, from, *span)?, Binding::Owned(_)) {
-                    return Err(error("CGR014", "move requires owned bytes", *span));
-                }
-                let value = bindings.remove(from).expect("checked owned binding");
-                bindings.insert(name.clone(), value);
-            }
-            Op::Promote {
-                name,
-                region: region_name,
-                from,
-            } => {
-                let id = region(bindings, region_name, *span)?;
-                if !matches!(binding(bindings, from, *span)?, Binding::Owned(_)) {
-                    return Err(error("CGR014", "promotion requires owned bytes", *span));
-                }
-                let Binding::Owned(value) = bindings.remove(from).expect("checked owned binding")
-                else {
-                    unreachable!()
-                };
-                let handle = match session.promote_owned(id, value) {
-                    Ok(handle) => handle,
-                    Err((failure, original)) => {
-                        bindings.insert(from.clone(), Binding::Owned(original));
-                        return Err(allocation(failure, *span));
+                    result?;
+                    if let Some(failure) = cleanup_error {
+                        return Err(failure);
                     }
-                };
-                session.root(handle).map_err(|e| runtime(e, *span))?;
-                bindings.insert(name.clone(), Binding::Managed(handle));
-            }
-            Op::CopyToOwned { name, from } => {
-                let Binding::Managed(handle) = binding(bindings, from, *span)? else {
-                    return Err(error("CGR014", "copy requires a managed handle", *span));
-                };
-                let value = session
-                    .copy_managed_to_owned(*handle)
-                    .map_err(|e| match e {
-                        MemoryError::Allocation(failure) => allocation(failure, *span),
-                        other => runtime(other, *span),
-                    })?;
-                bindings.insert(name.clone(), Binding::Owned(value));
-            }
-            Op::Alloc {
-                name,
-                region: region_name,
-                size,
-            } => {
-                let id = region(bindings, region_name, *span)?;
-                let handle = session
-                    .alloc_bytes(id, *size)
-                    .map_err(|e| allocation(e, *span))?;
-                session.root(handle).map_err(|e| runtime(e, *span))?;
-                bindings.insert(name.clone(), Binding::Managed(handle));
-            }
-            Op::AllocObject {
-                name,
-                region: region_name,
-                payload,
-                slots,
-            } => {
-                let id = region(bindings, region_name, *span)?;
-                let handle = session
-                    .alloc_object(id, *payload, *slots)
-                    .map_err(|e| allocation(e, *span))?;
-                session.root(handle).map_err(|e| runtime(e, *span))?;
-                bindings.insert(name.clone(), Binding::Managed(handle));
-            }
-            Op::SetReference {
-                owner,
-                index,
-                target,
-            } => {
-                let Binding::Managed(owner_handle) = binding(bindings, owner, *span)? else {
-                    return Err(error("CGR014", "reference owner requires object", *span));
-                };
-                let target_handle = match target {
-                    Some(target) => {
-                        let Binding::Managed(handle) = binding(bindings, target, *span)? else {
-                            return Err(error("CGR014", "reference target requires object", *span));
-                        };
-                        Some(*handle)
+                }
+                Op::NoGc { budget, body } => {
+                    let mut guard = session.no_gc(*budget);
+                    execute_with_functions(
+                        body,
+                        &mut guard,
+                        bindings,
+                        steps,
+                        functions,
+                        failure_rollback,
+                        observe_rollback,
+                    )?;
+                }
+                Op::Region { name, mode, limit } => {
+                    let id = session
+                        .create_region(*mode, *limit)
+                        .map_err(|e| allocation(e, *span))?;
+                    bindings.insert(name.clone(), Binding::Region(id));
+                }
+                Op::Owned { name, size } => {
+                    let value = session
+                        .alloc_owned_bytes(*size)
+                        .map_err(|e| allocation(e, *span))?;
+                    bindings.insert(name.clone(), Binding::Owned(value));
+                }
+                Op::Move { name, from } => {
+                    if !matches!(binding(bindings, from, *span)?, Binding::Owned(_)) {
+                        return Err(error("CGR014", "move requires owned bytes", *span));
                     }
-                    None => None,
-                };
-                session
-                    .set_reference(*owner_handle, *index, target_handle)
-                    .map_err(|e| runtime(e, *span))?;
-            }
-            Op::Reference { name, owner, index } => {
-                let Binding::Managed(handle) = binding(bindings, owner, *span)? else {
-                    return Err(error("CGR014", "reference owner requires object", *span));
-                };
-                let reference = session
-                    .reference(*handle, *index)
-                    .map_err(|e| runtime(e, *span))?;
-                bindings.insert(name.clone(), Binding::Reference(reference));
-            }
-            Op::UseReference { name } => {
-                let Binding::Reference(reference) = binding(bindings, name, *span)? else {
-                    return Err(error("CGR014", "expected optional object reference", *span));
-                };
-                let handle =
-                    reference.ok_or_else(|| error("CGR014", "empty object reference", *span))?;
-                session.read_bytes(handle).map_err(|e| runtime(e, *span))?;
-            }
-            Op::Borrow { name, target } => {
-                match binding(bindings, target, *span)? {
-                    Binding::Owned(_) | Binding::Managed(_) => (),
-                    _ => return Err(error("CGR014", "borrow requires a live value", *span)),
+                    let value = bindings.remove(from).expect("checked owned binding");
+                    bindings.insert(name.clone(), value);
                 }
-                bindings.insert(name.clone(), Binding::Borrow(target.clone()));
-            }
-            Op::Use { name } => match binding(bindings, name, *span)? {
-                Binding::Owned(bytes) => {
-                    let _ = bytes.as_slice();
-                }
-                Binding::Managed(handle) => {
-                    session.read_bytes(*handle).map_err(|e| runtime(e, *span))?;
-                }
-                _ => return Err(error("CGR014", "use requires a live value", *span)),
-            },
-            Op::Drop { name } => {
-                if let Binding::Managed(handle) = binding(bindings, name, *span)? {
-                    session.unroot(*handle).map_err(|e| runtime(e, *span))?;
-                }
-                if !matches!(
-                    binding(bindings, name, *span)?,
-                    Binding::Owned(_) | Binding::Managed(_)
-                ) {
-                    return Err(error("CGR014", "drop requires a live value", *span));
-                }
-                bindings.remove(name);
-            }
-            Op::EndBorrow { name } => {
-                match binding(bindings, name, *span)? {
-                    Binding::Borrow(target) => {
-                        binding(bindings, target, *span)?;
+                Op::Promote {
+                    name,
+                    region: region_name,
+                    from,
+                } => {
+                    let id = region(bindings, region_name, *span)?;
+                    if !matches!(binding(bindings, from, *span)?, Binding::Owned(_)) {
+                        return Err(error("CGR014", "promotion requires owned bytes", *span));
                     }
-                    _ => return Err(error("CGR014", "end_borrow requires a token", *span)),
+                    let Binding::Owned(value) =
+                        bindings.remove(from).expect("checked owned binding")
+                    else {
+                        unreachable!()
+                    };
+                    let handle = match session.promote_owned(id, value) {
+                        Ok(handle) => handle,
+                        Err((failure, original)) => {
+                            bindings.insert(from.clone(), Binding::Owned(original));
+                            return Err(allocation(failure, *span));
+                        }
+                    };
+                    session.root(handle).map_err(|e| runtime(e, *span))?;
+                    bindings.insert(name.clone(), Binding::Managed(handle));
                 }
-                bindings.remove(name);
+                Op::CopyToOwned { name, from } => {
+                    let Binding::Managed(handle) = binding(bindings, from, *span)? else {
+                        return Err(error("CGR014", "copy requires a managed handle", *span));
+                    };
+                    let value = session
+                        .copy_managed_to_owned(*handle)
+                        .map_err(|e| match e {
+                            MemoryError::Allocation(failure) => allocation(failure, *span),
+                            other => runtime(other, *span),
+                        })?;
+                    bindings.insert(name.clone(), Binding::Owned(value));
+                }
+                Op::Alloc {
+                    name,
+                    region: region_name,
+                    size,
+                } => {
+                    let id = region(bindings, region_name, *span)?;
+                    let handle = session
+                        .alloc_bytes(id, *size)
+                        .map_err(|e| allocation(e, *span))?;
+                    session.root(handle).map_err(|e| runtime(e, *span))?;
+                    bindings.insert(name.clone(), Binding::Managed(handle));
+                }
+                Op::AllocObject {
+                    name,
+                    region: region_name,
+                    payload,
+                    slots,
+                } => {
+                    let id = region(bindings, region_name, *span)?;
+                    let handle = session
+                        .alloc_object(id, *payload, *slots)
+                        .map_err(|e| allocation(e, *span))?;
+                    session.root(handle).map_err(|e| runtime(e, *span))?;
+                    bindings.insert(name.clone(), Binding::Managed(handle));
+                }
+                Op::SetReference {
+                    owner,
+                    index,
+                    target,
+                } => {
+                    let Binding::Managed(owner_handle) = binding(bindings, owner, *span)? else {
+                        return Err(error("CGR014", "reference owner requires object", *span));
+                    };
+                    let target_handle = match target {
+                        Some(target) => {
+                            let Binding::Managed(handle) = binding(bindings, target, *span)? else {
+                                return Err(error(
+                                    "CGR014",
+                                    "reference target requires object",
+                                    *span,
+                                ));
+                            };
+                            Some(*handle)
+                        }
+                        None => None,
+                    };
+                    session
+                        .set_reference(*owner_handle, *index, target_handle)
+                        .map_err(|e| runtime(e, *span))?;
+                }
+                Op::Reference { name, owner, index } => {
+                    let Binding::Managed(handle) = binding(bindings, owner, *span)? else {
+                        return Err(error("CGR014", "reference owner requires object", *span));
+                    };
+                    let reference = session
+                        .reference(*handle, *index)
+                        .map_err(|e| runtime(e, *span))?;
+                    bindings.insert(name.clone(), Binding::Reference(reference));
+                }
+                Op::UseReference { name } => {
+                    let Binding::Reference(reference) = binding(bindings, name, *span)? else {
+                        return Err(error("CGR014", "expected optional object reference", *span));
+                    };
+                    let handle = reference
+                        .ok_or_else(|| error("CGR014", "empty object reference", *span))?;
+                    session.read_bytes(handle).map_err(|e| runtime(e, *span))?;
+                }
+                Op::Borrow { name, target } => {
+                    match binding(bindings, target, *span)? {
+                        Binding::Owned(_) | Binding::Managed(_) => (),
+                        _ => return Err(error("CGR014", "borrow requires a live value", *span)),
+                    }
+                    bindings.insert(name.clone(), Binding::Borrow(target.clone()));
+                }
+                Op::Use { name } => match binding(bindings, name, *span)? {
+                    Binding::Owned(bytes) => {
+                        let _ = bytes.as_slice();
+                    }
+                    Binding::Managed(handle) => {
+                        session.read_bytes(*handle).map_err(|e| runtime(e, *span))?;
+                    }
+                    _ => return Err(error("CGR014", "use requires a live value", *span)),
+                },
+                Op::Drop { name } => {
+                    if let Binding::Managed(handle) = binding(bindings, name, *span)? {
+                        session.unroot(*handle).map_err(|e| runtime(e, *span))?;
+                    }
+                    if !matches!(
+                        binding(bindings, name, *span)?,
+                        Binding::Owned(_) | Binding::Managed(_)
+                    ) {
+                        return Err(error("CGR014", "drop requires a live value", *span));
+                    }
+                    bindings.remove(name);
+                }
+                Op::EndBorrow { name } => {
+                    match binding(bindings, name, *span)? {
+                        Binding::Borrow(target) => {
+                            binding(bindings, target, *span)?;
+                        }
+                        _ => return Err(error("CGR014", "end_borrow requires a token", *span)),
+                    }
+                    bindings.remove(name);
+                }
+                Op::Collect {
+                    region: region_name,
+                } => {
+                    let id = region(bindings, region_name, *span)?;
+                    session.collect(id).map_err(|e| runtime(e, *span))?;
+                }
+                Op::Close {
+                    region: region_name,
+                } => {
+                    let id = region(bindings, region_name, *span)?;
+                    session.close_region(id).map_err(|e| runtime(e, *span))?;
+                }
             }
-            Op::Collect {
-                region: region_name,
-            } => {
-                let id = region(bindings, region_name, *span)?;
-                session.collect(id).map_err(|e| runtime(e, *span))?;
+            Ok(())
+        })();
+        if let Err(error) = result {
+            if observe_rollback && failure_rollback.is_none() {
+                *failure_rollback = before
+                    .zip(graph_snapshot(session, bindings))
+                    .map(|(a, b)| a == b);
             }
-            Op::Close {
-                region: region_name,
-            } => {
-                let id = region(bindings, region_name, *span)?;
-                session.close_region(id).map_err(|e| runtime(e, *span))?;
-            }
+            return Err(error);
         }
     }
     Ok(())
@@ -591,21 +660,46 @@ fn execute(
     bindings: &mut HashMap<String, Binding>,
     steps: &mut usize,
 ) -> Result<(), RunError> {
-    execute_with_functions(ops, session, bindings, steps, &HashMap::new())
+    execute_with_functions(
+        ops,
+        session,
+        bindings,
+        steps,
+        &HashMap::new(),
+        &mut None,
+        false,
+    )
 }
 
-pub(crate) fn run_module(module: &Module) -> Result<MemoryReport, RunError> {
-    // Lower the entire checked profile before creating a session or mutating any region.
-    let ops = lower(&module.statements)?;
+pub(crate) fn run_module_with_failure(
+    module: &Module,
+    host_fail_reserve: Option<usize>,
+    observe_rollback: bool,
+) -> Result<MemoryReport, MemoryFailure> {
+    // Lower the checked profile before mutating any region.
+    let lower_failure = |error| MemoryFailure {
+        error,
+        report: None,
+        rollback_preserved: None,
+    };
+    let ops = lower(&module.statements).map_err(lower_failure)?;
     let functions = module
         .functions
         .iter()
         .map(|function| lower(&function.body).map(|body| (function.name.clone(), body)))
-        .collect::<Result<HashMap<_, _>, _>>()?;
+        .collect::<Result<HashMap<_, _>, _>>()
+        .map_err(lower_failure)?;
     let mut session = Session::new();
+    #[cfg(feature = "failure-injection-test")]
+    if let Some(index) = host_fail_reserve {
+        session.inject_host_failure_at_reserve(index);
+    }
+    #[cfg(not(feature = "failure-injection-test"))]
+    let _ = host_fail_reserve;
     let mut bindings = HashMap::new();
     let mut steps = 0;
-    if let Some(main) = module
+    let mut failure_rollback = None;
+    let result = if let Some(main) = module
         .functions
         .iter()
         .find(|function| function.name == "main")
@@ -616,10 +710,31 @@ pub(crate) fn run_module(module: &Module) -> Result<MemoryReport, RunError> {
             },
             span: main.span,
         }];
-        execute_with_functions(&entry, &mut session, &mut bindings, &mut steps, &functions)?;
+        execute_with_functions(
+            &entry,
+            &mut session,
+            &mut bindings,
+            &mut steps,
+            &functions,
+            &mut failure_rollback,
+            observe_rollback,
+        )
     } else {
-        execute_with_functions(&ops, &mut session, &mut bindings, &mut steps, &functions)?;
-    }
+        execute_with_functions(
+            &ops,
+            &mut session,
+            &mut bindings,
+            &mut steps,
+            &functions,
+            &mut failure_rollback,
+            observe_rollback,
+        )
+    };
+    result.map_err(|error| MemoryFailure {
+        error,
+        report: Some(Box::new(session.memory_report())),
+        rollback_preserved: failure_rollback,
+    })?;
     Ok(session.memory_report())
 }
 

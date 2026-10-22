@@ -82,6 +82,12 @@ fn call(expr: &Expr) -> Result<(&str, &[CallArg]), EmitDiagnostic> {
     Ok((operation, arguments))
 }
 
+fn emit_checked_statement(out: &mut String, pad: &str, statement: &str) {
+    out.push_str(&format!(
+        "{pad}let cgx2_before = graph_snapshot(session, &bindings);\n{pad}let cgx2_step = (|| -> Result<(), String> {{ {statement} Ok(()) }})();\n{pad}if let Err(message) = cgx2_step {{ record_rollback(cgx2_before, session, &bindings); return Err(message); }}\n"
+    ));
+}
+
 fn emit_block(
     stmts: &[Stmt],
     out: &mut String,
@@ -188,7 +194,7 @@ fn emit_block(
                         ));
                     }
                 };
-                out.push_str(&format!("{pad}{statement}\n"));
+                emit_checked_statement(out, &pad, &statement);
             }
             StmtKind::Expr(expr) => {
                 if let ExprKind::Call { callee, arguments } = &expr.kind
@@ -207,9 +213,11 @@ fn emit_block(
                             callee.span,
                         ));
                     };
-                    out.push_str(&format!(
-                        "{pad}cgx2_memory_function_{index}(session, steps, {span})?;\n"
-                    ));
+                    emit_checked_statement(
+                        out,
+                        &pad,
+                        &format!("cgx2_memory_function_{index}(session, steps, {span})?;"),
+                    );
                     continue;
                 }
                 let statement = if let ExprKind::Name(_) = &expr.kind {
@@ -259,7 +267,7 @@ fn emit_block(
                         }
                     }
                 };
-                out.push_str(&format!("{pad}{statement}\n"));
+                emit_checked_statement(out, &pad, &statement);
             }
             _ => return Err(unsupported("unsupported memory script form", stmt.span)),
         }
@@ -303,7 +311,7 @@ pub(crate) fn emit_memory_rust(
         emit_block(&function.body, &mut out, 2, &functions).map_err(|error| vec![error])?;
         out.push_str("        Ok(())\n    })();\n    let mut cleanup_error = None;\n    for value in bindings.into_values() {\n        if let Binding::Managed(handle) = value {\n            if let Err(failure) = session.unroot(handle) {\n                cleanup_error.get_or_insert_with(|| runtime(failure, call_span));\n            }\n        }\n    }\n    result?;\n    if let Some(failure) = cleanup_error { return Err(failure); }\n    Ok(())\n}\n");
     }
-    out.push_str("\nfn main() {\n    let report_path = match cgx2_report_path() {\n        Ok(path) => path,\n        Err(message) => { eprintln!(\"{message}\"); std::process::exit(1); }\n    };\n    let mut session = Session::new();\n    let mut bindings: HashMap<&'static str, Binding> = HashMap::new();\n    let mut steps = 0;\n    let result = (|| -> Result<(), String> {\n        let session = &mut session;\n        let steps = &mut steps;\n");
+    out.push_str("\nfn main() {\n    let report_path = match cgx2_report_path() {\n        Ok(path) => path,\n        Err(message) => { eprintln!(\"{message}\"); std::process::exit(1); }\n    };\n    CGX2_OBSERVE.with(|value| value.set(report_path.is_some()));\n    let mut session = Session::new();\n    #[cfg(feature = \"fault-injection\")]\n    session.inject_host_failure_at_reserve(option_env!(\"CGX2_TEST_FAIL_RESERVE\").expect(\"test fault index\").parse().expect(\"valid test fault index\"));\n    let mut bindings: HashMap<&'static str, Binding> = HashMap::new();\n    let mut steps = 0;\n    let result = (|| -> Result<(), String> {\n        let session = &mut session;\n        let steps = &mut steps;\n");
     if module.functions.is_empty() {
         emit_block(&module.statements, &mut out, 2, &functions).map_err(|error| vec![error])?;
     } else {

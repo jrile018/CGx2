@@ -1,0 +1,5 @@
+let r = memory.region(mode: manual, limit: 1024)
+let parent = memory.alloc_object(r, 8, 1)
+let child = memory.alloc_object(r, 4, 0)
+memory.set_reference(parent, 0, child)
+let bad = memory.reference(parent, 1)

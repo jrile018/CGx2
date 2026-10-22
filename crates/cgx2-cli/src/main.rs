@@ -2,17 +2,18 @@ mod diagnostics;
 
 use std::{env, fs, path::Path, process::ExitCode};
 
-use cgx2_cli::{check_source, run_checked_source, Value};
+use cgx2_cli::{check_source, run_checked_source, run_checked_source_with_failure, Value};
 use cgx2_syntax::{format_module, parse_module};
 
 use diagnostics::{CliDiagnostic, DiagnosticFormat};
 
-const HELP: &str = "usage: cgx2 [--diagnostic-format=json] check FILE.cg|PACKAGE | cgx2 [--diagnostic-format=json] run FILE.cg|PACKAGE [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 memory report FILE.cg [--format=json] | cgx2 fmt FILE.cg\ncheck validates syntax, scalar types, and a bounded memory/ownership script subset; a schema 2 PACKAGE directory can run the bounded pinned native C profile through cgx2-native; memory report shows CGx2 allocations only";
+const HELP: &str = "usage: cgx2 [--diagnostic-format=json] check FILE.cg|PACKAGE | cgx2 [--diagnostic-format=json] run FILE.cg|PACKAGE [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 memory report FILE.cg [--format=json] | cgx2 memory failure-report FILE.cg | cgx2 fmt FILE.cg\ncheck validates syntax, scalar types, and a bounded memory/ownership script subset; a schema 2 PACKAGE directory can run the bounded pinned native C profile through cgx2-native; memory report shows CGx2 allocations only";
 
 enum Command {
     Check { path: String },
     Run { path: String, args: Vec<String> },
     MemoryReport { path: String, json: bool },
+    FailureReport { path: String },
     Fmt { path: String },
 }
 
@@ -41,6 +42,7 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
         Command::Check { path }
         | Command::Run { path, .. }
         | Command::MemoryReport { path, .. }
+        | Command::FailureReport { path }
         | Command::Fmt { path } => path,
     };
     if Path::new(path).is_dir()
@@ -146,6 +148,46 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
                 print!("{}", report.to_text());
             }
         }
+        Command::FailureReport { path } => match run_checked_source_with_failure(&source, &[]) {
+            Ok((_, Some(_))) => (),
+            Ok((_, None)) => {
+                return Err(vec![CliDiagnostic::new(
+                    "CGC001",
+                    "failure report requires memory script".into(),
+                    path,
+                    None,
+                )])
+            }
+            Err(failures) => {
+                let mut diagnostics = Vec::new();
+                for failure in failures {
+                    if let Some(report) = &failure.report {
+                        let span = failure
+                            .error
+                            .span
+                            .map(|s| serde_json::json!({"start": s.start, "end": s.end}));
+                        if let Ok(memory) =
+                            serde_json::from_str::<serde_json::Value>(&report.to_json())
+                        {
+                            println!(
+                                "{}",
+                                serde_json::json!({
+                                    "failure_report_schema_version": 1,
+                                    "status": "error",
+                                    "diagnostic_code": failure.error.code,
+                                    "file": path,
+                                    "span": span,
+                                    "rollback_preserved": failure.rollback_preserved,
+                                    "memory": memory,
+                                })
+                            );
+                        }
+                    }
+                    diagnostics.push(CliDiagnostic::from_run(&path, failure.error));
+                }
+                return Err(diagnostics);
+            }
+        },
         Command::Fmt { path } => {
             let module = parse_module(&source).map_err(|errors| {
                 errors
@@ -188,6 +230,9 @@ fn parse_args(args: Vec<String>) -> Result<Command, CliDiagnostic> {
         Some("memory") if filtered.get(1).map(String::as_str) == Some("report") => {
             ("memory-report", &filtered[2..])
         }
+        Some("memory") if filtered.get(1).map(String::as_str) == Some("failure-report") => {
+            ("memory-failure-report", &filtered[2..])
+        }
         Some("check") => ("check", &filtered[1..]),
         Some("run") => ("run", &filtered[1..]),
         Some("fmt") if !json => ("fmt", &filtered[1..]),
@@ -211,6 +256,12 @@ fn parse_args(args: Vec<String>) -> Result<Command, CliDiagnostic> {
             path: path.clone(),
             json,
         });
+    }
+    if mode == "memory-failure-report" {
+        if rest.len() != 1 || Path::new(path).is_dir() {
+            return Err(usage());
+        }
+        return Ok(Command::FailureReport { path: path.clone() });
     }
     if mode == "check" || mode == "fmt" {
         if rest.len() != 1 {

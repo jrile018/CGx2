@@ -6,6 +6,8 @@ edition = "2021"
 [lib]
 name = "cgx2_cli"
 path = "src/lib.rs"
+[features]
+failure-injection-test = ["cgx2-runtime/fault-injection"]
 
 [[bin]]
 name = "cgx2"

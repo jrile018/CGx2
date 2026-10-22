@@ -4,6 +4,39 @@ use cgx2_runtime::{AllocationError, CollectionMode, Handle, MemoryError, OwnedBy
 
 enum Binding { Region(RegionId), Owned(OwnedBytes), Managed(Handle), Reference(Option<Handle>), Borrow(String) }
 
+thread_local! { static CGX2_ROLLBACK: std::cell::Cell<Option<bool>> = const { std::cell::Cell::new(None) }; }
+thread_local! { static CGX2_OBSERVE: std::cell::Cell<bool> = const { std::cell::Cell::new(false) }; }
+
+fn graph_snapshot(session: &Session, bindings: &HashMap<&'static str, Binding>) -> Option<Vec<(&'static str, Handle, bool, Vec<Option<Handle>>)>> {
+    if !CGX2_OBSERVE.with(|value| value.get()) { return None; }
+    let mut roots = Vec::new();
+    for (&name, binding) in bindings {
+        let Binding::Managed(handle) = binding else { continue };
+        let live = session.read_bytes(*handle).is_ok();
+        let mut references = Vec::new();
+        if live {
+            for index in 0..=1024 {
+                match session.reference(*handle, index) {
+                    Ok(reference) if index < 1024 => references.push(reference),
+                    Ok(_) => return None,
+                    Err(MemoryError::InvalidReferenceSlot) => break,
+                    Err(_) => return None,
+                }
+            }
+        }
+        roots.push((name, *handle, live, references));
+    }
+    roots.sort_by(|a, b| a.0.cmp(b.0));
+    Some(roots)
+}
+fn record_rollback(before: Option<Vec<(&'static str, Handle, bool, Vec<Option<Handle>>)>>, session: &Session, bindings: &HashMap<&'static str, Binding>) {
+    CGX2_ROLLBACK.with(|value| {
+        if value.get().is_none() {
+            value.set(before.zip(graph_snapshot(session, bindings)).map(|(a, b)| a == b));
+        }
+    });
+}
+
 fn allocation(error: AllocationError, span: (usize, usize)) -> String {
     format!("CGR013 at {}..{}: memory allocation failed: {error:?}", span.0, span.1)
 }
