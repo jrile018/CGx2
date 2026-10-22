@@ -22,18 +22,18 @@
 
 ### Input and bounded result
 
-- [ ] Add red CLI tests for valid bounded proof, false postcondition with counterexample, inconsistent precondition, case cap, uninterpreted call, malformed/oversized input, and stable JSON.
-- [ ] Implement versioned parser, safe limits, verdict formatter, and source/input hash. A repeated input produces byte-identical deterministic output except for explicitly documented solver metadata.
-- [ ] Add README examples runnable offline without an external solver.
+- [x] Add CLI tests for valid bounded proof, false postcondition with counterexample, inconsistent precondition, case cap, uninterpreted call, malformed/oversized input, and stable JSON.
+- [x] Implement versioned parser, safe limits, verdict formatter, and source/input hash. A repeated input produces byte-identical deterministic output except for explicitly documented solver metadata.
+- [x] Add README examples runnable offline without an external solver.
 
 ### Solver transport boundary
 
-- [ ] Add fake-solver tests for `unsat`, `sat`, `unknown`, malformed output, nonzero exit, stderr, timeout, and large/stalled output. Fake responses must appear as untrusted protocol observations.
-- [ ] Repair `run_solver` transport limits if needed without changing public verdict semantics. If a real installed solver is available, run a small smoke and report executable/version; if unavailable, report the live gate as open.
+- [x] Add fake-solver tests for `unsat`, `sat`, `unknown`, malformed output, nonzero exit, stderr, timeout, and large/stalled output. Fake responses appear as untrusted protocol observations.
+- [x] Repair `run_solver` transport limits without changing public verdict semantics. No real solver was found on this host; the live gate remains open.
 
 ### Verification and handoff
 
-- [ ] Run `cargo test -p cgx2-verify-core -p cgx2-verify-cli --offline`, `RUSTUP_TOOLCHAIN=1.98.1 cargo fmt --all --check`, and `RUSTUP_TOOLCHAIN=1.98.1 cargo clippy -p cgx2-verify-core -p cgx2-verify-cli --all-targets --offline -- -D warnings`.
-- [ ] Commit only owned paths; show a proof-scope example and state the missing source integration and live-solver trust gates.
+- [x] Run `cargo test -p cgx2-verify-core -p cgx2-verify-cli --offline`, `RUSTUP_TOOLCHAIN=1.98.1 cargo fmt --all --check`, and `RUSTUP_TOOLCHAIN=1.98.1 cargo clippy -p cgx2-verify-core -p cgx2-verify-cli --all-targets --offline -- -D warnings`.
+- [x] Commit only owned paths; show a proof-scope example and state the missing source integration and live-solver trust gates.
 
 **Acceptance:** An external contract can be checked reproducibly with honest finite-domain results and solver observations that cannot be mistaken for a global proof.

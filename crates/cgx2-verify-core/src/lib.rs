@@ -10,4 +10,7 @@ pub use bounded::{verify_bounded, Counterexample, Domain, Failure, Scope, Unknow
 pub use eval::{eval, EvalError, Value};
 pub use expr::{Contract, Expr, Parameter, Sort, ValidationError};
 pub use smtlib::{emit_smtlib, SmtError};
-pub use solver::{parse_solver_result, run_solver, SolverExit, SolverResponse};
+pub use solver::{
+    observe_solver, parse_solver_result, run_solver, SolverExit, SolverObservation, SolverResponse,
+    SOLVER_OUTPUT_LIMIT,
+};

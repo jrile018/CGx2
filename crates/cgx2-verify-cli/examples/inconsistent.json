@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "parameters": [{"name": "x", "sort": "i64"}],
+  "domains": [{"name": "x", "min": 0, "max": 1}],
+  "requires": {"op": "bool", "value": false},
+  "ensures": {"op": "bool", "value": false}
+}
