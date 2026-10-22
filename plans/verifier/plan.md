@@ -43,12 +43,12 @@ Expose `Sort::{Bool, I64}`, a typed `Expr` for literals/variables/checked add/su
 - produces: [typed contract/evaluator API]
 - estimate: M
 - coordination_risk: low
-- status: pending
+- status: complete
 
-- [ ] Add failing tests for Boolean and `i64` variables, valid addition, overflow, sort mismatch, and invalid variable reference.
-- [ ] Run `cargo test --manifest-path crates/cgx2-verify-core/Cargo.toml --offline` to observe missing behavior.
-- [ ] Implement AST validation and checked evaluation; return typed errors instead of panics/wraparound.
-- [ ] Run crate tests; document exact supported operators.
+- [x] Add failing tests for Boolean and `i64` variables, valid addition, overflow, sort mismatch, and invalid variable reference.
+- [x] Run `cargo test --manifest-path crates/cgx2-verify-core/Cargo.toml --offline` to observe missing behavior.
+- [x] Implement AST validation and checked evaluation; return typed errors instead of panics/wraparound.
+- [x] Run crate tests; document exact supported operators.
 
 ### T2: Exhaustive finite-domain proof
 
@@ -59,12 +59,12 @@ Expose `Sort::{Bool, I64}`, a typed `Expr` for literals/variables/checked add/su
 - produces: [bounded `Verdict` with provenance]
 - estimate: M
 - coordination_risk: low
-- status: pending
+- status: complete
 
-- [ ] Add failing tests for a valid bounded property, a smallest counterexample, impossible precondition, overflow case, empty domain, and case-cap exhaustion.
-- [ ] Run tests to observe missing behavior, then implement deterministic enumeration with a checked Cartesian-product count.
-- [ ] Return `Proved` only after all admitted inputs are explored; include exact ranges and checked-operation assumptions. Validate counterexamples by reevaluating the contract.
-- [ ] Run crate tests and inspect each verdict's structured reason/scope.
+- [x] Add failing tests for a valid bounded property, a smallest counterexample, impossible precondition, overflow case, empty domain, and case-cap exhaustion.
+- [x] Run tests to observe missing behavior, then implement deterministic enumeration with a checked Cartesian-product count.
+- [x] Return `Proved` only after all admitted inputs are explored; include exact ranges and checked-operation assumptions. Validate counterexamples by reevaluating the contract.
+- [x] Run crate tests and inspect each verdict's structured reason/scope.
 
 ### T3: SMT-LIB and solver protocol
 
@@ -75,11 +75,11 @@ Expose `Sort::{Bool, I64}`, a typed `Expr` for literals/variables/checked add/su
 - produces: [SMT-LIB text and safe solver-result parser]
 - estimate: M
 - coordination_risk: low
-- status: pending
+- status: complete
 
-- [ ] Add failing snapshot tests for SMT-LIB `i64` bounds and overflow guards, plus protocol tests for `unsat`, `sat`, `unknown`, timeout, missing executable, and malformed output using a fake solver command.
-- [ ] Run tests to confirm failures, then implement emission and protocol parsing. Require a validated solver response and disclosed assumptions before accepting an external proof.
-- [ ] Run `cargo test --manifest-path crates/cgx2-verify-core/Cargo.toml --offline`, `cargo fmt --manifest-path crates/cgx2-verify-core/Cargo.toml --check`, and `cargo clippy --manifest-path crates/cgx2-verify-core/Cargo.toml --offline -- -D warnings`.
-- [ ] Document the bounded proof guarantee and absence of local `z3`; commit owned paths and stop. Report test evidence, commit ID, and integration assumptions.
+- [x] Add failing snapshot tests for SMT-LIB `i64` bounds and overflow guards, plus protocol tests for `unsat`, `sat`, `unknown`, timeout, missing executable, and malformed output using a fake solver command.
+- [x] Run tests to confirm failures, then implement emission and protocol parsing. Require a validated solver response and disclosed assumptions before accepting an external proof.
+- [x] Run `cargo test --manifest-path crates/cgx2-verify-core/Cargo.toml --offline`, `cargo fmt --manifest-path crates/cgx2-verify-core/Cargo.toml --check`, and `cargo clippy --manifest-path crates/cgx2-verify-core/Cargo.toml --offline -- -D warnings`.
+- [x] Document the bounded proof guarantee and absence of local `z3`; commit owned paths and stop. Report test evidence, commit ID, and integration assumptions.
 
 **Acceptance:** finite-domain truths are proved with explicit scope, false properties yield validated counterexamples, incomplete/unsupported cases remain unknown, checked overflow is preserved, and missing `z3` is reported honestly.

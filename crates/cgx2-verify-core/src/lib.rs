@@ -1,0 +1,13 @@
+//! Standalone verification conditions for CGx2's pure Boolean and checked-i64 subset.
+
+mod bounded;
+mod eval;
+mod expr;
+mod smtlib;
+mod solver;
+
+pub use bounded::{verify_bounded, Counterexample, Domain, Failure, Scope, UnknownReason, Verdict};
+pub use eval::{eval, EvalError, Value};
+pub use expr::{Contract, Expr, Parameter, Sort, ValidationError};
+pub use smtlib::{emit_smtlib, SmtError};
+pub use solver::{parse_solver_result, run_solver, SolverExit, SolverResponse};
