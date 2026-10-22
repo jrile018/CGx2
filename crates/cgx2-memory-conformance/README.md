@@ -1,5 +1,8 @@
 # Deterministic memory corpus
 
+Wave 14's bounded graph and reserve audit, including the explicit release-gate
+matrix and replay limits, is in [release-gate-wave14.md](release-gate-wave14.md).
+
 ## Wave 12 checked reference graph model
 
 `tests/graph.rs` runs 128 deterministic seeds (0 through 127), 80 transitions
