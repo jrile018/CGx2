@@ -1,7 +1,7 @@
 use cgx2_sema::{check_module, TypedModule};
 use cgx2_syntax::{parse_module, Span};
 
-/// A parser or baseline semantic error in zero-based, half-open UTF-8 bytes.
+/// A parser, scalar, memory-source, or ownership error in zero-based, half-open UTF-8 bytes.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct CheckDiagnostic {
     pub code: String,
@@ -9,7 +9,7 @@ pub struct CheckDiagnostic {
     pub span: Span,
 }
 
-/// Parse source and check the Wave 2 scalar/type subset without executing it.
+/// Parse source and check scalar semantics or the bounded memory-source subset without executing it.
 pub fn check_source(source: &str) -> Result<TypedModule, Vec<CheckDiagnostic>> {
     let module = parse_module(source).map_err(|errors| {
         errors

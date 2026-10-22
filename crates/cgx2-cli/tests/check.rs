@@ -96,7 +96,38 @@ fn help_states_check_scope() {
     assert!(output.status.success());
     let help = String::from_utf8(output.stdout).unwrap();
     assert!(help.contains("check FILE.cg"));
-    assert!(help.contains("ownership, effects, and capabilities are not checked"));
+    assert!(help.contains("bounded memory/ownership script subset"));
+}
+
+#[test]
+fn memory_check_fmt_and_run_have_distinct_contracts() {
+    let source = "let r = memory.region(mode: manual, limit: 4096)\nno_gc(budget: 256):\n    let x = memory.alloc_bytes(r, 64)\nmemory.collect(r)\n";
+    let file = SourceFile::new(source);
+    assert!(invoke(&["check", file.path()]).status.success());
+    let formatted = invoke(&["fmt", file.path()]);
+    assert!(formatted.status.success());
+    assert_eq!(formatted.stdout, source.as_bytes());
+    let run = json_errors(invoke(&["run", file.path(), "--diagnostic-format=json"]));
+    assert_eq!(run[0].code, "CGR009");
+    assert!(run[0].message.contains("memory execution"));
+
+    let invalid_source =
+        "let r = memory.region(mode: manual, limit: 4)\nno_gc(budget: 2):\n    memory.collect(r)\n";
+    let invalid = SourceFile::new(invalid_source);
+    let errors = json_errors(invoke(&[
+        "check",
+        invalid.path(),
+        "--diagnostic-format=json",
+    ]));
+    assert_eq!(errors[0].code, "CGO004");
+    let start = invalid_source.find("memory.collect(r)").unwrap();
+    assert_eq!(
+        errors[0].span,
+        Some(Span {
+            start,
+            end: start + "memory.collect(r)".len()
+        })
+    );
 }
 
 #[test]

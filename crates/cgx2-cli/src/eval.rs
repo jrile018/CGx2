@@ -211,6 +211,13 @@ impl Evaluator<'_> {
                         stmt.span,
                     ))
                 }
+                StmtKind::NoGc { .. } => {
+                    return Err(error(
+                        "CGR009",
+                        "memory execution is unsupported",
+                        stmt.span,
+                    ))
+                }
             }
         }
         Ok(Flow::Continue(tail))
@@ -265,7 +272,7 @@ impl Evaluator<'_> {
                 };
                 let values = arguments
                     .iter()
-                    .map(|a| self.eval_expr(a, scope))
+                    .map(|a| self.eval_expr(&a.value, scope))
                     .collect::<Result<Vec<_>, _>>()?;
                 match name {
                     "arg_count" => {
@@ -347,6 +354,13 @@ impl Evaluator<'_> {
 
 fn reject_unsupported(statements: &[Stmt]) -> Result<(), RunError> {
     for stmt in statements {
+        if stmt_has_memory(stmt) {
+            return Err(error(
+                "CGR009",
+                "memory execution is unsupported",
+                stmt.span,
+            ));
+        }
         if matches!(stmt.kind, StmtKind::For { .. }) {
             return Err(error(
                 "CGR009",
@@ -356,6 +370,31 @@ fn reject_unsupported(statements: &[Stmt]) -> Result<(), RunError> {
         }
     }
     Ok(())
+}
+
+fn stmt_has_memory(stmt: &Stmt) -> bool {
+    match &stmt.kind {
+        StmtKind::Let { value, .. } | StmtKind::Assign { value, .. } | StmtKind::Expr(value) => {
+            expr_has_memory(value)
+        }
+        StmtKind::Return(Some(value)) => expr_has_memory(value),
+        StmtKind::For { iter, body, .. } => {
+            expr_has_memory(iter) || body.iter().any(stmt_has_memory)
+        }
+        StmtKind::NoGc { .. } => true,
+        StmtKind::Return(None) => false,
+    }
+}
+
+fn expr_has_memory(expr: &Expr) -> bool {
+    match &expr.kind {
+        ExprKind::Name(path) => path.segments.first().is_some_and(|s| s == "memory"),
+        ExprKind::Call { callee, arguments } => {
+            expr_has_memory(callee) || arguments.iter().any(|a| expr_has_memory(&a.value))
+        }
+        ExprKind::Binary { left, right, .. } => expr_has_memory(left) || expr_has_memory(right),
+        _ => false,
+    }
 }
 
 fn validate_type(ty: &TypeSyntax) -> Result<(), RunError> {

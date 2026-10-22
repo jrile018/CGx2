@@ -7,7 +7,7 @@ use cgx2_syntax::{format_module, parse_module};
 
 use diagnostics::{CliDiagnostic, DiagnosticFormat};
 
-const HELP: &str = "usage: cgx2 [--diagnostic-format=json] check FILE.cg | cgx2 [--diagnostic-format=json] run FILE.cg [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 fmt FILE.cg\ncheck validates syntax and baseline names/types/mutability only; ownership, effects, and capabilities are not checked";
+const HELP: &str = "usage: cgx2 [--diagnostic-format=json] check FILE.cg | cgx2 [--diagnostic-format=json] run FILE.cg [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 fmt FILE.cg\ncheck validates syntax, scalar types, and a bounded memory/ownership script subset; effects and capabilities are not checked; run cannot execute memory constructs";
 
 enum Command {
     Check { path: String },

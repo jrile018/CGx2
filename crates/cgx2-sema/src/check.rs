@@ -64,6 +64,9 @@ struct Checker {
 
 /// Check all functions and script statements, returning every discovered diagnostic.
 pub fn check_module(module: &Module) -> Result<TypedModule, Vec<TypeDiagnostic>> {
+    if let Some(result) = crate::memory::check_memory_module(module) {
+        return result;
+    }
     let mut checker = Checker {
         functions: BTreeMap::new(),
         expressions: SpanTypes::default(),
@@ -124,7 +127,7 @@ fn function_order(functions: &[Function]) -> Vec<&Function> {
                 }
                 calls_in_expr(callee, calls);
                 for argument in arguments {
-                    calls_in_expr(argument, calls);
+                    calls_in_expr(&argument.value, calls);
                 }
             }
             ExprKind::Binary { left, right, .. } => {
@@ -143,6 +146,12 @@ fn function_order(functions: &[Function]) -> Vec<&Function> {
             StmtKind::Return(Some(value)) => calls_in_expr(value, calls),
             StmtKind::For { iter, body, .. } => {
                 calls_in_expr(iter, calls);
+                for statement in body {
+                    calls_in_stmt(statement, calls);
+                }
+            }
+            StmtKind::NoGc { budget, body } => {
+                calls_in_expr(budget, calls);
                 for statement in body {
                     calls_in_stmt(statement, calls);
                 }
@@ -411,6 +420,14 @@ impl Checker {
                 self.scopes.pop();
                 Some((Type::Unit, statement.span))
             }
+            StmtKind::NoGc { .. } => {
+                self.report(
+                    "CGM001",
+                    "no_gc requires the memory source checker",
+                    statement.span,
+                );
+                None
+            }
         }
     }
 
@@ -464,7 +481,17 @@ impl Checker {
                 }
             }
             ExprKind::Call { callee, arguments } => {
-                let arg_types: Vec<_> = arguments.iter().map(|arg| self.check_expr(arg)).collect();
+                let mut arg_types = Vec::new();
+                for arg in arguments {
+                    if arg.name.is_some() {
+                        self.report(
+                            "CGT005",
+                            "named arguments are unsupported for scalar calls",
+                            arg.span,
+                        );
+                    }
+                    arg_types.push(self.check_expr(&arg.value));
+                }
                 let ExprKind::Name(path) = &callee.kind else {
                     self.check_expr(callee);
                     self.report("CGT003", "callee must be a function name", expr.span);

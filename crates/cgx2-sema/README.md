@@ -1,6 +1,6 @@
 # cgx2-sema
 
-`cgx2-sema` checks the unchanged Wave 1 `cgx2_syntax::Module` AST. Parse first with `cgx2_syntax::parse_module`, then call `check_module(&module)`. Success returns a `TypedModule`; failure returns all collected `TypeDiagnostic` values. Each diagnostic has a stable `code`, a `message`, and a zero-based, half-open UTF-8 byte `span` into the original source.
+`cgx2-sema` checks the `cgx2_syntax::Module` AST. Parse first with `cgx2_syntax::parse_module`, then call `check_module(&module)`. Success returns a `TypedModule`; failure returns all collected `TypeDiagnostic` values. Each diagnostic has a stable `code`, a `message`, and a zero-based, half-open UTF-8 byte `span` into the original source.
 
 `TypedModule.functions` is a `BTreeMap<String, FunctionSignature>` keyed by function name. It includes the reserved preview builtins `arg_count() -> i64` and `arg(i64) -> String`, which have synthetic `Span { start: 0, end: 0 }`. `FunctionSignature` exposes `public`, ordered `parameters`, `return_type`, and declaration `span`. Private functions without a return annotation infer their return type from the final statement. Unannotated recursive return inference is unsupported; annotate those functions. `TypedModule.expressions` is a `SpanTypes` index: `get(span)` retrieves an expression's `Type`, and `iter()` yields `(Span, &Type)` pairs in byte-offset order. Failed expressions have no entry.
 
@@ -16,4 +16,10 @@ The checked subset has `i64`, `Bool`, `String`, `Unit`, and nested `List<T>` typ
 | `CGT006` | Missing public return annotation |
 | `CGT007` | Integer literal outside signed `i64` |
 
-This crate does not execute code, check runtime overflow, implement effects or capabilities, enforce ownership or region safety, or provide a `cgx2 check` CLI command. Function values and qualified names are outside this preview. The syntax parser has no list literal, so list iteration is checked from typed parameters or other future expressions.
+This crate does not execute code, check runtime overflow or memory limits, or implement effects or capabilities. Function values and qualified names are outside the scalar preview. The syntax parser has no list literal, so list iteration is checked from typed parameters or other future expressions.
+
+## Bounded memory-source profile
+
+For a standalone script containing `memory.*` or `no_gc`, `check_module` uses a conservative source lowerer in `src/memory.rs` and invokes `cgx2_ownership::check_ops`. The reserved `memory` namespace accepts `memory.region(mode: auto|manual, limit: N)`, `memory.owned_bytes(N)`, `memory.move(owned)`, `memory.alloc_bytes(region, N)`, `memory.borrow(value)`, `memory.borrow_mut(value)`, and statement calls `memory.use(value)`, `memory.drop(value)`, `memory.end_borrow(token)`, `memory.collect(region)`, and `memory.close(region)`. `N` and `no_gc(budget: N)` require nonnegative integer literal bytes that fit `usize`; this is syntax/static validation only, and runtime limit enforcement is still required. Region, owned, managed, and borrow names have distinct source kinds and cannot be passed interchangeably. All memory bindings remain tracked until an explicit drop/end/close; scope cleanup is not modeled yet.
+
+The lowerer emits exact source spans and preserves ownership diagnostic codes `CGO001`–`CGO005`. `CGM001` reports constructs the source lowerer does not model, including memory operations in functions, dynamic calls, aliases, assignment, control flow, and returns in a memory script. `CGM002` reports wrong or missing intrinsic arguments, handle kinds, and nonliteral/overflowing byte counts. Ordinary scalar checking retains its `CGT` diagnostics; named arguments in scalar calls are currently rejected with `CGT005`. A successful memory script returns an empty `TypedModule` summary. This profile does not execute memory operations or prove budgets safe at runtime.

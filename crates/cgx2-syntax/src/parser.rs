@@ -1,8 +1,8 @@
-use std::mem::discriminant;
+use std::{collections::BTreeSet, mem::discriminant};
 
 use crate::{
-    lex, AssignOp, BinaryOp, Expr, ExprKind, Function, Module, Parameter, Path, Span, Stmt,
-    StmtKind, SyntaxDiagnostic, Token, TokenKind, TypeSyntax,
+    lex, AssignOp, BinaryOp, CallArg, Expr, ExprKind, Function, Module, Parameter, Path, Span,
+    Stmt, StmtKind, SyntaxDiagnostic, Token, TokenKind, TypeSyntax,
 };
 
 /// Parse a candidate CGx2 module or standalone script.
@@ -245,7 +245,25 @@ impl Parser {
     }
     fn parse_stmt(&mut self) -> Option<Stmt> {
         let start = self.peek().span.start;
-        let kind = if self.eat(&TokenKind::Let).is_some() {
+        let kind = if self.eat(&TokenKind::NoGc).is_some() {
+            self.expect(&TokenKind::LParen, "CGS103", "expected ( after no_gc")?;
+            let arguments = self.parse_arguments()?;
+            let label_span = arguments.first().map_or(self.peek().span, |arg| arg.span);
+            if arguments.len() != 1 || arguments[0].name.as_deref() != Some("budget") {
+                self.errors.push(SyntaxDiagnostic {
+                    code: "CGS106",
+                    message: "no_gc requires exactly one budget named argument".into(),
+                    span: label_span,
+                });
+            }
+            self.expect(&TokenKind::RParen, "CGS103", "expected ) after budget")?;
+            let budget = arguments.into_iter().next()?.value;
+            let (body, end) = self.parse_suite()?;
+            return Some(Stmt {
+                kind: StmtKind::NoGc { budget, body },
+                span: Span { start, end },
+            });
+        } else if self.eat(&TokenKind::Let).is_some() {
             let mutable = self.eat(&TokenKind::Mut).is_some();
             let (name, _) = self.name()?;
             let annotation = if self.eat(&TokenKind::Colon).is_some() {
@@ -324,15 +342,7 @@ impl Parser {
         loop {
             if self.at(&TokenKind::LParen) && 7 >= min_bp {
                 self.advance();
-                let mut arguments = Vec::new();
-                if !self.at(&TokenKind::RParen) {
-                    loop {
-                        arguments.push(self.parse_expr(0)?);
-                        if self.eat(&TokenKind::Comma).is_none() {
-                            break;
-                        }
-                    }
-                }
+                let arguments = self.parse_arguments()?;
                 let end = self
                     .expect(
                         &TokenKind::RParen,
@@ -377,6 +387,52 @@ impl Parser {
             };
         }
         Some(left)
+    }
+    fn parse_arguments(&mut self) -> Option<Vec<CallArg>> {
+        let mut arguments = Vec::new();
+        let mut labels = BTreeSet::new();
+        let mut named = false;
+        if !self.at(&TokenKind::RParen) {
+            loop {
+                let start = self.peek().span.start;
+                let name = if matches!(self.peek().kind, TokenKind::Name(_))
+                    && self
+                        .tokens
+                        .get(self.pos + 1)
+                        .is_some_and(|next| matches!(next.kind, TokenKind::Colon))
+                {
+                    let (name, span) = self.name()?;
+                    self.advance();
+                    if !labels.insert(name.clone()) {
+                        self.errors.push(SyntaxDiagnostic {
+                            code: "CGS106",
+                            message: format!("duplicate named argument `{name}`"),
+                            span,
+                        });
+                    }
+                    named = true;
+                    Some(name)
+                } else {
+                    if named {
+                        self.error("CGS107", "positional argument after named argument");
+                    }
+                    None
+                };
+                let value = self.parse_expr(0)?;
+                arguments.push(CallArg {
+                    name,
+                    span: Span {
+                        start,
+                        end: value.span.end,
+                    },
+                    value,
+                });
+                if self.eat(&TokenKind::Comma).is_none() {
+                    break;
+                }
+            }
+        }
+        Some(arguments)
     }
     fn parse_primary(&mut self) -> Option<Expr> {
         let token = self.peek().clone();

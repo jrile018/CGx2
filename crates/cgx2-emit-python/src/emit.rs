@@ -186,6 +186,11 @@ fn validate_block(stmts: &[Stmt], script: bool, errors: &mut Vec<EmitDiagnostic>
                 "for loops are unsupported by Python emission",
                 stmt.span,
             )),
+            StmtKind::NoGc { .. } => errors.push(EmitDiagnostic::new(
+                "CGE001",
+                "memory constructs are unsupported by Python emission",
+                stmt.span,
+            )),
         }
     }
 }
@@ -216,6 +221,15 @@ fn validate_expr(expr: &Expr, errors: &mut Vec<EmitDiagnostic>) {
             validate_expr(right, errors);
         }
         ExprKind::Call { callee, arguments } => {
+            if matches!(&callee.kind, ExprKind::Name(path) if path.segments.first().is_some_and(|s| s == "memory"))
+            {
+                errors.push(EmitDiagnostic::new(
+                    "CGE001",
+                    "memory operations are unsupported by Python emission",
+                    expr.span,
+                ));
+                return;
+            }
             if !matches!(&callee.kind, ExprKind::Name(path) if path.segments.len() == 1) {
                 errors.push(EmitDiagnostic::new(
                     "CGE001",
@@ -224,7 +238,14 @@ fn validate_expr(expr: &Expr, errors: &mut Vec<EmitDiagnostic>) {
                 ));
             }
             for arg in arguments {
-                validate_expr(arg, errors);
+                if arg.name.is_some() {
+                    errors.push(EmitDiagnostic::new(
+                        "CGE001",
+                        "named calls are unsupported by Python emission",
+                        arg.span,
+                    ));
+                }
+                validate_expr(&arg.value, errors);
             }
         }
         _ => {}
@@ -258,6 +279,7 @@ fn emit_block(stmts: &[Stmt], indent: usize, return_tail: bool, output: &mut Str
             }
             StmtKind::Expr(expr) => output.push_str(&format!("{}\n", emit_expr(expr))),
             StmtKind::For { .. } => unreachable!("validated before emission"),
+            StmtKind::NoGc { .. } => unreachable!("validated before emission"),
         }
     }
     if stmts.is_empty()
@@ -299,7 +321,7 @@ fn emit_expr(expr: &Expr) -> String {
             };
             let args = arguments
                 .iter()
-                .map(emit_expr)
+                .map(|arg| emit_expr(&arg.value))
                 .collect::<Vec<_>>()
                 .join(", ");
             format!("{name}({args})")

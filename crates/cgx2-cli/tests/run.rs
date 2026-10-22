@@ -81,6 +81,14 @@ fn syntax_errors_keep_cgs_code() {
 }
 
 #[test]
+fn low_level_run_source_rejects_memory_before_interpreting() {
+    let source = "let r = memory.region(mode: manual, limit: 4)\n";
+    let error = run_source(source, &[]).unwrap_err();
+    assert_eq!(error.code, "CGR009");
+    assert!(error.message.contains("memory execution"));
+}
+
+#[test]
 fn annotations_and_unsupported_items_are_explicit() {
     assert_eq!(
         run_source("let x: i64 = true\n", &[]).unwrap_err().code,

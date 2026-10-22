@@ -135,10 +135,59 @@ fn parse_call_and_arithmetic_precedence() {
     let ExprKind::Call { arguments, .. } = &value.kind else {
         panic!("call")
     };
-    let ExprKind::Binary { right, .. } = &arguments[0].kind else {
+    let ExprKind::Binary { right, .. } = &arguments[0].value.kind else {
         panic!("sum")
     };
     assert!(matches!(right.kind, ExprKind::Binary { .. }));
+}
+
+#[test]
+fn named_arguments_and_nested_guards_keep_byte_spans() {
+    let source = "let café = memory.region(mode: manual, limit: 4096)\nno_gc(budget: 256):\n    no_gc(budget: 128):\n        memory.collect(café)\n";
+    let module = parse_module(source).unwrap();
+    let StmtKind::Let { value, .. } = &module.statements[0].kind else {
+        panic!("let")
+    };
+    let ExprKind::Call { arguments, .. } = &value.kind else {
+        panic!("call")
+    };
+    assert_eq!(arguments[0].name.as_deref(), Some("mode"));
+    assert_eq!(
+        &source[arguments[0].span.start..arguments[0].span.end],
+        "mode: manual"
+    );
+    let StmtKind::NoGc { body, .. } = &module.statements[1].kind else {
+        panic!("guard")
+    };
+    assert!(matches!(body[0].kind, StmtKind::NoGc { .. }));
+    let once = format_module(&module);
+    assert_eq!(once, format_module(&parse_module(&once).unwrap()));
+}
+
+#[test]
+fn reject_duplicate_labels_and_positional_after_named() {
+    let duplicate = parse_module("f(x: 1, x: 2)\n").unwrap_err();
+    assert_eq!(duplicate[0].code, "CGS106");
+    assert_eq!(duplicate[0].span, Span { start: 8, end: 9 });
+    let mixed = parse_module("f(x: 1, 2)\n").unwrap_err();
+    assert_eq!(mixed[0].code, "CGS107");
+    assert_eq!(mixed[0].span, Span { start: 8, end: 9 });
+    assert!(parse_module("f(1, x: 2)\n").is_ok());
+    for source in [
+        "no_gc():\n    1\n",
+        "no_gc(limit: 1):\n    1\n",
+        "no_gc(budget: 1, budget: 2):\n    1\n",
+    ] {
+        assert!(parse_module(source)
+            .unwrap_err()
+            .iter()
+            .any(|e| e.code == "CGS106"));
+    }
+    assert!(parse_module("no_gc(budget: -1):\n    1\n").is_err());
+    assert_eq!(
+        parse_module("no_gc(budget: 1):\n1\n").unwrap_err()[0].code,
+        "CGS104"
+    );
 }
 
 #[test]
@@ -162,6 +211,7 @@ const FIXTURES: &[&str] = &[
     "let x = f(1 + 2 * 3)\n",
     "let x = (1 + 2) * 3\n",
     "let x = 1 - (2 - 3)\n",
+    "let scratch = memory.region(mode: manual, limit: 4096)\nno_gc(budget: 256):\n    no_gc(budget: 128):\n        memory.collect(scratch)\n",
 ];
 
 #[test]
@@ -212,7 +262,8 @@ fn erase_expr(expr: &mut Expr) {
         ExprKind::Call { callee, arguments } => {
             erase_expr(callee);
             for arg in arguments {
-                erase_expr(arg);
+                arg.span = expr.span;
+                erase_expr(&mut arg.value);
             }
         }
         _ => {}
@@ -243,6 +294,10 @@ fn erase_stmts(stmts: &mut [Stmt]) {
             StmtKind::Expr(expr) => erase_expr(expr),
             StmtKind::For { iter, body, .. } => {
                 erase_expr(iter);
+                erase_stmts(body);
+            }
+            StmtKind::NoGc { budget, body } => {
+                erase_expr(budget);
                 erase_stmts(body);
             }
         }

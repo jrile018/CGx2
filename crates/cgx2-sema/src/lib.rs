@@ -2,6 +2,7 @@
 
 mod check;
 mod diagnostic;
+mod memory;
 mod types;
 
 pub use check::{check_module, FunctionSignature, SpanTypes, TypedModule};

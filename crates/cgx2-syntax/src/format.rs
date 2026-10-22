@@ -57,6 +57,14 @@ fn write_stmt(out: &mut String, stmt: &Stmt, indent: usize) {
         out.push_str("    ");
     }
     match &stmt.kind {
+        StmtKind::NoGc { budget, body } => {
+            out.push_str("no_gc(budget: ");
+            write_expr(out, budget, 0);
+            out.push_str("):\n");
+            for nested in body {
+                write_stmt(out, nested, indent + 1);
+            }
+        }
         StmtKind::Let {
             mutable,
             name,
@@ -153,7 +161,11 @@ fn write_expr(out: &mut String, expr: &Expr, required: u8) {
                 if index > 0 {
                     out.push_str(", ");
                 }
-                write_expr(out, arg, 0);
+                if let Some(name) = &arg.name {
+                    out.push_str(name);
+                    out.push_str(": ");
+                }
+                write_expr(out, &arg.value, 0);
             }
             out.push(')');
         }

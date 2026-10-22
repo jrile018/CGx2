@@ -64,6 +64,10 @@ pub struct Stmt {
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum StmtKind {
+    NoGc {
+        budget: Expr,
+        body: Vec<Stmt>,
+    },
     Let {
         mutable: bool,
         name: String,
@@ -97,6 +101,13 @@ pub struct Expr {
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
+pub struct CallArg {
+    pub name: Option<String>,
+    pub value: Expr,
+    pub span: Span,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub enum ExprKind {
     Name(Path),
     Integer(String),
@@ -109,7 +120,7 @@ pub enum ExprKind {
     },
     Call {
         callee: Box<Expr>,
-        arguments: Vec<Expr>,
+        arguments: Vec<CallArg>,
     },
 }
 

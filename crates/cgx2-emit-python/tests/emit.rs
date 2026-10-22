@@ -150,3 +150,12 @@ fn invalid_string_escape_has_literal_diagnostic() {
     assert_eq!(error[0].code, "CGE003");
     assert_eq!(error[0].span, Span { start: 0, end: 7 });
 }
+
+#[test]
+fn checked_memory_source_is_not_emitted_as_python() {
+    let source = "let r = memory.region(mode: auto, limit: 64)\nno_gc(budget: 4):\n    let x = memory.alloc_bytes(r, 1)\n";
+    let (module, typed) = checked(source);
+    let errors = emit_python(&module, &typed).unwrap_err();
+    assert_eq!(errors[0].code, "CGE001");
+    assert!(errors[0].message.contains("memory"));
+}
