@@ -20,6 +20,11 @@ fn opt_in_failure_report_preserves_primary_diagnostic_and_success_output() {
     assert_eq!(failure["diagnostic_code"], "CGR014");
     assert_eq!(failure["file"], source.to_string_lossy().as_ref());
     assert_eq!(failure["rollback_preserved"], true);
+    assert_eq!(failure["operation_failure"]["rooted_handles"], 1);
+    assert_eq!(failure["operation_failure"]["rooted_edges"], 0);
+    assert_eq!(failure["final_unwind"]["rooted_handles"], 0);
+    assert_eq!(failure["final_unwind"]["rooted_edges"], 0);
+    assert_eq!(failure["final_unwind"]["memory"], failure["memory"]);
     assert!(
         failure["memory"]["totals"]["collection_count"]
             .as_u64()

@@ -169,6 +169,19 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
                         if let Ok(memory) =
                             serde_json::from_str::<serde_json::Value>(&report.to_json())
                         {
+                            let snapshot_json = |snapshot: &cgx2_cli::FailureSnapshot| {
+                                serde_json::from_str::<serde_json::Value>(
+                                    &snapshot.memory.to_json(),
+                                )
+                                .ok()
+                                .map(|memory| {
+                                    serde_json::json!({
+                                        "rooted_handles": snapshot.rooted_handles,
+                                        "rooted_edges": snapshot.rooted_edges,
+                                        "memory": memory,
+                                    })
+                                })
+                            };
                             println!(
                                 "{}",
                                 serde_json::json!({
@@ -179,6 +192,8 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
                                     "span": span,
                                     "rollback_preserved": failure.rollback_preserved,
                                     "memory": memory,
+                                    "operation_failure": failure.operation_failure.as_deref().and_then(snapshot_json),
+                                    "final_unwind": failure.final_unwind.as_deref().and_then(snapshot_json),
                                 })
                             );
                         }

@@ -1,11 +1,39 @@
 // Generated CGx2 memory script support. All storage and collection use cgx2_runtime::Session.
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use cgx2_runtime::{AllocationError, CollectionMode, Handle, MemoryError, OwnedBytes, RegionId, Session};
 
 enum Binding { Region(RegionId), Owned(OwnedBytes), Managed(Handle), Reference(Option<Handle>), Borrow(String) }
 
 thread_local! { static CGX2_ROLLBACK: std::cell::Cell<Option<bool>> = const { std::cell::Cell::new(None) }; }
 thread_local! { static CGX2_OBSERVE: std::cell::Cell<bool> = const { std::cell::Cell::new(false) }; }
+thread_local! { static CGX2_FAILURE: std::cell::RefCell<Option<FailureObservation>> = const { std::cell::RefCell::new(None) }; }
+struct FailureObservation {
+    memory: String,
+    handles: HashSet<Handle>,
+    edges: usize,
+    observable: bool,
+}
+impl FailureObservation {
+    fn new(session: &Session) -> Self {
+        Self { memory: session.memory_report().to_json(), handles: HashSet::new(), edges: 0, observable: true }
+    }
+    fn add_roots(&mut self, session: &Session, bindings: &HashMap<&'static str, Binding>) {
+        let Some(roots) = graph_snapshot(session, bindings) else {
+            self.observable = false;
+            return;
+        };
+        for (_, handle, live, references) in roots {
+            if live && self.handles.insert(handle) {
+                self.edges += references.iter().filter(|edge| edge.is_some()).count();
+            }
+        }
+    }
+    fn to_json(&self) -> String {
+        let handles = if self.observable { self.handles.len().to_string() } else { "null".into() };
+        let edges = if self.observable { self.edges.to_string() } else { "null".into() };
+        format!("{{\"rooted_handles\":{handles},\"rooted_edges\":{edges},\"memory\":{}}}", self.memory)
+    }
+}
 
 fn graph_snapshot(session: &Session, bindings: &HashMap<&'static str, Binding>) -> Option<Vec<(&'static str, Handle, bool, Vec<Option<Handle>>)>> {
     if !CGX2_OBSERVE.with(|value| value.get()) { return None; }
@@ -30,6 +58,12 @@ fn graph_snapshot(session: &Session, bindings: &HashMap<&'static str, Binding>) 
     Some(roots)
 }
 fn record_rollback(before: Option<Vec<(&'static str, Handle, bool, Vec<Option<Handle>>)>>, session: &Session, bindings: &HashMap<&'static str, Binding>) {
+    if CGX2_OBSERVE.with(|value| value.get()) {
+        CGX2_FAILURE.with(|value| {
+            let mut value = value.borrow_mut();
+            value.get_or_insert_with(|| FailureObservation::new(session)).add_roots(session, bindings);
+        });
+    }
     CGX2_ROLLBACK.with(|value| {
         if value.get().is_none() {
             value.set(before.zip(graph_snapshot(session, bindings)).map(|(a, b)| a == b));

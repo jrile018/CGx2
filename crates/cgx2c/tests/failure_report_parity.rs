@@ -111,7 +111,14 @@ fn semantic_json(json: &str) -> (Vec<Vec<u64>>, Vec<u64>) {
     .collect();
     (regions, totals)
 }
-fn compare_failure(name: &str, code: &str, detail: &str, fault: Option<usize>) {
+fn compare_failure(
+    name: &str,
+    code: &str,
+    detail: &str,
+    fault: Option<usize>,
+    roots: u64,
+    edges: u64,
+) {
     let case = Scratch::new();
     let source = fixture(name);
     let text = fs::read_to_string(&source).unwrap();
@@ -130,6 +137,15 @@ fn compare_failure(name: &str, code: &str, detail: &str, fault: Option<usize>) {
     let span = failure.error.span.expect("source span");
     assert!(text.is_char_boundary(span.start) && text.is_char_boundary(span.end));
     assert_eq!(failure.rollback_preserved, Some(true), "{name}");
+    let operation = failure
+        .operation_failure
+        .as_ref()
+        .expect("operation snapshot");
+    let final_unwind = failure.final_unwind.as_ref().expect("final snapshot");
+    assert_eq!(operation.rooted_handles, Some(roots as usize), "{name}");
+    assert_eq!(operation.rooted_edges, Some(edges as usize), "{name}");
+    assert_eq!(final_unwind.rooted_handles, Some(0), "{name}");
+    assert_eq!(final_unwind.rooted_edges, Some(0), "{name}");
     let interpreted = failure.report.expect("partial report").to_json();
     for release in [false, true] {
         let binary = case.path(&format!("{name}-{release}"));
@@ -156,6 +172,22 @@ fn compare_failure(name: &str, code: &str, detail: &str, fault: Option<usize>) {
             "{name}: {stderr}"
         );
         let native = fs::read_to_string(&report_path).unwrap();
+        let native_operation = native.split_once("\"operation_failure\":").unwrap().1;
+        let native_final = native.split_once("\"final_unwind\":").unwrap().1;
+        assert_eq!(number(native_operation, "rooted_handles"), roots, "{name}");
+        assert_eq!(number(native_operation, "rooted_edges"), edges, "{name}");
+        assert_eq!(number(native_final, "rooted_handles"), 0, "{name}");
+        assert_eq!(number(native_final, "rooted_edges"), 0, "{name}");
+        assert_eq!(
+            semantic_json(native_operation),
+            semantic_json(&operation.memory.to_json()),
+            "{name} operation release={release}"
+        );
+        assert_eq!(
+            semantic_json(native_final),
+            semantic_json(&final_unwind.memory.to_json()),
+            "{name} unwind release={release}"
+        );
         assert!(native.contains("\"status\":\"error\""), "{name}");
         assert!(
             native.contains(&format!("\"diagnostic_code\":\"{code}\"")),
@@ -183,10 +215,71 @@ fn compare_failure(name: &str, code: &str, detail: &str, fault: Option<usize>) {
 
 #[test]
 fn source_runtime_failures_match_native_debug_and_release() {
-    compare_failure("source_graph_dangling.cg", "CGR014", "InvalidHandle", None);
-    compare_failure("failure_manual_limit.cg", "CGR013", "RegionLimit", None);
-    compare_failure("failure_no_gc_budget.cg", "CGR013", "BudgetExceeded", None);
-    compare_failure("failure_host_fault.cg", "CGR013", "HostAllocation", Some(6));
+    compare_failure(
+        "source_graph_dangling.cg",
+        "CGR014",
+        "InvalidHandle",
+        None,
+        1,
+        0,
+    );
+    compare_failure(
+        "failure_manual_limit.cg",
+        "CGR013",
+        "RegionLimit",
+        None,
+        2,
+        1,
+    );
+    compare_failure(
+        "failure_no_gc_budget.cg",
+        "CGR013",
+        "BudgetExceeded",
+        None,
+        2,
+        1,
+    );
+    compare_failure(
+        "failure_host_fault.cg",
+        "CGR013",
+        "HostAllocation",
+        Some(6),
+        2,
+        1,
+    );
+    compare_failure(
+        "failure_nested_mutation_limit.cg",
+        "CGR013",
+        "RegionLimit",
+        None,
+        3,
+        1,
+    );
+}
+
+#[cfg(target_os = "linux")]
+#[test]
+fn report_write_failure_keeps_primary_runtime_diagnostic() {
+    let case = Scratch::new();
+    let source = fixture("failure_manual_limit.cg");
+    let binary = case.path("report-write-failure");
+    let built = build(&source, &binary, false, None);
+    assert!(
+        built.status.success(),
+        "{}",
+        String::from_utf8_lossy(&built.stderr)
+    );
+    let output = Command::new(&binary)
+        .env("CGX2_MEMORY_REPORT", "/proc/cgx2-failure-report.json")
+        .output()
+        .unwrap();
+    let stderr = String::from_utf8_lossy(&output.stderr);
+    assert_eq!(output.status.code(), Some(1));
+    assert!(
+        stderr.contains("CGR013") && stderr.contains("RegionLimit"),
+        "{stderr}"
+    );
+    assert!(stderr.contains("CGR017"), "{stderr}");
 }
 
 #[test]

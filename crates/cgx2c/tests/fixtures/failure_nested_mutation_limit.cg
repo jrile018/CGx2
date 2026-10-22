@@ -1,0 +1,21 @@
+fn exhaust_after_link() -> Unit effects(ManagedAlloc, Mutate):
+    let region = memory.region(mode: manual, limit: 256)
+    let parent = memory.alloc_object(region, 8, 1)
+    let child = memory.alloc_object(region, 4, 0)
+    memory.set_reference(parent, 0, child)
+    let denied = memory.alloc_object(region, 200, 0)
+    memory.drop(denied)
+    memory.clear_reference(parent, 0)
+    memory.drop(child)
+    memory.drop(parent)
+    memory.close(region)
+
+fn dispatch() -> Unit effects(ManagedAlloc, Mutate):
+    let held_region = memory.region(mode: manual, limit: 256)
+    let held = memory.alloc_object(held_region, 4, 0)
+    exhaust_after_link()
+    memory.drop(held)
+    memory.close(held_region)
+
+fn main() -> Unit effects(ManagedAlloc, Mutate):
+    dispatch()

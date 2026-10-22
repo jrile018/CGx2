@@ -1,5 +1,5 @@
 //! Execution of checked memory scripts and bounded local memory functions.
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use cgx2_runtime::{
     AllocationError, CollectionMode, Handle, MemoryError, MemoryReport, OwnedBytes, RegionId,
@@ -13,6 +13,63 @@ pub(crate) struct MemoryFailure {
     pub error: RunError,
     pub report: Option<Box<MemoryReport>>,
     pub rollback_preserved: Option<bool>,
+    pub operation_failure: Option<Box<FailureSnapshot>>,
+    pub final_unwind: Option<Box<FailureSnapshot>>,
+}
+
+#[derive(Default)]
+struct FailureState {
+    rollback: Option<bool>,
+    operation: Option<FailureObservation>,
+}
+
+/// Roots are live managed bindings in the active source scopes. Edges are
+/// occupied reference slots on those roots; the runtime report supplies the
+/// per-region and total byte, failure, and collection counters.
+pub struct FailureSnapshot {
+    pub rooted_handles: Option<usize>,
+    pub rooted_edges: Option<usize>,
+    pub memory: MemoryReport,
+}
+
+struct FailureObservation {
+    handles: HashSet<Handle>,
+    edges: usize,
+    observable: bool,
+    memory: MemoryReport,
+}
+
+impl FailureObservation {
+    fn new(session: &Session, bindings: &HashMap<String, Binding>) -> Self {
+        let mut observation = Self {
+            handles: HashSet::new(),
+            edges: 0,
+            observable: true,
+            memory: session.memory_report(),
+        };
+        observation.add_roots(session, bindings);
+        observation
+    }
+
+    fn add_roots(&mut self, session: &Session, bindings: &HashMap<String, Binding>) {
+        let Some(roots) = graph_snapshot(session, bindings) else {
+            self.observable = false;
+            return;
+        };
+        for (_, handle, live, references) in roots {
+            if live && self.handles.insert(handle) {
+                self.edges += references.iter().filter(|edge| edge.is_some()).count();
+            }
+        }
+    }
+
+    fn finish(self) -> FailureSnapshot {
+        FailureSnapshot {
+            rooted_handles: self.observable.then_some(self.handles.len()),
+            rooted_edges: self.observable.then_some(self.edges),
+            memory: self.memory,
+        }
+    }
 }
 
 type GraphSnapshot = Vec<(String, Handle, bool, Vec<Option<Handle>>)>;
@@ -407,11 +464,18 @@ fn execute_with_functions(
     bindings: &mut HashMap<String, Binding>,
     steps: &mut usize,
     functions: &HashMap<String, Vec<SpannedOp>>,
-    failure_rollback: &mut Option<bool>,
+    failure_state: &mut FailureState,
     observe_rollback: bool,
 ) -> Result<(), RunError> {
     for SpannedOp { op, span } in ops {
         if *steps >= STEP_LIMIT {
+            if observe_rollback {
+                if let Some(snapshot) = failure_state.operation.as_mut() {
+                    snapshot.add_roots(session, bindings);
+                } else {
+                    failure_state.operation = Some(FailureObservation::new(session, bindings));
+                }
+            }
             return Err(error(
                 "CGR010",
                 format!("execution step limit of {STEP_LIMIT} exceeded"),
@@ -439,7 +503,7 @@ fn execute_with_functions(
                         &mut locals,
                         steps,
                         functions,
-                        failure_rollback,
+                        failure_state,
                         observe_rollback,
                     );
                     let mut cleanup_error = None;
@@ -463,7 +527,7 @@ fn execute_with_functions(
                         bindings,
                         steps,
                         functions,
-                        failure_rollback,
+                        failure_state,
                         observe_rollback,
                     )?;
                 }
@@ -642,8 +706,15 @@ fn execute_with_functions(
             Ok(())
         })();
         if let Err(error) = result {
-            if observe_rollback && failure_rollback.is_none() {
-                *failure_rollback = before
+            if observe_rollback {
+                if let Some(snapshot) = failure_state.operation.as_mut() {
+                    snapshot.add_roots(session, bindings);
+                } else {
+                    failure_state.operation = Some(FailureObservation::new(session, bindings));
+                }
+            }
+            if observe_rollback && failure_state.rollback.is_none() {
+                failure_state.rollback = before
                     .zip(graph_snapshot(session, bindings))
                     .map(|(a, b)| a == b);
             }
@@ -666,7 +737,7 @@ fn execute(
         bindings,
         steps,
         &HashMap::new(),
-        &mut None,
+        &mut FailureState::default(),
         false,
     )
 }
@@ -681,6 +752,8 @@ pub(crate) fn run_module_with_failure(
         error,
         report: None,
         rollback_preserved: None,
+        operation_failure: None,
+        final_unwind: None,
     };
     let ops = lower(&module.statements).map_err(lower_failure)?;
     let functions = module
@@ -698,7 +771,7 @@ pub(crate) fn run_module_with_failure(
     let _ = host_fail_reserve;
     let mut bindings = HashMap::new();
     let mut steps = 0;
-    let mut failure_rollback = None;
+    let mut failure_state = FailureState::default();
     let result = if let Some(main) = module
         .functions
         .iter()
@@ -716,7 +789,7 @@ pub(crate) fn run_module_with_failure(
             &mut bindings,
             &mut steps,
             &functions,
-            &mut failure_rollback,
+            &mut failure_state,
             observe_rollback,
         )
     } else {
@@ -726,15 +799,31 @@ pub(crate) fn run_module_with_failure(
             &mut bindings,
             &mut steps,
             &functions,
-            &mut failure_rollback,
+            &mut failure_state,
             observe_rollback,
         )
     };
-    result.map_err(|error| MemoryFailure {
-        error,
-        report: Some(Box::new(session.memory_report())),
-        rollback_preserved: failure_rollback,
-    })?;
+    if let Err(error) = result {
+        let operation_failure = failure_state
+            .operation
+            .map(FailureObservation::finish)
+            .map(Box::new);
+        for binding in bindings.into_values() {
+            if let Binding::Managed(handle) = binding {
+                // Keep the original source diagnostic even if cleanup fails.
+                let _ = session.unroot(handle);
+            }
+        }
+        let final_unwind = observe_rollback
+            .then(|| Box::new(FailureObservation::new(&session, &HashMap::new()).finish()));
+        return Err(MemoryFailure {
+            error,
+            report: Some(Box::new(session.memory_report())),
+            rollback_preserved: failure_state.rollback,
+            operation_failure,
+            final_unwind,
+        });
+    }
     Ok(session.memory_report())
 }
 

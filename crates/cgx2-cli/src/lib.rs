@@ -9,6 +9,7 @@ pub use cgx2_runtime::MemoryReport;
 pub use check::{check_source, CheckDiagnostic};
 pub use error::RunError;
 pub use eval::{RunResult, Value};
+pub use memory::FailureSnapshot;
 pub use native::{check_native_package, NativeDiagnostic};
 use std::path::Path;
 
@@ -31,6 +32,8 @@ pub struct RunFailure {
     pub error: RunError,
     pub report: Option<MemoryReport>,
     pub rollback_preserved: Option<bool>,
+    pub operation_failure: Option<Box<FailureSnapshot>>,
+    pub final_unwind: Option<Box<FailureSnapshot>>,
 }
 
 fn no_report(error: RunError) -> RunFailure {
@@ -38,6 +41,8 @@ fn no_report(error: RunError) -> RunFailure {
         error,
         report: None,
         rollback_preserved: None,
+        operation_failure: None,
+        final_unwind: None,
     }
 }
 
@@ -106,6 +111,8 @@ fn execute_with_failure(
                     error: failure.error,
                     report: failure.report.map(|report| *report),
                     rollback_preserved: failure.rollback_preserved,
+                    operation_failure: failure.operation_failure,
+                    final_unwind: failure.final_unwind,
                 }]
             })?;
         Ok((RunResult { value: Value::Unit }, Some(report)))

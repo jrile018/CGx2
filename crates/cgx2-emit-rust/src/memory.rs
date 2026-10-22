@@ -97,7 +97,7 @@ fn emit_block(
     let pad = "    ".repeat(indent);
     for stmt in stmts {
         let span = format!("({}, {})", stmt.span.start, stmt.span.end);
-        out.push_str(&format!("{pad}step(steps, {span})?;\n"));
+        out.push_str(&format!("{pad}if let Err(message) = step(steps, {span}) {{ record_rollback(None, session, &bindings); return Err(message); }}\n"));
         match &stmt.kind {
             StmtKind::NoGc { budget, body } => {
                 let budget = size(budget)?;
@@ -331,6 +331,6 @@ pub(crate) fn emit_memory_rust(
             "        step(steps, {span})?;\n        cgx2_memory_function_{index}(session, steps, {span})?;\n"
         ));
     }
-    out.push_str("        Ok(())\n    })();\n    if let Err(message) = &result { eprintln!(\"{message}\"); }\n    if let Some(path) = report_path {\n        if let Err(message) = cgx2_write_report(&path, &session, &result) {\n            eprintln!(\"{message}\");\n            std::process::exit(1);\n        }\n    }\n    if result.is_err() { std::process::exit(1); }\n}\n");
+    out.push_str("        Ok(())\n    })();\n    if let Err(message) = &result { eprintln!(\"{message}\"); }\n    if result.is_err() {\n        for binding in bindings.into_values() {\n            if let Binding::Managed(handle) = binding { let _ = session.unroot(handle); }\n        }\n    }\n    if let Some(path) = report_path {\n        if let Err(message) = cgx2_write_report(&path, &session, &result) {\n            eprintln!(\"{message}\");\n            std::process::exit(1);\n        }\n    }\n    if result.is_err() { std::process::exit(1); }\n}\n");
     Ok(out)
 }

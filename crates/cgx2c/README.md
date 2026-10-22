@@ -53,6 +53,17 @@ The report is separate from stdout and contains `native_report_schema_version: 1
 
 ## Failure parity and host fault command
 
+The checked fixture below fails after a successful reference mutation inside `main → dispatch → exhaust_after_link`. These direct commands exercise both native profiles:
+
+```sh
+cargo run --offline -p cgx2c -- build crates/cgx2c/tests/fixtures/failure_nested_mutation_limit.cg --out /tmp/cgx2-nested-debug
+CGX2_MEMORY_REPORT=/tmp/cgx2-nested-debug.json /tmp/cgx2-nested-debug
+cargo run --offline -p cgx2c -- build crates/cgx2c/tests/fixtures/failure_nested_mutation_limit.cg --out /tmp/cgx2-nested-release --release
+CGX2_MEMORY_REPORT=/tmp/cgx2-nested-release.json /tmp/cgx2-nested-release
+```
+
+Both executions exit 1 with `CGR013 RegionLimit` at the denied allocation. The operation snapshot has three rooted handles and one edge across two source-created regions; the final snapshot has zero rooted bindings. `failure_report_parity.rs` compares error code and span, both snapshots' semantic per-region and total counters, and roots/edges against the checked interpreter for debug and release. It also covers top-level stale handles, manual limits, `no_gc` budgets, and test-only host faults. Cross-region edges and invalid reference slots are rejected by the checker (`CGM002`) before a binary or runtime snapshot exists.
+
 `cgx2c build FILE.cg --out BINARY --test-fail-reserve N` makes an explicit test-only build, where `N` is the one-based runtime host reserve attempt to fail. It works with `--release` for parity tests. The option is rejected for `emit-rust`, package, and scalar builds; ordinary release binaries do not compile the injection feature and ignore `CGX2_TEST_FAIL_RESERVE`. For example:
 
 ```sh
@@ -60,4 +71,4 @@ cgx2c build crates/cgx2c/tests/fixtures/failure_host_fault.cg --out /tmp/cgx2-fa
 CGX2_MEMORY_REPORT=/tmp/cgx2-fault.json /tmp/cgx2-fault
 ```
 
-The opt-in native report retains `native_report_schema_version: 1`, `status`, `diagnostic_code`, and `memory`. It adds `failure_report_schema_version: 1`, `file`, `span`, and `rollback_preserved` (null on success). The source path is embedded at build time; manually compiled `emit-rust` output reports `<source>` unless `CGX2_SOURCE_FILE` is set while compiling it. A failed operation reports counters after the failure, including allocation-failure increments. `rollback_preserved` compares observed managed bindings, liveness and reference slots immediately around the failed operation, up to 1,024 slots per object; it does not inspect root counts or later function cleanup. The final `memory` counters may therefore differ from the operation-local snapshot. Null means the snapshot was not observable. Ordinary diagnostics stay on stderr. Static checker errors and unsupported native package graph programs create no binary or runtime report. Direct Python, tensor, and scalar routes have no CGx2 memory failure report.
+The opt-in native report retains `native_report_schema_version: 1`, `status`, `diagnostic_code`, and `memory`. Failure reports retain `failure_report_schema_version: 1`, `file`, `span`, and `rollback_preserved`, and add `operation_failure` and `final_unwind`. Each snapshot has observed live binding `rooted_handles`, occupied `rooted_edges`, and a runtime `memory` report with per-region and total counters, including `collection_count`. The first snapshot precedes cleanup of the failing local function; the second follows cleanup of all active function and top-level bindings. The legacy `memory` field is final. Earlier successful mutations remain. The source path is embedded at build time; manually compiled `emit-rust` output reports `<source>` unless `CGX2_SOURCE_FILE` is set while compiling it. `rollback_preserved` still compares observed managed bindings, liveness and reference slots around the failed operation; it makes no transactional rollback claim. Root counts are null when observation exceeds 1,024 slots per object. Ordinary diagnostics stay on stderr even if writing the report fails. Static checker errors and unsupported native package graph programs create no binary or runtime report. Direct Python, tensor, and scalar routes have no CGx2 memory failure report.
