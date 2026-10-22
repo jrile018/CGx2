@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "kind": "public_calibration",
+  "conditions": [
+    {"language": "cgx2", "variant": "indent"},
+    {"language": "python", "variant": "standard"}
+  ],
+  "entries": [
+    {"manifest": "task-python.json", "result": "missing-result.json", "workspace": "starter",
+     "hidden_tests": "starter/main.py", "gold_changes": "gold.patch", "forbidden_markers": ["CALIBRATION_GOLD_DO_NOT_EXPOSE"]}
+  ]
+}

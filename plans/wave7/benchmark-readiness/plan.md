@@ -21,19 +21,19 @@
 
 ### Native scalar pilot
 
-- [ ] Add red tests for parity failures, compiler failure, timeout, missing reference, order recording, and raw-sample preservation.
-- [ ] Add hand-reviewed Rust counterparts to at least four of the six frozen scalar cases; run `cgx2c` and `rustc` builds before timing.
-- [ ] Produce one real local pilot JSON and summarize only what its workload measures; do not commit transient host output unless clearly labeled as one machine's observation.
+- [x] Add red tests for parity failures, compiler failure, timeout, missing reference, order recording, and raw-sample preservation.
+- [x] Add hand-reviewed Rust counterparts to at least four of the six frozen scalar cases; run `cgx2c` and `rustc` builds before timing.
+- [x] Produce one real local pilot JSON and summarize only what its workload measures; do not commit transient host output unless clearly labeled as one machine's observation.
 
 ### Task-matrix audit
 
-- [ ] Add red tests for an incomplete paired matrix, duplicate condition key, wrong repository size, hidden test leak, missing model token trace, and invalid provenance.
-- [ ] Implement the audit command and a reviewer-facing checklist/JSON summary. Include a public calibration example that fails at least one gate for demonstration.
-- [ ] Document how to freeze a future 60–100 task holdout, model families, seeds, prompt/tools budget, and independent review without implying those runs exist now.
+- [x] Add red tests for an incomplete paired matrix, duplicate condition key, wrong repository size, hidden test leak, missing model token trace, and invalid provenance.
+- [x] Implement the audit command and a reviewer-facing checklist/JSON summary. Include a public calibration example that fails at least one gate for demonstration.
+- [x] Document how to freeze a future 60–100 task holdout, model families, seeds, prompt/tools budget, and independent review without implying those runs exist now.
 
 ### Verification and handoff
 
-- [ ] Run `python3 -m unittest discover -s bench/tests`, existing `python3 bench/pilot.py parity --build`, the new native pilot, and the matrix audit examples.
-- [ ] Commit only `bench/**` and this plan; report actual measured scope, missing traces/tasks, and unresolved release targets.
+- [x] Run `python3 -m unittest discover -s bench/tests`, existing `python3 bench/pilot.py parity --build`, the new native pilot, and the matrix audit examples.
+- [x] Commit only `bench/**` and this plan; report actual measured scope, missing traces/tasks, and unresolved release targets.
 
 **Acceptance:** Native scalar parity/timing is recorded honestly, and the audit rejects incomplete or contaminated LLM comparison matrices before any productivity claim.

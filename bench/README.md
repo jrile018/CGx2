@@ -59,3 +59,38 @@ The report reads `*.json` in one directory and rejects duplicate condition/case 
 For every condition, `all_task_charged_seconds` uses each failure's full `timeout_seconds` budget, including early failure. `all_task_charged_tokens` uses each failure's full `budget_total_tokens`; if a successful task lacks token usage, the aggregate token charge and tokens per verified success are `null`. This prevents false zero-cost success. The report includes cost per verified success, completion rate, success-only median wall time, token medians, and missing-trace counts.
 
 With at least 30 eligible matched pairs for a metric, the report computes a deterministic 10,000-resample paired bootstrap 95% percentile interval using seed 0. Completion uses all matched pairs; time and token ratios require at least 30 pairs completed in both conditions with usable measurements. Smaller sets say `insufficient_data`. The report does not assert statistical significance or a CGx2 win. Apply the release gates in [the validation plan](../docs/validation-plan.md) only after an independently reviewed holdout and a real CGx2 implementation exist.
+
+## Wave 7 native scalar toolchain pilot
+
+The [native v1 manifest](fixtures/native/v1/manifest.json) pairs all six frozen `.cg` cases with hand-written Rust references. Each reference uses checked `i64` arithmetic where relevant, the same CLI argument indexing and Unicode output, and the same success/error class. The overflow comparison requires `i64 arithmetic overflow` on stderr from both binaries. These public cases are tiny scalar toolchain checks; they use no owned/managed runtime, collector, Python bridge, or model trace. Independent review of workload equivalence remains a release prerequisite.
+
+From the repository root:
+
+```sh
+cargo build --offline -p cgx2c
+python3 bench/native_pilot.py --cgx2c target/debug/cgx2c --warmups 2 --repetitions 10
+```
+
+The command writes a uniquely named `/tmp/cgx2-native-pilot-*.json` and prints its path. `--out PATH` chooses a new file; it never overwrites an existing file. `--manifest`, `--rustc`, `--timeout` (default 10 seconds), and `--build-timeout` (default 120 seconds) select inputs. Each `.cg` file is built by `cgx2c build --release --rustc RUSTC`; each reference uses `rustc --edition=2024 -O`. Build wall times, commands, source/binary SHA-256, `rustc` version, `cgx2c` SHA-256, host, CPU, logical CPU count, and thread environment are recorded. Compilation failure remains in the JSON and blocks timing.
+
+The first subprocess launch after all builds is a parity preflight and is also listed under `cold_launch`; its OS cache state is uncontrolled. Exact stdout, exit status, success/error class, overflow marker, and success stderr must agree before timing starts. Warmup and timed launches are fresh subprocesses in alternating condition order. Every raw sample, including failures and timeouts, is preserved with order and phase. Only valid timed samples receive medians, quartiles, and a deterministic 2,000-resample bootstrap 95% interval for each condition's median (seed 0). The interval describes sampling uncertainty in this local launch workload, not performance across machines. Build, first launch, and repeated launches are separate fields. These startup-dominated durations cannot support the native owned/managed runtime target; do not compare them with optimized application workloads or quote a speedup without the raw JSON.
+
+## Task-matrix audit before any LLM comparison
+
+Run the read-only v1 audit on trusted local manifests and results:
+
+```sh
+python3 bench/matrix_audit.py --matrix path/to/matrix.json --out /tmp/cgx2-matrix-audit.json
+python3 bench/matrix_audit.py --matrix bench/fixtures/matrix-calibration/v1/matrix.json
+python3 bench/matrix_audit.py --matrix bench/fixtures/matrix-calibration/v1/matrix-invalid.json
+```
+
+Exit codes are `0` for mechanically `ready`, `1` for `incomplete`, and `2` for `invalid`. The second command is intentionally incomplete public calibration material: it has no paired CGx2 entry, model result, or trace. The third deliberately points hidden tests into the starter workspace and is invalid. Neither is a hidden task, a model run, or a CGx2 outcome.
+
+The matrix JSON has `schema_version: 1`, `kind: public_calibration` or `holdout`, `conditions: [{language, variant}, ...]`, and `entries`. Each entry names a `task.schema.json` v1 `manifest`, a `result.schema.json` v1 `result`, the starter `workspace`, external `hidden_tests` entry point and `gold_changes`, plus a nonempty `forbidden_markers` list of task-specific answer/history canaries. Paths are relative to the matrix file. The manifest's `cwd` must resolve to the workspace, and its `hidden_test_argv` must name the external test entry point. The runner and audit read only trusted local files; the audit does not execute commands.
+
+The starter file-count rule counts every regular file recursively under the starter workspace, including README/config/source files. It excludes `.git`, `.hg`, `.svn`, `target`, `__pycache__`, `node_modules`, `.venv`, `venv`, and `.pytest_cache` directories; symlinked files are rejected. `small` requires 3–10 counted files and `large` 20–100. Keep generated dependencies out of the starter. `.git` history in the workspace, hidden tests or gold inside it, or a forbidden marker in any counted file is invalid.
+
+The audit checks unique `(task_id, tier, model_id, seed, language, variant)` keys, all declared paired conditions, identical paired prompt/tools/hardware/thread pins and budgets, model family/version IDs, manifest/result IDs and SHA-256 provenance, saved trace consistency, nonnull model token/iteration/intervention values, and full timeout/token-budget recording for failed runs. A missing result, trace, pin, pair, or holdout freeze is incomplete. A duplicate key, contamination, wrong tier size, mismatched provenance, or inconsistent result is invalid. `ready` means only that these mechanical checks passed; it cannot establish that traces are genuine, tasks are equivalent, or a holdout was kept private. The JSON carries findings and a reviewer checklist.
+
+For a future holdout, freeze 60–100 independently reviewed fresh tasks before opening them. Use at least two model families with explicit versions and repeated paired seeds. Set `kind: holdout` and include `freeze` fields `task_set_sha256`, `prompts_sha256`, `tools_sha256`, `locks_sha256`, `acceptance_sha256`, `order_seed`, `frozen_at_utc`, and `reviewer_ids`. Pin prompts, allowed tools, documentation budget, time/token limits, dependency locks, model versions, hardware, threads, and randomized task order. Store hidden tests and gold changes outside every model workspace and strip future history. An independent reviewer should adjudicate equivalent starter repositories and acceptable solutions before freeze. Preserve every failed run at full budget charge. After retirement, publish task definitions, failures, exclusions, changes, and paired uncertainty; do not infer LLM productivity from this audit or the six public scalar cases.

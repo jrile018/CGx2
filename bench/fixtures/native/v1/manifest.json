@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "kind": "native_scalar_pilot",
+  "cases": [
+    {"id": "precedence", "cgx2": "../../pilot/v1/precedence.cg", "rust": "precedence.rs", "args": [], "oracle": {"stdout": "93\n", "exit_status": 0, "exit_class": "success", "error_class": null}},
+    {"id": "calls", "cgx2": "../../pilot/v1/calls.cg", "rust": "calls.rs", "args": [], "oracle": {"stdout": "101\n", "exit_status": 0, "exit_class": "success", "error_class": null}},
+    {"id": "mutation", "cgx2": "../../pilot/v1/mutation.cg", "rust": "mutation.rs", "args": [], "oracle": {"stdout": "70\n", "exit_status": 0, "exit_class": "success", "error_class": null}},
+    {"id": "argument_count", "cgx2": "../../pilot/v1/argument_count.cg", "rust": "argument_count.rs", "args": ["red", "blue", "green"], "oracle": {"stdout": "22\n", "exit_status": 0, "exit_class": "success", "error_class": null}},
+    {"id": "argument_text", "cgx2": "../../pilot/v1/argument_text.cg", "rust": "argument_text.rs", "args": ["hello 世界"], "oracle": {"stdout": "hello 世界\n", "exit_status": 0, "exit_class": "success", "error_class": null}},
+    {"id": "overflow", "cgx2": "../../pilot/v1/overflow.cg", "rust": "overflow.rs", "args": [], "oracle": {"stdout": "", "exit_status": 1, "exit_class": "error", "error_class": "i64_overflow"}}
+  ]
+}

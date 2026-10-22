@@ -1,0 +1,17 @@
+{
+  "task_id": "calibration_arithmetic",
+  "tier": "small",
+  "language": "python",
+  "variant": "standard",
+  "model_id": "example-family/example-version",
+  "seed": 1,
+  "cwd": "starter",
+  "argv": ["python3", "main.py"],
+  "hidden_test_argv": ["python3", "../hidden.py"],
+  "timeout_seconds": 30,
+  "budget": {"total_tokens": 4000},
+  "expected_exit": 0,
+  "versions": {"compiler": "python-example", "dependencies": "none", "tools": "example-v1", "prompt": "example-v1", "hardware": "example-host", "threads": "1"},
+  "environment": {},
+  "trace_path": "missing-trace.json"
+}
