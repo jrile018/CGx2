@@ -3,6 +3,8 @@ use std::collections::BTreeMap;
 
 use cgx2_runtime::{CollectionMode, MemoryReport, SLOT_METADATA_BYTES};
 
+pub mod v3;
+
 pub const MODEL_VERSION: u32 = 1;
 pub const MODEL_VERSION_V2: u32 = 2;
 const REGION_LIMIT: usize = 4096;
