@@ -15,6 +15,13 @@ fn notebook(cells: Vec<Cell>) -> Notebook {
     Notebook { version: 1, cells }
 }
 
+fn output_body(output: &Output) -> &str {
+    match output {
+        Output::Text { body, .. } => body,
+        Output::Asset { .. } => panic!("expected text output"),
+    }
+}
+
 #[test]
 fn sequential_cells_share_scalar_binding_and_roundtrip() {
     let notebook = parse_notebook(include_str!("fixtures/scalar.cgnb")).unwrap();
@@ -199,4 +206,70 @@ fn replay_budget_stops_a_long_sequence() {
         .cells
         .iter()
         .any(|cell| cell.outputs.is_empty()));
+}
+
+#[test]
+fn selected_rerun_replays_prefix_and_stales_transitive_readers() {
+    let mut kernel = NotebookKernel::open(notebook(vec![
+        code("first", "let x = 3\nx"),
+        code("middle", "let y = x + 4\ny"),
+        code("last", "y + 1"),
+    ]))
+    .unwrap();
+    kernel.restart_and_run_all().unwrap();
+    kernel.replace_cell("first", "let x = 5\nx".into()).unwrap();
+    kernel.rerun_cell("first").unwrap();
+    assert_eq!(output_body(&kernel.notebook().cells[0].outputs[0]), "5");
+    assert_eq!(kernel.status("middle").unwrap(), CellStatus::Stale);
+    assert_eq!(kernel.status("last").unwrap(), CellStatus::Stale);
+    kernel.rerun_cell("middle").unwrap();
+    assert_eq!(output_body(&kernel.notebook().cells[1].outputs[0]), "9");
+    assert_eq!(kernel.status("last").unwrap(), CellStatus::Stale);
+    kernel.rerun_cell("last").unwrap();
+    assert_eq!(output_body(&kernel.notebook().cells[2].outputs[0]), "10");
+    assert!(kernel
+        .notebook()
+        .cells
+        .iter()
+        .all(|cell| kernel.status(&cell.id).unwrap() == CellStatus::Current));
+    kernel.rerun_cell("middle").unwrap();
+    assert_eq!(output_body(&kernel.notebook().cells[1].outputs[0]), "9");
+    assert_eq!(kernel.status("last").unwrap(), CellStatus::Stale);
+}
+
+#[test]
+fn failed_rerun_never_leaves_old_result_current() {
+    let mut kernel = NotebookKernel::open(notebook(vec![
+        code("first", "let x = 3"),
+        code("last", "x + 4"),
+    ]))
+    .unwrap();
+    kernel.restart_and_run_all().unwrap();
+    kernel.replace_cell("last", "missing + 4".into()).unwrap();
+    assert_eq!(kernel.rerun_cell("last").unwrap_err().code, "CGNK008");
+    assert_eq!(kernel.status("last").unwrap(), CellStatus::Failed);
+    assert_eq!(output_body(&kernel.notebook().cells[1].outputs[0]), "7");
+    kernel.replace_cell("last", "x + 5".into()).unwrap();
+    kernel.rerun_cell("last").unwrap();
+    assert_eq!(output_body(&kernel.notebook().cells[1].outputs[0]), "8");
+    assert_eq!(kernel.status("last").unwrap(), CellStatus::Current);
+}
+
+#[test]
+fn rerun_replay_budget_is_cumulative_and_failure_is_noncurrent() {
+    let source = format!("\"{}\"", "x".repeat(1_498));
+    let cells = (0..20).map(|n| code(&format!("c{n}"), &source)).collect();
+    let mut kernel = NotebookKernel::open(notebook(cells)).unwrap();
+    kernel.restart_and_run_all().unwrap();
+    let mut error = None;
+    for _ in 0..10 {
+        if let Err(failure) = kernel.rerun_cell("c19") {
+            error = Some(failure);
+            break;
+        }
+    }
+    let error = error.unwrap();
+    assert_eq!(error.code, "CGNK006");
+    assert!(error.message.contains("prefix cell"));
+    assert_eq!(kernel.status("c19").unwrap(), CellStatus::Failed);
 }

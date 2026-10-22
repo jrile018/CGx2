@@ -62,7 +62,7 @@ fn session_error(source: SessionError) -> KernelError {
     }
 }
 
-/// A clean, file-order notebook session. Running an earlier cell again requires restart.
+/// A bounded, file-order notebook session with selected pure-scalar replay.
 #[derive(Debug)]
 pub struct NotebookKernel {
     session: NotebookSession<ReplayExecutor>,
@@ -103,6 +103,10 @@ impl NotebookKernel {
         self.session.status(id).map_err(session_error)
     }
 
+    pub fn next_cell_id(&self) -> Option<&str> {
+        self.code_order.get(self.next_code).map(String::as_str)
+    }
+
     pub fn run_cell(&mut self, id: &str) -> Result<(), KernelError> {
         let Some(index) = self.code_order.iter().position(|candidate| candidate == id) else {
             return Err(session_error(match self.session.status(id) {
@@ -121,6 +125,24 @@ impl NotebookKernel {
         }
         self.session.run_cell(id).map_err(session_error)?;
         self.next_code += 1;
+        Ok(())
+    }
+
+    /// Replays preceding code cells from source in a fresh evaluator state, then
+    /// runs `id`. Replay is bounded and pure; prefix outputs are not refreshed.
+    pub fn rerun_cell(&mut self, id: &str) -> Result<(), KernelError> {
+        let Some(index) = self.code_order.iter().position(|candidate| candidate == id) else {
+            return Err(session_error(match self.session.status(id) {
+                Ok(_) => SessionError::MarkdownCell(id.into()),
+                Err(source) => source,
+            }));
+        };
+        if let Err(error) = self.session.rerun_cell(id) {
+            self.requires_restart = true;
+            return Err(session_error(error));
+        }
+        self.next_code = index + 1;
+        self.requires_restart = false;
         Ok(())
     }
 
@@ -312,6 +334,11 @@ impl CellExecutor for ReplayExecutor {
     fn reset(&mut self) -> Result<(), String> {
         self.accepted.clear();
         self.replay_bytes = 0;
+        Ok(())
+    }
+
+    fn reset_for_replay(&mut self) -> Result<(), String> {
+        self.accepted.clear();
         Ok(())
     }
 }

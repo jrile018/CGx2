@@ -21,18 +21,18 @@
 
 ### Kernel semantics
 
-- [ ] Add red tests for rerunning middle/first/last cells, edit then rerun, transitive dependency stale states, repeated rerun, failure after a prior success, and budget exhaustion during replay.
-- [ ] Implement `rerun_cell` with explicit status/output semantics. Prefer a simple coherent replay over hidden incremental state mutations; maintain stable cell IDs and ordinals.
-- [ ] Document exactly when prefix cells are replayed and how this differs from side-effecting notebooks.
+- [x] Add red tests for rerunning middle/first/last cells, edit then rerun, transitive dependency stale states, repeated rerun, failure after a prior success, and budget exhaustion during replay.
+- [x] Implement `rerun_cell` with explicit status/output semantics. Prefer a simple coherent replay over hidden incremental state mutations; maintain stable cell IDs and ordinals.
+- [x] Document exactly when prefix cells are replayed and how this differs from side-effecting notebooks.
 
 ### Local UI
 
-- [ ] Add an accessible `Run this cell` control, status/error display, and HTTP endpoint. Test old routes and new route with valid/invalid cell IDs, token/Origin failures, and HTML-like content.
-- [ ] Browser smoke: edit cell one, rerun it, observe a later dependent output stale, rerun later cell, save, reopen valid `.cgnb`, then clean Restart and Run All.
+- [x] Add an accessible `Run this cell` control, status/error display, and HTTP endpoint. Test old routes and new route with valid/invalid cell IDs, token/Origin failures, and HTML-like content.
+- [x] Browser smoke: edit cell one, rerun it, observe a later dependent output stale, rerun later cell, save, reopen valid `.cgnb`, then clean Restart and Run All.
 
 ### Verification and handoff
 
-- [ ] Run `cargo test -p cgx2-notebook-session -p cgx2-notebook-kernel -p cgx2-notebook-ui --offline` (HTTP tests require local loopback permission), `RUSTUP_TOOLCHAIN=1.98.1 cargo fmt --all --check`, and `RUSTUP_TOOLCHAIN=1.98.1 cargo clippy -p cgx2-notebook-session -p cgx2-notebook-kernel -p cgx2-notebook-ui --all-targets --offline -- -D warnings`.
-- [ ] Commit only owned paths; report rerun semantics, smoke result, and unsupported side effects.
+- [x] Run `cargo test -p cgx2-notebook-session -p cgx2-notebook-kernel -p cgx2-notebook-ui --offline` (HTTP tests require local loopback permission), `RUSTUP_TOOLCHAIN=1.98.1 cargo fmt --all --check`, and `RUSTUP_TOOLCHAIN=1.98.1 cargo clippy -p cgx2-notebook-session -p cgx2-notebook-kernel -p cgx2-notebook-ui --all-targets --offline -- -D warnings`.
+- [x] Commit only owned paths; report rerun semantics, smoke result, and unsupported side effects.
 
 **Acceptance:** A selected pure-scalar cell can be rerun from a coherent bounded state, dependent outputs are accurately stale/current, and the local UI/save path preserves safety limits.

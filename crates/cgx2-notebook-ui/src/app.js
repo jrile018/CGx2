@@ -32,11 +32,19 @@ function render(data) {
       const apply = el("button", "", "Apply edit");
       apply.addEventListener("click", () => command(null, null));
       section.append(apply);
+      const run = el("button", "", "Run this cell");
+      run.setAttribute("aria-label", `Run cell ${cell.id}`);
+      run.addEventListener("click", () => command("/api/run-cell", {id:cell.id}));
+      section.append(run);
     } else section.append(el("pre", "", cell.source));
-    for (const output of cell.outputs) section.append(el("pre", "output", output.kind === "text" ? output.body : `[cached asset ${output.body}]`));
+    for (const output of cell.outputs) {
+      const body = output.kind === "text" ? output.body : `[cached asset ${output.body}]`;
+      const label = cell.status === "current" ? "Output" : "Cached output (not current)";
+      section.append(el("pre", "output", `${label}: ${body}`));
+    }
     cells.append(section);
   }
-  notice.textContent = data.needsRestart ? "Source changed. Restart and run all before executing another cell." : (data.lastError || "");
+  notice.textContent = [data.lastError, data.needsRestart ? "Source changed or a rerun failed. Run this cell or Restart and run all before Run next." : ""].filter(Boolean).join(" ");
   document.getElementById("save-name").placeholder = data.inputName.replace(/\.cgnb$/, "-saved.cgnb");
   document.getElementById("save-name").value = saveName;
 }

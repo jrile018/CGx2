@@ -339,3 +339,112 @@ fn code_result_with_html_is_json_escaped_and_page_uses_local_scripts() {
     assert!(!js.contains("innerHTML"));
     handle.join().unwrap();
 }
+
+#[test]
+fn selected_rerun_edit_save_reopen_and_clean_restart() {
+    let f = Fixture::new("#!cgnb 1\n%% code id=seed\nlet x = 3\n%% code id=result\nx + 4\n");
+    let (port, handle) = server(&f.input, 8);
+    let secret = token(port);
+    let (_, page) = request(port, "GET", "/app.js", None, None, None, None);
+    assert!(page.contains("Run this cell"));
+    post(port, "/api/restart", json!({}), &secret);
+    let (_, state) = post(
+        port,
+        "/api/edit",
+        json!({"id":"seed","source":"let x = 5"}),
+        &secret,
+    );
+    assert_eq!(state["cells"][1]["status"], "stale");
+    let (status, state) = post(port, "/api/run-cell", json!({"id":"seed"}), &secret);
+    assert_eq!(status, 200);
+    assert_eq!(state["cells"][0]["status"], "current");
+    assert_eq!(state["cells"][1]["status"], "stale");
+    let (_, state) = post(port, "/api/run-cell", json!({"id":"result"}), &secret);
+    assert_eq!(state["cells"][1]["outputs"][0]["body"], "9");
+    assert_eq!(
+        post(
+            port,
+            "/api/save",
+            json!({"name":"saved.cgnb","overwrite":false}),
+            &secret
+        )
+        .0,
+        200
+    );
+    let saved = parse_notebook_bytes(&fs::read(f.dir.join("saved.cgnb")).unwrap()).unwrap();
+    assert_eq!(saved.cells[0].source, "let x = 5");
+    assert!(matches!(&saved.cells[1].outputs[0], Output::Text { body, .. } if body == "9"));
+    let (_, state) = post(port, "/api/restart", json!({}), &secret);
+    assert_eq!(state["cells"][1]["outputs"][0]["body"], "9");
+    handle.join().unwrap();
+    UiSession::open(f.dir.join("saved.cgnb")).unwrap();
+}
+
+#[test]
+fn selected_rerun_route_rejects_bad_ids_and_missing_guards() {
+    let f = Fixture::new("#!cgnb 1\n%% markdown id=notes\n# Hi\n%% code id=one\n\"<b>safe</b>\"\n");
+    let (port, handle) = server(&f.input, 8);
+    let secret = token(port);
+    let origin = format!("http://127.0.0.1:{port}");
+    assert_eq!(
+        request(
+            port,
+            "POST",
+            "/api/run-cell",
+            Some("{\"id\":\"one\"}"),
+            None,
+            Some(&origin),
+            None
+        )
+        .0,
+        403
+    );
+    assert_eq!(
+        request(
+            port,
+            "POST",
+            "/api/run-cell",
+            Some("{\"id\":\"one\"}"),
+            Some(&secret),
+            None,
+            None
+        )
+        .0,
+        403
+    );
+    assert_eq!(
+        request(
+            port,
+            "POST",
+            "/api/run-cell",
+            Some("{\"id\":\"one\"}"),
+            Some(&secret),
+            Some("http://evil.test"),
+            None
+        )
+        .0,
+        403
+    );
+    assert_eq!(
+        post(port, "/api/run-cell", json!({"id":"../../one"}), &secret).0,
+        409
+    );
+    assert_eq!(
+        post(port, "/api/run-cell", json!({"id":"notes"}), &secret).0,
+        409
+    );
+    assert_eq!(
+        post(
+            port,
+            "/api/run-cell",
+            json!({"id":"one","source":"1"}),
+            &secret
+        )
+        .0,
+        409
+    );
+    let (status, state) = post(port, "/api/run-cell", json!({"id":"one"}), &secret);
+    assert_eq!(status, 200);
+    assert_eq!(state["cells"][1]["outputs"][0]["body"], "<b>safe</b>");
+    handle.join().unwrap();
+}

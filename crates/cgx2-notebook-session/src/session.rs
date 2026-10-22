@@ -21,6 +21,12 @@ pub struct CellResult {
 pub trait CellExecutor {
     fn execute(&mut self, source: &str) -> Result<CellResult, String>;
     fn reset(&mut self) -> Result<(), String>;
+
+    /// Reset evaluator state for a selected rerun. Executors with a session-wide
+    /// work budget can retain the amount already spent while clearing values.
+    fn reset_for_replay(&mut self) -> Result<(), String> {
+        self.reset()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -174,6 +180,35 @@ impl<E: CellExecutor> NotebookSession<E> {
         Ok(())
     }
 
+    /// Rebuild a pure executor through the selected cell's file-order prefix.
+    /// Prefix executions do not change their saved outputs or visible statuses.
+    pub fn rerun_cell(&mut self, id: &str) -> Result<(), SessionError> {
+        let index = self.cell_index(id)?;
+        if self.notebook.cells[index].kind == CellKind::Markdown {
+            return Err(SessionError::MarkdownCell(id.into()));
+        }
+        if let Err(message) = self.executor.reset_for_replay() {
+            self.fail_cell(index);
+            return Err(SessionError::ExecutionFailed {
+                id: id.into(),
+                message,
+            });
+        }
+        for prefix in &self.notebook.cells[..index] {
+            if prefix.kind == CellKind::Code {
+                if let Err(message) = self.executor.execute(&prefix.source) {
+                    let prefix_id = prefix.id.clone();
+                    self.fail_cell(index);
+                    return Err(SessionError::ExecutionFailed {
+                        id: id.into(),
+                        message: format!("{message} (while replaying prefix cell {prefix_id})"),
+                    });
+                }
+            }
+        }
+        self.run_cell(id)
+    }
+
     pub fn replace_cell(
         &mut self,
         id: &str,
@@ -231,6 +266,16 @@ impl<E: CellExecutor> NotebookSession<E> {
         if !cell.outputs.is_empty() || self.statuses[&cell.id] != CellStatus::NeverRun {
             self.statuses.insert(cell.id.clone(), CellStatus::Stale);
         }
+    }
+
+    fn fail_cell(&mut self, index: usize) {
+        let id = self.notebook.cells[index].id.clone();
+        self.statuses.insert(id.clone(), CellStatus::Failed);
+        self.invalidate_after(
+            index,
+            &self.facts[&id].defines.clone(),
+            self.facts[&id].opaque_effects,
+        );
     }
 
     fn invalidate_after(&mut self, index: usize, defines: &BTreeSet<String>, opaque: bool) {

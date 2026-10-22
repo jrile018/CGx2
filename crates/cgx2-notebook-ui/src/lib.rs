@@ -117,22 +117,26 @@ impl UiSession {
 
     fn run_next(&mut self) -> Result<(), String> {
         if self.needs_restart {
-            return Err("an edit requires Restart and run all".into());
+            return Err("an edit requires Run this cell or Restart and run all".into());
         }
-        let next = self
-            .kernel
-            .notebook()
-            .cells
-            .iter()
-            .find(|cell| {
-                cell.kind == CellKind::Code
-                    && self.kernel.status(&cell.id).ok() == Some(CellStatus::NeverRun)
-            })
-            .map(|cell| cell.id.clone());
+        let next = self.kernel.next_cell_id().map(str::to_owned);
         let Some(id) = next else {
             return Err("no more unrun code cells".into());
         };
         self.kernel.run_cell(&id).map_err(|error| error.to_string())
+    }
+
+    fn run_cell(&mut self, id: &str) -> Result<(), String> {
+        let result = self
+            .kernel
+            .rerun_cell(id)
+            .map_err(|error| error.to_string());
+        if result.is_ok() {
+            self.needs_restart = false;
+        } else if self.kernel.status(id).ok() == Some(CellStatus::Failed) {
+            self.needs_restart = true;
+        }
+        result
     }
 
     fn restart(&mut self) -> Result<(), String> {
@@ -427,7 +431,10 @@ fn dispatch(session: &mut UiSession, request: Request, port: u16) -> Vec<u8> {
             "application/json; charset=utf-8",
             json_bytes(&session.state()),
         ),
-        ("POST", "/api/run-next" | "/api/restart" | "/api/edit" | "/api/save") => {
+        (
+            "POST",
+            "/api/run-next" | "/api/run-cell" | "/api/restart" | "/api/edit" | "/api/save",
+        ) => {
             if request.headers.get("x-cgx2-token") != Some(&session.token) {
                 return error_response(403, "missing or invalid token");
             }
@@ -447,6 +454,12 @@ fn dispatch(session: &mut UiSession, request: Request, port: u16) -> Vec<u8> {
             };
             let result = match request.path.as_str() {
                 "/api/run-next" if value == json!({}) => session.run_next(),
+                "/api/run-cell" => match value.get("id").and_then(Value::as_str) {
+                    Some(id) if value.as_object().is_some_and(|obj| obj.len() == 1) => {
+                        session.run_cell(id)
+                    }
+                    _ => Err("run-cell requires one notebook cell ID".into()),
+                },
                 "/api/restart" if value == json!({}) => session.restart(),
                 "/api/edit" => match (
                     value.get("id").and_then(Value::as_str),
