@@ -89,6 +89,10 @@ impl ApiIndex {
                         } else {
                             out.push_str("null");
                         }
+                        if let Some(profile) = &foreign.profile {
+                            out.push_str(",\"profile\":");
+                            push_json_string(&mut out, profile);
+                        }
                     }
                     out.push('}');
                 } else {
@@ -159,6 +163,10 @@ impl ApiIndex {
                 if let Some(id) = &foreign.binding_id {
                     out.push_str(" unsafe=true binding_id=");
                     out.push_str(id);
+                }
+                if let Some(profile) = &foreign.profile {
+                    out.push_str(" profile=");
+                    out.push_str(profile);
                 }
                 out.push('\n');
             }

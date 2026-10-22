@@ -24,7 +24,7 @@ fn main() -> ExitCode {
     let root = Path::new(&root);
     let result = match mode.as_str() {
         "check" => native::check_native_package(root).map(|()| None),
-        "run" => native::run_native_package_i64(root, &program_args).map(Some),
+        "run" => native::run_native_package_value(root, &program_args).map(Some),
         _ => Err(vec![native::NativeDiagnostic {
             code: "CGN001".into(),
             message: "native helper requires check|run".into(),

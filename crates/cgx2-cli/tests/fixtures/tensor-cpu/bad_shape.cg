@@ -1,0 +1,4 @@
+unsafe foreign native pub fn add_f64_cpu(left: String, right: String) -> String effects(Foreign) caps(native) = torch_cpu.cgx2_torch_add runtime "cgx2.libtorch.cpu@2.6.0" ownership copied
+
+fn main() -> String effects(Foreign) caps(native):
+    add_f64_cpu("[1.0, 2.0]", "[3.0]")

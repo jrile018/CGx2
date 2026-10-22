@@ -16,8 +16,11 @@ pub fn run_native_package(
     root: &Path,
     args: &[String],
 ) -> Result<RunResult, Vec<NativeDiagnostic>> {
-    native::run_native_package_i64(root, args).map(|value| RunResult {
-        value: Value::I64(value),
+    native::run_native_package_value(root, args).map(|value| RunResult {
+        value: match value {
+            native::NativeValue::I64(value) => Value::I64(value),
+            native::NativeValue::Tensor(value) => Value::String(value),
+        },
     })
 }
 

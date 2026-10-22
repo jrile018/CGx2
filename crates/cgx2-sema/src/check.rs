@@ -93,6 +93,7 @@ pub fn check_module_with_imports(
     module: &Module,
     imported: &ImportedSignatures,
 ) -> Result<TypedModule, Vec<TypeDiagnostic>> {
+    crate::tensor::tensor_profile(module)?;
     let mut foreign_errors = Vec::new();
     for function in &module.functions {
         if let Some(binding) = &function.foreign {
@@ -105,6 +106,21 @@ pub fn check_module_with_imports(
                 ));
             }
             if binding.route == "native" {
+                let tensor_shape = binding
+                    .target
+                    .segments
+                    .get(1)
+                    .is_some_and(|name| name == "cgx2_torch_add")
+                    && binding.runtime.starts_with("cgx2.libtorch.cpu@")
+                    && function.parameters.len() == 2
+                    && function
+                        .parameters
+                        .iter()
+                        .all(|parameter| parameter.ty.to_string() == "String")
+                    && function
+                        .return_type
+                        .as_ref()
+                        .is_some_and(|ty| ty.to_string() == "String");
                 let valid_shape = binding.unsafe_call
                     && binding.ownership == "copied"
                     && binding.target.segments.len() == 2
@@ -114,12 +130,13 @@ pub fn check_module_with_imports(
                         .is_some_and(|(library, version)| {
                             !library.is_empty() && !version.is_empty()
                         })
-                    && function.parameters.len() == 1
-                    && function.parameters[0].ty.to_string() == "i64"
-                    && function
-                        .return_type
-                        .as_ref()
-                        .is_some_and(|ty| ty.to_string() == "i64");
+                    && (tensor_shape
+                        || (function.parameters.len() == 1
+                            && function.parameters[0].ty.to_string() == "i64"
+                            && function
+                                .return_type
+                                .as_ref()
+                                .is_some_and(|ty| ty.to_string() == "i64")));
                 if !valid_shape {
                     foreign_errors.push(TypeDiagnostic::new(
                         "CGT016",

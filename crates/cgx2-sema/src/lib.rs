@@ -4,6 +4,7 @@ mod check;
 mod diagnostic;
 mod effects;
 mod memory;
+mod tensor;
 mod types;
 
 pub use check::{
@@ -12,4 +13,5 @@ pub use check::{
 };
 pub use diagnostic::TypeDiagnostic;
 pub use effects::EffectSummary;
+pub use tensor::{tensor_profile, TensorProfile};
 pub use types::Type;

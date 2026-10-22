@@ -19,6 +19,7 @@ cgx2-foreign = { path = "../cgx2-foreign" }
 cgx2-package = { path = "../cgx2-package" }
 cgx2-bind = { path = "../cgx2-bind" }
 cgx2-ffi-native = { path = "../cgx2-ffi-native" }
+cgx2-libtorch = { path = "../cgx2-libtorch" }
 serde_json = "=1.0.149"
 
 [dev-dependencies]

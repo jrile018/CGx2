@@ -65,3 +65,7 @@ The parser and formatter retain direct local calls such as `build()` inside `no_
 ## Checked object-reference spelling
 
 The parser and formatter preserve direct calls `memory.alloc_object(region, payload_bytes, reference_slots)`, `memory.set_reference(owner, index, target)`, `memory.clear_reference(owner, index)`, `let found = memory.reference(owner, index)`, and `memory.use_reference(found)`. These are ordinary call expressions in the AST; `cgx2-sema` enforces the bounded profile. `payload_bytes`, `reference_slots`, and `index` must be nonnegative integer literals in that profile. No record, pointer, optional-value expression, or general heap syntax is added.
+
+## Direct CPU tensor source spelling
+
+The bounded direct tensor call uses the existing `unsafe foreign native` declaration and a single call in `main`. Its two inputs are quoted, one-dimensional float64 vector literals such as `"[1.0, 2.0]"`. This intentionally keeps vector syntax inside the quoted literal for this preview; the checker accepts only finite decimal or exponent float64 elements, 1–1024 values per vector, equal lengths, and no nested arrays. The parser and formatter preserve that one call and quoted literal form. See `cgx2-cli/tests/fixtures/tensor-cpu/src/main.cg` for the exact source spelling. There is no general `Tensor` value or numeric tower in this grammar.

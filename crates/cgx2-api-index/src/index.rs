@@ -33,6 +33,8 @@ pub struct ApiForeign {
     pub runtime: String,
     pub unsafe_call: bool,
     pub binding_id: Option<String>,
+    /// The only source tensor profile; handles remain inside the direct call.
+    pub profile: Option<String>,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -164,6 +166,13 @@ fn build_index_checked(
                     unsafe_call: binding.unsafe_call,
                     binding_id: (binding.route == "native")
                         .then(|| binding.target.segments[0].clone()),
+                    profile: (binding.route == "native"
+                        && binding
+                            .target
+                            .segments
+                            .get(1)
+                            .is_some_and(|name| name == "cgx2_torch_add"))
+                    .then(|| "cpu-1d-f64-add-copied-v1".into()),
                 }),
             }
         })

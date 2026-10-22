@@ -10,6 +10,23 @@ use cgx2_syntax::{ForeignBinding, Span};
 
 use crate::native_eval;
 
+#[path = "tensor_native.rs"]
+mod tensor_native;
+
+pub enum NativeValue {
+    I64(i64),
+    Tensor(String),
+}
+
+impl std::fmt::Display for NativeValue {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::I64(value) => write!(f, "{value}"),
+            Self::Tensor(value) => f.write_str(value),
+        }
+    }
+}
+
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct NativeDiagnostic {
     pub code: String,
@@ -217,6 +234,9 @@ fn bind_one(
 
 /// Statically validate a pinned native package without loading or executing foreign code.
 pub fn check_native_package(root: &Path) -> Result<(), Vec<NativeDiagnostic>> {
+    if tensor_native::maybe_check(root)?.is_some() {
+        return Ok(());
+    }
     prepare(root, false).map(|_| ())
 }
 
@@ -232,4 +252,14 @@ pub fn run_native_package_i64(root: &Path, args: &[String]) -> Result<i64, Vec<N
             error.span,
         )]
     })
+}
+
+pub fn run_native_package_value(
+    root: &Path,
+    args: &[String],
+) -> Result<NativeValue, Vec<NativeDiagnostic>> {
+    if let Some(value) = tensor_native::maybe_run(root, args)? {
+        return Ok(NativeValue::Tensor(value));
+    }
+    run_native_package_i64(root, args).map(NativeValue::I64)
 }
