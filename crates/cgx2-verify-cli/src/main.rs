@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::env;
-use std::fs::File;
+use std::fs::{self, File};
 use std::io::Read;
 use std::path::Path;
 use std::time::Duration;
@@ -392,19 +392,104 @@ fn response_json(observation: &SolverObservation) -> Json {
     }
 }
 
+/// Only these solver command lines have a defined stdin SMT-LIB protocol here.
+/// A basename or version string is not an attestation of the executable.
+fn solver_protocol(path: &str) -> (&'static str, &'static [&'static str]) {
+    match Path::new(path).file_name().and_then(|name| name.to_str()) {
+        Some("z3") => ("z3", &["-in", "-smt2"]),
+        Some("cvc5") => (
+            "cvc5",
+            &["--lang=smt2", "--incremental", "--produce-models"],
+        ),
+        _ => ("unrecognized", &[]),
+    }
+}
+
+fn executable_hash(path: &str) -> Option<String> {
+    let path = fs::canonicalize(path).ok()?;
+    let metadata = fs::metadata(&path).ok()?;
+    if !metadata.is_file() || metadata.len() > 128 * 1024 * 1024 {
+        return None;
+    }
+    let mut file = File::open(path).ok()?;
+    let mut digest = Sha256::new();
+    let mut buffer = [0_u8; 8192];
+    loop {
+        let count = file.read(&mut buffer).ok()?;
+        if count == 0 {
+            break;
+        }
+        digest.update(&buffer[..count]);
+    }
+    Some(format!("{:x}", digest.finalize()))
+}
+
 fn solver_json(path: &str, script: &str, contract: &Contract, timeout_ms: u64) -> Json {
     let timeout = Duration::from_millis(timeout_ms);
-    let version = observe_solver(path, &["--version"], "", timeout);
-    let observation = observe_solver(path, &[], script, timeout);
+    let (family, args) = solver_protocol(path);
+    let canonical = fs::canonicalize(path).ok();
+    let executable = canonical.as_ref().and_then(|p| p.to_str()).unwrap_or(path);
+    let executable_sha256 = executable_hash(executable);
+    let version = observe_solver(executable, &["--version"], "", timeout);
+    let version_text = version.stdout.trim();
+    let version_valid = version.exit == SolverExit::Code(0)
+        && !version.output_limit_exceeded
+        && !version.write_error
+        && version.stderr.trim().is_empty()
+        && version_text.is_ascii()
+        && version_text.lines().count() == 1
+        && version_text.len() <= 256
+        && match family {
+            "z3" => version_text.starts_with("Z3 version "),
+            "cvc5" => {
+                version_text.starts_with("This is cvc5 version ")
+                    || version_text.starts_with("cvc5 version ")
+            }
+            _ => false,
+        };
+    let observation = if version_valid && executable_sha256.is_some() {
+        observe_solver(executable, args, script, timeout)
+    } else if family == "unrecognized" {
+        // Preserve existing protocol fixture observations without granting solver identity.
+        observe_solver(executable, &[], script, timeout)
+    } else {
+        observe_solver("/definitely/missing/cgx2-solver", &[], script, timeout)
+    };
     let statuses = observation
         .stdout
         .lines()
         .map(str::trim)
         .filter(|line| matches!(*line, "sat" | "unsat" | "unknown"))
         .collect::<Vec<_>>();
+    let executable_stable =
+        executable_sha256.is_some() && executable_sha256 == executable_hash(executable);
+    let response = response_json(&observation);
+    let bounded_reason = if family == "unrecognized" {
+        "unrecognized_solver"
+    } else if executable_sha256.is_none() {
+        "unreadable_executable"
+    } else if !version_valid {
+        "invalid_version_response"
+    } else if !executable_stable {
+        "executable_changed"
+    } else if contract.requires.contains_uninterpreted()
+        || contract.ensures.contains_uninterpreted()
+    {
+        "unsupported_uninterpreted_call"
+    } else if response != "unsat_protocol_only" {
+        "incomplete_solver_obligation"
+    } else {
+        "none"
+    };
     let mut result = json!({
         "trust": "untrusted_protocol",
         "executable": path,
+        "canonical_executable": executable,
+        "family": family,
+        "arguments": args,
+        "executable_sha256": executable_sha256,
+        "identity_valid": version_valid,
+        "executable_stable": executable_stable,
         "version": if version.exit == SolverExit::Code(0) && !version.output_limit_exceeded {
             version.stdout.trim().to_owned()
         } else { "unavailable".to_owned() },
@@ -416,9 +501,16 @@ fn solver_json(path: &str, script: &str, contract: &Contract, timeout_ms: u64) -
         "stderr": observation.stderr,
         "exit": exit_json(observation.exit),
         "timeout_ms": timeout_ms,
+        "memory_limit_bytes": if cfg!(target_os = "linux") {
+            Some(cgx2_verify_core::SOLVER_MEMORY_LIMIT_BYTES)
+        } else { None },
         "output_limit_exceeded": observation.output_limit_exceeded,
         "write_error": observation.write_error,
-        "response": response_json(&observation),
+        "response": response,
+        "bounded_reason": bounded_reason,
+        "bounded_result": if bounded_reason == "none" {
+                "unsat_observed"
+            } else { "unknown" },
         "witness_attempts": [],
     });
     if response_json(&observation) == "sat_candidate_unvalidated"
@@ -430,7 +522,7 @@ fn solver_json(path: &str, script: &str, contract: &Contract, timeout_ms: u64) -
                 continue;
             }
             let query = emit_witness_smtlib(contract, failure).expect("validated contract");
-            let witness = observe_solver(path, &[], &query, timeout);
+            let witness = observe_solver(executable, args, &query, timeout);
             let checked = if witness.output_limit_exceeded
                 || witness.write_error
                 || witness.exit != SolverExit::Code(0)
@@ -472,6 +564,7 @@ fn source_unknown(options: &Options, bytes: &[u8], diagnostic: &source::Diagnost
         "verdict": {"kind": "unknown", "meaning": "source_subset_unsupported",
             "scope": {"requested_domains": domain_json(&options.domains), "max_cases": options.max_cases},
             "diagnostic": diagnostic.json()},
+        "unsupported_obligations": [diagnostic.json()],
         "proof": {"kind": "unknown", "meaning": "no_trusted_solver_proof"},
     });
     if options.format == "json" {
@@ -507,7 +600,9 @@ fn run() -> Result<(), String> {
                 selected.contract,
                 selected.domains,
                 Some(json!({"path": options.input, "function": selected.name,
-                    "span": {"start": selected.span.start, "end": selected.span.end}})),
+                        "span": {"start": selected.span.start, "end": selected.span.end},
+                        "obligations": selected.obligations,
+                        "unsupported_obligations": []})),
             ),
             Err(diagnostic) => {
                 source_unknown(&options, &bytes, &diagnostic);

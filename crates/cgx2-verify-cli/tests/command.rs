@@ -245,6 +245,41 @@ fn solver_statuses_are_untrusted_observations() {
 
 #[cfg(unix)]
 #[test]
+fn named_solver_stub_rejects_partial_protocol() {
+    use std::os::unix::fs::PermissionsExt;
+    let directory = std::env::temp_dir().join(format!(
+        "cgx2-solver-protocol-{}-{}",
+        std::process::id(),
+        NEXT.fetch_add(1, Ordering::Relaxed)
+    ));
+    fs::create_dir(&directory).unwrap();
+    let executable = directory.join("z3");
+    fs::write(&executable, b"#!/bin/sh\nif [ \"$1\" = --version ]; then echo 'Z3 version 4.13.0'; exit 0; fi\nif [ \"$1\" != -in ] || [ \"$2\" != -smt2 ]; then exit 4; fi\ncat >/dev/null\nprintf 'unsat\\nsat\\nunsat\\n'\n").unwrap();
+    fs::set_permissions(&executable, fs::Permissions::from_mode(0o700)).unwrap();
+    let input = fixture(include_str!("../examples/valid.json"));
+    let result = parsed(
+        &input,
+        &["--format", "json", "--solver", executable.to_str().unwrap()],
+    );
+    assert_eq!(result["solver"]["family"], "z3");
+    assert_eq!(result["solver"]["arguments"], json!(["-in", "-smt2"]));
+    assert_eq!(result["solver"]["identity_valid"], true);
+    assert_eq!(
+        result["solver"]["executable_sha256"]
+            .as_str()
+            .unwrap()
+            .len(),
+        64
+    );
+    assert_eq!(result["solver"]["response"], "unknown:MalformedResponse");
+    assert_eq!(result["solver"]["bounded_result"], "unknown");
+    assert_eq!(result["proof"]["kind"], "unknown");
+    fs::remove_file(executable).unwrap();
+    fs::remove_dir(directory).unwrap();
+}
+
+#[cfg(unix)]
+#[test]
 fn solver_timeout_large_and_stalled_output_are_bounded() {
     let input = fixture(include_str!("../examples/valid.json"));
     let timeout = fake_solver("sleep 2");

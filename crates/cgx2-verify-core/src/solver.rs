@@ -8,6 +8,8 @@ use crate::UnknownReason;
 
 /// Maximum retained bytes from each child output stream.
 pub const SOLVER_OUTPUT_LIMIT: usize = 16 * 1024;
+/// Address-space limit for each solver subprocess on Linux.
+pub const SOLVER_MEMORY_LIMIT_BYTES: u64 = 512 * 1024 * 1024;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum SolverExit {
@@ -135,6 +137,29 @@ pub fn observe_solver(
     {
         use std::os::unix::process::CommandExt;
         command.process_group(0);
+        #[cfg(target_os = "linux")]
+        unsafe {
+            command.pre_exec(|| {
+                #[repr(C)]
+                struct Rlimit {
+                    current: u64,
+                    maximum: u64,
+                }
+                unsafe extern "C" {
+                    fn setrlimit(resource: i32, limits: *const Rlimit) -> i32;
+                }
+                const RLIMIT_AS: i32 = 9;
+                let limits = Rlimit {
+                    current: SOLVER_MEMORY_LIMIT_BYTES,
+                    maximum: SOLVER_MEMORY_LIMIT_BYTES,
+                };
+                if setrlimit(RLIMIT_AS, &limits) == 0 {
+                    Ok(())
+                } else {
+                    Err(std::io::Error::last_os_error())
+                }
+            });
+        }
     }
     let mut child = match command.spawn() {
         Ok(child) => child,

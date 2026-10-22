@@ -143,3 +143,64 @@ fn changed_source_changes_digest() {
     assert_ne!(first["input_sha256"], second["input_sha256"]);
     assert_eq!(second["verdict"]["kind"], "disproved");
 }
+
+#[test]
+fn source_artifact_names_obligations_and_rejects_unchecked_assert() {
+    let valid = Source::new(TRUE).run(&["--domain", "x:0:2"]);
+    let obligations = valid["source"]["obligations"].as_array().unwrap();
+    assert_eq!(obligations.len(), 3);
+    assert_eq!(obligations[0]["kind"], "requires_defined_and_satisfiable");
+    assert_eq!(obligations[1]["kind"], "body_defined");
+    assert_eq!(obligations[2]["kind"], "ensures");
+    assert_eq!(
+        valid["source"]["unsupported_obligations"]
+            .as_array()
+            .unwrap()
+            .len(),
+        0
+    );
+
+    let text = "pub fn f(x: i64) -> i64 effects() caps():\n requires true\n ensures result == x\n assert(x == x)\n x\n";
+    let result = Source::new(text).run(&["--domain", "x:0:1"]);
+    assert_eq!(result["proof"]["kind"], "unknown");
+    assert_eq!(result["verdict"]["kind"], "unknown");
+    assert_eq!(
+        result["unsupported_obligations"][0]["span"],
+        result["verdict"]["diagnostic"]["span"]
+    );
+    let span = &result["verdict"]["diagnostic"]["span"];
+    let start = span["start"].as_u64().unwrap() as usize;
+    let end = span["end"].as_u64().unwrap() as usize;
+    assert_eq!(text[start..end].trim_end(), "assert(x == x)");
+}
+
+/// Set CGX2_LIVE_SOLVER to an installed z3/cvc5 binary to run this gate.
+/// Finite enumeration independently checks the same small Boolean domain.
+#[test]
+fn live_solver_boolean_crosscheck_when_configured() {
+    let Ok(path) = std::env::var("CGX2_LIVE_SOLVER") else {
+        return;
+    };
+    let valid = Source::new(
+        "pub fn id(x: Bool) -> Bool effects() caps():\n requires true\n ensures result == x\n x\n",
+    )
+    .run(&["--solver", &path]);
+    assert_eq!(valid["verdict"]["kind"], "proved", "{valid}");
+    assert_eq!(valid["verdict"]["checked_cases"], 2);
+    assert_eq!(
+        valid["solver"]["bounded_result"], "unsat_observed",
+        "{valid}"
+    );
+    assert_eq!(valid["proof"]["kind"], "unknown");
+
+    let invalid = Source::new(
+        "pub fn id(x: Bool) -> Bool effects() caps():\n requires true\n ensures result == false\n x\n",
+    )
+    .run(&["--solver", &path]);
+    assert_eq!(invalid["verdict"]["kind"], "disproved", "{invalid}");
+    assert_eq!(invalid["verdict"]["counterexample"]["x"], true);
+    assert_eq!(
+        invalid["solver"]["response"], "validated_counterexample",
+        "{invalid}"
+    );
+}

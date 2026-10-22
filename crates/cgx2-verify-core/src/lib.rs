@@ -14,5 +14,5 @@ pub use model::validate_solver_witness;
 pub use smtlib::{emit_smtlib, emit_witness_smtlib, SmtError};
 pub use solver::{
     observe_solver, parse_solver_result, run_solver, SolverExit, SolverObservation, SolverResponse,
-    SOLVER_OUTPUT_LIMIT,
+    SOLVER_MEMORY_LIMIT_BYTES, SOLVER_OUTPUT_LIMIT,
 };

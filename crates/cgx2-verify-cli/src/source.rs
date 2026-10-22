@@ -33,6 +33,7 @@ pub struct Selected {
     pub domains: Vec<Domain>,
     pub name: String,
     pub span: Span,
+    pub obligations: Vec<Json>,
 }
 
 fn lower(
@@ -189,6 +190,17 @@ pub fn parse(
             function.span,
         ));
     }
+    if let Some(statement) = function.body.iter().find(|statement| {
+        matches!(&statement.kind,
+            StmtKind::Expr(SourceExpr { kind: ExprKind::Call { callee, .. }, .. })
+                if matches!(&callee.kind, ExprKind::Name(path)
+                    if path.segments.as_slice() == ["assert"]))
+    }) {
+        return Err(Diagnostic::unsupported(
+            "assert call is not a checked CGx2 source statement in this verifier fragment",
+            statement.span,
+        ));
+    }
     let Some(body) = (match function.body.as_slice() {
         [statement] => match &statement.kind {
             StmtKind::Expr(expression) | StmtKind::Return(Some(expression)) => Some(expression),
@@ -236,6 +248,7 @@ pub fn parse(
             function.span,
         ));
     }
+    let body_span = body.span;
     let mut nodes = 0;
     let body = lower(body, None, &mut nodes)?;
     let requires = lower(&function.requires[0], None, &mut nodes)?;
@@ -260,5 +273,10 @@ pub fn parse(
         domains,
         name: function.name.clone(),
         span: function.span,
+        obligations: vec![
+            json!({"kind": "requires_defined_and_satisfiable", "span": {"start": function.requires[0].span.start, "end": function.requires[0].span.end}}),
+            json!({"kind": "body_defined", "span": {"start": body_span.start, "end": body_span.end}}),
+            json!({"kind": "ensures", "span": {"start": function.ensures[0].span.start, "end": function.ensures[0].span.end}}),
+        ],
     })
 }
