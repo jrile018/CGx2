@@ -297,12 +297,14 @@ fn validate_package_output(options: &Options, package: &CheckedPackage) -> Resul
         return Ok(());
     };
     let output = fs::canonicalize(&options.output).ok();
-    let paths = std::iter::once(package.root().join("cgx2.toml")).chain(
-        package
-            .modules()
-            .iter()
-            .map(|m| m.canonical_path().to_path_buf()),
-    );
+    let paths = std::iter::once(package.root().join("cgx2.toml"))
+        .chain(package.binding_lock().map(|lock| package.root().join(lock)))
+        .chain(
+            package
+                .modules()
+                .iter()
+                .map(|m| m.canonical_path().to_path_buf()),
+        );
     for path in paths {
         if output.as_ref().is_some_and(|o| *o == path) {
             return Err(CliError::new("CGXC004", "output is a package input file"));

@@ -214,6 +214,19 @@ fn rejects_lock_schema_and_lock_symlink_escape() {
 }
 
 #[test]
+fn rejects_excessive_binding_and_symbol_counts_before_inspection() {
+    let (fixture, mut lock) = Fixture::c_fixture();
+    lock.bindings = vec![lock.bindings[0].clone(); 33];
+    fixture.write_lock(&lock);
+    assert!(codes(&fixture.0).contains(&"CGB004"));
+
+    lock.bindings.truncate(1);
+    lock.bindings[0].symbols = vec![lock.bindings[0].symbols[0].clone(); 129];
+    fixture.write_lock(&lock);
+    assert!(codes(&fixture.0).contains(&"CGB004"));
+}
+
+#[test]
 fn unavailable_libtorch_is_reported_without_fallback() {
     let fixture = Path::new(env!("CARGO_MANIFEST_DIR")).join("fixtures/libtorch-unavailable");
     let report = check_package(&fixture);

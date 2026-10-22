@@ -401,3 +401,29 @@ fn diagnostics_and_failing_compiler_do_not_replace_output() {
         }));
     }
 }
+
+#[test]
+fn package_build_does_not_replace_declared_binding_lock() {
+    let case = Case::new();
+    let source_dir = case.0.join("src");
+    fs::create_dir(&source_dir).unwrap();
+    fs::write(source_dir.join("main.cg"), "7\n").unwrap();
+    fs::write(
+        case.0.join("cgx2.toml"),
+        "schema_version = 2\nname = \"sample\"\nentry = \"src/main.cg\"\nsources = [\"src/main.cg\"]\nbinding_lock = \"cgx2-bind.lock.json\"\n",
+    )
+    .unwrap();
+    let lock = case.0.join("cgx2-bind.lock.json");
+    fs::write(&lock, "preserve this lock\n").unwrap();
+    let result = case.invoke(&[
+        "build",
+        "--package",
+        str_path(&case.0),
+        "--out",
+        str_path(&lock),
+        "--force",
+    ]);
+    assert!(!result.status.success());
+    assert!(stderr(&result).contains("CGXC004"), "{}", stderr(&result));
+    assert_eq!(fs::read_to_string(lock).unwrap(), "preserve this lock\n");
+}

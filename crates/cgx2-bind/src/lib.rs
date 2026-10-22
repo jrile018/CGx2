@@ -4,7 +4,7 @@ use std::collections::BTreeSet;
 use std::fs::{self, File};
 use std::io::Read;
 use std::path::{Component, Path, PathBuf};
-use std::process::Command;
+use std::process::{Command, Stdio};
 
 use cgx2_package::load_checked_package;
 use serde::{Deserialize, Serialize};
@@ -12,6 +12,10 @@ use sha2::{Digest, Sha256};
 
 const MAX_LOCK_BYTES: u64 = 1024 * 1024;
 const MAX_ARTIFACT_BYTES: u64 = 256 * 1024 * 1024;
+const MAX_TOTAL_ARTIFACT_BYTES: u64 = 512 * 1024 * 1024;
+const MAX_BINDINGS: usize = 32;
+const MAX_SYMBOLS_PER_BINDING: usize = 128;
+const MAX_INSPECT_OUTPUT_BYTES: u64 = 8 * 1024 * 1024;
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -169,22 +173,31 @@ pub fn check_package(root: &Path) -> Report {
             return report;
         }
     };
-    if lock.schema_version != 1 || lock.package != report.package || lock.bindings.is_empty() {
+    if lock.schema_version != 1
+        || lock.package != report.package
+        || lock.bindings.is_empty()
+        || lock.bindings.len() > MAX_BINDINGS
+        || lock
+            .bindings
+            .iter()
+            .any(|binding| binding.symbols.len() > MAX_SYMBOLS_PER_BINDING)
+    {
         report.push(
             "CGB004",
             "",
-            "lock schema, package identity or nonempty bindings mismatch",
+            "lock schema, package identity, or binding/symbol count is invalid",
         );
         return report;
     }
     let mut bindings = lock.bindings;
     bindings.sort_by(|a, b| a.id.cmp(&b.id));
     let mut seen = BTreeSet::new();
+    let mut remaining_artifact_bytes = MAX_TOTAL_ARTIFACT_BYTES;
     for binding in &bindings {
         if !seen.insert(binding.id.as_str()) {
             report.push("CGB004", &binding.id, "duplicate binding id");
         }
-        check_binding(root, binding, &mut report);
+        check_binding(root, binding, &mut report, &mut remaining_artifact_bytes);
         report.bindings_checked += 1;
     }
     report
@@ -196,7 +209,12 @@ pub fn check_package(root: &Path) -> Report {
     report
 }
 
-fn check_binding(root: &Path, binding: &Binding, report: &mut Report) {
+fn check_binding(
+    root: &Path,
+    binding: &Binding,
+    report: &mut Report,
+    remaining_artifact_bytes: &mut u64,
+) {
     let id = &binding.id;
     if !identifier(id) || !identifier(&binding.library) || !exact_version(&binding.version) {
         report.push(
@@ -327,13 +345,14 @@ fn check_binding(root: &Path, binding: &Binding, report: &mut Report) {
             return;
         }
     };
-    let bytes = match read_bounded(&artifact, MAX_ARTIFACT_BYTES) {
+    let bytes = match read_bounded(&artifact, MAX_ARTIFACT_BYTES.min(*remaining_artifact_bytes)) {
         Ok(bytes) => bytes,
         Err(message) => {
             report.push("CGB014", id, message);
             return;
         }
     };
+    *remaining_artifact_bytes -= bytes.len() as u64;
     let actual = format!("{:x}", Sha256::digest(&bytes));
     if actual != binding.sha256.to_ascii_lowercase() {
         report.push("CGB008", id, "artifact SHA-256 mismatch");
@@ -442,16 +461,30 @@ fn read_bounded(path: &Path, max: u64) -> Result<Vec<u8>, String> {
 
 fn exported_symbols(path: &Path) -> Result<BTreeSet<String>, String> {
     // `nm` inspects ELF bytes; it never links or runs artifact code.
-    let output = Command::new("nm")
+    let mut child = Command::new("nm")
         .arg("-D")
         .arg("--defined-only")
         .arg(path)
-        .output()
+        .stdout(Stdio::piped())
+        .stderr(Stdio::null())
+        .spawn()
         .map_err(|error| format!("static symbol inspector unavailable: {error}"))?;
-    if !output.status.success() {
+    let mut bytes = Vec::new();
+    let read_result = child
+        .stdout
+        .take()
+        .ok_or_else(|| "static symbol inspector has no stdout".to_owned())?
+        .take(MAX_INSPECT_OUTPUT_BYTES + 1)
+        .read_to_end(&mut bytes);
+    if read_result.is_err() || bytes.len() as u64 > MAX_INSPECT_OUTPUT_BYTES {
+        let _ = child.kill();
+        let _ = child.wait();
+        return Err("static symbol inspection exceeded output limit or failed".to_owned());
+    }
+    if !child.wait().map_err(|error| error.to_string())?.success() {
         return Err("static symbol inspection failed".to_owned());
     }
-    let text = String::from_utf8(output.stdout)
+    let text = String::from_utf8(bytes)
         .map_err(|_| "static symbol inspector returned non UTF-8 output".to_owned())?;
     Ok(text
         .lines()
