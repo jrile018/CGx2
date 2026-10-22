@@ -1,0 +1,13 @@
+let r = memory.region(mode: manual, limit: 1024)
+no_gc(budget: 256):
+    let a = memory.alloc_object(r, 8, 1)
+    no_gc(budget: 128):
+        let b = memory.alloc_object(r, 4, 0)
+        memory.set_reference(a, 0, b)
+        memory.drop(b)
+    let live = memory.reference(a, 0)
+    memory.use_reference(live)
+    memory.clear_reference(a, 0)
+    memory.drop(a)
+memory.collect(r)
+memory.close(r)

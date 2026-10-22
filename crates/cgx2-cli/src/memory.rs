@@ -47,6 +47,25 @@ enum Op {
         region: String,
         size: usize,
     },
+    AllocObject {
+        name: String,
+        region: String,
+        payload: usize,
+        slots: usize,
+    },
+    SetReference {
+        owner: String,
+        index: usize,
+        target: Option<String>,
+    },
+    Reference {
+        name: String,
+        owner: String,
+        index: usize,
+    },
+    UseReference {
+        name: String,
+    },
     Borrow {
         name: String,
         target: String,
@@ -77,6 +96,7 @@ enum Binding {
     Region(RegionId),
     Owned(OwnedBytes),
     Managed(Handle),
+    Reference(Option<Handle>),
     Borrow(String),
 }
 
@@ -224,6 +244,23 @@ fn lower_stmt(stmt: &Stmt) -> Result<SpannedOp, RunError> {
                         size: bytes(args[1])?,
                     }
                 }
+                "alloc_object" => {
+                    let args = positional(arguments, 3, value.span)?;
+                    Op::AllocObject {
+                        name: dest.clone(),
+                        region: name(args[0])?,
+                        payload: bytes(args[1])?,
+                        slots: bytes(args[2])?,
+                    }
+                }
+                "reference" => {
+                    let args = positional(arguments, 2, value.span)?;
+                    Op::Reference {
+                        name: dest.clone(),
+                        owner: name(args[0])?,
+                        index: bytes(args[1])?,
+                    }
+                }
                 "borrow" | "borrow_mut" => {
                     let args = positional(arguments, 1, value.span)?;
                     Op::Borrow {
@@ -257,6 +294,22 @@ fn lower_stmt(stmt: &Stmt) -> Result<SpannedOp, RunError> {
                 if namespace != "memory" {
                     return Err(unsupported(path.span));
                 }
+                if operation == "set_reference" || operation == "clear_reference" {
+                    let count = if operation == "set_reference" { 3 } else { 2 };
+                    let args = positional(arguments, count, expr.span)?;
+                    return Ok(SpannedOp {
+                        op: Op::SetReference {
+                            owner: name(args[0])?,
+                            index: bytes(args[1])?,
+                            target: if count == 3 {
+                                Some(name(args[2])?)
+                            } else {
+                                None
+                            },
+                        },
+                        span: expr.span,
+                    });
+                }
                 let args = positional(arguments, 1, expr.span)?;
                 let operand = name(args[0])?;
                 match operation.as_str() {
@@ -265,6 +318,7 @@ fn lower_stmt(stmt: &Stmt) -> Result<SpannedOp, RunError> {
                     "end_borrow" => Op::EndBorrow { name: operand },
                     "collect" => Op::Collect { region: operand },
                     "close" => Op::Close { region: operand },
+                    "use_reference" => Op::UseReference { name: operand },
                     _ => return Err(unsupported(expr.span)),
                 }
             }
@@ -425,6 +479,57 @@ fn execute_with_functions(
                 session.root(handle).map_err(|e| runtime(e, *span))?;
                 bindings.insert(name.clone(), Binding::Managed(handle));
             }
+            Op::AllocObject {
+                name,
+                region: region_name,
+                payload,
+                slots,
+            } => {
+                let id = region(bindings, region_name, *span)?;
+                let handle = session
+                    .alloc_object(id, *payload, *slots)
+                    .map_err(|e| allocation(e, *span))?;
+                session.root(handle).map_err(|e| runtime(e, *span))?;
+                bindings.insert(name.clone(), Binding::Managed(handle));
+            }
+            Op::SetReference {
+                owner,
+                index,
+                target,
+            } => {
+                let Binding::Managed(owner_handle) = binding(bindings, owner, *span)? else {
+                    return Err(error("CGR014", "reference owner requires object", *span));
+                };
+                let target_handle = match target {
+                    Some(target) => {
+                        let Binding::Managed(handle) = binding(bindings, target, *span)? else {
+                            return Err(error("CGR014", "reference target requires object", *span));
+                        };
+                        Some(*handle)
+                    }
+                    None => None,
+                };
+                session
+                    .set_reference(*owner_handle, *index, target_handle)
+                    .map_err(|e| runtime(e, *span))?;
+            }
+            Op::Reference { name, owner, index } => {
+                let Binding::Managed(handle) = binding(bindings, owner, *span)? else {
+                    return Err(error("CGR014", "reference owner requires object", *span));
+                };
+                let reference = session
+                    .reference(*handle, *index)
+                    .map_err(|e| runtime(e, *span))?;
+                bindings.insert(name.clone(), Binding::Reference(reference));
+            }
+            Op::UseReference { name } => {
+                let Binding::Reference(reference) = binding(bindings, name, *span)? else {
+                    return Err(error("CGR014", "expected optional object reference", *span));
+                };
+                let handle =
+                    reference.ok_or_else(|| error("CGR014", "empty object reference", *span))?;
+                session.read_bytes(handle).map_err(|e| runtime(e, *span))?;
+            }
             Op::Borrow { name, target } => {
                 match binding(bindings, target, *span)? {
                     Binding::Owned(_) | Binding::Managed(_) => (),
@@ -521,6 +626,35 @@ pub(crate) fn run_module(module: &Module) -> Result<MemoryReport, RunError> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn failed_object_allocation_keeps_prior_reference_and_region_state() {
+        let source = "let r = memory.region(mode: manual, limit: 1024)\nlet parent = memory.alloc_object(r, 8, 1)\nlet child = memory.alloc_object(r, 4, 0)\nmemory.set_reference(parent, 0, child)\nno_gc(budget: 0):\n    let failed = memory.alloc_object(r, 1, 0)\n";
+        let module = cgx2_syntax::parse_module(source).unwrap();
+        cgx2_sema::check_module(&module).unwrap();
+        let ops = lower(&module.statements).unwrap();
+        let mut session = Session::new();
+        let mut bindings = HashMap::new();
+        let mut steps = 0;
+        let failure = execute(&ops, &mut session, &mut bindings, &mut steps).unwrap_err();
+        assert_eq!(failure.code, "CGR013");
+        assert!(
+            source[failure.span.unwrap().start..failure.span.unwrap().end].contains("alloc_object")
+        );
+        let Binding::Managed(parent) = bindings["parent"] else {
+            panic!("parent missing")
+        };
+        let Binding::Managed(child) = bindings["child"] else {
+            panic!("child missing")
+        };
+        assert_eq!(session.reference(parent, 0).unwrap(), Some(child));
+        assert!(!bindings.contains_key("failed"));
+        let id = region(&bindings, "r", Span { start: 0, end: 0 }).unwrap();
+        let stats = session.stats(id).unwrap();
+        assert_eq!(stats.allocation_failures, 1);
+        assert_eq!(stats.collection_count, 0);
+        assert!(stats.live_bytes > 0);
+    }
 
     #[test]
     fn failed_nested_guard_keeps_zero_collection_delta() {

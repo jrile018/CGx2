@@ -45,3 +45,5 @@ Explicit effect/capability lists retain declared names; omitted lists contain co
 
 
 A checked public memory function appears with zero parameters, `Unit` return, and its explicit/transitive effects and capabilities in schema 2. Handles cannot cross its call boundary; the index does not imply native compilation support for the memory function profile.
+
+Checked source object-reference operations stay local to zero-argument memory functions. The index records the public function's `Unit` signature and declared or inferred `ManagedAlloc`, `Mutate`, and `Collect` effects and `MemoryCollect` capability; it does not expose object handles as API parameters or results. `build_index` rechecks the bounded object shape and same-region rules, so invalid graph source returns `IndexError::InvalidModule`. The index does not claim native graph compilation.

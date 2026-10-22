@@ -61,3 +61,7 @@ These codes are stable for this slice. Future compiler integration should consum
 
 
 The parser and formatter retain direct local calls such as `build()` inside `no_gc` blocks in function bodies. The checked memory-function subset (zero arguments and `Unit` result) is imposed by `cgx2-sema`, not by the grammar.
+
+## Checked object-reference spelling
+
+The parser and formatter preserve direct calls `memory.alloc_object(region, payload_bytes, reference_slots)`, `memory.set_reference(owner, index, target)`, `memory.clear_reference(owner, index)`, `let found = memory.reference(owner, index)`, and `memory.use_reference(found)`. These are ordinary call expressions in the AST; `cgx2-sema` enforces the bounded profile. `payload_bytes`, `reference_slots`, and `index` must be nonnegative integer literals in that profile. No record, pointer, optional-value expression, or general heap syntax is added.

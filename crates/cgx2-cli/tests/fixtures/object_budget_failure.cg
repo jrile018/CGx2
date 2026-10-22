@@ -1,0 +1,3 @@
+let r = memory.region(mode: manual, limit: 1024)
+no_gc(budget: 64):
+    let a = memory.alloc_object(r, 8, 1)

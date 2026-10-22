@@ -5,18 +5,32 @@ use cgx2_ownership::{check_ops, Op};
 use cgx2_syntax::{CallArg, Expr, ExprKind, Module, Path, Span, Stmt, StmtKind};
 
 use crate::{effects, FunctionSignature, SpanTypes, Type, TypeDiagnostic, TypedModule};
+// Frozen Wave 12 runtime limits; keep these in sync with cgx2-runtime::region.
+const MAX_OBJECT_PAYLOAD_BYTES: usize = 1 << 20;
+const MAX_OBJECT_REFERENCE_SLOTS: usize = 256;
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum Kind {
     Region,
     Owned,
     Managed,
+    Object,
+    Reference,
     Borrow,
+}
+
+#[derive(Clone)]
+struct ObjectShape {
+    region: String,
+    slots: usize,
 }
 
 #[derive(Default)]
 struct Lowerer {
     bindings: BTreeMap<String, Kind>,
+    objects: BTreeMap<String, ObjectShape>,
+    references: BTreeMap<String, String>,
+    closed_regions: std::collections::BTreeSet<String>,
     ops: Vec<Op>,
     diagnostics: Vec<TypeDiagnostic>,
 }
@@ -372,7 +386,9 @@ impl Lowerer {
                 }
                 StmtKind::Expr(expr) => {
                     if let ExprKind::Name(path) = &expr.kind {
-                        if let Some(name) = self.name(path, &[Kind::Owned, Kind::Managed]) {
+                        if let Some(name) =
+                            self.name(path, &[Kind::Owned, Kind::Managed, Kind::Object])
+                        {
                             self.ops.push(Op::Use {
                                 value: name,
                                 span: expr.span,
@@ -493,6 +509,70 @@ impl Lowerer {
                 });
                 Some(Kind::Managed)
             }
+            "alloc_object" if destination.is_some() => {
+                let args = self.positional(arguments, 3, expr.span)?;
+                let region = self.reference(args[0], &[Kind::Region])?;
+                let payload = self.bytes(args[1], "payload size")?;
+                let slots = self.bytes(args[2], "reference slots")?;
+                if payload > MAX_OBJECT_PAYLOAD_BYTES || slots > MAX_OBJECT_REFERENCE_SLOTS {
+                    self.argument_error("object shape exceeds runtime limits", expr.span);
+                    return None;
+                }
+                let value = destination.unwrap_or_default().to_owned();
+                self.objects.insert(
+                    value.clone(),
+                    ObjectShape {
+                        region: region.clone(),
+                        slots,
+                    },
+                );
+                self.ops.push(Op::CreateManaged {
+                    value,
+                    region,
+                    span: expr.span,
+                });
+                Some(Kind::Object)
+            }
+            "reference" if destination.is_some() => {
+                let args = self.positional(arguments, 2, expr.span)?;
+                let (owner, region) = self.object_slot(args[0], args[1])?;
+                self.ops.push(Op::Use {
+                    value: owner,
+                    span: expr.span,
+                });
+                self.references
+                    .insert(destination.unwrap_or_default().to_owned(), region);
+                Some(Kind::Reference)
+            }
+            "set_reference" | "clear_reference" if destination.is_none() => {
+                let count = if operation == "set_reference" { 3 } else { 2 };
+                let args = self.positional(arguments, count, expr.span)?;
+                let (owner, region) = self.object_slot(args[0], args[1])?;
+                if operation == "set_reference" {
+                    let target = self.reference(args[2], &[Kind::Object])?;
+                    if self.objects[&target].region != region {
+                        self.argument_error("reference edge must stay in one region", args[2].span);
+                        return None;
+                    }
+                    self.ops.push(Op::Use {
+                        value: target,
+                        span: expr.span,
+                    });
+                }
+                self.ops.push(Op::Use {
+                    value: owner,
+                    span: expr.span,
+                });
+                None
+            }
+            "use_reference" if destination.is_none() => {
+                let args = self.positional(arguments, 1, expr.span)?;
+                let reference = self.reference(args[0], &[Kind::Reference])?;
+                if self.closed_regions.contains(&self.references[&reference]) {
+                    self.argument_error("reference used after region close", expr.span);
+                }
+                None
+            }
             "borrow" | "borrow_mut" if destination.is_some() => {
                 let args = self.positional(arguments, 1, expr.span)?;
                 let value = self.reference(args[0], &[Kind::Owned, Kind::Managed])?;
@@ -517,9 +597,12 @@ impl Lowerer {
                 let expected = match operation.as_str() {
                     "collect" | "close" => &[Kind::Region][..],
                     "end_borrow" => &[Kind::Borrow][..],
-                    _ => &[Kind::Owned, Kind::Managed][..],
+                    _ => &[Kind::Owned, Kind::Managed, Kind::Object][..],
                 };
                 let name = self.reference(args[0], expected)?;
+                if operation == "close" {
+                    self.closed_regions.insert(name.clone());
+                }
                 self.ops.push(match operation.as_str() {
                     "collect" => Op::Collect {
                         region: name,
@@ -555,6 +638,17 @@ impl Lowerer {
                 None
             }
         }
+    }
+
+    fn object_slot(&mut self, owner: &Expr, index: &Expr) -> Option<(String, String)> {
+        let name = self.reference(owner, &[Kind::Object])?;
+        let slot = self.bytes(index, "reference index")?;
+        let shape = &self.objects[&name];
+        if slot >= shape.slots {
+            self.argument_error("reference index outside object shape", index.span);
+            return None;
+        }
+        Some((name, shape.region.clone()))
     }
 
     fn named<'a>(&mut self, args: &'a [CallArg], label: &str) -> Option<&'a Expr> {
