@@ -153,6 +153,13 @@ Only a fully reviewed, frozen, complete run set reaches the unchanged Wave 11 `a
 
 ## Wave 13 executable candidate set
 
+The Wave 14 [review and measurement protocol](candidate-review-protocol.md),
+[`task-cards.json`](fixtures/task-candidates/v3/task-cards.json), and
+[`evidence-unrun.json`](fixtures/task-candidates/v3/evidence-unrun.json)
+add independent review fields, workspace-bound hidden acceptance, and an
+explicit no-trials evidence packet. Reviewer decisions remain blank.
+
+
 The v3 pack now contains two runnable repair candidates, both paired with a
 Rust baseline selected before model traces:
 

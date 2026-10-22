@@ -1,0 +1,36 @@
+{
+  "external_trace_file_sha256": null,
+  "kind": "candidate_review_packet",
+  "protocol_sha256": "6e49d6119f55a4442092fc2129599263846b60c245f94197eaf61c1b5c9328e6",
+  "schema_version": 1,
+  "tasks": [
+    {
+      "claim_status": "not_assessed",
+      "harness_sha256": "6977f5ac9dcbd3ac4b38b7a076885c3820c6fee3a4ec93faa80ad066b5f30e86",
+      "prompt_sha256": "40abb7ff94f50ba35f464c0b4aec46cbf056df25a465e34baa973a6ab3748323",
+      "review_state": "pending",
+      "run_state": "unrun",
+      "starter_sha256": {
+        "cgx2": "b66ef276758fb855e017313587d5e94aa5727f394773adca69454919770ffbb6",
+        "rust": "2385fe87c9145fd188ecc458e793eb8a298a33d49d914a99f4c3e720f6ac27d5"
+      },
+      "task_id": "quote-credit-v3",
+      "task_sha256": "03979f5f798f54426cf38f28d952af7c758c1a155fbcd41bd101724b87eae7db",
+      "trials": []
+    },
+    {
+      "claim_status": "not_assessed",
+      "harness_sha256": "6977f5ac9dcbd3ac4b38b7a076885c3820c6fee3a4ec93faa80ad066b5f30e86",
+      "prompt_sha256": "38badb5a805e41e6e847e1a60dfa3d455b490293d0891b9673d047ae906cebd0",
+      "review_state": "pending",
+      "run_state": "unrun",
+      "starter_sha256": {
+        "cgx2": "6ced0e3a2cb9517ad937b1788d0d07fb68e7722a1ceeb37f744b1f0993f4ada8",
+        "rust": "6886b1431667199e23de0361381839326f782034eaf1ca91771f8619fc4415c2"
+      },
+      "task_id": "grid-quote-v3",
+      "task_sha256": "588d39bb7464b57b7e727f24ae7588ad062a78acd77e13d62510c88a2dc5f63e",
+      "trials": []
+    }
+  ]
+}
