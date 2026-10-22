@@ -120,6 +120,77 @@ fn semantic_interpreter(report: &MemoryReport) -> (Vec<Vec<u64>>, Vec<u64>) {
 }
 
 #[test]
+fn source_graph_reports_match_interpreter_in_debug_and_release() {
+    let case = Case::new();
+    for (name, expected_code, expected_detail, expected_collections) in [
+        ("source_graph_cycle.cg", None, None, 2),
+        ("source_graph_nested.cg", None, None, 1),
+        (
+            "source_graph_dangling.cg",
+            Some("CGR014"),
+            Some("InvalidHandle"),
+            1,
+        ),
+        (
+            "source_graph_limit.cg",
+            Some("CGR013"),
+            Some("RegionLimit"),
+            0,
+        ),
+    ] {
+        let source = fixture(name);
+        let text = fs::read_to_string(&source).unwrap();
+        let interpreted = run_checked_source(&text, &[]);
+        let mut first_native = None;
+        for release in [false, true] {
+            let binary = case.path(&format!("graph-{name}-{release}"));
+            let report_path = case.path(&format!("graph-{name}-{release}.json"));
+            build(&source, &binary, release);
+            let output = Command::new(&binary)
+                .env("CGX2_MEMORY_REPORT", &report_path)
+                .output()
+                .unwrap();
+            let stderr = String::from_utf8_lossy(&output.stderr);
+            let json = fs::read_to_string(&report_path).unwrap();
+            let native = semantic_json(&json);
+            assert_eq!(native.1[4], expected_collections, "{name}");
+            assert!(output.stdout.is_empty());
+            if let Some(code) = expected_code {
+                let error = &interpreted.as_ref().unwrap_err()[0];
+                assert_eq!(error.code, code, "{name}");
+                assert_eq!(output.status.code(), Some(1));
+                assert!(stderr.contains(code), "{stderr}");
+                assert!(stderr.contains(expected_detail.unwrap()), "{stderr}");
+                assert!(json.contains(&format!("\"diagnostic_code\":\"{code}\"")));
+                let span = error.span.unwrap();
+                assert!(stderr.contains(&format!("{}..{}", span.start, span.end)));
+                // The interpreter returns no report after an execution error. The
+                // native report still exposes committed state and failure counts.
+                if code == "CGR013" {
+                    assert_eq!(native.1[3], 1);
+                    assert_eq!(native.1[1], 0);
+                } else {
+                    assert!(native.1[1] > 0);
+                    assert_eq!(native.1[3], 0);
+                }
+            } else {
+                assert!(output.status.success(), "{stderr}");
+                assert!(stderr.is_empty());
+                let (_, Some(interpreter_report)) = interpreted.as_ref().unwrap() else {
+                    panic!("missing interpreter report")
+                };
+                assert_eq!(native, semantic_interpreter(interpreter_report), "{name}");
+            }
+            if let Some(first) = &first_native {
+                assert_eq!(first, &native, "debug/release {name}");
+            } else {
+                first_native = Some(native);
+            }
+        }
+    }
+}
+
+#[test]
 fn native_reports_match_interpreter_and_failure_counters_in_both_profiles() {
     let case = Case::new();
     let fixtures = [

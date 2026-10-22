@@ -1,0 +1,2 @@
+let r = memory.region(mode: manual, limit: 64)
+let parent = memory.alloc_object(r, 8, 1)

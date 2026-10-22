@@ -160,6 +160,23 @@ fn emit_block(
                             size(args[1])?
                         )
                     }
+                    "alloc_object" => {
+                        let args = positional(args, 3, value.span)?;
+                        format!(
+                            "alloc_object(session, &mut bindings, {dest}, {}, {}, {}, {span})?;",
+                            quote_rust(name(args[0])?),
+                            size(args[1])?,
+                            size(args[2])?
+                        )
+                    }
+                    "reference" => {
+                        let args = positional(args, 2, value.span)?;
+                        format!(
+                            "reference(session, &mut bindings, {dest}, {}, {}, {span})?;",
+                            quote_rust(name(args[0])?),
+                            size(args[1])?
+                        )
+                    }
                     "borrow" | "borrow_mut" => format!(
                         "borrow(&mut bindings, {dest}, {}, {span})?;",
                         quote_rust(name(positional(args, 1, value.span)?[0])?)
@@ -202,21 +219,43 @@ fn emit_block(
                     )
                 } else {
                     let (op, args) = call(expr)?;
-                    let args = positional(args, 1, expr.span)?;
-                    let operand = quote_rust(name(args[0])?);
-                    match op {
-                        "use" => format!("use_value(session, &bindings, {operand}, {span})?;"),
-                        "drop" => {
-                            format!("drop_value(session, &mut bindings, {operand}, {span})?;")
-                        }
-                        "end_borrow" => format!("end_borrow(&mut bindings, {operand}, {span})?;"),
-                        "collect" => format!("collect(session, &bindings, {operand}, {span})?;"),
-                        "close" => format!("close(session, &bindings, {operand}, {span})?;"),
-                        _ => {
-                            return Err(unsupported(
-                                format!("unsupported memory operation `{op}`"),
-                                expr.span,
-                            ));
+                    if op == "set_reference" || op == "clear_reference" {
+                        let args =
+                            positional(args, if op == "set_reference" { 3 } else { 2 }, expr.span)?;
+                        let owner = quote_rust(name(args[0])?);
+                        let index = size(args[1])?;
+                        let target = if op == "set_reference" {
+                            format!("Some({})", quote_rust(name(args[2])?))
+                        } else {
+                            "None".to_owned()
+                        };
+                        format!(
+                            "set_reference(session, &bindings, {owner}, {index}, {target}, {span})?;"
+                        )
+                    } else {
+                        let args = positional(args, 1, expr.span)?;
+                        let operand = quote_rust(name(args[0])?);
+                        match op {
+                            "use" => format!("use_value(session, &bindings, {operand}, {span})?;"),
+                            "drop" => {
+                                format!("drop_value(session, &mut bindings, {operand}, {span})?;")
+                            }
+                            "end_borrow" => {
+                                format!("end_borrow(&mut bindings, {operand}, {span})?;")
+                            }
+                            "collect" => {
+                                format!("collect(session, &bindings, {operand}, {span})?;")
+                            }
+                            "close" => format!("close(session, &bindings, {operand}, {span})?;"),
+                            "use_reference" => {
+                                format!("use_reference(session, &bindings, {operand}, {span})?;")
+                            }
+                            _ => {
+                                return Err(unsupported(
+                                    format!("unsupported memory operation `{op}`"),
+                                    expr.span,
+                                ));
+                            }
                         }
                     }
                 };
