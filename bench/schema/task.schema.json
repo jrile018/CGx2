@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:cgx2:bench:task:v1",
+  "title": "CGx2 baseline or pilot task manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["task_id", "tier", "language", "variant", "model_id", "argv", "cwd", "timeout_seconds", "seed", "expected_exit", "hidden_test_argv", "budget", "versions", "environment"],
+  "properties": {
+    "task_id": {"type": "string", "minLength": 1},
+    "tier": {"enum": ["small", "large"]},
+    "language": {"type": "string", "minLength": 1},
+    "variant": {"type": "string", "minLength": 1},
+    "model_id": {"type": "string", "minLength": 1},
+    "argv": {"$ref": "#/$defs/argv"},
+    "cwd": {"type": "string", "minLength": 1},
+    "timeout_seconds": {"type": "number", "exclusiveMinimum": 0, "maximum": 86400},
+    "seed": {"type": "integer"},
+    "expected_exit": {"type": "integer"},
+    "hidden_test_argv": {"$ref": "#/$defs/argv"},
+    "budget": {"type": "object", "required": ["total_tokens"], "additionalProperties": false,
+      "properties": {"total_tokens": {"type": "integer", "minimum": 1}}},
+    "versions": {"$ref": "#/$defs/stringMap"},
+    "environment": {"$ref": "#/$defs/stringMap"},
+    "trace_path": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "argv": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "stringMap": {"type": "object", "additionalProperties": {"type": "string"}}
+  }
+}

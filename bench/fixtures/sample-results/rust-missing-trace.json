@@ -1,0 +1,10 @@
+{
+  "schema_version": 1, "task_id": "synthetic-two", "tier": "small", "language": "rust", "variant": "standard",
+  "model_id": "synthetic-model", "seed": 0, "timeout_seconds": 10, "budget_total_tokens": 100,
+  "wall_seconds": 2, "charged_wall_seconds": 2, "exit_status": 0,
+  "stdout_sha256": null, "stderr_sha256": null, "hidden_test_exit_status": 0,
+  "hidden_test_stdout_sha256": null, "hidden_test_stderr_sha256": null,
+  "verified_completion": true, "failure_reason": null, "iterations": null,
+  "output_tokens": null, "total_tokens": null, "human_interventions": null,
+  "provenance": {"synthetic_fixture": true}
+}

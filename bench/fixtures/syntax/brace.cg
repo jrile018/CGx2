@@ -1,0 +1,6 @@
+# Provisional brace candidate with the same API and behavior.
+module sample.math;
+
+pub fn double(x: i64) -> i64 {
+    x * 2
+}

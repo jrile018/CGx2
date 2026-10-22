@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:cgx2:bench:result:v1",
+  "title": "CGx2 baseline or pilot single-run result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "task_id", "tier", "language", "variant", "model_id", "seed", "timeout_seconds", "budget_total_tokens", "wall_seconds", "charged_wall_seconds", "exit_status", "stdout_sha256", "stderr_sha256", "hidden_test_exit_status", "hidden_test_stdout_sha256", "hidden_test_stderr_sha256", "verified_completion", "failure_reason", "iterations", "output_tokens", "total_tokens", "human_interventions", "provenance"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "task_id": {"type": "string", "minLength": 1},
+    "tier": {"enum": ["small", "large"]},
+    "language": {"type": "string", "minLength": 1},
+    "variant": {"type": "string", "minLength": 1},
+    "model_id": {"type": "string", "minLength": 1},
+    "seed": {"type": "integer"},
+    "timeout_seconds": {"type": "number", "exclusiveMinimum": 0},
+    "budget_total_tokens": {"type": "integer", "minimum": 1},
+    "wall_seconds": {"type": "number", "minimum": 0},
+    "charged_wall_seconds": {"type": "number", "minimum": 0},
+    "exit_status": {"$ref": "#/$defs/nullableInteger"},
+    "stdout_sha256": {"$ref": "#/$defs/nullableSha"},
+    "stderr_sha256": {"$ref": "#/$defs/nullableSha"},
+    "hidden_test_exit_status": {"$ref": "#/$defs/nullableInteger"},
+    "hidden_test_stdout_sha256": {"$ref": "#/$defs/nullableSha"},
+    "hidden_test_stderr_sha256": {"$ref": "#/$defs/nullableSha"},
+    "verified_completion": {"type": "boolean"},
+    "failure_reason": {"type": ["string", "null"]},
+    "iterations": {"$ref": "#/$defs/nullableCount"},
+    "output_tokens": {"$ref": "#/$defs/nullableCount"},
+    "total_tokens": {"$ref": "#/$defs/nullableCount"},
+    "human_interventions": {"$ref": "#/$defs/nullableCount"},
+    "provenance": {"type": "object"}
+  },
+  "$defs": {
+    "nullableInteger": {"type": ["integer", "null"]},
+    "nullableCount": {"type": ["integer", "null"], "minimum": 0},
+    "nullableSha": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
+  }
+}
