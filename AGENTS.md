@@ -6,9 +6,9 @@ The project knowledge graph is provided by the `megamemory` MCP server and skill
 2. Before each task, call `megamemory` with action `query` (or `megamemory:understand`) before reading source files for project understanding.
 3. After each task, call `megamemory` with action `record` to create or update linked concepts. Include names, defaults, file locations, and rationale; keep concepts at most three levels deep.
 
-# CGx2 first-wave collaboration
+# CGx2 parallel-wave collaboration
 
-- Read `docs/language-design.md`, `docs/validation-plan.md`, `plans/README.md`, and your assigned `plans/<track>/plan.md` before coding.
+- Read `docs/language-design.md`, `docs/validation-plan.md`, `plans/roadmap.md`, the current wave ledger, and your assigned `plan.md` before coding.
 - Follow the exclusive path ownership in your plan. Do not edit another track, the root Cargo workspace manifest, shared design documents, or the coordinator ledger.
 - Work in the Git worktree attached to your chat. Do not merge branches or automatically start a follow-on task.
 - Finish the one bounded coding deliverable, run its specified checks, commit your changes in your worktree, and stop for the user's review. Report files, verification, limitations, and the commit identifier.
