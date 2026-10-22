@@ -659,3 +659,18 @@ fn interrupt_stops_active_worker_and_saved_output_is_not_current() {
     assert_eq!(restarted["cells"][0]["status"], "stale");
     handle.join().unwrap();
 }
+
+#[test]
+fn slow_client_does_not_hold_up_interrupt_request() {
+    use std::time::{Duration, Instant};
+    let fixture = Fixture::new("#!cgnb 1\n%% code id=one\n1 + 2\n");
+    let (port, handle) = server(&fixture.input, 3);
+    let secret = token(port);
+    let slow = TcpStream::connect(("127.0.0.1", port)).unwrap();
+    thread::sleep(Duration::from_millis(40));
+    let start = Instant::now();
+    assert_eq!(post(port, "/api/interrupt", json!({}), &secret).0, 409);
+    assert!(start.elapsed() < Duration::from_secs(1));
+    drop(slow);
+    handle.join().unwrap();
+}

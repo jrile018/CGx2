@@ -1,7 +1,7 @@
 {
   "external_trace_file_sha256": null,
   "kind": "candidate_review_packet",
-  "protocol_sha256": "6e49d6119f55a4442092fc2129599263846b60c245f94197eaf61c1b5c9328e6",
+  "protocol_sha256": "d483481fa9d952c62a657b54ba91a07618d5c0f10e695cd5d73c3863aeeb2b36",
   "schema_version": 1,
   "tasks": [
     {

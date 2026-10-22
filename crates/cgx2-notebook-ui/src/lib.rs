@@ -634,17 +634,17 @@ pub fn serve(listener: TcpListener, session: UiSession) -> io::Result<()> {
                 requests += 1;
                 stream.set_read_timeout(Some(IO_TIMEOUT))?;
                 stream.set_write_timeout(Some(IO_TIMEOUT))?;
-                let request = read_request(&mut stream);
-                if let Ok(request) = &request {
-                    if request.method == "POST" && request.path == "/api/interrupt" {
-                        let reply = interrupt_response(request, port, &token, control.as_ref());
-                        let _ = stream.write_all(&reply);
-                        continue;
-                    }
-                }
                 let shared = Arc::clone(&shared);
+                let token = token.clone();
+                let control = control.clone();
                 std::thread::spawn(move || {
+                    let request = read_request(&mut stream);
                     let reply = match request {
+                        Ok(request)
+                            if request.method == "POST" && request.path == "/api/interrupt" =>
+                        {
+                            interrupt_response(&request, port, &token, control.as_ref())
+                        }
                         Ok(request) => match shared.lock() {
                             Ok(mut session) => dispatch(&mut session, request, port),
                             Err(_) => error_response(500, "notebook session unavailable"),
@@ -673,16 +673,15 @@ pub fn serve_n(listener: TcpListener, session: UiSession, count: usize) -> io::R
         let (mut stream, _) = listener.accept()?;
         stream.set_read_timeout(Some(IO_TIMEOUT))?;
         stream.set_write_timeout(Some(IO_TIMEOUT))?;
-        let request = read_request(&mut stream);
-        if let Ok(request) = &request {
-            if request.method == "POST" && request.path == "/api/interrupt" {
-                stream.write_all(&interrupt_response(request, port, &token, control.as_ref()))?;
-                continue;
-            }
-        }
         let shared = Arc::clone(&shared);
+        let token = token.clone();
+        let control = control.clone();
         handlers.push(std::thread::spawn(move || {
+            let request = read_request(&mut stream);
             let reply = match request {
+                Ok(request) if request.method == "POST" && request.path == "/api/interrupt" => {
+                    interrupt_response(&request, port, &token, control.as_ref())
+                }
                 Ok(request) => match shared.lock() {
                     Ok(mut session) => dispatch(&mut session, request, port),
                     Err(_) => error_response(500, "notebook session unavailable"),

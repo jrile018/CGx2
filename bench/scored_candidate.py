@@ -26,6 +26,7 @@ PRIVATE_ORACLE = DEFAULT_PACK / "private/accept.py"
 PIN_FIELDS = (
     "prompt_sha256", "tools_sha256", "documentation_sha256",
     "dependency_lock_sha256", "cgx2_source_sha256", "compiler_sha256",
+    "rust_compiler_sha256",
     "dependency_sha256",
 )
 
@@ -127,8 +128,11 @@ def _preflight(base, task_id, language, submitted, toolchain, compiler_relative)
     if not compiler.is_relative_to(toolchain) or not compiler.is_file():
         raise ValueError("compiler must be inside read-only toolchain")
     compiler_sha = isolation.file_sha256(compiler)
-    if language == "cgx2" and compiler_sha != protocol["compiler_sha256"]:
-        raise ValueError("CGx2 compiler does not match frozen pin")
+    compiler_pin = protocol[
+        "compiler_sha256" if language == "cgx2" else "rust_compiler_sha256"
+    ]
+    if compiler_sha != compiler_pin:
+        raise ValueError(f"{language} compiler does not match frozen pin")
     if compiler.stat().st_size > 256 * 1024**2:
         raise ValueError("compiler exceeds identity bound")
     return {"base": base, "task": task, "card": card, "workspace": workspace,

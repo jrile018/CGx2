@@ -602,16 +602,9 @@ fn run_worker(
         .stderr(Stdio::null())
         .spawn()
         .map_err(|error| format!("CGNK010: cannot start scalar worker: {error}"))?;
-    if let Err(error) = child
-        .stdin
-        .take()
-        .expect("piped stdin")
-        .write_all(script.as_bytes())
-    {
-        let _ = child.kill();
-        let _ = child.wait();
-        return Err(format!("CGNK010: cannot send scalar script: {error}"));
-    }
+    let mut stdin = child.stdin.take().expect("piped stdin");
+    let script_bytes = script.as_bytes().to_vec();
+    let writer = std::thread::spawn(move || stdin.write_all(&script_bytes));
     let stdout = child.stdout.take().expect("piped stdout");
     let reader = std::thread::spawn(move || {
         let mut bytes = Vec::new();
@@ -624,6 +617,7 @@ fn run_worker(
         if control.interrupted.load(Ordering::Acquire) || Instant::now() >= deadline {
             let _ = child.kill();
             let _ = child.wait();
+            let _ = writer.join();
             let _ = reader.join();
             return Err("CGNK010: cell interrupted or timed out".into());
         }
@@ -633,11 +627,16 @@ fn run_worker(
             Err(error) => {
                 let _ = child.kill();
                 let _ = child.wait();
+                let _ = writer.join();
                 let _ = reader.join();
                 return Err(format!("CGNK010: scalar worker wait failed: {error}"));
             }
         }
     };
+    writer
+        .join()
+        .map_err(|_| "CGNK010: scalar worker writer panicked".to_owned())?
+        .map_err(|error| format!("CGNK010: cannot send scalar script: {error}"))?;
     let bytes = reader
         .join()
         .map_err(|_| "CGNK010: scalar worker reader panicked".to_owned())?
@@ -660,6 +659,34 @@ fn run_worker(
         b'U' if text.is_empty() => Ok(Value::Unit),
         b'E' => Err(text.into()),
         _ => Err("CGNK010: invalid scalar worker result".into()),
+    }
+}
+
+#[cfg(all(test, unix))]
+mod worker_io_tests {
+    use super::{run_worker, ExecutionControl};
+    use std::os::unix::fs::PermissionsExt;
+    use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
+
+    #[test]
+    fn full_stdin_pipe_does_not_block_worker_timeout() {
+        let nonce = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap()
+            .as_nanos();
+        let path = std::env::temp_dir().join(format!(
+            "cgx2-notebook-no-read-{}-{nonce}",
+            std::process::id()
+        ));
+        std::fs::write(&path, "#!/bin/sh\nexec sleep 2\n").unwrap();
+        std::fs::set_permissions(&path, std::fs::Permissions::from_mode(0o700)).unwrap();
+        let control = ExecutionControl::new(path.clone(), Duration::from_millis(40));
+        let script = "x".repeat(128 * 1024);
+        let start = Instant::now();
+        let result = run_worker(&script, &control, start + control.timeout);
+        let _ = std::fs::remove_file(path);
+        assert!(result.unwrap_err().contains("interrupted or timed out"));
+        assert!(start.elapsed() < Duration::from_secs(1));
     }
 }
 

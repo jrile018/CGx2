@@ -19,8 +19,9 @@ python3 bench/scored_candidate.py \
   --compiler-relative bin/rustc
 ```
 
-The compiler must be inside the toolchain root. For CGx2, its SHA-256 must
-equal the frozen `protocol.compiler_sha256`. The task needs status `frozen`,
+The compiler must be inside the toolchain root. Its SHA-256 must equal the
+frozen `protocol.compiler_sha256` for CGx2 or `protocol.rust_compiler_sha256`
+for Rust. The task needs status `frozen`,
 an accepted review card, all protocol pins, and matching starter, prompt,
 and hidden-oracle hashes. The current candidate pack has no independent
 approvals or frozen protocol pins; it returns `unrun` before launching.
@@ -35,7 +36,10 @@ no capabilities, and no network. An outer seccomp filter blocks network and
 privileged syscalls. After compilation, Landlock permits execution only of
 the compiled result and ELF interpreter; another seccomp filter blocks
 process creation. CPU, wall time, address space, file size, process count,
-open files, tmpfs, and output have fixed bounds in `isolation.py`.
+open files, tmpfs, and output have bounds in `isolation.py`. CPU, address-space
+and process-count limits are currently per process; they do not establish an
+aggregate cgroup limit for a compiler that creates children. Keep scored
+evidence gated until total resource containment is demonstrated.
 
 The JSON evidence records profile settings, compiler, worker and isolation
 hashes, copied workspace hash, pack/card/oracle hashes, capability probe,

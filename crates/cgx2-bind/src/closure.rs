@@ -203,7 +203,10 @@ impl VerifiedClosure {
                     observed.insert(index);
                 } else if name.starts_with("libtorch") || name.starts_with("libc10") {
                     return Err(invalid(format!("unlocked LibTorch module loaded: {name}")));
-                } else if name.contains(".so") {
+                } else if fields[1].as_bytes().get(2) == Some(&b'x') {
+                    // A preloaded dependency can have any filename. Its ELF SONAME,
+                    // rather than a `.so` suffix on the mapped path, can satisfy
+                    // the facade's DT_NEEDED before post-load verification runs.
                     other_elf.insert(path.to_path_buf());
                     if other_elf.len() > MAX_MAPPED_ELF_FILES {
                         return Err(ClosureError::UnverifiedLoader(

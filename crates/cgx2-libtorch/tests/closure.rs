@@ -342,9 +342,9 @@ fn closure_accepts_and_rejects_changed_version_and_loader_substitution() {
             "-Wl,-soname,libcgx2_closure_dep.so",
         ],
         &source,
-        &evil.join(DEP),
+        &evil.join("hidden_dependency"),
     );
-    let evil_path = CString::new(evil.join(DEP).to_str().unwrap()).unwrap();
+    let evil_path = CString::new(evil.join("hidden_dependency").to_str().unwrap()).unwrap();
     assert!(!unsafe { dlopen(evil_path.as_ptr(), 2) }.is_null());
     assert!(check_package(&substituted.root).passed());
     assert!(matches!(

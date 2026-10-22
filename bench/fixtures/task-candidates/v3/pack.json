@@ -11,6 +11,7 @@
     "dependency_lock_sha256": null,
     "cgx2_source_sha256": null,
     "compiler_sha256": null,
+    "rust_compiler_sha256": null,
     "dependency_sha256": null,
     "tool_version": null,
     "hardware": null
