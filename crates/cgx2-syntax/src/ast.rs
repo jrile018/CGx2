@@ -59,6 +59,8 @@ pub struct Function {
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ForeignBinding {
+    /// Required explicit escape hatch for native declarations.
+    pub unsafe_call: bool,
     pub route: String,
     pub target: Path,
     pub runtime: String,

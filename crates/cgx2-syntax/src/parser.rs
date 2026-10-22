@@ -43,7 +43,11 @@ pub fn parse_module(source: &str) -> Result<Module, Vec<SyntaxDiagnostic>> {
     let mut statements = Vec::new();
     while !parser.at(&TokenKind::Eof) {
         let before = parser.pos;
-        if parser.at_name("foreign") || parser.at(&TokenKind::Pub) || parser.at(&TokenKind::Fn) {
+        if parser.at_name("unsafe")
+            || parser.at_name("foreign")
+            || parser.at(&TokenKind::Pub)
+            || parser.at(&TokenKind::Fn)
+        {
             if let Some(function) = parser.parse_function() {
                 if function.foreign.is_some()
                     && functions
@@ -214,10 +218,16 @@ impl Parser {
     }
     fn parse_function(&mut self) -> Option<Function> {
         let start = self.peek().span.start;
+        let unsafe_call = if self.at_name("unsafe") {
+            self.advance();
+            true
+        } else {
+            false
+        };
         let route = if self.at_name("foreign") {
             self.advance();
             let (route, span) = self.name()?;
-            if route != "python" {
+            if route != "python" && route != "native" {
                 self.errors.push(SyntaxDiagnostic {
                     code: "CGS111",
                     message: format!("unsupported foreign route `{route}`"),
@@ -226,6 +236,9 @@ impl Parser {
             }
             Some(route)
         } else {
+            if unsafe_call {
+                self.error("CGS111", "unsafe requires a foreign native declaration");
+            }
             None
         };
         let public = self.eat(&TokenKind::Pub).is_some();
@@ -289,7 +302,7 @@ impl Parser {
             self.expect(
                 &TokenKind::Equal,
                 "CGS111",
-                "expected = before Python target",
+                "expected = before foreign target",
             )?;
             let target = self.parse_path()?;
             if !self.at_name("runtime") {
@@ -330,6 +343,7 @@ impl Parser {
                 ensures: vec![],
                 body: vec![],
                 foreign: Some(ForeignBinding {
+                    unsafe_call,
                     route,
                     target,
                     runtime,
@@ -400,7 +414,10 @@ impl Parser {
                     "ReadArgs" | "ManagedAlloc" | "Collect" | "Mutate" | "Foreign" | "Unknown"
                 )
             } else {
-                matches!(name.as_str(), "ArgsRead" | "MemoryCollect" | "ForeignCall")
+                matches!(
+                    name.as_str(),
+                    "ArgsRead" | "MemoryCollect" | "ForeignCall" | "native"
+                )
             };
             if !valid || !seen.insert(name.clone()) {
                 self.errors.push(SyntaxDiagnostic {

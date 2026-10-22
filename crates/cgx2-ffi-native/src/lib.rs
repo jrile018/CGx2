@@ -97,7 +97,7 @@ impl<'a> Declaration<'a> {
             thread_rule: "calling_thread",
             callbacks: false,
             effects: &["foreign"],
-            capabilities: &[],
+            capabilities: &["native"],
         }
     }
 
@@ -139,6 +139,7 @@ impl<'a> Declaration<'a> {
             || self.thread_rule != "calling_thread"
             || self.callbacks
             || !self.effects.contains(&"foreign")
+            || (self.operation == Operation::ScalarI64 && !self.capabilities.contains(&"native"))
         {
             return Err(Error::UnsupportedDeclaration);
         }

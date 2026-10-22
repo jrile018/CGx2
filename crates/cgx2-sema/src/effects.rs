@@ -111,7 +111,17 @@ pub(crate) fn analyze(module: &Module) -> (BTreeMap<String, EffectSummary>, Vec<
         };
         if function.foreign.is_some() {
             summary.effects.insert("Foreign".into());
-            summary.capabilities.insert("ForeignCall".into());
+            summary.capabilities.insert(
+                if function
+                    .foreign
+                    .as_ref()
+                    .is_some_and(|binding| binding.route == "native")
+                {
+                    "native".into()
+                } else {
+                    "ForeignCall".into()
+                },
+            );
         }
         summaries.insert(function.name.clone(), summary);
     }

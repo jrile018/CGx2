@@ -33,6 +33,9 @@ pub fn format_module(module: &Module) -> String {
 
 fn write_function(out: &mut String, function: &Function) {
     if let Some(binding) = &function.foreign {
+        if binding.unsafe_call {
+            out.push_str("unsafe ");
+        }
         out.push_str("foreign ");
         out.push_str(&binding.route);
         out.push(' ');

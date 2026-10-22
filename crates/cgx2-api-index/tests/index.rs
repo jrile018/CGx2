@@ -5,6 +5,25 @@ use cgx2_api_index::{build_index, ApiFunction, ApiIndex, ApiParameter, IndexErro
 use cgx2_sema::check_module;
 use cgx2_syntax::{parse_module, Span};
 
+#[test]
+fn native_api_index_exposes_unsafe_binding_and_source_span() {
+    let source = "unsafe foreign native pub fn double(x: i64) -> i64 effects(Foreign) caps(native) = fixture.fixture_double runtime \"native_fixture@1.0.0\" ownership copied\n";
+    let module = parse_module(source).unwrap();
+    let typed = check_module(&module).unwrap();
+    let index = build_index(&module, &typed).unwrap();
+    assert_eq!(index.schema_version, 4);
+    let function = &index.functions[0];
+    assert_eq!(&source[function.span.start..function.span.end], source);
+    assert_eq!(function.capabilities, ["native"]);
+    assert_eq!(
+        function.foreign.as_ref().unwrap().binding_id.as_deref(),
+        Some("fixture")
+    );
+    let json = index.render_json();
+    assert!(json.contains("\"unsafe\":true"));
+    assert!(json.contains("\"binding_id\":\"fixture\""));
+}
+
 fn python_json_assert(json: &str, python_assertions: &str, args: &[&str]) {
     let program = format!(
         "import json, sys\nsys.argv = [sys.argv[0]] + [bytes.fromhex(x).decode('utf-8') for x in sys.argv[1:]]\ndata = json.load(sys.stdin)\n{python_assertions}\n"

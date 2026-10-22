@@ -438,6 +438,22 @@ pub fn load_checked_package(root: &Path) -> Result<CheckedPackage, Vec<PackageDi
                 continue;
             }
         };
+        if manifest.binding_lock.is_none() {
+            for function in &parsed.functions {
+                if function
+                    .foreign
+                    .as_ref()
+                    .is_some_and(|binding| binding.route == "native")
+                {
+                    errors.push(PackageDiagnostic::new(
+                        "CGP019",
+                        "native foreign declaration requires schema 2 binding_lock",
+                        &listed,
+                        Some(function.span),
+                    ));
+                }
+            }
+        }
         let name = parsed.name.as_ref().map(|path| path.segments.join("."));
         if let Some(ref name) = name {
             if let Some(first) = seen_modules.insert(name.clone(), listed.clone()) {

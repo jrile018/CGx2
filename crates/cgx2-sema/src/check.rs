@@ -104,6 +104,60 @@ pub fn check_module_with_imports(
                     function.span,
                 ));
             }
+            if binding.route == "native" {
+                let valid_shape = binding.unsafe_call
+                    && binding.ownership == "copied"
+                    && binding.target.segments.len() == 2
+                    && binding
+                        .runtime
+                        .split_once('@')
+                        .is_some_and(|(library, version)| {
+                            !library.is_empty() && !version.is_empty()
+                        })
+                    && function.parameters.len() == 1
+                    && function.parameters[0].ty.to_string() == "i64"
+                    && function
+                        .return_type
+                        .as_ref()
+                        .is_some_and(|ty| ty.to_string() == "i64");
+                if !valid_shape {
+                    foreign_errors.push(TypeDiagnostic::new(
+                        "CGT016",
+                        "native C calls require unsafe foreign native, one i64 input, i64 result, binding.symbol target, LIBRARY@VERSION runtime and copied ownership".into(),
+                        binding.span,
+                    ));
+                }
+                if !function
+                    .effects
+                    .as_ref()
+                    .is_some_and(|decl| decl.names.iter().any(|name| name.name == "Foreign"))
+                {
+                    foreign_errors.push(TypeDiagnostic::new(
+                        "CGT012",
+                        "native declaration requires effects(Foreign)".into(),
+                        function.span,
+                    ));
+                }
+                if !function
+                    .capabilities
+                    .as_ref()
+                    .is_some_and(|decl| decl.names.iter().any(|name| name.name == "native"))
+                {
+                    foreign_errors.push(TypeDiagnostic::new(
+                        "CGT013",
+                        "native declaration requires caps(native)".into(),
+                        function.span,
+                    ));
+                }
+                continue;
+            }
+            if binding.unsafe_call {
+                foreign_errors.push(TypeDiagnostic::new(
+                    "CGT016",
+                    "unsafe foreign is reserved for the native route".into(),
+                    binding.span,
+                ));
+            }
             let supported = |ty: &cgx2_syntax::TypeSyntax| {
                 matches!(ty.to_string().as_str(), "i64" | "Bool" | "String")
             };

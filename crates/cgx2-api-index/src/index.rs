@@ -31,6 +31,8 @@ pub struct ApiForeign {
     pub target: String,
     pub ownership: String,
     pub runtime: String,
+    pub unsafe_call: bool,
+    pub binding_id: Option<String>,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -159,6 +161,9 @@ fn build_index_checked(
                     target: binding.target.segments.join("."),
                     ownership: binding.ownership.clone(),
                     runtime: binding.runtime.clone(),
+                    unsafe_call: binding.unsafe_call,
+                    binding_id: (binding.route == "native")
+                        .then(|| binding.target.segments[0].clone()),
                 }),
             }
         })
@@ -171,7 +176,14 @@ fn build_index_checked(
     });
 
     Ok(ApiIndex {
-        schema_version: if module
+        schema_version: if module.functions.iter().any(|function| {
+            function
+                .foreign
+                .as_ref()
+                .is_some_and(|binding| binding.route == "native")
+        }) {
+            4
+        } else if module
             .functions
             .iter()
             .any(|function| function.foreign.is_some())

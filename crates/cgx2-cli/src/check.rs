@@ -21,7 +21,7 @@ pub fn check_source(source: &str) -> Result<TypedModule, Vec<CheckDiagnostic>> {
             })
             .collect::<Vec<_>>()
     })?;
-    check_module(&module).map_err(|errors| {
+    let typed = check_module(&module).map_err(|errors| {
         errors
             .into_iter()
             .map(|error| CheckDiagnostic {
@@ -30,5 +30,19 @@ pub fn check_source(source: &str) -> Result<TypedModule, Vec<CheckDiagnostic>> {
                 span: error.span,
             })
             .collect::<Vec<_>>()
-    })
+    })?;
+    if let Some(function) = module.functions.iter().find(|function| {
+        function
+            .foreign
+            .as_ref()
+            .is_some_and(|binding| binding.route == "native")
+    }) {
+        return Err(vec![CheckDiagnostic {
+            code: "CGT017".into(),
+            message: "native C calls require an explicit schema 2 package and pinned binding lock"
+                .into(),
+            span: function.span,
+        }]);
+    }
+    Ok(typed)
 }

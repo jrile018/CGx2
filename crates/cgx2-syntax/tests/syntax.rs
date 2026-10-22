@@ -21,6 +21,17 @@ fn python_foreign_declaration_round_trips_with_source_spans() {
 }
 
 #[test]
+fn unsafe_native_declaration_round_trips_and_marks_boundary() {
+    let source = "unsafe foreign native pub fn double(x: i64) -> i64 effects(Foreign) caps(native) = fixture.fixture_double runtime \"native_fixture@1.0.0\" ownership copied\n";
+    let parsed = parse_module(source).unwrap();
+    let binding = parsed.functions[0].foreign.as_ref().unwrap();
+    assert!(binding.unsafe_call);
+    assert_eq!(binding.route, "native");
+    assert_eq!(binding.target.segments, ["fixture", "fixture_double"]);
+    assert_eq!(format_module(&parsed), source);
+}
+
+#[test]
 fn foreign_route_and_duplicate_declarations_are_diagnosed() {
     let header = "foreign python fn f(x: i64) -> i64 effects(Foreign) caps(ForeignCall) = math.isqrt runtime \"local:cpython\" ownership copied\n";
     let duplicate = format!("{header}{header}");

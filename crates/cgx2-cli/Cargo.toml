@@ -16,3 +16,10 @@ cgx2-syntax = { path = "../cgx2-syntax" }
 cgx2-sema = { path = "../cgx2-sema" }
 cgx2-runtime = { path = "../cgx2-runtime" }
 cgx2-foreign = { path = "../cgx2-foreign" }
+cgx2-package = { path = "../cgx2-package" }
+cgx2-bind = { path = "../cgx2-bind" }
+cgx2-ffi-native = { path = "../cgx2-ffi-native" }
+serde_json = "=1.0.149"
+
+[dev-dependencies]
+sha2 = "=0.10.9"

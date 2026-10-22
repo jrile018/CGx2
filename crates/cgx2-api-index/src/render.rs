@@ -80,6 +80,16 @@ impl ApiIndex {
                     push_json_string(&mut out, &foreign.ownership);
                     out.push_str(",\"runtime\":");
                     push_json_string(&mut out, &foreign.runtime);
+                    if self.schema_version >= 4 {
+                        out.push_str(",\"unsafe\":");
+                        out.push_str(if foreign.unsafe_call { "true" } else { "false" });
+                        out.push_str(",\"binding_id\":");
+                        if let Some(id) = &foreign.binding_id {
+                            push_json_string(&mut out, id);
+                        } else {
+                            out.push_str("null");
+                        }
+                    }
                     out.push('}');
                 } else {
                     out.push_str("null");
@@ -146,6 +156,10 @@ impl ApiIndex {
                 out.push_str(&foreign.ownership);
                 out.push_str(" runtime=");
                 out.push_str(&foreign.runtime);
+                if let Some(id) = &foreign.binding_id {
+                    out.push_str(" unsafe=true binding_id=");
+                    out.push_str(id);
+                }
                 out.push('\n');
             }
         }

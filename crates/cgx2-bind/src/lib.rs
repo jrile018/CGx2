@@ -132,6 +132,10 @@ impl Report {
 
 /// Checks local bytes and declared contracts without loading any foreign artifact.
 pub fn check_package(root: &Path) -> Report {
+    inspect_package(root).0
+}
+
+fn inspect_package(root: &Path) -> (Report, Option<BindingLock>) {
     let mut report = Report::new();
     let checked = match load_checked_package(root) {
         Ok(package) => package,
@@ -139,27 +143,27 @@ pub fn check_package(root: &Path) -> Report {
             for diagnostic in diagnostics {
                 report.push(diagnostic.code, "", diagnostic.message);
             }
-            return report;
+            return (report, None);
         }
     };
     report.package = checked.index().name.clone();
     let Some(lock_path) = checked.binding_lock() else {
         report.push("CGB001", "", "cgx2.toml schema 2 binding_lock is required");
-        return report;
+        return (report, None);
     };
     let root = checked.root();
     let lock_file = match confined_file(root, lock_path) {
         Ok(path) => path,
         Err(message) => {
             report.push("CGB002", "", message);
-            return report;
+            return (report, None);
         }
     };
     let bytes = match read_bounded(&lock_file, MAX_LOCK_BYTES) {
         Ok(bytes) => bytes,
         Err(message) => {
             report.push("CGB002", "", message);
-            return report;
+            return (report, None);
         }
     };
     let lock: BindingLock = match serde_json::from_slice(&bytes) {
@@ -170,7 +174,7 @@ pub fn check_package(root: &Path) -> Report {
                 "",
                 format!("invalid strict binding lock: {error}"),
             );
-            return report;
+            return (report, None);
         }
     };
     if lock.schema_version != 1
@@ -187,9 +191,9 @@ pub fn check_package(root: &Path) -> Report {
             "",
             "lock schema, package identity, or binding/symbol count is invalid",
         );
-        return report;
+        return (report, None);
     }
-    let mut bindings = lock.bindings;
+    let mut bindings = lock.bindings.clone();
     bindings.sort_by(|a, b| a.id.cmp(&b.id));
     let mut seen = BTreeSet::new();
     let mut remaining_artifact_bytes = MAX_TOTAL_ARTIFACT_BYTES;
@@ -206,7 +210,38 @@ pub fn check_package(root: &Path) -> Report {
     if report.diagnostics.is_empty() {
         report.status = "ok";
     }
-    report
+    (report, Some(lock))
+}
+
+/// Return a lock only after the complete, offline package preflight succeeds.
+pub fn checked_lock(root: &Path) -> Result<BindingLock, Report> {
+    let (report, lock) = inspect_package(root);
+    if report.passed() {
+        Ok(lock.expect("successful preflight parsed lock"))
+    } else {
+        Err(report)
+    }
+}
+
+/// Hold the checked artifact inode while the native loader opens it.
+/// Call this after `checked_lock`; it repeats the hash and confinement check.
+pub fn checked_artifact(root: &Path, binding: &Binding) -> Result<File, String> {
+    let path = confined_file(root, Path::new(&binding.artifact))?;
+    let mut file = File::open(&path).map_err(|error| format!("cannot open artifact: {error}"))?;
+    let size = file
+        .metadata()
+        .map_err(|error| format!("cannot stat artifact: {error}"))?
+        .len();
+    if size > MAX_ARTIFACT_BYTES {
+        return Err("artifact exceeds size limit".into());
+    }
+    let mut bytes = Vec::with_capacity(size as usize);
+    file.read_to_end(&mut bytes)
+        .map_err(|error| format!("cannot read artifact: {error}"))?;
+    if format!("{:x}", Sha256::digest(&bytes)) != binding.sha256.to_ascii_lowercase() {
+        return Err("artifact SHA-256 mismatch".into());
+    }
+    Ok(file)
 }
 
 fn check_binding(
@@ -228,7 +263,8 @@ fn check_binding(
         || (binding.route == "native-c" && binding.abi != "c")
         || (binding.route == "libtorch" && binding.abi != "libtorch-stable")
         || binding.calling_convention != "c"
-        || binding.layout != "scalar-v1"
+        || !matches!(binding.layout.as_str(), "scalar-v1" | "status-i64-out-v1")
+        || (binding.layout == "status-i64-out-v1" && binding.route != "native-c")
     {
         report.push(
             "CGB006",
@@ -257,6 +293,22 @@ fn check_binding(
     }
     let mut names = BTreeSet::new();
     for symbol in &binding.symbols {
+        if binding.layout == "status-i64-out-v1"
+            && (symbol.parameters != ["i64"]
+                || symbol.result != "i64"
+                || symbol.ownership != "none"
+                || symbol.owner.is_some()
+                || symbol.release.is_some()
+                || symbol.error != "status"
+                || symbol.effects != ["foreign"]
+                || symbol.capabilities != ["native"])
+        {
+            report.push(
+                "CGB017",
+                id,
+                format!("{} is not the status-i64-out-v1 C shape", symbol.name),
+            );
+        }
         if !identifier(&symbol.name) || !names.insert(symbol.name.as_str()) {
             report.push(
                 "CGB009",
@@ -361,6 +413,21 @@ fn check_binding(
     if binding.os == "linux" && std::env::consts::OS == "linux" {
         match exported_symbols(&artifact) {
             Ok(exports) => {
+                if binding.layout == "status-i64-out-v1" {
+                    for metadata in [
+                        "cgx2_library_identity",
+                        "cgx2_library_version",
+                        "cgx2_abi_version",
+                    ] {
+                        if !exports.contains(metadata) {
+                            report.push(
+                                "CGB015",
+                                id,
+                                format!("missing exported symbol {metadata}"),
+                            );
+                        }
+                    }
+                }
                 for symbol in &binding.symbols {
                     if !exports.contains(symbol.name.as_str()) {
                         report.push(

@@ -1,0 +1,4 @@
+unsafe foreign native pub fn double(x: i64) -> i64 effects(Foreign) caps(native) = fixture.fixture_double runtime "native_fixture@1.0.0" ownership copied
+
+fn main() -> i64 effects(Foreign) caps(native):
+    double(21)

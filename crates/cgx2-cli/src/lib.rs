@@ -2,11 +2,24 @@ mod check;
 mod error;
 mod eval;
 mod memory;
+mod native;
+mod native_eval;
 
 pub use cgx2_runtime::MemoryReport;
 pub use check::{check_source, CheckDiagnostic};
 pub use error::RunError;
 pub use eval::{RunResult, Value};
+pub use native::{check_native_package, NativeDiagnostic};
+use std::path::Path;
+
+pub fn run_native_package(
+    root: &Path,
+    args: &[String],
+) -> Result<RunResult, Vec<NativeDiagnostic>> {
+    native::run_native_package_i64(root, args).map(|value| RunResult {
+        value: Value::I64(value),
+    })
+}
 
 use cgx2_syntax::parse_module;
 
@@ -25,6 +38,19 @@ fn execute(
             })
             .collect::<Vec<_>>()
     })?;
+    if let Some(function) = module.functions.iter().find(|function| {
+        function
+            .foreign
+            .as_ref()
+            .is_some_and(|binding| binding.route == "native")
+    }) {
+        return Err(vec![RunError {
+            code: "CGT017",
+            message: "native C calls require an explicit schema 2 package and pinned binding lock"
+                .into(),
+            span: Some(function.span),
+        }]);
+    }
     let is_memory = module.statements.iter().any(eval::stmt_has_memory)
         || module
             .functions

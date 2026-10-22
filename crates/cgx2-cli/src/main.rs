@@ -7,7 +7,7 @@ use cgx2_syntax::{format_module, parse_module};
 
 use diagnostics::{CliDiagnostic, DiagnosticFormat};
 
-const HELP: &str = "usage: cgx2 [--diagnostic-format=json] check FILE.cg | cgx2 [--diagnostic-format=json] run FILE.cg [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 memory report FILE.cg [--format=json] | cgx2 fmt FILE.cg\ncheck validates syntax, scalar types, and a bounded memory/ownership script subset; run checks source before execution; memory report shows CGx2 allocations only";
+const HELP: &str = "usage: cgx2 [--diagnostic-format=json] check FILE.cg|PACKAGE | cgx2 [--diagnostic-format=json] run FILE.cg|PACKAGE [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 memory report FILE.cg [--format=json] | cgx2 fmt FILE.cg\ncheck validates syntax, scalar types, and a bounded memory/ownership script subset; a schema 2 PACKAGE directory can run the bounded pinned native C profile through cgx2-native; memory report shows CGx2 allocations only";
 
 enum Command {
     Check { path: String },
@@ -35,6 +35,7 @@ fn main() -> ExitCode {
 }
 
 fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
+    let json = matches!(DiagnosticFormat::from_args(&args), DiagnosticFormat::Json);
     let command = parse_args(args).map_err(|error| vec![error])?;
     let path = match &command {
         Command::Check { path }
@@ -42,6 +43,60 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
         | Command::MemoryReport { path, .. }
         | Command::Fmt { path } => path,
     };
+    if Path::new(path).is_dir()
+        && Path::new(path).extension().and_then(|ext| ext.to_str()) != Some("cg")
+    {
+        let mode = match &command {
+            Command::Check { .. } => "check",
+            Command::Run { .. } => "run",
+            _ => {
+                return Err(vec![CliDiagnostic::new(
+                    "CGC001",
+                    HELP.into(),
+                    path.to_string(),
+                    None,
+                )])
+            }
+        };
+        #[cfg(target_os = "linux")]
+        {
+            use std::os::unix::process::CommandExt;
+            let helper = env::current_exe()
+                .map_err(|error| {
+                    vec![CliDiagnostic::new(
+                        "CGN001",
+                        format!("cannot locate native helper: {error}"),
+                        path.to_string(),
+                        None,
+                    )]
+                })?
+                .with_file_name("cgx2-native");
+            let mut process = std::process::Command::new(helper);
+            process.arg(mode).arg(path);
+            if json {
+                process.arg("--diagnostic-format=json");
+            }
+            if let Command::Run { args, .. } = &command {
+                if !args.is_empty() {
+                    process.arg("--").args(args);
+                }
+            }
+            let error = process.exec();
+            return Err(vec![CliDiagnostic::new(
+                "CGN001",
+                format!("cannot start native helper: {error}"),
+                path.to_string(),
+                None,
+            )]);
+        }
+        #[cfg(not(target_os = "linux"))]
+        return Err(vec![CliDiagnostic::new(
+            "CGN001",
+            "native C package execution requires Linux".into(),
+            path.to_string(),
+            None,
+        )]);
+    }
     let source = fs::read_to_string(path).map_err(|error| {
         vec![CliDiagnostic::new(
             "CGC002",
@@ -136,13 +191,15 @@ fn parse_args(args: Vec<String>) -> Result<Command, CliDiagnostic> {
         Some("check") => ("check", &filtered[1..]),
         Some("run") => ("run", &filtered[1..]),
         Some("fmt") if !json => ("fmt", &filtered[1..]),
-        Some(path) if path.ends_with(".cg") => ("run", &filtered[..]),
+        Some(path) if path.ends_with(".cg") || Path::new(path).is_dir() => ("run", &filtered[..]),
         _ => return Err(usage()),
     };
     let Some(path) = rest.first() else {
         return Err(usage());
     };
-    if Path::new(path).extension().and_then(|ext| ext.to_str()) != Some("cg") {
+    if Path::new(path).extension().and_then(|ext| ext.to_str()) != Some("cg")
+        && !Path::new(path).is_dir()
+    {
         return Err(usage());
     }
     if mode == "memory-report" {
