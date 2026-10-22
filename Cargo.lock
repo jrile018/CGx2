@@ -24,9 +24,27 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4e7648175b45a9a48536d676f68d918270699102aa8dab5496df06904c914600"
 
 [[package]]
+name = "cgx2-api-index"
+version = "0.1.0"
+dependencies = [
+ "cgx2-sema",
+ "cgx2-syntax",
+]
+
+[[package]]
 name = "cgx2-cli"
 version = "0.1.0"
 dependencies = [
+ "cgx2-sema",
+ "cgx2-syntax",
+]
+
+[[package]]
+name = "cgx2-emit-python"
+version = "0.1.0"
+dependencies = [
+ "cgx2-cli",
+ "cgx2-sema",
  "cgx2-syntax",
 ]
 
@@ -43,6 +61,13 @@ name = "cgx2-notebook-session"
 version = "0.1.0"
 dependencies = [
  "cgx2-notebook-format",
+]
+
+[[package]]
+name = "cgx2-ownership"
+version = "0.1.0"
+dependencies = [
+ "cgx2-syntax",
 ]
 
 [[package]]
