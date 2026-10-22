@@ -1,0 +1,9 @@
+[package]
+name = "cgx2-memory-conformance"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.98"
+
+[dependencies]
+cgx2-cli = { path = "../cgx2-cli" }
+cgx2-runtime = { path = "../cgx2-runtime" }
