@@ -4,6 +4,7 @@ use pyo3::exceptions::{PyAttributeError, PyModuleNotFoundError};
 use pyo3::prelude::*;
 use pyo3::types::{PyBool, PyFloat, PyInt, PyString, PyTuple};
 
+use crate::tensor::validate_torch_capability;
 use crate::value::{BridgeValue, PyHandle};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -55,6 +56,28 @@ impl fmt::Display for BridgeError {
 }
 
 impl std::error::Error for BridgeError {}
+
+/// The linked interpreter and the result of an actual CPU float32 PyTorch check.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct TorchProbe {
+    pub python_version: String,
+    pub python_prefix: String,
+    pub status: TorchStatus,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum TorchStatus {
+    Available {
+        torch_version: String,
+    },
+    Unavailable {
+        failure: PythonFailure,
+    },
+    Broken {
+        torch_version: Option<String>,
+        error: BridgeError,
+    },
+}
 
 pub(crate) fn python_failure(py: Python<'_>, error: PyErr) -> PythonFailure {
     let exception_type = error.get_type(py).name().map_or_else(
@@ -113,6 +136,64 @@ impl PythonBridge {
     }
     pub fn python_prefix(&self) -> &str {
         &self.python_prefix
+    }
+
+    /// Probes tensor creation and typed arithmetic in the interpreter selected at build time.
+    pub fn probe_torch(&self) -> TorchProbe {
+        let status = Python::attach(|py| match py.import("torch") {
+            Ok(module) => {
+                let torch = PyHandle(module.into_any().unbind());
+                self.probe_imported_torch(&torch)
+            }
+            Err(error) => {
+                let is_absent = error.is_instance_of::<PyModuleNotFoundError>(py)
+                    && error
+                        .value(py)
+                        .getattr("name")
+                        .and_then(|name| name.extract::<String>())
+                        .is_ok_and(|name| name == "torch");
+                let failure = python_failure(py, error);
+                if is_absent {
+                    TorchStatus::Unavailable { failure }
+                } else {
+                    TorchStatus::Broken {
+                        torch_version: None,
+                        error: BridgeError::PythonException(failure),
+                    }
+                }
+            }
+        });
+        TorchProbe {
+            python_version: self.python_version.clone(),
+            python_prefix: self.python_prefix.clone(),
+            status,
+        }
+    }
+
+    fn probe_imported_torch(&self, torch: &PyHandle) -> TorchStatus {
+        let version =
+            self.getattr(torch, "__version__")
+                .and_then(|value| match self.to_value(&value)? {
+                    BridgeValue::String(version) => Ok(version),
+                    _ => Err(BridgeError::TypeConversion {
+                        expected: "torch.__version__ string",
+                        actual: "non-string version".into(),
+                        failure: None,
+                    }),
+                });
+        match version {
+            Ok(torch_version) => match validate_torch_capability(torch) {
+                Ok(()) => TorchStatus::Available { torch_version },
+                Err(error) => TorchStatus::Broken {
+                    torch_version: Some(torch_version),
+                    error,
+                },
+            },
+            Err(error) => TorchStatus::Broken {
+                torch_version: None,
+                error,
+            },
+        }
     }
 
     pub fn import_module(&self, name: &str) -> Result<PyHandle, BridgeError> {
@@ -233,5 +314,34 @@ fn bridge_to_python(py: Python<'_>, arg: &BridgeValue) -> Result<Py<PyAny>, Brid
             .into_any()
             .unbind()),
         BridgeValue::Handle(value) => Ok(value.0.clone_ref(py)),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use pyo3::types::PyModule;
+
+    use super::*;
+
+    #[test]
+    fn incomplete_imported_torch_is_broken_with_reported_version() {
+        let bridge = PythonBridge::new().unwrap();
+        Python::attach(|py| {
+            let module = PyModule::from_code(
+                py,
+                c"__version__ = 'fake-1'\nclass Tensor: pass\n",
+                c"incomplete_torch.py",
+                c"incomplete_torch",
+            )
+            .unwrap();
+            let torch = PyHandle(module.into_any().unbind());
+            assert!(matches!(
+                bridge.probe_imported_torch(&torch),
+                TorchStatus::Broken {
+                    torch_version: Some(version),
+                    ..
+                } if version == "fake-1"
+            ));
+        });
     }
 }

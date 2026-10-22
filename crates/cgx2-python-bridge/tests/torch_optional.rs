@@ -1,4 +1,24 @@
-use cgx2_python_bridge::{BridgeError, BridgeValue, PythonBridge};
+use cgx2_python_bridge::{BridgeError, BridgeValue, PythonBridge, TorchStatus};
+
+#[test]
+fn torch_probe_reports_real_capability_or_missing_package() {
+    let bridge = PythonBridge::new().unwrap();
+    let probe = bridge.probe_torch();
+    assert_eq!(probe.python_version, bridge.python_version());
+    assert_eq!(probe.python_prefix, bridge.python_prefix());
+    match probe.status {
+        TorchStatus::Available { torch_version } => assert!(!torch_version.is_empty()),
+        TorchStatus::Unavailable { failure } => {
+            eprintln!(
+                "SKIPPED real PyTorch capability test: torch is absent from the linked Python interpreter"
+            );
+            assert_eq!(failure.exception_type, "ModuleNotFoundError");
+        }
+        TorchStatus::Broken { error, .. } => {
+            panic!("installed torch failed capability probe: {error}")
+        }
+    }
+}
 
 #[test]
 fn shape_is_checked_before_a_foreign_allocation() {
