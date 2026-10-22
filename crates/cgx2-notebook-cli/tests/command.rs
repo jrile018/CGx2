@@ -76,6 +76,15 @@ fn run_saves_fresh_reopenable_output_without_touching_input() {
         [CellOutput::Text { mime, ordinal: 1, body }]
             if mime == "text/plain" && body.trim() == "7"
     ));
+    assert!(notebook.cells[2].provenance.is_some());
+    let inspected = run(&[Path::new("inspect"), &output]);
+    assert!(inspected.status.success(), "{}", stderr(&inspected));
+    let text = String::from_utf8_lossy(&inspected.stdout);
+    assert!(
+        text.contains("result\tcode\tcached\tschema=1\tordinal="),
+        "{text}"
+    );
+    assert!(text.contains("source_sha256="), "{text}");
 }
 
 #[test]
@@ -86,8 +95,8 @@ fn inspect_is_read_only_and_does_not_execute() {
     assert!(result.status.success(), "{}", stderr(&result));
     let stdout = String::from_utf8_lossy(&result.stdout);
     assert!(stdout.contains("notes\tmarkdown"), "{stdout}");
-    assert!(stdout.contains("seed\tcode\tnever-run"), "{stdout}");
-    assert!(stdout.contains("result\tcode\tnever-run"), "{stdout}");
+    assert!(stdout.contains("seed\tcode\tcached"), "{stdout}");
+    assert!(stdout.contains("result\tcode\tcached"), "{stdout}");
     assert_eq!(fs::read_to_string(input).unwrap(), INPUT);
 }
 
@@ -213,6 +222,60 @@ fn valid_stale_asset_is_checked_then_dropped_from_clean_code_output() {
         .iter()
         .all(|value| matches!(value, CellOutput::Text { mime, .. } if mime == "text/plain")));
     assert_eq!(fs::read(sidecar.join(digest)).unwrap(), b"old image");
+}
+
+#[test]
+fn portable_export_import_preserves_provenance_and_rejects_corrupt_record() {
+    let fixture = Fixture::new();
+    let input = fixture.path("source.cgnb");
+    let digest = save_asset(&fixture.path("source.cgnb.assets"), b"image bytes").unwrap();
+    let mut notebook = cgx2_notebook_format::parse_notebook(&format!(
+        "#!cgnb 1\n%% code id=plot\nplot()\n%% asset id=plot mime=image/png ordinal=2 sha256={digest}\n"
+    )).unwrap();
+    notebook.cells[0].provenance = Some(cgx2_notebook_format::make_provenance(
+        &notebook,
+        0,
+        4,
+        Some(2),
+    ));
+    fs::write(
+        &input,
+        cgx2_notebook_format::write_notebook(&notebook).unwrap(),
+    )
+    .unwrap();
+    let portable = fixture.path("portable.cgnb");
+    let exported = run(&[Path::new("export"), &input, Path::new("--out"), &portable]);
+    assert!(exported.status.success(), "{}", stderr(&exported));
+    let imported = fixture.path("imported.cgnb");
+    let result = run(&[
+        Path::new("import"),
+        &portable,
+        Path::new("--out"),
+        &imported,
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    assert_eq!(
+        parse_notebook_bytes(&fs::read(&imported).unwrap()).unwrap(),
+        notebook
+    );
+    assert_eq!(
+        fs::read(fixture.path("imported.cgnb.assets").join(&digest)).unwrap(),
+        b"image bytes"
+    );
+    let corrupt = fixture.write(
+        "corrupt.cgnb",
+        &fs::read_to_string(portable)
+            .unwrap()
+            .replace("source_sha256=", "source_sha256=BAD"),
+    );
+    let rejected = run(&[
+        Path::new("import"),
+        &corrupt,
+        Path::new("--out"),
+        &fixture.path("rejected.cgnb"),
+    ]);
+    assert!(!rejected.status.success());
+    assert!(stderr(&rejected).contains("provenance"));
 }
 
 #[test]

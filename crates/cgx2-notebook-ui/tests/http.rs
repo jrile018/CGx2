@@ -5,7 +5,9 @@ use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::thread;
 
-use cgx2_notebook_format::{load_asset, parse_notebook_bytes, save_asset, Output};
+use cgx2_notebook_format::{
+    load_asset, parse_notebook_bytes, save_asset, Output, ProvenanceResult,
+};
 use cgx2_notebook_ui::{serve_n, UiSession};
 use serde_json::{json, Value};
 
@@ -140,6 +142,7 @@ fn edit_run_restart_save_reopen_and_input_is_unchanged() {
     let saved = parse_notebook_bytes(&fs::read(f.dir.join("saved.cgnb")).unwrap()).unwrap();
     assert_eq!(saved.cells[1].source, "let x = 5");
     assert!(matches!(&saved.cells[2].outputs[0], Output::Text { body, .. } if body == "9"));
+    assert!(saved.cells[2].provenance.is_some());
     assert_eq!(
         post(
             port,
@@ -154,9 +157,40 @@ fn edit_run_restart_save_reopen_and_input_is_unchanged() {
 }
 
 #[test]
+fn cached_and_current_provenance_are_exposed_after_save_and_reopen() {
+    let f = Fixture::new("#!cgnb 1\n%% code id=value\n\"<b>safe</b>\"\n%% output id=value mime=text/plain ordinal=1\nold\n");
+    let (port, handle) = server(&f.input, 4);
+    let secret = token(port);
+    let (_, body) = request(port, "GET", "/api/state", None, None, None, None);
+    let state: Value = serde_json::from_str(&body).unwrap();
+    assert_eq!(state["cells"][0]["status"], "cached");
+    assert!(state["cells"][0]["provenance"].is_null());
+    let (_, state) = post(port, "/api/run-cell", json!({"id":"value"}), &secret);
+    assert_eq!(state["cells"][0]["status"], "current");
+    assert_eq!(state["cells"][0]["provenance"]["schemaVersion"], 1);
+    assert_eq!(
+        post(
+            port,
+            "/api/save",
+            json!({"name":"saved.cgnb","overwrite":false}),
+            &secret
+        )
+        .0,
+        200
+    );
+    handle.join().unwrap();
+    let (port, handle) = server(&f.dir.join("saved.cgnb"), 1);
+    let (_, body) = request(port, "GET", "/api/state", None, None, None, None);
+    let state: Value = serde_json::from_str(&body).unwrap();
+    assert_eq!(state["cells"][0]["status"], "cached");
+    assert_eq!(state["cells"][0]["provenance"]["ordinal"], 2);
+    handle.join().unwrap();
+}
+
+#[test]
 fn failed_cell_is_reported_and_saved_text_is_not_current() {
     let f = Fixture::new("#!cgnb 1\n%% code id=bad\nmissing + 1\n%% output id=bad mime=text/plain ordinal=1\n<script>alert(1)</script>\n");
-    let (port, handle) = server(&f.input, 4);
+    let (port, handle) = server(&f.input, 5);
     let secret = token(port);
     let (status, state) = post(port, "/api/run-next", json!({}), &secret);
     assert_eq!(status, 409);
@@ -168,6 +202,26 @@ fn failed_cell_is_reported_and_saved_text_is_not_current() {
     let (_, html) = request(port, "GET", "/", None, None, None, None);
     assert!(!html.contains("<script>alert(1)</script>"));
     assert!(html.contains("script defer src=\"/app.js\""));
+    assert_eq!(
+        post(
+            port,
+            "/api/save",
+            json!({"name":"failed.cgnb","overwrite":false}),
+            &secret
+        )
+        .0,
+        200
+    );
+    handle.join().unwrap();
+    let saved = parse_notebook_bytes(&fs::read(f.dir.join("failed.cgnb")).unwrap()).unwrap();
+    assert_eq!(
+        saved.cells[0].provenance.as_ref().unwrap().result,
+        ProvenanceResult::Failed
+    );
+    let (port, handle) = server(&f.dir.join("failed.cgnb"), 1);
+    let (_, body) = request(port, "GET", "/api/state", None, None, None, None);
+    let reopened: Value = serde_json::from_str(&body).unwrap();
+    assert_eq!(reopened["cells"][0]["status"], "failed");
     handle.join().unwrap();
 }
 

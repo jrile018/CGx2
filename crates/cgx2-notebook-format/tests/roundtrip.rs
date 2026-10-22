@@ -1,5 +1,6 @@
 use cgx2_notebook_format::{
-    parse_notebook, write_notebook, Cell, CellKind, Notebook, NotebookError, Output,
+    make_provenance, parse_notebook, prefix_hash, source_hash, write_notebook, Cell, CellKind,
+    Notebook, NotebookError, Output,
 };
 
 #[test]
@@ -22,6 +23,64 @@ fn fixture_round_trips_cells_and_text_output() {
 }
 
 #[test]
+fn provenance_roundtrips_exact_unicode_and_escaped_marker_bytes() {
+    let mut notebook = Notebook {
+        version: 1,
+        cells: vec![Cell {
+            id: "cell_1".into(),
+            kind: CellKind::Code,
+            source: "let café = \"雪\"\n%% literal\n\\%% escaped\n".into(),
+            outputs: vec![Output::Text {
+                mime: "text/plain".into(),
+                ordinal: 4,
+                body: "雪".into(),
+            }],
+            provenance: None,
+        }],
+    };
+    notebook.cells[0].provenance = Some(make_provenance(&notebook, 0, 7, Some(4)));
+    let serialized = write_notebook(&notebook).unwrap();
+    let parsed = parse_notebook(&serialized).unwrap();
+    assert_eq!(parsed, notebook);
+    assert_eq!(
+        parsed.cells[0].provenance.as_ref().unwrap().source_sha256,
+        source_hash(&notebook.cells[0].source)
+    );
+    assert_eq!(
+        prefix_hash(&parsed.cells, 0),
+        prefix_hash(&notebook.cells, 0)
+    );
+}
+
+#[test]
+fn provenance_rejects_duplicate_bad_digest_and_output_ordinal() {
+    let source = "#!cgnb 1\n%% code id=a\nx\n%% output id=a mime=text/plain ordinal=3\ny\n";
+    let mut notebook = parse_notebook(source).unwrap();
+    notebook.cells[0].provenance = Some(make_provenance(&notebook, 0, 5, Some(3)));
+    let valid = write_notebook(&notebook).unwrap();
+    let record = valid
+        .lines()
+        .find(|line| line.starts_with("%% provenance"))
+        .unwrap();
+    assert!(matches!(
+        parse_notebook(&format!("{valid}{record}\n")),
+        Err(NotebookError::InvalidProvenance(_))
+    ));
+    assert!(matches!(
+        parse_notebook(&valid.replace("source_sha256=", "source_sha256=BAD")),
+        Err(NotebookError::InvalidProvenance(_))
+    ));
+    assert!(matches!(
+        parse_notebook(&valid.replace("output_ordinal=3", "output_ordinal=9")),
+        Err(NotebookError::InvalidProvenance(_))
+    ));
+    assert!(matches!(
+        parse_notebook(&valid.replace("schema=1", "schema=2")),
+        Err(NotebookError::InvalidProvenance(_))
+    ));
+}
+
+#[test]
 fn no_final_newline_and_leading_markers_survive_multiple_cells() {
     let notebook = Notebook {
         version: 1,
@@ -35,12 +94,14 @@ fn no_final_newline_and_leading_markers_survive_multiple_cells() {
                     ordinal: 7,
                     body: "%% result".into(),
                 }],
+                provenance: None,
             },
             Cell {
                 id: "b".into(),
                 kind: CellKind::Markdown,
                 source: "tail".into(),
                 outputs: vec![],
+                provenance: None,
             },
         ],
     };
@@ -93,6 +154,7 @@ fn writer_rejects_duplicate_ids_and_markdown_outputs() {
         kind: CellKind::Code,
         source: String::new(),
         outputs: vec![],
+        provenance: None,
     };
     let duplicate = Notebook {
         version: 1,
@@ -113,6 +175,7 @@ fn writer_rejects_duplicate_ids_and_markdown_outputs() {
                 ordinal: 1,
                 body: "x".into(),
             }],
+            provenance: None,
         }],
     };
     assert!(matches!(

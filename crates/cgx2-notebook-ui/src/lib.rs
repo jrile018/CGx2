@@ -9,7 +9,7 @@ use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{Duration, Instant};
 
 use cgx2_notebook_format::{
-    load_asset, parse_notebook_bytes, save_asset, write_notebook, CellKind, Notebook, Output,
+    load_asset, parse_notebook_bytes, save_asset, write_notebook, CellKind, Output,
     MAX_NOTEBOOK_BYTES,
 };
 use cgx2_notebook_kernel::NotebookKernel;
@@ -27,7 +27,6 @@ static TEMP_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
 pub struct UiSession {
     input: PathBuf,
-    original: Notebook,
     kernel: NotebookKernel,
     token: String,
     last_error: Option<String>,
@@ -78,7 +77,6 @@ impl UiSession {
         let token = secret.iter().map(|byte| format!("{byte:02x}")).collect();
         Ok(Self {
             input,
-            original,
             kernel,
             token,
             last_error: None,
@@ -98,6 +96,7 @@ impl UiSession {
                 } else {
                     match self.kernel.status(&cell.id).expect("validated cell ID") {
                         CellStatus::NeverRun => "never-run",
+                        CellStatus::Cached => "cached",
                         CellStatus::Current => "current",
                         CellStatus::Stale => "stale",
                         CellStatus::Failed => "failed",
@@ -107,8 +106,13 @@ impl UiSession {
                     Output::Text { body, .. } => json!({"kind":"text", "body":body}),
                     Output::Asset { sha256, .. } => json!({"kind":"asset", "body":sha256}),
                 }).collect();
+                let provenance = cell.provenance.as_ref().map(|p| json!({
+                    "schemaVersion":p.schema_version, "sourceSha256":p.source_sha256,
+                    "prefixSha256":p.prefix_sha256, "evaluator":p.evaluator,
+                    "ordinal":p.ordinal, "outputOrdinal":p.output_ordinal,
+                    "result":if p.result == cgx2_notebook_format::ProvenanceResult::Success {"success"} else {"failed"}}));
                 json!({"id":cell.id, "kind":if cell.kind == CellKind::Code {"code"} else {"markdown"},
-                    "source":cell.source, "status":status, "outputs":outputs})
+                    "source":cell.source, "status":status, "outputs":outputs, "provenance":provenance})
             })
             .collect();
         json!({"cells":cells, "needsRestart":self.needs_restart,
@@ -173,28 +177,7 @@ impl UiSession {
             }
             _ => {}
         }
-        let mut notebook = self.kernel.notebook().clone();
-        // The kernel discards cached outputs at open. Keep only original assets for untouched,
-        // never-run cells; generated text outputs always come from the current session.
-        for cell in &mut notebook.cells {
-            if cell.kind == CellKind::Code
-                && self.kernel.status(&cell.id).ok() == Some(CellStatus::NeverRun)
-            {
-                if let Some(old) = self
-                    .original
-                    .cells
-                    .iter()
-                    .find(|old| old.id == cell.id && old.source == cell.source)
-                {
-                    cell.outputs.extend(
-                        old.outputs
-                            .iter()
-                            .filter(|output| matches!(output, Output::Asset { .. }))
-                            .cloned(),
-                    );
-                }
-            }
-        }
+        let notebook = self.kernel.notebook().clone();
         let text = write_notebook(&notebook)
             .map_err(|error| format!("cannot serialize notebook: {error}"))?;
         parse_notebook_bytes(text.as_bytes())

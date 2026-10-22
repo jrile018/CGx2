@@ -44,6 +44,7 @@ fn code(id: &str, source: &str) -> Cell {
         kind: CellKind::Code,
         source: source.into(),
         outputs: vec![],
+        provenance: None,
     }
 }
 
@@ -53,6 +54,7 @@ fn markdown(id: &str) -> Cell {
         kind: CellKind::Markdown,
         source: "notes".into(),
         outputs: vec![],
+        provenance: None,
     }
 }
 
@@ -82,7 +84,7 @@ fn map(entries: &[(&str, CellFacts)]) -> BTreeMap<String, CellFacts> {
 }
 
 #[test]
-fn constructs_code_and_markdown_with_never_run_status() {
+fn constructs_cached_code_and_never_run_markdown() {
     let mut saved = code("a", "x");
     saved.outputs.push(Output::Text {
         mime: "text/plain".into(),
@@ -95,7 +97,7 @@ fn constructs_code_and_markdown_with_never_run_status() {
         FakeExecutor::default(),
     )
     .unwrap();
-    assert_eq!(session.status("a").unwrap(), CellStatus::NeverRun);
+    assert_eq!(session.status("a").unwrap(), CellStatus::Cached);
     assert_eq!(session.status("notes").unwrap(), CellStatus::NeverRun);
     assert_eq!(session.notebook().cells[0].outputs.len(), 1);
     assert!(matches!(
@@ -257,7 +259,7 @@ fn changed_definition_stales_transitive_dependents_and_preserves_cache() {
         .replace_cell("root", "new a".into(), facts(&["a"], &[], false))
         .unwrap();
     assert_eq!(session.status("root").unwrap(), CellStatus::Stale);
-    assert_eq!(session.status("unrelated").unwrap(), CellStatus::Current);
+    assert_eq!(session.status("unrelated").unwrap(), CellStatus::Stale);
     assert_eq!(session.status("middle").unwrap(), CellStatus::Stale);
     assert_eq!(session.status("leaf").unwrap(), CellStatus::Stale);
     assert_eq!(text_output(&session.notebook().cells[3]), (4, "read b:4"));

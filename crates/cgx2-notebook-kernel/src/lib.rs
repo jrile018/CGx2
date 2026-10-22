@@ -72,7 +72,7 @@ pub struct NotebookKernel {
 }
 
 impl NotebookKernel {
-    pub fn open(mut notebook: Notebook) -> Result<Self, KernelError> {
+    pub fn open(notebook: Notebook) -> Result<Self, KernelError> {
         validate_limits(&notebook)?;
         let code_order = notebook
             .cells
@@ -80,12 +80,6 @@ impl NotebookKernel {
             .filter(|cell| cell.kind == CellKind::Code)
             .map(|cell| cell.id.clone())
             .collect();
-        // Saved outputs are cached observations, not live results in this clean session.
-        for cell in &mut notebook.cells {
-            if cell.kind == CellKind::Code {
-                cell.outputs.clear();
-            }
-        }
         let session = new_session(notebook)?;
         Ok(Self {
             session,
@@ -174,6 +168,7 @@ impl NotebookKernel {
         for cell in &mut notebook.cells {
             if cell.kind == CellKind::Code {
                 cell.outputs.clear();
+                cell.provenance = None;
             }
         }
         self.session = new_session(notebook)?;

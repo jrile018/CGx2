@@ -19,6 +19,7 @@ function render(data) {
     const section = el("article", "cell");
     section.append(el("h2", "", `${cell.kind} · ${cell.id}`));
     section.append(el("p", "status", `Status: ${cell.status}`));
+    if (cell.provenance) section.append(el("p", "provenance", `Run #${cell.provenance.ordinal} (${cell.provenance.result}) · ${cell.provenance.evaluator} · source ${cell.provenance.sourceSha256} · prefix ${cell.provenance.prefixSha256}`));
     if (cell.kind === "code") {
       const editor = el("textarea");
       editor.value = pending.get(cell.id) ?? cell.source;
@@ -39,7 +40,7 @@ function render(data) {
     } else section.append(el("pre", "", cell.source));
     for (const output of cell.outputs) {
       const body = output.kind === "text" ? output.body : `[cached asset ${output.body}]`;
-      const label = cell.status === "current" ? "Output" : "Cached output (not current)";
+      const label = cell.status === "current" ? "Current output" : `${cell.status} output (saved observation)`;
       section.append(el("pre", "output", `${label}: ${body}`));
     }
     cells.append(section);

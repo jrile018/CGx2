@@ -31,6 +31,7 @@ fn image_notebook(digest: &str) -> Notebook {
                 ordinal: 3,
                 sha256: digest.into(),
             }],
+            provenance: None,
         }],
     }
 }
@@ -80,7 +81,13 @@ fn export_import_reopens_without_original_sidecar() {
     let destination = temp_dir();
     let png = b"\x89PNG\r\n\x1a\nbytes";
     let digest = save_asset(&original, png).unwrap();
-    let notebook = image_notebook(&digest);
+    let mut notebook = image_notebook(&digest);
+    notebook.cells[0].provenance = Some(cgx2_notebook_format::make_provenance(
+        &notebook,
+        0,
+        3,
+        Some(3),
+    ));
     let exported = export_self_contained(&notebook, &original).unwrap();
     fs::remove_dir_all(original).unwrap();
     let imported = import_self_contained(&exported, &destination).unwrap();

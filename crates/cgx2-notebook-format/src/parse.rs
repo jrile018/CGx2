@@ -2,6 +2,7 @@ use std::collections::HashMap;
 
 use crate::{
     check_document_size, valid_id, valid_mime, Cell, CellKind, Notebook, NotebookError, Output,
+    Provenance, ProvenanceResult,
 };
 
 enum Body {
@@ -84,6 +85,7 @@ pub fn parse_notebook(text: &str) -> Result<Notebook, NotebookError> {
                         kind,
                         source: String::new(),
                         outputs: Vec::new(),
+                        provenance: None,
                     });
                     let index = notebook.cells.len() - 1;
                     indices.insert(id.to_owned(), index);
@@ -128,6 +130,68 @@ pub fn parse_notebook(text: &str) -> Result<Notebook, NotebookError> {
                         sha256: sha256.to_owned(),
                     });
                 }
+                ["%%", "provenance", id_field, schema_field, source_field, prefix_field, evaluator_field, ordinal_field, output_ordinal_field, result_field] =>
+                {
+                    let id = id_field
+                        .strip_prefix("id=")
+                        .ok_or_else(|| malformed(zero_line + 1, line))?;
+                    let index = indices
+                        .get(id)
+                        .copied()
+                        .ok_or_else(|| NotebookError::UnknownCellId(id.into()))?;
+                    let cell = &mut notebook.cells[index];
+                    if cell.provenance.is_some() {
+                        return Err(NotebookError::InvalidProvenance(format!(
+                            "duplicate record for {id}"
+                        )));
+                    }
+                    let schema_version = schema_field
+                        .strip_prefix("schema=")
+                        .and_then(|s| s.parse().ok())
+                        .ok_or_else(|| malformed(zero_line + 1, line))?;
+                    let source_sha256 = source_field
+                        .strip_prefix("source_sha256=")
+                        .ok_or_else(|| malformed(zero_line + 1, line))?
+                        .to_owned();
+                    let prefix_sha256 = prefix_field
+                        .strip_prefix("prefix_sha256=")
+                        .ok_or_else(|| malformed(zero_line + 1, line))?
+                        .to_owned();
+                    let evaluator = evaluator_field
+                        .strip_prefix("evaluator=")
+                        .ok_or_else(|| malformed(zero_line + 1, line))?
+                        .to_owned();
+                    let ordinal = ordinal_field
+                        .strip_prefix("ordinal=")
+                        .and_then(|s| s.parse().ok())
+                        .ok_or_else(|| malformed(zero_line + 1, line))?;
+                    let output_ordinal = output_ordinal_field
+                        .strip_prefix("output_ordinal=")
+                        .ok_or_else(|| malformed(zero_line + 1, line))?;
+                    let output_ordinal = if output_ordinal == "none" {
+                        None
+                    } else {
+                        Some(
+                            output_ordinal
+                                .parse()
+                                .map_err(|_| malformed(zero_line + 1, line))?,
+                        )
+                    };
+                    let result = match *result_field {
+                        "result=success" => ProvenanceResult::Success,
+                        "result=failed" => ProvenanceResult::Failed,
+                        _ => return Err(malformed(zero_line + 1, line)),
+                    };
+                    cell.provenance = Some(Provenance {
+                        schema_version,
+                        source_sha256,
+                        prefix_sha256,
+                        evaluator,
+                        ordinal,
+                        output_ordinal,
+                        result,
+                    });
+                }
                 _ => return Err(malformed(zero_line + 1, line)),
             }
         } else {
@@ -138,6 +202,9 @@ pub fn parse_notebook(text: &str) -> Result<Notebook, NotebookError> {
         }
     }
     flush(&mut notebook, &body, &mut buffer)?;
+    for cell in &notebook.cells {
+        crate::provenance::validate_provenance(cell)?;
+    }
     Ok(notebook)
 }
 

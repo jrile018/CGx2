@@ -2,6 +2,7 @@
 
 mod assets;
 mod parse;
+mod provenance;
 mod write;
 
 use std::fmt;
@@ -9,6 +10,9 @@ use std::io;
 
 pub use assets::{export_self_contained, import_self_contained, load_asset, save_asset};
 pub use parse::{parse_notebook, parse_notebook_bytes};
+pub use provenance::{
+    make_provenance, prefix_hash, source_hash, EVALUATOR_PROFILE, PROVENANCE_SCHEMA_VERSION,
+};
 pub use write::write_notebook;
 
 pub const MAX_NOTEBOOK_BYTES: usize = 16 * 1024 * 1024;
@@ -26,6 +30,25 @@ pub struct Cell {
     pub kind: CellKind,
     pub source: String,
     pub outputs: Vec<Output>,
+    pub provenance: Option<Provenance>,
+}
+
+/// A saved observation. It never establishes a live evaluator state on import.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Provenance {
+    pub schema_version: u32,
+    pub source_sha256: String,
+    pub prefix_sha256: String,
+    pub evaluator: String,
+    pub ordinal: u64,
+    pub output_ordinal: Option<u64>,
+    pub result: ProvenanceResult,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum ProvenanceResult {
+    Success,
+    Failed,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -57,6 +80,7 @@ pub enum NotebookError {
     InvalidCellId(String),
     InvalidOutput(String),
     InvalidDigest(String),
+    InvalidProvenance(String),
     InvalidUtf8,
     SizeLimit { what: &'static str, limit: usize },
     MissingAsset(String),
@@ -77,6 +101,7 @@ impl fmt::Display for NotebookError {
             Self::InvalidCellId(id) => write!(f, "invalid cell ID: {id}"),
             Self::InvalidOutput(reason) => write!(f, "invalid output: {reason}"),
             Self::InvalidDigest(digest) => write!(f, "invalid SHA-256 digest: {digest}"),
+            Self::InvalidProvenance(reason) => write!(f, "invalid provenance: {reason}"),
             Self::InvalidUtf8 => write!(f, "notebook is not UTF-8"),
             Self::SizeLimit { what, limit } => write!(f, "{what} exceeds {limit} bytes"),
             Self::MissingAsset(digest) => write!(f, "missing asset: {digest}"),

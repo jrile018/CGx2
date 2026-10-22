@@ -8,6 +8,7 @@ fn code(id: &str, source: &str) -> Cell {
         kind: CellKind::Code,
         source: source.into(),
         outputs: vec![],
+        provenance: None,
     }
 }
 
@@ -20,6 +21,84 @@ fn output_body(output: &Output) -> &str {
         Output::Text { body, .. } => body,
         Output::Asset { .. } => panic!("expected text output"),
     }
+}
+
+#[test]
+fn reopen_preserves_observation_and_prefix_edit_is_stale() {
+    let mut kernel = NotebookKernel::open(notebook(vec![
+        code("seed", "let x = 3"),
+        code("value", "x + 2"),
+    ]))
+    .unwrap();
+    kernel.restart_and_run_all().unwrap();
+    assert!(kernel
+        .notebook()
+        .cells
+        .iter()
+        .all(|cell| cell.provenance.is_some()));
+    let saved = write_notebook(kernel.notebook()).unwrap();
+    let reopened = NotebookKernel::open(parse_notebook(&saved).unwrap()).unwrap();
+    assert_eq!(reopened.status("seed").unwrap(), CellStatus::Cached);
+    assert_eq!(reopened.status("value").unwrap(), CellStatus::Cached);
+    assert_eq!(output_body(&reopened.notebook().cells[1].outputs[0]), "5");
+    let mut edited = parse_notebook(&saved).unwrap();
+    edited.cells[0].source = "let x = 4".into();
+    let stale =
+        NotebookKernel::open(parse_notebook(&write_notebook(&edited).unwrap()).unwrap()).unwrap();
+    assert_eq!(stale.status("seed").unwrap(), CellStatus::Stale);
+    assert_eq!(stale.status("value").unwrap(), CellStatus::Stale);
+}
+
+#[test]
+fn repeated_runs_advance_execution_and_legacy_output_ordinals() {
+    let mut kernel = NotebookKernel::open(notebook(vec![
+        code("silent", "let x = 3"),
+        code("value", "x"),
+    ]))
+    .unwrap();
+    kernel.restart_and_run_all().unwrap();
+    assert_eq!(
+        kernel.notebook().cells[0]
+            .provenance
+            .as_ref()
+            .unwrap()
+            .ordinal,
+        1
+    );
+    assert_eq!(
+        kernel.notebook().cells[1]
+            .provenance
+            .as_ref()
+            .unwrap()
+            .ordinal,
+        2
+    );
+    assert_eq!(
+        kernel.notebook().cells[1]
+            .provenance
+            .as_ref()
+            .unwrap()
+            .output_ordinal,
+        Some(1)
+    );
+    kernel.rerun_cell("value").unwrap();
+    assert_eq!(
+        kernel.notebook().cells[1]
+            .provenance
+            .as_ref()
+            .unwrap()
+            .ordinal,
+        3
+    );
+    assert_eq!(
+        kernel.notebook().cells[1]
+            .provenance
+            .as_ref()
+            .unwrap()
+            .output_ordinal,
+        Some(2)
+    );
+    assert_eq!(kernel.status("silent").unwrap(), CellStatus::Cached);
 }
 
 #[test]
@@ -227,11 +306,9 @@ fn selected_rerun_replays_prefix_and_stales_transitive_readers() {
     assert_eq!(kernel.status("last").unwrap(), CellStatus::Stale);
     kernel.rerun_cell("last").unwrap();
     assert_eq!(output_body(&kernel.notebook().cells[2].outputs[0]), "10");
-    assert!(kernel
-        .notebook()
-        .cells
-        .iter()
-        .all(|cell| kernel.status(&cell.id).unwrap() == CellStatus::Current));
+    assert_eq!(kernel.status("first").unwrap(), CellStatus::Cached);
+    assert_eq!(kernel.status("middle").unwrap(), CellStatus::Cached);
+    assert_eq!(kernel.status("last").unwrap(), CellStatus::Current);
     kernel.rerun_cell("middle").unwrap();
     assert_eq!(output_body(&kernel.notebook().cells[1].outputs[0]), "9");
     assert_eq!(kernel.status("last").unwrap(), CellStatus::Stale);

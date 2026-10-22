@@ -15,6 +15,7 @@ let value = 2
 %% output id=load mime=text/plain ordinal=1
 2
 %% asset id=load mime=image/png ordinal=1 sha256=<64 lowercase hex characters>
+%% provenance id=load schema=1 source_sha256=<64 lowercase hex characters> prefix_sha256=<64 lowercase hex characters> evaluator=cgx2-pure-scalar-v1 ordinal=1 output_ordinal=1 result=success
 ```
 
 Cell IDs contain 1–64 ASCII letters, digits, `_`, or `-`, and must be unique. Output `id` refers to an earlier code cell. MIME values are ASCII tokens with a slash (for example `text/plain` or `image/png`); ordinals are unsigned 64-bit decimal integers. Writers group each cell's outputs immediately after its source and keep cell/output order. A Markdown cell cannot have outputs.
@@ -22,6 +23,12 @@ Cell IDs contain 1–64 ASCII letters, digits, `_`, or `-`, and must be unique. 
 Cell sources and text output bodies continue until the next column-zero header. A body line whose content begins `%%` is prefixed with a backslash. A line with one or more leading backslashes followed by `%%` receives one additional backslash, so the original bytes round-trip. Other body bytes, including blank lines and trailing newline state, are preserved. If a body does not end in a newline, the writer adds one separator newline followed by `%% end`; the reader removes that separator. An empty body needs no `%% end`.
 
 Headers use LF. Body text is UTF-8 and may contain CRLF. `parse_notebook_bytes` reports invalid UTF-8; `parse_notebook` accepts a Rust `&str`, which is already valid UTF-8. The complete document, including embedded data, is limited to 16 MiB. The parser rejects unsupported versions, duplicate/invalid IDs, unknown output references, malformed headers, and invalid asset digests with typed errors.
+
+## Execution provenance
+
+A code cell may have one `%% provenance` header after its outputs. `schema=1` and `evaluator=cgx2-pure-scalar-v1` are the supported values. `result=success` records a completed evaluation; `result=failed` records an attempted evaluation while any retained output remains an older saved observation. `ordinal` counts recorded execution attempts in the kernel session, continuing from saved provenance after reopen; `output_ordinal` is the existing output numbering, or `none` when the cell has no output. Every output in a cell with provenance must have that output ordinal. The parser rejects duplicate records, unknown IDs, unsupported fields, non-lowercase SHA-256 digests, and mismatched output ordinals. It permits a well-formed source or prefix digest that differs from the current source: this represents a stale saved observation.
+
+`source_sha256` is SHA-256 of the exact unescaped UTF-8 source bytes. `prefix_sha256` is SHA-256 of the bytes `CGX2-PREFIX-v1` followed by one NUL byte, then each earlier **code** cell in file order. For each cell, append its ID length as an unsigned 64-bit big-endian integer, its UTF-8 ID bytes, its source length in the same encoding, and its exact UTF-8 source bytes. Markdown is omitted. Hashes contain no source text or evaluated values. A matching success record remains **cached** after import; a matching failed record remains **failed**. Only a real successful run in the current kernel session can mark an output current.
 
 ## Assets and portable export
 

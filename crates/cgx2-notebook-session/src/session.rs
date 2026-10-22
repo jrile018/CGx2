@@ -1,13 +1,16 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
 
-use cgx2_notebook_format::{CellKind, Notebook, Output};
+use cgx2_notebook_format::{
+    make_provenance, prefix_hash, source_hash, CellKind, Notebook, Output, ProvenanceResult,
+};
 
 use crate::deps::{affected_after, CellFacts};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum CellStatus {
     NeverRun,
+    Cached,
     Current,
     Stale,
     Failed,
@@ -69,6 +72,7 @@ pub struct NotebookSession<E: CellExecutor> {
     statuses: BTreeMap<String, CellStatus>,
     executor: E,
     last_ordinal: u64,
+    last_execution_ordinal: u64,
 }
 
 impl<E: CellExecutor> NotebookSession<E> {
@@ -80,6 +84,7 @@ impl<E: CellExecutor> NotebookSession<E> {
         let mut seen = BTreeSet::new();
         let mut statuses = BTreeMap::new();
         let mut last_ordinal = 0;
+        let mut last_execution_ordinal = 0;
         for cell in &notebook.cells {
             if !valid_cell_id(&cell.id) {
                 return Err(SessionError::InvalidCellId(cell.id.clone()));
@@ -107,12 +112,37 @@ impl<E: CellExecutor> NotebookSession<E> {
                 return Err(SessionError::FactsForMarkdown(id.clone()));
             }
         }
+        for (index, cell) in notebook.cells.iter().enumerate() {
+            if cell.kind != CellKind::Code {
+                continue;
+            }
+            let status = if let Some(provenance) = &cell.provenance {
+                if provenance.source_sha256 != source_hash(&cell.source)
+                    || provenance.prefix_sha256 != prefix_hash(&notebook.cells, index)
+                {
+                    CellStatus::Stale
+                } else if provenance.result == ProvenanceResult::Failed {
+                    CellStatus::Failed
+                } else {
+                    CellStatus::Cached
+                }
+            } else if !cell.outputs.is_empty() {
+                CellStatus::Cached
+            } else {
+                CellStatus::NeverRun
+            };
+            statuses.insert(cell.id.clone(), status);
+            if let Some(provenance) = &cell.provenance {
+                last_execution_ordinal = last_execution_ordinal.max(provenance.ordinal);
+            }
+        }
         Ok(Self {
             notebook,
             facts,
             statuses,
             executor,
             last_ordinal,
+            last_execution_ordinal: last_execution_ordinal.max(last_ordinal),
         })
     }
 
@@ -137,6 +167,7 @@ impl<E: CellExecutor> NotebookSession<E> {
             Ok(result) => result,
             Err(message) => {
                 self.statuses.insert(id.into(), CellStatus::Failed);
+                self.record_failed_attempt(index);
                 self.invalidate_after(
                     index,
                     &self.facts[id].defines.clone(),
@@ -148,6 +179,14 @@ impl<E: CellExecutor> NotebookSession<E> {
                 });
             }
         };
+        let execution_ordinal = match self.last_execution_ordinal.checked_add(1) {
+            Some(ordinal) => ordinal,
+            None => {
+                self.fail_cell(index);
+                return Err(SessionError::OrdinalOverflow);
+            }
+        };
+        let mut output_ordinal = None;
         let outputs = if let Some(body) = result.text {
             let ordinal = match self.last_ordinal.checked_add(1) {
                 Some(ordinal) => ordinal,
@@ -162,6 +201,7 @@ impl<E: CellExecutor> NotebookSession<E> {
                 }
             };
             self.last_ordinal = ordinal;
+            output_ordinal = Some(ordinal);
             vec![Output::Text {
                 mime: "text/plain".into(),
                 ordinal,
@@ -170,7 +210,14 @@ impl<E: CellExecutor> NotebookSession<E> {
         } else {
             vec![]
         };
+        self.last_execution_ordinal = execution_ordinal;
         self.notebook.cells[index].outputs = outputs;
+        self.notebook.cells[index].provenance = Some(make_provenance(
+            &self.notebook,
+            index,
+            execution_ordinal,
+            output_ordinal,
+        ));
         self.statuses.insert(id.into(), CellStatus::Current);
         self.invalidate_after(
             index,
@@ -193,6 +240,11 @@ impl<E: CellExecutor> NotebookSession<E> {
                 id: id.into(),
                 message,
             });
+        }
+        for status in self.statuses.values_mut() {
+            if *status == CellStatus::Current {
+                *status = CellStatus::Cached;
+            }
         }
         for prefix in &self.notebook.cells[..index] {
             if prefix.kind == CellKind::Code {
@@ -219,18 +271,15 @@ impl<E: CellExecutor> NotebookSession<E> {
         if self.notebook.cells[index].kind == CellKind::Markdown {
             return Err(SessionError::FactsForMarkdown(id.into()));
         }
-        let old = self
-            .facts
-            .insert(id.into(), facts.clone())
-            .expect("validated code facts");
+        self.facts.insert(id.into(), facts);
         self.notebook.cells[index].source = source;
         self.mark_stale(index);
-        let changed_defines = old.defines.union(&facts.defines).cloned().collect();
-        self.invalidate_after(
-            index,
-            &changed_defines,
-            old.opaque_effects || facts.opaque_effects,
-        );
+        // The saved prefix hash includes every earlier executable cell.
+        for later in index + 1..self.notebook.cells.len() {
+            if self.notebook.cells[later].kind == CellKind::Code {
+                self.mark_stale(later);
+            }
+        }
         Ok(())
     }
 
@@ -276,6 +325,27 @@ impl<E: CellExecutor> NotebookSession<E> {
             &self.facts[&id].defines.clone(),
             self.facts[&id].opaque_effects,
         );
+    }
+
+    fn record_failed_attempt(&mut self, index: usize) {
+        let Some(ordinal) = self.last_execution_ordinal.checked_add(1) else {
+            return;
+        };
+        let outputs = &self.notebook.cells[index].outputs;
+        let output_ordinal = outputs.first().map(|output| match output {
+            Output::Text { ordinal, .. } | Output::Asset { ordinal, .. } => *ordinal,
+        });
+        if outputs.iter().any(|output| match output {
+            Output::Text { ordinal, .. } | Output::Asset { ordinal, .. } => {
+                Some(*ordinal) != output_ordinal
+            }
+        }) {
+            return;
+        }
+        let mut provenance = make_provenance(&self.notebook, index, ordinal, output_ordinal);
+        provenance.result = ProvenanceResult::Failed;
+        self.notebook.cells[index].provenance = Some(provenance);
+        self.last_execution_ordinal = ordinal;
     }
 
     fn invalidate_after(&mut self, index: usize, defines: &BTreeSet<String>, opaque: bool) {
