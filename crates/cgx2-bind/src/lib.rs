@@ -56,6 +56,99 @@ pub struct Symbol {
     pub capabilities: Vec<String>,
 }
 
+/// Exact C entry points of the version-pinned `torch/torch.h` facade ABI v1.
+/// Pointer spellings describe the physical C signature, including output
+/// parameters; `owned` means an output handle is released by the named entry.
+pub fn libtorch_facade_symbols() -> Vec<Symbol> {
+    fn symbol(
+        name: &str,
+        parameters: &[&str],
+        result: &str,
+        ownership: &str,
+        release: Option<&str>,
+        error: &str,
+    ) -> Symbol {
+        Symbol {
+            name: name.into(),
+            parameters: parameters.iter().map(|value| (*value).into()).collect(),
+            result: result.into(),
+            ownership: ownership.into(),
+            owner: None,
+            release: release.map(str::to_owned),
+            error: error.into(),
+            effects: vec!["foreign".into()],
+            capabilities: vec!["native".into()],
+        }
+    }
+    vec![
+        symbol(
+            "cgx2_library_identity",
+            &[],
+            "cstr_ptr",
+            "none",
+            None,
+            "none",
+        ),
+        symbol(
+            "cgx2_library_version",
+            &[],
+            "cstr_ptr",
+            "none",
+            None,
+            "none",
+        ),
+        symbol("cgx2_abi_version", &[], "u32", "none", None, "none"),
+        symbol(
+            "cgx2_torch_last_error",
+            &[],
+            "cstr_ptr",
+            "none",
+            None,
+            "none",
+        ),
+        symbol(
+            "cgx2_torch_f64_cpu",
+            &["f64_const_ptr", "u64", "handle_out_ptr"],
+            "i32",
+            "owned",
+            Some("cgx2_torch_release"),
+            "status",
+        ),
+        symbol(
+            "cgx2_torch_add",
+            &["handle_const_ptr", "handle_const_ptr", "handle_out_ptr"],
+            "i32",
+            "owned",
+            Some("cgx2_torch_release"),
+            "status",
+        ),
+        symbol(
+            "cgx2_torch_length",
+            &["handle_const_ptr", "u64_out_ptr"],
+            "i32",
+            "none",
+            None,
+            "status",
+        ),
+        symbol(
+            "cgx2_torch_copy_f64",
+            &["handle_const_ptr", "f64_mut_ptr", "u64"],
+            "i32",
+            "none",
+            None,
+            "status",
+        ),
+        symbol(
+            "cgx2_torch_release",
+            &["handle_mut_ptr"],
+            "i32",
+            "none",
+            None,
+            "status",
+        ),
+    ]
+}
+
 /// Stable serialization: bindings, symbols, effects and capabilities are sorted.
 pub fn render_lock(lock: &BindingLock) -> Result<Vec<u8>, serde_json::Error> {
     let mut lock = lock.clone();
@@ -251,7 +344,11 @@ fn check_binding(
     remaining_artifact_bytes: &mut u64,
 ) {
     let id = &binding.id;
-    if !identifier(id) || !identifier(&binding.library) || !exact_version(&binding.version) {
+    if !identifier(id)
+        || (!identifier(&binding.library)
+            && !(binding.route == "libtorch" && binding.library == "cgx2.libtorch.cpu"))
+        || !exact_version(&binding.version)
+    {
         report.push(
             "CGB005",
             id,
@@ -259,11 +356,16 @@ fn check_binding(
         );
     }
     if !matches!(binding.route.as_str(), "native-c" | "libtorch")
-        || !matches!(binding.abi.as_str(), "c" | "libtorch-stable")
+        || !matches!(binding.abi.as_str(), "c" | "cgx2-libtorch-facade-v1")
         || (binding.route == "native-c" && binding.abi != "c")
-        || (binding.route == "libtorch" && binding.abi != "libtorch-stable")
+        || (binding.route == "libtorch" && binding.abi != "cgx2-libtorch-facade-v1")
         || binding.calling_convention != "c"
-        || !matches!(binding.layout.as_str(), "scalar-v1" | "status-i64-out-v1")
+        || !matches!(
+            binding.layout.as_str(),
+            "scalar-v1" | "status-i64-out-v1" | "tensor-f64-cpu-v1"
+        )
+        || (binding.route == "libtorch" && binding.layout != "tensor-f64-cpu-v1")
+        || (binding.route == "native-c" && binding.layout == "tensor-f64-cpu-v1")
         || (binding.layout == "status-i64-out-v1" && binding.route != "native-c")
     {
         report.push(
@@ -291,102 +393,113 @@ fn check_binding(
     if binding.symbols.is_empty() {
         report.push("CGB009", id, "at least one symbol is required");
     }
-    let mut names = BTreeSet::new();
-    for symbol in &binding.symbols {
-        if binding.layout == "status-i64-out-v1"
-            && (symbol.parameters != ["i64"]
-                || symbol.result != "i64"
-                || symbol.ownership != "none"
-                || symbol.owner.is_some()
-                || symbol.release.is_some()
-                || symbol.error != "status"
-                || symbol.effects != ["foreign"]
-                || symbol.capabilities != ["native"])
-        {
-            report.push(
-                "CGB017",
-                id,
-                format!("{} is not the status-i64-out-v1 C shape", symbol.name),
-            );
+    if binding.route == "libtorch" {
+        let mut declared = binding.symbols.clone();
+        let mut expected = libtorch_facade_symbols();
+        declared.sort_by(|left, right| left.name.cmp(&right.name));
+        expected.sort_by(|left, right| left.name.cmp(&right.name));
+        if binding.library != "cgx2.libtorch.cpu" || declared != expected {
+            report.push("CGB018", id, "LibTorch route requires exact cgx2.libtorch.cpu facade v1 exports and C signatures");
         }
-        if !identifier(&symbol.name) || !names.insert(symbol.name.as_str()) {
-            report.push(
-                "CGB009",
-                id,
-                format!("invalid or duplicate symbol {}", symbol.name),
-            );
-        }
-        if !symbol.parameters.iter().all(|t| supported_type(t, false))
-            || !supported_type(&symbol.result, true)
-        {
-            report.push(
-                "CGB010",
-                id,
-                format!("unsupported type or layout for {}", symbol.name),
-            );
-        }
-        if !matches!(symbol.ownership.as_str(), "none" | "borrowed" | "owned")
-            || (symbol.ownership == "owned"
-                && (symbol.result != "opaque_handle"
+    } else {
+        let mut names = BTreeSet::new();
+        for symbol in &binding.symbols {
+            if binding.layout == "status-i64-out-v1"
+                && (symbol.parameters != ["i64"]
+                    || symbol.result != "i64"
+                    || symbol.ownership != "none"
                     || symbol.owner.is_some()
-                    || symbol.release.as_ref().is_none_or(|name| !identifier(name))))
-            || (symbol.ownership == "borrowed"
-                && (symbol.result != "opaque_handle" || symbol.owner.as_deref() != Some("caller")))
-            || (symbol.ownership != "owned" && symbol.release.is_some())
-            || (symbol.ownership == "none" && symbol.owner.is_some())
-        {
-            report.push(
-                "CGB011",
-                id,
-                format!("invalid ownership/release for {}", symbol.name),
-            );
-        }
-        if !matches!(symbol.error.as_str(), "none" | "status") {
-            report.push(
-                "CGB012",
-                id,
-                format!("unsupported error convention for {}", symbol.name),
-            );
-        }
-        if symbol.effects.is_empty()
-            || symbol.effects.iter().collect::<BTreeSet<_>>().len() != symbol.effects.len()
-            || !symbol
-                .effects
-                .iter()
-                .all(|e| matches!(e.as_str(), "foreign" | "io" | "allocation" | "gpu"))
-            || !symbol.effects.iter().any(|e| e == "foreign")
-            || symbol.capabilities.is_empty()
-            || symbol.capabilities.iter().collect::<BTreeSet<_>>().len()
-                != symbol.capabilities.len()
-            || !symbol
-                .capabilities
-                .iter()
-                .all(|c| matches!(c.as_str(), "native" | "gpu"))
-            || !symbol.capabilities.iter().any(|c| c == "native")
-            || (symbol.effects.iter().any(|e| e == "gpu")
-                != symbol.capabilities.iter().any(|c| c == "gpu"))
-        {
-            report.push(
-                "CGB013",
-                id,
-                format!("invalid effects/capabilities for {}", symbol.name),
-            );
-        }
-    }
-    for symbol in &binding.symbols {
-        if let Some(release) = &symbol.release {
-            let valid = binding.symbols.iter().any(|candidate| {
-                candidate.name == *release
-                    && candidate.parameters == ["opaque_handle"]
-                    && candidate.result == "void"
-                    && candidate.ownership == "none"
-            });
-            if !valid {
+                    || symbol.release.is_some()
+                    || symbol.error != "status"
+                    || symbol.effects != ["foreign"]
+                    || symbol.capabilities != ["native"])
+            {
+                report.push(
+                    "CGB017",
+                    id,
+                    format!("{} is not the status-i64-out-v1 C shape", symbol.name),
+                );
+            }
+            if !identifier(&symbol.name) || !names.insert(symbol.name.as_str()) {
+                report.push(
+                    "CGB009",
+                    id,
+                    format!("invalid or duplicate symbol {}", symbol.name),
+                );
+            }
+            if !symbol.parameters.iter().all(|t| supported_type(t, false))
+                || !supported_type(&symbol.result, true)
+            {
+                report.push(
+                    "CGB010",
+                    id,
+                    format!("unsupported type or layout for {}", symbol.name),
+                );
+            }
+            if !matches!(symbol.ownership.as_str(), "none" | "borrowed" | "owned")
+                || (symbol.ownership == "owned"
+                    && (symbol.result != "opaque_handle"
+                        || symbol.owner.is_some()
+                        || symbol.release.as_ref().is_none_or(|name| !identifier(name))))
+                || (symbol.ownership == "borrowed"
+                    && (symbol.result != "opaque_handle"
+                        || symbol.owner.as_deref() != Some("caller")))
+                || (symbol.ownership != "owned" && symbol.release.is_some())
+                || (symbol.ownership == "none" && symbol.owner.is_some())
+            {
                 report.push(
                     "CGB011",
                     id,
-                    format!("release symbol {release} is absent or has an incompatible shape"),
+                    format!("invalid ownership/release for {}", symbol.name),
                 );
+            }
+            if !matches!(symbol.error.as_str(), "none" | "status") {
+                report.push(
+                    "CGB012",
+                    id,
+                    format!("unsupported error convention for {}", symbol.name),
+                );
+            }
+            if symbol.effects.is_empty()
+                || symbol.effects.iter().collect::<BTreeSet<_>>().len() != symbol.effects.len()
+                || !symbol
+                    .effects
+                    .iter()
+                    .all(|e| matches!(e.as_str(), "foreign" | "io" | "allocation" | "gpu"))
+                || !symbol.effects.iter().any(|e| e == "foreign")
+                || symbol.capabilities.is_empty()
+                || symbol.capabilities.iter().collect::<BTreeSet<_>>().len()
+                    != symbol.capabilities.len()
+                || !symbol
+                    .capabilities
+                    .iter()
+                    .all(|c| matches!(c.as_str(), "native" | "gpu"))
+                || !symbol.capabilities.iter().any(|c| c == "native")
+                || (symbol.effects.iter().any(|e| e == "gpu")
+                    != symbol.capabilities.iter().any(|c| c == "gpu"))
+            {
+                report.push(
+                    "CGB013",
+                    id,
+                    format!("invalid effects/capabilities for {}", symbol.name),
+                );
+            }
+        }
+        for symbol in &binding.symbols {
+            if let Some(release) = &symbol.release {
+                let valid = binding.symbols.iter().any(|candidate| {
+                    candidate.name == *release
+                        && candidate.parameters == ["opaque_handle"]
+                        && candidate.result == "void"
+                        && candidate.ownership == "none"
+                });
+                if !valid {
+                    report.push(
+                        "CGB011",
+                        id,
+                        format!("release symbol {release} is absent or has an incompatible shape"),
+                    );
+                }
             }
         }
     }
@@ -413,7 +526,7 @@ fn check_binding(
     if binding.os == "linux" && std::env::consts::OS == "linux" {
         match exported_symbols(&artifact) {
             Ok(exports) => {
-                if binding.layout == "status-i64-out-v1" {
+                if binding.layout == "status-i64-out-v1" || binding.route == "libtorch" {
                     for metadata in [
                         "cgx2_library_identity",
                         "cgx2_library_version",

@@ -3,7 +3,9 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::sync::atomic::{AtomicU64, Ordering};
 
-use cgx2_bind::{check_package, render_lock, Binding, BindingLock, Symbol};
+use cgx2_bind::{
+    check_package, libtorch_facade_symbols, render_lock, Binding, BindingLock, Symbol,
+};
 use sha2::{Digest, Sha256};
 
 static NEXT: AtomicU64 = AtomicU64::new(0);
@@ -233,4 +235,66 @@ fn unavailable_libtorch_is_reported_without_fallback() {
     assert!(!report.passed());
     assert!(report.diagnostics.iter().any(|d| d.code == "CGB014"));
     assert!(!report.render_json().contains("python"));
+}
+
+fn libtorch_mock_fixture(flags: &[&str]) -> (Fixture, BindingLock) {
+    let fixture = Fixture::new("libtorch-unavailable");
+    let source = Path::new(env!("CARGO_MANIFEST_DIR")).join("../cgx2-libtorch/facade/mock.c");
+    let output = fixture.0.join("libcgx2_libtorch_facade.so");
+    assert!(Command::new("cc")
+        .args(["-std=c11", "-Wall", "-Wextra", "-Werror", "-shared", "-fPIC"])
+        .args(flags)
+        .arg(source)
+        .arg("-o")
+        .arg(&output)
+        .status()
+        .unwrap()
+        .success());
+    let lock = BindingLock {
+        schema_version: 1,
+        package: "torch_unavailable".into(),
+        bindings: vec![Binding {
+            id: "torch_cpu".into(),
+            route: "libtorch".into(),
+            library: "cgx2.libtorch.cpu".into(),
+            version: "2.6.0".into(),
+            artifact: "libcgx2_libtorch_facade.so".into(),
+            sha256: format!("{:x}", Sha256::digest(fs::read(output).unwrap())),
+            os: std::env::consts::OS.into(),
+            arch: std::env::consts::ARCH.into(),
+            abi: "cgx2-libtorch-facade-v1".into(),
+            calling_convention: "c".into(),
+            layout: "tensor-f64-cpu-v1".into(),
+            symbols: libtorch_facade_symbols(),
+        }],
+    };
+    fixture.write_lock(&lock);
+    (fixture, lock)
+}
+
+#[test]
+fn mock_facade_preflight_pins_exact_bytes_and_c_signatures_without_loading() {
+    let (fixture, mut lock) = libtorch_mock_fixture(&[]);
+    let report = check_package(&fixture.0);
+    assert!(report.passed(), "{}", report.render_text());
+    lock.bindings[0].sha256 = "0".repeat(64);
+    fixture.write_lock(&lock);
+    assert!(codes(&fixture.0).contains(&"CGB008"));
+    lock.bindings[0].sha256 = format!(
+        "{:x}",
+        Sha256::digest(fs::read(fixture.0.join("libcgx2_libtorch_facade.so")).unwrap())
+    );
+    lock.bindings[0].abi = "libtorch-stable".into();
+    fixture.write_lock(&lock);
+    assert!(codes(&fixture.0).contains(&"CGB006"));
+    lock.bindings[0].abi = "cgx2-libtorch-facade-v1".into();
+    lock.bindings[0].symbols[4].parameters = vec!["i64".into()];
+    fixture.write_lock(&lock);
+    assert!(codes(&fixture.0).contains(&"CGB018"));
+}
+
+#[test]
+fn mock_facade_preflight_rejects_missing_export() {
+    let (fixture, _) = libtorch_mock_fixture(&["-DMOCK_MISSING_COPY"]);
+    assert!(codes(&fixture.0).contains(&"CGB015"));
 }

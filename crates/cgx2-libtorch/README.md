@@ -1,19 +1,34 @@
 # cgx2-libtorch
 
-Wave 10 direct native **CPU** LibTorch prototype. The public Rust route opens a C++ facade built against an **exact LibTorch version**. It never imports Python, links a Python bridge, or falls back to CPython. The typed profile is one-dimensional CPU `float64`: create from a Rust slice, add equal-shaped tensors, inspect shape, copy values back, and release. Tensor storage belongs to LibTorch; input and output slices are copied. Handles remain tied to the adapter that created them and are released once. LibTorch errors become `Error::Foreign` with status and message.
+This crate is a direct native **CPU, one-dimensional `float64`** adapter. It opens a reviewed C++ facade compiled with `torch/torch.h` against an exact LibTorch `Torch_VERSION`. The facade exports the C signatures in `facade/facade.h` under ABI version 1. This is a version-pinned CGx2 C boundary, **not** LibTorch's stable C ABI. `Torch::open(path, exact_version)` checks identity `cgx2.libtorch.cpu`, exact version and ABI before resolving tensor exports; the caller must supply a reviewed, hash-pinned facade artifact. A missing export rejects opening. No Python bridge or fallback is used.
 
-The official [LibTorch stable ABI notes](https://docs.pytorch.org/docs/stable/notes/libtorch_stable_abi.html) describe a limited extension API, so this prototype uses a version-pinned C++ facade over `torch/torch.h`. `facade/CMakeLists.txt` rejects a mismatched `Torch_VERSION`; the runtime declaration also checks the exact version string and ABI 1. `facade.h` defines the C ABI. The C++ implementation catches all exceptions before returning to Rust. The facade exports only the CPU profile and does not claim a GPU or general tensor binding.
+`from_f64` copies `length * 8` input bytes into LibTorch-owned tensor storage. `add` requires equal lengths and creates a new LibTorch tensor; `shape` reports `[length]`; `to_vec` copies `length * 8` bytes into a zero-initialized Rust buffer. The facade checks CPU, `float64` and one dimension on tensor reads, exact output capacity before copy, and converts C++ exceptions into a status and thread-local message. On failed create/add, output starts null and the Rust adapter releases any nonnull handle before returning an error. A successful status with null handle is rejected. Each Rust `Tensor` belongs to one `Torch` adapter instance, holds the facade loaded through its lifetime, and releases its foreign handle once by explicit `release` or `Drop`. Cross-adapter add and double release are rejected. LibTorch owns tensor and device allocations; CGx2 owns wrapper handles and copied host buffers. CGx2 `no_gc` does not control LibTorch memory.
 
-To run the real CPU conformance test with a compatible LibTorch distribution:
+For a real artifact, configure and build the facade with a compatible LibTorch installation:
 
 ```sh
 cmake -S crates/cgx2-libtorch/facade -B /tmp/cgx2-libtorch-build \
   -DCMAKE_PREFIX_PATH=/absolute/path/to/libtorch \
   -DCGX2_EXPECT_TORCH_VERSION=EXACT_VERSION
 cmake --build /tmp/cgx2-libtorch-build
-CGX2_LIBTORCH_FACADE=/tmp/cgx2-libtorch-build/libcgx2_libtorch_facade.so \
-CGX2_LIBTORCH_VERSION=EXACT_VERSION \
-RUSTUP_TOOLCHAIN=1.98.1 cargo test -p cgx2-libtorch --offline -- --ignored --nocapture
+sha256sum /tmp/cgx2-libtorch-build/libcgx2_libtorch_facade.so
 ```
 
-The host used for Wave 10 has Rust 1.98.1, GCC 15.2.0, and CMake 4.2.3, but no compatible LibTorch distribution in the checked system, `/opt`, or project paths. The real CPU test is therefore **unavailable** and is explicitly marked ignored until run with the commands above. The static route test checks that the manifest/build/facade sources do not reference Python libraries and C-compiles the ABI header. With a real facade, the CPU test additionally checks `ldd` for a direct/transitive `libpython` dependency, exercises create/add/shape/copy/release, and rejects an incorrect version. The C++ facade could not be compiled or runtime-checked on this host. GPU conformance, ABI stress/sanitizers, and `.cg` source calls remain open gates.
+Pin that exact `.so` hash, target OS/arch, facade ABI and nine exports in a `cgx2-bind` lock. Preflight only inspects bytes and exported names; it cannot prove that a foreign library actually implements their C types, version assertion or lifetime contract. `Torch::open` is unsafe for this reason. The C++ build rejects a mismatched `Torch_VERSION`, and runtime checks metadata again.
+
+Run mock facade tests and the offline binding tests:
+
+```sh
+RUSTUP_TOOLCHAIN=1.98.1 cargo test -p cgx2-libtorch -p cgx2-bind --offline
+```
+
+The real test is ignored in the offline suite. When the exact compatible artifact exists, run:
+
+```sh
+CGX2_LIBTORCH_FACADE=/absolute/path/to/libcgx2_libtorch_facade.so \
+CGX2_LIBTORCH_VERSION=EXACT_VERSION \
+RUSTUP_TOOLCHAIN=1.98.1 cargo test -p cgx2-libtorch --offline \
+  real_libtorch_cpu_when_installed -- --ignored --nocapture
+```
+
+That test checks transitive `ldd` dependencies for `libpython`, create/add/shape/copy/release and wrong-version rejection. The compiled C mock tests negative metadata, missing export, shape/profile errors, output-copy bounds, foreign failures, cleanup, cross-adapter handles and double release. The mock is **not** a real LibTorch conformance run. GPU, other dtypes/ranks, a compatible real artifact on this host, sanitizer review, and typed `.cg` tensor/FFI integration remain open.

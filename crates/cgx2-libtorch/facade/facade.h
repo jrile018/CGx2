@@ -9,6 +9,12 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+/* CGx2 facade ABI v1 over a version-pinned torch/torch.h build. This is not
+ * LibTorch's stable C ABI. All tensor handles are opaque and facade-owned.
+ * Callers borrow handles for add/length/copy and release each owned output
+ * exactly once. All tensor operations return zero on success or nonzero on
+ * failure; last_error is thread-local and valid until the next facade call.
+ * create copies length doubles in, and copy requires capacity == length. */
 CGX2_EXPORT const char *cgx2_library_identity(void);
 CGX2_EXPORT const char *cgx2_library_version(void);
 CGX2_EXPORT uint32_t cgx2_abi_version(void);

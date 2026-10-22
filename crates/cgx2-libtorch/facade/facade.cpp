@@ -73,7 +73,7 @@ int32_t cgx2_torch_copy_f64(const void *raw, double *output, uint64_t capacity) 
     return translate([&] {
         const auto &tensor = checked(raw);
         auto length = static_cast<uint64_t>(tensor.size(0));
-        if (capacity < length || (length && !output)) throw std::invalid_argument("output buffer too small");
+        if (capacity != length || (length && !output)) throw std::invalid_argument("output buffer length mismatch");
         if (length) std::memcpy(output, tensor.data_ptr<double>(), static_cast<size_t>(length) * sizeof(double));
     });
 }

@@ -5,26 +5,167 @@
     {
       "id": "torch_cpu",
       "route": "libtorch",
-      "library": "torch",
+      "library": "cgx2.libtorch.cpu",
       "version": "2.6.0",
-      "artifact": "libtorch_missing.so",
+      "artifact": "libcgx2_libtorch_facade_missing.so",
       "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
       "os": "linux",
       "arch": "x86_64",
-      "abi": "libtorch-stable",
+      "abi": "cgx2-libtorch-facade-v1",
       "calling_convention": "c",
-      "layout": "scalar-v1",
+      "layout": "tensor-f64-cpu-v1",
       "symbols": [
         {
-          "name": "torch_tensor",
-          "parameters": ["i64"],
-          "result": "i64",
+          "name": "cgx2_library_identity",
+          "parameters": [],
+          "result": "cstr_ptr",
+          "ownership": "none",
+          "owner": null,
+          "release": null,
+          "error": "none",
+          "effects": [
+            "foreign"
+          ],
+          "capabilities": [
+            "native"
+          ]
+        },
+        {
+          "name": "cgx2_library_version",
+          "parameters": [],
+          "result": "cstr_ptr",
+          "ownership": "none",
+          "owner": null,
+          "release": null,
+          "error": "none",
+          "effects": [
+            "foreign"
+          ],
+          "capabilities": [
+            "native"
+          ]
+        },
+        {
+          "name": "cgx2_abi_version",
+          "parameters": [],
+          "result": "u32",
+          "ownership": "none",
+          "owner": null,
+          "release": null,
+          "error": "none",
+          "effects": [
+            "foreign"
+          ],
+          "capabilities": [
+            "native"
+          ]
+        },
+        {
+          "name": "cgx2_torch_last_error",
+          "parameters": [],
+          "result": "cstr_ptr",
+          "ownership": "none",
+          "owner": null,
+          "release": null,
+          "error": "none",
+          "effects": [
+            "foreign"
+          ],
+          "capabilities": [
+            "native"
+          ]
+        },
+        {
+          "name": "cgx2_torch_f64_cpu",
+          "parameters": [
+            "f64_const_ptr",
+            "u64",
+            "handle_out_ptr"
+          ],
+          "result": "i32",
+          "ownership": "owned",
+          "owner": null,
+          "release": "cgx2_torch_release",
+          "error": "status",
+          "effects": [
+            "foreign"
+          ],
+          "capabilities": [
+            "native"
+          ]
+        },
+        {
+          "name": "cgx2_torch_add",
+          "parameters": [
+            "handle_const_ptr",
+            "handle_const_ptr",
+            "handle_out_ptr"
+          ],
+          "result": "i32",
+          "ownership": "owned",
+          "owner": null,
+          "release": "cgx2_torch_release",
+          "error": "status",
+          "effects": [
+            "foreign"
+          ],
+          "capabilities": [
+            "native"
+          ]
+        },
+        {
+          "name": "cgx2_torch_length",
+          "parameters": [
+            "handle_const_ptr",
+            "u64_out_ptr"
+          ],
+          "result": "i32",
           "ownership": "none",
           "owner": null,
           "release": null,
           "error": "status",
-          "effects": ["foreign"],
-          "capabilities": ["native"]
+          "effects": [
+            "foreign"
+          ],
+          "capabilities": [
+            "native"
+          ]
+        },
+        {
+          "name": "cgx2_torch_copy_f64",
+          "parameters": [
+            "handle_const_ptr",
+            "f64_mut_ptr",
+            "u64"
+          ],
+          "result": "i32",
+          "ownership": "none",
+          "owner": null,
+          "release": null,
+          "error": "status",
+          "effects": [
+            "foreign"
+          ],
+          "capabilities": [
+            "native"
+          ]
+        },
+        {
+          "name": "cgx2_torch_release",
+          "parameters": [
+            "handle_mut_ptr"
+          ],
+          "result": "i32",
+          "ownership": "none",
+          "owner": null,
+          "release": null,
+          "error": "status",
+          "effects": [
+            "foreign"
+          ],
+          "capabilities": [
+            "native"
+          ]
         }
       ]
     }
