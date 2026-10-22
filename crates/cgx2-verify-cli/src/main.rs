@@ -5,8 +5,9 @@ use std::io::Read;
 use std::time::Duration;
 
 use cgx2_verify_core::{
-    emit_smtlib, observe_solver, parse_solver_result, verify_bounded, Contract, Domain, Expr,
-    Parameter, SolverExit, SolverObservation, SolverResponse, Sort, Value, Verdict,
+    emit_smtlib, emit_witness_smtlib, observe_solver, parse_solver_result, validate_solver_witness,
+    verify_bounded, Contract, Counterexample, Domain, Expr, Failure, Parameter, SolverExit,
+    SolverObservation, SolverResponse, Sort, Value, Verdict,
 };
 use serde_json::{json, Map, Value as Json};
 use sha2::{Digest, Sha256};
@@ -290,6 +291,14 @@ fn value_json(value: &Value) -> Json {
         Value::I64(value) => json!(value),
     }
 }
+fn counterexample_json(counterexample: &Counterexample) -> Json {
+    let values: BTreeMap<_, _> = counterexample
+        .values
+        .iter()
+        .map(|(name, value)| (name, value_json(value)))
+        .collect();
+    json!({"counterexample": values, "failure": format!("{:?}", counterexample.failure)})
+}
 
 fn domain_json(domains: &[Domain]) -> Json {
     Json::Array(
@@ -325,16 +334,14 @@ fn verdict_json(
             "assumptions": proved.assumptions,
         }),
         Verdict::Disproved { counterexample } => {
-            let values: BTreeMap<_, _> = counterexample
-                .values
-                .iter()
-                .map(|(k, v)| (k, value_json(v)))
-                .collect();
-            json!({"kind": "disproved", "scope": scope, "counterexample": values,
-                "failure": format!("{:?}", counterexample.failure)})
+            let mut result = counterexample_json(counterexample);
+            result["kind"] = json!("disproved");
+            result["meaning"] = json!("finite_domain_validated_counterexample");
+            result["scope"] = scope;
+            result
         }
         Verdict::Unknown { reason } => {
-            json!({"kind": "unknown", "scope": scope, "reason": format!("{reason:?}")})
+            json!({"kind": "unknown", "meaning": "finite_enumeration_unknown", "scope": scope, "reason": format!("{reason:?}")})
         }
     }
 }
@@ -358,7 +365,7 @@ fn response_json(observation: &SolverObservation) -> Json {
     }
 }
 
-fn solver_json(path: &str, script: &str, timeout_ms: u64) -> Json {
+fn solver_json(path: &str, script: &str, contract: &Contract, timeout_ms: u64) -> Json {
     let timeout = Duration::from_millis(timeout_ms);
     let version = observe_solver(path, &["--version"], "", timeout);
     let observation = observe_solver(path, &[], script, timeout);
@@ -368,7 +375,7 @@ fn solver_json(path: &str, script: &str, timeout_ms: u64) -> Json {
         .map(str::trim)
         .filter(|line| matches!(*line, "sat" | "unsat" | "unknown"))
         .collect::<Vec<_>>();
-    json!({
+    let mut result = json!({
         "trust": "untrusted_protocol",
         "executable": path,
         "version": if version.exit == SolverExit::Code(0) && !version.output_limit_exceeded {
@@ -385,7 +392,48 @@ fn solver_json(path: &str, script: &str, timeout_ms: u64) -> Json {
         "output_limit_exceeded": observation.output_limit_exceeded,
         "write_error": observation.write_error,
         "response": response_json(&observation),
-    })
+        "witness_attempts": [],
+    });
+    if response_json(&observation) == "sat_candidate_unvalidated"
+        && !contract.requires.contains_uninterpreted()
+        && !contract.ensures.contains_uninterpreted()
+    {
+        for (index, failure) in [(2, Failure::EnsuresFalse), (3, Failure::Overflow)] {
+            if statuses.get(index) != Some(&"sat") {
+                continue;
+            }
+            let query = emit_witness_smtlib(contract, failure).expect("validated contract");
+            let witness = observe_solver(path, &[], &query, timeout);
+            let checked = if witness.output_limit_exceeded
+                || witness.write_error
+                || witness.exit != SolverExit::Code(0)
+                || !witness.stderr.trim().is_empty()
+            {
+                Err(cgx2_verify_core::UnknownReason::MalformedResponse)
+            } else {
+                validate_solver_witness(contract, &witness.stdout, failure)
+            };
+            result["witness_attempts"]
+                .as_array_mut()
+                .expect("array")
+                .push(json!({
+                    "condition": if index == 2 { "ensures_false" } else { "ensures_overflow" },
+                    "script_sha256": hash(query.as_bytes()),
+                    "exit": exit_json(witness.exit),
+                    "stdout": witness.stdout,
+                    "stderr": witness.stderr,
+                    "output_limit_exceeded": witness.output_limit_exceeded,
+                    "write_error": witness.write_error,
+                    "validation": match &checked { Ok(_) => "validated".to_owned(), Err(e) => format!("unknown:{e:?}") },
+                }));
+            if let Ok(counterexample) = checked {
+                result["response"] = json!("validated_counterexample");
+                result["validated_counterexample"] = counterexample_json(&counterexample);
+                break;
+            }
+        }
+    }
+    result
 }
 
 fn run() -> Result<(), String> {
@@ -402,14 +450,33 @@ fn run() -> Result<(), String> {
     let (contract, domains) = parse_document(&bytes)?;
     let verdict = verify_bounded(&contract, &domains, options.max_cases);
     let mut result = json!({
-        "schema_version": 1,
+        "schema_version": 2,
         "input_sha256": hash(&bytes),
         "verdict": verdict_json(&verdict, &domains, &contract, options.max_cases),
     });
     if let Some(path) = &options.solver {
         let script = emit_smtlib(&contract).map_err(|e| format!("SMT emission failed: {e:?}"))?;
-        result["solver"] = solver_json(path, &script, options.timeout_ms);
+        result["solver"] = solver_json(path, &script, &contract, options.timeout_ms);
     }
+    result["proof"] = match &verdict {
+        Verdict::Disproved { counterexample } => {
+            let mut proof = counterexample_json(counterexample);
+            proof["kind"] = json!("disproved");
+            proof["meaning"] = json!("finite_domain_validated_counterexample");
+            proof
+        }
+        _ if result["solver"]["response"] == "validated_counterexample" => {
+            let mut proof = result["solver"]["validated_counterexample"].clone();
+            proof["kind"] = json!("disproved");
+            proof["meaning"] = json!("validated_counterexample");
+            proof
+        }
+        _ => json!({
+            "kind": "unknown",
+            "meaning": "no_trusted_solver_proof",
+            "reason": result["solver"]["response"].as_str().unwrap_or("solver_not_configured"),
+        }),
+    };
     if options.format == "json" {
         println!(
             "{}",
@@ -418,6 +485,11 @@ fn run() -> Result<(), String> {
     } else {
         println!("input_sha256: {}", result["input_sha256"].as_str().unwrap());
         println!("verdict: {}", result["verdict"]["kind"].as_str().unwrap());
+        println!(
+            "proof: {} ({})",
+            result["proof"]["kind"].as_str().unwrap(),
+            result["proof"]["meaning"].as_str().unwrap()
+        );
         println!("scope: {}", result["verdict"]["scope"]);
         match &verdict {
             Verdict::Proved { scope } => {

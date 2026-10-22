@@ -59,7 +59,7 @@ fn finite_proof_scope_and_stable_json() {
     let second = run(&input, &args);
     assert_eq!(first.stdout, second.stdout);
     let result: Value = serde_json::from_slice(&first.stdout).unwrap();
-    assert_eq!(result["schema_version"], 1);
+    assert_eq!(result["schema_version"], 2);
     assert_eq!(result["input_sha256"].as_str().unwrap().len(), 64);
     assert_eq!(result["verdict"]["kind"], "proved");
     assert_eq!(result["verdict"]["meaning"], "finite_domain_only");
@@ -142,19 +142,76 @@ fn fake_solver(body: &str) -> Temp {
 
 #[cfg(unix)]
 #[test]
+fn fake_solver_only_disproves_with_a_validated_model() {
+    let input = fixture(include_str!("../examples/valid.json"));
+    let valid = fake_solver("printf 'unsat\\nsat\\nsat\\nunsat\\n'");
+    let result = parsed(
+        &input,
+        &["--format", "json", "--solver", valid.path.to_str().unwrap()],
+    );
+    assert_eq!(result["schema_version"], 2);
+    assert_eq!(result["proof"]["kind"], "unknown");
+    assert_eq!(result["solver"]["trust"], "untrusted_protocol");
+
+    use std::os::unix::fs::PermissionsExt;
+    let body = "#!/bin/sh\nif [ \"$1\" = \"--version\" ]; then echo fake-1; exit 0; fi\ninput=$(cat)\ncase \"$input\" in *get-value*) printf 'sat\\n((v_78 4))\\n';; *) printf 'unsat\\nsat\\nsat\\nunsat\\n';; esac\n";
+    let solver = Temp::new(body.as_bytes(), "model-solver.sh");
+    fs::set_permissions(&solver.path, fs::Permissions::from_mode(0o700)).unwrap();
+    let result = parsed(
+        &input,
+        &[
+            "--format",
+            "json",
+            "--solver",
+            solver.path.to_str().unwrap(),
+        ],
+    );
+    assert_eq!(result["verdict"]["meaning"], "finite_domain_only");
+    assert_eq!(result["proof"]["kind"], "disproved", "{result}");
+    assert_eq!(result["proof"]["meaning"], "validated_counterexample");
+    assert_eq!(result["proof"]["counterexample"]["x"], 4);
+    assert_eq!(result["solver"]["response"], "validated_counterexample");
+
+    let invalid = body.replace("v_78 4", "v_78 0");
+    let solver = Temp::new(invalid.as_bytes(), "invalid-model-solver.sh");
+    fs::set_permissions(&solver.path, fs::Permissions::from_mode(0o700)).unwrap();
+    let result = parsed(
+        &input,
+        &[
+            "--format",
+            "json",
+            "--solver",
+            solver.path.to_str().unwrap(),
+        ],
+    );
+    assert_eq!(result["proof"]["kind"], "unknown");
+    assert_eq!(result["solver"]["response"], "sat_candidate_unvalidated");
+}
+
+#[cfg(unix)]
+#[test]
 fn solver_statuses_are_untrusted_observations() {
     let input = fixture(include_str!("../examples/valid.json"));
     let cases = [
-        ("printf 'unsat\\nsat\\nunsat\\n'", "unsat_protocol_only"),
-        ("printf 'unsat\\nsat\\nsat\\n'", "sat_candidate_unvalidated"),
-        ("printf 'unsat\\nsat\\nunknown\\n'", "unknown:SolverUnknown"),
+        (
+            "printf 'unsat\\nsat\\nunsat\\nunsat\\n'",
+            "unsat_protocol_only",
+        ),
+        (
+            "printf 'unsat\\nsat\\nsat\\nunsat\\n'",
+            "sat_candidate_unvalidated",
+        ),
+        (
+            "printf 'unsat\\nsat\\nunknown\\nunsat\\n'",
+            "unknown:SolverUnknown",
+        ),
         ("printf 'junk\\n'", "unknown:MalformedResponse"),
         (
-            "printf 'unsat\\nsat\\nunsat\\n'; exit 3",
+            "printf 'unsat\\nsat\\nunsat\\nunsat\\n'; exit 3",
             "unknown:MalformedResponse",
         ),
         (
-            "printf 'error' >&2; printf 'unsat\\nsat\\nunsat\\n'",
+            "printf 'error' >&2; printf 'unsat\\nsat\\nunsat\\nunsat\\n'",
             "unknown:MalformedResponse",
         ),
     ];
@@ -170,6 +227,7 @@ fn solver_statuses_are_untrusted_observations() {
             ],
         );
         assert_eq!(result["verdict"]["kind"], "proved");
+        assert_eq!(result["proof"]["kind"], "unknown");
         assert_eq!(result["solver"]["trust"], "untrusted_protocol");
         assert_eq!(result["solver"]["version"], "fake-1");
         assert_eq!(

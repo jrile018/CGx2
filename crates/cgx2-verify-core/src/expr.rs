@@ -136,7 +136,7 @@ impl Expr {
         }
     }
 
-    pub(crate) fn contains_uninterpreted(&self) -> bool {
+    pub fn contains_uninterpreted(&self) -> bool {
         match self {
             Self::Uninterpreted { .. } => true,
             Self::Add(a, b)

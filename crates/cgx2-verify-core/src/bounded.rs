@@ -27,7 +27,7 @@ pub struct Scope {
     pub assumptions: Vec<String>,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Failure {
     EnsuresFalse,
     Overflow,
