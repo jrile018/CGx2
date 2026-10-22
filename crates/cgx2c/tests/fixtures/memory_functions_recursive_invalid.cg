@@ -1,0 +1,6 @@
+fn loop() -> Unit effects(ManagedAlloc):
+    let value = memory.owned_bytes(8)
+    loop()
+
+fn main() -> Unit effects(ManagedAlloc):
+    loop()

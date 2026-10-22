@@ -1,0 +1,22 @@
+fn allocate() -> Unit effects(ManagedAlloc, Collect, Mutate) caps(MemoryCollect):
+    let manual = memory.region(mode: manual, limit: 256)
+    let original = memory.owned_bytes(8)
+    let managed = memory.promote_owned(manual, original)
+    let copy = memory.copy_to_owned(managed)
+    memory.use(managed)
+    memory.drop(managed)
+    memory.drop(copy)
+    memory.collect(manual)
+    memory.close(manual)
+
+fn guarded() -> Unit effects(ManagedAlloc, Mutate):
+    let auto = memory.region(mode: auto, limit: 256)
+    no_gc(budget: 256):
+        let value = memory.alloc_bytes(auto, 8)
+        memory.use(value)
+        memory.drop(value)
+    memory.close(auto)
+
+fn main() -> Unit effects(ManagedAlloc, Collect, Mutate) caps(MemoryCollect):
+    allocate()
+    guarded()

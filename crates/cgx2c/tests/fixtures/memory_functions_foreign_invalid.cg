@@ -1,0 +1,5 @@
+foreign python fn isqrt(x: i64) -> i64 effects(Foreign) caps(ForeignCall) = math.isqrt runtime "local:cpython" ownership copied
+
+fn main() -> Unit effects(ManagedAlloc, Foreign) caps(ForeignCall):
+    let value = memory.owned_bytes(8)
+    isqrt(4)

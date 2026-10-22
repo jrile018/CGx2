@@ -1,6 +1,7 @@
 //! Native lowering for the checked, literal-size memory script profile.
 use cgx2_sema::{TypedModule, check_module};
 use cgx2_syntax::{CallArg, Expr, ExprKind, Module, Span, Stmt, StmtKind};
+use std::collections::BTreeMap;
 
 use crate::{EmitDiagnostic, quote_rust};
 
@@ -17,6 +18,10 @@ pub fn is_memory_script(module: &Module) -> bool {
         }
     }
     module.statements.iter().any(has_memory)
+        || module
+            .functions
+            .iter()
+            .any(|function| function.body.iter().any(has_memory))
 }
 
 fn unsupported(message: impl Into<String>, span: Span) -> EmitDiagnostic {
@@ -77,16 +82,21 @@ fn call(expr: &Expr) -> Result<(&str, &[CallArg]), EmitDiagnostic> {
     Ok((operation, arguments))
 }
 
-fn emit_block(stmts: &[Stmt], out: &mut String, indent: usize) -> Result<(), EmitDiagnostic> {
+fn emit_block(
+    stmts: &[Stmt],
+    out: &mut String,
+    indent: usize,
+    functions: &BTreeMap<&str, usize>,
+) -> Result<(), EmitDiagnostic> {
     let pad = "    ".repeat(indent);
     for stmt in stmts {
         let span = format!("({}, {})", stmt.span.start, stmt.span.end);
-        out.push_str(&format!("{pad}step(&mut steps, {span})?;\n"));
+        out.push_str(&format!("{pad}step(steps, {span})?;\n"));
         match &stmt.kind {
             StmtKind::NoGc { budget, body } => {
                 let budget = size(budget)?;
                 out.push_str(&format!("{pad}{{\n{pad}    let mut cgx2_guard = session.no_gc({budget});\n{pad}    let session = &mut *cgx2_guard;\n"));
-                emit_block(body, out, indent + 1)?;
+                emit_block(body, out, indent + 1, functions)?;
                 out.push_str(&format!("{pad}}}\n"));
             }
             StmtKind::Let {
@@ -164,6 +174,27 @@ fn emit_block(stmts: &[Stmt], out: &mut String, indent: usize) -> Result<(), Emi
                 out.push_str(&format!("{pad}{statement}\n"));
             }
             StmtKind::Expr(expr) => {
+                if let ExprKind::Call { callee, arguments } = &expr.kind
+                    && let ExprKind::Name(path) = &callee.kind
+                    && let [local] = path.segments.as_slice()
+                {
+                    if !arguments.is_empty() {
+                        return Err(unsupported(
+                            "local memory calls take no arguments",
+                            expr.span,
+                        ));
+                    }
+                    let Some(index) = functions.get(local.as_str()) else {
+                        return Err(unsupported(
+                            format!("unknown local memory function `{local}`"),
+                            callee.span,
+                        ));
+                    };
+                    out.push_str(&format!(
+                        "{pad}cgx2_memory_function_{index}(session, steps, {span})?;\n"
+                    ));
+                    continue;
+                }
                 let statement = if let ExprKind::Name(_) = &expr.kind {
                     format!(
                         "use_value(session, &bindings, {}, {span})?;",
@@ -201,9 +232,9 @@ pub(crate) fn emit_memory_rust(
     module: &Module,
     checked: &TypedModule,
 ) -> Result<String, Vec<EmitDiagnostic>> {
-    if !module.functions.is_empty() || !module.imports.is_empty() {
+    if !module.imports.is_empty() {
         return Err(vec![unsupported(
-            "memory scripts cannot contain functions or imports",
+            "native memory functions cannot contain imports",
             module.span,
         )]);
     }
@@ -217,10 +248,41 @@ pub(crate) fn emit_memory_rust(
             )]);
         }
     }
-    let mut out = String::from("// Generated CGx2 native memory script. Requires cgx2-runtime.\n");
+    let functions: BTreeMap<&str, usize> = module
+        .functions
+        .iter()
+        .enumerate()
+        .map(|(index, function)| (function.name.as_str(), index))
+        .collect();
+    let mut out = String::from("// Generated CGx2 native memory program. Requires cgx2-runtime.\n");
     out.push_str(include_str!("memory_runtime.rs.txt"));
-    out.push_str("\nfn main() {\n    let mut session = Session::new();\n    let mut bindings: HashMap<&'static str, Binding> = HashMap::new();\n    let mut steps = 0;\n    let result = (|| -> Result<(), String> {\n        let session = &mut session;\n");
-    emit_block(&module.statements, &mut out, 2).map_err(|error| vec![error])?;
+    for (index, function) in module.functions.iter().enumerate() {
+        out.push_str(&format!(
+            "\nfn cgx2_memory_function_{index}(session: &mut Session, steps: &mut usize, call_span: (usize, usize)) -> Result<(), String> {{\n    let mut bindings: HashMap<&'static str, Binding> = HashMap::new();\n    let result = (|| -> Result<(), String> {{\n"
+        ));
+        emit_block(&function.body, &mut out, 2, &functions).map_err(|error| vec![error])?;
+        out.push_str("        Ok(())\n    })();\n    let mut cleanup_error = None;\n    for value in bindings.into_values() {\n        if let Binding::Managed(handle) = value {\n            if let Err(failure) = session.unroot(handle) {\n                cleanup_error.get_or_insert_with(|| runtime(failure, call_span));\n            }\n        }\n    }\n    result?;\n    if let Some(failure) = cleanup_error { return Err(failure); }\n    Ok(())\n}\n");
+    }
+    out.push_str("\nfn main() {\n    let mut session = Session::new();\n    let mut bindings: HashMap<&'static str, Binding> = HashMap::new();\n    let mut steps = 0;\n    let result = (|| -> Result<(), String> {\n        let session = &mut session;\n        let steps = &mut steps;\n");
+    if module.functions.is_empty() {
+        emit_block(&module.statements, &mut out, 2, &functions).map_err(|error| vec![error])?;
+    } else {
+        let main = module
+            .functions
+            .iter()
+            .find(|function| function.name == "main")
+            .ok_or_else(|| {
+                vec![unsupported(
+                    "memory function module requires main()",
+                    module.span,
+                )]
+            })?;
+        let index = functions["main"];
+        let span = format!("({}, {})", main.span.start, main.span.end);
+        out.push_str(&format!(
+            "        step(steps, {span})?;\n        cgx2_memory_function_{index}(session, steps, {span})?;\n"
+        ));
+    }
     out.push_str("        Ok(())\n    })();\n    if let Err(message) = result { eprintln!(\"{message}\"); std::process::exit(1); }\n}\n");
     Ok(out)
 }

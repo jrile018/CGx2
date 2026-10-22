@@ -1,0 +1,11 @@
+fn guarded() -> Unit effects(ManagedAlloc, Mutate):
+    let region = memory.region(mode: auto, limit: 256)
+    no_gc(budget: 256):
+        let value = memory.alloc_bytes(region, 8)
+        memory.use(value)
+        memory.drop(value)
+    memory.close(region)
+
+fn main() -> Unit effects(ManagedAlloc, Mutate):
+    no_gc(budget: 512):
+        guarded()

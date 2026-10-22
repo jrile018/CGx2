@@ -1,0 +1,6 @@
+fn borrow_outer() -> Unit effects(ManagedAlloc):
+    memory.use(outer)
+
+fn main() -> Unit effects(ManagedAlloc):
+    let outer = memory.owned_bytes(8)
+    borrow_outer()

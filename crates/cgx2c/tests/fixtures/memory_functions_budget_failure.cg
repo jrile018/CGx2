@@ -1,0 +1,9 @@
+fn exhaust() -> Unit effects(ManagedAlloc, Mutate):
+    let region = memory.region(mode: manual, limit: 256)
+    no_gc(budget: 95):
+        let value = memory.alloc_bytes(region, 32)
+    memory.drop(value)
+    memory.close(region)
+
+fn main() -> Unit effects(ManagedAlloc, Mutate):
+    exhaust()

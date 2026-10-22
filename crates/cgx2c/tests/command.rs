@@ -88,10 +88,7 @@ fn moved_compiler_builds_memory_without_its_source_checkout() {
     fs::copy(case.0.join("target/debug/cgx2c"), &installed).unwrap();
     fs::remove_dir_all(checkout).unwrap();
 
-    let source = case.source(
-        "memory.cg",
-        include_str!("../../cgx2-cli/tests/fixtures/memory.cg"),
-    );
+    let source = case.source("memory.cg", include_str!("fixtures/memory_functions.cg"));
     let binary = case.0.join("memory program");
     let result = Command::new(installed)
         .args(["build", str_path(&source), "--out", str_path(&binary)])

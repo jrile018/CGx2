@@ -1,0 +1,9 @@
+fn convert() -> Unit effects(ManagedAlloc, Mutate):
+    let region = memory.region(mode: manual, limit: 64)
+    let original = memory.owned_bytes(8)
+    let managed = memory.promote_owned(region, original)
+    memory.drop(managed)
+    memory.close(region)
+
+fn main() -> Unit effects(ManagedAlloc, Mutate):
+    convert()
