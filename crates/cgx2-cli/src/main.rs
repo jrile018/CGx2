@@ -1,49 +1,86 @@
+mod diagnostics;
+
 use std::{env, fs, path::Path, process::ExitCode};
 
-use cgx2_cli::{run_source, RunError, Value};
-use cgx2_syntax::{format_module, parse_module, Span};
+use cgx2_cli::{check_source, run_source, Value};
+use cgx2_syntax::{format_module, parse_module};
+
+use diagnostics::{CliDiagnostic, DiagnosticFormat};
+
+const HELP: &str = "usage: cgx2 [--diagnostic-format=json] check FILE.cg | cgx2 [--diagnostic-format=json] run FILE.cg [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 fmt FILE.cg\ncheck validates syntax and baseline names/types/mutability only; ownership, effects, and capabilities are not checked";
 
 enum Command {
+    Check { path: String },
     Run { path: String, args: Vec<String> },
     Fmt { path: String },
 }
 
 fn main() -> ExitCode {
-    match execute() {
+    let args: Vec<String> = env::args().skip(1).collect();
+    if matches!(args.as_slice(), [arg] if arg == "--help" || arg == "-h") {
+        println!("{HELP}");
+        return ExitCode::SUCCESS;
+    }
+    let format = DiagnosticFormat::from_args(&args);
+    match execute(args) {
         Ok(()) => ExitCode::SUCCESS,
-        Err((code, message)) => {
-            eprintln!("{code}: {message}");
+        Err(errors) => {
+            for error in errors {
+                eprintln!("{}", error.render(format));
+            }
             ExitCode::FAILURE
         }
     }
 }
 
-fn execute() -> Result<(), (&'static str, String)> {
-    let command = parse_args(env::args().skip(1).collect())?;
+fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
+    let command = parse_args(args).map_err(|error| vec![error])?;
     let path = match &command {
-        Command::Run { path, .. } | Command::Fmt { path } => path.clone(),
+        Command::Check { path } | Command::Run { path, .. } | Command::Fmt { path } => path,
     };
-    let source = fs::read_to_string(&path)
-        .map_err(|error| ("CGC002", format!("cannot read {}: {error}", path)))?;
+    let source = fs::read_to_string(path).map_err(|error| {
+        vec![CliDiagnostic::new(
+            "CGC002",
+            format!("cannot read {path}: {error}"),
+            path.clone(),
+            None,
+        )]
+    })?;
     match command {
-        Command::Run { args, .. } => {
-            let result =
-                run_source(&source, &args).map_err(|error| format_run_error(&path, error))?;
+        Command::Check { path } => {
+            check_source(&source).map_err(|errors| {
+                errors
+                    .into_iter()
+                    .map(|error| CliDiagnostic::from_check(&path, error))
+                    .collect::<Vec<_>>()
+            })?;
+        }
+        Command::Run { path, args } => {
+            check_source(&source).map_err(|errors| {
+                errors
+                    .into_iter()
+                    .map(|error| CliDiagnostic::from_check(&path, error))
+                    .collect::<Vec<_>>()
+            })?;
+            let result = run_source(&source, &args)
+                .map_err(|error| vec![CliDiagnostic::from_run(&path, error)])?;
             if result.value != Value::Unit {
                 println!("{}", result.value);
             }
         }
-        Command::Fmt { .. } => {
-            let module = parse_module(&source).map_err(|diagnostics| {
-                let first = &diagnostics[0];
-                format_run_error(
-                    &path,
-                    RunError {
-                        code: first.code,
-                        message: first.message.clone(),
-                        span: Some(first.span),
-                    },
-                )
+        Command::Fmt { path } => {
+            let module = parse_module(&source).map_err(|errors| {
+                errors
+                    .into_iter()
+                    .map(|error| {
+                        CliDiagnostic::new(
+                            error.code,
+                            error.message,
+                            path.clone(),
+                            Some(error.span),
+                        )
+                    })
+                    .collect::<Vec<_>>()
             })?;
             print!("{}", format_module(&module));
         }
@@ -51,17 +88,29 @@ fn execute() -> Result<(), (&'static str, String)> {
     Ok(())
 }
 
-fn parse_args(args: Vec<String>) -> Result<Command, (&'static str, String)> {
-    let usage = || {
-        (
-            "CGC001",
-            "usage: cgx2 run FILE.cg [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 fmt FILE.cg".into(),
-        )
-    };
-    let (mode, rest) = match args.first().map(String::as_str) {
-        Some("run") => ("run", &args[1..]),
-        Some("fmt") => ("fmt", &args[1..]),
-        Some(path) if path.ends_with(".cg") => ("run", &args[..]),
+fn parse_args(args: Vec<String>) -> Result<Command, CliDiagnostic> {
+    let usage = || CliDiagnostic::new("CGC001", HELP.into(), "<command>".into(), None);
+    let mut filtered = Vec::new();
+    let mut json = false;
+    let mut program_args = false;
+    for arg in args {
+        if arg == "--" {
+            program_args = true;
+        }
+        if !program_args && arg == "--diagnostic-format=json" {
+            if json {
+                return Err(usage());
+            }
+            json = true;
+        } else {
+            filtered.push(arg);
+        }
+    }
+    let (mode, rest) = match filtered.first().map(String::as_str) {
+        Some("check") => ("check", &filtered[1..]),
+        Some("run") => ("run", &filtered[1..]),
+        Some("fmt") if !json => ("fmt", &filtered[1..]),
+        Some(path) if path.ends_with(".cg") => ("run", &filtered[..]),
         _ => return Err(usage()),
     };
     let Some(path) = rest.first() else {
@@ -70,27 +119,23 @@ fn parse_args(args: Vec<String>) -> Result<Command, (&'static str, String)> {
     if Path::new(path).extension().and_then(|ext| ext.to_str()) != Some("cg") {
         return Err(usage());
     }
-    if mode == "fmt" {
+    if mode == "check" || mode == "fmt" {
         if rest.len() != 1 {
             return Err(usage());
         }
-        return Ok(Command::Fmt { path: path.clone() });
+        return Ok(if mode == "check" {
+            Command::Check { path: path.clone() }
+        } else {
+            Command::Fmt { path: path.clone() }
+        });
     }
-    let program_args = match rest.get(1).map(String::as_str) {
+    let args = match rest.get(1).map(String::as_str) {
         None => Vec::new(),
         Some("--") => rest[2..].to_vec(),
         _ => return Err(usage()),
     };
     Ok(Command::Run {
         path: path.clone(),
-        args: program_args,
+        args,
     })
-}
-
-fn format_run_error(path: &str, error: RunError) -> (&'static str, String) {
-    let location = match error.span {
-        Some(Span { start, end }) => format!("{path}:{start}..{end}"),
-        None => path.to_owned(),
-    };
-    (error.code, format!("{location}: {}", error.message))
 }

@@ -13,3 +13,4 @@ path = "src/main.rs"
 
 [dependencies]
 cgx2-syntax = { path = "../cgx2-syntax" }
+cgx2-sema = { path = "../cgx2-sema" }

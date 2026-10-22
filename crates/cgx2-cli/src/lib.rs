@@ -1,6 +1,8 @@
+mod check;
 mod error;
 mod eval;
 
+pub use check::{check_source, CheckDiagnostic};
 pub use error::RunError;
 pub use eval::{RunResult, Value};
 
