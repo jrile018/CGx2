@@ -1,0 +1,4 @@
+schema_version = 1
+name = "demo"
+entry = "src/main.cg"
+sources = ["src/math.cg", "src/main.cg"]

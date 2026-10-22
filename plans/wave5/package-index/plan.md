@@ -30,19 +30,19 @@
 
 ### 1. Manifest grammar and path safety
 
-- [ ] Add red tests for valid manifest, duplicates, unknown keys, missing fields, invalid UTF-8, `../` escape, and outside symlink. Use temporary directories and no network.
-- [ ] Implement strict parser with fixed limits on manifest/source count/bytes. Canonicalize and validate paths under root before source reads.
-- [ ] Document exact key names, defaults (if any), and limits in README; reject unsupported TOML features.
+- [x] Add red tests for valid manifest, duplicates, unknown keys, missing fields, invalid UTF-8, `../` escape, and outside symlink. Use temporary directories and no network.
+- [x] Implement strict parser with fixed limits on manifest/source count/bytes. Canonicalize and validate paths under root before source reads.
+- [x] Document exact key names, defaults (if any), and limits in README; reject unsupported TOML features.
 
 ### 2. Module/API index
 
-- [ ] Add red tests for two-module package, duplicate module declarations, source semantic errors, missing public signatures, and stable render order.
-- [ ] Parse/check each `.cg`, call existing API-index library, and build deterministic records. Include source paths/spans in diagnostics.
-- [ ] Expose text/JSON rendering with schema version and explicit unsupported-import field; no invented dependency resolution.
+- [x] Add red tests for two-module package, duplicate module declarations, source semantic errors, missing public signatures, and stable render order.
+- [x] Parse/check each `.cg`, call existing API-index library, and build deterministic records. Include source paths/spans in diagnostics.
+- [x] Expose text/JSON rendering with schema version and explicit unsupported-import field; no invented dependency resolution.
 
 ### 3. Verification and handoff
 
-- [ ] Run `cargo test -p cgx2-package --offline`, `RUSTUP_TOOLCHAIN=1.98.1 cargo fmt --all --check`, and `RUSTUP_TOOLCHAIN=1.98.1 cargo clippy -p cgx2-package --all-targets --offline -- -D warnings`.
-- [ ] Commit only owned paths and include a small example package with its expected index in the crate fixtures.
+- [x] Run `cargo test -p cgx2-package --offline`, `RUSTUP_TOOLCHAIN=1.98.1 cargo fmt --all --check`, and `RUSTUP_TOOLCHAIN=1.98.1 cargo clippy -p cgx2-package --all-targets --offline -- -D warnings`.
+- [x] Commit only owned paths and include a small example package with its expected index in the crate fixtures.
 
 **Acceptance:** A safe local package index works for declared module files and public signatures; imports, dependency fetching, and package execution remain explicit next steps.

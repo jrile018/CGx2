@@ -1,0 +1,9 @@
+[package]
+name = "cgx2-package"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+cgx2-api-index = { path = "../cgx2-api-index" }
+cgx2-sema = { path = "../cgx2-sema" }
+cgx2-syntax = { path = "../cgx2-syntax" }
