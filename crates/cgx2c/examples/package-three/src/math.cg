@@ -1,0 +1,5 @@
+module example.math
+import example.base
+
+pub fn twice(value: i64) -> i64:
+    example.base.add(value, value)

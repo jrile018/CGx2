@@ -1,4 +1,5 @@
-use cgx2_emit_rust::emit_rust;
+use cgx2_emit_rust::{emit_package_rust, emit_rust};
+use cgx2_package::{CheckedPackage, load_checked_package};
 use cgx2_sema::check_module;
 use cgx2_syntax::parse_module;
 use sha2::{Digest, Sha256};
@@ -13,7 +14,7 @@ use std::{
     time::{SystemTime, UNIX_EPOCH},
 };
 
-const USAGE: &str = "usage: cgx2c build FILE.cg --out BINARY [--release] [--force] [--rustc PATH]\n       cgx2c emit-rust FILE.cg --out FILE.rs [--force]";
+const USAGE: &str = "usage: cgx2c build FILE.cg --out BINARY [--release] [--force] [--rustc PATH]\n       cgx2c emit-rust FILE.cg --out FILE.rs [--force]\n       cgx2c build --package ROOT --out BINARY [--release] [--force] [--rustc PATH]\n       cgx2c emit-rust --package ROOT --out FILE.rs [--force]";
 const MAX_SOURCE: u64 = 4 * 1024 * 1024;
 const MAX_GENERATED: usize = 32 * 1024 * 1024;
 const MAX_STDERR: usize = 8 * 1024;
@@ -28,6 +29,7 @@ enum Mode {
 struct Options {
     mode: Mode,
     source: PathBuf,
+    package: bool,
     output: PathBuf,
     force: bool,
     release: bool,
@@ -70,6 +72,9 @@ fn run(args: Vec<OsString>) -> Result<(), CliError> {
     }
     let options = parse_args(args)?;
     validate_output(&options)?;
+    if options.package {
+        return run_package(&options);
+    }
     let metadata = fs::metadata(&options.source).map_err(|e| {
         CliError::new(
             "CGXC002",
@@ -172,6 +177,120 @@ fn run(args: Vec<OsString>) -> Result<(), CliError> {
     Ok(())
 }
 
+fn package_error(errors: Vec<cgx2_package::PackageDiagnostic>) -> CliError {
+    let first = &errors[0];
+    source_error(
+        &first.file,
+        first.code,
+        &first.message,
+        first.span.map_or(0, |s| s.start),
+        first.span.map_or(0, |s| s.end),
+    )
+}
+
+fn run_package(options: &Options) -> Result<(), CliError> {
+    let package = load_checked_package(&options.source).map_err(package_error)?;
+    validate_package_output(options, &package)?;
+    let generated = emit_package_rust(&package).map_err(|errors| {
+        let first = &errors[0];
+        source_error(
+            &package.root().join(&first.file),
+            first.diagnostic.code,
+            &first.diagnostic.message,
+            first.diagnostic.span.start,
+            first.diagnostic.span.end,
+        )
+    })?;
+    if generated.len() > MAX_GENERATED {
+        return Err(CliError::new("CGXC006", "generated Rust exceeds 32 MiB"));
+    }
+    package.verify_unchanged().map_err(package_error)?;
+    let parent = options
+        .output
+        .parent()
+        .filter(|p| !p.as_os_str().is_empty())
+        .unwrap_or(Path::new("."));
+    let temporary = PrivateDir::new(parent)?;
+    let generated_path = temporary.path.join("generated.rs");
+    fs::write(&generated_path, generated.as_bytes()).map_err(|e| {
+        CliError::new(
+            "CGXC006",
+            format!("cannot write temporary Rust source: {e}"),
+        )
+    })?;
+    if options.mode == Mode::Emit {
+        package.verify_unchanged().map_err(package_error)?;
+        validate_output(options)?;
+        validate_package_output(options, &package)?;
+        install(&generated_path, &options.output, options.force)?;
+        return Ok(());
+    }
+    let binary_path = temporary.path.join("program");
+    compile(
+        &options.rustc,
+        &generated_path,
+        &binary_path,
+        options.release,
+    )?;
+    let built = fs::metadata(&binary_path)
+        .map_err(|e| CliError::new("CGXC005", format!("rustc succeeded without a binary: {e}")))?;
+    if !built.is_file() {
+        return Err(CliError::new(
+            "CGXC005",
+            "rustc did not produce a regular binary",
+        ));
+    }
+    package.verify_unchanged().map_err(package_error)?;
+    validate_output(options)?;
+    validate_package_output(options, &package)?;
+    install(&binary_path, &options.output, options.force)?;
+    let (toolchain, target) = rustc_version(&options.rustc);
+    let source_hashes = package
+        .modules()
+        .iter()
+        .map(|m| format!("{}:{}", m.source().display(), m.source_sha256()))
+        .collect::<Vec<_>>();
+    println!(
+        "cgx2c build metadata: package_manifest_sha256={} package_sources_sha256={source_hashes:?} rustc={} toolchain={} target={} profile={} output={}",
+        package.manifest_sha256(),
+        options.rustc.to_string_lossy(),
+        toolchain,
+        target,
+        if options.release { "release" } else { "debug" },
+        options.output.display()
+    );
+    Ok(())
+}
+
+fn validate_package_output(options: &Options, package: &CheckedPackage) -> Result<(), CliError> {
+    let Ok(info) = fs::metadata(&options.output) else {
+        return Ok(());
+    };
+    let output = fs::canonicalize(&options.output).ok();
+    let paths = std::iter::once(package.root().join("cgx2.toml")).chain(
+        package
+            .modules()
+            .iter()
+            .map(|m| m.canonical_path().to_path_buf()),
+    );
+    for path in paths {
+        if output.as_ref().is_some_and(|o| *o == path) {
+            return Err(CliError::new("CGXC004", "output is a package input file"));
+        }
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::MetadataExt;
+            if let Ok(source) = fs::metadata(&path)
+                && source.dev() == info.dev()
+                && source.ino() == info.ino()
+            {
+                return Err(CliError::new("CGXC004", "output is a package input file"));
+            }
+        }
+    }
+    Ok(())
+}
+
 fn source_error(path: &Path, code: &str, message: &str, start: usize, end: usize) -> CliError {
     CliError::new(
         code,
@@ -189,15 +308,20 @@ fn parse_args(args: Vec<OsString>) -> Result<Options, CliError> {
         Some("emit-rust") => Mode::Emit,
         _ => return Err(usage()),
     };
-    let source = PathBuf::from(&args[1]);
-    if source.extension().is_none_or(|ext| ext != "cg") {
+    let package = args[1] == "--package";
+    let source_index = if package { 2 } else { 1 };
+    let Some(source_arg) = args.get(source_index) else {
+        return Err(usage());
+    };
+    let source = PathBuf::from(source_arg);
+    if !package && source.extension().is_none_or(|ext| ext != "cg") {
         return Err(usage());
     }
     let mut output = None;
     let mut force = false;
     let mut release = false;
     let mut rustc = None;
-    let mut index = 2;
+    let mut index = source_index + 1;
     while index < args.len() {
         match args[index].to_str() {
             Some("--out") if output.is_none() && index + 1 < args.len() => {
@@ -232,6 +356,7 @@ fn parse_args(args: Vec<OsString>) -> Result<Options, CliError> {
     Ok(Options {
         mode,
         source,
+        package,
         output,
         force,
         release,

@@ -1,0 +1,8 @@
+module example.main
+import example.math
+
+fn identity(value: i64) -> i64:
+    value
+
+fn main() -> i64:
+    identity(example.math.twice(21))

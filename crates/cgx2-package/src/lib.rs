@@ -6,8 +6,11 @@ use std::io::Read;
 use std::path::{Component, Path, PathBuf};
 
 use cgx2_api_index::{build_index_with_imports, ApiIndex, IndexError};
-use cgx2_sema::{check_module_with_imports, collect_public_signatures, ImportedSignatures};
+use cgx2_sema::{
+    check_module_with_imports, collect_public_signatures, ImportedSignatures, TypedModule,
+};
 use cgx2_syntax::{parse_module, Expr, ExprKind, Module, Span, Stmt, StmtKind};
+use sha2::{Digest, Sha256};
 
 pub const MAX_MANIFEST_BYTES: usize = 64 * 1024;
 pub const MAX_SOURCE_BYTES: usize = 1024 * 1024;
@@ -189,13 +192,117 @@ struct Manifest {
 struct ParsedSource {
     source: PathBuf,
     listed: PathBuf,
+    canonical: PathBuf,
+    text: String,
+    sha256: String,
     module: Module,
     name: Option<String>,
+}
+
+/// Source bytes and typed syntax that were checked together by the package loader.
+#[derive(Clone, Debug)]
+pub struct CheckedModule {
+    source: PathBuf,
+    canonical_path: PathBuf,
+    source_sha256: String,
+    text: String,
+    syntax: Module,
+    typed: TypedModule,
+}
+
+impl CheckedModule {
+    pub fn source(&self) -> &Path {
+        &self.source
+    }
+    pub fn canonical_path(&self) -> &Path {
+        &self.canonical_path
+    }
+    pub fn source_sha256(&self) -> &str {
+        &self.source_sha256
+    }
+    pub fn text(&self) -> &str {
+        &self.text
+    }
+    pub fn syntax(&self) -> &Module {
+        &self.syntax
+    }
+    pub fn typed(&self) -> &TypedModule {
+        &self.typed
+    }
+}
+
+/// An immutable local package view. Call `verify_unchanged` before publishing output.
+#[derive(Clone, Debug)]
+pub struct CheckedPackage {
+    root: PathBuf,
+    manifest_sha256: String,
+    index: PackageIndex,
+    modules: Vec<CheckedModule>,
+}
+
+impl CheckedPackage {
+    pub fn root(&self) -> &Path {
+        &self.root
+    }
+    pub fn manifest_sha256(&self) -> &str {
+        &self.manifest_sha256
+    }
+    pub fn index(&self) -> &PackageIndex {
+        &self.index
+    }
+    pub fn modules(&self) -> &[CheckedModule] {
+        &self.modules
+    }
+    /// Reject a changed manifest, source bytes, or canonical target after validation.
+    pub fn verify_unchanged(&self) -> Result<(), Vec<PackageDiagnostic>> {
+        let manifest = self.root.join("cgx2.toml");
+        let manifest_path = canonicalize_contained(&manifest, &self.root).map_err(|d| vec![d])?;
+        let bytes = read_limited(&manifest_path, &manifest, MAX_MANIFEST_BYTES)?;
+        if digest(&bytes) != self.manifest_sha256 {
+            return Err(vec![PackageDiagnostic::new(
+                "CGP018",
+                "manifest changed after package validation",
+                &manifest,
+                None,
+            )]);
+        }
+        for module in &self.modules {
+            let listed = self.root.join(&module.source);
+            let canonical = canonicalize_contained(&listed, &self.root).map_err(|d| vec![d])?;
+            if canonical != module.canonical_path {
+                return Err(vec![PackageDiagnostic::new(
+                    "CGP018",
+                    "source target changed after package validation",
+                    &listed,
+                    None,
+                )]);
+            }
+            let bytes = read_limited(&canonical, &listed, MAX_SOURCE_BYTES)?;
+            if digest(&bytes) != module.source_sha256 {
+                return Err(vec![PackageDiagnostic::new(
+                    "CGP018",
+                    "source changed after package validation",
+                    &listed,
+                    None,
+                )]);
+            }
+        }
+        Ok(())
+    }
+}
+
+fn digest(bytes: &[u8]) -> String {
+    format!("{:x}", Sha256::digest(bytes))
 }
 
 /// Load only manifest-listed `.cg` files under a canonical package root.
 /// No source is read until all listed paths have passed containment checks.
 pub fn load_package(root: &Path) -> Result<PackageIndex, Vec<PackageDiagnostic>> {
+    load_checked_package(root).map(|checked| checked.index)
+}
+
+/// Load and statically check a package, retaining the exact checked source bytes.
+pub fn load_checked_package(root: &Path) -> Result<CheckedPackage, Vec<PackageDiagnostic>> {
     let canonical_root = fs::canonicalize(root).map_err(|error| {
         vec![PackageDiagnostic::new(
             "CGP005",
@@ -208,6 +315,7 @@ pub fn load_package(root: &Path) -> Result<PackageIndex, Vec<PackageDiagnostic>>
     let canonical_manifest =
         canonicalize_contained(&manifest_path, &canonical_root).map_err(|d| vec![d])?;
     let manifest_bytes = read_limited(&canonical_manifest, &manifest_path, MAX_MANIFEST_BYTES)?;
+    let manifest_sha256 = digest(&manifest_bytes);
     let manifest_text = std::str::from_utf8(&manifest_bytes).map_err(|error| {
         vec![PackageDiagnostic::new(
             "CGP004",
@@ -350,6 +458,9 @@ pub fn load_package(root: &Path) -> Result<PackageIndex, Vec<PackageDiagnostic>>
         parsed_sources.push(ParsedSource {
             source: relative,
             listed,
+            canonical,
+            text: source.to_owned(),
+            sha256: digest(&bytes),
             module: parsed,
             name,
         });
@@ -465,6 +576,7 @@ pub fn load_package(root: &Path) -> Result<PackageIndex, Vec<PackageDiagnostic>>
         .collect();
     let public_names: BTreeSet<String> = declarations.keys().cloned().collect();
     let mut modules = Vec::new();
+    let mut checked_modules = Vec::new();
     for source in parsed_sources {
         if !source.module.imports.is_empty() && contains_memory_script(&source.module) {
             errors.push(PackageDiagnostic::new(
@@ -515,7 +627,7 @@ pub fn load_package(root: &Path) -> Result<PackageIndex, Vec<PackageDiagnostic>>
         let mut calls = Vec::new();
         collect_calls(&source.module, &public_names, &mut calls);
         modules.push(ModuleRecord {
-            source: source.source,
+            source: source.source.clone(),
             name: source.name,
             api,
             imports: source
@@ -526,18 +638,31 @@ pub fn load_package(root: &Path) -> Result<PackageIndex, Vec<PackageDiagnostic>>
                 .collect(),
             resolved_public_calls: calls,
         });
+        checked_modules.push(CheckedModule {
+            source: source.source,
+            canonical_path: source.canonical,
+            source_sha256: source.sha256,
+            text: source.text,
+            syntax: source.module,
+            typed,
+        });
     }
     if !errors.is_empty() {
         return Err(errors);
     }
     modules.sort_by(|a, b| a.name.cmp(&b.name).then(a.source.cmp(&b.source)));
-    Ok(PackageIndex {
-        schema_version: 2,
-        name: manifest.name,
-        entry: PathBuf::from(manifest.entry.value),
-        imports_supported: true,
-        modules,
-        topological_order,
+    Ok(CheckedPackage {
+        root: canonical_root,
+        manifest_sha256,
+        index: PackageIndex {
+            schema_version: 2,
+            name: manifest.name,
+            entry: PathBuf::from(manifest.entry.value),
+            imports_supported: true,
+            modules,
+            topological_order,
+        },
+        modules: checked_modules,
     })
 }
 

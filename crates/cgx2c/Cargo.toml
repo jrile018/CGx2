@@ -7,6 +7,7 @@ edition = "2024"
 cgx2-syntax = { path = "../cgx2-syntax" }
 cgx2-sema = { path = "../cgx2-sema" }
 cgx2-emit-rust = { path = "../cgx2-emit-rust" }
+cgx2-package = { path = "../cgx2-package" }
 sha2 = "0.10"
 
 [dev-dependencies]

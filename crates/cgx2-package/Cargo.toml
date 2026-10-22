@@ -7,3 +7,4 @@ edition = "2021"
 cgx2-api-index = { path = "../cgx2-api-index" }
 cgx2-sema = { path = "../cgx2-sema" }
 cgx2-syntax = { path = "../cgx2-syntax" }
+sha2 = "0.10"

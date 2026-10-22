@@ -1,6 +1,8 @@
 # CGx2 package index preview
 
-`cgx2-package::load_package(root)` reads `root/cgx2.toml`, checks exactly the listed `.cg` files, and returns a deterministic static `PackageIndex`. It resolves explicit local imports, rejects cycles, and type-checks imported public scalar calls. It does not execute imported code, install dependencies, or generate cross-module code. `cgx2 run` and `cgx2c build` cannot run imported functions yet; their standalone semantic check rejects the qualified call.
+`cgx2-package::load_package(root)` reads `root/cgx2.toml`, checks exactly the listed `.cg` files, and returns a deterministic static `PackageIndex`. It resolves explicit local imports, rejects cycles, and type-checks imported public scalar calls. `cgx2c build --package ROOT` executes the bounded scalar subset; `cgx2 run` remains standalone.
+
+`load_checked_package(root)` returns a read-only `CheckedPackage` with `index()`, `root()`, `manifest_sha256()`, and `modules()`. Each `CheckedModule` exposes its manifest-relative `source()`, `canonical_path()`, `source_sha256()`, checked `text()`, `syntax()`, and `typed()`. The loader reads each source once for parsing and typing. Call `verify_unchanged()` before publishing a generated artifact; it rechecks manifest/source SHA-256 and canonical source targets and reports `CGP018` on changed bytes or targets. The compiler checks again after `rustc` and before installation. Hashes identify the validated inputs, not a reproducible build attestation.
 
 ## Manifest version 1 subset
 

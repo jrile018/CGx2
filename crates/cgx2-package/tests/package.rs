@@ -2,7 +2,28 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicU64, Ordering};
 
-use cgx2_package::load_package;
+use cgx2_package::{load_checked_package, load_package};
+
+#[test]
+fn checked_snapshot_rejects_manifest_and_source_mutations() {
+    let f = Fixture::new();
+    f.manifest("schema_version = 1\nname = \"demo\"\nentry = \"src/main.cg\"\nsources = [\"src/main.cg\"]\n");
+    f.write(
+        "src/main.cg",
+        "module demo.main\nfn main() -> i64:\n    7\n",
+    );
+    let checked = load_checked_package(f.root()).unwrap();
+    assert!(checked.verify_unchanged().is_ok());
+    assert_eq!(checked.modules()[0].source(), Path::new("src/main.cg"));
+    f.write(
+        "src/main.cg",
+        "module demo.main\nfn main() -> i64:\n    8\n",
+    );
+    assert_eq!(checked.verify_unchanged().unwrap_err()[0].code, "CGP018");
+    let checked = load_checked_package(f.root()).unwrap();
+    f.manifest("schema_version = 1\nname = \"new\"\nentry = \"src/main.cg\"\nsources = [\"src/main.cg\"]\n");
+    assert_eq!(checked.verify_unchanged().unwrap_err()[0].code, "CGP018");
+}
 
 static NEXT_DIR: AtomicU64 = AtomicU64::new(0);
 

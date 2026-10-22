@@ -6,6 +6,7 @@ edition = "2024"
 [dependencies]
 cgx2-syntax = { path = "../cgx2-syntax" }
 cgx2-sema = { path = "../cgx2-sema" }
+cgx2-package = { path = "../cgx2-package" }
 
 [dev-dependencies]
 cgx2-cli = { path = "../cgx2-cli" }

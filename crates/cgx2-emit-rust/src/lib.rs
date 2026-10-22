@@ -1,13 +1,239 @@
 //! Readable, standalone Rust output for checked CGx2 scalar programs.
 
+use cgx2_package::CheckedPackage;
 use cgx2_sema::{Type, TypedModule, check_module};
 use cgx2_syntax::{AssignOp, BinaryOp, Expr, ExprKind, Module, Span, Stmt, StmtKind, TypeSyntax};
+use std::collections::{BTreeMap, BTreeSet};
+use std::path::PathBuf;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct EmitDiagnostic {
     pub code: &'static str,
     pub message: String,
     pub span: Span,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct PackageEmitDiagnostic {
+    pub file: PathBuf,
+    pub diagnostic: EmitDiagnostic,
+}
+
+/// Emit one standalone Rust program from a checked, immutable local package snapshot.
+pub fn emit_package_rust(package: &CheckedPackage) -> Result<String, Vec<PackageEmitDiagnostic>> {
+    let mut errors = Vec::new();
+    let by_name: BTreeMap<_, _> = package
+        .modules()
+        .iter()
+        .filter_map(|source| {
+            source
+                .syntax()
+                .name
+                .as_ref()
+                .map(|name| (name.segments.join("."), source))
+        })
+        .collect();
+    let entry = package
+        .modules()
+        .iter()
+        .find(|source| source.source() == package.index().entry);
+    let Some(entry) = entry else {
+        return Err(vec![PackageEmitDiagnostic {
+            file: package.index().entry.clone(),
+            diagnostic: EmitDiagnostic::new(
+                "CGRS001",
+                "package entry is not a checked module",
+                Span { start: 0, end: 0 },
+            ),
+        }]);
+    };
+    let Some(entry_name) = entry.syntax().name.as_ref().map(|p| p.segments.join(".")) else {
+        return Err(vec![PackageEmitDiagnostic {
+            file: entry.source().to_path_buf(),
+            diagnostic: EmitDiagnostic::new(
+                "CGRS001",
+                "package entry requires a module declaration",
+                entry.syntax().span,
+            ),
+        }]);
+    };
+    for name in &package.index().topological_order {
+        let Some(source) = by_name.get(name) else {
+            continue;
+        };
+        let local: BTreeSet<_> = source
+            .syntax()
+            .functions
+            .iter()
+            .map(|f| f.name.as_str())
+            .collect();
+        let allowed: BTreeSet<String> = source
+            .syntax()
+            .imports
+            .iter()
+            .filter_map(|path| {
+                let imported = path.segments.join(".");
+                by_name.get(&imported).map(|target| (imported, target))
+            })
+            .flat_map(|(imported, target)| {
+                target
+                    .syntax()
+                    .functions
+                    .iter()
+                    .filter(|f| f.public)
+                    .map(move |f| format!("{imported}.{}", f.name))
+            })
+            .collect();
+        if !source.syntax().statements.is_empty() {
+            errors.push(package_error(
+                source,
+                EmitDiagnostic::new(
+                    "CGRS001",
+                    "script-style package modules are unsupported",
+                    source.syntax().statements[0].span,
+                ),
+            ));
+        }
+        for function in &source.syntax().functions {
+            let mut local_errors = Vec::new();
+            for parameter in &function.parameters {
+                validate_type(&parameter.ty, &mut local_errors);
+            }
+            if let Some(ty) = &function.return_type {
+                validate_type(ty, &mut local_errors);
+            }
+            validate_block(
+                &function.body,
+                false,
+                &local,
+                Some(&allowed),
+                &mut local_errors,
+            );
+            errors.extend(local_errors.into_iter().map(|d| package_error(source, d)));
+        }
+        for signature in source.typed().functions.values() {
+            if signature.parameters.iter().any(|ty| !scalar_type(ty))
+                || !scalar_type(&signature.return_type)
+            {
+                errors.push(package_error(
+                    source,
+                    EmitDiagnostic::new(
+                        "CGRS001",
+                        "function uses a non-scalar inferred type",
+                        signature.span,
+                    ),
+                ));
+            }
+        }
+        for (span, ty) in source.typed().expressions.iter() {
+            if !scalar_type(ty) {
+                errors.push(package_error(
+                    source,
+                    EmitDiagnostic::new("CGRS001", "expression uses a non-scalar type", span),
+                ));
+            }
+        }
+        let mut local_errors = Vec::new();
+        let mut stack = Vec::new();
+        let mut seen = BTreeSet::new();
+        for function in &source.syntax().functions {
+            find_cycle(
+                &function.name,
+                source.syntax(),
+                &mut stack,
+                &mut seen,
+                &mut local_errors,
+            );
+        }
+        errors.extend(local_errors.into_iter().map(|d| package_error(source, d)));
+    }
+    match entry.typed().functions.get("main") {
+        Some(main) if !main.parameters.is_empty() => errors.push(package_error(
+            entry,
+            EmitDiagnostic::new(
+                "CGRS001",
+                "package main must have zero parameters",
+                main.span,
+            ),
+        )),
+        Some(main)
+            if !matches!(
+                main.return_type,
+                Type::I64 | Type::Bool | Type::String | Type::Unit
+            ) =>
+        {
+            errors.push(package_error(
+                entry,
+                EmitDiagnostic::new(
+                    "CGRS001",
+                    "package main return type is unsupported",
+                    main.span,
+                ),
+            ))
+        }
+        None => errors.push(package_error(
+            entry,
+            EmitDiagnostic::new(
+                "CGRS001",
+                "package entry requires a main function",
+                entry.syntax().span,
+            ),
+        )),
+        _ => {}
+    }
+    if !errors.is_empty() {
+        return Err(errors);
+    }
+    let mut out = String::from(PRELUDE);
+    for name in &package.index().topological_order {
+        let source = by_name[name];
+        for function in &source.syntax().functions {
+            let signature = &source.typed().functions[&function.name];
+            let params = function
+                .parameters
+                .iter()
+                .zip(&signature.parameters)
+                .map(|(p, ty)| format!(", {}: {}", rust_name(&p.name), rust_type(ty)))
+                .collect::<String>();
+            out.push_str(&format!(
+                "fn {}(ctx: &mut Cgx2Context, args: &[String]{params}) -> Result<{}, String> {{\n",
+                rust_name(&format!("{name}.{}", function.name)),
+                rust_type(&signature.return_type)
+            ));
+            out.push_str("    ctx.enter()?;\n    let result = (|| -> Result<_, String> {\n");
+            emit_block_package(&function.body, 2, &mut out, name);
+            out.push_str("    })();\n    ctx.leave();\n    result\n}\n\n");
+        }
+    }
+    let result_type = &entry.typed().functions["main"].return_type;
+    out.push_str("fn main() {\n    let args: Vec<String> = std::env::args().skip(1).collect();\n    let mut ctx = Cgx2Context::default();\n");
+    out.push_str(&format!(
+        "    match {}(&mut ctx, &args) {{\n",
+        rust_name(&format!("{entry_name}.main"))
+    ));
+    if *result_type == Type::Unit {
+        out.push_str("        Ok(()) => {},\n");
+    } else {
+        out.push_str("        Ok(value) => println!(\"{value}\"),\n");
+    }
+    out.push_str(
+        "        Err(message) => { eprintln!(\"{message}\"); std::process::exit(1); }\n    }\n}\n",
+    );
+    Ok(out)
+}
+
+fn package_error(
+    source: &cgx2_package::CheckedModule,
+    diagnostic: EmitDiagnostic,
+) -> PackageEmitDiagnostic {
+    PackageEmitDiagnostic {
+        file: source.source().to_path_buf(),
+        diagnostic,
+    }
+}
+
+fn scalar_type(ty: &Type) -> bool {
+    matches!(ty, Type::I64 | Type::Bool | Type::String | Type::Unit)
 }
 
 impl EmitDiagnostic {
@@ -42,9 +268,9 @@ pub fn emit_rust(module: &Module, checked: &TypedModule) -> Result<String, Vec<E
         if let Some(ty) = &function.return_type {
             validate_type(ty, &mut errors);
         }
-        validate_block(&function.body, false, &functions, &mut errors);
+        validate_block(&function.body, false, &functions, None, &mut errors);
     }
-    validate_block(&module.statements, true, &functions, &mut errors);
+    validate_block(&module.statements, true, &functions, None, &mut errors);
     if !module.functions.is_empty() {
         match module.functions.iter().find(|f| f.name == "main") {
             Some(main) if !main.parameters.is_empty() => errors.push(EmitDiagnostic::new(
@@ -194,6 +420,7 @@ fn validate_block(
     stmts: &[Stmt],
     script: bool,
     functions: &std::collections::BTreeSet<&str>,
+    allowed_imports: Option<&BTreeSet<String>>,
     errors: &mut Vec<EmitDiagnostic>,
 ) {
     for stmt in stmts {
@@ -204,7 +431,7 @@ fn validate_block(
                 if let Some(ty) = annotation {
                     validate_type(ty, errors);
                 }
-                validate_expr(value, functions, errors);
+                validate_expr(value, functions, allowed_imports, errors);
             }
             StmtKind::Assign { target, value, .. } => {
                 if target.segments.len() != 1 {
@@ -214,7 +441,7 @@ fn validate_block(
                         target.span,
                     ));
                 }
-                validate_expr(value, functions, errors);
+                validate_expr(value, functions, allowed_imports, errors);
             }
             StmtKind::Return(value) => {
                 if script {
@@ -225,10 +452,10 @@ fn validate_block(
                     ));
                 }
                 if let Some(expr) = value {
-                    validate_expr(expr, functions, errors);
+                    validate_expr(expr, functions, allowed_imports, errors);
                 }
             }
-            StmtKind::Expr(expr) => validate_expr(expr, functions, errors),
+            StmtKind::Expr(expr) => validate_expr(expr, functions, allowed_imports, errors),
             StmtKind::For { .. } => errors.push(EmitDiagnostic::new(
                 "CGRS001",
                 "for loops are unsupported by Rust scalar emission",
@@ -246,6 +473,7 @@ fn validate_block(
 fn validate_expr(
     expr: &Expr,
     functions: &std::collections::BTreeSet<&str>,
+    allowed_imports: Option<&BTreeSet<String>>,
     errors: &mut Vec<EmitDiagnostic>,
 ) {
     match &expr.kind {
@@ -269,8 +497,8 @@ fn validate_expr(
             ))
         }
         ExprKind::Binary { left, right, .. } => {
-            validate_expr(left, functions, errors);
-            validate_expr(right, functions, errors);
+            validate_expr(left, functions, allowed_imports, errors);
+            validate_expr(right, functions, allowed_imports, errors);
         }
         ExprKind::Call { callee, arguments } => {
             if matches!(&callee.kind, ExprKind::Name(path) if path.segments.first().is_some_and(|s| s == "memory"))
@@ -282,15 +510,19 @@ fn validate_expr(
                 ));
                 return;
             }
-            if !matches!(&callee.kind, ExprKind::Name(path) if path.segments.len() == 1) {
+            if !matches!(&callee.kind, ExprKind::Name(path) if path.segments.len() == 1 || allowed_imports.is_some_and(|allowed| allowed.contains(&path.segments.join("."))))
+            {
                 errors.push(EmitDiagnostic::new(
                     "CGRS001",
-                    "computed or qualified calls are unsupported by Rust scalar emission",
+                    "computed or unlisted qualified calls are unsupported by Rust scalar emission",
                     callee.span,
                 ));
             } else if let ExprKind::Name(path) = &callee.kind {
-                let name = path.segments[0].as_str();
-                if !matches!(name, "arg" | "arg_count") && !functions.contains(name) {
+                let name = path.segments.join(".");
+                if path.segments.len() == 1
+                    && !matches!(name.as_str(), "arg" | "arg_count")
+                    && !functions.contains(name.as_str())
+                {
                     errors.push(EmitDiagnostic::new(
                         "CGRS001",
                         format!("unknown or unsupported call `{name}` for Rust scalar emission"),
@@ -306,7 +538,7 @@ fn validate_expr(
                         arg.span,
                     ));
                 }
-                validate_expr(&arg.value, functions, errors);
+                validate_expr(&arg.value, functions, allowed_imports, errors);
             }
         }
         _ => {}
@@ -407,6 +639,14 @@ fn tail_type(stmts: &[Stmt], typed: &TypedModule) -> Type {
 }
 
 fn emit_block(stmts: &[Stmt], indent: usize, out: &mut String) {
+    emit_block_context(stmts, indent, out, None);
+}
+
+fn emit_block_package(stmts: &[Stmt], indent: usize, out: &mut String, module: &str) {
+    emit_block_context(stmts, indent, out, Some(module));
+}
+
+fn emit_block_context(stmts: &[Stmt], indent: usize, out: &mut String, module: Option<&str>) {
     let pad = "    ".repeat(indent);
     for (index, stmt) in stmts.iter().enumerate() {
         out.push_str(&format!("{pad}ctx.step()?;\n"));
@@ -422,29 +662,35 @@ fn emit_block(stmts: &[Stmt], indent: usize, out: &mut String) {
                     "{pad}let {}{} = {}?;\n",
                     if *mutable { "mut " } else { "" },
                     rust_name(name),
-                    emit_expr(value)
+                    emit_expr_context(value, module)
                 ));
             }
             StmtKind::Assign { target, op, value } => {
                 let name = rust_name(&target.segments[0]);
                 match op {
-                    AssignOp::Set => {
-                        out.push_str(&format!("{pad}{name} = {}?;\n", emit_expr(value)))
-                    }
+                    AssignOp::Set => out.push_str(&format!(
+                        "{pad}{name} = {}?;\n",
+                        emit_expr_context(value, module)
+                    )),
                     AssignOp::Add => out.push_str(&format!(
                         "{pad}let cgx2_rhs = {}?;\n{pad}{name} = cgx2_add({name}, cgx2_rhs)?;\n",
-                        emit_expr(value)
+                        emit_expr_context(value, module)
                     )),
                 }
             }
-            StmtKind::Return(Some(expr)) => {
-                out.push_str(&format!("{pad}return Ok({}?);\n", emit_expr(expr)))
-            }
+            StmtKind::Return(Some(expr)) => out.push_str(&format!(
+                "{pad}return Ok({}?);\n",
+                emit_expr_context(expr, module)
+            )),
             StmtKind::Return(None) => out.push_str(&format!("{pad}return Ok(());\n")),
-            StmtKind::Expr(expr) if last => {
-                out.push_str(&format!("{pad}return Ok({}?);\n", emit_expr(expr)))
-            }
-            StmtKind::Expr(expr) => out.push_str(&format!("{pad}let _ = {}?;\n", emit_expr(expr))),
+            StmtKind::Expr(expr) if last => out.push_str(&format!(
+                "{pad}return Ok({}?);\n",
+                emit_expr_context(expr, module)
+            )),
+            StmtKind::Expr(expr) => out.push_str(&format!(
+                "{pad}let _ = {}?;\n",
+                emit_expr_context(expr, module)
+            )),
             StmtKind::For { .. } | StmtKind::NoGc { .. } => unreachable!("validated source"),
         }
     }
@@ -456,7 +702,7 @@ fn emit_block(stmts: &[Stmt], indent: usize, out: &mut String) {
     }
 }
 
-fn emit_expr(expr: &Expr) -> String {
+fn emit_expr_context(expr: &Expr, module: Option<&str>) -> String {
     let value = match &expr.kind {
         ExprKind::Name(path) => {
             format!("Ok::<_, String>({}.clone())", rust_name(&path.segments[0]))
@@ -476,8 +722,8 @@ fn emit_expr(expr: &Expr) -> String {
             };
             format!(
                 "{{ let left = {}?; let right = {}?; {helper}(left, right) }}",
-                emit_expr(left),
-                emit_expr(right)
+                emit_expr_context(left, module),
+                emit_expr_context(right, module)
             )
         }
         ExprKind::Call { callee, arguments } => {
@@ -488,25 +734,34 @@ fn emit_expr(expr: &Expr) -> String {
             for (index, arg) in arguments.iter().enumerate() {
                 prefix.push_str(&format!(
                     "let cgx2_arg_{index} = {}?; ",
-                    emit_expr(&arg.value)
+                    emit_expr_context(&arg.value, module)
                 ));
             }
             let args = (0..arguments.len())
                 .map(|i| format!("cgx2_arg_{i}"))
                 .collect::<Vec<_>>()
                 .join(", ");
-            let call = match path.segments[0].as_str() {
-                "arg_count" => "cgx2_arg_count(args)".to_owned(),
-                "arg" => format!("cgx2_arg(args, {args})"),
-                other => format!(
-                    "{}(ctx, args{})",
-                    rust_name(other),
-                    if args.is_empty() {
-                        String::new()
+            let call = match path.segments.as_slice() {
+                [name] if name == "arg_count" => "cgx2_arg_count(args)".to_owned(),
+                [name] if name == "arg" => format!("cgx2_arg(args, {args})"),
+                _ => {
+                    let full_name = if path.segments.len() > 1 {
+                        path.segments.join(".")
+                    } else if let Some(module) = module {
+                        format!("{module}.{}", path.segments[0])
                     } else {
-                        format!(", {args}")
-                    }
-                ),
+                        path.segments[0].clone()
+                    };
+                    format!(
+                        "{}(ctx, args{})",
+                        rust_name(&full_name),
+                        if args.is_empty() {
+                            String::new()
+                        } else {
+                            format!(", {args}")
+                        }
+                    )
+                }
             };
             format!("{{ {prefix}{call} }}")
         }
