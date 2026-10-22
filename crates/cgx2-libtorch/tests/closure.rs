@@ -146,6 +146,7 @@ fn hash(path: &Path) -> String {
 
 unsafe extern "C" {
     fn dlopen(path: *const c_char, flags: c_int) -> *mut c_void;
+    fn dlclose(handle: *mut c_void) -> c_int;
 }
 
 #[test]
@@ -156,6 +157,26 @@ fn closure_accepts_and_rejects_changed_version_and_loader_substitution() {
     let tensor = torch.from_f64(&[3.0]).unwrap();
     assert_eq!(tensor.shape().unwrap(), [1]);
     assert_eq!(tensor.to_vec().unwrap(), vec![3.0]);
+    // An arbitrary executable filename without a SONAME is benign while its
+    // mapped inode is inspectable. Replacing the pathname must fail closed.
+    let arbitrary = good.root.join("arbitrary_executable");
+    let dep_source = Path::new(env!("CARGO_MANIFEST_DIR")).join("fixtures/closure/dep.c");
+    compile(&["-shared", "-fPIC", "-nostdlib"], &dep_source, &arbitrary);
+    let arbitrary_name = CString::new(arbitrary.to_str().unwrap()).unwrap();
+    let arbitrary_handle = unsafe { dlopen(arbitrary_name.as_ptr(), 2) };
+    assert!(!arbitrary_handle.is_null());
+    let closure = verify_libtorch_closure(&good.root, &good.binding).unwrap();
+    assert!(closure.verify_preloaded().is_ok());
+    let original = good.root.join("arbitrary_original");
+    fs::copy(&arbitrary, &original).unwrap();
+    fs::remove_file(&arbitrary).unwrap();
+    fs::copy(&original, &arbitrary).unwrap();
+    assert!(matches!(
+        closure.verify_preloaded(),
+        Err(cgx2_bind::ClosureError::UnverifiedLoader(message))
+            if message.contains("executable mapping was deleted")
+    ));
+    assert_eq!(unsafe { dlclose(arbitrary_handle) }, 0);
     for line in fs::read_to_string("/proc/self/maps").unwrap().lines() {
         if line.contains(&good.root.to_string_lossy().to_string())
             && (line.contains(FACADE) || line.contains(DEP))
@@ -377,11 +398,15 @@ fn real_pinned_libtorch_when_installed() {
         PathBuf::from(std::env::var("CGX2_LIBTORCH_PACKAGE").expect("set CGX2_LIBTORCH_PACKAGE"));
     assert!(check_package(&root).passed());
     let torch = unsafe { Torch::open_pinned(&root, "torch_cpu") }.unwrap();
-    let x = torch.from_f64(&[1.0, 2.0, 3.0]).unwrap();
-    let y = torch.from_f64(&[4.0, 5.0, 6.0]).unwrap();
-    let sum = x.add(&y).unwrap();
+    let mut x = torch.from_f64(&[1.0, 2.0, 3.0]).unwrap();
+    let mut y = torch.from_f64(&[4.0, 5.0, 6.0]).unwrap();
+    let mut sum = x.add(&y).unwrap();
     assert_eq!(sum.shape().unwrap(), [3]);
     assert_eq!(sum.to_vec().unwrap(), vec![5.0, 7.0, 9.0]);
+    sum.release().unwrap();
+    x.release().unwrap();
+    y.release().unwrap();
+    assert_eq!(sum.release(), Err(Error::AlreadyReleased));
     assert!(
         !fs::read_to_string("/proc/self/maps")
             .unwrap()

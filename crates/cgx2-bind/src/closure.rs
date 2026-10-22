@@ -140,7 +140,7 @@ impl VerifiedClosure {
             use std::os::unix::fs::MetadataExt;
             let maps = read_maps()?;
             let mut observed = BTreeSet::new();
-            let mut other_elf = BTreeSet::new();
+            let mut other_elf = BTreeMap::<PathBuf, (String, u64)>::new();
             let mut expected = BTreeMap::new();
             for (index, (pin, _)) in self.pins.iter().enumerate() {
                 let basename = pin
@@ -207,7 +207,25 @@ impl VerifiedClosure {
                     // A preloaded dependency can have any filename. Its ELF SONAME,
                     // rather than a `.so` suffix on the mapped path, can satisfy
                     // the facade's DT_NEEDED before post-load verification runs.
-                    other_elf.insert(path.to_path_buf());
+                    if fields.get(6) == Some(&"(deleted)") {
+                        return Err(ClosureError::UnverifiedLoader(format!(
+                            "executable mapping was deleted: {}",
+                            path.display()
+                        )));
+                    }
+                    let inode = fields[4].parse().map_err(|_| {
+                        ClosureError::UnverifiedLoader("bad executable maps inode".into())
+                    })?;
+                    let identity = (fields[3].to_owned(), inode);
+                    if other_elf
+                        .insert(path.to_path_buf(), identity.clone())
+                        .is_some_and(|previous| previous != identity)
+                    {
+                        return Err(ClosureError::UnverifiedLoader(format!(
+                            "executable mapping changed identity: {}",
+                            path.display()
+                        )));
+                    }
                     if other_elf.len() > MAX_MAPPED_ELF_FILES {
                         return Err(ClosureError::UnverifiedLoader(
                             "too many mapped ELF files".into(),
@@ -215,13 +233,42 @@ impl VerifiedClosure {
                     }
                 }
             }
-            for path in other_elf {
+            for (path, (mapped_dev, mapped_inode)) in other_elf {
+                let metadata = fs::metadata(&path).map_err(|error| {
+                    ClosureError::UnverifiedLoader(format!(
+                        "cannot inspect executable mapping {}: {error}",
+                        path.display()
+                    ))
+                })?;
+                let dev = metadata.dev();
+                let major = ((dev >> 8) & 0xfff) | ((dev >> 32) & 0xfffff000);
+                let minor = (dev & 0xff) | ((dev >> 12) & 0xffffff00);
+                if metadata.ino() != mapped_inode
+                    || format!("{major:02x}:{minor:02x}") != mapped_dev
+                {
+                    return Err(ClosureError::UnverifiedLoader(format!(
+                        "executable mapping path changed inode: {}",
+                        path.display()
+                    )));
+                }
                 let (soname, _) = elf_dynamic(&path, false).map_err(|error| {
                     ClosureError::UnverifiedLoader(format!(
                         "cannot identify mapped ELF {}: {error}",
                         path.display()
                     ))
                 })?;
+                let inspected = fs::metadata(&path).map_err(|error| {
+                    ClosureError::UnverifiedLoader(format!(
+                        "mapped ELF path changed during inspection {}: {error}",
+                        path.display()
+                    ))
+                })?;
+                if inspected.dev() != metadata.dev() || inspected.ino() != metadata.ino() {
+                    return Err(ClosureError::UnverifiedLoader(format!(
+                        "mapped ELF path changed during inspection: {}",
+                        path.display()
+                    )));
+                }
                 if let Some(soname) = soname {
                     if expected.contains_key(&soname)
                         || soname.starts_with("libtorch")

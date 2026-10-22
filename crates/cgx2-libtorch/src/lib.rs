@@ -2,6 +2,8 @@
 
 use cgx2_bind::{ClosureError, Report, VerifiedClosure, checked_lock, verify_libtorch_closure};
 use cgx2_ffi_native::{Error as NativeError, Library, LibraryDeclaration};
+use std::cell::RefCell;
+use std::collections::HashSet;
 use std::ffi::{CStr, c_char, c_void};
 use std::path::Path;
 use std::ptr::NonNull;
@@ -52,6 +54,7 @@ struct Inner {
     copy: Copy,
     release: Release,
     last_error: LastError,
+    live_handles: RefCell<HashSet<usize>>,
 }
 
 impl Inner {
@@ -63,6 +66,9 @@ impl Inner {
     }
 
     fn check(&self, status: i32) -> Result<(), Error> {
+        // A facade call may have changed the loader state. Do not call even its
+        // error accessor until the closure has been checked again.
+        self.check_pinned()?;
         if status == 0 {
             return Ok(());
         }
@@ -74,6 +80,7 @@ impl Inner {
                 .to_string_lossy()
                 .into_owned()
         };
+        self.check_pinned()?;
         Err(Error::Foreign { status, message })
     }
 
@@ -84,16 +91,30 @@ impl Inner {
         expected_length: usize,
     ) -> Result<Tensor, Error> {
         if let Err(error) = self.check(status) {
-            if !raw.is_null() {
+            // A failed foreign call may still return an owned output. Never
+            // release a pointer already owned by another Tensor, or call back
+            // into a closure that became unverifiable during the call.
+            if !raw.is_null()
+                && !matches!(error, Error::UnverifiedLoader(_))
+                && !self.live_handles.borrow().contains(&(raw as usize))
+                && self.check_pinned().is_ok()
+            {
                 unsafe {
                     (self.release)(raw);
                 }
             }
             return Err(error);
         }
+        let raw = NonNull::new(raw).ok_or(Error::NullHandle)?;
+        if !self.live_handles.borrow_mut().insert(raw.as_ptr() as usize) {
+            return Err(Error::Foreign {
+                status: -1,
+                message: "facade returned an already owned handle".into(),
+            });
+        }
         Ok(Tensor {
             inner: self.clone(),
-            raw: Some(NonNull::new(raw).ok_or(Error::NullHandle)?),
+            raw: Some(raw),
             expected_length,
         })
     }
@@ -161,6 +182,7 @@ impl Torch {
                 copy: library.symbol("cgx2_torch_copy_f64")?,
                 release: library.symbol("cgx2_torch_release")?,
                 last_error: library.symbol("cgx2_torch_last_error")?,
+                live_handles: RefCell::new(HashSet::new()),
                 _library: library,
             }
         };
@@ -252,9 +274,13 @@ impl Tensor {
     }
 
     pub fn release(&mut self) -> Result<(), Error> {
-        self.inner.check_pinned()?;
         let raw = self.raw.ok_or(Error::AlreadyReleased)?;
+        self.inner.check_pinned()?;
         self.raw = None;
+        self.inner
+            .live_handles
+            .borrow_mut()
+            .remove(&(raw.as_ptr() as usize));
         self.inner
             .check(unsafe { (self.inner.release)(raw.as_ptr()) })
     }

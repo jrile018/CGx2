@@ -56,11 +56,19 @@ int32_t cgx2_torch_f64_cpu(const double *values, uint64_t length, void **output)
         error_message = "invalid tensor input";
         return 1;
     }
+    if (length && (values[0] == -109 || values[0] == -110) && next_slot) {
+        *output = &slots[0]; /* deliberately violate distinct-handle ABI */
+        if (values[0] == -110) {
+            error_message = "injected failure with aliased handle";
+            return 7;
+        }
+        return 0;
+    }
     if (length && values[0] == -102) return 0; /* broken success: no handle */
     MockTensor *tensor = allocate();
     if (!tensor) return 1;
     tensor->length = length;
-    tensor->profile = length && values[0] <= -103 && values[0] >= -108 ? (int)-values[0] : 0;
+    tensor->profile = length && values[0] <= -103 && values[0] >= -112 ? (int)-values[0] : 0;
     if (length) memcpy(tensor->values, values, (size_t)length * sizeof(double));
     *output = tensor;
     if (length && values[0] == -101) {
@@ -76,6 +84,10 @@ int32_t cgx2_torch_add(const void *left, const void *right, void **output) {
     if (!output || !a || !b || a->length != b->length) {
         error_message = "shape mismatch or invalid handle";
         return 2;
+    }
+    if (a->profile == 112) {
+        *output = a; /* deliberately violate distinct-handle ABI */
+        return 0;
     }
     MockTensor *sum = allocate();
     if (!sum) return 2;
@@ -117,5 +129,9 @@ int32_t cgx2_torch_release(void *raw) {
     tensor->alive = 0;
     --live_count;
     ++releases;
+    if (tensor->profile == 111) {
+        error_message = "release failed after teardown";
+        return 6;
+    }
     return 0;
 }

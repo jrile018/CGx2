@@ -176,6 +176,54 @@ fn mock_facade_failed_create_cleans_handle_and_never_publishes_values() {
 }
 
 #[test]
+fn aliased_output_never_releases_an_existing_handle() {
+    let mock = Mock::compile(&[]);
+    let torch = mock.open();
+    let owner = torch.from_f64(&[4.0]).unwrap();
+    assert!(matches!(
+        torch.from_f64(&[-109.0]),
+        Err(Error::Foreign { status: -1, .. })
+    ));
+    assert!(matches!(
+        torch.from_f64(&[-110.0]),
+        Err(Error::Foreign { status: 7, .. })
+    ));
+    assert_eq!(owner.to_vec_bounded(1).unwrap(), [4.0]);
+    assert_eq!(mock.counter("cgx2_mock_live_count"), 1);
+    assert_eq!(mock.counter("cgx2_mock_release_count"), 0);
+    let retained = torch.clone();
+    drop(torch);
+    drop(owner);
+    assert_eq!(mock.counter("cgx2_mock_live_count"), 0);
+    assert_eq!(mock.counter("cgx2_mock_release_count"), 1);
+    drop(retained);
+}
+
+#[test]
+fn aliased_add_and_release_error_keep_single_owner() {
+    let mock = Mock::compile(&[]);
+    let torch = mock.open();
+    let owner = torch.from_f64(&[-112.0]).unwrap();
+    assert!(matches!(
+        owner.add(&owner),
+        Err(Error::Foreign { status: -1, .. })
+    ));
+    assert_eq!(owner.to_vec_bounded(1).unwrap(), [-112.0]);
+    let mut uncertain_release = torch.from_f64(&[-111.0]).unwrap();
+    assert!(matches!(
+        uncertain_release.release(),
+        Err(Error::Foreign { status: 6, .. })
+    ));
+    assert_eq!(uncertain_release.release(), Err(Error::AlreadyReleased));
+    drop(uncertain_release);
+    assert_eq!(mock.counter("cgx2_mock_live_count"), 1);
+    assert_eq!(mock.counter("cgx2_mock_release_count"), 1);
+    drop(owner);
+    assert_eq!(mock.counter("cgx2_mock_live_count"), 0);
+    assert_eq!(mock.counter("cgx2_mock_release_count"), 2);
+}
+
+#[test]
 fn mock_facade_c_copy_checks_capacity_before_writing() {
     let mock = Mock::compile(&[]);
     // SAFETY: mock.c declares these exact C signatures; the handle is live

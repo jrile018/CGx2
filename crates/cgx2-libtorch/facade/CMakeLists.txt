@@ -10,7 +10,7 @@ if(NOT Torch_VERSION STREQUAL CGX2_EXPECT_TORCH_VERSION)
 endif()
 
 add_library(cgx2_libtorch_facade SHARED facade.cpp)
-target_compile_features(cgx2_libtorch_facade PRIVATE cxx_std_17)
+target_compile_features(cgx2_libtorch_facade PRIVATE cxx_std_20)
 separate_arguments(CGX2_TORCH_CXX_FLAGS NATIVE_COMMAND "${TORCH_CXX_FLAGS}")
 target_compile_options(cgx2_libtorch_facade PRIVATE ${CGX2_TORCH_CXX_FLAGS})
 target_compile_definitions(cgx2_libtorch_facade PRIVATE CGX2_TORCH_VERSION="${Torch_VERSION}")
