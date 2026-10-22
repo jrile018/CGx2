@@ -1,0 +1,8 @@
+module grid.generation
+import grid.solar
+import grid.wind
+import grid.hydro
+import grid.gas
+import grid.coal
+pub fn charge(units: i64) -> i64:
+    grid.solar.charge(units * 2) + grid.wind.charge(units) + grid.hydro.charge(units) + grid.gas.charge(units) + grid.coal.charge(units)

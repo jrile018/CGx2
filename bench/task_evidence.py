@@ -89,6 +89,111 @@ def finding(items, severity, code, where, detail):
     items.append({"severity": severity, "code": code, "where": where, "detail": detail})
 
 
+def candidate_material(task, base, tier, applicable):
+    """Check executable candidate metadata without running untrusted commands."""
+    if not isinstance(task.get("author_id"), str) or not task["author_id"].strip():
+        raise ValueError("task author identity required for independent review")
+    workspaces = task["workspace_paths"]
+    snapshots = task["repository_snapshots"]
+    references = task["reference_paths"]
+    reference_hashes = task["reference_snapshots"]
+    if set(workspaces) != set(applicable) or set(snapshots) != set(applicable):
+        raise ValueError("each language needs a starter path and exact snapshot")
+    if set(references) != set(applicable) or set(reference_hashes) != set(applicable):
+        raise ValueError("each language needs a private reference path and exact snapshot")
+    hidden = confined_path(base, task["hidden_test_path"])
+    prompt = confined_path(base, task["prompt_path"])
+    if not hidden.is_file() or digest(hidden.read_bytes()) != task["hidden_test_sha256"]:
+        raise ValueError("hidden acceptance file missing or its hash is stale")
+    if not prompt.is_file() or digest(prompt.read_bytes()) != task["prompt_sha256"]:
+        raise ValueError("shared prompt missing or its hash is stale")
+    resolved = []
+    for language in applicable:
+        workspace = confined_path(base, workspaces[language])
+        count, actual = tree_digest(workspace)
+        if not TIERS[tier][0] <= count <= TIERS[tier][1]:
+            raise ValueError(f"{language} starter has {count} files outside {tier} tier")
+        if not is_sha(snapshots[language]) or actual != snapshots[language]:
+            raise ValueError(f"{language} starter snapshot hash is stale")
+        reference = confined_path(base, references[language])
+        _, reference_actual = tree_digest(reference)
+        if not is_sha(reference_hashes[language]) or reference_actual != reference_hashes[language]:
+            raise ValueError(f"{language} private reference snapshot hash is stale")
+        if reference.resolve().is_relative_to(workspace.resolve()):
+            raise ValueError("reference solution leaks into model workspace")
+        resolved.append(workspace.resolve())
+    private_paths = [hidden.resolve(), *(confined_path(base, references[language]).resolve()
+                                          for language in applicable)]
+    if (len(set(resolved)) != len(resolved) or
+            any(private.is_relative_to(w) for private in private_paths for w in resolved)):
+        raise ValueError("shared starter path or hidden acceptance leak")
+    if task["equivalence"]["shared_prompt"] != task["prompt_path"] or task["equivalence"]["same_cases_ref"] != task["hidden_test_ref"]:
+        raise ValueError("baseline/CGx2 prompt or acceptance references differ")
+    if task["equivalence"]["baseline_selected_before_traces"] is not True:
+        raise ValueError("baseline selection must predate traces")
+    if not all(isinstance(task["equivalence"].get(key), str) and task["equivalence"][key].strip()
+               for key in ("input_domain", "output_rule", "known_limit")):
+        raise ValueError("equivalence domain, outputs, and limits required")
+    for key in ("build_commands", "run_commands"):
+        if set(task[key]) != set(applicable):
+            raise ValueError(f"{key} must cover each language")
+        if any(not isinstance(command, list) or not command or
+               any(not isinstance(arg, str) or not arg for arg in command)
+               for command in task[key].values()):
+            raise ValueError(f"{key} must contain concrete argv commands")
+    for language in applicable:
+        build = task["build_commands"][language]
+        run = task["run_commands"][language]
+        if not any(workspaces[language] in arg for arg in build):
+            raise ValueError(f"{language} build command does not name its pinned starter")
+        output_flags = ("--out", "-o")
+        outputs = [build[index + 1] for index, arg in enumerate(build[:-1]) if arg in output_flags]
+        if len(outputs) != 1 or run[0] != outputs[0]:
+            raise ValueError(f"{language} run command differs from build output")
+    if not isinstance(task["acceptance_command"], list) or not task["acceptance_command"]:
+        raise ValueError("independently runnable acceptance command required")
+    if (not any(task["hidden_test_path"] in arg for arg in task["acceptance_command"])
+            or task["task_id"] not in task["acceptance_command"]):
+        raise ValueError("acceptance command must name the pinned oracle and task")
+    for key in ("allowed_tools", "allowed_docs", "acceptance_criteria"):
+        if not isinstance(task.get(key), list) or not task[key]:
+            raise ValueError(f"{key} required")
+    scope = task["feature_scope"]
+    if not isinstance(scope, dict) or not all(scope.get(k) for k in ("memory", "foreign", "syntax")):
+        raise ValueError("memory, foreign, and syntax scope required")
+    if not all(task["expected_outcomes"].get(k) for k in ("starter", "reference")):
+        raise ValueError("starter and reference correctness outcomes required")
+    return resolved, private_paths
+
+
+def review_records(task, base, frozen_at):
+    """Require two inspectable, hash-pinned independent review artifacts."""
+    records = task["review_records"]
+    if not isinstance(records, list) or len(records) < 2:
+        raise ValueError("two independent review records required")
+    reviewers = set()
+    for entry in records:
+        path = confined_path(base, entry["path"])
+        if any(path.resolve().is_relative_to(confined_path(base, workspace).resolve())
+               for workspace in task["workspace_paths"].values()):
+            raise ValueError("review artifact leaks into model workspace")
+        if not path.is_file() or digest(path.read_bytes()) != entry["sha256"]:
+            raise ValueError("review artifact missing or hash mismatch")
+        review = read_json(path)
+        reviewer = review["reviewer_id"]
+        if (review["task_id"] != task["task_id"] or reviewer == task["author_id"]
+                or reviewer in reviewers or reviewer not in task["reviewer_ids"]):
+            raise ValueError("review identity not independent or mismatched")
+        if any(review["approvals"].get(k) is not True
+               for k in ("task", "equivalence", "hidden_test", "baseline")):
+            raise ValueError("review must approve task, equivalence, hidden test, and baseline")
+        if utc(review["reviewed_at_utc"]) > frozen_at:
+            raise ValueError("review record postdates freeze")
+        reviewers.add(reviewer)
+    if reviewers != set(task["reviewer_ids"]):
+        raise ValueError("review record IDs differ from declared reviewers")
+
+
 def audit(pack, base, run_paths=()):
     """Validate definitions and genuine paired observations before analysis."""
     base = Path(base).resolve()
@@ -105,6 +210,7 @@ def audit(pack, base, run_paths=()):
     tasks = {}
     all_workspaces = []
     all_hidden = []
+    all_private = []
     for index, task in enumerate(pack["tasks"]):
         where = f"tasks[{index}]"
         if not isinstance(task, dict):
@@ -142,6 +248,19 @@ def audit(pack, base, run_paths=()):
                      not TIERS[tier][0] <= task["planned_repository_files"] <= TIERS[tier][1]))):
             finding(findings, "invalid", "task_schema", where, "category, tier, criteria, baseline, applicability, and opaque hidden reference required")
             continue
+        try:
+            resolved, private_paths = candidate_material(task, base, tier, applicable)
+            all_private.extend(private_paths)
+            if not holdout:
+                all_workspaces.extend(resolved)
+                all_hidden.append(private_paths[0])
+        except (KeyError, TypeError, ValueError, OSError) as error:
+            finding(findings, "invalid", "candidate_material", task_id, str(error))
+        if not holdout:
+            if (task.get("status") == "candidate" and
+                    (task.get("reviewer_ids") or task.get("review_records") or task.get("reviewed_at_utc"))):
+                finding(findings, "invalid", "premature_review", task_id,
+                        "candidate must not claim an unverified independent review")
         if task["status"] != "frozen":
             finding(findings, "missing", "independent_review", task_id, "candidate is not a reviewed holdout task")
             continue
@@ -152,6 +271,7 @@ def audit(pack, base, run_paths=()):
                 raise ValueError("two distinct independent reviewer IDs required")
             if utc(task["reviewed_at_utc"]) > utc(pack["freeze"]["frozen_at_utc"]):
                 raise ValueError("review occurred after freeze")
+            review_records(task, base, utc(pack["freeze"]["frozen_at_utc"]))
             hidden = confined_path(base, task["hidden_test_path"])
             if not hidden.is_file() or digest(hidden.read_bytes()) != task["hidden_test_sha256"]:
                 raise ValueError("hidden acceptance bytes differ frozen digest")
@@ -178,6 +298,8 @@ def audit(pack, base, run_paths=()):
             finding(findings, "invalid", "task_freeze", task_id, str(error))
     if any(hidden.is_relative_to(workspace) for hidden in all_hidden for workspace in all_workspaces):
         finding(findings, "invalid", "hidden_leak", "pack", "hidden acceptance test lies in a model workspace")
+    if any(private.is_relative_to(workspace) for private in all_private for workspace in all_workspaces):
+        finding(findings, "invalid", "private_leak", "pack", "private acceptance or reference lies in a model workspace")
     if len(set(all_workspaces)) != len(all_workspaces):
         finding(findings, "invalid", "shared_workspace", "pack", "tasks or languages share a model workspace")
     if not holdout:

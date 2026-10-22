@@ -1,0 +1,4 @@
+schema_version = 1
+name = "quote_credit"
+entry = "src/main.cg"
+sources = ["src/main.cg", "src/pricing.cg", "src/adjust.cg"]

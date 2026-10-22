@@ -1,0 +1,4 @@
+module quote.pricing
+import quote.adjust
+pub fn quote(units: i64, unit_price: i64, shipping: i64, credit: i64) -> i64:
+    quote.adjust.finalize(units * unit_price, shipping, credit)

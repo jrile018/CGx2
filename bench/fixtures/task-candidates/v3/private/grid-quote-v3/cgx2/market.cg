@@ -1,0 +1,6 @@
+module grid.market
+import grid.reserve
+import grid.balancing
+import grid.settlement
+pub fn charge(units: i64) -> i64:
+    grid.reserve.charge(units) + grid.balancing.charge(units) + grid.settlement.charge(units)

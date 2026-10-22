@@ -1,0 +1,6 @@
+module grid.transmission
+import grid.line
+import grid.transformer
+import grid.switch
+pub fn charge(units: i64) -> i64:
+    grid.line.charge(units) + grid.transformer.charge(units) + grid.switch.charge(units)

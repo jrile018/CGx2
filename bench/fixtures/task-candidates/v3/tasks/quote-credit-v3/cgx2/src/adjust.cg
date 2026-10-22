@@ -1,0 +1,3 @@
+module quote.adjust
+pub fn finalize(subtotal: i64, shipping: i64, credit: i64) -> i64:
+    subtotal + shipping + credit

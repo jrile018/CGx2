@@ -1,0 +1,6 @@
+module grid.distribution
+import grid.local
+import grid.meter
+import grid.connection
+pub fn charge(units: i64) -> i64:
+    grid.local.charge(units) + grid.meter.charge(units) + grid.connection.charge(units)

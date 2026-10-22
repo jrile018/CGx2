@@ -1,0 +1,4 @@
+schema_version = 1
+name = "grid_quote"
+entry = "src/main.cg"
+sources = ["src/main.cg", "src/quote.cg", "src/generation.cg", "src/transmission.cg", "src/distribution.cg", "src/market.cg", "src/solar.cg", "src/wind.cg", "src/hydro.cg", "src/gas.cg", "src/coal.cg", "src/line.cg", "src/transformer.cg", "src/switch.cg", "src/local.cg", "src/meter.cg", "src/connection.cg", "src/reserve.cg", "src/balancing.cg", "src/settlement.cg"]

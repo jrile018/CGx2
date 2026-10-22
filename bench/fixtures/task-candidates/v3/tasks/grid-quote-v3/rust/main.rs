@@ -1,0 +1,20 @@
+mod quote;
+mod generation;
+mod transmission;
+mod distribution;
+mod market;
+mod solar;
+mod wind;
+mod hydro;
+mod gas;
+mod coal;
+mod line;
+mod transformer;
+mod switch;
+mod local;
+mod meter;
+mod connection;
+mod reserve;
+mod balancing;
+mod settlement;
+fn main() { println!("{}", quote::total(10)); }

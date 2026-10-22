@@ -1,0 +1,3 @@
+module grid.solar
+pub fn charge(units: i64) -> i64:
+    units * 2

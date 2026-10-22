@@ -1,0 +1,4 @@
+module quote.main
+import quote.pricing
+fn main() -> i64:
+    quote.pricing.quote(7, 120, 18, 34)

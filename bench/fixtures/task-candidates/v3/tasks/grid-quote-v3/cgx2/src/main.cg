@@ -1,0 +1,4 @@
+module grid.main
+import grid.quote
+fn main() -> i64:
+    grid.quote.total(10)

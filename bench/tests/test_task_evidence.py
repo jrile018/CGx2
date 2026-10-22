@@ -15,8 +15,8 @@ class TaskEvidenceTests(unittest.TestCase):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
         self.root = Path(temporary.name)
-        self.candidate = json.loads((Path(__file__).resolve().parents[1] /
-                                     "fixtures/task-candidates/v3/pack.json").read_text())
+        self.candidate_root = Path(__file__).resolve().parents[1] / "fixtures/task-candidates/v3"
+        self.candidate = json.loads((self.candidate_root / "pack.json").read_text())
         self.root.joinpath("private").mkdir()
         for language in ("cgx2", "rust"):
             workspace = self.root / language
@@ -32,6 +32,33 @@ class TaskEvidenceTests(unittest.TestCase):
                          workspace_paths={"cgx2": "cgx2", "rust": "rust"},
                          repository_snapshots={language: evidence.tree_digest(self.root / language)[1]
                                                for language in ("cgx2", "rust")})
+        prompt = self.root / "private/prompt.md"
+        prompt.write_text("Repair the same quote in both languages.\n")
+        self.task["prompt_path"] = "private/prompt.md"
+        self.task["prompt_sha256"] = evidence.digest(prompt.read_bytes())
+        self.task["equivalence"]["shared_prompt"] = self.task["prompt_path"]
+        self.task["reference_paths"] = {}
+        self.task["reference_snapshots"] = {}
+        for language in ("cgx2", "rust"):
+            reference = self.root / f"private/reference-{language}"
+            reference.mkdir()
+            (reference / "fix.txt").write_text("reference repair\n")
+            self.task["reference_paths"][language] = str(reference.relative_to(self.root))
+            self.task["reference_snapshots"][language] = evidence.tree_digest(reference)[1]
+        self.task["build_commands"] = {
+            "cgx2": ["cgx2c", "build", "--package", "cgx2", "--out", "/tmp/test-cgx2"],
+            "rust": ["rustc", "rust/main.rs", "-o", "/tmp/test-rust"]}
+        self.task["run_commands"] = {"cgx2": ["/tmp/test-cgx2"], "rust": ["/tmp/test-rust"]}
+        self.task["acceptance_command"] = ["python3", "private/hidden.py", "--task", self.task["task_id"]]
+        records = []
+        for reviewer in self.task["reviewer_ids"]:
+            path = self.root / f"private/{reviewer}.json"
+            path.write_text(json.dumps({"task_id": self.task["task_id"],
+                "reviewer_id": reviewer, "reviewed_at_utc": "2026-10-22T00:00:00Z",
+                "approvals": {key: True for key in ("task", "equivalence", "hidden_test", "baseline")}}))
+            records.append({"path": str(path.relative_to(self.root)),
+                            "sha256": evidence.digest(path.read_bytes())})
+        self.task["review_records"] = records
         sha = "a" * 64
         self.protocol = {key: sha for key in evidence.SHA_FIELDS}
         self.protocol.update(tool_version="shell-v1", hardware="test-host",
@@ -89,11 +116,11 @@ class TaskEvidenceTests(unittest.TestCase):
         return [item["code"] for item in evidence.audit(self.pack, self.root, run_paths)["findings"]]
 
     def test_candidate_pack_cannot_support_claim(self):
-        result = evidence.report(self.candidate, self.root)
+        result = evidence.report(self.candidate, self.candidate_root)
         self.assertEqual(result["release_verdict"], "insufficient_evidence")
-        self.assertEqual(result["summary"]["candidate_count"], 6)
+        self.assertEqual(result["summary"]["candidate_count"], 2)
         self.assertEqual(result["summary"]["tier_status_counts"],
-                         {"small/candidate": 3, "large/candidate": 3})
+                         {"small/candidate": 1, "large/candidate": 1})
         self.assertIsNone(result["comparison"])
 
     def test_incomplete_and_duplicate_pair(self):

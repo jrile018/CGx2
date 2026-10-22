@@ -17,52 +17,216 @@
   },
   "tasks": [
     {
-      "task_id": "memory-region-failure-v3", "status": "candidate", "tier": "small", "planned_repository_files": 5,
-      "category": "memory_sensitive", "baseline_language": "rust",
-      "baseline_rationale": "Rust's ownership and explicit error paths are the strongest available comparison for a region lifetime repair.",
-      "applicable_languages": ["cgx2", "rust"], "exclusions": {"python": "No equivalent explicit ownership semantics prepared.", "typescript": "No equivalent explicit ownership semantics prepared.", "ocaml": "No equivalent region lifetime starter prepared."},
-      "hidden_test_ref": "private:memory-region-failure-v3", "repository_snapshots": {}, "workspace_paths": {}, "reviewer_ids": [],
-      "acceptance_criteria": ["A failed allocation leaves live handles usable and does not collect a manual region.", "An explicit collect changes the collection counter exactly once.", "A handle cannot escape its closed region."]
+      "task_id": "quote-credit-v3",
+      "status": "candidate",
+      "author_id": "wave13-benchmark-candidates",
+      "review_records": [],
+      "tier": "small",
+      "planned_repository_files": 4,
+      "category": "numerical_edge",
+      "baseline_language": "rust",
+      "baseline_rationale": "Rust checked i64 arithmetic and explicit multi-module composition are the strongest directly comparable available baseline; chosen before any model traces.",
+      "applicable_languages": [
+        "cgx2",
+        "rust"
+      ],
+      "exclusions": {
+        "python": "Unbounded integer semantics require a separately reviewed i64 shim.",
+        "typescript": "Number semantics differ and no reviewed fixed-width starter exists.",
+        "ocaml": "No independently reviewed fixed-width starter exists."
+      },
+      "workspace_paths": {
+        "cgx2": "tasks/quote-credit-v3/cgx2",
+        "rust": "tasks/quote-credit-v3/rust"
+      },
+      "repository_snapshots": {
+        "cgx2": "b66ef276758fb855e017313587d5e94aa5727f394773adca69454919770ffbb6",
+        "rust": "2385fe87c9145fd188ecc458e793eb8a298a33d49d914a99f4c3e720f6ac27d5"
+      },
+      "prompt_path": "tasks/quote-credit-v3/statement.md",
+      "prompt_sha256": "40abb7ff94f50ba35f464c0b4aec46cbf056df25a465e34baa973a6ab3748323",
+      "hidden_test_ref": "private:quote-credit-v3:v1",
+      "hidden_test_path": "private/accept.py",
+      "hidden_test_sha256": "671700b8aaed901f69f7219a9d820c0abacf0753b9182c9e7c4120092fbbbfbc",
+      "acceptance_command": [
+        "python3",
+        "bench/fixtures/task-candidates/v3/private/accept.py",
+        "--task",
+        "quote-credit-v3"
+      ],
+      "build_commands": {
+        "cgx2": [
+          "target/debug/cgx2c",
+          "build",
+          "--package",
+          "bench/fixtures/task-candidates/v3/tasks/quote-credit-v3/cgx2",
+          "--out",
+          "/tmp/cgx2-quote-credit-v3",
+          "--force"
+        ],
+        "rust": [
+          "rustc",
+          "--edition=2024",
+          "bench/fixtures/task-candidates/v3/tasks/quote-credit-v3/rust/main.rs",
+          "-o",
+          "/tmp/rust-quote-credit-v3"
+        ]
+      },
+      "run_commands": {
+        "cgx2": [
+          "/tmp/cgx2-quote-credit-v3"
+        ],
+        "rust": [
+          "/tmp/rust-quote-credit-v3"
+        ]
+      },
+      "allowed_tools": [
+        "local compiler",
+        "test runner",
+        "editor",
+        "standard language tools"
+      ],
+      "allowed_docs": [
+        "supplied starter",
+        "CGx2 language and package docs for CGx2",
+        "Rust standard library docs for Rust"
+      ],
+      "feature_scope": {
+        "memory": "No managed/owned regions; checked i64 arithmetic only.",
+        "foreign": "None.",
+        "syntax": "Frozen Wave 12 scalar functions and acyclic local packages."
+      },
+      "expected_outcomes": {
+        "starter": "Builds, runs, and returns an incorrect value for the default case.",
+        "reference": "Passes private value cases; overflow exits nonzero with an overflow error."
+      },
+      "equivalence": {
+        "shared_prompt": "tasks/quote-credit-v3/statement.md",
+        "same_cases_ref": "private:quote-credit-v3:v1",
+        "input_domain": "signed i64 fixed width",
+        "output_rule": "same integer result or overflow class",
+        "baseline_selected_before_traces": true,
+        "known_limit": "Rust panic stderr and CGx2 diagnostic text differ; acceptance compares error class, not byte-identical diagnostics."
+      },
+      "acceptance_criteria": [
+        "The four-argument quote computes units times unit price, adds shipping, and subtracts credit exactly once.",
+        "All representable test inputs produce the specified signed i64 value in both starters.",
+        "An unrepresentable intermediate fails with overflow, never a wrapped value."
+      ],
+      "reference_paths": {
+        "cgx2": "private/quote-credit-v3/cgx2",
+        "rust": "private/quote-credit-v3/rust"
+      },
+      "reference_snapshots": {
+        "cgx2": "2f030ed8a89bb3c046a6cc0e4e43dfe4cb0f5c233cbb7914687a1047cccbb9e5",
+        "rust": "f1c59c4f265bdd1536b67313a78902c4494852b98ba62549faf9f9507ce45d74"
+      }
     },
     {
-      "task_id": "package-api-repair-v3", "status": "candidate", "tier": "large", "planned_repository_files": 28,
-      "category": "package_api", "baseline_language": "typescript",
-      "baseline_rationale": "TypeScript has the closest mature typed package API and module graph for this API migration task.",
-      "applicable_languages": ["cgx2", "typescript"], "exclusions": {"python": "No equivalent typed API-index starter prepared.", "rust": "No equivalent package API starter prepared.", "ocaml": "No equivalent package API starter prepared."},
-      "hidden_test_ref": "private:package-api-repair-v3", "repository_snapshots": {}, "workspace_paths": {}, "reviewer_ids": [],
-      "acceptance_criteria": ["Update callers to the pinned public package API without changing unrelated modules.", "Dependency and API resolution complete without missing-symbol diagnostics.", "Existing behavior and declared error classes remain equivalent."]
-    },
-    {
-      "task_id": "native-c-boundary-v3", "status": "candidate", "tier": "small", "planned_repository_files": 8,
-      "category": "native_c", "baseline_language": "rust",
-      "baseline_rationale": "Rust's explicit unsafe FFI is the strongest applicable native C boundary baseline.",
-      "applicable_languages": ["cgx2", "rust"], "exclusions": {"python": "Python extension boundary would add a different interpreter and ABI.", "typescript": "No direct native ABI starter prepared.", "ocaml": "No equivalent reviewed C binding starter prepared."},
-      "hidden_test_ref": "private:native-c-boundary-v3", "repository_snapshots": {}, "workspace_paths": {}, "reviewer_ids": [],
-      "acceptance_criteria": ["Call the pinned fixed-shape C ABI only through an explicit unsafe boundary.", "Reject a mismatched ABI version before invocation.", "Preserve byte lengths, error codes, and release ownership on every path."]
-    },
-    {
-      "task_id": "notebook-cell-impact-v3", "status": "candidate", "tier": "large", "planned_repository_files": 24,
-      "category": "notebook_comprehension", "baseline_language": "python",
-      "baseline_rationale": "Python notebooks have the most established comparable cell state and comprehension workflow.",
-      "applicable_languages": ["cgx2", "python"], "exclusions": {"rust": "No equivalent interactive notebook starter prepared.", "typescript": "No equivalent reviewed notebook starter prepared.", "ocaml": "No equivalent notebook starter prepared."},
-      "hidden_test_ref": "private:notebook-cell-impact-v3", "repository_snapshots": {}, "workspace_paths": {}, "reviewer_ids": [],
-      "acceptance_criteria": ["Identify which cells become stale after a changed pure scalar definition.", "Explain retained values without replaying earlier cells.", "Give the same answers under a blinded rubric for both languages."]
-    },
-    {
-      "task_id": "proof-result-reading-v3", "status": "candidate", "tier": "small", "planned_repository_files": 6,
-      "category": "proof_interpretation", "baseline_language": "rust",
-      "baseline_rationale": "Rust with the same external bounded verifier is a conservative typed baseline for interpreting proof results.",
-      "applicable_languages": ["cgx2", "rust"], "exclusions": {"python": "No matched contract verifier starter prepared.", "typescript": "No matched contract verifier starter prepared.", "ocaml": "No matched contract verifier starter prepared."},
-      "hidden_test_ref": "private:proof-result-reading-v3", "repository_snapshots": {}, "workspace_paths": {}, "reviewer_ids": [],
-      "acceptance_criteria": ["Distinguish proved, disproved, and unknown outcomes with their assumptions.", "Identify the source obligation and explain a concrete counterexample without asserting unproved safety.", "Answer the behavior question under a blinded rubric."]
-    },
-    {
-      "task_id": "numeric-boundary-chain-v3", "status": "candidate", "tier": "large", "planned_repository_files": 32,
-      "category": "numerical_edge", "baseline_language": "rust",
-      "baseline_rationale": "Rust's checked integer operations provide the strongest comparable fixed-width arithmetic baseline.",
-      "applicable_languages": ["cgx2", "rust"], "exclusions": {"python": "Unbounded integers need a separately reviewed fixed-width shim.", "typescript": "Number semantics differ and no equivalent fixed-width starter is prepared.", "ocaml": "No independently reviewed fixed-width starter prepared."},
-      "hidden_test_ref": "private:numeric-boundary-chain-v3", "repository_snapshots": {}, "workspace_paths": {}, "reviewer_ids": [],
-      "acceptance_criteria": ["Preserve exact i64 boundary behavior through a multi-module call chain.", "Overflow returns the specified error class rather than a wrapped value.", "Finite inputs produce equal outputs and error locations under equivalent starters."]
+      "task_id": "grid-quote-v3",
+      "status": "candidate",
+      "author_id": "wave13-benchmark-candidates",
+      "review_records": [],
+      "tier": "large",
+      "planned_repository_files": 21,
+      "category": "package_api",
+      "baseline_language": "rust",
+      "baseline_rationale": "Rust checked i64 arithmetic and explicit multi-module composition are the strongest directly comparable available baseline; chosen before any model traces.",
+      "applicable_languages": [
+        "cgx2",
+        "rust"
+      ],
+      "exclusions": {
+        "python": "Unbounded integer semantics require a separately reviewed i64 shim.",
+        "typescript": "Number semantics differ and no reviewed fixed-width starter exists.",
+        "ocaml": "No independently reviewed fixed-width starter exists."
+      },
+      "workspace_paths": {
+        "cgx2": "tasks/grid-quote-v3/cgx2",
+        "rust": "tasks/grid-quote-v3/rust"
+      },
+      "repository_snapshots": {
+        "cgx2": "6ced0e3a2cb9517ad937b1788d0d07fb68e7722a1ceeb37f744b1f0993f4ada8",
+        "rust": "6886b1431667199e23de0361381839326f782034eaf1ca91771f8619fc4415c2"
+      },
+      "prompt_path": "tasks/grid-quote-v3/statement.md",
+      "prompt_sha256": "38badb5a805e41e6e847e1a60dfa3d455b490293d0891b9673d047ae906cebd0",
+      "hidden_test_ref": "private:grid-quote-v3:v1",
+      "hidden_test_path": "private/accept.py",
+      "hidden_test_sha256": "671700b8aaed901f69f7219a9d820c0abacf0753b9182c9e7c4120092fbbbfbc",
+      "acceptance_command": [
+        "python3",
+        "bench/fixtures/task-candidates/v3/private/accept.py",
+        "--task",
+        "grid-quote-v3"
+      ],
+      "build_commands": {
+        "cgx2": [
+          "target/debug/cgx2c",
+          "build",
+          "--package",
+          "bench/fixtures/task-candidates/v3/tasks/grid-quote-v3/cgx2",
+          "--out",
+          "/tmp/cgx2-grid-quote-v3",
+          "--force"
+        ],
+        "rust": [
+          "rustc",
+          "--edition=2024",
+          "bench/fixtures/task-candidates/v3/tasks/grid-quote-v3/rust/main.rs",
+          "-o",
+          "/tmp/rust-grid-quote-v3"
+        ]
+      },
+      "run_commands": {
+        "cgx2": [
+          "/tmp/cgx2-grid-quote-v3"
+        ],
+        "rust": [
+          "/tmp/rust-grid-quote-v3"
+        ]
+      },
+      "allowed_tools": [
+        "local compiler",
+        "test runner",
+        "editor",
+        "standard language tools"
+      ],
+      "allowed_docs": [
+        "supplied starter",
+        "CGx2 language and package docs for CGx2",
+        "Rust standard library docs for Rust"
+      ],
+      "feature_scope": {
+        "memory": "No managed/owned regions; checked i64 arithmetic only.",
+        "foreign": "None.",
+        "syntax": "Frozen Wave 12 scalar functions and acyclic local packages."
+      },
+      "expected_outcomes": {
+        "starter": "Builds, runs, and returns an incorrect value for the default case.",
+        "reference": "Passes private value cases; overflow exits nonzero with an overflow error."
+      },
+      "equivalence": {
+        "shared_prompt": "tasks/grid-quote-v3/statement.md",
+        "same_cases_ref": "private:grid-quote-v3:v1",
+        "input_domain": "signed i64 fixed width",
+        "output_rule": "same integer result or overflow class",
+        "baseline_selected_before_traces": true,
+        "known_limit": "Rust panic stderr and CGx2 diagnostic text differ; acceptance compares error class, not byte-identical diagnostics."
+      },
+      "acceptance_criteria": [
+        "All 14 component rates apply to normalized usage exactly once across four charge groups.",
+        "Group and total results agree across both starters; total(10) is 2810.",
+        "An unrepresentable intermediate fails with overflow, never a wrapped value."
+      ],
+      "reference_paths": {
+        "cgx2": "private/grid-quote-v3/cgx2",
+        "rust": "private/grid-quote-v3/rust"
+      },
+      "reference_snapshots": {
+        "cgx2": "06c09a276f9995a907dbcb21c1a9dcea1c5c8649cd76ddb3486a28c58c3618b3",
+        "rust": "96415ab9869c9906334ee0a24a9927441bcb4980d6bdb75597b0e60602722f29"
+      }
     }
   ],
   "expected_runs": []

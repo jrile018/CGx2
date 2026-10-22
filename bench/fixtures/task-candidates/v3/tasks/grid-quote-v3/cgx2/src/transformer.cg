@@ -1,0 +1,3 @@
+module grid.transformer
+pub fn charge(units: i64) -> i64:
+    units * 17

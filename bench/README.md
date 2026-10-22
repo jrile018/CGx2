@@ -151,6 +151,84 @@ python3 bench/task_evidence.py report --pack PRIVATE/pack.json --run PRIVATE/run
 
 Only a fully reviewed, frozen, complete run set reaches the unchanged Wave 11 `analyze_ready` scoring. A pass needs matching external hidden-test verification, positive measured time and token use, and no failure cause. A fail or timeout needs a cause; the analysis charges its **full** wall and token budgets even when the recorded failed attempt ended early. Any missing, duplicate, leaking, mismatched, out-of-order, or unpaired evidence yields `insufficient_evidence`, with no numeric completion rate or superiority verdict. A ready report separates each task's preregistered baseline (including Python) and reports task-clustered confidence intervals, paired-success tokens/time, and all-task cost-to-success as described below. Creating this pack supplies no LLM advantage evidence.
 
+## Wave 13 executable candidate set
+
+The v3 pack now contains two runnable repair candidates, both paired with a
+Rust baseline selected before model traces:
+
+| Candidate | Tier and starter files | Correctness target |
+| --- | --- | --- |
+| `quote-credit-v3` | small: 4 CGx2, 4 Rust | Apply a customer credit once after shipping; `quote(7,120,18,34) = 824`. |
+| `grid-quote-v3` | large: 21 CGx2, 20 Rust | Apply each of 14 named charge rates to normalized usage once; `total(10) = 2810`. |
+
+The shared language-neutral statements are under
+`fixtures/task-candidates/v3/tasks/<id>/statement.md`. The model-visible
+workspaces are only their `cgx2/` or `rust/` starter directories. The oracle
+and reference overlays are in `fixtures/task-candidates/v3/private/`, outside
+both workspaces. The pack pins SHA-256 bytes for prompts, oracle, starters,
+and reference overlays, plus concrete build and run argv, scope, allowed
+tools and docs, expected outcomes, and cross-language equivalence metadata.
+The starter builds in both languages and returns a wrong value; the reference
+repair passes normal, zero, group (large task), and overflow cases. This
+negative fixture is a behavior failure, not a compile failure.
+
+From the repository root, reproduce the correctness checks offline:
+
+```sh
+cargo build --offline -p cgx2c
+python3 bench/fixtures/task-candidates/v3/private/accept.py --task quote-credit-v3
+python3 bench/fixtures/task-candidates/v3/private/accept.py --task grid-quote-v3
+python3 -m unittest discover -s bench/tests -q
+python3 - <<'PY'
+import json
+from pathlib import Path
+import jsonschema
+schema = json.loads(Path('bench/schema/task-pack-v3.schema.json').read_text())
+pack = json.loads(Path('bench/fixtures/task-candidates/v3/pack.json').read_text())
+jsonschema.Draft202012Validator.check_schema(schema)
+jsonschema.Draft202012Validator(schema).validate(pack)
+PY
+python3 bench/task_evidence.py validate --pack bench/fixtures/task-candidates/v3/pack.json
+python3 bench/task_evidence.py report --pack bench/fixtures/task-candidates/v3/pack.json
+```
+
+The last two commands intentionally exit 1 and report
+`insufficient_evidence`: there are no independent reviews, frozen protocol
+pins, preregistered runs, or real model traces. The acceptance suites are
+correctness checks, not timing benchmarks. Verified on the Wave 12 base
+`a2a35ba0ac1a44e425cbb39c457cebd0ee980b2f` with Python 3.14.4,
+rustc 1.98.1, and Cargo 1.98.1. Rust's overflow panic text and CGx2's
+overflow diagnostic differ; both conditions require the same nonzero
+overflow class. The CGx2 starters use only frozen scalar package calls and
+checked i64 arithmetic; no source memory graph, foreign call, notebook,
+proof, or newer Wave 13 API is exercised.
+The pinned build/run commands were each run twice with identical starter
+output. `cargo fmt --all -- --check` and targeted `cargo clippy --offline -p
+cgx2c --all-targets -- -D warnings` could not run here because this host's
+stable Rust toolchain lacks the `rustfmt` and `clippy` components; no Rust
+source was changed in this lane.
+
+Reviewer checklist before any task is marked `frozen`:
+
+1. Independently inspect each statement, starter, hidden case, and reference
+   change; confirm the task is meaningful and the same behavior is required
+   in CGx2 and Rust. Check the large task's real 20-module call graph.
+2. Re-run both acceptance suites on a pinned offline toolchain and verify the
+   starter fails behavior while the reference passes. Recompute every hash.
+3. Record two distinct reviewers other than the task author. Each reviewer
+   must approve task quality, language equivalence, hidden tests, and Rust
+   baseline choice in a separate hash-pinned review artifact. The v3 importer
+   rejects missing, mismatched, or post-freeze records. Recorded identities
+   still need human verification; a JSON file cannot prove independence.
+4. Freeze prompts, tool/docs limits, dependencies, compiler, hardware, task
+   set, and randomized paired run grid before model execution. Keep private
+   acceptance material outside all model-visible workspaces and traces.
+
+A later holdout needs 60–100 independently reviewed tasks across both tiers
+and all six categories, two model families, repeated paired seeds, and genuine
+external traces plus hidden verification. These two candidates alone are not
+an LLM comparison and have no completion, speed, or release verdict.
+
 ## Wave 11 task-clustered statistics
 
 The v2 analysis matches `task_id`, `model_family`, `model_version`, and `seed`, and compares CGx2 with each task's preregistered `baseline_language`. A holdout must have the same model/version/seed grid on every task, one frozen version and tokenizer per family, two families, and repeated seeds. The report includes raw registered/matched task counts, counts by tier, excluded task counts by condition, baseline-language breakdown (including Python separately), run and paired-success counts, and family/tier cells. These are mechanical checks: review quality and model trace authenticity still need independent evidence.

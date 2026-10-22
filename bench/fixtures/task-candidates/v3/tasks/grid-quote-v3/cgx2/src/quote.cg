@@ -1,0 +1,7 @@
+module grid.quote
+import grid.generation
+import grid.transmission
+import grid.distribution
+import grid.market
+pub fn total(units: i64) -> i64:
+    grid.generation.charge(units) + grid.transmission.charge(units) + grid.distribution.charge(units) + grid.market.charge(units)
