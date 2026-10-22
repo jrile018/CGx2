@@ -16,6 +16,8 @@ sha256sum /tmp/cgx2-libtorch-build/libcgx2_libtorch_facade.so
 
 Pin that exact `.so` hash, target OS/arch, facade ABI and nine exports in a `cgx2-bind` lock. Preflight only inspects bytes and exported names; it cannot prove that a foreign library actually implements their C types, version assertion or lifetime contract. `Torch::open` is unsafe for this reason. The C++ build rejects a mismatched `Torch_VERSION`, and runtime checks metadata again.
 
+The lock pins the **facade file only**. The facade links LibTorch dynamically; its transitive `.so` dependencies and loader search paths are not hashed or controlled here. A matching facade hash and compiled version string therefore do not prove that the loaded LibTorch binaries match the reviewed build. Dependency-closure pinning and a compatible real-LibTorch run remain required before this route can be called fully pinned or release ready.
+
 Run mock facade tests and the offline binding tests:
 
 ```sh

@@ -172,6 +172,14 @@ The starter builds in both languages and returns a wrong value; the reference
 repair passes normal, zero, group (large task), and overflow cases. This
 negative fixture is a behavior failure, not a compile failure.
 
+The private oracle without a submitted workspace is a starter/reference preflight. A
+holdout runner must substitute `{language}` and `{workspace}` in each task's
+`acceptance_command` and run it against the model's submitted workspace, for example
+`python3 bench/fixtures/task-candidates/v3/private/accept.py --task quote-credit-v3 --language cgx2 --candidate-workspace /path/to/submission`.
+The oracle copies that workspace into a temporary directory before injecting test
+entry points; it does not copy the bundled reference overlay for a candidate.
+The oracle and its expected values remain outside the model-visible workspace.
+
 From the repository root, reproduce the correctness checks offline:
 
 ```sh

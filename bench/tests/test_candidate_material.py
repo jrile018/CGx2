@@ -50,6 +50,9 @@ class CandidateMaterialTests(unittest.TestCase):
         pack["tasks"][0]["build_commands"]["rust"] = []
         self.assertIn("candidate_material", [item["code"] for item in self.findings(pack)])
         pack = self.pack()
+        pack["tasks"][0]["acceptance_command"] = pack["tasks"][0]["acceptance_command"][:4]
+        self.assertIn("candidate_material", [item["code"] for item in self.findings(pack)])
+        pack = self.pack()
         pack["tasks"][0]["tier"] = "large"
         pack["tasks"][0]["planned_repository_files"] = 20
         self.assertIn("candidate_material", [item["code"] for item in self.findings(pack)])

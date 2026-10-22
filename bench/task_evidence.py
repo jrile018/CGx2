@@ -153,8 +153,10 @@ def candidate_material(task, base, tier, applicable):
     if not isinstance(task["acceptance_command"], list) or not task["acceptance_command"]:
         raise ValueError("independently runnable acceptance command required")
     if (not any(task["hidden_test_path"] in arg for arg in task["acceptance_command"])
-            or task["task_id"] not in task["acceptance_command"]):
-        raise ValueError("acceptance command must name the pinned oracle and task")
+            or task["task_id"] not in task["acceptance_command"]
+            or "{workspace}" not in task["acceptance_command"]
+            or "{language}" not in task["acceptance_command"]):
+        raise ValueError("acceptance command must name the pinned oracle, task, submitted workspace and language")
     for key in ("allowed_tools", "allowed_docs", "acceptance_criteria"):
         if not isinstance(task.get(key), list) or not task[key]:
             raise ValueError(f"{key} required")

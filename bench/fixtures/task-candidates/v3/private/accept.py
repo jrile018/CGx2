@@ -44,9 +44,9 @@ def invoke(command, cwd=None):
                           timeout=90, check=False)
 
 
-def run_case(task, language, variant, args, compiler, group=None):
+def run_case(task, language, variant, args, compiler, group=None, candidate_workspace=None):
     spec = SPECS[task]
-    source = ROOT / "tasks" / task / language
+    source = candidate_workspace if variant == "candidate" else ROOT / "tasks" / task / language
     with tempfile.TemporaryDirectory(prefix="cgx2-candidate-") as directory:
         root = Path(directory) / "starter"
         shutil.copytree(source, root)
@@ -79,36 +79,53 @@ def run_case(task, language, variant, args, compiler, group=None):
         return invoke([str(binary)])
 
 
-def check(task, compiler):
+def check(task, compiler, candidate_workspace=None, language=None):
     spec = SPECS[task]
-    for language in ("cgx2", "rust"):
-        args, wrong = spec["wrong_case"]
-        observed = run_case(task, language, "starter", args, compiler)
-        assert observed.returncode == 0 and observed.stdout.strip() == str(wrong), (
-            task, language, "negative fixture must be a behavioral failure", observed)
+    languages = (language,) if candidate_workspace is not None else ("cgx2", "rust")
+    for current_language in languages:
+        if candidate_workspace is None:
+            args, wrong = spec["wrong_case"]
+            observed = run_case(task, current_language, "starter", args, compiler)
+            assert observed.returncode == 0 and observed.stdout.strip() == str(wrong), (
+                task, current_language, "negative fixture must be a behavioral failure", observed)
+        variant = "candidate" if candidate_workspace is not None else "reference"
         for args, expected in spec["cases"]:
-            observed = run_case(task, language, "reference", args, compiler)
+            observed = run_case(task, current_language, variant, args, compiler,
+                                candidate_workspace=candidate_workspace)
             if expected == "overflow":
                 assert observed.returncode != 0 and "overflow" in observed.stderr.lower(), (
-                    task, language, args, observed)
+                    task, current_language, args, observed)
             else:
                 assert observed.returncode == 0 and observed.stdout.strip() == str(expected), (
-                    task, language, args, observed)
+                    task, current_language, args, observed)
         for group, expected in spec.get("group_cases", []):
-            observed = run_case(task, language, "reference", (10,), compiler, group=group)
+            observed = run_case(task, current_language, variant, (10,), compiler,
+                                group=group, candidate_workspace=candidate_workspace)
             assert observed.returncode == 0 and observed.stdout.strip() == str(expected), (
-                task, language, group, observed)
-        print(f"{task}/{language}: negative behavior and {len(spec['cases'])} reference cases passed")
+                task, current_language, group, observed)
+        print(f"{task}/{current_language}: {variant} passed {len(spec['cases'])} correctness cases")
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--task", required=True, choices=sorted(SPECS))
     parser.add_argument("--cgx2c", type=Path, default=REPO / "target/debug/cgx2c")
+    parser.add_argument("--candidate-workspace", type=Path)
+    parser.add_argument("--language", choices=("cgx2", "rust"))
     args = parser.parse_args()
+    if (args.candidate_workspace is None) != (args.language is None):
+        parser.error("--candidate-workspace and --language must be supplied together")
     if not args.cgx2c.is_file():
         parser.error(f"build cgx2c first: {args.cgx2c}")
-    check(args.task, args.cgx2c.resolve())
+    candidate = None
+    if args.candidate_workspace is not None:
+        candidate = args.candidate_workspace.resolve()
+        private = (ROOT / "private").resolve()
+        if not candidate.is_dir() or candidate == private or private in candidate.parents:
+            parser.error("candidate workspace must be a directory outside private fixtures")
+        if any(path.is_symlink() for path in candidate.rglob("*")):
+            parser.error("candidate workspace must not contain symlinks")
+    check(args.task, args.cgx2c.resolve(), candidate, args.language)
 
 
 if __name__ == "__main__":

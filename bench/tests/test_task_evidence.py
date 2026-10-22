@@ -49,7 +49,8 @@ class TaskEvidenceTests(unittest.TestCase):
             "cgx2": ["cgx2c", "build", "--package", "cgx2", "--out", "/tmp/test-cgx2"],
             "rust": ["rustc", "rust/main.rs", "-o", "/tmp/test-rust"]}
         self.task["run_commands"] = {"cgx2": ["/tmp/test-cgx2"], "rust": ["/tmp/test-rust"]}
-        self.task["acceptance_command"] = ["python3", "private/hidden.py", "--task", self.task["task_id"]]
+        self.task["acceptance_command"] = ["python3", "private/hidden.py", "--task", self.task["task_id"],
+                                           "--language", "{language}", "--candidate-workspace", "{workspace}"]
         records = []
         for reviewer in self.task["reviewer_ids"]:
             path = self.root / f"private/{reviewer}.json"

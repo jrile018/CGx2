@@ -18,13 +18,14 @@ const USAGE: &str = "usage: cgx2c build FILE.cg --out BINARY [--release] [--forc
 const MAX_SOURCE: u64 = 4 * 1024 * 1024;
 const MAX_GENERATED: usize = 32 * 1024 * 1024;
 const MAX_STDERR: usize = 8 * 1024;
-const RUNTIME_SOURCES: [(&str, &str); 6] = [
+const RUNTIME_SOURCES: [(&str, &str); 7] = [
     ("lib.rs", include_str!("../../cgx2-runtime/src/lib.rs")),
     (
         "budget.rs",
         include_str!("../../cgx2-runtime/src/budget.rs"),
     ),
     ("heap.rs", include_str!("../../cgx2-runtime/src/heap.rs")),
+    ("fault.rs", include_str!("../../cgx2-runtime/src/fault.rs")),
     ("owned.rs", include_str!("../../cgx2-runtime/src/owned.rs")),
     (
         "region.rs",

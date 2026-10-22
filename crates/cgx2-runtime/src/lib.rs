@@ -346,6 +346,14 @@ impl Session {
         }
         self.check_budgets(minimum_charge)
             .map_err(|error| self.allocation_failure(region, error))?;
+        let r = self.region(region).expect("validated region");
+        // Manual regions and no_gc cannot reclaim space before this allocation. Reject
+        // their logical limit before attempting any host reserve or injected failure.
+        if (matches!(r.mode, CollectionMode::Manual) || !self.budgets.is_empty())
+            && minimum_charge > r.limit_bytes.saturating_sub(r.stats.committed_bytes)
+        {
+            return Err(self.allocation_failure(region, AllocationError::RegionLimit));
+        }
 
         let mut bytes = Vec::new();
         if payload_len > 0 {

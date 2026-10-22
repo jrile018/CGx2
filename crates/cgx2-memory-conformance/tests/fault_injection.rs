@@ -103,6 +103,29 @@ fn every_managed_reserve_can_fail_without_committing_graph_state() {
 }
 
 #[test]
+fn logical_manual_region_limit_precedes_injected_host_failure() {
+    let mut session = Session::new();
+    let region = session
+        .create_region(CollectionMode::Manual, SLOT_METADATA_BYTES + 1)
+        .unwrap();
+    let first = session.alloc_object(region, 1, 0).unwrap();
+    session.root(first).unwrap();
+    let before = session.stats(region).unwrap();
+    session.inject_host_failure_at_reserve(1);
+    assert_eq!(
+        session.alloc_object(region, 1, 0),
+        Err(AllocationError::RegionLimit)
+    );
+    assert_eq!(session.host_reserve_attempts(), 0);
+    assert_eq!(session.last_host_failure_site(), None);
+    let after = session.stats(region).unwrap();
+    assert_eq!(after.committed_bytes, before.committed_bytes);
+    assert_eq!(after.collection_count, before.collection_count);
+    assert_eq!(after.allocation_failures, before.allocation_failures + 1);
+    assert_eq!(session.read_bytes(first).unwrap(), &[0]);
+}
+
+#[test]
 fn conversion_and_edge_reserves_retain_ownership_and_references() {
     let (mut session, region) = manual();
     let (owner, target) = graph(&mut session, region);

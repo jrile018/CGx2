@@ -8,4 +8,6 @@ The package uses `cgx2.toml` schema 2 with `binding_lock = "cgx2-bind.lock.json"
 
 The preflight checks exact declarations and exported names, not C types or metadata *values* in the artifact. A caller must retain the checked artifact inode through native loading, as `checked_artifact` does, and use the reviewed `cgx2-libtorch` adapter for identity, version and ABI checks. `cgx2-bind` does not connect `.cg` source calls to this route yet.
 
+For the `libtorch` route, the lock hashes the CGx2 facade artifact only. Dynamically loaded LibTorch dependencies and loader search paths are outside this lock, so passing preflight does not pin the complete executable dependency closure.
+
 Run `RUSTUP_TOOLCHAIN=1.98.1 cargo test -p cgx2-bind --offline` for the compiled C mock and adversarial preflight tests. `fixtures/libtorch-unavailable` demonstrates an otherwise well-formed declaration whose artifact is absent. The mock proves the binding contract shape and static checks; it is not evidence of real LibTorch behavior.
