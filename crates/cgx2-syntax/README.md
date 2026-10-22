@@ -58,3 +58,6 @@ The grammar remains incomplete. Glob, alias, and relative imports, records, vari
 | `CGS110` | Unknown or duplicate effect/capability declaration. |
 
 These codes are stable for this slice. Future compiler integration should consume the exported AST and diagnostics directly; it may need a source-order item representation if mixed module/script files become valid.
+
+
+The parser and formatter retain direct local calls such as `build()` inside `no_gc` blocks in function bodies. The checked memory-function subset (zero arguments and `Unit` result) is imposed by `cgx2-sema`, not by the grammar.

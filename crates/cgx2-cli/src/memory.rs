@@ -1,4 +1,4 @@
-//! Execution of the checked, script-only memory source profile.
+//! Execution of checked memory scripts and bounded local memory functions.
 use std::collections::HashMap;
 
 use cgx2_runtime::{
@@ -13,6 +13,9 @@ const AUTO_TRIGGER_BYTES: usize = 1 << 20;
 const STEP_LIMIT: usize = 1_000_000;
 
 enum Op {
+    Call {
+        name: String,
+    },
     NoGc {
         budget: usize,
         body: Vec<SpannedOp>,
@@ -86,7 +89,7 @@ fn error(code: &'static str, message: impl Into<String>, span: Span) -> RunError
 }
 
 fn unsupported(span: Span) -> RunError {
-    error("CGM001", "unsupported memory script form", span)
+    error("CGM001", "unsupported memory source form", span)
 }
 
 fn argument_error(span: Span) -> RunError {
@@ -237,6 +240,17 @@ fn lower_stmt(stmt: &Stmt) -> Result<SpannedOp, RunError> {
                 let ExprKind::Name(path) = &callee.kind else {
                     return Err(unsupported(callee.span));
                 };
+                if let [local] = path.segments.as_slice() {
+                    if !arguments.is_empty() {
+                        return Err(argument_error(expr.span));
+                    }
+                    return Ok(SpannedOp {
+                        op: Op::Call {
+                            name: local.clone(),
+                        },
+                        span: expr.span,
+                    });
+                }
                 let [namespace, operation] = path.segments.as_slice() else {
                     return Err(unsupported(path.span));
                 };
@@ -301,11 +315,12 @@ fn region(
     }
 }
 
-fn execute(
+fn execute_with_functions(
     ops: &[SpannedOp],
     session: &mut Session,
     bindings: &mut HashMap<String, Binding>,
     steps: &mut usize,
+    functions: &HashMap<String, Vec<SpannedOp>>,
 ) -> Result<(), RunError> {
     for SpannedOp { op, span } in ops {
         if *steps >= STEP_LIMIT {
@@ -317,9 +332,32 @@ fn execute(
         }
         *steps += 1;
         match op {
+            Op::Call { name } => {
+                let body = functions.get(name).ok_or_else(|| {
+                    error(
+                        "CGR014",
+                        format!("unknown local memory function `{name}`"),
+                        *span,
+                    )
+                })?;
+                let mut locals = HashMap::new();
+                let result = execute_with_functions(body, session, &mut locals, steps, functions);
+                let mut cleanup_error = None;
+                for binding in locals.into_values() {
+                    if let Binding::Managed(handle) = binding {
+                        if let Err(failure) = session.unroot(handle) {
+                            cleanup_error.get_or_insert_with(|| runtime(failure, *span));
+                        }
+                    }
+                }
+                result?;
+                if let Some(failure) = cleanup_error {
+                    return Err(failure);
+                }
+            }
             Op::NoGc { budget, body } => {
                 let mut guard = session.no_gc(*budget);
-                execute(body, &mut guard, bindings, steps)?;
+                execute_with_functions(body, &mut guard, bindings, steps, functions)?;
             }
             Op::Region { name, mode, limit } => {
                 let id = session
@@ -441,13 +479,42 @@ fn execute(
     Ok(())
 }
 
+#[cfg(test)]
+fn execute(
+    ops: &[SpannedOp],
+    session: &mut Session,
+    bindings: &mut HashMap<String, Binding>,
+    steps: &mut usize,
+) -> Result<(), RunError> {
+    execute_with_functions(ops, session, bindings, steps, &HashMap::new())
+}
+
 pub(crate) fn run_module(module: &Module) -> Result<MemoryReport, RunError> {
-    // Lower the entire checked script before creating a session or mutating any region.
+    // Lower the entire checked profile before creating a session or mutating any region.
     let ops = lower(&module.statements)?;
+    let functions = module
+        .functions
+        .iter()
+        .map(|function| lower(&function.body).map(|body| (function.name.clone(), body)))
+        .collect::<Result<HashMap<_, _>, _>>()?;
     let mut session = Session::new();
     let mut bindings = HashMap::new();
     let mut steps = 0;
-    execute(&ops, &mut session, &mut bindings, &mut steps)?;
+    if let Some(main) = module
+        .functions
+        .iter()
+        .find(|function| function.name == "main")
+    {
+        let entry = [SpannedOp {
+            op: Op::Call {
+                name: "main".into(),
+            },
+            span: main.span,
+        }];
+        execute_with_functions(&entry, &mut session, &mut bindings, &mut steps, &functions)?;
+    } else {
+        execute_with_functions(&ops, &mut session, &mut bindings, &mut steps, &functions)?;
+    }
     Ok(session.memory_report())
 }
 

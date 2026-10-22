@@ -1,10 +1,10 @@
-//! Conservative source lowering for the initial, script-only memory profile.
+//! Conservative source lowering for scripts and bounded local memory functions.
 use std::collections::BTreeMap;
 
 use cgx2_ownership::{check_ops, Op};
 use cgx2_syntax::{CallArg, Expr, ExprKind, Module, Path, Span, Stmt, StmtKind};
 
-use crate::{SpanTypes, TypeDiagnostic, TypedModule};
+use crate::{effects, FunctionSignature, SpanTypes, Type, TypeDiagnostic, TypedModule};
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum Kind {
@@ -21,9 +21,16 @@ struct Lowerer {
     diagnostics: Vec<TypeDiagnostic>,
 }
 
-/// Return `None` for the unchanged scalar checker, or a checked memory script.
-/// Only direct reserved `memory.*` intrinsics are lowered. All other operations
-/// in a memory script are rejected before `check_ops` is called.
+#[derive(Clone)]
+struct LocalCall {
+    name: String,
+    span: Span,
+    in_no_gc: bool,
+}
+
+/// Return `None` for the unchanged scalar checker, or check the bounded memory profile.
+/// Direct `memory.*` intrinsics are lowered to ownership operations. Function calls
+/// receive separate local scopes and are validated through the local call graph.
 pub(crate) fn check_memory_module(
     module: &Module,
 ) -> Option<Result<TypedModule, Vec<TypeDiagnostic>>> {
@@ -36,17 +43,7 @@ pub(crate) fn check_memory_module(
         return None;
     }
     if !module.functions.is_empty() {
-        let span = module
-            .functions
-            .iter()
-            .flat_map(|f| &f.body)
-            .find(|stmt| has_memory(stmt))
-            .map_or(module.span, |stmt| stmt.span);
-        return Some(Err(vec![TypeDiagnostic::new(
-            "CGM001",
-            "memory operations in functions are not modeled by the source checker yet".into(),
-            span,
-        )]));
+        return Some(check_memory_functions(module));
     }
     let mut lowerer = Lowerer::default();
     lowerer.block(&module.statements);
@@ -68,6 +65,245 @@ pub(crate) fn check_memory_module(
     } else {
         Err(lowerer.diagnostics)
     })
+}
+
+fn without_local_calls(
+    statements: &[Stmt],
+    in_no_gc: bool,
+    calls: &mut Vec<LocalCall>,
+    diagnostics: &mut Vec<TypeDiagnostic>,
+) -> Vec<Stmt> {
+    let mut retained = Vec::new();
+    for stmt in statements {
+        match &stmt.kind {
+            StmtKind::Expr(Expr {
+                kind: ExprKind::Name(_),
+                ..
+            }) => {
+                diagnostics.push(TypeDiagnostic::new(
+                    "CGM001",
+                    "memory handles cannot be function result expressions; use memory.use(value)"
+                        .into(),
+                    stmt.span,
+                ));
+            }
+            StmtKind::Expr(expr) => {
+                if let ExprKind::Call { callee, arguments } = &expr.kind {
+                    if let ExprKind::Name(path) = &callee.kind {
+                        if let [name] = path.segments.as_slice() {
+                            if !arguments.is_empty() {
+                                diagnostics.push(TypeDiagnostic::new(
+                                    "CGM001",
+                                    "memory function calls take no arguments".into(),
+                                    expr.span,
+                                ));
+                            } else {
+                                calls.push(LocalCall {
+                                    name: name.clone(),
+                                    span: expr.span,
+                                    in_no_gc,
+                                });
+                            }
+                            continue;
+                        }
+                    }
+                }
+                retained.push(stmt.clone());
+            }
+            StmtKind::NoGc { budget, body } => retained.push(Stmt {
+                kind: StmtKind::NoGc {
+                    budget: budget.clone(),
+                    body: without_local_calls(body, true, calls, diagnostics),
+                },
+                span: stmt.span,
+            }),
+            _ => retained.push(stmt.clone()),
+        }
+    }
+    retained
+}
+
+fn reaches(
+    target: &str,
+    current: &str,
+    calls: &BTreeMap<String, Vec<LocalCall>>,
+    visited: &mut std::collections::BTreeSet<String>,
+) -> bool {
+    if current == target {
+        return true;
+    }
+    if !visited.insert(current.into()) {
+        return false;
+    }
+    calls.get(current).is_some_and(|next| {
+        next.iter()
+            .any(|call| reaches(target, &call.name, calls, visited))
+    })
+}
+
+fn transitively_collects(
+    current: &str,
+    calls: &BTreeMap<String, Vec<LocalCall>>,
+    direct: &BTreeMap<String, bool>,
+    visited: &mut std::collections::BTreeSet<String>,
+) -> bool {
+    if !visited.insert(current.into()) {
+        return false;
+    }
+    direct.get(current).copied().unwrap_or(false)
+        || calls.get(current).is_some_and(|next| {
+            next.iter()
+                .any(|call| transitively_collects(&call.name, calls, direct, visited))
+        })
+}
+
+fn check_memory_functions(module: &Module) -> Result<TypedModule, Vec<TypeDiagnostic>> {
+    let mut diagnostics = Vec::new();
+    if let Some(stmt) = module.statements.first() {
+        diagnostics.push(TypeDiagnostic::new(
+            "CGM001",
+            "top-level statements are unsupported beside memory functions".into(),
+            stmt.span,
+        ));
+    }
+    let mut signatures = BTreeMap::new();
+    let mut calls = BTreeMap::new();
+    let mut direct_collect = BTreeMap::new();
+    for function in &module.functions {
+        if !function.parameters.is_empty()
+            || function
+                .return_type
+                .as_ref()
+                .is_none_or(|ty| ty.to_string() != "Unit")
+            || function.foreign.is_some()
+            || !function.requires.is_empty()
+            || !function.ensures.is_empty()
+        {
+            diagnostics.push(TypeDiagnostic::new(
+                "CGM001",
+                "memory functions require zero parameters, explicit Unit result, and no foreign binding or contracts".into(),
+                function.span,
+            ));
+        }
+        if signatures.contains_key(&function.name) {
+            diagnostics.push(TypeDiagnostic::new(
+                "CGM001",
+                format!("duplicate memory function `{}`", function.name),
+                function.span,
+            ));
+        }
+        signatures.insert(
+            function.name.clone(),
+            FunctionSignature {
+                public: function.public,
+                parameters: Vec::new(),
+                return_type: Type::Unit,
+                span: function.span,
+            },
+        );
+        let mut local_calls = Vec::new();
+        let body = without_local_calls(&function.body, false, &mut local_calls, &mut diagnostics);
+        let mut lowerer = Lowerer::default();
+        lowerer.block(&body);
+        diagnostics.extend(lowerer.diagnostics);
+        if let Err(errors) = check_ops(&lowerer.ops) {
+            diagnostics.extend(
+                errors
+                    .into_iter()
+                    .map(|error| TypeDiagnostic::new(error.code, error.message, error.span)),
+            );
+        }
+        for op in &lowerer.ops {
+            if let Op::OpenRegion { region, .. } = op {
+                if !lowerer.ops.iter().any(|later| {
+                    matches!(later, Op::CloseRegion { region: closed, .. } if closed == region)
+                }) {
+                    diagnostics.push(TypeDiagnostic::new(
+                        "CGM001",
+                        format!("local region `{region}` must be closed before return"),
+                        function.span,
+                    ));
+                }
+            }
+        }
+        direct_collect.insert(
+            function.name.clone(),
+            lowerer
+                .ops
+                .iter()
+                .any(|op| matches!(op, Op::Collect { .. })),
+        );
+        calls.insert(function.name.clone(), local_calls);
+    }
+    if !signatures.contains_key("main") {
+        diagnostics.push(TypeDiagnostic::new(
+            "CGM001",
+            "memory function module requires main()".into(),
+            module.span,
+        ));
+    }
+    for (caller, sites) in &calls {
+        for site in sites {
+            if !signatures.contains_key(&site.name) {
+                diagnostics.push(TypeDiagnostic::new(
+                    "CGM001",
+                    format!("unknown local memory function `{}`", site.name),
+                    site.span,
+                ));
+            } else if reaches(caller, &site.name, &calls, &mut Default::default()) {
+                diagnostics.push(TypeDiagnostic::new(
+                    "CGM001",
+                    "recursive memory functions are unsupported".into(),
+                    site.span,
+                ));
+            }
+            if site.in_no_gc
+                && transitively_collects(
+                    &site.name,
+                    &calls,
+                    &direct_collect,
+                    &mut Default::default(),
+                )
+            {
+                diagnostics.push(TypeDiagnostic::new(
+                    "CGO004",
+                    "memory.collect is forbidden across a no_gc call".into(),
+                    site.span,
+                ));
+            }
+        }
+    }
+    let (summaries, effect_errors) = effects::analyze(module);
+    diagnostics.extend(effect_errors);
+    for function in &module.functions {
+        if function.effects.is_none() {
+            diagnostics.push(TypeDiagnostic::new(
+                "CGT012",
+                "memory functions require explicit effects".into(),
+                function.span,
+            ));
+        }
+        if function.capabilities.is_none()
+            && summaries
+                .get(&function.name)
+                .is_some_and(|summary| !summary.capabilities.is_empty())
+        {
+            diagnostics.push(TypeDiagnostic::new(
+                "CGT013",
+                "memory function requires explicit capabilities".into(),
+                function.span,
+            ));
+        }
+    }
+    if diagnostics.is_empty() {
+        Ok(TypedModule {
+            functions: signatures,
+            expressions: SpanTypes::default(),
+            effects: summaries,
+        })
+    } else {
+        Err(diagnostics)
+    }
 }
 
 fn has_memory(stmt: &Stmt) -> bool {

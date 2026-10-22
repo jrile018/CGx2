@@ -42,3 +42,6 @@ backslashes; other Unicode text remains UTF-8. `render_text()` starts with
 line as `pub fn NAME(PARAM: TYPE) -> TYPE effects(...) [STATUS] caps(...) [STATUS] [START, END)`, followed by contract summaries labeled `runtime-checked`.
 
 Explicit effect/capability lists retain declared names; omitted lists contain conservative inferred names and use status `inferred`. Each contract has canonical expression text, a source span, and status `runtime-checked`. No contract is labeled proved. This is a per-module library; documentation comments are not indexed, and a `cgx2 api` CLI command requires later integration.
+
+
+A checked public memory function appears with zero parameters, `Unit` return, and its explicit/transitive effects and capabilities in schema 2. Handles cannot cross its call boundary; the index does not imply native compilation support for the memory function profile.

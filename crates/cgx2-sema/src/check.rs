@@ -207,11 +207,7 @@ pub fn check_module_with_imports(
                 module.imports[0].span,
             )]);
         }
-        return result.map_err(|mut diagnostics| {
-            let (_, effect_diagnostics) = effects::analyze(module);
-            diagnostics.extend(effect_diagnostics);
-            diagnostics
-        });
+        return result;
     }
     let mut checker = Checker {
         functions: BTreeMap::new(),

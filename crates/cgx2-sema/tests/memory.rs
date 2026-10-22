@@ -100,7 +100,7 @@ fn rejects_unmodeled_values_and_calls() {
     error(
         "fn f():\n    memory.owned_bytes(4)\n",
         "CGM001",
-        "memory.owned_bytes(4)\n",
+        "fn f():\n    memory.owned_bytes(4)\n",
     );
     error("let x = memory.move(1)\n", "CGM002", "1");
 }
