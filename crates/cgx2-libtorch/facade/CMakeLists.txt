@@ -11,6 +11,8 @@ endif()
 
 add_library(cgx2_libtorch_facade SHARED facade.cpp)
 target_compile_features(cgx2_libtorch_facade PRIVATE cxx_std_17)
+separate_arguments(CGX2_TORCH_CXX_FLAGS NATIVE_COMMAND "${TORCH_CXX_FLAGS}")
+target_compile_options(cgx2_libtorch_facade PRIVATE ${CGX2_TORCH_CXX_FLAGS})
 target_compile_definitions(cgx2_libtorch_facade PRIVATE CGX2_TORCH_VERSION="${Torch_VERSION}")
 target_link_libraries(cgx2_libtorch_facade PRIVATE ${TORCH_LIBRARIES})
 target_include_directories(cgx2_libtorch_facade PRIVATE ${TORCH_INCLUDE_DIRS})

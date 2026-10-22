@@ -129,8 +129,12 @@ fn malformed_oversized_and_invalid_domains_are_rejected() {
 #[cfg(unix)]
 fn fake_solver(body: &str) -> Temp {
     use std::os::unix::fs::PermissionsExt;
-    let script =
-        format!("#!/bin/sh\nif [ \"$1\" = \"--version\" ]; then echo fake-1; exit 0; fi\n{body}\n");
+    // Consume the solver script before producing a response. A fake solver that
+    // exits immediately races the parent's stdin writer and can spuriously
+    // report a broken pipe under the full workspace test load.
+    let script = format!(
+        "#!/bin/sh\nif [ \"$1\" = \"--version\" ]; then echo fake-1; exit 0; fi\ncat >/dev/null\n{body}\n"
+    );
     let file = Temp::new(script.as_bytes(), "solver.sh");
     fs::set_permissions(&file.path, fs::Permissions::from_mode(0o700)).unwrap();
     file

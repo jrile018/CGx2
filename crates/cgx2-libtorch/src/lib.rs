@@ -78,11 +78,18 @@ pub struct Torch {
 
 impl Torch {
     /// `exact_version` must match the LibTorch version used to compile the facade.
-    pub fn open(path: &Path, exact_version: &str) -> Result<Self, Error> {
-        let library = Library::open(
-            path,
-            &LibraryDeclaration::new("cgx2.libtorch.cpu", exact_version),
-        )?;
+    ///
+    /// # Safety
+    ///
+    /// `path` must be the reviewed facade built from this crate's `facade.h`.
+    /// Version metadata alone cannot establish the native symbol signatures.
+    pub unsafe fn open(path: &Path, exact_version: &str) -> Result<Self, Error> {
+        let library = unsafe {
+            Library::open(
+                path,
+                &LibraryDeclaration::new("cgx2.libtorch.cpu", exact_version),
+            )?
+        };
         // SAFETY: facade.h specifies these exact C signatures. This adapter only loads that
         // reviewed facade, after identity and exact version metadata validation.
         let inner = unsafe {
@@ -158,9 +165,11 @@ impl Tensor {
     }
 
     pub fn release(&mut self) -> Result<(), Error> {
-        let raw = self.raw.take().ok_or(Error::AlreadyReleased)?;
+        let raw = self.raw.ok_or(Error::AlreadyReleased)?;
         self.inner
-            .check(unsafe { (self.inner.release)(raw.as_ptr()) })
+            .check(unsafe { (self.inner.release)(raw.as_ptr()) })?;
+        self.raw = None;
+        Ok(())
     }
 }
 

@@ -102,6 +102,13 @@ pub fn emit_package_rust(package: &CheckedPackage) -> Result<String, Vec<Package
         }
         for function in &source.syntax().functions {
             let mut local_errors = Vec::new();
+            if let Some(binding) = &function.foreign {
+                local_errors.push(EmitDiagnostic::new(
+                    "CGRS001",
+                    "foreign declarations are unsupported by native Rust emission",
+                    binding.target.span,
+                ));
+            }
             for parameter in &function.parameters {
                 validate_type(&parameter.ty, &mut local_errors);
             }
@@ -272,6 +279,13 @@ pub fn emit_rust(module: &Module, checked: &TypedModule) -> Result<String, Vec<E
         ));
     }
     for function in &module.functions {
+        if let Some(binding) = &function.foreign {
+            errors.push(EmitDiagnostic::new(
+                "CGRS001",
+                "foreign declarations are unsupported by native Rust emission",
+                binding.target.span,
+            ));
+        }
         for parameter in &function.parameters {
             validate_type(&parameter.ty, &mut errors);
         }

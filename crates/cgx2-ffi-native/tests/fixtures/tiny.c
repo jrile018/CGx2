@@ -53,6 +53,15 @@ int32_t tiny_release(void *handle) {
     return 0;
 }
 
+int32_t tiny_release_retry(void *handle) {
+    static int first_failure = 1;
+    if (first_failure) {
+        first_failure = 0;
+        return 24;
+    }
+    return tiny_release(handle);
+}
+
 int32_t tiny_live(int64_t unused, int64_t *output) {
     (void)unused;
     *output = live_handles;

@@ -77,6 +77,13 @@ pub(crate) fn emit(module: &Module, typed: &TypedModule) -> Result<String, Vec<E
         ));
     }
     for function in &module.functions {
+        if let Some(binding) = &function.foreign {
+            errors.push(EmitDiagnostic::new(
+                "CGE001",
+                "foreign declarations are unsupported by Python source emission",
+                binding.target.span,
+            ));
+        }
         for parameter in &function.parameters {
             validate_type(&parameter.ty, &mut errors);
         }

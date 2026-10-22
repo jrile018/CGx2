@@ -222,7 +222,14 @@ pub struct Library {
 }
 
 impl Library {
-    pub fn open(path: &Path, declaration: &LibraryDeclaration<'_>) -> Result<Self, Error> {
+    /// Loads metadata from a reviewed native library.
+    ///
+    /// # Safety
+    ///
+    /// `path` must identify a trusted library whose three `cgx2_*` metadata
+    /// exports have the exact C signatures used below. Identity and version
+    /// strings cannot prove the physical signatures of those exports.
+    pub unsafe fn open(path: &Path, declaration: &LibraryDeclaration<'_>) -> Result<Self, Error> {
         if declaration.schema_version != 1
             || declaration.package_id.is_empty()
             || declaration.library_id.is_empty()
@@ -299,7 +306,11 @@ impl Library {
         }
     }
 
-    pub fn bind(&self, declaration: &Declaration<'_>) -> Result<Function, Error> {
+    /// # Safety
+    ///
+    /// The selected export must have the exact physical C signature described
+    /// by `declaration`. Dynamic symbol lookup cannot verify that signature.
+    pub unsafe fn bind(&self, declaration: &Declaration<'_>) -> Result<Function, Error> {
         declaration.validate()?;
         match declaration.operation {
             Operation::ScalarI64 => {
@@ -323,7 +334,16 @@ impl Library {
         }
     }
 
-    pub fn bind_handle(&self, declaration: &HandleDeclaration<'_>) -> Result<HandleFactory, Error> {
+    /// # Safety
+    ///
+    /// All create/read/release exports must have the declared C signatures and
+    /// obey the documented ownership contract, including on error paths. In
+    /// particular, a nonzero release status must leave the handle valid and
+    /// owned by the caller so it can be retried or released during `Drop`.
+    pub unsafe fn bind_handle(
+        &self,
+        declaration: &HandleDeclaration<'_>,
+    ) -> Result<HandleFactory, Error> {
         declaration.validate()?;
         let create = unsafe { self.symbol(declaration.create_symbol)? };
         let read = unsafe { self.symbol(declaration.read_symbol)? };
@@ -465,11 +485,12 @@ impl OwnedHandle {
     }
 
     pub fn release(&mut self) -> Result<(), Error> {
-        let raw = self.raw.take().ok_or(Error::AlreadyReleased)?;
+        let raw = self.raw.ok_or(Error::AlreadyReleased)?;
         let status = unsafe { (self.release)(raw.as_ptr()) };
         if status != 0 {
             return Err(Error::ForeignStatus(status));
         }
+        self.raw = None;
         Ok(())
     }
 }

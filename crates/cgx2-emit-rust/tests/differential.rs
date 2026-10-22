@@ -45,6 +45,19 @@ fn compile_and_run(source: &str, args: &[&str], optimized: bool) -> std::process
     output
 }
 
+#[test]
+fn source_python_foreign_binding_is_not_silently_emitted() {
+    let source = "foreign python fn host(x: i64) -> i64 effects(Foreign) caps(ForeignCall) = math.isqrt runtime \"local:cpython\" ownership copied\n\nfn main() -> i64 effects(Foreign) caps(ForeignCall):\n    host(81)\n";
+    let module = parse_module(source).unwrap();
+    let typed = check_module(&module).unwrap();
+    let errors = emit_rust(&module, &typed).unwrap_err();
+    assert_eq!(errors[0].code, "CGRS001");
+    assert_eq!(
+        &source[errors[0].span.start..errors[0].span.end],
+        "math.isqrt"
+    );
+}
+
 fn compare(source: &str, args: &[&str], expected: &str, error: Option<&str>) {
     let owned_args = args.iter().map(|s| (*s).to_owned()).collect::<Vec<_>>();
     let cli = run_source(source, &owned_args);

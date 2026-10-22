@@ -42,7 +42,8 @@ fn real_libtorch_cpu_when_installed() {
     let dependencies = Command::new("ldd").arg(&path).output().expect("ldd");
     assert!(dependencies.status.success());
     assert!(!String::from_utf8_lossy(&dependencies.stdout).contains("libpython"));
-    let torch = Torch::open(Path::new(&path), &version).unwrap();
+    // SAFETY: this opt-in test requires a facade built from the reviewed facade.h.
+    let torch = unsafe { Torch::open(Path::new(&path), &version) }.unwrap();
     let mut x = torch.from_f64(&[1.0, 2.0, 3.0]).unwrap();
     let y = torch.from_f64(&[4.0, 5.0, 6.0]).unwrap();
     let sum = x.add(&y).unwrap();
@@ -53,7 +54,7 @@ fn real_libtorch_cpu_when_installed() {
     x.release().unwrap();
     assert_eq!(x.release(), Err(Error::AlreadyReleased));
     assert_eq!(
-        Torch::open(Path::new(&path), "deliberately-wrong-version").err(),
+        unsafe { Torch::open(Path::new(&path), "deliberately-wrong-version") }.err(),
         Some(Error::Native(cgx2_ffi_native::Error::VersionMismatch))
     );
 }

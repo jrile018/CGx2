@@ -1,4 +1,4 @@
-use cgx2_cli::{check_source, run_checked_source, Value};
+use cgx2_cli::{check_source, run_checked_source, run_source, Value};
 use std::{fs, process::Command};
 
 fn source(target: &str, result: &str, argument: &str, extra: &str) -> String {
@@ -24,6 +24,16 @@ fn declared_stdlib_call_returns_checked_scalar() {
 }
 
 #[test]
+fn low_level_source_runner_checks_foreign_declarations_before_execution() {
+    let missing_effects = "foreign python fn host(x: i64) -> i64 = math.isqrt runtime \"local:cpython\" ownership copied\n\nfn main() -> i64:\n    host(81)\n";
+    let error = run_source(missing_effects, &[]).unwrap_err();
+    assert!(matches!(error.code, "CGT012" | "CGT013" | "CGT016"));
+
+    let missing_return = "foreign python fn host(x: i64) = math.isqrt runtime \"local:cpython\" ownership copied\n\nfn main() -> i64:\n    host(81)\n";
+    assert!(run_source(missing_return, &[]).is_err());
+}
+
+#[test]
 fn static_foreign_gate_rejects_type_arity_effect_capability_and_torch() {
     let valid = source("math.isqrt", "i64", "81", "");
     let cases = [
@@ -46,6 +56,8 @@ fn static_foreign_gate_rejects_type_arity_effect_capability_and_torch() {
         ),
         (valid.replace("math.isqrt", "torch.isqrt"), "CGT016"),
         (valid.replace("math.isqrt", "builtins.eval"), "CGT016"),
+        (valid.replace("math.isqrt", "os.system"), "CGT016"),
+        (valid.replace("math.isqrt", "builtins.open"), "CGT016"),
     ];
     for (source, code) in cases {
         let errors = check_source(&source).unwrap_err();
@@ -59,7 +71,6 @@ fn static_foreign_gate_rejects_type_arity_effect_capability_and_torch() {
 #[test]
 fn python_errors_and_wrong_return_keep_call_span() {
     for (target, result, argument, code) in [
-        ("missing_cgx2_module.isqrt", "i64", "4", "CGR018"),
         ("math.missing_cgx2_callable", "i64", "4", "CGR019"),
         ("math.isqrt", "i64", "0 - 1", "CGR020"),
         ("math.sqrt", "i64", "4", "CGR021"),
@@ -71,6 +82,22 @@ fn python_errors_and_wrong_return_keep_call_span() {
         let span = error.span.unwrap();
         assert_eq!(&source[span.start..span.end], format!("host({argument})"));
     }
+}
+
+#[test]
+fn unknown_module_and_foreign_main_fail_static_check() {
+    let unknown = source("missing_cgx2_module.isqrt", "i64", "4", "");
+    assert!(check_source(&unknown)
+        .unwrap_err()
+        .iter()
+        .any(|error| error.code == "CGT016"));
+
+    let foreign_main = "foreign python fn main() -> i64 effects(Foreign) caps(ForeignCall) = math.isqrt runtime \"local:cpython\" ownership copied\n";
+    assert!(check_source(foreign_main)
+        .unwrap_err()
+        .iter()
+        .any(|error| error.code == "CGT016"));
+    assert!(run_source(foreign_main, &[]).is_err());
 }
 
 #[test]

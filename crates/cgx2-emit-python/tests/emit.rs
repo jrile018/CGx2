@@ -9,6 +9,18 @@ fn checked(source: &str) -> (cgx2_syntax::Module, cgx2_sema::TypedModule) {
     (module, typed)
 }
 
+#[test]
+fn source_python_foreign_binding_is_not_silently_emitted() {
+    let source = "foreign python fn host(x: i64) -> i64 effects(Foreign) caps(ForeignCall) = math.isqrt runtime \"local:cpython\" ownership copied\n\nfn main() -> i64 effects(Foreign) caps(ForeignCall):\n    host(81)\n";
+    let (module, typed) = checked(source);
+    let errors = emit_python(&module, &typed).unwrap_err();
+    assert_eq!(errors[0].code, "CGE001");
+    assert_eq!(
+        &source[errors[0].span.start..errors[0].span.end],
+        "math.isqrt"
+    );
+}
+
 fn run(source: &str, args: &[&str]) -> std::process::Output {
     let (module, typed) = checked(source);
     let python = emit_python(&module, &typed).unwrap();

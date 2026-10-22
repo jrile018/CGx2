@@ -30,13 +30,14 @@ fn execute(
             .functions
             .iter()
             .any(|f| f.body.iter().any(eval::stmt_has_memory));
-    let has_contracts = module.functions.iter().any(|f| {
+    let requires_static_gate = module.functions.iter().any(|f| {
         !f.requires.is_empty()
             || !f.ensures.is_empty()
             || f.effects.is_some()
             || f.capabilities.is_some()
+            || f.foreign.is_some()
     });
-    if is_memory || check_scalar || has_contracts {
+    if is_memory || check_scalar || requires_static_gate {
         cgx2_sema::check_module(&module).map_err(|diagnostics| {
             diagnostics
                 .into_iter()

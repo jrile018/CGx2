@@ -96,6 +96,14 @@ pub fn check_module_with_imports(
     let mut foreign_errors = Vec::new();
     for function in &module.functions {
         if let Some(binding) = &function.foreign {
+            if function.name == "main" {
+                foreign_errors.push(TypeDiagnostic::new(
+                    "CGT016",
+                    "foreign main is unsupported; declare a local main that calls the binding"
+                        .into(),
+                    function.span,
+                ));
+            }
             let supported = |ty: &cgx2_syntax::TypeSyntax| {
                 matches!(ty.to_string().as_str(), "i64" | "Bool" | "String")
             };
@@ -141,19 +149,14 @@ pub fn check_module_with_imports(
                 ));
             }
             let target_name = binding.target.segments.join(".");
-            if matches!(
-                target_name.as_str(),
-                "builtins.eval"
-                    | "builtins.exec"
-                    | "builtins.compile"
-                    | "builtins.__import__"
-                    | "importlib.import_module"
-                    | "runpy.run_module"
-                    | "runpy.run_path"
-            ) {
+            if !((binding.target.segments.len() == 2
+                && binding.target.segments[0] == "math"
+                && !binding.target.segments[1].starts_with('_'))
+                || matches!(target_name.as_str(), "builtins.str" | "builtins.bool"))
+            {
                 foreign_errors.push(TypeDiagnostic::new(
                     "CGT016",
-                    "dynamic Python evaluation and import targets are forbidden".into(),
+                    "Python source calls currently allow only public math functions and builtins.str/bool; other targets need a reviewed effect and capability contract".into(),
                     binding.target.span,
                 ));
             }
