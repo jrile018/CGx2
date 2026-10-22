@@ -1,6 +1,8 @@
 # CGx2 bounded verification core
 
-This crate accepts typed external `Contract` values. It does not parse `.cg` source. The supported executable subset is Boolean expressions and checked signed `i64` addition/subtraction, equality, and ordering. Both operands of `and` and `or` are evaluated. An uninterpreted call is outside this subset.
+This crate accepts typed `Contract` values. The `cgx2-verify-cli` source adapter parses and checks `.cg` before lowering a small pure scalar subset into this crate; the core itself does not parse source. The supported executable subset is Boolean expressions and checked signed `i64` addition/subtraction, equality, and ordering. Both operands of `and` and `or` are evaluated. An uninterpreted call is outside this subset.
+
+For source functions, the adapter substitutes the expression body for `result` in the single postcondition and prefixes a definedness expression. This ensures checked body overflow is a finite counterexample even when the postcondition does not mention `result`. A finite `Verdict::Proved` covers only the supplied domain and does not upgrade `proof.kind` to global proof.
 
 `verify_bounded(&contract, &domains, max_cases)` enumerates inclusive integer domains and both Boolean values. `Verdict::Proved` covers **only** the listed finite inputs, with at least one input satisfying `requires`. A false `ensures` or checked postcondition overflow returns a counterexample re-evaluated against the original contract. Inconsistent or overflowing preconditions, unsupported calls, and an exhausted case cap return `Unknown`.
 

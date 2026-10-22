@@ -2,7 +2,10 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::env;
 use std::fs::File;
 use std::io::Read;
+use std::path::Path;
 use std::time::Duration;
+
+mod source;
 
 use cgx2_verify_core::{
     emit_smtlib, emit_witness_smtlib, observe_solver, parse_solver_result, validate_solver_witness,
@@ -26,6 +29,22 @@ struct Options {
     max_cases: usize,
     solver: Option<String>,
     timeout_ms: u64,
+    function: Option<String>,
+    domains: Vec<Domain>,
+}
+
+fn parse_domain(text: &str) -> Result<Domain, String> {
+    let parts: Vec<_> = text.split(':').collect();
+    if parts.len() != 3 || parts[0].is_empty() {
+        return Err("--domain requires NAME:MIN:MAX".into());
+    }
+    let min = parts[1]
+        .parse::<i64>()
+        .map_err(|_| "--domain MIN must be i64")?;
+    let max = parts[2]
+        .parse::<i64>()
+        .map_err(|_| "--domain MAX must be i64")?;
+    Ok(Domain::new(parts[0], min, max))
 }
 
 fn options() -> Result<Options, String> {
@@ -35,6 +54,8 @@ fn options() -> Result<Options, String> {
     let mut max_cases = DEFAULT_CASES;
     let mut solver = None;
     let mut timeout_ms = DEFAULT_TIMEOUT_MS;
+    let mut function = None;
+    let mut domains = Vec::new();
     while let Some(arg) = args.next() {
         match arg.as_str() {
             "--format" => format = args.next().ok_or("--format requires text or json")?,
@@ -46,6 +67,10 @@ fn options() -> Result<Options, String> {
                     .map_err(|_| "--max-cases must be a positive integer")?;
             }
             "--solver" => solver = Some(args.next().ok_or("--solver requires a path")?),
+            "--function" => function = Some(args.next().ok_or("--function requires a name")?),
+            "--domain" => domains.push(parse_domain(
+                &args.next().ok_or("--domain requires NAME:MIN:MAX")?,
+            )?),
             "--timeout-ms" => {
                 timeout_ms = args
                     .next()
@@ -58,7 +83,7 @@ fn options() -> Result<Options, String> {
             _ => return Err("expected one contract path".into()),
         }
     }
-    let input = input.ok_or("usage: cgx2-verify CONTRACT.json [--format text|json] [--max-cases N] [--solver PATH] [--timeout-ms N]")?;
+    let input = input.ok_or("usage: cgx2-verify CONTRACT.json|FILE.cg [--function NAME] [--domain NAME:MIN:MAX] [--format text|json] [--max-cases N] [--solver PATH] [--timeout-ms N]")?;
     if format != "text" && format != "json" {
         return Err("--format must be text or json".into());
     }
@@ -77,6 +102,8 @@ fn options() -> Result<Options, String> {
         max_cases,
         solver,
         timeout_ms,
+        function,
+        domains,
     })
 }
 
@@ -436,6 +463,26 @@ fn solver_json(path: &str, script: &str, contract: &Contract, timeout_ms: u64) -
     result
 }
 
+fn source_unknown(options: &Options, bytes: &[u8], diagnostic: &source::Diagnostic) {
+    let result = json!({
+        "schema_version": 3,
+        "input_sha256": hash(bytes),
+        "source": {"path": options.input, "function": options.function},
+        "verdict": {"kind": "unknown", "meaning": "source_subset_unsupported", "diagnostic": diagnostic.json()},
+        "proof": {"kind": "unknown", "meaning": "no_trusted_solver_proof"},
+    });
+    if options.format == "json" {
+        println!("{}", result);
+    } else {
+        println!("input_sha256: {}", result["input_sha256"]);
+        println!("verdict: unknown");
+        println!(
+            "{}: {} at byte {}..{}",
+            diagnostic.code, diagnostic.message, diagnostic.span.start, diagnostic.span.end
+        );
+    }
+}
+
 fn run() -> Result<(), String> {
     let options = options()?;
     let mut bytes = Vec::new();
@@ -447,13 +494,46 @@ fn run() -> Result<(), String> {
     if bytes.len() as u64 > INPUT_LIMIT {
         return Err(format!("contract exceeds {INPUT_LIMIT} byte limit"));
     }
-    let (contract, domains) = parse_document(&bytes)?;
+    let source_input = Path::new(&options.input)
+        .extension()
+        .is_some_and(|ext| ext == "cg");
+    let (contract, domains, source_meta) = if source_input {
+        let text = std::str::from_utf8(&bytes).map_err(|_| "source must be UTF-8")?;
+        match source::parse(text, options.function.as_deref(), options.domains.clone()) {
+            Ok(selected) => (
+                selected.contract,
+                selected.domains,
+                Some(json!({"path": options.input, "function": selected.name,
+                    "span": {"start": selected.span.start, "end": selected.span.end}})),
+            ),
+            Err(diagnostic) => {
+                source_unknown(&options, &bytes, &diagnostic);
+                return Ok(());
+            }
+        }
+    } else {
+        if options.function.is_some() || !options.domains.is_empty() {
+            return Err("--function and --domain require a .cg source file".into());
+        }
+        let (contract, domains) = parse_document(&bytes)?;
+        (contract, domains, None)
+    };
     let verdict = verify_bounded(&contract, &domains, options.max_cases);
     let mut result = json!({
-        "schema_version": 2,
+        "schema_version": if source_input { 3 } else { 2 },
         "input_sha256": hash(&bytes),
         "verdict": verdict_json(&verdict, &domains, &contract, options.max_cases),
     });
+    if let Some(source_meta) = source_meta {
+        result["source"] = source_meta;
+        if let Verdict::Unknown { reason } = &verdict {
+            result["verdict"]["diagnostic"] = json!({
+                "code": "CGV002",
+                "message": format!("finite verification unavailable: {reason:?}"),
+                "span": result["source"]["span"].clone(),
+            });
+        }
+    }
     if let Some(path) = &options.solver {
         let script = emit_smtlib(&contract).map_err(|e| format!("SMT emission failed: {e:?}"))?;
         result["solver"] = solver_json(path, &script, &contract, options.timeout_ms);

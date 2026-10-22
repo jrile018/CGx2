@@ -1,0 +1,4 @@
+pub fn next(x: i64) -> i64 effects() caps():
+    requires x >= 0
+    ensures result == x
+    x + 1
