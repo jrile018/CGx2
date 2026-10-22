@@ -1,0 +1,7 @@
+[package]
+name = "cgx2-libtorch"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+cgx2-ffi-native = { path = "../cgx2-ffi-native" }

@@ -1,0 +1,17 @@
+cmake_minimum_required(VERSION 3.20)
+project(cgx2_libtorch_facade LANGUAGES CXX)
+
+if(NOT DEFINED CGX2_EXPECT_TORCH_VERSION OR CGX2_EXPECT_TORCH_VERSION STREQUAL "")
+  message(FATAL_ERROR "Set CGX2_EXPECT_TORCH_VERSION to the exact LibTorch version")
+endif()
+find_package(Torch REQUIRED)
+if(NOT Torch_VERSION VERSION_EQUAL CGX2_EXPECT_TORCH_VERSION)
+  message(FATAL_ERROR "LibTorch version ${Torch_VERSION} does not match ${CGX2_EXPECT_TORCH_VERSION}")
+endif()
+
+add_library(cgx2_libtorch_facade SHARED facade.cpp)
+target_compile_features(cgx2_libtorch_facade PRIVATE cxx_std_17)
+target_compile_definitions(cgx2_libtorch_facade PRIVATE CGX2_TORCH_VERSION="${Torch_VERSION}")
+target_link_libraries(cgx2_libtorch_facade PRIVATE ${TORCH_LIBRARIES})
+target_include_directories(cgx2_libtorch_facade PRIVATE ${TORCH_INCLUDE_DIRS})
+set_target_properties(cgx2_libtorch_facade PROPERTIES CXX_VISIBILITY_PRESET hidden VISIBILITY_INLINES_HIDDEN YES)
