@@ -233,7 +233,9 @@ fn output_fields(
         .strip_prefix("mime=")
         .ok_or_else(|| malformed(line_no, line))?;
     if !valid_mime(mime) {
-        return Err(malformed(line_no, line));
+        return Err(NotebookError::InvalidOutput(format!(
+            "invalid MIME type: {mime}"
+        )));
     }
     let ordinal = ordinal_field
         .strip_prefix("ordinal=")
@@ -247,7 +249,8 @@ fn flush(notebook: &mut Notebook, body: &Body, buffer: &mut String) -> Result<()
     match body {
         Body::Cell(index) => notebook.cells[*index].source = decoded,
         Body::TextOutput(cell, output) => {
-            if let Output::Text { body, .. } = &mut notebook.cells[*cell].outputs[*output] {
+            if let Output::Text { mime, body, .. } = &mut notebook.cells[*cell].outputs[*output] {
+                crate::validate_captured_text(mime, &decoded)?;
                 *body = decoded
             }
         }

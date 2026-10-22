@@ -126,7 +126,7 @@ fn later_cell_and_selected_rerun_execute_only_the_requested_cell() {
     assert_eq!(counts.borrow().get("first"), Some(&1));
     assert_eq!(counts.borrow().get("second"), Some(&2));
     assert_eq!(counts.borrow().get("third"), Some(&1));
-    assert_eq!(session.status("c").unwrap(), CellStatus::Stale);
+    assert_eq!(session.status("c").unwrap(), CellStatus::Current);
 }
 
 #[test]
@@ -305,7 +305,7 @@ fn changed_definition_stales_transitive_dependents_and_preserves_cache() {
         .replace_cell("root", "new a".into(), facts(&["a"], &[], false))
         .unwrap();
     assert_eq!(session.status("root").unwrap(), CellStatus::Stale);
-    assert_eq!(session.status("unrelated").unwrap(), CellStatus::Stale);
+    assert_eq!(session.status("unrelated").unwrap(), CellStatus::Current);
     assert_eq!(session.status("middle").unwrap(), CellStatus::Stale);
     assert_eq!(session.status("leaf").unwrap(), CellStatus::Stale);
     assert_eq!(text_output(&session.notebook().cells[3]), (4, "read b:4"));
@@ -467,4 +467,94 @@ fn silent_success_clears_old_output_and_ordinal_overflow_is_checked() {
     ));
     assert_eq!(maxed.status("a").unwrap(), CellStatus::Failed);
     assert_eq!(text_output(&maxed.notebook().cells[0]), (u64::MAX, "old"));
+}
+#[test]
+fn executor_output_over_byte_limit_fails_without_committing_display() {
+    struct Oversize;
+    impl CellExecutor for Oversize {
+        fn execute(&mut self, _: &str) -> Result<CellResult, String> {
+            Ok(CellResult {
+                text: Some("é".repeat(cgx2_notebook_format::MAX_TEXT_OUTPUT_BYTES / 2 + 1)),
+            })
+        }
+        fn reset(&mut self) -> Result<(), String> {
+            Ok(())
+        }
+    }
+    let mut session = NotebookSession::new(
+        notebook(vec![code("one", "1")]),
+        map(&[("one", facts(&[], &[], false))]),
+        Oversize,
+    )
+    .unwrap();
+    assert!(matches!(
+        session.run_cell("one"),
+        Err(SessionError::OutputTooLarge { .. })
+    ));
+    assert!(session.notebook().cells[0].outputs.is_empty());
+    assert_eq!(session.status("one").unwrap(), CellStatus::Failed);
+}
+
+#[test]
+fn later_shadowed_definition_blocks_invalidation_and_dependency_digest_change() {
+    let mut session = NotebookSession::new(
+        notebook(vec![
+            code("root", "old x"),
+            code("shadow", "new x"),
+            code("reader", "read x"),
+        ]),
+        map(&[
+            ("root", facts(&["x"], &[], false)),
+            ("shadow", facts(&["x"], &[], false)),
+            ("reader", facts(&[], &["x"], false)),
+        ]),
+        FakeExecutor::default(),
+    )
+    .unwrap();
+    for id in ["root", "shadow", "reader"] {
+        session.run_cell(id).unwrap();
+    }
+    let reader_digest = session.notebook().cells[2]
+        .provenance
+        .as_ref()
+        .unwrap()
+        .prefix_sha256
+        .clone();
+    let reader_revision = session.notebook().cells[2]
+        .provenance
+        .as_ref()
+        .unwrap()
+        .ordinal;
+    session
+        .replace_cell("root", "changed x".into(), facts(&["x"], &[], false))
+        .unwrap();
+    assert_eq!(session.status("shadow").unwrap(), CellStatus::Current);
+    assert_eq!(session.status("reader").unwrap(), CellStatus::Current);
+    assert_eq!(
+        session.notebook().cells[2]
+            .provenance
+            .as_ref()
+            .unwrap()
+            .ordinal,
+        reader_revision
+    );
+    let reopened = NotebookSession::new(
+        session.notebook().clone(),
+        map(&[
+            ("root", facts(&["x"], &[], false)),
+            ("shadow", facts(&["x"], &[], false)),
+            ("reader", facts(&[], &["x"], false)),
+        ]),
+        FakeExecutor::default(),
+    )
+    .unwrap();
+    assert_eq!(reopened.status("reader").unwrap(), CellStatus::Cached);
+    assert_eq!(
+        reopened.notebook().cells[2]
+            .provenance
+            .as_ref()
+            .unwrap()
+            .prefix_sha256,
+        reader_digest
+    );
 }

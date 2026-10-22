@@ -100,8 +100,11 @@ impl UiSession {
                         CellStatus::Failed => "failed",
                     }
                 };
-                let outputs: Vec<Value> = cell.outputs.iter().map(|output| match output {
-                    Output::Text { body, .. } => json!({"kind":"text", "body":body}),
+            let outputs: Vec<Value> = cell.outputs.iter().map(|output| match output {
+                Output::Text { mime, ordinal, body } => json!({"kind":"text", "body":body,
+                    "mime":mime, "ordinal":ordinal, "cellId":cell.id,
+                    "executionRevision":cell.provenance.as_ref().map(|p| p.ordinal),
+                    "dependencySha256":cell.provenance.as_ref().map(|p| &p.prefix_sha256)}),
                     Output::Asset { mime, sha256, .. } => json!({"kind":"asset",
                         "body":sha256, "mime":mime,
                         "size":self.assets.get(sha256).map(Vec::len).unwrap_or(0)}),
@@ -133,7 +136,7 @@ impl UiSession {
     fn run_cell(&mut self, id: &str) -> Result<(), String> {
         let result = self
             .kernel
-            .rerun_cell(id)
+            .rerun_affected(id)
             .map_err(|error| error.to_string());
         if result.is_ok() {
             self.needs_restart = false;

@@ -130,8 +130,10 @@ fn facts_ignore_escaped_string_contents_and_collect_expression_reads() {
         facts.defines.into_iter().collect::<Vec<_>>(),
         vec!["answer"]
     );
-    assert_eq!(facts.reads.into_iter().collect::<Vec<_>>(), vec!["answer"]);
+    assert!(facts.reads.is_empty());
     assert!(!facts.opaque_effects);
+    let shadow = facts_for_source("let answer = answer + 1").unwrap();
+    assert_eq!(shadow.reads.into_iter().collect::<Vec<_>>(), vec!["answer"]);
 }
 
 #[test]
@@ -410,5 +412,102 @@ fn retained_scalars_keep_cli_arithmetic_and_string_behavior() {
     assert_eq!(
         output_body(&kernel.notebook().cells[3].outputs[0]),
         i64::MIN.to_string()
+    );
+}
+
+#[test]
+fn selective_edit_reruns_only_transitive_reader_and_reopens_with_dependency_digest() {
+    let mut kernel = NotebookKernel::open(notebook(vec![
+        code("seed", "let x = 3"),
+        code("independent", "let z = 9"),
+        code("result", "x + 4"),
+    ]))
+    .unwrap();
+    kernel.restart_and_run_all().unwrap();
+    let independent_revision = kernel.notebook().cells[1]
+        .provenance
+        .as_ref()
+        .unwrap()
+        .ordinal;
+    let independent_digest = kernel.notebook().cells[1]
+        .provenance
+        .as_ref()
+        .unwrap()
+        .prefix_sha256
+        .clone();
+
+    kernel.replace_cell("seed", "let x = 5".into()).unwrap();
+    assert_eq!(kernel.status("independent").unwrap(), CellStatus::Current);
+    assert_eq!(kernel.status("result").unwrap(), CellStatus::Stale);
+    kernel.rerun_affected("seed").unwrap();
+    assert_eq!(output_body(&kernel.notebook().cells[2].outputs[0]), "9");
+    assert_eq!(
+        kernel.notebook().cells[1]
+            .provenance
+            .as_ref()
+            .unwrap()
+            .ordinal,
+        independent_revision
+    );
+    assert_eq!(
+        kernel.notebook().cells[1]
+            .provenance
+            .as_ref()
+            .unwrap()
+            .prefix_sha256,
+        independent_digest
+    );
+
+    let saved = write_notebook(kernel.notebook()).unwrap();
+    let reopened = NotebookKernel::open(parse_notebook(&saved).unwrap()).unwrap();
+    assert_eq!(reopened.status("independent").unwrap(), CellStatus::Cached);
+    assert_eq!(reopened.status("result").unwrap(), CellStatus::Cached);
+    let mut edited = parse_notebook(&saved).unwrap();
+    edited.cells[0].source = "let x = 6".into();
+    let stale = NotebookKernel::open(edited).unwrap();
+    assert_eq!(stale.status("independent").unwrap(), CellStatus::Cached);
+    assert_eq!(stale.status("result").unwrap(), CellStatus::Stale);
+}
+
+#[test]
+fn forward_dependency_cycle_is_reported_before_execution() {
+    let error = NotebookKernel::open(notebook(vec![
+        code("a", "let x = y"),
+        code("b", "let y = x"),
+    ]))
+    .err()
+    .unwrap();
+    assert_eq!(error.code, "CGNK009");
+    assert!(error.message.contains("dependency cycles"));
+}
+
+#[test]
+fn rerun_affected_leaves_an_independent_edited_branch_stale() {
+    let mut kernel = NotebookKernel::open(notebook(vec![
+        code("a", "let x = 1"),
+        code("b", "let y = 2"),
+        code("read_a", "x + 1"),
+        code("read_b", "y + 1"),
+    ]))
+    .unwrap();
+    kernel.restart_and_run_all().unwrap();
+    let b_revision = kernel.notebook().cells[1]
+        .provenance
+        .as_ref()
+        .unwrap()
+        .ordinal;
+    kernel.replace_cell("a", "let x = 5".into()).unwrap();
+    kernel.replace_cell("b", "let y = 7".into()).unwrap();
+    kernel.rerun_affected("a").unwrap();
+    assert_eq!(output_body(&kernel.notebook().cells[2].outputs[0]), "6");
+    assert_eq!(kernel.status("b").unwrap(), CellStatus::Stale);
+    assert_eq!(kernel.status("read_b").unwrap(), CellStatus::Stale);
+    assert_eq!(
+        kernel.notebook().cells[1]
+            .provenance
+            .as_ref()
+            .unwrap()
+            .ordinal,
+        b_revision
     );
 }

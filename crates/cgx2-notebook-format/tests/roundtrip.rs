@@ -75,7 +75,7 @@ fn provenance_rejects_duplicate_bad_digest_and_output_ordinal() {
         Err(NotebookError::InvalidProvenance(_))
     ));
     assert!(matches!(
-        parse_notebook(&valid.replace("schema=1", "schema=2")),
+        parse_notebook(&valid.replace("schema=1", "schema=3")),
         Err(NotebookError::InvalidProvenance(_))
     ));
 }
@@ -143,7 +143,52 @@ fn malformed_mime_is_rejected() {
     let text = "#!cgnb 1\n%% code id=a\n%% output id=a mime=image/png/extra ordinal=1\n";
     assert!(matches!(
         parse_notebook(text),
-        Err(NotebookError::MalformedHeader { .. })
+        Err(NotebookError::InvalidOutput(_))
+    ));
+}
+
+#[test]
+fn captured_text_is_plain_utf8_and_bounded_on_read_and_write() {
+    use cgx2_notebook_format::MAX_TEXT_OUTPUT_BYTES;
+    let oversized = "é".repeat(MAX_TEXT_OUTPUT_BYTES / 2 + 1);
+    let mut notebook = Notebook {
+        version: 1,
+        cells: vec![Cell {
+            id: "cell".into(),
+            kind: CellKind::Code,
+            source: "1".into(),
+            outputs: vec![Output::Text {
+                mime: "text/plain".into(),
+                ordinal: 1,
+                body: oversized.clone(),
+            }],
+            provenance: None,
+        }],
+    };
+    assert!(matches!(
+        write_notebook(&notebook),
+        Err(NotebookError::SizeLimit { .. })
+    ));
+    notebook.cells[0].outputs[0] = Output::Text {
+        mime: "text/html".into(),
+        ordinal: 1,
+        body: "<script>bad()</script>".into(),
+    };
+    assert!(matches!(
+        write_notebook(&notebook),
+        Err(NotebookError::InvalidOutput(_))
+    ));
+    let raw = format!(
+        "#!cgnb 1\n%% code id=cell\n1\n%% output id=cell mime=text/plain ordinal=1\n{oversized}\n"
+    );
+    assert!(matches!(
+        parse_notebook(&raw),
+        Err(NotebookError::SizeLimit { .. })
+    ));
+    let html = "#!cgnb 1\n%% code id=cell\n1\n%% output id=cell mime=text/html ordinal=1\nx\n";
+    assert!(matches!(
+        parse_notebook(html),
+        Err(NotebookError::InvalidOutput(_))
     ));
 }
 

@@ -167,7 +167,7 @@ fn cached_and_current_provenance_are_exposed_after_save_and_reopen() {
     assert!(state["cells"][0]["provenance"].is_null());
     let (_, state) = post(port, "/api/run-cell", json!({"id":"value"}), &secret);
     assert_eq!(state["cells"][0]["status"], "current");
-    assert_eq!(state["cells"][0]["provenance"]["schemaVersion"], 1);
+    assert_eq!(state["cells"][0]["provenance"]["schemaVersion"], 2);
     assert_eq!(
         post(
             port,
@@ -481,8 +481,9 @@ fn selected_rerun_edit_save_reopen_and_clean_restart() {
     let (status, state) = post(port, "/api/run-cell", json!({"id":"seed"}), &secret);
     assert_eq!(status, 200);
     assert_eq!(state["cells"][0]["status"], "current");
-    assert_eq!(state["cells"][1]["status"], "stale");
-    let (_, state) = post(port, "/api/run-cell", json!({"id":"result"}), &secret);
+    assert_eq!(state["cells"][1]["status"], "current");
+    let (_, body) = request(port, "GET", "/api/state", None, None, None, None);
+    let state: Value = serde_json::from_str(&body).unwrap();
     assert_eq!(state["cells"][1]["outputs"][0]["body"], "9");
     assert_eq!(
         post(
@@ -570,4 +571,60 @@ fn selected_rerun_route_rejects_bad_ids_and_missing_guards() {
     assert_eq!(status, 200);
     assert_eq!(state["cells"][1]["outputs"][0]["body"], "<b>safe</b>");
     handle.join().unwrap();
+}
+#[test]
+fn selective_ui_rerun_preserves_independent_revision_and_exposes_output_digest() {
+    let f = Fixture::new(
+        "#!cgnb 1\n%% code id=seed\nlet x = 3\n%% code id=independent\nlet z = 9\n%% code id=result\nx + 4\n",
+    );
+    let (port, handle) = server(&f.input, 6);
+    let secret = token(port);
+    let (_, before) = post(port, "/api/restart", json!({}), &secret);
+    let revision = before["cells"][1]["provenance"]["ordinal"].clone();
+    let digest = before["cells"][1]["provenance"]["prefixSha256"].clone();
+    let (_, edited) = post(
+        port,
+        "/api/edit",
+        json!({"id":"seed","source":"let x = 5"}),
+        &secret,
+    );
+    assert_eq!(edited["cells"][1]["status"], "current");
+    assert_eq!(edited["cells"][2]["status"], "stale");
+    let (status, after) = post(port, "/api/run-cell", json!({"id":"seed"}), &secret);
+    assert_eq!(status, 200);
+    assert_eq!(after["cells"][2]["outputs"][0]["body"], "9");
+    assert_eq!(after["cells"][2]["outputs"][0]["mime"], "text/plain");
+    assert_eq!(after["cells"][2]["outputs"][0]["cellId"], "result");
+    assert_eq!(
+        after["cells"][2]["outputs"][0]["executionRevision"],
+        after["cells"][2]["provenance"]["ordinal"]
+    );
+    assert_eq!(
+        after["cells"][2]["outputs"][0]["dependencySha256"]
+            .as_str()
+            .unwrap()
+            .len(),
+        64
+    );
+    assert_eq!(after["cells"][1]["provenance"]["ordinal"], revision);
+    assert_eq!(after["cells"][1]["provenance"]["prefixSha256"], digest);
+    let (_, body) = request(port, "GET", "/api/state", None, None, None, None);
+    let state: Value = serde_json::from_str(&body).unwrap();
+    assert_eq!(state["cells"][1]["status"], "current");
+    assert_eq!(
+        post(
+            port,
+            "/api/save",
+            json!({"name":"selective.cgnb","overwrite":false}),
+            &secret
+        )
+        .0,
+        200
+    );
+    handle.join().unwrap();
+    let saved = parse_notebook_bytes(&fs::read(f.dir.join("selective.cgnb")).unwrap()).unwrap();
+    assert_eq!(
+        saved.cells[1].provenance.as_ref().unwrap().ordinal,
+        revision.as_u64().unwrap()
+    );
 }

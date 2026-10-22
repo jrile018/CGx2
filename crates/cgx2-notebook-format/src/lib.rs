@@ -14,12 +14,15 @@ pub use assets::{
 };
 pub use parse::{parse_notebook, parse_notebook_bytes};
 pub use provenance::{
-    make_provenance, prefix_hash, source_hash, EVALUATOR_PROFILE, PROVENANCE_SCHEMA_VERSION,
+    make_provenance, prefix_hash, source_hash, CAPTURE_SCHEMA_VERSION, EVALUATOR_PROFILE,
+    PROVENANCE_SCHEMA_VERSION,
 };
 pub use write::write_notebook;
 
 pub const MAX_NOTEBOOK_BYTES: usize = 16 * 1024 * 1024;
 pub const MAX_ASSET_BYTES: usize = 8 * 1024 * 1024;
+/// Maximum decoded UTF-8 bytes in one captured display value.
+pub const MAX_TEXT_OUTPUT_BYTES: usize = 64 * 1024;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Notebook {
@@ -41,6 +44,7 @@ pub struct Cell {
 pub struct Provenance {
     pub schema_version: u32,
     pub source_sha256: String,
+    /// Schema 1: whole preceding code prefix. Schema 2: transitive dependency digest.
     pub prefix_sha256: String,
     pub evaluator: String,
     pub ordinal: u64,
@@ -161,4 +165,19 @@ pub(crate) fn check_document_size(bytes: usize) -> Result<(), NotebookError> {
     } else {
         Ok(())
     }
+}
+
+pub(crate) fn validate_captured_text(mime: &str, body: &str) -> Result<(), NotebookError> {
+    if mime != "text/plain" {
+        return Err(NotebookError::InvalidOutput(format!(
+            "captured text requires MIME text/plain, got {mime}"
+        )));
+    }
+    if body.len() > MAX_TEXT_OUTPUT_BYTES {
+        return Err(NotebookError::SizeLimit {
+            what: "captured text output",
+            limit: MAX_TEXT_OUTPUT_BYTES,
+        });
+    }
+    Ok(())
 }

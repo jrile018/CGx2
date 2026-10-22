@@ -81,7 +81,7 @@ fn run_saves_fresh_reopenable_output_without_touching_input() {
     assert!(inspected.status.success(), "{}", stderr(&inspected));
     let text = String::from_utf8_lossy(&inspected.stdout);
     assert!(
-        text.contains("result\tcode\tcached\tschema=1\tordinal="),
+        text.contains("result\tcode\tcached\tschema=2\tordinal="),
         "{text}"
     );
     assert!(text.contains("source_sha256="), "{text}");
@@ -386,4 +386,70 @@ fn invalid_inputs_and_unknown_commands_fail() {
     let help = run_str(&["--help"]);
     assert!(help.status.success());
     assert!(String::from_utf8_lossy(&help.stdout).contains("pure scalar"));
+}
+#[test]
+fn edited_run_saves_output_and_preserves_independent_execution_revision() {
+    let fixture = Fixture::new();
+    let input = fixture.write("input.cgnb",
+        "#!cgnb 1\n%% code id=seed\nlet x = 3\n%% code id=independent\nlet z = 9\n%% code id=result\nx + 4\n");
+    let output = fixture.path("output.cgnb");
+    let result = run_str(&[
+        "run",
+        input.to_str().unwrap(),
+        "--out",
+        output.to_str().unwrap(),
+        "--edit-cell",
+        "seed",
+        "--source",
+        "let x = 5",
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let notebook = parse_notebook_bytes(&fs::read(&output).unwrap()).unwrap();
+    assert_eq!(notebook.cells[0].provenance.as_ref().unwrap().ordinal, 4);
+    assert_eq!(notebook.cells[1].provenance.as_ref().unwrap().ordinal, 2);
+    assert_eq!(notebook.cells[2].provenance.as_ref().unwrap().ordinal, 5);
+    assert!(matches!(&notebook.cells[2].outputs[0], CellOutput::Text { body, .. } if body == "9"));
+    let shown = run_str(&["show", output.to_str().unwrap(), "result"]);
+    assert!(shown.status.success(), "{}", stderr(&shown));
+    let text = String::from_utf8(shown.stdout).unwrap();
+    assert!(text.contains("schema=2 execution_revision=5"));
+    assert!(text.contains("mime=text/plain"));
+    assert!(text.contains("text=\"9\""));
+}
+
+#[test]
+fn two_cell_fixture_runs_edits_saves_exports_and_reopens_without_execution() {
+    let fixture = Fixture::new();
+    let input = Path::new(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/examples/two-cells.cgnb"
+    ));
+    let saved = fixture.path("saved.cgnb");
+    let portable = fixture.path("portable.cgnb");
+    let run_result = run_str(&[
+        "run",
+        input.to_str().unwrap(),
+        "--out",
+        saved.to_str().unwrap(),
+        "--edit-cell",
+        "seed",
+        "--source",
+        "let x = 5",
+    ]);
+    assert!(run_result.status.success(), "{}", stderr(&run_result));
+    let shown = run_str(&["show", saved.to_str().unwrap(), "result"]);
+    assert!(shown.status.success(), "{}", stderr(&shown));
+    let display = String::from_utf8(shown.stdout).unwrap();
+    assert!(display.contains("schema=2 execution_revision=4"));
+    assert!(display.contains("text=\"9\""));
+    let exported = run_str(&[
+        "export",
+        saved.to_str().unwrap(),
+        "--out",
+        portable.to_str().unwrap(),
+    ]);
+    assert!(exported.status.success(), "{}", stderr(&exported));
+    let reopened = run_str(&["show", portable.to_str().unwrap(), "result"]);
+    assert!(reopened.status.success(), "{}", stderr(&reopened));
+    assert_eq!(reopened.stdout, display.as_bytes());
 }

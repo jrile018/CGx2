@@ -20,19 +20,23 @@ static TEMP_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
 const HELP: &str = "cgx2-notebook: clean, pure scalar notebook file runner\n\
 Usage:\n\
-  cgx2-notebook run INPUT.cgnb --out OUTPUT.cgnb [--force]\n\
+  cgx2-notebook run INPUT.cgnb --out OUTPUT.cgnb [--edit-cell ID --source CG_CODE] [--force]\n\
   cgx2-notebook inspect INPUT.cgnb\n\
+  cgx2-notebook show INPUT.cgnb CELL_ID\n\
   cgx2-notebook export INPUT.cgnb --out PORTABLE.cgnb [--force]\n\
   cgx2-notebook import PORTABLE.cgnb --out OUTPUT.cgnb [--force]\n\
 \n\
 Run starts a clean session, replaces saved code outputs, executes code cells in file order,\n\
 and saves fresh text/plain outputs. Inspect reads cell IDs, kinds, saved provenance and status\n\
 without executing. Only immutable bindings and pure scalar expressions are supported.\n\
-There is no live UI, individual side-effecting rerun, or implicit overwrite.\n";
+With --edit-cell, run first establishes clean scalar state, then recomputes the edit and its\n\
+transitive readers without rerunning independent cells. Show prints saved captured text and\n\
+provenance without executing. There is no side-effecting rerun or implicit overwrite.\n";
 
 enum Command {
     Help,
     Inspect(PathBuf),
+    Show(PathBuf, String),
     Export {
         input: PathBuf,
         output: PathBuf,
@@ -47,6 +51,8 @@ enum Command {
         input: PathBuf,
         output: PathBuf,
         force: bool,
+        edit_cell: Option<String>,
+        source: Option<String>,
     },
 }
 
@@ -103,6 +109,22 @@ fn parse_command(mut args: impl Iterator<Item = OsString>) -> Result<Command, Co
         require_extension(&input)?;
         return Ok(Command::Inspect(input));
     }
+    if command == "show" {
+        let input =
+            PathBuf::from(args.next().ok_or_else(|| {
+                CommandError::Usage("show requires INPUT.cgnb and CELL_ID".into())
+            })?);
+        require_extension(&input)?;
+        let id = args
+            .next()
+            .ok_or_else(|| CommandError::Usage("show requires CELL_ID".into()))?
+            .into_string()
+            .map_err(|_| CommandError::Usage("CELL_ID must be UTF-8".into()))?;
+        if args.next().is_some() {
+            return Err(CommandError::Usage("show accepts one CELL_ID".into()));
+        }
+        return Ok(Command::Show(input, id));
+    }
     if command == "run" || command == "export" || command == "import" {
         let input = PathBuf::from(args.next().ok_or_else(|| {
             CommandError::Usage(format!("{} requires INPUT.cgnb", command.to_string_lossy()))
@@ -110,6 +132,8 @@ fn parse_command(mut args: impl Iterator<Item = OsString>) -> Result<Command, Co
         require_extension(&input)?;
         let mut output = None;
         let mut force = false;
+        let mut edit_cell = None;
+        let mut source = None;
         while let Some(arg) = args.next() {
             if arg == "--out" {
                 if output.is_some() {
@@ -126,6 +150,28 @@ fn parse_command(mut args: impl Iterator<Item = OsString>) -> Result<Command, Co
                     return Err(CommandError::Usage("--force may appear only once".into()));
                 }
                 force = true;
+            } else if command == "run" && arg == "--edit-cell" {
+                if edit_cell.is_some() {
+                    return Err(CommandError::Usage(
+                        "--edit-cell may appear only once".into(),
+                    ));
+                }
+                edit_cell = Some(
+                    args.next()
+                        .ok_or_else(|| CommandError::Usage("--edit-cell requires ID".into()))?
+                        .into_string()
+                        .map_err(|_| CommandError::Usage("cell ID must be UTF-8".into()))?,
+                );
+            } else if command == "run" && arg == "--source" {
+                if source.is_some() {
+                    return Err(CommandError::Usage("--source may appear only once".into()));
+                }
+                source = Some(
+                    args.next()
+                        .ok_or_else(|| CommandError::Usage("--source requires CG_CODE".into()))?
+                        .into_string()
+                        .map_err(|_| CommandError::Usage("source must be UTF-8".into()))?,
+                );
             } else {
                 return Err(CommandError::Usage(format!(
                     "unexpected argument: {}",
@@ -136,11 +182,18 @@ fn parse_command(mut args: impl Iterator<Item = OsString>) -> Result<Command, Co
         let output = output.ok_or_else(|| {
             CommandError::Usage(format!("{} requires --out", command.to_string_lossy()))
         })?;
+        if edit_cell.is_some() != source.is_some() {
+            return Err(CommandError::Usage(
+                "--edit-cell and --source must appear together".into(),
+            ));
+        }
         return Ok(if command == "run" {
             Command::Run {
                 input,
                 output,
                 force,
+                edit_cell,
+                source,
             }
         } else if command == "export" {
             Command::Export {
@@ -204,10 +257,36 @@ fn execute(command: Command) -> Result<(), CommandError> {
             }
             Ok(())
         }
+        Command::Show(input, id) => {
+            let notebook = read_notebook(&input)?;
+            let cell = notebook
+                .cells
+                .iter()
+                .find(|cell| cell.id == id)
+                .ok_or_else(|| CommandError::Input(format!("unknown notebook cell ID: {id}")))?;
+            if let Some(p) = &cell.provenance {
+                println!("cell={id} schema={} execution_revision={} source_sha256={} dependency_sha256={} result={}",
+                    p.schema_version, p.ordinal, p.source_sha256, p.prefix_sha256,
+                    if p.result == cgx2_notebook_format::ProvenanceResult::Success { "success" } else { "failed" });
+            }
+            for output in &cell.outputs {
+                if let cgx2_notebook_format::Output::Text {
+                    mime,
+                    ordinal,
+                    body,
+                } = output
+                {
+                    println!("mime={mime} output_ordinal={ordinal} text={:?}", body);
+                }
+            }
+            Ok(())
+        }
         Command::Run {
             input,
             output,
             force,
+            edit_cell,
+            source,
         } => {
             check_output_collision(&output, force)?;
             let notebook = read_notebook(&input)?;
@@ -216,6 +295,14 @@ fn execute(command: Command) -> Result<(), CommandError> {
             kernel
                 .restart_and_run_all()
                 .map_err(|error| CommandError::Cell(error.to_string()))?;
+            if let (Some(id), Some(source)) = (edit_cell, source) {
+                kernel
+                    .replace_cell(&id, source)
+                    .map_err(|error| CommandError::Cell(error.to_string()))?;
+                kernel
+                    .rerun_affected(&id)
+                    .map_err(|error| CommandError::Cell(error.to_string()))?;
+            }
             let text = write_notebook(kernel.notebook())
                 .map_err(|error| CommandError::Output(error.to_string()))?;
             atomic_write(&output, text.as_bytes(), force)

@@ -144,6 +144,27 @@ impl NotebookKernel {
         Ok(())
     }
 
+    /// Recompute the selected cell and only its stale transitive readers.
+    /// Independent cells keep their captured output and execution revision.
+    pub fn rerun_affected(&mut self, id: &str) -> Result<(), KernelError> {
+        let affected = self.session.affected_ids(id).map_err(session_error)?;
+        self.rerun_cell(id)?;
+        for candidate in affected {
+            if self.session.status(&candidate).map_err(session_error)? == CellStatus::Stale {
+                if let Err(error) = self.session.run_cell(&candidate) {
+                    self.requires_restart = true;
+                    return Err(session_error(error));
+                }
+            }
+        }
+        self.next_code = self
+            .code_order
+            .iter()
+            .position(|candidate| self.session.status(candidate).ok() != Some(CellStatus::Current))
+            .unwrap_or(self.code_order.len());
+        Ok(())
+    }
+
     pub fn replace_cell(&mut self, id: &str, source: String) -> Result<(), KernelError> {
         let mut proposed = self.session.notebook().clone();
         let cell = proposed
@@ -159,6 +180,7 @@ impl NotebookKernel {
         }
         cell.source = source.clone();
         validate_limits(&proposed)?;
+        let _ = new_session(proposed)?;
         self.session
             .replace_cell(id, source.clone(), facts_or_opaque(&source))
             .map_err(session_error)?;
@@ -219,7 +241,38 @@ fn new_session(notebook: Notebook) -> Result<NotebookSession<RetainedExecutor>, 
         .filter(|cell| cell.kind == CellKind::Code)
         .map(|cell| (cell.id.clone(), facts_or_opaque(&cell.source)))
         .collect::<BTreeMap<_, _>>();
-    NotebookSession::new(notebook, facts, RetainedExecutor::default()).map_err(session_error)
+    for (index, cell) in notebook.cells.iter().enumerate() {
+        if cell.kind != CellKind::Code {
+            continue;
+        }
+        for read in &facts[&cell.id].reads {
+            if notebook.cells[..index].iter().any(|earlier| {
+                earlier.kind == CellKind::Code && facts[&earlier.id].defines.contains(read)
+            }) {
+                continue;
+            }
+            if notebook.cells[index + 1..].iter().any(|later| {
+                later.kind == CellKind::Code && facts[&later.id].defines.contains(read)
+            }) {
+                return Err(error("CGNK009", format!(
+                    "cell {} has a forward dependency on {read}; dependency cycles and forward references are unsupported",
+                    cell.id
+                )));
+            }
+        }
+    }
+    let order = notebook
+        .cells
+        .iter()
+        .enumerate()
+        .filter(|(_, cell)| cell.kind == CellKind::Code)
+        .map(|(index, cell)| (cell.id.clone(), index))
+        .collect();
+    let executor = RetainedExecutor {
+        order,
+        ..RetainedExecutor::default()
+    };
+    NotebookSession::new(notebook, facts, executor).map_err(session_error)
 }
 
 fn facts_or_opaque(source: &str) -> CellFacts {
@@ -242,6 +295,7 @@ pub fn facts_for_source(source: &str) -> Result<CellFacts, KernelError> {
         ));
     }
     let mut facts = CellFacts::default();
+    let mut locals = BTreeSet::new();
     for statement in &module.statements {
         match &statement.kind {
             StmtKind::Let {
@@ -250,10 +304,11 @@ pub fn facts_for_source(source: &str) -> Result<CellFacts, KernelError> {
                 value,
                 ..
             } => {
+                collect_external_reads(value, &locals, &mut facts)?;
                 facts.defines.insert(name.clone());
-                collect_reads(value, &mut facts)?;
+                locals.insert(name.clone());
             }
-            StmtKind::Expr(value) => collect_reads(value, &mut facts)?,
+            StmtKind::Expr(value) => collect_external_reads(value, &locals, &mut facts)?,
             _ => {
                 return Err(error(
                     "CGNK001",
@@ -263,6 +318,17 @@ pub fn facts_for_source(source: &str) -> Result<CellFacts, KernelError> {
         }
     }
     Ok(facts)
+}
+
+fn collect_external_reads(
+    expression: &Expr,
+    locals: &BTreeSet<String>,
+    facts: &mut CellFacts,
+) -> Result<(), KernelError> {
+    let mut reads = CellFacts::default();
+    collect_reads(expression, &mut reads)?;
+    facts.reads.extend(reads.reads.difference(locals).cloned());
+    Ok(())
 }
 
 fn collect_reads(expression: &Expr, facts: &mut CellFacts) -> Result<(), KernelError> {
@@ -303,15 +369,23 @@ struct RetainedBinding {
 
 #[derive(Debug, Default)]
 struct RetainedExecutor {
-    bindings: BTreeMap<String, RetainedBinding>,
+    bindings: BTreeMap<String, Vec<RetainedBinding>>,
+    order: BTreeMap<String, usize>,
     evaluation_bytes: usize,
 }
 
 impl RetainedExecutor {
-    fn prefix(&self, pending: &BTreeMap<String, Value>) -> Result<String, String> {
+    fn prefix(&self, id: &str, pending: &BTreeMap<String, Value>) -> Result<String, String> {
         let mut script = String::new();
-        for (name, binding) in &self.bindings {
-            append_binding(&mut script, name, &binding.value)?;
+        let selected_index = self.order.get(id).copied().unwrap_or(usize::MAX);
+        for (name, bindings) in &self.bindings {
+            if let Some(binding) = bindings
+                .iter()
+                .filter(|binding| self.order[&binding.cell_id] < selected_index)
+                .max_by_key(|binding| self.order[&binding.cell_id])
+            {
+                append_binding(&mut script, name, &binding.value)?;
+            }
         }
         for (name, value) in pending {
             append_binding(&mut script, name, value)?;
@@ -337,7 +411,7 @@ impl RetainedExecutor {
             let first = &diagnostics[0];
             format!("{}: {}", first.code, first.message)
         })?;
-        let prefix = self.prefix(&BTreeMap::new())?;
+        let prefix = self.prefix(id, &BTreeMap::new())?;
         let checked = format!("{prefix}{source}");
         if checked.len() > MAX_REPLAY_BYTES {
             return Err(limit_error());
@@ -352,7 +426,7 @@ impl RetainedExecutor {
         let mut tail = Value::Unit;
         for statement in &module.statements {
             let statement_source = &source[statement.span.start..statement.span.end];
-            let prefix = self.prefix(&pending)?;
+            let prefix = self.prefix(id, &pending)?;
             let (script, defined) = match &statement.kind {
                 StmtKind::Let { name, .. } => {
                     (format!("{prefix}{statement_source}\n{name}"), Some(name))
@@ -378,7 +452,11 @@ impl RetainedExecutor {
         let retained_bytes = self
             .bindings
             .iter()
-            .map(|(name, binding)| name.len() + binding.cell_id.len() + value_size(&binding.value))
+            .flat_map(|(name, bindings)| {
+                bindings.iter().map(move |binding| {
+                    name.len() + binding.cell_id.len() + value_size(&binding.value)
+                })
+            })
             .sum::<usize>()
             + pending
                 .iter()
@@ -388,13 +466,13 @@ impl RetainedExecutor {
             return Err(limit_error());
         }
         for (name, value) in pending {
-            self.bindings.insert(
-                name,
-                RetainedBinding {
+            self.bindings
+                .entry(name)
+                .or_default()
+                .push(RetainedBinding {
                     value,
                     cell_id: id.to_owned(),
-                },
-            );
+                });
         }
         Ok(CellResult {
             text: (tail != Value::Unit).then(|| tail.to_string()),
@@ -458,8 +536,10 @@ impl CellExecutor for RetainedExecutor {
 
     fn invalidate_cells(&mut self, ids: &[String]) {
         let invalidated: BTreeSet<_> = ids.iter().collect();
-        self.bindings
-            .retain(|_, binding| !invalidated.contains(&binding.cell_id));
+        self.bindings.retain(|_, bindings| {
+            bindings.retain(|binding| !invalidated.contains(&binding.cell_id));
+            !bindings.is_empty()
+        });
     }
 
     fn reset(&mut self) -> Result<(), String> {

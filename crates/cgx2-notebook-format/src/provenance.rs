@@ -4,6 +4,8 @@ use crate::{Cell, CellKind, Notebook, NotebookError, Provenance, ProvenanceResul
 
 pub const EVALUATOR_PROFILE: &str = "cgx2-pure-scalar-v1";
 pub const PROVENANCE_SCHEMA_VERSION: u32 = 1;
+/// Schema 2 records a source/dependency digest in `prefix_sha256`.
+pub const CAPTURE_SCHEMA_VERSION: u32 = 2;
 
 fn digest(bytes: &[u8]) -> String {
     format!("{:x}", Sha256::digest(bytes))
@@ -57,7 +59,7 @@ pub(crate) fn validate_provenance(cell: &Cell) -> Result<(), NotebookError> {
             cell.id
         )));
     }
-    if provenance.schema_version != PROVENANCE_SCHEMA_VERSION
+    if ![PROVENANCE_SCHEMA_VERSION, CAPTURE_SCHEMA_VERSION].contains(&provenance.schema_version)
         || provenance.evaluator != EVALUATOR_PROFILE
         || !crate::assets::valid_digest(&provenance.source_sha256)
         || !crate::assets::valid_digest(&provenance.prefix_sha256)

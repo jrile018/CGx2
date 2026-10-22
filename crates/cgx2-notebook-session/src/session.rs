@@ -3,9 +3,10 @@ use std::fmt;
 
 use cgx2_notebook_format::{
     make_provenance, prefix_hash, source_hash, CellKind, Notebook, Output, ProvenanceResult,
+    CAPTURE_SCHEMA_VERSION, MAX_TEXT_OUTPUT_BYTES,
 };
 
-use crate::deps::{affected_after, CellFacts};
+use crate::deps::{affected_after, dependency_digest, CellFacts};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum CellStatus {
@@ -43,6 +44,7 @@ pub enum SessionError {
     ExecutionFailed { id: String, message: String },
     ResetFailed(String),
     PrerequisiteNotCurrent { id: String, prerequisite: String },
+    OutputTooLarge { id: String, limit: usize },
     OrdinalOverflow,
 }
 
@@ -62,6 +64,9 @@ impl fmt::Display for SessionError {
                 f,
                 "cell {id} needs cell {prerequisite} rerun, or Restart and Run All"
             ),
+            Self::OutputTooLarge { id, limit } => {
+                write!(f, "cell {id} captured text exceeds {limit} UTF-8 bytes")
+            }
             Self::OrdinalOverflow => write!(f, "notebook output ordinal overflow"),
         }
     }
@@ -74,6 +79,7 @@ pub struct NotebookSession<E: CellExecutor> {
     notebook: Notebook,
     facts: BTreeMap<String, CellFacts>,
     statuses: BTreeMap<String, CellStatus>,
+    pending_affected: BTreeMap<String, BTreeSet<String>>,
     executor: E,
     last_ordinal: u64,
     last_execution_ordinal: u64,
@@ -121,8 +127,13 @@ impl<E: CellExecutor> NotebookSession<E> {
                 continue;
             }
             let status = if let Some(provenance) = &cell.provenance {
+                let expected_dependency = if provenance.schema_version == CAPTURE_SCHEMA_VERSION {
+                    dependency_digest(&notebook.cells, &facts, index)
+                } else {
+                    prefix_hash(&notebook.cells, index)
+                };
                 if provenance.source_sha256 != source_hash(&cell.source)
-                    || provenance.prefix_sha256 != prefix_hash(&notebook.cells, index)
+                    || provenance.prefix_sha256 != expected_dependency
                 {
                     CellStatus::Stale
                 } else if provenance.result == ProvenanceResult::Failed {
@@ -144,6 +155,7 @@ impl<E: CellExecutor> NotebookSession<E> {
             notebook,
             facts,
             statuses,
+            pending_affected: BTreeMap::new(),
             executor,
             last_ordinal,
             last_execution_ordinal: last_execution_ordinal.max(last_ordinal),
@@ -161,6 +173,32 @@ impl<E: CellExecutor> NotebookSession<E> {
         &self.notebook
     }
 
+    /// Downstream cells affected by the selected cell's latest edit or rerun.
+    /// The edit snapshot retains readers of names that the new source removed.
+    pub fn affected_ids(&self, id: &str) -> Result<Vec<String>, SessionError> {
+        let index = self.cell_index(id)?;
+        if self.notebook.cells[index].kind == CellKind::Markdown {
+            return Err(SessionError::MarkdownCell(id.into()));
+        }
+        if let Some(ids) = self.pending_affected.get(id) {
+            return Ok(self.notebook.cells[index + 1..]
+                .iter()
+                .filter(|cell| ids.contains(&cell.id))
+                .map(|cell| cell.id.clone())
+                .collect());
+        }
+        Ok(affected_after(
+            &self.notebook.cells,
+            &self.facts,
+            index,
+            &self.facts[id].defines,
+            self.facts[id].opaque_effects,
+        )
+        .into_iter()
+        .map(|index| self.notebook.cells[index].id.clone())
+        .collect())
+    }
+
     pub fn run_cell(&mut self, id: &str) -> Result<(), SessionError> {
         let index = self.cell_index(id)?;
         if self.notebook.cells[index].kind == CellKind::Markdown {
@@ -171,6 +209,7 @@ impl<E: CellExecutor> NotebookSession<E> {
             self.fail_cell(index);
             return Err(SessionError::OrdinalOverflow);
         }
+        self.executor.invalidate_cells(&[id.to_owned()]);
         let source = self.notebook.cells[index].source.clone();
         let result = match self.executor.execute_cell(id, &source) {
             Ok(result) => result,
@@ -197,9 +236,24 @@ impl<E: CellExecutor> NotebookSession<E> {
         };
         let mut output_ordinal = None;
         let outputs = if let Some(body) = result.text {
+            if body.len() > MAX_TEXT_OUTPUT_BYTES {
+                self.executor.invalidate_cells(&[id.to_owned()]);
+                self.statuses.insert(id.into(), CellStatus::Failed);
+                self.record_failed_attempt(index);
+                self.invalidate_after(
+                    index,
+                    &self.facts[id].defines.clone(),
+                    self.facts[id].opaque_effects,
+                );
+                return Err(SessionError::OutputTooLarge {
+                    id: id.into(),
+                    limit: MAX_TEXT_OUTPUT_BYTES,
+                });
+            }
             let ordinal = match self.last_ordinal.checked_add(1) {
                 Some(ordinal) => ordinal,
                 None => {
+                    self.executor.invalidate_cells(&[id.to_owned()]);
                     self.statuses.insert(id.into(), CellStatus::Failed);
                     self.invalidate_after(
                         index,
@@ -221,13 +275,13 @@ impl<E: CellExecutor> NotebookSession<E> {
         };
         self.last_execution_ordinal = execution_ordinal;
         self.notebook.cells[index].outputs = outputs;
-        self.notebook.cells[index].provenance = Some(make_provenance(
-            &self.notebook,
-            index,
-            execution_ordinal,
-            output_ordinal,
-        ));
+        let mut provenance =
+            make_provenance(&self.notebook, index, execution_ordinal, output_ordinal);
+        provenance.schema_version = CAPTURE_SCHEMA_VERSION;
+        provenance.prefix_sha256 = dependency_digest(&self.notebook.cells, &self.facts, index);
+        self.notebook.cells[index].provenance = Some(provenance);
         self.statuses.insert(id.into(), CellStatus::Current);
+        self.pending_affected.remove(id);
         self.invalidate_after(
             index,
             &self.facts[id].defines.clone(),
@@ -243,7 +297,12 @@ impl<E: CellExecutor> NotebookSession<E> {
             return Err(SessionError::MarkdownCell(id.into()));
         }
         self.check_prerequisites(index, id)?;
-        self.invalidate_suffix(index);
+        self.executor.invalidate_cells(&[id.to_owned()]);
+        self.invalidate_after(
+            index,
+            &self.facts[id].defines.clone(),
+            self.facts[id].opaque_effects,
+        );
         self.run_cell(id)
     }
 
@@ -257,14 +316,53 @@ impl<E: CellExecutor> NotebookSession<E> {
         if self.notebook.cells[index].kind == CellKind::Markdown {
             return Err(SessionError::FactsForMarkdown(id.into()));
         }
-        self.facts.insert(id.into(), facts);
+        if self.notebook.cells[index].source == source && self.facts[id] == facts {
+            return Ok(());
+        }
+        let old = self.facts[id].clone();
+        let mut affected: BTreeSet<usize> = affected_after(
+            &self.notebook.cells,
+            &self.facts,
+            index,
+            &old.defines,
+            old.opaque_effects,
+        )
+        .into_iter()
+        .collect();
+        if let Some(pending) = self.pending_affected.get(id) {
+            affected.extend(
+                (index + 1..self.notebook.cells.len())
+                    .filter(|later| pending.contains(&self.notebook.cells[*later].id)),
+            );
+        }
+        self.facts.insert(id.into(), facts.clone());
         self.notebook.cells[index].source = source;
-        self.invalidate_suffix(index);
+        affected.extend(affected_after(
+            &self.notebook.cells,
+            &self.facts,
+            index,
+            &facts.defines,
+            facts.opaque_effects,
+        ));
+        let invalidated: Vec<String> = std::iter::once(id.to_owned())
+            .chain(
+                affected
+                    .iter()
+                    .map(|index| self.notebook.cells[*index].id.clone()),
+            )
+            .collect();
+        self.pending_affected
+            .insert(id.into(), invalidated.iter().skip(1).cloned().collect());
+        self.executor.invalidate_cells(&invalidated);
         self.mark_stale(index);
+        for affected in affected {
+            self.mark_stale(affected);
+        }
         Ok(())
     }
 
     pub fn restart_and_run_all(&mut self) -> Result<(), SessionError> {
+        self.pending_affected.clear();
         if let Err(message) = self.executor.reset() {
             self.stale_all_code();
             return Err(SessionError::ResetFailed(message));
@@ -293,9 +391,6 @@ impl<E: CellExecutor> NotebookSession<E> {
 
     fn check_prerequisites(&self, index: usize, id: &str) -> Result<(), SessionError> {
         for read in &self.facts[id].reads {
-            if self.facts[id].defines.contains(read) {
-                continue;
-            }
             if let Some(prerequisite) = self.notebook.cells[..index].iter().rev().find(|cell| {
                 cell.kind == CellKind::Code && self.facts[&cell.id].defines.contains(read)
             }) {
@@ -319,6 +414,7 @@ impl<E: CellExecutor> NotebookSession<E> {
 
     fn fail_cell(&mut self, index: usize) {
         let id = self.notebook.cells[index].id.clone();
+        self.executor.invalidate_cells(std::slice::from_ref(&id));
         self.statuses.insert(id.clone(), CellStatus::Failed);
         self.invalidate_after(
             index,
@@ -343,13 +439,21 @@ impl<E: CellExecutor> NotebookSession<E> {
             return;
         }
         let mut provenance = make_provenance(&self.notebook, index, ordinal, output_ordinal);
+        provenance.schema_version = CAPTURE_SCHEMA_VERSION;
+        provenance.prefix_sha256 = dependency_digest(&self.notebook.cells, &self.facts, index);
         provenance.result = ProvenanceResult::Failed;
         self.notebook.cells[index].provenance = Some(provenance);
         self.last_execution_ordinal = ordinal;
     }
 
     fn invalidate_after(&mut self, index: usize, defines: &BTreeSet<String>, opaque: bool) {
-        for affected in affected_after(&self.notebook.cells, &self.facts, index, defines, opaque) {
+        let affected = affected_after(&self.notebook.cells, &self.facts, index, defines, opaque);
+        let ids: Vec<String> = affected
+            .iter()
+            .map(|index| self.notebook.cells[*index].id.clone())
+            .collect();
+        self.executor.invalidate_cells(&ids);
+        for affected in affected {
             self.mark_stale(affected);
         }
     }
@@ -358,20 +462,6 @@ impl<E: CellExecutor> NotebookSession<E> {
         for index in 0..self.notebook.cells.len() {
             if self.notebook.cells[index].kind == CellKind::Code {
                 self.mark_stale(index);
-            }
-        }
-    }
-
-    fn invalidate_suffix(&mut self, index: usize) {
-        let ids: Vec<_> = self.notebook.cells[index..]
-            .iter()
-            .filter(|cell| cell.kind == CellKind::Code)
-            .map(|cell| cell.id.clone())
-            .collect();
-        self.executor.invalidate_cells(&ids);
-        for later in index + 1..self.notebook.cells.len() {
-            if self.notebook.cells[later].kind == CellKind::Code {
-                self.mark_stale(later);
             }
         }
     }

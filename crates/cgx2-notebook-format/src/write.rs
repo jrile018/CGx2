@@ -37,7 +37,7 @@ pub fn write_notebook(notebook: &Notebook) -> Result<String, NotebookError> {
                     ordinal,
                     body,
                 } => {
-                    validate_mime(mime)?;
+                    crate::validate_captured_text(mime, body)?;
                     out.push_str(&format!(
                         "%% output id={} mime={} ordinal={}\n",
                         cell.id, mime, ordinal
