@@ -35,22 +35,22 @@
 
 ### Task 1: Unique owned allocation
 
-- [ ] Add failing tests for zero-filled length, mutable then immutable borrow, unique move, zero length, huge failure, and an active-guard budget charge.
-- [ ] Run `cargo test -p cgx2-runtime --offline` and record the initial failure.
-- [ ] Implement `OwnedBytes` and `alloc_owned_bytes` with fallible reservations and checked charges; add a compile-fail doc test or equivalent evidence that `OwnedBytes` is not cloneable.
-- [ ] Run the tests and verify Task 1 cases pass.
+- [x] Add failing tests for zero-filled length, mutable then immutable borrow, unique move, zero length, huge failure, and an active-guard budget charge.
+- [x] Run `cargo test -p cgx2-runtime --offline` and record the initial failure.
+- [x] Implement `OwnedBytes` and `alloc_owned_bytes` with fallible reservations and checked charges; add a compile-fail doc test or equivalent evidence that `OwnedBytes` is not cloneable.
+- [x] Run the tests and verify Task 1 cases pass.
 
 ### Task 2: Move into managed region
 
-- [ ] Add failing tests for successful promotion preserving bytes, consumed source, region-limit failure, invalid region, nested-budget failure, and no collection during guard.
-- [ ] Run the tests to observe failures, then implement `promote_owned` as an atomic move with the error returning the source intact.
-- [ ] Run the tests and verify region stats, roots, and later collection behavior remain correct.
+- [x] Add failing tests for successful promotion preserving bytes, consumed source, region-limit failure, invalid region, nested-budget failure, and no collection during guard.
+- [x] Run the tests to observe failures, then implement `promote_owned` as an atomic move with the error returning the source intact.
+- [x] Run the tests and verify region stats, roots, and later collection behavior remain correct.
 
 ### Task 3: Copy from managed and handoff
 
-- [ ] Add failing tests for nonaliasing copy, stale handle, active-budget failure, zero-length copy, and the Review Focus 5 nested guard case.
-- [ ] Run the tests to observe failures, implement `copy_managed_to_owned`, and re-run all runtime tests.
-- [ ] Run `cargo test -p cgx2-runtime --offline`, `cargo fmt --check --manifest-path crates/cgx2-runtime/Cargo.toml`, and `cargo clippy -p cgx2-runtime --all-targets --offline -- -D warnings` from the repository root.
-- [ ] Document exact accounting and limits, including that compiler borrow/escape rules and foreign memory accounting remain future work. Commit only owned paths and stop for review.
+- [x] Add failing tests for nonaliasing copy, stale handle, active-budget failure, zero-length copy, and the Review Focus 5 nested guard case.
+- [x] Run the tests to observe failures, implement `copy_managed_to_owned`, and re-run all runtime tests.
+- [x] Run `cargo test -p cgx2-runtime --offline`, `cargo fmt --check --manifest-path crates/cgx2-runtime/Cargo.toml`, and `cargo clippy -p cgx2-runtime --all-targets --offline -- -D warnings` from the repository root (format and Clippy using installed Rust 1.98.1 because the active stable toolchain lacks those components).
+- [x] Document exact accounting and limits, including that compiler borrow/escape rules and foreign memory accounting remain future work. Commit only owned paths and stop for review.
 
 **Acceptance:** owned storage has single Rust ownership, promotion failures retain the source, copies do not alias, and every managed/owned allocation inside `no_gc` respects budgets. The crate remains safe Rust with no `unsafe`.

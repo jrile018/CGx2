@@ -3,6 +3,7 @@
 
 mod budget;
 mod heap;
+mod owned;
 mod region;
 
 use std::sync::atomic::{AtomicU64, Ordering};
@@ -10,6 +11,7 @@ use std::sync::atomic::{AtomicU64, Ordering};
 use budget::Budget;
 pub use budget::NoGcGuard;
 use heap::{Object, Region};
+pub use owned::{OwnedBytes, OWNED_METADATA_BYTES};
 pub use region::{
     AllocationError, CollectionMode, Handle, MemoryError, RegionId, RegionStats,
     EDGE_METADATA_BYTES, REGION_METADATA_BYTES, SLOT_METADATA_BYTES,
@@ -190,6 +192,69 @@ impl Session {
         r.stats.peak_bytes = r.stats.peak_bytes.max(r.stats.committed_bytes);
         let generation = slot.generation;
         self.charge_budgets(charge);
+        Ok(Handle {
+            region,
+            slot: index,
+            generation,
+        })
+    }
+
+    /// Moves a unique owned payload into a managed slot without copying it.
+    /// The active guard charge is only the newly created slot metadata; the
+    /// payload was charged when it was allocated as owned storage.
+    pub fn promote_owned(
+        &mut self,
+        region: RegionId,
+        value: OwnedBytes,
+    ) -> Result<Handle, (AllocationError, OwnedBytes)> {
+        let r = match self.region(region) {
+            Ok(r) => r,
+            Err(_) => return Err((AllocationError::InvalidRegion, value)),
+        };
+        let charge = match value.bytes.capacity().checked_add(SLOT_METADATA_BYTES) {
+            Some(charge) => charge,
+            None => {
+                self.region_mut(region)
+                    .expect("validated region")
+                    .stats
+                    .allocation_failures += 1;
+                return Err((AllocationError::HostAllocation, value));
+            }
+        };
+        if let Err(error) = self.check_budgets(SLOT_METADATA_BYTES) {
+            self.region_mut(region)
+                .expect("validated region")
+                .stats
+                .allocation_failures += 1;
+            return Err((error, value));
+        }
+        if charge > r.limit_bytes.saturating_sub(r.stats.committed_bytes) {
+            self.region_mut(region)
+                .expect("validated region")
+                .stats
+                .allocation_failures += 1;
+            return Err((AllocationError::RegionLimit, value));
+        }
+        let r = self.region_mut(region).expect("validated region");
+        let index = match r.vacant_slot() {
+            Ok(index) => index,
+            Err(()) => {
+                r.stats.allocation_failures += 1;
+                return Err((AllocationError::HostAllocation, value));
+            }
+        };
+        let slot = &mut r.slots[index];
+        slot.object = Some(Object {
+            bytes: value.bytes,
+            edges: Vec::new(),
+            roots: 0,
+            charge,
+        });
+        r.stats.committed_bytes += charge;
+        r.stats.live_bytes += charge;
+        r.stats.peak_bytes = r.stats.peak_bytes.max(r.stats.committed_bytes);
+        let generation = slot.generation;
+        self.charge_budgets(SLOT_METADATA_BYTES);
         Ok(Handle {
             region,
             slot: index,
