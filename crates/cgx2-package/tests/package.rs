@@ -72,10 +72,10 @@ fn two_modules_have_sorted_public_api_and_stable_rendering() {
     assert_eq!(first.modules[0].api.functions[0].name, "run");
     assert_eq!(first.modules[1].api.functions[0].name, "twice");
     assert_eq!(first.modules[1].api.functions.len(), 1);
-    assert!(!first.imports_supported);
+    assert!(first.imports_supported);
     assert_eq!(first.render_text(), second.render_text());
     assert_eq!(first.render_json(), second.render_json());
-    assert!(first.render_json().contains("\"imports_supported\":false"));
+    assert!(first.render_json().contains("\"imports_supported\":true"));
     assert!(first.render_json().contains("\"return_type\":\"i64\""));
 }
 
@@ -213,4 +213,187 @@ fn outside_symlink_is_rejected_before_source_read() {
     assert!(errors
         .iter()
         .any(|d| d.code == "CGP011" && d.file.ends_with("src/main.cg")));
+}
+
+#[test]
+fn three_module_fixture_checks_calls_and_dependency_order() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("fixtures/imports");
+    let index = load_package(&root).unwrap();
+    assert_eq!(index.schema_version, 2);
+    assert_eq!(
+        index.topological_order,
+        ["app.base", "app.math", "app.main"]
+    );
+    let main = index
+        .modules
+        .iter()
+        .find(|m| m.name.as_deref() == Some("app.main"))
+        .unwrap();
+    assert_eq!(main.imports, ["app.math"]);
+    assert_eq!(main.resolved_public_calls[0].name, "app.math.double");
+    let source = fs::read_to_string(root.join(&main.source)).unwrap();
+    let span = main.resolved_public_calls[0].span;
+    assert_eq!(&source[span.start..span.end], "app.math.double(3)");
+    assert_eq!(
+        index.render_json(),
+        load_package(&root).unwrap().render_json()
+    );
+}
+
+#[test]
+fn two_module_public_call_checks_from_manifest_entry() {
+    let f = Fixture::new();
+    f.manifest(MANIFEST);
+    f.write(
+        "src/main.cg",
+        "module app.main\nimport app.math\npub fn run() -> i64:\n    app.math.double(3)\n",
+    );
+    f.write(
+        "src/math.cg",
+        "module app.math\npub fn double(x: i64) -> i64:\n    x * 2\n",
+    );
+    let index = load_package(f.root()).unwrap();
+    assert_eq!(index.topological_order, ["app.math", "app.main"]);
+    assert_eq!(
+        index
+            .modules
+            .iter()
+            .find(|m| m.name.as_deref() == Some("app.main"))
+            .unwrap()
+            .resolved_public_calls[0]
+            .name,
+        "app.math.double"
+    );
+}
+
+#[test]
+fn import_failures_are_distinct_and_source_located() {
+    let f = Fixture::new();
+    f.manifest(MANIFEST);
+    f.write("src/math.cg", "module app.math\nfn hidden(x: i64) -> i64:\n    x\npub fn double(x: i64) -> i64:\n    x * 2\n");
+    let check = |source: &str| {
+        f.write("src/main.cg", source);
+        load_package(f.root()).unwrap_err()
+    };
+    let missing_module = check("module app.main\nimport app.absent\npub fn run() -> i64:\n    1\n");
+    assert!(missing_module.iter().any(|d| d.code == "CGP014"
+        && d.span == Some(cgx2_syntax::Span { start: 23, end: 33 })
+        && d.file.ends_with("src/main.cg")));
+    let private =
+        check("module app.main\nimport app.math\npub fn run() -> i64:\n    app.math.hidden(1)\n");
+    assert!(private
+        .iter()
+        .any(|d| d.code == "CGT009" && d.file.ends_with("src/main.cg") && d.span.is_some()));
+    let unimported = check("module app.main\npub fn run() -> i64:\n    app.math.double(1)\n");
+    assert!(unimported.iter().any(|d| d.code == "CGT008"));
+    let missing_symbol =
+        check("module app.main\nimport app.math\npub fn run() -> i64:\n    app.math.absent(1)\n");
+    assert!(missing_symbol.iter().any(|d| d.code == "CGT001"));
+    let wrong_type = check(
+        "module app.main\nimport app.math\npub fn run() -> i64:\n    app.math.double(true)\n",
+    );
+    assert!(wrong_type.iter().any(|d| d.code == "CGT003"));
+    assert!(wrong_type.iter().any(|d| d.code == "CGT003"
+        && d.related
+            .as_ref()
+            .is_some_and(|r| r.file.ends_with("src/math.cg"))));
+    let arity =
+        check("module app.main\nimport app.math\npub fn run() -> i64:\n    app.math.double()\n");
+    assert!(arity.iter().any(|d| d.code == "CGT005"));
+    let self_import = check("module app.main\nimport app.main\npub fn run() -> i64:\n    1\n");
+    assert!(self_import.iter().any(|d| d.code == "CGP015"));
+}
+
+#[test]
+fn cycle_trace_is_stable_and_points_at_closing_import() {
+    let f = Fixture::new();
+    f.manifest(MANIFEST);
+    f.write(
+        "src/main.cg",
+        "module app.main\nimport app.math\npub fn run() -> i64:\n    1\n",
+    );
+    f.write(
+        "src/math.cg",
+        "module app.math\nimport app.main\npub fn double(x: i64) -> i64:\n    x\n",
+    );
+    let first = load_package(f.root()).unwrap_err();
+    let second = load_package(f.root()).unwrap_err();
+    assert_eq!(first, second);
+    let cycle = first.iter().find(|d| d.code == "CGP016").unwrap();
+    assert_eq!(
+        cycle.message,
+        "import cycle: app.main -> app.math -> app.main"
+    );
+    assert!(cycle.file.ends_with("src/math.cg"));
+    assert_eq!(cycle.span, Some(cgx2_syntax::Span { start: 23, end: 31 }));
+}
+
+#[test]
+fn importing_memory_script_is_explicitly_unsupported() {
+    let f = Fixture::new();
+    f.manifest(MANIFEST);
+    f.write(
+        "src/main.cg",
+        "module app.main\nimport app.math\npub fn run() -> i64:\n    1\n",
+    );
+    f.write(
+        "src/math.cg",
+        "module app.math\nlet region = memory.region(mode: manual, limit: 32)\n",
+    );
+    assert!(codes(&f).contains(&"CGP017"));
+}
+
+#[test]
+fn check_command_emits_json_and_fails_on_errors() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("fixtures/imports");
+    let binary = env!("CARGO_BIN_EXE_cgx2-package");
+    let output = std::process::Command::new(binary)
+        .args(["check", root.to_str().unwrap(), "--format", "json"])
+        .output()
+        .unwrap();
+    assert!(output.status.success());
+    assert!(String::from_utf8(output.stdout)
+        .unwrap()
+        .contains("\"topological_order\":[\"app.base\",\"app.math\",\"app.main\"]"));
+    let f = Fixture::new();
+    f.manifest("schema_version = 1\nname = \"demo\"\nentry = \"src/main.cg\"\nsources = [\"src/main.cg\"]\n");
+    f.write("src/main.cg", "module app.main\nimport app.absent\n");
+    let output = std::process::Command::new(binary)
+        .args(["check", f.root().to_str().unwrap(), "--format", "json"])
+        .output()
+        .unwrap();
+    assert!(!output.status.success());
+    assert!(String::from_utf8(output.stdout)
+        .unwrap()
+        .contains("\"code\":\"CGP014\""));
+
+    f.manifest(MANIFEST);
+    f.write(
+        "src/main.cg",
+        "module app.main\nimport app.math\npub fn run() -> i64:\n    app.math.double(true)\n",
+    );
+    f.write(
+        "src/math.cg",
+        "module app.math\npub fn double(x: i64) -> i64:\n    x\n",
+    );
+    let output = std::process::Command::new(binary)
+        .args(["check", f.root().to_str().unwrap(), "--format", "json"])
+        .output()
+        .unwrap();
+    assert!(!output.status.success());
+    let line = String::from_utf8(output.stdout).unwrap();
+    assert!(line.contains("\"code\":\"CGT003\""));
+    assert!(line.contains("\"related\":{\"file\":\"src/math.cg\""));
+}
+
+#[test]
+fn imported_list_signature_is_outside_scalar_profile() {
+    let f = Fixture::new();
+    f.manifest(MANIFEST);
+    f.write("src/main.cg", "module app.main\nimport app.math\npub fn run(xs: List<i64>) -> i64:\n    app.math.size(xs)\n");
+    f.write(
+        "src/math.cg",
+        "module app.math\npub fn size(xs: List<i64>) -> i64:\n    1\n",
+    );
+    assert!(codes(&f).contains(&"CGT010"));
 }

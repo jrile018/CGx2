@@ -5,9 +5,9 @@ use std::fs;
 use std::io::Read;
 use std::path::{Component, Path, PathBuf};
 
-use cgx2_api_index::{build_index, ApiIndex, IndexError};
-use cgx2_sema::check_module;
-use cgx2_syntax::{parse_module, Span};
+use cgx2_api_index::{build_index_with_imports, ApiIndex, IndexError};
+use cgx2_sema::{check_module_with_imports, collect_public_signatures, ImportedSignatures};
+use cgx2_syntax::{parse_module, Expr, ExprKind, Module, Span, Stmt, StmtKind};
 
 pub const MAX_MANIFEST_BYTES: usize = 64 * 1024;
 pub const MAX_SOURCE_BYTES: usize = 1024 * 1024;
@@ -20,6 +20,13 @@ pub struct PackageDiagnostic {
     pub file: PathBuf,
     /// Zero-based, half-open UTF-8 byte span; absent for filesystem errors.
     pub span: Option<Span>,
+    pub related: Option<Box<RelatedLocation>>,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct RelatedLocation {
+    pub file: PathBuf,
+    pub span: Span,
 }
 
 impl PackageDiagnostic {
@@ -34,6 +41,7 @@ impl PackageDiagnostic {
             message: message.into(),
             file: file.to_path_buf(),
             span,
+            related: None,
         }
     }
 }
@@ -44,6 +52,14 @@ pub struct ModuleRecord {
     pub source: PathBuf,
     pub name: Option<String>,
     pub api: ApiIndex,
+    pub imports: Vec<String>,
+    pub resolved_public_calls: Vec<ResolvedCall>,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ResolvedCall {
+    pub name: String,
+    pub span: Span,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -55,6 +71,8 @@ pub struct PackageIndex {
     pub imports_supported: bool,
     /// Sorted by declared module name, then source path.
     pub modules: Vec<ModuleRecord>,
+    /// Dependency-first declared module names, with lexical tie breaking.
+    pub topological_order: Vec<String>,
 }
 
 impl PackageIndex {
@@ -68,8 +86,21 @@ impl PackageIndex {
         );
         for module in &self.modules {
             out.push_str(&format!("source {}\n", module.source.display()));
+            for import in &module.imports {
+                out.push_str(&format!("import {import}\n"));
+            }
+            for call in &module.resolved_public_calls {
+                out.push_str(&format!(
+                    "call {} [{}, {})\n",
+                    call.name, call.span.start, call.span.end
+                ));
+            }
             out.push_str(&module.api.render_text());
         }
+        out.push_str(&format!(
+            "topological_order {}\n",
+            self.topological_order.join(", ")
+        ));
         out
     }
 
@@ -93,7 +124,34 @@ impl PackageIndex {
             push_json_string(&mut out, &module.source.to_string_lossy());
             out.push_str(",\"api\":");
             out.push_str(&module.api.render_json());
+            out.push_str(",\"imports\":[");
+            for (i, import) in module.imports.iter().enumerate() {
+                if i > 0 {
+                    out.push(',');
+                }
+                push_json_string(&mut out, import);
+            }
+            out.push_str("],\"resolved_public_calls\":[");
+            for (i, call) in module.resolved_public_calls.iter().enumerate() {
+                if i > 0 {
+                    out.push(',');
+                }
+                out.push_str("{\"name\":");
+                push_json_string(&mut out, &call.name);
+                out.push_str(&format!(
+                    ",\"span\":{{\"start\":{},\"end\":{}}}}}",
+                    call.span.start, call.span.end
+                ));
+            }
+            out.push(']');
             out.push('}');
+        }
+        out.push_str("],\"topological_order\":[");
+        for (i, name) in self.topological_order.iter().enumerate() {
+            if i > 0 {
+                out.push(',');
+            }
+            push_json_string(&mut out, name);
         }
         out.push_str("]}");
         out
@@ -126,6 +184,13 @@ struct Manifest {
     name: String,
     entry: LocatedString,
     sources: Vec<LocatedString>,
+}
+
+struct ParsedSource {
+    source: PathBuf,
+    listed: PathBuf,
+    module: Module,
+    name: Option<String>,
 }
 
 /// Load only manifest-listed `.cg` files under a canonical package root.
@@ -222,7 +287,7 @@ pub fn load_package(root: &Path) -> Result<PackageIndex, Vec<PackageDiagnostic>>
         return Err(errors);
     }
 
-    let mut modules = Vec::new();
+    let mut parsed_sources = Vec::new();
     let mut seen_modules: BTreeMap<String, PathBuf> = BTreeMap::new();
     for (relative, listed, canonical) in validated {
         let bytes = match read_limited(&canonical, &listed, MAX_SOURCE_BYTES) {
@@ -282,41 +347,184 @@ pub fn load_package(root: &Path) -> Result<PackageIndex, Vec<PackageDiagnostic>>
             ));
             continue;
         }
-        let typed = match check_module(&parsed) {
+        parsed_sources.push(ParsedSource {
+            source: relative,
+            listed,
+            module: parsed,
+            name,
+        });
+    }
+    if !errors.is_empty() {
+        return Err(errors);
+    }
+
+    let named: BTreeMap<String, usize> = parsed_sources
+        .iter()
+        .enumerate()
+        .filter_map(|(i, source)| source.name.as_ref().map(|name| (name.clone(), i)))
+        .collect();
+    let mut imported = ImportedSignatures::default();
+    imported.modules.extend(named.keys().cloned());
+    for source in &parsed_sources {
+        if let Some(name) = &source.name {
+            match collect_public_signatures(&source.module) {
+                Ok(signatures) => {
+                    for (function, signature) in signatures {
+                        imported
+                            .public_functions
+                            .insert(format!("{name}.{function}"), signature);
+                    }
+                }
+                Err(diagnostics) => errors.extend(diagnostics.into_iter().map(|d| {
+                    PackageDiagnostic::new(d.code, d.message, &source.listed, Some(d.span))
+                })),
+            }
+            for function in &source.module.functions {
+                if !function.public {
+                    imported
+                        .private_functions
+                        .insert(format!("{name}.{}", function.name));
+                }
+            }
+        }
+    }
+    let mut dependencies: BTreeMap<String, Vec<String>> = BTreeMap::new();
+    for source in &parsed_sources {
+        let Some(name) = &source.name else {
+            continue;
+        };
+        let mut edges = Vec::new();
+        for import in &source.module.imports {
+            let target = import.segments.join(".");
+            if target == *name {
+                errors.push(PackageDiagnostic::new(
+                    "CGP015",
+                    format!("module `{name}` imports itself"),
+                    &source.listed,
+                    Some(import.span),
+                ));
+            } else if !named.contains_key(&target) {
+                errors.push(PackageDiagnostic::new(
+                    "CGP014",
+                    format!("imported module `{target}` is not listed in this package"),
+                    &source.listed,
+                    Some(import.span),
+                ));
+            } else if contains_memory_script(&parsed_sources[named[&target]].module) {
+                errors.push(PackageDiagnostic::new(
+                    "CGP017",
+                    format!("importing memory-script module `{target}` is unsupported"),
+                    &source.listed,
+                    Some(import.span),
+                ));
+            } else {
+                edges.push(target);
+            }
+        }
+        edges.sort();
+        dependencies.insert(name.clone(), edges);
+    }
+    if !errors.is_empty() {
+        return Err(errors);
+    }
+    let topological_order = match topo_order(&dependencies) {
+        Ok(order) => order,
+        Err(cycle) => {
+            let from = &cycle[cycle.len() - 2];
+            let to = cycle.last().expect("cycle has closing node");
+            let source = &parsed_sources[named[from]];
+            let span = source
+                .module
+                .imports
+                .iter()
+                .find(|p| p.segments.join(".") == *to)
+                .map(|p| p.span);
+            return Err(vec![PackageDiagnostic::new(
+                "CGP016",
+                format!("import cycle: {}", cycle.join(" -> ")),
+                &source.listed,
+                span,
+            )]);
+        }
+    };
+
+    let declarations: BTreeMap<String, RelatedLocation> = imported
+        .public_functions
+        .iter()
+        .filter_map(|(name, signature)| {
+            let module = name.rsplit_once('.')?.0;
+            let source = &parsed_sources[*named.get(module)?];
+            Some((
+                name.clone(),
+                RelatedLocation {
+                    file: source.listed.clone(),
+                    span: signature.span,
+                },
+            ))
+        })
+        .collect();
+    let public_names: BTreeSet<String> = declarations.keys().cloned().collect();
+    let mut modules = Vec::new();
+    for source in parsed_sources {
+        if !source.module.imports.is_empty() && contains_memory_script(&source.module) {
+            errors.push(PackageDiagnostic::new(
+                "CGM001",
+                "imports in memory scripts are unsupported",
+                &source.listed,
+                Some(source.module.imports[0].span),
+            ));
+            continue;
+        }
+        let typed = match check_module_with_imports(&source.module, &imported) {
             Ok(typed) => typed,
             Err(diagnostics) => {
-                errors.extend(
-                    diagnostics
-                        .into_iter()
-                        .map(|d| PackageDiagnostic::new(d.code, d.message, &listed, Some(d.span))),
-                );
+                errors.extend(diagnostics.into_iter().map(|d| {
+                    let mut diagnostic =
+                        PackageDiagnostic::new(d.code, d.message, &source.listed, Some(d.span));
+                    if matches!(d.code, "CGT003" | "CGT005" | "CGT010") {
+                        let mut calls = Vec::new();
+                        collect_calls(&source.module, &public_names, &mut calls);
+                        if let Some(call) = calls.iter().find(|call| call.span == d.span) {
+                            diagnostic.related =
+                                declarations.get(&call.name).cloned().map(Box::new);
+                        }
+                    }
+                    diagnostic
+                }));
                 continue;
             }
         };
-        let api = match build_index(&parsed, &typed) {
+        let api = match build_index_with_imports(&source.module, &typed, &imported) {
             Ok(api) => api,
             Err(IndexError::InvalidModule(diagnostics)) => {
-                errors.extend(
-                    diagnostics
-                        .into_iter()
-                        .map(|d| PackageDiagnostic::new(d.code, d.message, &listed, Some(d.span))),
-                );
+                errors.extend(diagnostics.into_iter().map(|d| {
+                    PackageDiagnostic::new(d.code, d.message, &source.listed, Some(d.span))
+                }));
                 continue;
             }
             Err(IndexError::MismatchedTypedModule) => {
                 errors.push(PackageDiagnostic::new(
                     "CGP012",
                     "API index rejected a freshly checked module",
-                    &listed,
+                    &source.listed,
                     None,
                 ));
                 continue;
             }
         };
+        let mut calls = Vec::new();
+        collect_calls(&source.module, &public_names, &mut calls);
         modules.push(ModuleRecord {
-            source: relative,
-            name,
+            source: source.source,
+            name: source.name,
             api,
+            imports: source
+                .module
+                .imports
+                .iter()
+                .map(|p| p.segments.join("."))
+                .collect(),
+            resolved_public_calls: calls,
         });
     }
     if !errors.is_empty() {
@@ -324,12 +532,131 @@ pub fn load_package(root: &Path) -> Result<PackageIndex, Vec<PackageDiagnostic>>
     }
     modules.sort_by(|a, b| a.name.cmp(&b.name).then(a.source.cmp(&b.source)));
     Ok(PackageIndex {
-        schema_version: 1,
+        schema_version: 2,
         name: manifest.name,
         entry: PathBuf::from(manifest.entry.value),
-        imports_supported: false,
+        imports_supported: true,
         modules,
+        topological_order,
     })
+}
+
+fn topo_order(graph: &BTreeMap<String, Vec<String>>) -> Result<Vec<String>, Vec<String>> {
+    fn visit(
+        name: &str,
+        graph: &BTreeMap<String, Vec<String>>,
+        states: &mut BTreeMap<String, u8>,
+        stack: &mut Vec<String>,
+        order: &mut Vec<String>,
+    ) -> Result<(), Vec<String>> {
+        match states.get(name).copied().unwrap_or(0) {
+            2 => return Ok(()),
+            1 => {
+                let start = stack.iter().position(|node| node == name).unwrap_or(0);
+                let mut cycle = stack[start..].to_vec();
+                cycle.push(name.to_owned());
+                return Err(cycle);
+            }
+            _ => {}
+        }
+        states.insert(name.to_owned(), 1);
+        stack.push(name.to_owned());
+        for dependency in &graph[name] {
+            visit(dependency, graph, states, stack, order)?;
+        }
+        stack.pop();
+        states.insert(name.to_owned(), 2);
+        order.push(name.to_owned());
+        Ok(())
+    }
+    let mut states = BTreeMap::new();
+    let mut stack = Vec::new();
+    let mut order = Vec::new();
+    for name in graph.keys() {
+        visit(name, graph, &mut states, &mut stack, &mut order)?;
+    }
+    Ok(order)
+}
+
+fn contains_memory_script(module: &Module) -> bool {
+    fn expr(node: &Expr) -> bool {
+        match &node.kind {
+            ExprKind::Name(path) => path.segments.first().is_some_and(|name| name == "memory"),
+            ExprKind::Call { callee, arguments } => {
+                expr(callee) || arguments.iter().any(|arg| expr(&arg.value))
+            }
+            ExprKind::Binary { left, right, .. } => expr(left) || expr(right),
+            _ => false,
+        }
+    }
+    fn stmt(node: &Stmt) -> bool {
+        match &node.kind {
+            StmtKind::NoGc { .. } => true,
+            StmtKind::Let { value, .. }
+            | StmtKind::Assign { value, .. }
+            | StmtKind::Expr(value) => expr(value),
+            StmtKind::Return(Some(value)) => expr(value),
+            StmtKind::For { iter, body, .. } => expr(iter) || body.iter().any(stmt),
+            StmtKind::Return(None) => false,
+        }
+    }
+    module.statements.iter().any(stmt) || module.functions.iter().any(|f| f.body.iter().any(stmt))
+}
+
+fn collect_calls(module: &Module, public: &BTreeSet<String>, out: &mut Vec<ResolvedCall>) {
+    fn expr(node: &Expr, public: &BTreeSet<String>, out: &mut Vec<ResolvedCall>) {
+        match &node.kind {
+            ExprKind::Call { callee, arguments } => {
+                if let ExprKind::Name(path) = &callee.kind {
+                    let name = path.segments.join(".");
+                    if public.contains(&name) {
+                        out.push(ResolvedCall {
+                            name,
+                            span: node.span,
+                        });
+                    }
+                }
+                for arg in arguments {
+                    expr(&arg.value, public, out);
+                }
+            }
+            ExprKind::Binary { left, right, .. } => {
+                expr(left, public, out);
+                expr(right, public, out);
+            }
+            _ => {}
+        }
+    }
+    fn stmt(node: &Stmt, public: &BTreeSet<String>, out: &mut Vec<ResolvedCall>) {
+        match &node.kind {
+            StmtKind::NoGc { budget, body } => {
+                expr(budget, public, out);
+                for nested in body {
+                    stmt(nested, public, out);
+                }
+            }
+            StmtKind::Let { value, .. }
+            | StmtKind::Assign { value, .. }
+            | StmtKind::Expr(value) => expr(value, public, out),
+            StmtKind::Return(Some(value)) => expr(value, public, out),
+            StmtKind::For { iter, body, .. } => {
+                expr(iter, public, out);
+                for nested in body {
+                    stmt(nested, public, out);
+                }
+            }
+            StmtKind::Return(None) => {}
+        }
+    }
+    for function in &module.functions {
+        for statement in &function.body {
+            stmt(statement, public, out);
+        }
+    }
+    for statement in &module.statements {
+        stmt(statement, public, out);
+    }
+    out.sort_by_key(|call| (call.span.start, call.span.end));
 }
 
 fn canonicalize_contained(path: &Path, root: &Path) -> Result<PathBuf, PackageDiagnostic> {

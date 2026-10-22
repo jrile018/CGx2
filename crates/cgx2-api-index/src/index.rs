@@ -1,4 +1,4 @@
-use cgx2_sema::{check_module, TypedModule};
+use cgx2_sema::{check_module, check_module_with_imports, ImportedSignatures, TypedModule};
 use cgx2_syntax::{Module, Span};
 
 use crate::IndexError;
@@ -27,6 +27,24 @@ pub struct ApiParameter {
 /// Build an index only when `typed` equals a fresh semantic check of `module`.
 pub fn build_index(module: &Module, typed: &TypedModule) -> Result<ApiIndex, IndexError> {
     let checked = check_module(module).map_err(IndexError::InvalidModule)?;
+    build_index_checked(module, typed, checked)
+}
+
+/// Recheck a package module against exactly the supplied imported declarations.
+pub fn build_index_with_imports(
+    module: &Module,
+    typed: &TypedModule,
+    imports: &ImportedSignatures,
+) -> Result<ApiIndex, IndexError> {
+    let checked = check_module_with_imports(module, imports).map_err(IndexError::InvalidModule)?;
+    build_index_checked(module, typed, checked)
+}
+
+fn build_index_checked(
+    module: &Module,
+    typed: &TypedModule,
+    checked: TypedModule,
+) -> Result<ApiIndex, IndexError> {
     if &checked != typed {
         return Err(IndexError::MismatchedTypedModule);
     }

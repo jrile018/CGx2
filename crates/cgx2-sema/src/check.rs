@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 use cgx2_syntax::{AssignOp, Expr, ExprKind, Function, Module, Path, Span, Stmt, StmtKind};
 
@@ -41,6 +41,15 @@ pub struct TypedModule {
     pub expressions: SpanTypes,
 }
 
+/// Package-supplied declarations. Keys in `public_functions` are fully qualified
+/// `module.function` names; only explicit source imports make them callable.
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub struct ImportedSignatures {
+    pub modules: BTreeSet<String>,
+    pub public_functions: BTreeMap<String, FunctionSignature>,
+    pub private_functions: BTreeSet<String>,
+}
+
 #[derive(Clone)]
 struct DraftSignature {
     public: bool,
@@ -60,11 +69,35 @@ struct Checker {
     expressions: SpanTypes,
     diagnostics: Vec<TypeDiagnostic>,
     scopes: Vec<BTreeMap<String, Binding>>,
+    imports: BTreeSet<String>,
+    imported: ImportedSignatures,
 }
 
 /// Check all functions and script statements, returning every discovered diagnostic.
 pub fn check_module(module: &Module) -> Result<TypedModule, Vec<TypeDiagnostic>> {
+    if let Some(import) = module.imports.first() {
+        return Err(vec![TypeDiagnostic::new(
+            "CGT011",
+            "imports require static package checking; imported code cannot execute yet".into(),
+            import.span,
+        )]);
+    }
+    check_module_with_imports(module, &ImportedSignatures::default())
+}
+
+/// Check a module against declared, local package signatures without executing imports.
+pub fn check_module_with_imports(
+    module: &Module,
+    imported: &ImportedSignatures,
+) -> Result<TypedModule, Vec<TypeDiagnostic>> {
     if let Some(result) = crate::memory::check_memory_module(module) {
+        if !module.imports.is_empty() {
+            return Err(vec![TypeDiagnostic::new(
+                "CGM001",
+                "imports in memory scripts are unsupported".into(),
+                module.imports[0].span,
+            )]);
+        }
         return result;
     }
     let mut checker = Checker {
@@ -72,6 +105,12 @@ pub fn check_module(module: &Module) -> Result<TypedModule, Vec<TypeDiagnostic>>
         expressions: SpanTypes::default(),
         diagnostics: Vec::new(),
         scopes: Vec::new(),
+        imports: module
+            .imports
+            .iter()
+            .map(|p| p.segments.join("."))
+            .collect(),
+        imported: imported.clone(),
     };
     checker.insert_builtin("arg_count", vec![], Type::I64);
     checker.insert_builtin("arg", vec![Type::I64], Type::String);
@@ -114,6 +153,61 @@ pub fn check_module(module: &Module) -> Result<TypedModule, Vec<TypeDiagnostic>>
         functions,
         expressions: checker.expressions,
     })
+}
+
+/// Collect explicitly annotated public scalar signatures without checking bodies.
+/// Package loading uses this before type-checking callers, independent of file order.
+pub fn collect_public_signatures(
+    module: &Module,
+) -> Result<BTreeMap<String, FunctionSignature>, Vec<TypeDiagnostic>> {
+    let mut signatures = BTreeMap::new();
+    let mut seen = BTreeSet::new();
+    let mut errors = Vec::new();
+    for function in &module.functions {
+        if !seen.insert(function.name.clone()) {
+            errors.push(TypeDiagnostic::new(
+                "CGT001",
+                format!("duplicate function `{}`", function.name),
+                function.span,
+            ));
+            continue;
+        }
+        if !function.public {
+            continue;
+        }
+        let parameters: Vec<_> = function
+            .parameters
+            .iter()
+            .map(|p| resolve(&p.ty, &mut errors))
+            .collect();
+        let result = match &function.return_type {
+            Some(ty) => resolve(ty, &mut errors),
+            None => {
+                errors.push(TypeDiagnostic::new(
+                    "CGT006",
+                    "public function requires a return annotation".into(),
+                    function.span,
+                ));
+                None
+            }
+        };
+        if let (Some(result), true) = (result, parameters.iter().all(Option::is_some)) {
+            signatures.insert(
+                function.name.clone(),
+                FunctionSignature {
+                    public: true,
+                    parameters: parameters.into_iter().flatten().collect(),
+                    return_type: result,
+                    span: function.span,
+                },
+            );
+        }
+    }
+    if errors.is_empty() {
+        Ok(signatures)
+    } else {
+        Err(errors)
+    }
 }
 
 fn function_order(functions: &[Function]) -> Vec<&Function> {
@@ -500,7 +594,7 @@ impl Checker {
                 let signature = if path.segments.len() == 1 {
                     self.functions.get(&path.segments[0]).cloned()
                 } else {
-                    None
+                    self.imported_signature(path)
                 };
                 if let Some(signature) = signature {
                     if arguments.len() != signature.parameters.len() {
@@ -534,11 +628,13 @@ impl Checker {
                     }
                     signature.result
                 } else {
-                    self.report(
-                        "CGT001",
-                        format!("unknown function `{}`", path.segments.join(".")),
-                        path.span,
-                    );
+                    if path.segments.len() == 1 {
+                        self.report(
+                            "CGT001",
+                            format!("unknown function `{}`", path.segments[0]),
+                            path.span,
+                        );
+                    }
                     None
                 }
             }
@@ -547,5 +643,60 @@ impl Checker {
             self.expressions.insert(expr.span, ty.clone());
         }
         ty
+    }
+}
+
+impl Checker {
+    fn imported_signature(&mut self, path: &Path) -> Option<DraftSignature> {
+        let module = path.segments[..path.segments.len() - 1].join(".");
+        let name = path.segments.join(".");
+        if module == "memory" {
+            self.report(
+                "CGM001",
+                "memory intrinsics cannot be called through an import",
+                path.span,
+            );
+        } else if !self.imports.contains(&module) {
+            self.report(
+                "CGT008",
+                format!("module `{module}` is not imported"),
+                path.span,
+            );
+        } else if !self.imported.modules.contains(&module) {
+            self.report(
+                "CGT001",
+                format!("unknown imported module `{module}`"),
+                path.span,
+            );
+        } else if self.imported.private_functions.contains(&name) {
+            self.report("CGT009", format!("function `{name}` is private"), path.span);
+        } else if let Some(signature) = self.imported.public_functions.get(&name) {
+            if signature
+                .parameters
+                .iter()
+                .any(|ty| matches!(ty, Type::List(_)))
+                || matches!(signature.return_type, Type::List(_))
+            {
+                self.report(
+                    "CGT010",
+                    format!("imported function `{name}` has a non-scalar signature"),
+                    path.span,
+                );
+                return None;
+            }
+            return Some(DraftSignature {
+                public: true,
+                parameters: signature.parameters.iter().cloned().map(Some).collect(),
+                result: Some(signature.return_type.clone()),
+                span: signature.span,
+            });
+        } else {
+            self.report(
+                "CGT001",
+                format!("unknown public function `{name}`"),
+                path.span,
+            );
+        }
+        None
     }
 }

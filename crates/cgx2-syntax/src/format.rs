@@ -7,9 +7,14 @@ pub fn format_module(module: &Module) -> String {
         out.push_str("module ");
         out.push_str(&name.segments.join("."));
         out.push('\n');
-        if !module.functions.is_empty() || !module.statements.is_empty() {
-            out.push('\n');
-        }
+    }
+    for import in &module.imports {
+        out.push_str("import ");
+        out.push_str(&import.segments.join("."));
+        out.push('\n');
+    }
+    if !out.is_empty() && (!module.functions.is_empty() || !module.statements.is_empty()) {
+        out.push('\n');
     }
     for (index, function) in module.functions.iter().enumerate() {
         if index > 0 {

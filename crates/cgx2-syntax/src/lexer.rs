@@ -24,6 +24,7 @@ pub enum TokenKind {
     Integer(String),
     StringLiteral(String),
     Module,
+    Import,
     Pub,
     Fn,
     Let,
@@ -64,6 +65,7 @@ fn token(tokens: &mut Vec<Token>, kind: TokenKind, start: usize, end: usize) {
 fn word_kind(word: &str) -> TokenKind {
     match word {
         "module" => TokenKind::Module,
+        "import" => TokenKind::Import,
         "pub" => TokenKind::Pub,
         "fn" => TokenKind::Fn,
         "let" => TokenKind::Let,

@@ -34,6 +34,7 @@ impl fmt::Display for TypeSyntax {
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Module {
     pub name: Option<Path>,
+    pub imports: Vec<Path>,
     pub functions: Vec<Function>,
     pub statements: Vec<Stmt>,
     pub span: Span,

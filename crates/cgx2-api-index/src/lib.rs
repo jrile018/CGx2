@@ -5,4 +5,4 @@ mod index;
 mod render;
 
 pub use error::IndexError;
-pub use index::{build_index, ApiFunction, ApiIndex, ApiParameter};
+pub use index::{build_index, build_index_with_imports, ApiFunction, ApiIndex, ApiParameter};

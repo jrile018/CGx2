@@ -1,0 +1,4 @@
+module app.math
+import app.base
+pub fn double(x: i64) -> i64:
+    app.base.add(x, x)

@@ -18,6 +18,12 @@ typed summaries cannot be distinguished. Source edits that change only a
 literal or comment can fall in this category. The caller should retain the AST
 and typed summary as a pair from the same checking run.
 
+For an imported package module, use `build_index_with_imports(&module, &typed,
+&environment)`, passing the same `ImportedSignatures` used by
+`check_module_with_imports`. It rechecks against that environment and keeps the
+per-module API schema at version 1. Package graph fields belong to
+`cgx2-package` schema version 2.
+
 ## Schema version 1
 
 `render_json()` emits one compact UTF-8 JSON object, without a trailing newline:
@@ -33,6 +39,5 @@ backslashes; other Unicode text remains UTF-8. `render_text()` starts with
 `module NAME` (or `module <unnamed>`), then writes one sorted signature per
 line as `pub fn NAME(PARAM: TYPE) -> TYPE [START, END)`.
 
-This is a per-module library. The frozen Wave 1 AST and Wave 2 semantic summary
-have no imports, effects, capabilities, contracts, or documentation comments
-to index. Package graphs and a `cgx2 api` CLI command require later integration.
+This is a per-module library. Effects, capabilities, contracts, and documentation
+comments are not yet indexed. A `cgx2 api` CLI command requires later integration.

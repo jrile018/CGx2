@@ -21,6 +21,23 @@ pub fn parse_module(source: &str) -> Result<Module, Vec<SyntaxDiagnostic>> {
     } else {
         None
     };
+    let mut imports = Vec::new();
+    let mut seen_imports = BTreeSet::new();
+    while parser.at(&TokenKind::Import) {
+        parser.advance();
+        if let Some(path) = parser.parse_path() {
+            let dotted = path.segments.join(".");
+            if !seen_imports.insert(dotted.clone()) {
+                parser.errors.push(SyntaxDiagnostic {
+                    code: "CGS108",
+                    message: format!("duplicate import `{dotted}`"),
+                    span: path.span,
+                });
+            }
+            imports.push(path);
+        }
+        parser.end_statement();
+    }
     let mut functions = Vec::new();
     let mut statements = Vec::new();
     while !parser.at(&TokenKind::Eof) {
@@ -29,6 +46,12 @@ pub fn parse_module(source: &str) -> Result<Module, Vec<SyntaxDiagnostic>> {
             if let Some(function) = parser.parse_function() {
                 functions.push(function);
             }
+        } else if parser.at(&TokenKind::Import) {
+            parser.error(
+                "CGS109",
+                "imports must precede functions and script statements",
+            );
+            parser.recover();
         } else if parser.at(&TokenKind::Indent) || parser.at(&TokenKind::Dedent) {
             parser.error("CGS102", "unexpected indentation boundary");
             parser.advance();
@@ -43,6 +66,7 @@ pub fn parse_module(source: &str) -> Result<Module, Vec<SyntaxDiagnostic>> {
     }
     let module = Module {
         name,
+        imports,
         functions,
         statements,
         span: Span {

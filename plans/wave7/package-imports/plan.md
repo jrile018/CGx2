@@ -22,19 +22,19 @@
 
 ### Syntax and static signatures
 
-- [ ] Add red lexer/parser/formatter tests for valid import placement, UTF-8 byte spans, duplicates, invalid nesting, and round-trip formatting.
-- [ ] Add AST import declarations without changing existing statement variants. Keep downstream source pattern matches compiling; run workspace compile early.
-- [ ] Add a sema API for checking a module with explicitly supplied imported public scalar signatures. Keep `check_module` unchanged for standalone files and unknown import calls.
+- [x] Add red lexer/parser/formatter tests for valid import placement, UTF-8 byte spans, duplicates, invalid nesting, and round-trip formatting.
+- [x] Add AST import declarations without changing existing statement variants. Keep downstream source pattern matches compiling; run workspace compile early.
+- [x] Add a sema API for checking a module with explicitly supplied imported public scalar signatures. Keep `check_module` unchanged for standalone files and unknown import calls.
 
 ### Package graph
 
-- [ ] Add fixture packages for valid two/three-module calls, missing/private/unimported symbols, cycles, duplicate names, wrong type/arity, and a symlink/path escape. Assert stable file/spans and graph order.
-- [ ] Implement multi-pass signature collection, graph resolution, typed calls, deterministic JSON/text index, and `cgx2-package check ROOT` with nonzero errors. Avoid executing imported code or invoking a compiler backend.
-- [ ] Update owned crate READMEs with exact scope and machine-readable example.
+- [x] Add fixture packages for valid two/three-module calls, missing/private/unimported symbols, cycles, duplicate names, wrong type/arity, and a symlink/path escape. Assert stable file/spans and graph order.
+- [x] Implement multi-pass signature collection, graph resolution, typed calls, deterministic JSON/text index, and `cgx2-package check ROOT` with nonzero errors. Avoid executing imported code or invoking a compiler backend.
+- [x] Update owned crate READMEs with exact scope and machine-readable example.
 
 ### Verification and handoff
 
-- [ ] Run `cargo test --workspace --exclude cgx2-python-bridge --offline`, `RUSTUP_TOOLCHAIN=1.98.1 cargo fmt --all --check`, and `RUSTUP_TOOLCHAIN=1.98.1 cargo clippy --workspace --exclude cgx2-python-bridge --all-targets --offline -- -D warnings`. If local HTTP socket tests need permission, run them with appropriate sandbox access or report that exact environmental limit.
-- [ ] Commit only owned paths and report graph/signature examples, downstream compatibility, and remaining execution gap.
+- [x] Run `cargo test --workspace --exclude cgx2-python-bridge --offline`, `RUSTUP_TOOLCHAIN=1.98.1 cargo fmt --all --check`, and `RUSTUP_TOOLCHAIN=1.98.1 cargo clippy --workspace --exclude cgx2-python-bridge --all-targets --offline -- -D warnings`. If local HTTP socket tests need permission, run them with appropriate sandbox access or report that exact environmental limit.
+- [x] Commit only owned paths and report graph/signature examples, downstream compatibility, and remaining execution gap.
 
 **Acceptance:** A declared local import gives a source-located, acyclic, typed package graph and permits public scalar calls to check; unsupported execution fails or remains unavailable clearly.

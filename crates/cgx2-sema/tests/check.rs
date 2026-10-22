@@ -1,6 +1,18 @@
 use cgx2_sema::{check_module, Type};
 use cgx2_syntax::{parse_module, Span};
 
+#[test]
+fn standalone_check_rejects_import_execution_at_import_span() {
+    let source = "module app.main\nimport app.math\npub fn run() -> i64:\n    1\n";
+    let module = parse_module(source).unwrap();
+    let errors = check_module(&module).unwrap_err();
+    assert_eq!(errors[0].code, "CGT011");
+    assert_eq!(
+        &source[errors[0].span.start..errors[0].span.end],
+        "app.math"
+    );
+}
+
 fn check(source: &str) -> cgx2_sema::TypedModule {
     check_module(&parse_module(source).unwrap()).unwrap()
 }

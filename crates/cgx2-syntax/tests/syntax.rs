@@ -8,6 +8,38 @@ fn kinds(source: &str) -> Vec<TokenKind> {
 }
 
 #[test]
+fn imports_have_utf8_byte_spans_and_round_trip_in_source_order() {
+    let source = "module café.main\nimport café.math\nimport café.text\npub fn run() -> i64:\n    café.math.double(3)\n";
+    let parsed = parse_module(source).unwrap();
+    assert_eq!(parsed.imports.len(), 2);
+    let first = &parsed.imports[0];
+    assert_eq!(&source[first.span.start..first.span.end], "café.math");
+    assert_eq!(first.span.start, "module café.main\nimport ".len());
+    let formatted = format_module(&parsed);
+    assert!(formatted.contains("import café.math\nimport café.text\n"));
+    let reparsed = parse_module(&formatted).unwrap();
+    assert_eq!(
+        reparsed
+            .imports
+            .iter()
+            .map(|p| p.segments.join("."))
+            .collect::<Vec<_>>(),
+        vec!["café.math", "café.text"]
+    );
+}
+
+#[test]
+fn rejects_duplicate_late_and_nested_imports() {
+    let duplicate = parse_module("import app.math\nimport app.math\n").unwrap_err();
+    assert_eq!(duplicate[0].code, "CGS108");
+    assert_eq!(duplicate[0].span.start, "import app.math\nimport ".len());
+    let late = parse_module("let x = 1\nimport app.math\n").unwrap_err();
+    assert!(late.iter().any(|d| d.code == "CGS109"));
+    let nested = parse_module("fn run() -> i64:\n    import app.math\n    1\n").unwrap_err();
+    assert!(nested.iter().any(|d| d.code == "CGS103"));
+}
+
+#[test]
 fn lex_simple_function() {
     assert_eq!(
         kinds("pub fn double(x: i64) -> i64:\n    x * 2\n"),
