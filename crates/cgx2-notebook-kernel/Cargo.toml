@@ -1,0 +1,10 @@
+[package]
+name = "cgx2-notebook-kernel"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+cgx2-cli = { path = "../cgx2-cli" }
+cgx2-notebook-format = { path = "../cgx2-notebook-format" }
+cgx2-notebook-session = { path = "../cgx2-notebook-session" }
+cgx2-syntax = { path = "../cgx2-syntax" }

@@ -1,0 +1,7 @@
+#!cgnb 1
+%% markdown id=notes
+# Scalar notebook
+%% code id=seed
+let x = 3
+%% code id=result
+x + 4
