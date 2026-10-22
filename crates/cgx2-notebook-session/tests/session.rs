@@ -1,4 +1,6 @@
+use std::cell::RefCell;
 use std::collections::{BTreeMap, BTreeSet};
+use std::rc::Rc;
 
 use cgx2_notebook_format::{Cell, CellKind, Notebook, Output};
 use cgx2_notebook_session::{
@@ -81,6 +83,50 @@ fn map(entries: &[(&str, CellFacts)]) -> BTreeMap<String, CellFacts> {
         .iter()
         .map(|(id, f)| ((*id).into(), f.clone()))
         .collect()
+}
+
+#[test]
+fn later_cell_and_selected_rerun_execute_only_the_requested_cell() {
+    #[derive(Clone)]
+    struct CountingExecutor(Rc<RefCell<BTreeMap<String, usize>>>);
+    impl CellExecutor for CountingExecutor {
+        fn execute(&mut self, source: &str) -> Result<CellResult, String> {
+            *self.0.borrow_mut().entry(source.into()).or_default() += 1;
+            Ok(CellResult { text: None })
+        }
+        fn reset(&mut self) -> Result<(), String> {
+            Ok(())
+        }
+    }
+    let counts = Rc::new(RefCell::new(BTreeMap::new()));
+    let mut session = NotebookSession::new(
+        notebook(vec![
+            code("a", "first"),
+            code("b", "second"),
+            code("c", "third"),
+        ]),
+        map(&[
+            ("a", facts(&[], &[], false)),
+            ("b", facts(&[], &[], false)),
+            ("c", facts(&[], &[], false)),
+        ]),
+        CountingExecutor(Rc::clone(&counts)),
+    )
+    .unwrap();
+    session.run_cell("a").unwrap();
+    session.run_cell("b").unwrap();
+    assert_eq!(counts.borrow().get("first"), Some(&1));
+    assert_eq!(counts.borrow().get("second"), Some(&1));
+    assert_eq!(counts.borrow().get("third"), None);
+    session.run_cell("c").unwrap();
+    assert_eq!(counts.borrow().get("first"), Some(&1));
+    assert_eq!(counts.borrow().get("second"), Some(&1));
+    assert_eq!(counts.borrow().get("third"), Some(&1));
+    session.rerun_cell("b").unwrap();
+    assert_eq!(counts.borrow().get("first"), Some(&1));
+    assert_eq!(counts.borrow().get("second"), Some(&2));
+    assert_eq!(counts.borrow().get("third"), Some(&1));
+    assert_eq!(session.status("c").unwrap(), CellStatus::Stale);
 }
 
 #[test]

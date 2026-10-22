@@ -23,13 +23,12 @@ pub struct CellResult {
 
 pub trait CellExecutor {
     fn execute(&mut self, source: &str) -> Result<CellResult, String>;
-    fn reset(&mut self) -> Result<(), String>;
-
-    /// Reset evaluator state for a selected rerun. Executors with a session-wide
-    /// work budget can retain the amount already spent while clearing values.
-    fn reset_for_replay(&mut self) -> Result<(), String> {
-        self.reset()
+    fn execute_cell(&mut self, _id: &str, source: &str) -> Result<CellResult, String> {
+        self.execute(source)
     }
+    /// Drop definitions belonging to these stable cell IDs.
+    fn invalidate_cells(&mut self, _ids: &[String]) {}
+    fn reset(&mut self) -> Result<(), String>;
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -43,6 +42,7 @@ pub enum SessionError {
     MarkdownCell(String),
     ExecutionFailed { id: String, message: String },
     ResetFailed(String),
+    PrerequisiteNotCurrent { id: String, prerequisite: String },
     OrdinalOverflow,
 }
 
@@ -58,6 +58,10 @@ impl fmt::Display for SessionError {
             Self::MarkdownCell(id) => write!(f, "cannot execute Markdown cell: {id}"),
             Self::ExecutionFailed { id, message } => write!(f, "cell {id} failed: {message}"),
             Self::ResetFailed(message) => write!(f, "executor reset failed: {message}"),
+            Self::PrerequisiteNotCurrent { id, prerequisite } => write!(
+                f,
+                "cell {id} needs cell {prerequisite} rerun, or Restart and Run All"
+            ),
             Self::OrdinalOverflow => write!(f, "notebook output ordinal overflow"),
         }
     }
@@ -162,8 +166,13 @@ impl<E: CellExecutor> NotebookSession<E> {
         if self.notebook.cells[index].kind == CellKind::Markdown {
             return Err(SessionError::MarkdownCell(id.into()));
         }
+        self.check_prerequisites(index, id)?;
+        if self.last_execution_ordinal == u64::MAX || self.last_ordinal == u64::MAX {
+            self.fail_cell(index);
+            return Err(SessionError::OrdinalOverflow);
+        }
         let source = self.notebook.cells[index].source.clone();
-        let result = match self.executor.execute(&source) {
+        let result = match self.executor.execute_cell(id, &source) {
             Ok(result) => result,
             Err(message) => {
                 self.statuses.insert(id.into(), CellStatus::Failed);
@@ -227,37 +236,14 @@ impl<E: CellExecutor> NotebookSession<E> {
         Ok(())
     }
 
-    /// Rebuild a pure executor through the selected cell's file-order prefix.
-    /// Prefix executions do not change their saved outputs or visible statuses.
+    /// Recompute the selected cell without executing earlier cells.
     pub fn rerun_cell(&mut self, id: &str) -> Result<(), SessionError> {
         let index = self.cell_index(id)?;
         if self.notebook.cells[index].kind == CellKind::Markdown {
             return Err(SessionError::MarkdownCell(id.into()));
         }
-        if let Err(message) = self.executor.reset_for_replay() {
-            self.fail_cell(index);
-            return Err(SessionError::ExecutionFailed {
-                id: id.into(),
-                message,
-            });
-        }
-        for status in self.statuses.values_mut() {
-            if *status == CellStatus::Current {
-                *status = CellStatus::Cached;
-            }
-        }
-        for prefix in &self.notebook.cells[..index] {
-            if prefix.kind == CellKind::Code {
-                if let Err(message) = self.executor.execute(&prefix.source) {
-                    let prefix_id = prefix.id.clone();
-                    self.fail_cell(index);
-                    return Err(SessionError::ExecutionFailed {
-                        id: id.into(),
-                        message: format!("{message} (while replaying prefix cell {prefix_id})"),
-                    });
-                }
-            }
-        }
+        self.check_prerequisites(index, id)?;
+        self.invalidate_suffix(index);
         self.run_cell(id)
     }
 
@@ -273,13 +259,8 @@ impl<E: CellExecutor> NotebookSession<E> {
         }
         self.facts.insert(id.into(), facts);
         self.notebook.cells[index].source = source;
+        self.invalidate_suffix(index);
         self.mark_stale(index);
-        // The saved prefix hash includes every earlier executable cell.
-        for later in index + 1..self.notebook.cells.len() {
-            if self.notebook.cells[later].kind == CellKind::Code {
-                self.mark_stale(later);
-            }
-        }
         Ok(())
     }
 
@@ -308,6 +289,25 @@ impl<E: CellExecutor> NotebookSession<E> {
             .iter()
             .position(|cell| cell.id == id)
             .ok_or_else(|| SessionError::UnknownCellId(id.into()))
+    }
+
+    fn check_prerequisites(&self, index: usize, id: &str) -> Result<(), SessionError> {
+        for read in &self.facts[id].reads {
+            if self.facts[id].defines.contains(read) {
+                continue;
+            }
+            if let Some(prerequisite) = self.notebook.cells[..index].iter().rev().find(|cell| {
+                cell.kind == CellKind::Code && self.facts[&cell.id].defines.contains(read)
+            }) {
+                if self.statuses[&prerequisite.id] != CellStatus::Current {
+                    return Err(SessionError::PrerequisiteNotCurrent {
+                        id: id.into(),
+                        prerequisite: prerequisite.id.clone(),
+                    });
+                }
+            }
+        }
+        Ok(())
     }
 
     fn mark_stale(&mut self, index: usize) {
@@ -358,6 +358,20 @@ impl<E: CellExecutor> NotebookSession<E> {
         for index in 0..self.notebook.cells.len() {
             if self.notebook.cells[index].kind == CellKind::Code {
                 self.mark_stale(index);
+            }
+        }
+    }
+
+    fn invalidate_suffix(&mut self, index: usize) {
+        let ids: Vec<_> = self.notebook.cells[index..]
+            .iter()
+            .filter(|cell| cell.kind == CellKind::Code)
+            .map(|cell| cell.id.clone())
+            .collect();
+        self.executor.invalidate_cells(&ids);
+        for later in index + 1..self.notebook.cells.len() {
+            if self.notebook.cells[later].kind == CellKind::Code {
+                self.mark_stale(later);
             }
         }
     }

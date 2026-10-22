@@ -98,7 +98,7 @@ fn repeated_runs_advance_execution_and_legacy_output_ordinals() {
             .output_ordinal,
         Some(2)
     );
-    assert_eq!(kernel.status("silent").unwrap(), CellStatus::Cached);
+    assert_eq!(kernel.status("silent").unwrap(), CellStatus::Current);
 }
 
 #[test]
@@ -273,9 +273,11 @@ fn escaped_string_is_evaluated_by_cgx2() {
 }
 
 #[test]
-fn replay_budget_stops_a_long_sequence() {
+fn evaluation_budget_stops_a_long_sequence() {
     let source = format!("\"{}\"", "x".repeat(498));
-    let cells = (0..70).map(|n| code(&format!("c{n}"), &source)).collect();
+    let cells = (0..120)
+        .map(|n| code(&format!("c{n}"), &format!("let x{n} = {source}")))
+        .collect();
     let mut kernel = NotebookKernel::open(notebook(cells)).unwrap();
     let error = kernel.restart_and_run_all().unwrap_err();
     assert_eq!(error.code, "CGNK006");
@@ -288,7 +290,7 @@ fn replay_budget_stops_a_long_sequence() {
 }
 
 #[test]
-fn selected_rerun_replays_prefix_and_stales_transitive_readers() {
+fn selected_rerun_uses_retained_prefix_and_stales_transitive_readers() {
     let mut kernel = NotebookKernel::open(notebook(vec![
         code("first", "let x = 3\nx"),
         code("middle", "let y = x + 4\ny"),
@@ -306,8 +308,8 @@ fn selected_rerun_replays_prefix_and_stales_transitive_readers() {
     assert_eq!(kernel.status("last").unwrap(), CellStatus::Stale);
     kernel.rerun_cell("last").unwrap();
     assert_eq!(output_body(&kernel.notebook().cells[2].outputs[0]), "10");
-    assert_eq!(kernel.status("first").unwrap(), CellStatus::Cached);
-    assert_eq!(kernel.status("middle").unwrap(), CellStatus::Cached);
+    assert_eq!(kernel.status("first").unwrap(), CellStatus::Current);
+    assert_eq!(kernel.status("middle").unwrap(), CellStatus::Current);
     assert_eq!(kernel.status("last").unwrap(), CellStatus::Current);
     kernel.rerun_cell("middle").unwrap();
     assert_eq!(output_body(&kernel.notebook().cells[1].outputs[0]), "9");
@@ -333,20 +335,80 @@ fn failed_rerun_never_leaves_old_result_current() {
 }
 
 #[test]
-fn rerun_replay_budget_is_cumulative_and_failure_is_noncurrent() {
-    let source = format!("\"{}\"", "x".repeat(1_498));
-    let cells = (0..20).map(|n| code(&format!("c{n}"), &source)).collect();
-    let mut kernel = NotebookKernel::open(notebook(cells)).unwrap();
+fn rerun_evaluation_budget_is_cumulative_and_failure_is_noncurrent() {
+    let source = format!("\"{}\"", "x".repeat(30_000));
+    let mut kernel = NotebookKernel::open(notebook(vec![code("c", &source)])).unwrap();
     kernel.restart_and_run_all().unwrap();
     let mut error = None;
-    for _ in 0..10 {
-        if let Err(failure) = kernel.rerun_cell("c19") {
+    for _ in 0..40 {
+        if let Err(failure) = kernel.rerun_cell("c") {
             error = Some(failure);
             break;
         }
     }
     let error = error.unwrap();
     assert_eq!(error.code, "CGNK006");
-    assert!(error.message.contains("prefix cell"));
-    assert_eq!(kernel.status("c19").unwrap(), CellStatus::Failed);
+    assert!(error.message.contains("evaluation budget"));
+    assert_eq!(kernel.status("c").unwrap(), CellStatus::Failed);
+}
+
+#[test]
+fn edited_prerequisite_requires_explicit_rerun_and_preserves_old_cache() {
+    let mut kernel = NotebookKernel::open(notebook(vec![
+        code("a", "let x = 3"),
+        code("b", "let y = x + 4"),
+        code("c", "y + 1"),
+    ]))
+    .unwrap();
+    kernel.restart_and_run_all().unwrap();
+    kernel.replace_cell("a", "let x = 5".into()).unwrap();
+    let error = kernel.rerun_cell("c").unwrap_err();
+    assert_eq!(error.code, "CGNK004");
+    assert_eq!(kernel.status("c").unwrap(), CellStatus::Stale);
+    assert_eq!(output_body(&kernel.notebook().cells[2].outputs[0]), "8");
+    kernel.rerun_cell("a").unwrap();
+    kernel.rerun_cell("b").unwrap();
+    kernel.rerun_cell("c").unwrap();
+    assert_eq!(output_body(&kernel.notebook().cells[2].outputs[0]), "10");
+    assert_eq!(kernel.status("c").unwrap(), CellStatus::Current);
+}
+
+#[test]
+fn failing_cell_does_not_commit_partially_checked_bindings() {
+    let mut kernel = NotebookKernel::open(notebook(vec![
+        code("seed", "let x = 3"),
+        code("value", "let y = x + 4\n1 / 0"),
+    ]))
+    .unwrap();
+    kernel.run_cell("seed").unwrap();
+    let error = kernel.run_cell("value").unwrap_err();
+    assert_eq!(error.code, "CGNK008");
+    assert!(error.message.contains("CGR006"));
+    kernel.replace_cell("value", "y".into()).unwrap();
+    let error = kernel.rerun_cell("value").unwrap_err();
+    assert_eq!(error.code, "CGNK008");
+    assert!(error.message.contains("unknown name"));
+    kernel.replace_cell("value", "x + 4".into()).unwrap();
+    kernel.rerun_cell("value").unwrap();
+    assert_eq!(output_body(&kernel.notebook().cells[1].outputs[0]), "7");
+}
+
+#[test]
+fn retained_scalars_keep_cli_arithmetic_and_string_behavior() {
+    let mut kernel = NotebookKernel::open(notebook(vec![
+        code("minimum", "let min = 0 - 9223372036854775807 - 1"),
+        code("text", "let message: String = \"line\\n\\\"quoted\\\"\""),
+        code("read", "message"),
+        code("edge", "min"),
+    ]))
+    .unwrap();
+    kernel.restart_and_run_all().unwrap();
+    assert_eq!(
+        output_body(&kernel.notebook().cells[2].outputs[0]),
+        "line\n\"quoted\""
+    );
+    assert_eq!(
+        output_body(&kernel.notebook().cells[3].outputs[0]),
+        i64::MIN.to_string()
+    );
 }

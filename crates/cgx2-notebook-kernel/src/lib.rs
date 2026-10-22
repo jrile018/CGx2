@@ -1,6 +1,6 @@
-//! Checked, bounded replay of pure scalar CGx2 notebook cells.
+//! Checked, bounded retained-state execution of pure scalar CGx2 cells.
 
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
 
 use cgx2_cli::{check_source, run_source, Value};
@@ -12,7 +12,9 @@ use cgx2_syntax::{parse_module, Expr, ExprKind, Path, StmtKind};
 
 pub const MAX_CODE_CELLS: usize = 128;
 pub const MAX_SOURCE_BYTES: usize = 64 * 1024;
-pub const MAX_REPLAY_BYTES: usize = 1024 * 1024;
+pub const MAX_EVALUATION_BYTES: usize = 1024 * 1024;
+/// Compatibility alias for the cumulative evaluation budget.
+pub const MAX_REPLAY_BYTES: usize = MAX_EVALUATION_BYTES;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct KernelError {
@@ -42,9 +44,12 @@ fn error(code: &'static str, message: impl Into<String>) -> KernelError {
 
 fn session_error(source: SessionError) -> KernelError {
     match source {
+        SessionError::PrerequisiteNotCurrent { .. } => error("CGNK004", source.to_string()),
         SessionError::ExecutionFailed { id, message } => {
             let (code, message) = if let Some(reason) = message.strip_prefix("CGNK001: ") {
                 ("CGNK001", reason.to_owned())
+            } else if let Some(reason) = message.strip_prefix("CGNK004: ") {
+                ("CGNK004", reason.to_owned())
             } else if let Some(reason) = message.strip_prefix("CGNK006: ") {
                 ("CGNK006", reason.to_owned())
             } else if let Some(reason) = message.strip_prefix("CGNK008: ") {
@@ -62,10 +67,10 @@ fn session_error(source: SessionError) -> KernelError {
     }
 }
 
-/// A bounded, file-order notebook session with selected pure-scalar replay.
+/// A bounded, file-order notebook session with selected pure-scalar rerun.
 #[derive(Debug)]
 pub struct NotebookKernel {
-    session: NotebookSession<ReplayExecutor>,
+    session: NotebookSession<RetainedExecutor>,
     code_order: Vec<String>,
     next_code: usize,
     requires_restart: bool,
@@ -111,7 +116,7 @@ impl NotebookKernel {
         if self.requires_restart || index < self.next_code {
             return Err(error(
                 "CGNK004",
-                "cell rerun or edit requires Restart and Run All",
+                "use Run this cell or Restart and Run All after a rerun or edit",
             ));
         }
         if index != self.next_code {
@@ -122,8 +127,7 @@ impl NotebookKernel {
         Ok(())
     }
 
-    /// Replays preceding code cells from source in a fresh evaluator state, then
-    /// runs `id`. Replay is bounded and pure; prefix outputs are not refreshed.
+    /// Runs only `id` from retained preceding scalar bindings. Later bindings are invalidated.
     pub fn rerun_cell(&mut self, id: &str) -> Result<(), KernelError> {
         let Some(index) = self.code_order.iter().position(|candidate| candidate == id) else {
             return Err(session_error(match self.session.status(id) {
@@ -162,7 +166,7 @@ impl NotebookKernel {
         Ok(())
     }
 
-    /// Clears old code outputs, resets replay, and runs all code cells in file order.
+    /// Clears old code outputs and retained state, then runs all code cells in file order.
     pub fn restart_and_run_all(&mut self) -> Result<(), KernelError> {
         let mut notebook = self.session.notebook().clone();
         for cell in &mut notebook.cells {
@@ -208,14 +212,14 @@ fn validate_limits(notebook: &Notebook) -> Result<(), KernelError> {
     Ok(())
 }
 
-fn new_session(notebook: Notebook) -> Result<NotebookSession<ReplayExecutor>, KernelError> {
+fn new_session(notebook: Notebook) -> Result<NotebookSession<RetainedExecutor>, KernelError> {
     let facts = notebook
         .cells
         .iter()
         .filter(|cell| cell.kind == CellKind::Code)
         .map(|cell| (cell.id.clone(), facts_or_opaque(&cell.source)))
         .collect::<BTreeMap<_, _>>();
-    NotebookSession::new(notebook, facts, ReplayExecutor::default()).map_err(session_error)
+    NotebookSession::new(notebook, facts, RetainedExecutor::default()).map_err(session_error)
 }
 
 fn facts_or_opaque(source: &str) -> CellFacts {
@@ -234,7 +238,7 @@ pub fn facts_for_source(source: &str) -> Result<CellFacts, KernelError> {
     if module.name.is_some() || !module.functions.is_empty() {
         return Err(error(
             "CGNK001",
-            "module declarations and functions are unsupported in notebook replay",
+            "module declarations and functions are unsupported in notebook scalar execution",
         ));
     }
     let mut facts = CellFacts::default();
@@ -274,7 +278,7 @@ fn collect_reads(expression: &Expr, facts: &mut CellFacts) -> Result<(), KernelE
         ExprKind::Call { .. } => {
             return Err(error(
                 "CGNK001",
-                "function calls are unsupported in notebook replay",
+                "function calls are unsupported in notebook scalar execution",
             ))
         }
     }
@@ -286,54 +290,181 @@ fn simple_name(path: &Path) -> Result<&str, KernelError> {
         [name] => Ok(name),
         _ => Err(error(
             "CGNK001",
-            "qualified names are unsupported in notebook replay",
+            "qualified names are unsupported in notebook scalar execution",
         )),
     }
 }
 
-#[derive(Debug, Default)]
-struct ReplayExecutor {
-    accepted: Vec<String>,
-    replay_bytes: usize,
+#[derive(Debug, Clone)]
+struct RetainedBinding {
+    value: Value,
+    cell_id: String,
 }
 
-impl CellExecutor for ReplayExecutor {
-    fn execute(&mut self, source: &str) -> Result<CellResult, String> {
-        facts_for_source(source).map_err(|error| error.to_string())?;
-        let mut script = self.accepted.join("\n");
-        if !script.is_empty() {
-            script.push('\n');
+#[derive(Debug, Default)]
+struct RetainedExecutor {
+    bindings: BTreeMap<String, RetainedBinding>,
+    evaluation_bytes: usize,
+}
+
+impl RetainedExecutor {
+    fn prefix(&self, pending: &BTreeMap<String, Value>) -> Result<String, String> {
+        let mut script = String::new();
+        for (name, binding) in &self.bindings {
+            append_binding(&mut script, name, &binding.value)?;
         }
-        script.push_str(source);
-        self.replay_bytes = self
-            .replay_bytes
-            .checked_add(script.len())
-            .filter(|total| *total <= MAX_REPLAY_BYTES)
-            .ok_or_else(|| {
-                format!("CGNK006: replay budget of {MAX_REPLAY_BYTES} bytes exceeded")
-            })?;
-        check_source(&script).map_err(|diagnostics| {
-            let first = &diagnostics[0];
-            format!("{}: {}", first.code, first.message)
-        })?;
-        let result = run_source(&script, &[])
-            .map_err(|error| format!("{}: {}", error.code, error.message))?;
-        self.accepted.push(source.to_owned());
-        let text = match result.value {
-            Value::Unit => None,
-            value => Some(value.to_string()),
-        };
-        Ok(CellResult { text })
+        for (name, value) in pending {
+            append_binding(&mut script, name, value)?;
+        }
+        if script.len() > MAX_REPLAY_BYTES {
+            return Err(limit_error());
+        }
+        Ok(script)
     }
 
-    fn reset(&mut self) -> Result<(), String> {
-        self.accepted.clear();
-        self.replay_bytes = 0;
+    fn charge(&mut self, bytes: usize) -> Result<(), String> {
+        self.evaluation_bytes = self
+            .evaluation_bytes
+            .checked_add(bytes)
+            .filter(|total| *total <= MAX_REPLAY_BYTES)
+            .ok_or_else(limit_error)?;
         Ok(())
     }
 
-    fn reset_for_replay(&mut self) -> Result<(), String> {
-        self.accepted.clear();
+    fn execute_named(&mut self, id: &str, source: &str) -> Result<CellResult, String> {
+        facts_for_source(source).map_err(|error| error.to_string())?;
+        let module = parse_module(source).map_err(|diagnostics| {
+            let first = &diagnostics[0];
+            format!("{}: {}", first.code, first.message)
+        })?;
+        let prefix = self.prefix(&BTreeMap::new())?;
+        let checked = format!("{prefix}{source}");
+        if checked.len() > MAX_REPLAY_BYTES {
+            return Err(limit_error());
+        }
+        self.charge(checked.len())?;
+        check_source(&checked).map_err(|diagnostics| {
+            let first = &diagnostics[0];
+            format!("{}: {}", first.code, first.message)
+        })?;
+
+        let mut pending = BTreeMap::new();
+        let mut tail = Value::Unit;
+        for statement in &module.statements {
+            let statement_source = &source[statement.span.start..statement.span.end];
+            let prefix = self.prefix(&pending)?;
+            let (script, defined) = match &statement.kind {
+                StmtKind::Let { name, .. } => {
+                    (format!("{prefix}{statement_source}\n{name}"), Some(name))
+                }
+                StmtKind::Expr(_) => (format!("{prefix}{statement_source}"), None),
+                _ => unreachable!("facts_for_source rejects unsupported statements"),
+            };
+            self.charge(script.len())?;
+            let value = run_source(&script, &[])
+                .map_err(|error| format!("{}: {}", error.code, error.message))?
+                .value;
+            if let Some(name) = defined {
+                if value == Value::Unit {
+                    return Err("CGNK001: Unit bindings are unsupported".into());
+                }
+                pending.insert(name.clone(), value);
+                tail = Value::Unit;
+            } else {
+                tail = value;
+            }
+        }
+
+        let retained_bytes = self
+            .bindings
+            .iter()
+            .map(|(name, binding)| name.len() + binding.cell_id.len() + value_size(&binding.value))
+            .sum::<usize>()
+            + pending
+                .iter()
+                .map(|(name, value)| name.len() + id.len() + value_size(value))
+                .sum::<usize>();
+        if retained_bytes > MAX_REPLAY_BYTES {
+            return Err(limit_error());
+        }
+        for (name, value) in pending {
+            self.bindings.insert(
+                name,
+                RetainedBinding {
+                    value,
+                    cell_id: id.to_owned(),
+                },
+            );
+        }
+        Ok(CellResult {
+            text: (tail != Value::Unit).then(|| tail.to_string()),
+        })
+    }
+}
+
+fn limit_error() -> String {
+    format!("CGNK006: retained-state evaluation budget of {MAX_REPLAY_BYTES} bytes exceeded")
+}
+
+fn value_size(value: &Value) -> usize {
+    match value {
+        Value::String(text) => text.len(),
+        _ => 8,
+    }
+}
+
+fn append_binding(script: &mut String, name: &str, value: &Value) -> Result<(), String> {
+    script.push_str("let ");
+    script.push_str(name);
+    script.push_str(" = ");
+    match value {
+        Value::I64(number) if *number == i64::MIN => {
+            script.push_str("0 - 9223372036854775807 - 1");
+        }
+        Value::I64(number) if *number < 0 => {
+            script.push_str("0 - ");
+            script.push_str(&(-number).to_string());
+        }
+        Value::I64(number) => script.push_str(&number.to_string()),
+        Value::Bool(boolean) => script.push_str(&boolean.to_string()),
+        Value::String(text) => {
+            script.push('"');
+            for character in text.chars() {
+                match character {
+                    '\n' => script.push_str("\\n"),
+                    '\r' => script.push_str("\\r"),
+                    '\t' => script.push_str("\\t"),
+                    '"' => script.push_str("\\\""),
+                    '\\' => script.push_str("\\\\"),
+                    other => script.push(other),
+                }
+            }
+            script.push('"');
+        }
+        Value::Unit => return Err("CGNK001: Unit bindings are unsupported".into()),
+    }
+    script.push('\n');
+    Ok(())
+}
+
+impl CellExecutor for RetainedExecutor {
+    fn execute(&mut self, source: &str) -> Result<CellResult, String> {
+        self.execute_named("", source)
+    }
+
+    fn execute_cell(&mut self, id: &str, source: &str) -> Result<CellResult, String> {
+        self.execute_named(id, source)
+    }
+
+    fn invalidate_cells(&mut self, ids: &[String]) {
+        let invalidated: BTreeSet<_> = ids.iter().collect();
+        self.bindings
+            .retain(|_, binding| !invalidated.contains(&binding.cell_id));
+    }
+
+    fn reset(&mut self) -> Result<(), String> {
+        self.bindings.clear();
+        self.evaluation_bytes = 0;
         Ok(())
     }
 }
