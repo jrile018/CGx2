@@ -163,6 +163,15 @@ name = "cgx2-syntax"
 version = "0.1.0"
 
 [[package]]
+name = "cgx2-verify-cli"
+version = "0.1.0"
+dependencies = [
+ "cgx2-verify-core",
+ "serde_json",
+ "sha2",
+]
+
+[[package]]
 name = "cgx2-verify-core"
 version = "0.1.0"
 
