@@ -1,4 +1,6 @@
 import copy
+from contextlib import redirect_stderr
+from io import StringIO
 import importlib.util
 import json
 from pathlib import Path
@@ -19,6 +21,19 @@ spec.loader.exec_module(accept)
 
 
 class CandidatePacketTests(unittest.TestCase):
+    def test_candidate_cli_requires_trusted_local_smoke_flag(self):
+        with tempfile.TemporaryDirectory() as directory:
+            workspace = self.copy_starter("quote-credit-v3", "rust", directory)
+            error = StringIO()
+            with redirect_stderr(error), self.assertRaises(SystemExit) as stopped:
+                accept.main([
+                    "--task", "quote-credit-v3", "--language", "rust",
+                    "--candidate-workspace", str(workspace),
+                    "--cgx2c", "/missing/cgx2c",
+                ])
+            self.assertEqual(stopped.exception.code, 2)
+            self.assertIn("requires --trusted-local-smoke", error.getvalue())
+
     def copy_starter(self, task, language, directory):
         workspace = Path(directory) / "submission"
         shutil.copytree(BASE / "tasks" / task / language, workspace)

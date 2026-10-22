@@ -6,7 +6,7 @@
   "tasks": [
     {
       "claim_status": "not_assessed",
-      "harness_sha256": "6977f5ac9dcbd3ac4b38b7a076885c3820c6fee3a4ec93faa80ad066b5f30e86",
+      "harness_sha256": "17242900d12ba4a38862414bf40f17fdf65a6922a2ab73656d3cc777c1c45903",
       "prompt_sha256": "40abb7ff94f50ba35f464c0b4aec46cbf056df25a465e34baa973a6ab3748323",
       "review_state": "pending",
       "run_state": "unrun",
@@ -15,12 +15,12 @@
         "rust": "2385fe87c9145fd188ecc458e793eb8a298a33d49d914a99f4c3e720f6ac27d5"
       },
       "task_id": "quote-credit-v3",
-      "task_sha256": "03979f5f798f54426cf38f28d952af7c758c1a155fbcd41bd101724b87eae7db",
+      "task_sha256": "faf6b9f005e9815a1ee66de37b2d5bb084922e399f060766cdc72eea2d942d12",
       "trials": []
     },
     {
       "claim_status": "not_assessed",
-      "harness_sha256": "6977f5ac9dcbd3ac4b38b7a076885c3820c6fee3a4ec93faa80ad066b5f30e86",
+      "harness_sha256": "17242900d12ba4a38862414bf40f17fdf65a6922a2ab73656d3cc777c1c45903",
       "prompt_sha256": "38badb5a805e41e6e847e1a60dfa3d455b490293d0891b9673d047ae906cebd0",
       "review_state": "pending",
       "run_state": "unrun",
@@ -29,7 +29,7 @@
         "rust": "6886b1431667199e23de0361381839326f782034eaf1ca91771f8619fc4415c2"
       },
       "task_id": "grid-quote-v3",
-      "task_sha256": "588d39bb7464b57b7e727f24ae7588ad062a78acd77e13d62510c88a2dc5f63e",
+      "task_sha256": "3f10ff38db7b876b8672d52cc3033796a8697650d19f0090cb6066f269474cb0",
       "trials": []
     }
   ]

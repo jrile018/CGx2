@@ -47,7 +47,7 @@
       "prompt_sha256": "40abb7ff94f50ba35f464c0b4aec46cbf056df25a465e34baa973a6ab3748323",
       "hidden_test_ref": "private:quote-credit-v3:v1",
       "hidden_test_path": "private/accept.py",
-      "hidden_test_sha256": "6977f5ac9dcbd3ac4b38b7a076885c3820c6fee3a4ec93faa80ad066b5f30e86",
+      "hidden_test_sha256": "17242900d12ba4a38862414bf40f17fdf65a6922a2ab73656d3cc777c1c45903",
       "acceptance_command": [
         "python3",
         "bench/fixtures/task-candidates/v3/private/accept.py",
@@ -157,7 +157,7 @@
       "prompt_sha256": "38badb5a805e41e6e847e1a60dfa3d455b490293d0891b9673d047ae906cebd0",
       "hidden_test_ref": "private:grid-quote-v3:v1",
       "hidden_test_path": "private/accept.py",
-      "hidden_test_sha256": "6977f5ac9dcbd3ac4b38b7a076885c3820c6fee3a4ec93faa80ad066b5f30e86",
+      "hidden_test_sha256": "17242900d12ba4a38862414bf40f17fdf65a6922a2ab73656d3cc777c1c45903",
       "acceptance_command": [
         "python3",
         "bench/fixtures/task-candidates/v3/private/accept.py",

@@ -48,6 +48,7 @@ dependencies = [
  "cgx2-bind",
  "cgx2-ffi-native",
  "cgx2-foreign",
+ "cgx2-libtorch",
  "cgx2-package",
  "cgx2-runtime",
  "cgx2-sema",
@@ -104,7 +105,10 @@ dependencies = [
 name = "cgx2-libtorch"
 version = "0.1.0"
 dependencies = [
+ "cgx2-bind",
  "cgx2-ffi-native",
+ "serde_json",
+ "sha2",
 ]
 
 [[package]]

@@ -1,7 +1,10 @@
 """Private correctness oracle for Wave 13 candidates.
 
 Reference smoke: python3 bench/fixtures/task-candidates/v3/private/accept.py
-Scored submission: add --task TASK --language cgx2|rust --candidate-workspace DIR.
+Trusted local submission smoke: add --task TASK --language cgx2|rust
+--candidate-workspace DIR --trusted-local-smoke. Do not run untrusted model
+submissions on a host with private fixtures; use an isolated worker without
+network or private-oracle access for scored submissions.
 Only a submitted workspace is scored; bundled starters and references are smoke
 fixtures. Keep this file and reference overlays out of model-visible workspaces.
 """
@@ -208,10 +211,20 @@ def main(argv=None):
     parser.add_argument("--task", choices=SPECS, help="one candidate; omitted for both reference smokes")
     parser.add_argument("--language", choices=LANGUAGES)
     parser.add_argument("--candidate-workspace", type=Path)
+    parser.add_argument(
+        "--trusted-local-smoke",
+        action="store_true",
+        help="permit candidate execution only for trusted local fixture smoke",
+    )
     parser.add_argument("--cgx2c", type=Path, default=REPO / "target/debug/cgx2c")
     args = parser.parse_args(argv)
     if args.candidate_workspace is not None and (args.task is None or args.language is None):
         parser.error("submitted workspaces require --task and --language")
+    if args.candidate_workspace is not None and not args.trusted_local_smoke:
+        parser.error(
+            "submitted workspace execution requires --trusted-local-smoke; "
+            "untrusted submissions need an isolated worker without private-oracle access"
+        )
     if not args.cgx2c.is_file():
         parser.error(f"build cgx2c first: {args.cgx2c}")
     for task in (args.task,) if args.task else SPECS:

@@ -1,9 +1,7 @@
 //! One lexical `.cg` tensor call, using the frozen direct LibTorch facade.
-use std::fs::File;
-use std::os::fd::AsRawFd;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
-use cgx2_bind::{checked_artifact, checked_lock};
+use cgx2_bind::checked_lock;
 use cgx2_libtorch::Torch;
 use cgx2_package::{load_checked_package, CheckedPackage};
 use cgx2_sema::{tensor_profile, TensorProfile};
@@ -14,7 +12,6 @@ struct Prepared {
     package: CheckedPackage,
     entry: usize,
     profile: TensorProfile,
-    artifact: File,
 }
 
 fn prepare(root: &Path) -> Result<Option<Prepared>, Vec<NativeDiagnostic>> {
@@ -68,6 +65,14 @@ fn prepare(root: &Path) -> Result<Option<Prepared>, Vec<NativeDiagnostic>> {
             })
             .collect::<Vec<_>>()
     })?;
+    if lock.schema_version != 2 {
+        return Err(vec![diagnostic(
+            "CGN004",
+            "source tensor calls require a schema-2 binding and complete LibTorch closure lock",
+            source,
+            Some(profile.declaration_span),
+        )]);
+    }
     let binding = lock
         .bindings
         .iter()
@@ -93,14 +98,6 @@ fn prepare(root: &Path) -> Result<Option<Prepared>, Vec<NativeDiagnostic>> {
             Some(profile.declaration_span),
         )]);
     }
-    let artifact = checked_artifact(package.root(), binding).map_err(|message| {
-        vec![diagnostic(
-            "CGN006",
-            format!("binding {}: {message}", binding.id),
-            source,
-            Some(profile.declaration_span),
-        )]
-    })?;
     package.verify_unchanged().map_err(|errors| {
         errors
             .into_iter()
@@ -111,7 +108,6 @@ fn prepare(root: &Path) -> Result<Option<Prepared>, Vec<NativeDiagnostic>> {
         package,
         entry,
         profile,
-        artifact,
     }))
 }
 
@@ -135,19 +131,19 @@ pub(super) fn maybe_run(
             Some(prepared.profile.call_span),
         )]);
     }
-    // Keep the verified descriptor alive until Torch and every tensor handle have dropped.
-    let fd_path = PathBuf::from(format!("/proc/self/fd/{}", prepared.artifact.as_raw_fd()));
-    // SAFETY: the source explicitly declares unsafe native execution. The checked lock pins
-    // facade bytes, target, ABI and signatures; only reviewed facade.h implementations may be
-    // used. Native metadata is checked again by Torch::open.
-    let torch = unsafe { Torch::open(&fd_path, &prepared.profile.version) }.map_err(|error| {
-        vec![diagnostic(
-            "CGN007",
-            format!("tensor facade load failed: {error:?}"),
-            source,
-            Some(prepared.profile.declaration_span),
-        )]
-    })?;
+    // SAFETY: the source declares an unsafe native call, and the package has a schema-2
+    // closure lock. The adapter rechecks the ELF closure and mapped modules before returning.
+    // Native constructors may run during dlopen, so only reviewed artifacts are permitted.
+    let torch =
+        unsafe { Torch::open_pinned(prepared.package.root(), &prepared.profile.binding_id) }
+            .map_err(|error| {
+                vec![diagnostic(
+                    "CGN007",
+                    format!("tensor facade load failed: {error:?}"),
+                    source,
+                    Some(prepared.profile.declaration_span),
+                )]
+            })?;
     let call_error = |error| {
         vec![diagnostic(
             "CGR024",
@@ -161,6 +157,15 @@ pub(super) fn maybe_run(
         .from_f64(&prepared.profile.right)
         .map_err(call_error)?;
     let sum = left.add(&right).map_err(call_error)?;
+    let shape = sum.shape().map_err(call_error)?;
+    if shape[0] != prepared.profile.left.len() {
+        return Err(vec![diagnostic(
+            "CGR024",
+            "tensor facade returned unexpected shape",
+            source,
+            Some(prepared.profile.call_span),
+        )]);
+    }
     let values = sum.to_vec().map_err(call_error)?;
     if values.len() != prepared.profile.left.len() {
         return Err(vec![diagnostic(

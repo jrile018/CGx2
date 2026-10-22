@@ -180,9 +180,11 @@ repair passes normal, zero, group (large task), and overflow cases. This
 negative fixture is a behavior failure, not a compile failure.
 
 The private oracle without a submitted workspace is a starter/reference preflight. A
-holdout runner must substitute `{language}` and `{workspace}` in each task's
-`acceptance_command` and run it against the model's submitted workspace, for example
-`python3 bench/fixtures/task-candidates/v3/private/accept.py --task quote-credit-v3 --language cgx2 --candidate-workspace /path/to/submission`.
+trusted local fixture smoke can pass `--trusted-local-smoke`, `--task`, `--language`,
+and `--candidate-workspace`. The pack's `acceptance_command` deliberately omits
+the trust flag, so it refuses to execute a submitted workspace on this host.
+Untrusted holdout submissions require a separately reviewed isolated worker
+with no candidate access to the private oracle or network before scoring.
 The oracle copies that workspace into a temporary directory before injecting test
 entry points; it does not copy the bundled reference overlay for a candidate.
 The oracle and its expected values remain outside the model-visible workspace.
