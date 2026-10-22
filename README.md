@@ -2,11 +2,11 @@
 
 CGx2 is a proposed programming language and toolchain for memory-safe native programs, short human-readable source, and fast LLM-assisted development. It combines automatically managed memory with explicit owned values and programmer-controlled collection regions. It also aims to make program structure, effects, contracts, and compiler feedback easy for both people and coding agents to inspect.
 
-**Status: early component prototypes.** Standalone syntax, runtime, notebook-format, Python-bridge, benchmark-harness, and bounded-verifier crates exist. There is no runnable CGx2 compiler, live notebook, real PyTorch verification, or measured CGx2 benchmark yet. CGx2 uses `.cg` source files and `.cgnb` notebooks.
+**Status: runnable preview, incomplete language.** The `cgx2` CLI interprets a small scalar `.cg` subset; a separate semantic checker, memory runtime, notebook session, Python bridge, benchmark harness, and bounded verifier exist. The CLI does not yet use all of them together. There is no native compiler, live notebook UI, real PyTorch verification, or measured CGx2 benchmark yet. CGx2 uses `.cg` source files and `.cgnb` notebooks.
 
 Read the [language design](docs/language-design.md), [validation plan](docs/validation-plan.md), and [implementation roadmap](docs/superpowers/plans/2026-10-22-first-compiler.md).
 
-The [delivery roadmap](plans/roadmap.md) defines the repeated review-and-integration loop. The [first-wave contracts](plans/README.md) record the six completed component plans; the [second-wave ledger](plans/wave2/README.md) assigns four independent coding chats. Each chat uses a separate Git worktree and stops for user review after its bounded deliverable.
+The [delivery roadmap](plans/roadmap.md) defines the repeated review-and-integration loop. The [first-wave contracts](plans/README.md) and [second-wave ledger](plans/wave2/README.md) record completed component plans; the [third-wave ledger](plans/wave3/README.md) assigns the next independent coding chats. Each chat uses a separate Git worktree and stops for user review after its bounded deliverable.
 
 ## What the first usable release must do
 

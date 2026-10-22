@@ -1,9 +1,12 @@
 [workspace]
 members = ["crates/*"]
 default-members = [
+    "crates/cgx2-cli",
     "crates/cgx2-syntax",
+    "crates/cgx2-sema",
     "crates/cgx2-runtime",
     "crates/cgx2-notebook-format",
+    "crates/cgx2-notebook-session",
     "crates/cgx2-verify-core",
 ]
 resolver = "3"
