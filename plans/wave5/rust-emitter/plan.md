@@ -30,19 +30,19 @@
 
 ### 1. Pure scalar mapping
 
-- [ ] Add red tests for scalar script, `let`/mutation, function module, tail return, `arg`/`arg_count`, identifier escaping, Unicode/string literals, and deterministic output.
-- [ ] Implement validation and readable Rust emission. State precise supported profile in the crate README.
-- [ ] Ensure generated source can compile with installed `rustc` without Cargo or external crates.
+- [x] Add red tests for scalar script, `let`/mutation, function module, tail return, `arg`/`arg_count`, identifier escaping, Unicode/string literals, and deterministic output.
+- [x] Implement validation and readable Rust emission. State precise supported profile in the crate README.
+- [x] Ensure generated source can compile with installed `rustc` without Cargo or external crates.
 
 ### 2. Differential and rejection tests
 
-- [ ] Add fixture tests that write generated Rust to a temporary directory, invoke `rustc` with `--edition=2024`, run the binary, and compare stdout/exit/error class with `cgx2-cli` for valid/error cases. Avoid relying on exact compiler formatting.
-- [ ] Test `i64::MIN`, max/min overflow, divide-by-zero, recursion depth where supported, and malformed strings. If the CGx2 runtime limits cannot be preserved, reject that construct rather than diverge silently.
-- [ ] Add rejection tests for memory, loops, foreign calls, and stale summaries with spans.
+- [x] Add fixture tests that write generated Rust to a temporary directory, invoke `rustc` with `--edition=2024`, run the binary, and compare stdout/exit/error class with `cgx2-cli` for valid/error cases. Avoid relying on exact compiler formatting.
+- [x] Test `i64::MIN`, max/min overflow, divide-by-zero, recursion depth where supported, and malformed strings. If the CGx2 runtime limits cannot be preserved, reject that construct rather than diverge silently.
+- [x] Add rejection tests for memory, loops, foreign calls, and stale summaries with spans.
 
 ### 3. Verification and handoff
 
-- [ ] Run `cargo test -p cgx2-emit-rust --offline`, `RUSTUP_TOOLCHAIN=1.98.1 cargo fmt --all --check`, and `RUSTUP_TOOLCHAIN=1.98.1 cargo clippy -p cgx2-emit-rust --all-targets --offline -- -D warnings`.
-- [ ] Document how to call the emitter and compile output, plus full-backend gaps. Commit only owned paths.
+- [x] Run `cargo test -p cgx2-emit-rust --offline`, `RUSTUP_TOOLCHAIN=1.98.1 cargo fmt --all --check`, and `RUSTUP_TOOLCHAIN=1.98.1 cargo clippy -p cgx2-emit-rust --all-targets --offline -- -D warnings`.
+- [x] Document how to call the emitter and compile output, plus full-backend gaps. Commit only owned paths.
 
 **Acceptance:** Real generated Rust binaries behave like the checked CGx2 scalar preview on deterministic fixtures; unsupported semantics are diagnosed rather than mistranslated.
