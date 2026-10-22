@@ -1,6 +1,6 @@
 # CGx2 language and toolchain specification
 
-**Status:** design proposal approved in the October 2026 interview; no integrated implementation exists. CGx2 uses `.cg` source files and `.cgnb` notebooks. Examples below define intended behavior, but the exact grammar is provisional until the syntax comparison in the validation plan.
+**Status:** design proposal with an integrated scalar preview and standalone memory, notebook, Python, and verification components. Most first-release paths are incomplete. CGx2 uses `.cg` source files and `.cgnb` notebooks. Examples below define intended behavior, but the exact grammar is provisional until the syntax comparison in the validation plan.
 
 ## Purpose and boundaries
 
@@ -63,6 +63,12 @@ A function's public signature declares observable effects such as file access, n
 The first usable release has a bounded formal verifier for pure integer/Boolean functions, checked arithmetic, array bounds, ownership/region rules, and annotated loops/contracts. Unsupported constructs are diagnosed as outside the proof subset. Verification conditions go to an SMT solver; a proved result requires the negated condition to be unsatisfiable under the modeled semantics. A counterexample is `disproved`; timeout or unsupported reasoning is `unknown`, never `proved`. Python/PyTorch calls and unmodeled effects require explicit assumptions or runtime checks. Memory safety established by the core type/ownership rules and dynamic region checks is documented separately from SMT-proved functional properties.
 
 The security analyzer checks declared effect/capability policy and a limited, specified taint source-to-sink set. The performance analyzer reports measured runtime, allocations, GC pauses, and user-declared budget violations; static cost hints are advisory unless a contract is mechanically enforced. Tests, property tests, fuzzing, and cross-target differential tests complement proofs.
+
+### Automatic execution choices
+
+CGx2 should aim to run supported work efficiently by default. A future execution planner may choose sequential CPU, parallel CPU, or a GPU-backed implementation only where it can preserve the program's declared effects, ownership, memory guarantees, and result contract. `auto` is the default policy; explicit `cpu`, `parallel`, and `gpu` requests are available for measurement and reproducibility. An unsupported explicit request is an error. `auto` falls back to a correct sequential implementation when capabilities or reliable measurements are missing.
+
+Parallel execution requires an analysis that proves independent work or a library primitive with a reviewed parallel contract. Side-effect order, data races, borrow lifetimes, and allocation behavior cannot change silently. One managed runtime session remains single-threaded initially; sharing its region handles across workers requires a separately specified thread-safe runtime. A `no_gc` guard cannot be bypassed by a parallel worker that shares the session. GPU dispatch is limited to a backend that actually supports the operation and device; host/device transfer, kernel launch, synchronization, memory pressure, and numerical differences count in the decision. Foreign PyTorch GPU allocation stays under PyTorch's manager and is reported as foreign memory. The compiler cannot guarantee globally optimal execution because input sizes, devices, contention, and transfer costs vary at runtime; it can compare safe candidates under measured conditions and expose the chosen plan and reason. General automatic GPU kernel generation is a later platform track.
 
 ## Compiler, CLI, and LLM interface
 

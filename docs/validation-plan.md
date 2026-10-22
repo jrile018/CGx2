@@ -53,6 +53,8 @@ Use at least two model families and repeated paired runs with frozen versions, p
 
 Use behaviorally equivalent reference outputs before timing. Pin compiler, Python, torch, dependencies, hardware, threads, device, dtype, batch size, input distribution, precision, and warmup. Report cold start separately from warm execution; use repeated independent process runs and uncertainty intervals. For GPU work, synchronize at request boundaries or use device events before reading latency. Measure process RSS and PyTorch allocated/reserved device memory separately.
 
+For automatic CPU/parallel/GPU selection, compare each supported backend with the sequential reference on the same input distribution. Include launch, transfers, synchronization, fallback, and planner overhead in end-to-end latency. Validate exact integer results and documented floating-point tolerances, effect order, ownership and `no_gc` behavior before accepting a speedup. Report selection accuracy and regressions across small and large inputs and across devices; an automatic choice is disabled when its correctness or benefit is uncertain. A source-independent policy prototype is not evidence that arbitrary `.cg` code runs in parallel or on a GPU.
+
 | Workload | Baseline | Provisional target |
 | --- | --- | --- |
 | Native pure/owned CPU | Optimized Rust implementation | CGx2 median runtime ≤1.25× and peak RSS ≤1.5×. |

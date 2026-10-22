@@ -57,6 +57,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "cgx2-notebook-kernel"
+version = "0.1.0"
+dependencies = [
+ "cgx2-cli",
+ "cgx2-notebook-format",
+ "cgx2-notebook-session",
+ "cgx2-syntax",
+]
+
+[[package]]
 name = "cgx2-notebook-session"
 version = "0.1.0"
 dependencies = [
@@ -85,6 +95,7 @@ version = "0.1.0"
 name = "cgx2-sema"
 version = "0.1.0"
 dependencies = [
+ "cgx2-ownership",
  "cgx2-syntax",
 ]
 
