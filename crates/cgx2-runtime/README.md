@@ -1,0 +1,21 @@
+# CGx2 runtime kernel
+
+This standalone crate is the first, safe Rust slice of CGx2 managed memory. It stores zero-initialized byte buffers with explicit same-region references. It is not connected to the compiler or a typed object layout yet. The crate uses no `unsafe` and no external dependencies.
+
+## Public API
+
+`Session::new() -> Session` creates a default auto region with a 64 MiB committed-byte limit and a 1 MiB trigger. `Session::default_region() -> RegionId` identifies it. `Session::create_region(mode: CollectionMode, limit_bytes: usize) -> Result<RegionId, AllocationError>` creates another region; modes are `Auto { trigger_bytes: usize }` and `Manual`.
+
+`Session::alloc_bytes(region: RegionId, len: usize) -> Result<Handle, AllocationError>` creates a zero-filled buffer. `Session::read_bytes(handle: Handle) -> Result<&[u8], MemoryError>` borrows it. A handle is opaque and contains a region, slot, and generation; reclaimed or closed handles return `InvalidHandle`. Region and handle identities are session-specific. `Session::mode(region)`, `limit_bytes(region)`, and `stats(region)` return `Result<CollectionMode, MemoryError>`, `Result<usize, MemoryError>`, and `Result<RegionStats, MemoryError>` respectively.
+
+`Session::root(handle)` and `unroot(handle)` return `Result<(), MemoryError>`. Roots are counted, so each successful `root` needs one `unroot`. `Session::link(parent, child) -> Result<(), MemoryError>` adds an idempotent same-region reference; a cross-region edge returns `CrossRegionEdge`. Edge storage can return `MemoryError::Allocation(AllocationError)`. `Session::collect(region) -> Result<(), MemoryError>` traces from roots and reclaims unreachable slots, including cycles. `Session::close_region(region) -> Result<(), MemoryError>` releases remaining storage when no roots remain; closing is not a collection. A handle left unrooted can be invalidated by collection or region close. The future compiler checker must enforce handle escape rules.
+
+`Session::no_gc(budget_bytes: usize) -> NoGcGuard<'_>` borrows the session exclusively. The guard dereferences to `Session`, so it supports allocation, region creation, rooting, linking, and nested `no_gc` calls. Every successful allocation is charged to every active guard. An exhausted budget returns `AllocationError::BudgetExceeded` before commitment. Explicit `collect` returns `MemoryError::CollectionForbidden`, even for another region. Dropping a guard only removes its budget; it does not collect. An auto region that reached its trigger collects at its **next allocation safepoint after all guards exit**. A manual region collects only by explicit call.
+
+## Accounting and scope
+
+The logical charge for a byte object is its reserved byte-buffer capacity plus `SLOT_METADATA_BYTES` (64). Each link charges newly reserved edge capacity times `EDGE_METADATA_BYTES` (`size_of::<Handle>()`). A region created inside a guard charges `REGION_METADATA_BYTES` (128) to active guard budgets, but region bookkeeping is not charged to that region's limit. Each allocation checks the region limit and every guard before commitment; failure increments the affected region's `allocation_failures` when a region exists. `RegionStats` exposes `committed_bytes`, `live_bytes`, `peak_bytes`, `allocation_failures`, `collection_count`, and `total_collected_bytes`. Here, live and committed are equal while objects remain allocated, including unreachable objects awaiting collection. The counters exclude foreign/Python allocations.
+
+This kernel proves its tested behavior for byte buffers and explicit edges only. It does not implement owned/borrowed type rules, automatic trace metadata for generated records, foreign handles, concurrent collection, pause histograms, or a proof of memory safety for all future CGx2 programs. Fixed logical metadata charges are accounting estimates; they are not an RSS measurement. The conformance tests assert zero collection counts inside every guard case and include deterministic graph operations, stale-handle reuse, cycle reclamation, failure paths, and region isolation.
+
+Run `cargo test --manifest-path crates/cgx2-runtime/Cargo.toml --offline`, `cargo fmt --manifest-path crates/cgx2-runtime/Cargo.toml --check`, and `cargo clippy --manifest-path crates/cgx2-runtime/Cargo.toml --offline -- -D warnings` from the repository root.

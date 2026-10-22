@@ -1,0 +1,7 @@
+[package]
+name = "cgx2-runtime"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.98"
+
+[dependencies]

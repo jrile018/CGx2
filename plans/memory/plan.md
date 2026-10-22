@@ -46,12 +46,12 @@ Expose `Session`, opaque `RegionId` and `Handle` with slot generation, `Collecti
 - produces: [`Session`, region/handle/error/stats API]
 - estimate: L
 - coordination_risk: low
-- status: pending
+- status: complete
 
-- [ ] Add failing tests for default region values, manual/auto creation, exact byte charging, region-limit error without allocation, and stale handle after slot reuse.
-- [ ] Run `cargo test --manifest-path crates/cgx2-runtime/Cargo.toml --offline` and confirm the new tests fail.
-- [ ] Implement slots, generation validation, fallible byte reservation, charge accounting, and byte access without unsafe code.
-- [ ] Run the crate tests and verify failure leaves stats and existing payloads consistent.
+- [x] Add failing tests for default region values, manual/auto creation, exact byte charging, region-limit error without allocation, and stale handle after slot reuse.
+- [x] Run `cargo test --manifest-path crates/cgx2-runtime/Cargo.toml --offline` and confirm the new tests fail.
+- [x] Implement slots, generation validation, fallible byte reservation, charge accounting, and byte access without unsafe code.
+- [x] Run the crate tests and verify failure leaves stats and existing payloads consistent.
 
 ### T2: Roots, graph tracing, and collection
 
@@ -62,12 +62,12 @@ Expose `Session`, opaque `RegionId` and `Handle` with slot generation, `Collecti
 - produces: [`root`, `unroot`, `link`, `collect`, `close_region`]
 - estimate: L
 - coordination_risk: low
-- status: pending
+- status: complete
 
-- [ ] Add failing tests for reachable cycle retention, unreachable cycle reclamation, manual-only collection, auto-trigger collection, cross-region edge rejection, and rooted-region close refusal.
-- [ ] Run the crate tests to observe the missing behavior.
-- [ ] Implement mark/sweep from explicit roots. Keep object slot addresses stable; reclaim bytes and advance generation on reuse.
-- [ ] Run the crate tests and a deterministic randomized operation sequence that checks stats, handle validity, and root reachability.
+- [x] Add failing tests for reachable cycle retention, unreachable cycle reclamation, manual-only collection, auto-trigger collection, cross-region edge rejection, and rooted-region close refusal.
+- [x] Run the crate tests to observe the missing behavior.
+- [x] Implement mark/sweep from explicit roots. Keep object slot addresses stable; reclaim bytes and advance generation on reuse.
+- [x] Run the crate tests and a deterministic randomized operation sequence that checks stats, handle validity, and root reachability.
 
 ### T3: Global `no_gc` guard and review receipt
 
@@ -78,12 +78,19 @@ Expose `Session`, opaque `RegionId` and `Handle` with slot generation, `Collecti
 - produces: [budgeted guard, counter-based conformance evidence]
 - estimate: L
 - coordination_risk: moderate
-- status: pending
+- status: complete
 
-- [ ] Add failing tests for zero collection across two auto regions in one guard, nested budgets, budget exhaustion before commit, explicit collect rejection, and guard drop after an error.
-- [ ] Run tests to see them fail, then implement budget charge/defer logic and RAII cleanup.
-- [ ] Run `cargo test --manifest-path crates/cgx2-runtime/Cargo.toml --offline`, `cargo fmt --manifest-path crates/cgx2-runtime/Cargo.toml --check`, and `cargo clippy --manifest-path crates/cgx2-runtime/Cargo.toml --offline -- -D warnings`.
-- [ ] Document exactly what this kernel proves and does not prove, including that byte buffers stand in for future generated trace metadata; report collection counters for every guard test.
-- [ ] Commit owned paths and stop. Report test results, commit ID, measured limits, and any API decisions needing integration review.
+- [x] Add failing tests for zero collection across two auto regions in one guard, nested budgets, budget exhaustion before commit, explicit collect rejection, and guard drop after an error.
+- [x] Run tests to see them fail, then implement budget charge/defer logic and RAII cleanup.
+- [x] Run `cargo test --manifest-path crates/cgx2-runtime/Cargo.toml --offline`, `cargo fmt --manifest-path crates/cgx2-runtime/Cargo.toml --check`, and `cargo clippy --manifest-path crates/cgx2-runtime/Cargo.toml --offline -- -D warnings`.
+- [x] Document exactly what this kernel proves and does not prove, including that byte buffers stand in for future generated trace metadata; report collection counters for every guard test.
+- [x] Commit owned paths and stop. Report test results, commit ID, measured limits, and any API decisions needing integration review.
 
 **Acceptance:** all listed tests pass; instrumentation shows zero CGx2 collections inside any guard; manual collection and limits behave as specified; no unsafe code or cross-track edit appears.
+
+## Execution receipt
+
+- T1/T2/T3 tests were observed red before implementation, then green. The final suite has 19 integration tests; the deterministic graph test runs 300 operations.
+- The guard tests report `collection_count == 0` inside two-region, nested-budget, budget-failure, explicit-collect, and error-drop cases. Auto collection occurs at the next post-guard allocation safepoint; explicit collection after guard drop increments the manual region counter to 1.
+- The installed `stable` alias lacks rustfmt and Clippy. All three specified checks pass with `RUSTUP_TOOLCHAIN=1.98.1`, the plan's pinned version.
+- API decisions for integration review: `create_region` is fallible; `default_region()` exposes the built-in region; `link` wraps allocation failures in `MemoryError::Allocation`; fixed logical metadata charges are not an RSS measure. Unrooted handles can be invalidated by region close until the compiler's escape checker is integrated.
