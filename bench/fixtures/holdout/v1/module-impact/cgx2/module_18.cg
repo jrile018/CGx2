@@ -1,0 +1,4 @@
+module calibration.m18
+
+pub fn value() -> i64:
+    18

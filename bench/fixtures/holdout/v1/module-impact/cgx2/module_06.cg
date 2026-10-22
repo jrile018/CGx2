@@ -1,0 +1,4 @@
+module calibration.m06
+
+pub fn value() -> i64:
+    6

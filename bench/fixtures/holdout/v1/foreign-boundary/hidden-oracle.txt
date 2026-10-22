@@ -1,0 +1,2 @@
+PRIVATE_FOREIGN_BOUNDARY_ORACLE
+Private executable acceptance tests must replace this public placeholder.

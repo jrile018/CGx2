@@ -1,0 +1,4 @@
+module calibration.m15
+
+pub fn value() -> i64:
+    15

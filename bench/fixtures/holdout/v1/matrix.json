@@ -1,0 +1,211 @@
+{
+  "schema_version": 2,
+  "kind": "public_calibration",
+  "conditions": [
+    "cgx2",
+    "python",
+    "rust",
+    "typescript",
+    "ocaml"
+  ],
+  "protocol": {
+    "allowed_tools": "unassigned",
+    "documentation_budget": "unassigned",
+    "token_budget": 4000,
+    "time_budget_seconds": 300,
+    "hardware": "unassigned",
+    "toolchain": "unassigned"
+  },
+  "tasks": [
+    {
+      "task_id": "memory-growth",
+      "tier": "small",
+      "category": "memory",
+      "statement": "memory-growth/statement.md",
+      "starters": {
+        "cgx2": "memory-growth/cgx2",
+        "python": "memory-growth/python"
+      },
+      "hidden_tests": "memory-growth/hidden-oracle.txt",
+      "hidden_test_version": "calibration-placeholder-v1",
+      "gold_changes": "memory-growth/gold.patch",
+      "baseline_language": "python",
+      "applicable_languages": [
+        "cgx2",
+        "python"
+      ],
+      "exclusions": {
+        "rust": "No independently reviewed equivalent starter for this public calibration template.",
+        "typescript": "No independently reviewed equivalent starter for this public calibration template.",
+        "ocaml": "No independently reviewed equivalent starter for this public calibration template."
+      },
+      "forbidden_markers": [
+        "PRIVATE_MEMORY_GROWTH_ORACLE"
+      ],
+      "hidden_test_sha256": "6c2a0f3f6d186f5729e11564570ce82eb8735e9a055a48632735ede0cc78ee3f"
+    },
+    {
+      "task_id": "module-impact",
+      "tier": "large",
+      "category": "modularity",
+      "statement": "module-impact/statement.md",
+      "starters": {
+        "cgx2": "module-impact/cgx2",
+        "python": "module-impact/python"
+      },
+      "hidden_tests": "module-impact/hidden-oracle.txt",
+      "hidden_test_version": "calibration-placeholder-v1",
+      "gold_changes": "module-impact/gold.patch",
+      "baseline_language": "python",
+      "applicable_languages": [
+        "cgx2",
+        "python"
+      ],
+      "exclusions": {
+        "rust": "No independently reviewed equivalent starter for this public calibration template.",
+        "typescript": "No independently reviewed equivalent starter for this public calibration template.",
+        "ocaml": "No independently reviewed equivalent starter for this public calibration template."
+      },
+      "forbidden_markers": [
+        "PRIVATE_MODULE_IMPACT_ORACLE"
+      ],
+      "hidden_test_sha256": "b65a140b151e7ac3821b223a24a11e90b4f5c1eda125835394e76afd5be577c4"
+    },
+    {
+      "task_id": "foreign-boundary",
+      "tier": "small",
+      "category": "foreign_library",
+      "statement": "foreign-boundary/statement.md",
+      "starters": {
+        "cgx2": "foreign-boundary/cgx2",
+        "python": "foreign-boundary/python"
+      },
+      "hidden_tests": "foreign-boundary/hidden-oracle.txt",
+      "hidden_test_version": "calibration-placeholder-v1",
+      "gold_changes": "foreign-boundary/gold.patch",
+      "baseline_language": "python",
+      "applicable_languages": [
+        "cgx2",
+        "python"
+      ],
+      "exclusions": {
+        "rust": "No independently reviewed equivalent starter for this public calibration template.",
+        "typescript": "No independently reviewed equivalent starter for this public calibration template.",
+        "ocaml": "No independently reviewed equivalent starter for this public calibration template."
+      },
+      "forbidden_markers": [
+        "PRIVATE_FOREIGN_BOUNDARY_ORACLE"
+      ],
+      "hidden_test_sha256": "19c53f047b96e8836331e3cf1693b6bac2bac7c1bd2642ef59fa1b74c036378f"
+    },
+    {
+      "task_id": "repair-through-chain",
+      "tier": "small",
+      "category": "comprehension_repair",
+      "statement": "repair-through-chain/statement.md",
+      "starters": {
+        "cgx2": "repair-through-chain/cgx2",
+        "python": "repair-through-chain/python"
+      },
+      "hidden_tests": "repair-through-chain/hidden-oracle.txt",
+      "hidden_test_version": "calibration-placeholder-v1",
+      "gold_changes": "repair-through-chain/gold.patch",
+      "baseline_language": "python",
+      "applicable_languages": [
+        "cgx2",
+        "python"
+      ],
+      "exclusions": {
+        "rust": "No independently reviewed equivalent starter for this public calibration template.",
+        "typescript": "No independently reviewed equivalent starter for this public calibration template.",
+        "ocaml": "No independently reviewed equivalent starter for this public calibration template."
+      },
+      "forbidden_markers": [
+        "PRIVATE_REPAIR_THROUGH_CHAIN_ORACLE"
+      ],
+      "hidden_test_sha256": "572b3dbd9a80be4d70298dcd60ed3e5438c737c91cf40f63269bc3073471357d"
+    }
+  ],
+  "runs": [
+    {
+      "task_id": "memory-growth",
+      "language": "cgx2",
+      "model_family": "unassigned",
+      "model_version": "unassigned",
+      "run_id": "memory-growth-cgx2-calibration-1",
+      "seed": 1,
+      "order": 0,
+      "trace": "traces/memory-growth-cgx2.json"
+    },
+    {
+      "task_id": "memory-growth",
+      "language": "python",
+      "model_family": "unassigned",
+      "model_version": "unassigned",
+      "run_id": "memory-growth-python-calibration-1",
+      "seed": 1,
+      "order": 1,
+      "trace": "traces/memory-growth-python.json"
+    },
+    {
+      "task_id": "module-impact",
+      "language": "cgx2",
+      "model_family": "unassigned",
+      "model_version": "unassigned",
+      "run_id": "module-impact-cgx2-calibration-1",
+      "seed": 1,
+      "order": 0,
+      "trace": "traces/module-impact-cgx2.json"
+    },
+    {
+      "task_id": "module-impact",
+      "language": "python",
+      "model_family": "unassigned",
+      "model_version": "unassigned",
+      "run_id": "module-impact-python-calibration-1",
+      "seed": 1,
+      "order": 1,
+      "trace": "traces/module-impact-python.json"
+    },
+    {
+      "task_id": "foreign-boundary",
+      "language": "cgx2",
+      "model_family": "unassigned",
+      "model_version": "unassigned",
+      "run_id": "foreign-boundary-cgx2-calibration-1",
+      "seed": 1,
+      "order": 0,
+      "trace": "traces/foreign-boundary-cgx2.json"
+    },
+    {
+      "task_id": "foreign-boundary",
+      "language": "python",
+      "model_family": "unassigned",
+      "model_version": "unassigned",
+      "run_id": "foreign-boundary-python-calibration-1",
+      "seed": 1,
+      "order": 1,
+      "trace": "traces/foreign-boundary-python.json"
+    },
+    {
+      "task_id": "repair-through-chain",
+      "language": "cgx2",
+      "model_family": "unassigned",
+      "model_version": "unassigned",
+      "run_id": "repair-through-chain-cgx2-calibration-1",
+      "seed": 1,
+      "order": 0,
+      "trace": "traces/repair-through-chain-cgx2.json"
+    },
+    {
+      "task_id": "repair-through-chain",
+      "language": "python",
+      "model_family": "unassigned",
+      "model_version": "unassigned",
+      "run_id": "repair-through-chain-python-calibration-1",
+      "seed": 1,
+      "order": 1,
+      "trace": "traces/repair-through-chain-python.json"
+    }
+  ]
+}

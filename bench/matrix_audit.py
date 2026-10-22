@@ -53,6 +53,9 @@ def read_json(path):
 
 
 def audit(matrix, base):
+    if isinstance(matrix, dict) and matrix.get("schema_version") == 2:
+        from holdout import audit as holdout_audit
+        return holdout_audit(matrix, base)
     base = Path(base).resolve()
     findings = []
     if not isinstance(matrix, dict) or matrix.get("schema_version") != 1 or matrix.get("kind") not in ("public_calibration", "holdout"):
@@ -235,6 +238,7 @@ def main(argv=None):
     try:
         matrix, _ = read_json(args.matrix)
         result = audit(matrix, args.matrix.resolve().parent)
+        result = {key: value for key, value in result.items() if key != "validated_traces"}
         rendered = json.dumps(result, indent=2, sort_keys=True) + "\n"
         if args.out:
             if args.out.exists():

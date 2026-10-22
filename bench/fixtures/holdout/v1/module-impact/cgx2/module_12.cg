@@ -1,0 +1,4 @@
+module calibration.m12
+
+pub fn value() -> i64:
+    12

@@ -1,0 +1,4 @@
+module calibration.m07
+
+pub fn value() -> i64:
+    7

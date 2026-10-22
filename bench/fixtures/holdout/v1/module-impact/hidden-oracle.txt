@@ -1,0 +1,2 @@
+PRIVATE_MODULE_IMPACT_ORACLE
+Private executable acceptance tests must replace this public placeholder.

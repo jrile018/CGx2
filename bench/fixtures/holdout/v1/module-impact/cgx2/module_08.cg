@@ -1,0 +1,4 @@
+module calibration.m08
+
+pub fn value() -> i64:
+    8

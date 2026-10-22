@@ -1,0 +1,4 @@
+module calibration.m10
+
+pub fn value() -> i64:
+    10

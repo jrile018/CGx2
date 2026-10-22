@@ -1,0 +1,4 @@
+module calibration.m03
+
+pub fn value() -> i64:
+    3

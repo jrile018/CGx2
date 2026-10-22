@@ -1,0 +1,4 @@
+module calibration.m00
+
+pub fn value() -> i64:
+    0

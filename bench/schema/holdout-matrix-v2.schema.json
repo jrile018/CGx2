@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:cgx2:bench:holdout-matrix:v2",
+  "title": "CGx2 paired LLM matrix version 2",
+  "type": "object",
+  "required": ["schema_version", "kind", "conditions", "protocol", "tasks", "runs"],
+  "properties": {
+    "schema_version": {"const": 2},
+    "kind": {"enum": ["public_calibration", "holdout"]},
+    "conditions": {"type": "array", "minItems": 5, "maxItems": 5, "uniqueItems": true,
+      "items": {"enum": ["cgx2", "python", "rust", "typescript", "ocaml"]}},
+    "protocol": {"type": "object", "additionalProperties": false,
+      "required": ["allowed_tools", "documentation_budget", "token_budget", "time_budget_seconds", "hardware", "toolchain"],
+      "properties": {
+        "allowed_tools": {"$ref": "#/$defs/text"},
+        "documentation_budget": {"$ref": "#/$defs/text"},
+        "token_budget": {"type": "integer", "minimum": 1, "maximum": 10000000},
+        "time_budget_seconds": {"type": "number", "exclusiveMinimum": 0, "maximum": 86400},
+        "hardware": {"$ref": "#/$defs/text"},
+        "toolchain": {"$ref": "#/$defs/text"}
+      }},
+    "tasks": {"type": "array", "items": {"$ref": "#/$defs/task"}},
+    "runs": {"type": "array", "items": {"$ref": "#/$defs/run"}},
+    "freeze": {"type": "object", "additionalProperties": false,
+      "required": ["task_set_sha256", "prompts_sha256", "tools_sha256", "locks_sha256", "acceptance_sha256", "order_seed", "frozen_at_utc", "reviewer_ids"],
+      "properties": {
+        "task_set_sha256": {"$ref": "#/$defs/sha"},
+        "prompts_sha256": {"$ref": "#/$defs/sha"},
+        "tools_sha256": {"$ref": "#/$defs/sha"},
+        "locks_sha256": {"$ref": "#/$defs/sha"},
+        "acceptance_sha256": {"$ref": "#/$defs/sha"},
+        "order_seed": {"type": "integer"},
+        "frozen_at_utc": {"$ref": "#/$defs/text"},
+        "reviewer_ids": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/text"}}
+      }}
+  },
+  "$defs": {
+    "text": {"type": "string", "minLength": 1},
+    "sha": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "task": {"type": "object",
+      "required": ["task_id", "tier", "category", "statement", "hidden_tests", "hidden_test_version", "hidden_test_sha256", "gold_changes", "baseline_language", "applicable_languages", "exclusions", "forbidden_markers"],
+      "properties": {
+        "task_id": {"$ref": "#/$defs/text"},
+        "tier": {"enum": ["small", "large"]},
+        "category": {"$ref": "#/$defs/text"},
+        "statement": {"$ref": "#/$defs/text"},
+        "starter": {"$ref": "#/$defs/text"},
+        "starters": {"type": "object", "additionalProperties": {"$ref": "#/$defs/text"}},
+        "hidden_tests": {"$ref": "#/$defs/text"},
+        "hidden_test_version": {"$ref": "#/$defs/text"},
+        "hidden_test_sha256": {"$ref": "#/$defs/sha"},
+        "gold_changes": {"$ref": "#/$defs/text"},
+        "baseline_language": {"enum": ["python", "rust", "typescript", "ocaml"]},
+        "applicable_languages": {"type": "array", "uniqueItems": true, "items": {"enum": ["cgx2", "python", "rust", "typescript", "ocaml"]}},
+        "exclusions": {"type": "object", "additionalProperties": {"$ref": "#/$defs/text"}},
+        "forbidden_markers": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/text"}}
+      }},
+    "run": {"type": "object", "additionalProperties": false,
+      "required": ["task_id", "language", "model_family", "model_version", "run_id", "seed", "order", "trace"],
+      "properties": {
+        "task_id": {"$ref": "#/$defs/text"},
+        "language": {"enum": ["cgx2", "python", "rust", "typescript", "ocaml"]},
+        "model_family": {"$ref": "#/$defs/text"},
+        "model_version": {"$ref": "#/$defs/text"},
+        "run_id": {"$ref": "#/$defs/text"},
+        "seed": {"type": "integer", "minimum": 0},
+        "order": {"type": "integer", "minimum": 0},
+        "trace": {"$ref": "#/$defs/text"}
+      }}
+  }
+}

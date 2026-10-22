@@ -1,0 +1,4 @@
+module calibration.m19
+
+pub fn value() -> i64:
+    19

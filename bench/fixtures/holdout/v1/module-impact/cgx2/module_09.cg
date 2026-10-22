@@ -1,0 +1,4 @@
+module calibration.m09
+
+pub fn value() -> i64:
+    9

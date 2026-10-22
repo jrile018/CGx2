@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:cgx2:bench:holdout-trace:v2",
+  "title": "CGx2 externally observed model run version 2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "task_id", "hidden_test_version", "language", "model_family", "model_version", "run_id", "seed", "order", "allowed_tools", "documentation_budget", "token_budget", "time_budget_seconds", "prompt_tokens", "completion_tokens", "wall_seconds", "final_patch_sha256", "hidden_test_result", "failure_cause", "hardware", "toolchain"],
+  "properties": {
+    "schema_version": {"const": 2},
+    "task_id": {"$ref": "#/$defs/text"},
+    "hidden_test_version": {"$ref": "#/$defs/text"},
+    "language": {"enum": ["cgx2", "python", "rust", "typescript", "ocaml"]},
+    "model_family": {"$ref": "#/$defs/text"},
+    "model_version": {"$ref": "#/$defs/text"},
+    "run_id": {"$ref": "#/$defs/text"},
+    "seed": {"type": "integer", "minimum": 0},
+    "order": {"type": "integer", "minimum": 0},
+    "allowed_tools": {"$ref": "#/$defs/text"},
+    "documentation_budget": {"$ref": "#/$defs/text"},
+    "token_budget": {"type": "integer", "minimum": 1},
+    "time_budget_seconds": {"type": "number", "exclusiveMinimum": 0},
+    "prompt_tokens": {"type": "integer", "minimum": 0},
+    "completion_tokens": {"type": "integer", "minimum": 0},
+    "wall_seconds": {"type": "number", "minimum": 0},
+    "final_patch_sha256": {"$ref": "#/$defs/sha"},
+    "hidden_test_result": {"enum": ["pass", "fail", "timeout"]},
+    "failure_cause": {"type": ["string", "null"]},
+    "hardware": {"$ref": "#/$defs/text"},
+    "toolchain": {"$ref": "#/$defs/text"}
+  },
+  "$defs": {
+    "text": {"type": "string", "minLength": 1},
+    "sha": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

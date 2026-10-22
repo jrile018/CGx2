@@ -142,16 +142,23 @@ def load_results(directory):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--results", type=Path, required=True)
+    source = parser.add_mutually_exclusive_group(required=True)
+    source.add_argument("--results", type=Path)
+    source.add_argument("--matrix", type=Path, help="version 2 holdout matrix")
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args(argv)
     try:
-        data = summarize(load_results(args.results))
+        if args.matrix:
+            from holdout import _read_json, analyze, MAX_MATRIX_BYTES
+            data = analyze(_read_json(args.matrix, MAX_MATRIX_BYTES), args.matrix.resolve().parent)
+        else:
+            data = summarize(load_results(args.results))
         args.out.parent.mkdir(parents=True, exist_ok=True)
         args.out.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        return 0 if args.matrix is None else {"ready": 0, "incomplete": 1, "invalid": 2}[data["status"]]
     except (ValueError, OSError, json.JSONDecodeError) as error:
         parser.exit(2, f"benchmark report error: {error}\n")
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
