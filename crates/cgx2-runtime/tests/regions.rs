@@ -404,3 +404,31 @@ fn impossible_allocation_counts_as_failure_without_collection() {
     assert_eq!(stats.committed_bytes, 0);
     assert_eq!(stats.collection_count, 0);
 }
+
+#[test]
+fn growing_edges_inside_guard_charges_full_new_buffer_allocation() {
+    use cgx2_runtime::EDGE_METADATA_BYTES;
+
+    let mut session = Session::new();
+    let region = session.create_region(CollectionMode::Manual, 4096).unwrap();
+    let parent = session.alloc_bytes(region, 0).unwrap();
+    let first = session.alloc_bytes(region, 0).unwrap();
+    let second = session.alloc_bytes(region, 0).unwrap();
+    session.link(parent, first).unwrap();
+    let before = session.stats(region).unwrap();
+    {
+        let mut guard = session.no_gc(EDGE_METADATA_BYTES);
+        assert_eq!(
+            guard.link(parent, second),
+            Err(MemoryError::Allocation(AllocationError::BudgetExceeded))
+        );
+        let after = guard.stats(region).unwrap();
+        assert_eq!(after.committed_bytes, before.committed_bytes);
+        assert_eq!(after.allocation_failures, before.allocation_failures + 1);
+        assert_eq!(after.collection_count, 0);
+    }
+    session.root(parent).unwrap();
+    session.collect(region).unwrap();
+    assert!(session.read_bytes(first).is_ok());
+    assert_eq!(session.read_bytes(second), Err(MemoryError::InvalidHandle));
+}

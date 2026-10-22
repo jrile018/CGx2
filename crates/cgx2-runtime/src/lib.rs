@@ -300,7 +300,17 @@ impl Session {
                     .allocation_failures += 1;
                 MemoryError::Allocation(AllocationError::HostAllocation)
             })?;
-        if let Err(error) = self.check_budgets(added) {
+        let budget_charge = edges
+            .capacity()
+            .checked_mul(EDGE_METADATA_BYTES)
+            .ok_or_else(|| {
+                self.region_mut(parent.region)
+                    .expect("validated region")
+                    .stats
+                    .allocation_failures += 1;
+                MemoryError::Allocation(AllocationError::HostAllocation)
+            })?;
+        if let Err(error) = self.check_budgets(budget_charge) {
             self.region_mut(parent.region)?.stats.allocation_failures += 1;
             return Err(MemoryError::Allocation(error));
         }
@@ -320,7 +330,7 @@ impl Session {
         r.stats.committed_bytes += added;
         r.stats.live_bytes += added;
         r.stats.peak_bytes = r.stats.peak_bytes.max(r.stats.committed_bytes);
-        self.charge_budgets(added);
+        self.charge_budgets(budget_charge);
         Ok(())
     }
 

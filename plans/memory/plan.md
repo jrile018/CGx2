@@ -90,7 +90,7 @@ Expose `Session`, opaque `RegionId` and `Handle` with slot generation, `Collecti
 
 ## Execution receipt
 
-- T1/T2/T3 tests were observed red before implementation, then green. The final suite has 19 integration tests; the deterministic graph test runs 300 operations.
+- T1/T2/T3 tests were observed red before implementation, then green. The final suite has 20 integration tests; the deterministic graph test runs 300 operations. A final review test was red before fixing full edge-buffer budget charging.
 - The guard tests report `collection_count == 0` inside two-region, nested-budget, budget-failure, explicit-collect, and error-drop cases. Auto collection occurs at the next post-guard allocation safepoint; explicit collection after guard drop increments the manual region counter to 1.
 - The installed `stable` alias lacks rustfmt and Clippy. All three specified checks pass with `RUSTUP_TOOLCHAIN=1.98.1`, the plan's pinned version.
 - API decisions for integration review: `create_region` is fallible; `default_region()` exposes the built-in region; `link` wraps allocation failures in `MemoryError::Allocation`; fixed logical metadata charges are not an RSS measure. Unrooted handles can be invalidated by region close until the compiler's escape checker is integrated.
