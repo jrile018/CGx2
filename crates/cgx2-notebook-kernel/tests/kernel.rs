@@ -1,4 +1,6 @@
-use cgx2_notebook_format::{parse_notebook, write_notebook, Cell, CellKind, Notebook, Output};
+use cgx2_notebook_format::{
+    make_provenance, parse_notebook, write_notebook, Cell, CellKind, Notebook, Output,
+};
 use cgx2_notebook_kernel::{
     facts_for_source, ExecutionControl, NotebookKernel, MAX_CODE_CELLS, MAX_SOURCE_BYTES,
 };
@@ -324,12 +326,110 @@ fn duplicate_definition_and_unsupported_forms_are_rejected() {
         "x = 4",
     ] {
         let mut kernel = NotebookKernel::open(notebook(vec![code("a", source)])).unwrap();
-        assert_eq!(
-            kernel.run_cell("a").unwrap_err().code,
-            "CGNK001",
-            "{source}"
-        );
+        let expected = if source == "arg_count()" {
+            "CGNK011"
+        } else {
+            "CGNK001"
+        };
+        assert_eq!(kernel.run_cell("a").unwrap_err().code, expected, "{source}");
     }
+}
+
+#[test]
+fn calls_with_file_network_or_foreign_names_fail_before_execution() {
+    for source in [
+        "read_file(\"secret\")",
+        "network_get(\"example\")",
+        "foreign_call()",
+    ] {
+        let mut kernel = NotebookKernel::open(notebook(vec![code("effect", source)])).unwrap();
+        let error = kernel.run_cell("effect").unwrap_err();
+        assert_eq!(error.code, "CGNK011", "{source}");
+        assert!(error.message.contains("file, network, and foreign effects"));
+        assert!(kernel.notebook().cells[0].outputs.is_empty());
+        assert_eq!(kernel.status("effect").unwrap(), CellStatus::Failed);
+    }
+}
+
+#[test]
+fn saved_unsupported_effect_and_later_output_reopen_stale_without_execution() {
+    let mut saved = notebook(vec![
+        code("before", "1"),
+        code("effect", "foreign_call()"),
+        code("later", "2"),
+    ]);
+    for index in 0..saved.cells.len() {
+        let ordinal = (index + 1) as u64;
+        saved.cells[index].outputs.push(Output::Text {
+            mime: "text/plain".into(),
+            ordinal,
+            body: format!("old-{index}"),
+        });
+        saved.cells[index].provenance =
+            Some(make_provenance(&saved, index, ordinal, Some(ordinal)));
+    }
+    let text = write_notebook(&saved).unwrap();
+    let reopened = NotebookKernel::open(parse_notebook(&text).unwrap()).unwrap();
+    assert_eq!(reopened.status("before").unwrap(), CellStatus::Cached);
+    assert_eq!(reopened.status("effect").unwrap(), CellStatus::Stale);
+    assert_eq!(reopened.status("later").unwrap(), CellStatus::Stale);
+    assert_eq!(
+        output_body(&reopened.notebook().cells[2].outputs[0]),
+        "old-2"
+    );
+}
+
+#[test]
+fn effect_boundary_fixture_tracks_edit_interrupt_restart_and_passive_reopen() {
+    let source = include_str!("fixtures/effect-boundary.cgnb");
+    let mut kernel = NotebookKernel::open(parse_notebook(source).unwrap()).unwrap();
+    kernel.restart_and_run_all().unwrap();
+    assert_eq!(kernel.notebook().cells[0].kind, CellKind::Markdown);
+    assert_eq!(output_body(&kernel.notebook().cells[2].outputs[0]), "7");
+    let independent_revision = kernel.notebook().cells[4]
+        .provenance
+        .as_ref()
+        .unwrap()
+        .ordinal;
+
+    kernel.replace_cell("seed", "let x = 5".into()).unwrap();
+    assert_eq!(kernel.status("seed").unwrap(), CellStatus::Stale);
+    assert_eq!(kernel.status("reader").unwrap(), CellStatus::Stale);
+    assert_eq!(kernel.status("independent").unwrap(), CellStatus::Current);
+    kernel.rerun_cell("seed").unwrap();
+
+    let control = ExecutionControl::new(
+        std::path::PathBuf::from(env!("CARGO_BIN_EXE_cgx2-notebook-scalar-worker")),
+        Duration::from_secs(2),
+    );
+    kernel.set_execution_control(control.clone());
+    control.interrupt();
+    assert_eq!(kernel.rerun_cell("reader").unwrap_err().code, "CGNK010");
+    assert_eq!(kernel.status("reader").unwrap(), CellStatus::Failed);
+    assert_eq!(kernel.status("independent").unwrap(), CellStatus::Current);
+    assert_eq!(output_body(&kernel.notebook().cells[2].outputs[0]), "7");
+    assert_eq!(
+        kernel.notebook().cells[4]
+            .provenance
+            .as_ref()
+            .unwrap()
+            .ordinal,
+        independent_revision
+    );
+
+    let interrupted = write_notebook(kernel.notebook()).unwrap();
+    let mut reopened = NotebookKernel::open(parse_notebook(&interrupted).unwrap()).unwrap();
+    assert_eq!(reopened.status("reader").unwrap(), CellStatus::Failed);
+    assert_eq!(output_body(&reopened.notebook().cells[2].outputs[0]), "7");
+    assert_eq!(reopened.run_cell("reader").unwrap_err().code, "CGNK005");
+
+    kernel.restart_and_run_all().unwrap();
+    assert_eq!(kernel.status("reader").unwrap(), CellStatus::Current);
+    assert_eq!(output_body(&kernel.notebook().cells[2].outputs[0]), "9");
+    let saved = write_notebook(kernel.notebook()).unwrap();
+    let reopened = NotebookKernel::open(parse_notebook(&saved).unwrap()).unwrap();
+    assert_eq!(reopened.status("reader").unwrap(), CellStatus::Cached);
+    assert_eq!(output_body(&reopened.notebook().cells[2].outputs[0]), "9");
 }
 
 #[test]

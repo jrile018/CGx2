@@ -343,6 +343,34 @@ fn opaque_edit_stales_all_later_code_without_a_symbol_edge() {
 }
 
 #[test]
+fn reopening_opaque_effect_never_presents_its_or_later_output_as_current_cache() {
+    let facts_by_id = map(&[
+        ("before", facts(&[], &[], false)),
+        ("effect", facts(&[], &[], true)),
+        ("after", facts(&[], &[], false)),
+    ]);
+    let mut session = NotebookSession::new(
+        notebook(vec![
+            code("before", "1"),
+            code("effect", "opaque"),
+            code("after", "2"),
+        ]),
+        facts_by_id.clone(),
+        FakeExecutor::default(),
+    )
+    .unwrap();
+    for id in ["before", "effect", "after"] {
+        session.run_cell(id).unwrap();
+    }
+    let saved = session.notebook().clone();
+    let reopened = NotebookSession::new(saved, facts_by_id, FakeExecutor::default()).unwrap();
+    assert_eq!(reopened.status("before").unwrap(), CellStatus::Cached);
+    assert_eq!(reopened.status("effect").unwrap(), CellStatus::Stale);
+    assert_eq!(reopened.status("after").unwrap(), CellStatus::Stale);
+    assert_eq!(text_output(&reopened.notebook().cells[2]), (3, "2:3"));
+}
+
+#[test]
 fn failure_keeps_cached_output_visible_but_not_current() {
     let mut session = NotebookSession::new(
         notebook(vec![code("a", "good"), code("b", "depends")]),

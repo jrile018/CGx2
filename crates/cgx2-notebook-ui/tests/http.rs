@@ -642,13 +642,16 @@ fn interrupt_stops_active_worker_and_saved_output_is_not_current() {
     session.configure_worker(worker);
     let listener = TcpListener::bind("127.0.0.1:0").unwrap();
     let port = listener.local_addr().unwrap().port();
-    let handle = thread::spawn(move || serve_n(listener, session, 5).unwrap());
+    let handle = thread::spawn(move || serve_n(listener, session, 6).unwrap());
     let secret = token(port);
+    let slow_client = TcpStream::connect(("127.0.0.1", port)).unwrap();
     let secret_for_run = secret.clone();
     let run = thread::spawn(move || post(port, "/api/run-next", json!({}), &secret_for_run));
     thread::sleep(Duration::from_millis(80));
     let start = Instant::now();
-    assert_eq!(post(port, "/api/interrupt", json!({}), &secret).0, 200);
+    let (interrupt_status, interrupt_reply) = post(port, "/api/interrupt", json!({}), &secret);
+    assert_eq!(interrupt_status, 200);
+    assert_eq!(interrupt_reply["interruptRequested"], true);
     assert!(start.elapsed() < Duration::from_secs(1));
     assert_eq!(run.join().unwrap().0, 409);
     let (_, body) = request(port, "GET", "/api/state", None, None, None, None);
@@ -657,6 +660,7 @@ fn interrupt_stops_active_worker_and_saved_output_is_not_current() {
     let (status, restarted) = post(port, "/api/restart-only", json!({}), &secret);
     assert_eq!(status, 200);
     assert_eq!(restarted["cells"][0]["status"], "stale");
+    drop(slow_client);
     handle.join().unwrap();
 }
 

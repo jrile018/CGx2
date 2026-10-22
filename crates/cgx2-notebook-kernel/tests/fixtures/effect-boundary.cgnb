@@ -1,0 +1,12 @@
+#!cgnb 1
+%% markdown id=notes
+# Effect boundary
+The source cells use only the admitted pure scalar profile.
+%% code id=seed
+let x = 3
+%% code id=reader
+x + 4
+%% markdown id=explanation
+Changing seed makes reader stale; independent stays current.
+%% code id=independent
+40 + 2

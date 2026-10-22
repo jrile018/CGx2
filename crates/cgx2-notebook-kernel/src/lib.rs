@@ -128,6 +128,8 @@ fn session_error(source: SessionError) -> KernelError {
                 ("CGNK008", reason.to_owned())
             } else if let Some(reason) = message.strip_prefix("CGNK010: ") {
                 ("CGNK010", reason.to_owned())
+            } else if let Some(reason) = message.strip_prefix("CGNK011: ") {
+                ("CGNK011", reason.to_owned())
             } else {
                 ("CGNK008", message)
             };
@@ -188,6 +190,9 @@ impl NotebookKernel {
     /// Saved outputs and provenance remain observations and display as stale.
     pub fn restart(&mut self) -> Result<(), KernelError> {
         self.session.restart().map_err(session_error)?;
+        if let Some(control) = &self.session.executor_mut().control {
+            control.clear_interrupt();
+        }
         self.next_code = 0;
         self.requires_restart = false;
         Ok(())
@@ -430,8 +435,8 @@ fn collect_reads(expression: &Expr, facts: &mut CellFacts) -> Result<(), KernelE
         ExprKind::Integer(_) | ExprKind::StringLiteral(_) | ExprKind::Boolean(_) => {}
         ExprKind::Call { .. } => {
             return Err(error(
-                "CGNK001",
-                "function calls are unsupported in notebook scalar execution",
+                "CGNK011",
+                "calls are unsupported in notebook scalar execution; file, network, and foreign effects cannot run in this worker",
             ))
         }
     }

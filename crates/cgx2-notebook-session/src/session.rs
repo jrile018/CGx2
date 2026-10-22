@@ -122,10 +122,12 @@ impl<E: CellExecutor> NotebookSession<E> {
                 return Err(SessionError::FactsForMarkdown(id.clone()));
             }
         }
+        let mut uncertain_effect_seen = false;
         for (index, cell) in notebook.cells.iter().enumerate() {
             if cell.kind != CellKind::Code {
                 continue;
             }
+            uncertain_effect_seen |= facts[&cell.id].opaque_effects;
             let status = if let Some(provenance) = &cell.provenance {
                 let expected_dependency = if provenance.schema_version == CAPTURE_SCHEMA_VERSION {
                     dependency_digest(&notebook.cells, &facts, index)
@@ -146,6 +148,13 @@ impl<E: CellExecutor> NotebookSession<E> {
                 CellStatus::Cached
             } else {
                 CellStatus::NeverRun
+            };
+            // An opaque effect cannot be reconstructed from saved text. Treat its
+            // own cached result and every later cached result as observations.
+            let status = if uncertain_effect_seen && status == CellStatus::Cached {
+                CellStatus::Stale
+            } else {
+                status
             };
             statuses.insert(cell.id.clone(), status);
             if let Some(provenance) = &cell.provenance {

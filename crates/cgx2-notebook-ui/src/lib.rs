@@ -616,7 +616,7 @@ fn interrupt_response(
     response(
         200,
         "application/json; charset=utf-8",
-        json_bytes(&json!({"interrupted":true})),
+        json_bytes(&json!({"interruptRequested":true})),
     )
 }
 

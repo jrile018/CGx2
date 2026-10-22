@@ -1,5 +1,7 @@
 # CGx2 loopback notebook UI
 
+`POST /api/interrupt` replies with `{"interruptRequested":true}` when it sets the worker's interrupt signal. That reply does not claim the worker has stopped. Once the active run returns, its cell status is `failed`, retained output is a stale observation, and dependent outputs are `stale`. A later restart clears the signal before running cells again.
+
 From the repository root, run `cargo run --offline -p cgx2-notebook-ui -- open path/to/notebook.cgnb` and open the printed `http://127.0.0.1:PORT/` address on the same computer. The UI accepts ordinary and portable `.cgnb` files. It shows saved Markdown, captured text, supported images, cell status, and provenance without executing on open. Notebook content is inserted as text in the browser; browser-side execution of notebook HTML or script is unsupported.
 
 Use **Restart and run all** for a clean file-order evaluation. **Apply edit** changes a code cell in memory and marks it and transitive readers stale. **Run cell** executes that cell and those readers while preserving independent cells' outputs and execution revisions. **Run next** executes the next code cell in file order. Save as writes an ordinary `.cgnb` beside the input; Export portable writes a self-contained `.cgnb` with verified referenced assets. Existing destinations require the **Overwrite existing file** checkbox. Reopening reproduces saved display and provenance as cached or stale observation without executing cells or restoring live bindings.
