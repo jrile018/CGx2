@@ -1,0 +1,461 @@
+use std::{collections::HashMap, fmt};
+
+use crate::RunError;
+use cgx2_syntax::{
+    parse_module, AssignOp, BinaryOp, Expr, ExprKind, Function, Module, Span, Stmt, StmtKind,
+    TypeSyntax,
+};
+
+const STEP_LIMIT: usize = 1_000_000;
+const DEPTH_LIMIT: usize = 64;
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum Value {
+    I64(i64),
+    Bool(bool),
+    String(String),
+    Unit,
+}
+
+impl fmt::Display for Value {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::I64(v) => write!(f, "{v}"),
+            Self::Bool(v) => write!(f, "{v}"),
+            Self::String(v) => f.write_str(v),
+            Self::Unit => Ok(()),
+        }
+    }
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct RunResult {
+    pub value: Value,
+}
+
+#[derive(Clone)]
+struct Binding {
+    value: Value,
+    mutable: bool,
+    annotation: Option<TypeSyntax>,
+}
+type Scope = HashMap<String, Binding>;
+enum Flow {
+    Continue(Value),
+    Return(Value),
+}
+
+struct Evaluator<'a> {
+    module: &'a Module,
+    args: &'a [String],
+    steps: usize,
+    depth: usize,
+}
+
+pub fn run_source(source: &str, args: &[String]) -> Result<RunResult, RunError> {
+    let module = parse_module(source).map_err(|diagnostics| {
+        let first = &diagnostics[0];
+        RunError {
+            code: first.code,
+            message: first.message.clone(),
+            span: Some(first.span),
+        }
+    })?;
+    for function in &module.functions {
+        if matches!(function.name.as_str(), "arg" | "arg_count") {
+            return Err(error(
+                "CGR009",
+                format!("{} is a reserved builtin", function.name),
+                function.span,
+            ));
+        }
+        for parameter in &function.parameters {
+            validate_type(&parameter.ty)?;
+        }
+        if let Some(ty) = &function.return_type {
+            validate_type(ty)?;
+        }
+        reject_unsupported(&function.body)?;
+    }
+    reject_unsupported(&module.statements)?;
+    let mut evaluator = Evaluator {
+        module: &module,
+        args,
+        steps: 0,
+        depth: 0,
+    };
+    let value = if module.functions.is_empty() {
+        let mut scope = Scope::new();
+        match evaluator.eval_block(&module.statements, &mut scope)? {
+            Flow::Continue(value) => value,
+            Flow::Return(_) => {
+                return Err(error("CGR009", "return outside a function", module.span))
+            }
+        }
+    } else {
+        let mains: Vec<_> = module
+            .functions
+            .iter()
+            .filter(|f| f.name == "main")
+            .collect();
+        match mains.as_slice() {
+            [] => return Err(error("CGR008", "function module has no main", module.span)),
+            [main] if main.parameters.is_empty() => {
+                evaluator.call_function(main, Vec::new(), main.span)?
+            }
+            [main] => return Err(error("CGR008", "main must have zero parameters", main.span)),
+            [first, ..] => return Err(error("CGR008", "ambiguous main definitions", first.span)),
+        }
+    };
+    Ok(RunResult { value })
+}
+
+fn error(code: &'static str, message: impl Into<String>, span: Span) -> RunError {
+    RunError {
+        code,
+        message: message.into(),
+        span: Some(span),
+    }
+}
+
+impl Evaluator<'_> {
+    fn step(&mut self, span: Span) -> Result<(), RunError> {
+        if self.steps >= STEP_LIMIT {
+            return Err(error(
+                "CGR010",
+                format!("execution step limit of {STEP_LIMIT} exceeded"),
+                span,
+            ));
+        }
+        self.steps += 1;
+        Ok(())
+    }
+
+    fn eval_block(&mut self, statements: &[Stmt], scope: &mut Scope) -> Result<Flow, RunError> {
+        let mut tail = Value::Unit;
+        for stmt in statements {
+            self.step(stmt.span)?;
+            match &stmt.kind {
+                StmtKind::Let {
+                    mutable,
+                    name,
+                    annotation,
+                    value,
+                } => {
+                    let value = self.eval_expr(value, scope)?;
+                    if let Some(ty) = annotation {
+                        check_type(ty, &value)?;
+                    }
+                    if scope.contains_key(name) {
+                        return Err(error(
+                            "CGR009",
+                            format!("duplicate binding {name}"),
+                            stmt.span,
+                        ));
+                    }
+                    scope.insert(
+                        name.clone(),
+                        Binding {
+                            value,
+                            mutable: *mutable,
+                            annotation: annotation.clone(),
+                        },
+                    );
+                    tail = Value::Unit;
+                }
+                StmtKind::Assign { target, op, value } => {
+                    let name = single_name(&target.segments, target.span)?;
+                    let new_value = self.eval_expr(value, scope)?;
+                    let binding = scope.get_mut(name).ok_or_else(|| {
+                        error("CGR001", format!("unknown name {name}"), target.span)
+                    })?;
+                    if !binding.mutable {
+                        return Err(error(
+                            "CGR003",
+                            format!("cannot assign to immutable binding {name}"),
+                            target.span,
+                        ));
+                    }
+                    let assigned = match op {
+                        AssignOp::Set => new_value,
+                        AssignOp::Add => {
+                            binary_values(&binding.value, &new_value, BinaryOp::Add, stmt.span)?
+                        }
+                    };
+                    if let Some(ty) = &binding.annotation {
+                        check_type(ty, &assigned)?;
+                    } else if std::mem::discriminant(&binding.value)
+                        != std::mem::discriminant(&assigned)
+                    {
+                        return Err(error(
+                            "CGR004",
+                            format!("assignment changes the type of {name}"),
+                            stmt.span,
+                        ));
+                    }
+                    binding.value = assigned;
+                    tail = Value::Unit;
+                }
+                StmtKind::Return(value) => {
+                    let value = match value {
+                        Some(expr) => self.eval_expr(expr, scope)?,
+                        None => Value::Unit,
+                    };
+                    return Ok(Flow::Return(value));
+                }
+                StmtKind::Expr(expr) => tail = self.eval_expr(expr, scope)?,
+                StmtKind::For { .. } => {
+                    return Err(error(
+                        "CGR009",
+                        "for loops are unsupported in the execution preview",
+                        stmt.span,
+                    ))
+                }
+            }
+        }
+        Ok(Flow::Continue(tail))
+    }
+
+    fn eval_expr(&mut self, expr: &Expr, scope: &Scope) -> Result<Value, RunError> {
+        self.step(expr.span)?;
+        match &expr.kind {
+            ExprKind::Integer(raw) => raw
+                .replace('_', "")
+                .parse::<i64>()
+                .map(Value::I64)
+                .map_err(|_| error("CGR005", "integer literal exceeds i64 range", expr.span)),
+            ExprKind::StringLiteral(raw) => decode_string(raw, expr.span).map(Value::String),
+            ExprKind::Boolean(value) => Ok(Value::Bool(*value)),
+            ExprKind::Name(path) => {
+                let name = single_name(&path.segments, path.span)?;
+                scope
+                    .get(name)
+                    .map(|b| b.value.clone())
+                    .ok_or_else(|| error("CGR001", format!("unknown name {name}"), path.span))
+            }
+            ExprKind::Binary { left, op, right } => {
+                let left = self.eval_expr(left, scope)?;
+                let right = self.eval_expr(right, scope)?;
+                binary_values(&left, &right, *op, expr.span)
+            }
+            ExprKind::Call { callee, arguments } => {
+                let ExprKind::Name(path) = &callee.kind else {
+                    return Err(error(
+                        "CGR009",
+                        "computed calls are unsupported",
+                        callee.span,
+                    ));
+                };
+                let name = single_name(&path.segments, path.span)?;
+                let function = if matches!(name, "arg" | "arg_count") {
+                    None
+                } else {
+                    let mut matches = self.module.functions.iter().filter(|f| f.name == name);
+                    let first = matches.next().ok_or_else(|| {
+                        error("CGR002", format!("unknown function {name}"), callee.span)
+                    })?;
+                    if matches.next().is_some() {
+                        return Err(error(
+                            "CGR002",
+                            format!("ambiguous function {name}"),
+                            callee.span,
+                        ));
+                    }
+                    Some(first.clone())
+                };
+                let values = arguments
+                    .iter()
+                    .map(|a| self.eval_expr(a, scope))
+                    .collect::<Result<Vec<_>, _>>()?;
+                match name {
+                    "arg_count" => {
+                        expect_arity(name, 0, values.len(), expr.span)?;
+                        i64::try_from(self.args.len()).map(Value::I64).map_err(|_| {
+                            error("CGR005", "argument count exceeds i64 range", expr.span)
+                        })
+                    }
+                    "arg" => {
+                        expect_arity(name, 1, values.len(), expr.span)?;
+                        let Value::I64(index) = values[0] else {
+                            return Err(error(
+                                "CGR004",
+                                "arg index must be i64",
+                                arguments[0].span,
+                            ));
+                        };
+                        let index = usize::try_from(index).map_err(|_| {
+                            error("CGR007", "arg index must be nonnegative", arguments[0].span)
+                        })?;
+                        self.args
+                            .get(index)
+                            .cloned()
+                            .map(Value::String)
+                            .ok_or_else(|| {
+                                error(
+                                    "CGR007",
+                                    format!("arg index {index} is out of range"),
+                                    arguments[0].span,
+                                )
+                            })
+                    }
+                    _ => {
+                        self.call_function(&function.expect("resolved function"), values, expr.span)
+                    }
+                }
+            }
+        }
+    }
+
+    fn call_function(
+        &mut self,
+        function: &Function,
+        args: Vec<Value>,
+        span: Span,
+    ) -> Result<Value, RunError> {
+        expect_arity(&function.name, function.parameters.len(), args.len(), span)?;
+        if self.depth >= DEPTH_LIMIT {
+            return Err(error(
+                "CGR011",
+                format!("function call depth limit of {DEPTH_LIMIT} exceeded"),
+                span,
+            ));
+        }
+        self.depth += 1;
+        let mut scope = Scope::new();
+        for (param, value) in function.parameters.iter().zip(args) {
+            check_type(&param.ty, &value)?;
+            scope.insert(
+                param.name.clone(),
+                Binding {
+                    value,
+                    mutable: false,
+                    annotation: Some(param.ty.clone()),
+                },
+            );
+        }
+        let result = self.eval_block(&function.body, &mut scope);
+        self.depth -= 1;
+        let value = match result? {
+            Flow::Continue(value) | Flow::Return(value) => value,
+        };
+        if let Some(ty) = &function.return_type {
+            check_type(ty, &value)?;
+        }
+        Ok(value)
+    }
+}
+
+fn reject_unsupported(statements: &[Stmt]) -> Result<(), RunError> {
+    for stmt in statements {
+        if matches!(stmt.kind, StmtKind::For { .. }) {
+            return Err(error(
+                "CGR009",
+                "for loops are unsupported in the execution preview",
+                stmt.span,
+            ));
+        }
+    }
+    Ok(())
+}
+
+fn validate_type(ty: &TypeSyntax) -> Result<(), RunError> {
+    if ty.arguments.is_empty()
+        && ty.path.segments.len() == 1
+        && matches!(
+            ty.path.segments[0].as_str(),
+            "i64" | "Bool" | "String" | "Unit"
+        )
+    {
+        Ok(())
+    } else {
+        Err(error(
+            "CGR009",
+            format!("type {ty} is unsupported in the execution preview"),
+            ty.span,
+        ))
+    }
+}
+
+fn check_type(ty: &TypeSyntax, value: &Value) -> Result<(), RunError> {
+    validate_type(ty)?;
+    let matches = matches!(
+        (ty.path.segments[0].as_str(), value),
+        ("i64", Value::I64(_))
+            | ("Bool", Value::Bool(_))
+            | ("String", Value::String(_))
+            | ("Unit", Value::Unit)
+    );
+    if matches {
+        Ok(())
+    } else {
+        Err(error(
+            "CGR004",
+            format!("value does not match declared type {ty}"),
+            ty.span,
+        ))
+    }
+}
+
+fn expect_arity(name: &str, expected: usize, actual: usize, span: Span) -> Result<(), RunError> {
+    if expected == actual {
+        Ok(())
+    } else {
+        Err(error(
+            "CGR012",
+            format!("{name} expects {expected} argument(s), got {actual}"),
+            span,
+        ))
+    }
+}
+
+fn single_name(segments: &[String], span: Span) -> Result<&str, RunError> {
+    if segments.len() == 1 {
+        Ok(&segments[0])
+    } else {
+        Err(error(
+            "CGR009",
+            "qualified names are unsupported in the execution preview",
+            span,
+        ))
+    }
+}
+
+fn binary_values(left: &Value, right: &Value, op: BinaryOp, span: Span) -> Result<Value, RunError> {
+    let (Value::I64(left), Value::I64(right)) = (left, right) else {
+        return Err(error(
+            "CGR004",
+            "arithmetic operands must both be i64",
+            span,
+        ));
+    };
+    let result = match op {
+        BinaryOp::Add => left.checked_add(*right),
+        BinaryOp::Subtract => left.checked_sub(*right),
+        BinaryOp::Multiply => left.checked_mul(*right),
+        BinaryOp::Divide if *right == 0 => return Err(error("CGR006", "division by zero", span)),
+        BinaryOp::Divide => left.checked_div(*right),
+    };
+    result
+        .map(Value::I64)
+        .ok_or_else(|| error("CGR005", "i64 arithmetic overflow", span))
+}
+
+fn decode_string(raw: &str, span: Span) -> Result<String, RunError> {
+    let mut result = String::new();
+    let mut chars = raw[1..raw.len() - 1].chars();
+    while let Some(ch) = chars.next() {
+        if ch != '\\' {
+            result.push(ch);
+            continue;
+        }
+        result.push(match chars.next() {
+            Some('n') => '\n',
+            Some('r') => '\r',
+            Some('t') => '\t',
+            Some('\\') => '\\',
+            Some('"') => '"',
+            _ => return Err(error("CGR009", "unsupported string escape", span)),
+        });
+    }
+    Ok(result)
+}

@@ -1,0 +1,3 @@
+let mut answer = 6
+answer += 1
+answer

@@ -1,0 +1,15 @@
+[package]
+name = "cgx2-cli"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "cgx2_cli"
+path = "src/lib.rs"
+
+[[bin]]
+name = "cgx2"
+path = "src/main.rs"
+
+[dependencies]
+cgx2-syntax = { path = "../cgx2-syntax" }
