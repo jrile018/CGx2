@@ -95,8 +95,15 @@ fn moved_compiler_builds_memory_without_its_source_checkout() {
         .output()
         .unwrap();
     assert!(result.status.success(), "{}", stderr(&result));
-    let execution = Command::new(binary).output().unwrap();
+    let report = case.0.join("moved-memory-report.json");
+    let execution = Command::new(binary)
+        .env("CGX2_MEMORY_REPORT", &report)
+        .output()
+        .unwrap();
     assert!(execution.status.success(), "{}", stderr(&execution));
+    let json = fs::read_to_string(report).unwrap();
+    assert!(json.contains("\"status\":\"ok\""));
+    assert!(json.contains("\"collection_count\":1"));
 }
 
 #[cfg(unix)]

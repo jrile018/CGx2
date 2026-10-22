@@ -1,0 +1,97 @@
+
+// Native report v1 wraps the frozen runtime report v1. It is only enabled by
+// CGX2_MEMORY_REPORT, and never writes to program stdout.
+const CGX2_REPORT_LIMIT: usize = 1024 * 1024;
+
+fn cgx2_report_path() -> Result<Option<std::path::PathBuf>, String> {
+    let Some(value) = std::env::var_os("CGX2_MEMORY_REPORT") else {
+        return Ok(None);
+    };
+    let path = std::path::PathBuf::from(value);
+    if path.as_os_str().is_empty() || path.file_name().is_none() {
+        return Err("CGR017: invalid CGX2_MEMORY_REPORT path".into());
+    }
+    let parent = path.parent().filter(|p| !p.as_os_str().is_empty())
+        .unwrap_or_else(|| std::path::Path::new("."));
+    let parent = parent.canonicalize()
+        .map_err(|e| format!("CGR017: invalid report parent: {e}"))?;
+    if !parent.is_dir() {
+        return Err("CGR017: report parent is not a directory".into());
+    }
+    let target = parent.join(path.file_name().expect("checked filename"));
+    cgx2_check_report_target(&target)?;
+    Ok(Some(target))
+}
+
+fn cgx2_check_report_target(path: &std::path::Path) -> Result<(), String> {
+    let metadata = match std::fs::symlink_metadata(path) {
+        Ok(metadata) => metadata,
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => return Ok(()),
+        Err(e) => return Err(format!("CGR017: cannot inspect report target: {e}")),
+    };
+    if !metadata.file_type().is_file() {
+        return Err("CGR017: report target must be a regular file".into());
+    }
+    let executable = std::env::current_exe()
+        .and_then(std::fs::metadata)
+        .map_err(|e| format!("CGR017: cannot inspect executable: {e}"))?;
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::MetadataExt;
+        if metadata.dev() == executable.dev() && metadata.ino() == executable.ino() {
+            return Err("CGR017: report target is the running binary".into());
+        }
+    }
+    #[cfg(not(unix))]
+    if path.canonicalize().ok() == std::env::current_exe().ok() {
+        return Err("CGR017: report target is the running binary".into());
+    }
+    Ok(())
+}
+
+fn cgx2_write_report(
+    path: &std::path::Path,
+    session: &Session,
+    result: &Result<(), String>,
+) -> Result<(), String> {
+    use std::io::Write;
+    use std::sync::atomic::{AtomicU64, Ordering};
+    static NEXT_REPORT: AtomicU64 = AtomicU64::new(0);
+
+    let memory = session.memory_report().to_json();
+    let (status, code) = match result {
+        Ok(()) => ("ok", "null".to_owned()),
+        Err(message) => {
+            let code = message.split_once(" at ").map(|(code, _)| code).unwrap_or("");
+            if code.len() != 6 || !code.starts_with("CGR")
+                || !code[3..].bytes().all(|byte| byte.is_ascii_digit()) {
+                return Err("CGR017: unrecognized native error code".into());
+            }
+            ("error", format!("\"{code}\""))
+        }
+    };
+    let report = format!(
+        "{{\"native_report_schema_version\":1,\"status\":\"{status}\",\"diagnostic_code\":{code},\"memory\":{memory}}}\n"
+    );
+    if report.len() > CGX2_REPORT_LIMIT {
+        return Err("CGR017: native memory report exceeds 1 MiB".into());
+    }
+    let name = format!(
+        ".cgx2-report-{}-{}",
+        std::process::id(),
+        NEXT_REPORT.fetch_add(1, Ordering::Relaxed)
+    );
+    let temporary = path.with_file_name(name);
+    let write_result = (|| -> std::io::Result<()> {
+        let mut file = std::fs::OpenOptions::new()
+            .write(true).create_new(true).open(&temporary)?;
+        file.write_all(report.as_bytes())?;
+        file.sync_all()?;
+        cgx2_check_report_target(path).map_err(std::io::Error::other)?;
+        std::fs::rename(&temporary, path)
+    })();
+    if write_result.is_err() {
+        let _ = std::fs::remove_file(&temporary);
+    }
+    write_result.map_err(|e| format!("CGR017: cannot write native memory report: {e}"))
+}
