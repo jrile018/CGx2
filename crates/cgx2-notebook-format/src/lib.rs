@@ -8,7 +8,10 @@ mod write;
 use std::fmt;
 use std::io;
 
-pub use assets::{export_self_contained, import_self_contained, load_asset, save_asset};
+pub use assets::{
+    export_document, export_self_contained, import_self_contained, load_asset, open_notebook_bytes,
+    parse_self_contained, save_asset, NotebookDocument, MAX_DISTINCT_ASSETS, MAX_TOTAL_ASSET_BYTES,
+};
 pub use parse::{parse_notebook, parse_notebook_bytes};
 pub use provenance::{
     make_provenance, prefix_hash, source_hash, EVALUATOR_PROFILE, PROVENANCE_SCHEMA_VERSION,

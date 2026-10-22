@@ -279,6 +279,97 @@ fn portable_export_import_preserves_provenance_and_rejects_corrupt_record() {
 }
 
 #[test]
+fn portable_file_inspects_and_runs_without_sidecars_or_source_mutation() {
+    let fixture = Fixture::new();
+    let root = fixture.path("source.cgnb.assets");
+    let digest = save_asset(&root, b"\x89PNG\r\n\x1a\nimage").unwrap();
+    let original = format!(
+        "#!cgnb 1\n%% markdown id=notes\n# A plot\n%% code id=seed\nlet x = 3\n%% output id=seed mime=text/plain ordinal=1\n3\n%% asset id=seed mime=image/png ordinal=1 sha256={digest}\n%% code id=result\nx + 4\n%% output id=result mime=text/plain ordinal=2\n7\n"
+    );
+    let source = fixture.write("source.cgnb", &original);
+    let portable = fixture.path("portable.cgnb");
+    let exported = run(&[Path::new("export"), &source, Path::new("--out"), &portable]);
+    assert!(exported.status.success(), "{}", stderr(&exported));
+    assert_eq!(fs::read_to_string(&source).unwrap(), original);
+    fs::remove_dir_all(root).unwrap();
+
+    let inspected = run(&[Path::new("inspect"), &portable]);
+    assert!(inspected.status.success(), "{}", stderr(&inspected));
+    let listing = String::from_utf8(inspected.stdout).unwrap();
+    assert!(listing.contains("seed\tcode\tcached"));
+    assert!(listing.contains("result\tcode\tcached"));
+
+    let executed = fixture.path("executed.cgnb");
+    let fresh = run(&[Path::new("run"), &portable, Path::new("--out"), &executed]);
+    assert!(fresh.status.success(), "{}", stderr(&fresh));
+    let output = parse_notebook_bytes(&fs::read(&executed).unwrap()).unwrap();
+    assert_eq!(output.cells[0].source, "# A plot\n");
+    assert_eq!(output.cells[2].source, "x + 4\n");
+    assert!(output.cells[2].provenance.is_some());
+    assert_eq!(fs::read_to_string(&source).unwrap(), original);
+    assert!(!fixture.path("portable.cgnb.assets").exists());
+
+    let collision = run(&[Path::new("export"), &source, Path::new("--out"), &portable]);
+    assert!(!collision.status.success());
+    assert_eq!(fs::read_to_string(&source).unwrap(), original);
+}
+
+#[test]
+fn rejected_import_preserves_existing_notebook_and_sidecars() {
+    let fixture = Fixture::new();
+    let digest = save_asset(&fixture.path("source.cgnb.assets"), b"new image").unwrap();
+    let input = fixture.write(
+        "source.cgnb",
+        &format!("#!cgnb 1\n%% code id=plot\n1\n%% asset id=plot mime=image/png ordinal=1 sha256={digest}\n"),
+    );
+    let portable = fixture.path("portable.cgnb");
+    assert!(
+        run(&[Path::new("export"), &input, Path::new("--out"), &portable])
+            .status
+            .success()
+    );
+    let existing = fixture.write("destination.cgnb", "#!cgnb 1\n%% code id=old\n2\n");
+    let old_digest = save_asset(&fixture.path("destination.cgnb.assets"), b"old image").unwrap();
+    let before = fs::read(&existing).unwrap();
+    let bad = fixture.write(
+        "bad.cgnb",
+        &fs::read_to_string(&portable)
+            .unwrap()
+            .replace("mime=image/png size=", "mime=image/svg+xml size="),
+    );
+    let rejected = run(&[
+        Path::new("import"),
+        &bad,
+        Path::new("--out"),
+        &existing,
+        Path::new("--force"),
+    ]);
+    assert!(!rejected.status.success());
+    assert_eq!(fs::read(&existing).unwrap(), before);
+    assert_eq!(
+        fs::read(fixture.path("destination.cgnb.assets").join(&old_digest)).unwrap(),
+        b"old image"
+    );
+
+    let imported = run(&[
+        Path::new("import"),
+        &portable,
+        Path::new("--out"),
+        &existing,
+        Path::new("--force"),
+    ]);
+    assert!(imported.status.success(), "{}", stderr(&imported));
+    assert_eq!(
+        fs::read(fixture.path("destination.cgnb.assets").join(&digest)).unwrap(),
+        b"new image"
+    );
+    assert!(!fixture
+        .path("destination.cgnb.assets")
+        .join(old_digest)
+        .exists());
+}
+
+#[test]
 fn invalid_inputs_and_unknown_commands_fail() {
     let fixture = Fixture::new();
     let bad = fixture.write("invalid.cgnb", "not a notebook\n");

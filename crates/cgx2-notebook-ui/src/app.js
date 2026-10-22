@@ -5,6 +5,7 @@ const notice = document.getElementById("notice");
 let current = null;
 let busy = false;
 const pending = new Map();
+let imageUrls = [];
 function el(tag, cls, text) {
   const node = document.createElement(tag);
   if (cls) node.className = cls;
@@ -13,6 +14,8 @@ function el(tag, cls, text) {
 }
 function render(data) {
   const saveName = document.getElementById("save-name").value;
+  for (const url of imageUrls) URL.revokeObjectURL(url);
+  imageUrls = [];
   current = data;
   cells.replaceChildren();
   for (const cell of data.cells) {
@@ -39,9 +42,21 @@ function render(data) {
       section.append(run);
     } else section.append(el("pre", "", cell.source));
     for (const output of cell.outputs) {
-      const body = output.kind === "text" ? output.body : `[cached asset ${output.body}]`;
       const label = cell.status === "current" ? "Current output" : `${cell.status} output (saved observation)`;
-      section.append(el("pre", "output", `${label}: ${body}`));
+      if (output.kind === "text") section.append(el("pre", "output", `${label}: ${output.body}`));
+      else {
+        const figure = el("figure", "output");
+        figure.append(el("figcaption", "", `${label}: ${output.mime} · ${output.size} bytes · SHA-256 ${output.body}`));
+        const img = el("img");
+        img.alt = `Saved image output for ${cell.id}`;
+        figure.append(img);
+        section.append(figure);
+        fetch("/api/asset", {method:"POST", headers:{"Content-Type":"application/json", "X-CGX2-Token":token},
+          body:JSON.stringify({sha256:output.body}), cache:"no-store"})
+          .then(response => { if (!response.ok) throw new Error("asset unavailable"); return response.blob(); })
+          .then(blob => { if (img.isConnected) { const url = URL.createObjectURL(blob); imageUrls.push(url); img.src = url; } })
+          .catch(() => { if (img.isConnected) img.replaceWith(el("span", "error", "Saved image unavailable")); });
+      }
     }
     cells.append(section);
   }
@@ -69,6 +84,7 @@ async function command(path, body) {
     notice.className = "";
     render(data);
     if (path === "/api/save") notice.textContent = `Saved as ${body.name}`;
+    if (path === "/api/export") notice.textContent = `Exported portable notebook as ${body.name}`;
   } catch (error) {
     try { await refresh(); } catch (_) { /* keep the original error */ }
     notice.textContent = `${error}`;
@@ -85,5 +101,10 @@ document.getElementById("restart").addEventListener("click", () => command("/api
 document.getElementById("save").addEventListener("click", () => {
   const input = document.getElementById("save-name");
   command("/api/save", {name:input.value || input.placeholder, overwrite:document.getElementById("overwrite").checked});
+});
+document.getElementById("export").addEventListener("click", () => {
+  const input = document.getElementById("save-name");
+  const name = input.value || (current ? current.inputName.replace(/\.cgnb$/, "-portable.cgnb") : "portable.cgnb");
+  command("/api/export", {name, overwrite:document.getElementById("overwrite").checked});
 });
 refresh().catch(error => { notice.textContent = `Connection error: ${error}`; });

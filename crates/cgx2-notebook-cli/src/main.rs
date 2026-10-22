@@ -11,8 +11,8 @@ use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use cgx2_notebook_format::{
-    export_self_contained, import_self_contained, load_asset, parse_notebook_bytes, write_notebook,
-    CellKind, Notebook, Output, MAX_NOTEBOOK_BYTES,
+    export_document, open_notebook_bytes, parse_self_contained, save_asset, write_notebook,
+    CellKind, Notebook, NotebookDocument, MAX_NOTEBOOK_BYTES,
 };
 use cgx2_notebook_kernel::NotebookKernel;
 
@@ -226,8 +226,8 @@ fn execute(command: Command) -> Result<(), CommandError> {
             force,
         } => {
             check_output_collision(&output, force)?;
-            let notebook = read_notebook(&input)?;
-            let text = export_self_contained(&notebook, &sidecar(&input))
+            let document = read_document(&input)?;
+            let text = export_document(&document.notebook, &document.assets)
                 .map_err(|error| CommandError::Input(error.to_string()))?;
             atomic_write(&output, text.as_bytes(), force)
         }
@@ -240,11 +240,11 @@ fn execute(command: Command) -> Result<(), CommandError> {
             let bytes = read_limited_bytes(&input)?;
             let text = std::str::from_utf8(&bytes)
                 .map_err(|_| CommandError::Input("portable notebook is not UTF-8".into()))?;
-            let notebook = import_self_contained(text, &sidecar(&output))
+            let document = parse_self_contained(text)
                 .map_err(|error| CommandError::Input(error.to_string()))?;
-            let native = write_notebook(&notebook)
+            let native = write_notebook(&document.notebook)
                 .map_err(|error| CommandError::Output(error.to_string()))?;
-            atomic_write(&output, native.as_bytes(), force)
+            import_document(&output, &document, native.as_bytes(), force)
         }
     }
 }
@@ -261,11 +261,13 @@ fn status_name(status: cgx2_notebook_session::CellStatus) -> &'static str {
 }
 
 fn read_notebook(path: &Path) -> Result<Notebook, CommandError> {
+    Ok(read_document(path)?.notebook)
+}
+
+fn read_document(path: &Path) -> Result<NotebookDocument, CommandError> {
     let bytes = read_limited_bytes(path)?;
-    let notebook = parse_notebook_bytes(&bytes)
-        .map_err(|error| CommandError::Input(format!("{}: {error}", path.display())))?;
-    validate_assets(path, &notebook)?;
-    Ok(notebook)
+    open_notebook_bytes(&bytes, &sidecar(path))
+        .map_err(|error| CommandError::Input(format!("{}: {error}", path.display())))
 }
 
 fn read_limited_bytes(path: &Path) -> Result<Vec<u8>, CommandError> {
@@ -281,17 +283,6 @@ fn sidecar(path: &Path) -> PathBuf {
     let mut name = path.as_os_str().to_os_string();
     name.push(".assets");
     PathBuf::from(name)
-}
-
-fn validate_assets(path: &Path, notebook: &Notebook) -> Result<(), CommandError> {
-    let sidecar = sidecar(path);
-    for output in notebook.cells.iter().flat_map(|cell| &cell.outputs) {
-        if let Output::Asset { sha256, .. } = output {
-            load_asset(&sidecar, sha256)
-                .map_err(|error| CommandError::Input(format!("{}: {error}", path.display())))?;
-        }
-    }
-    Ok(())
 }
 
 fn input_io(path: &Path, error: io::Error) -> CommandError {
@@ -372,4 +363,97 @@ fn atomic_write(path: &Path, bytes: &[u8], force: bool) -> Result<(), CommandErr
         "{}: could not allocate a temporary sibling file",
         path.display()
     )))
+}
+
+struct TemporaryDirectory(PathBuf);
+
+impl Drop for TemporaryDirectory {
+    fn drop(&mut self) {
+        let _ = fs::remove_dir_all(&self.0);
+    }
+}
+
+fn import_document(
+    output: &Path,
+    document: &NotebookDocument,
+    native: &[u8],
+    force: bool,
+) -> Result<(), CommandError> {
+    if document.assets.is_empty() {
+        return atomic_write(output, native, force);
+    }
+    let target = sidecar(output);
+    let existing = match fs::symlink_metadata(&target) {
+        Ok(metadata) if metadata.file_type().is_symlink() || !metadata.is_dir() => {
+            return Err(CommandError::Output(format!(
+                "{} is not a regular asset directory",
+                target.display()
+            )));
+        }
+        Ok(_) if !force => {
+            return Err(CommandError::Output(format!(
+                "{} already exists; pass --force to replace it",
+                target.display()
+            )));
+        }
+        Ok(_) => true,
+        Err(error) if error.kind() == io::ErrorKind::NotFound => false,
+        Err(error) => return Err(output_io(&target, error)),
+    };
+    let parent = target
+        .parent()
+        .filter(|parent| !parent.as_os_str().is_empty())
+        .unwrap_or(Path::new("."));
+    let stamp = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_nanos();
+    let mut stage = None;
+    for _ in 0..16 {
+        let sequence = TEMP_SEQUENCE.fetch_add(1, Ordering::Relaxed);
+        let path = parent.join(format!(
+            ".cgx2-notebook-assets-{}-{stamp}-{sequence}.tmp",
+            std::process::id()
+        ));
+        match fs::create_dir(&path) {
+            Ok(()) => {
+                stage = Some(TemporaryDirectory(path));
+                break;
+            }
+            Err(error) if error.kind() == io::ErrorKind::AlreadyExists => {}
+            Err(error) => return Err(output_io(&target, error)),
+        }
+    }
+    let stage = stage.ok_or_else(|| {
+        CommandError::Output(format!(
+            "{}: cannot allocate staging directory",
+            target.display()
+        ))
+    })?;
+    for bytes in document.assets.values() {
+        save_asset(&stage.0, bytes).map_err(|error| CommandError::Output(error.to_string()))?;
+    }
+    let mut backup_name = stage.0.as_os_str().to_os_string();
+    backup_name.push(".backup");
+    let backup = PathBuf::from(backup_name);
+    if existing {
+        fs::rename(&target, &backup).map_err(|error| output_io(&target, error))?;
+    }
+    if let Err(error) = fs::rename(&stage.0, &target) {
+        if existing {
+            let _ = fs::rename(&backup, &target);
+        }
+        return Err(output_io(&target, error));
+    }
+    if let Err(error) = atomic_write(output, native, force) {
+        fs::remove_dir_all(&target).map_err(|rollback| output_io(&target, rollback))?;
+        if existing {
+            fs::rename(&backup, &target).map_err(|rollback| output_io(&target, rollback))?;
+        }
+        return Err(error);
+    }
+    if existing {
+        fs::remove_dir_all(&backup).map_err(|error| output_io(&backup, error))?;
+    }
+    Ok(())
 }

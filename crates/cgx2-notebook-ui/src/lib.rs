@@ -1,6 +1,6 @@
 //! Bounded loopback editor for the Wave 5 pure-scalar notebook kernel.
 
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeMap;
 use std::fs::{self, File, OpenOptions};
 use std::io::{self, Read, Write};
 use std::net::{TcpListener, TcpStream};
@@ -9,8 +9,8 @@ use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{Duration, Instant};
 
 use cgx2_notebook_format::{
-    load_asset, parse_notebook_bytes, save_asset, write_notebook, CellKind, Output,
-    MAX_NOTEBOOK_BYTES,
+    export_document, open_notebook_bytes, parse_notebook_bytes, save_asset, write_notebook,
+    CellKind, Output, MAX_NOTEBOOK_BYTES,
 };
 use cgx2_notebook_kernel::NotebookKernel;
 use cgx2_notebook_session::CellStatus;
@@ -21,19 +21,38 @@ const MAX_BODY: usize = 128 * 1024;
 const IO_TIMEOUT: Duration = Duration::from_secs(5);
 const MAX_LIFETIME: Duration = Duration::from_secs(8 * 60 * 60);
 const MAX_REQUESTS: usize = 10_000;
-const MAX_DISTINCT_ASSETS: usize = 32;
-const MAX_TOTAL_ASSET_BYTES: usize = 64 * 1024 * 1024;
 static TEMP_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
 pub struct UiSession {
     input: PathBuf,
     kernel: NotebookKernel,
+    assets: BTreeMap<String, Vec<u8>>,
     token: String,
     last_error: Option<String>,
     needs_restart: bool,
 }
 
 impl UiSession {
+    fn referenced_assets(&self) -> Result<BTreeMap<String, Vec<u8>>, String> {
+        let mut referenced = BTreeMap::new();
+        for output in self
+            .kernel
+            .notebook()
+            .cells
+            .iter()
+            .flat_map(|cell| &cell.outputs)
+        {
+            if let Output::Asset { sha256, .. } = output {
+                let bytes = self
+                    .assets
+                    .get(sha256)
+                    .ok_or_else(|| format!("missing verified asset {sha256}"))?;
+                referenced.insert(sha256.clone(), bytes.clone());
+            }
+        }
+        Ok(referenced)
+    }
+
     pub fn open(input: PathBuf) -> Result<Self, String> {
         if input.extension().is_none_or(|ext| ext != "cgnb") {
             return Err("expected a .cgnb input file".into());
@@ -45,31 +64,9 @@ impl UiSession {
                     .read_to_end(&mut bytes)
             })
             .map_err(|error| format!("cannot read {}: {error}", input.display()))?;
-        let original = parse_notebook_bytes(&bytes)
+        let document = open_notebook_bytes(&bytes, &sidecar(&input))
             .map_err(|error| format!("invalid {}: {error}", input.display()))?;
-        let asset_root = sidecar(&input);
-        let mut assets = BTreeSet::new();
-        let mut total_asset_bytes = 0usize;
-        for output in original.cells.iter().flat_map(|cell| &cell.outputs) {
-            if let Output::Asset { sha256, .. } = output {
-                if assets.insert(sha256) {
-                    if assets.len() > MAX_DISTINCT_ASSETS {
-                        return Err(format!(
-                            "notebook exceeds {MAX_DISTINCT_ASSETS} distinct assets"
-                        ));
-                    }
-                    let data = load_asset(&asset_root, sha256)
-                        .map_err(|error| format!("invalid notebook asset {sha256}: {error}"))?;
-                    total_asset_bytes = total_asset_bytes.saturating_add(data.len());
-                    if total_asset_bytes > MAX_TOTAL_ASSET_BYTES {
-                        return Err(format!(
-                            "notebook assets exceed {MAX_TOTAL_ASSET_BYTES} bytes"
-                        ));
-                    }
-                }
-            }
-        }
-        let kernel = NotebookKernel::open(original.clone())
+        let kernel = NotebookKernel::open(document.notebook)
             .map_err(|error| format!("cannot open notebook kernel: {error}"))?;
         let mut secret = [0u8; 32];
         getrandom::getrandom(&mut secret)
@@ -78,6 +75,7 @@ impl UiSession {
         Ok(Self {
             input,
             kernel,
+            assets: document.assets,
             token,
             last_error: None,
             needs_restart: false,
@@ -104,7 +102,9 @@ impl UiSession {
                 };
                 let outputs: Vec<Value> = cell.outputs.iter().map(|output| match output {
                     Output::Text { body, .. } => json!({"kind":"text", "body":body}),
-                    Output::Asset { sha256, .. } => json!({"kind":"asset", "body":sha256}),
+                    Output::Asset { mime, sha256, .. } => json!({"kind":"asset",
+                        "body":sha256, "mime":mime,
+                        "size":self.assets.get(sha256).map(Vec::len).unwrap_or(0)}),
                 }).collect();
                 let provenance = cell.provenance.as_ref().map(|p| json!({
                     "schemaVersion":p.schema_version, "sourceSha256":p.source_sha256,
@@ -182,21 +182,33 @@ impl UiSession {
             .map_err(|error| format!("cannot serialize notebook: {error}"))?;
         parse_notebook_bytes(text.as_bytes())
             .map_err(|error| format!("serialized notebook invalid: {error}"))?;
-        if destination != self.input {
-            let source_assets = sidecar(&self.input);
-            let target_assets = sidecar(&destination);
-            let mut copied = BTreeSet::new();
-            for output in notebook.cells.iter().flat_map(|cell| &cell.outputs) {
-                if let Output::Asset { sha256, .. } = output {
-                    if copied.insert(sha256) {
-                        let bytes = load_asset(&source_assets, sha256)
-                            .map_err(|error| error.to_string())?;
-                        save_asset(&target_assets, &bytes)
-                            .map_err(|error| format!("cannot save asset: {error}"))?;
-                    }
-                }
-            }
+        let target_assets = sidecar(&destination);
+        for bytes in self.referenced_assets()?.values() {
+            save_asset(&target_assets, bytes)
+                .map_err(|error| format!("cannot save asset: {error}"))?;
         }
+        atomic_write(&destination, text.as_bytes(), overwrite)
+    }
+
+    fn export(&self, name: &str, overwrite: bool) -> Result<(), String> {
+        if !valid_save_name(name) {
+            return Err("export name must be a simple .cgnb filename".into());
+        }
+        let destination = self.input.parent().unwrap_or(Path::new(".")).join(name);
+        match fs::symlink_metadata(&destination) {
+            Ok(meta) if meta.file_type().is_symlink() || !meta.is_file() => {
+                return Err("export destination must be a regular file".into());
+            }
+            Ok(_) if !overwrite => {
+                return Err("destination exists; check Overwrite to replace it".into());
+            }
+            Err(error) if error.kind() != io::ErrorKind::NotFound => {
+                return Err(format!("cannot inspect export destination: {error}"));
+            }
+            _ => {}
+        }
+        let text = export_document(self.kernel.notebook(), &self.referenced_assets()?)
+            .map_err(|error| format!("cannot export notebook: {error}"))?;
         atomic_write(&destination, text.as_bytes(), overwrite)
     }
 }
@@ -372,7 +384,7 @@ fn response(status: u16, mime: &str, body: Vec<u8>) -> Vec<u8> {
         431 => "Request Header Fields Too Large",
         _ => "Error",
     };
-    let head = format!("HTTP/1.1 {status} {reason}\r\nContent-Type: {mime}\r\nContent-Length: {}\r\nCache-Control: no-store\r\nX-Content-Type-Options: nosniff\r\nContent-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'\r\nConnection: close\r\n\r\n", body.len());
+    let head = format!("HTTP/1.1 {status} {reason}\r\nContent-Type: {mime}\r\nContent-Length: {}\r\nCache-Control: no-store\r\nX-Content-Type-Options: nosniff\r\nContent-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src blob:; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'\r\nConnection: close\r\n\r\n", body.len());
     [head.as_bytes(), &body].concat()
 }
 
@@ -414,9 +426,51 @@ fn dispatch(session: &mut UiSession, request: Request, port: u16) -> Vec<u8> {
             "application/json; charset=utf-8",
             json_bytes(&session.state()),
         ),
+        ("POST", "/api/asset") => {
+            if request.headers.get("x-cgx2-token") != Some(&session.token)
+                || request.headers.get("origin") != Some(&format!("http://{expected}"))
+            {
+                return error_response(403, "missing or invalid token or Origin");
+            }
+            if request
+                .headers
+                .get("content-type")
+                .is_none_or(|value| value != "application/json")
+            {
+                return error_response(400, "expected application/json");
+            }
+            let value: Value = match serde_json::from_slice(&request.body) {
+                Ok(value) => value,
+                Err(_) => return error_response(400, "invalid JSON"),
+            };
+            let Some(digest) = value.get("sha256").and_then(Value::as_str) else {
+                return error_response(400, "asset requires sha256");
+            };
+            if value.as_object().is_none_or(|object| object.len() != 1) {
+                return error_response(400, "asset requires only sha256");
+            }
+            let mime = session
+                .kernel
+                .notebook()
+                .cells
+                .iter()
+                .flat_map(|cell| &cell.outputs)
+                .find_map(|output| match output {
+                    Output::Asset { mime, sha256, .. } if sha256 == digest => Some(mime.as_str()),
+                    _ => None,
+                });
+            let Some(mime) = mime else {
+                return error_response(404, "unknown asset");
+            };
+            let Some(bytes) = session.assets.get(digest) else {
+                return error_response(404, "unknown asset");
+            };
+            response(200, mime, bytes.clone())
+        }
         (
             "POST",
-            "/api/run-next" | "/api/run-cell" | "/api/restart" | "/api/edit" | "/api/save",
+            "/api/run-next" | "/api/run-cell" | "/api/restart" | "/api/edit" | "/api/save"
+            | "/api/export",
         ) => {
             if request.headers.get("x-cgx2-token") != Some(&session.token) {
                 return error_response(403, "missing or invalid token");
@@ -465,6 +519,17 @@ fn dispatch(session: &mut UiSession, request: Request, port: u16) -> Vec<u8> {
                         session.save(name, overwrite)
                     }
                     _ => Err("save requires name and overwrite".into()),
+                },
+                "/api/export" => match (
+                    value.get("name").and_then(Value::as_str),
+                    value.get("overwrite").and_then(Value::as_bool),
+                ) {
+                    (Some(name), Some(overwrite))
+                        if value.as_object().is_some_and(|obj| obj.len() == 2) =>
+                    {
+                        session.export(name, overwrite)
+                    }
+                    _ => Err("export requires name and overwrite".into()),
                 },
                 _ => Err("expected an empty JSON object".into()),
             };

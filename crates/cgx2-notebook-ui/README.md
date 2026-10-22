@@ -1,5 +1,13 @@
 # CGx2 local notebook UI preview
 
+## Portable export and import
+
+Open an exported file directly with `cgx2-notebook-ui open PORTABLE.cgnb`; its image bytes are verified and loaded from the file, so no sidecar is needed. The **Export portable** button writes one self-contained `.cgnb` beside the opened notebook. Enter a simple name in **Save as** and use the **Overwrite existing file** checkbox to replace an existing destination, including the opened file. **Save as** writes ordinary version 1 text and restores sidecars from the session's verified bytes. Export and save write temporary sibling files and leave the opened source unchanged unless it is explicitly named with Overwrite.
+
+Saved PNG, JPEG, GIF, and WebP outputs appear as images through a token-protected local asset request with MIME, byte length, and SHA-256 shown. HTML and SVG assets are rejected. Markdown and text outputs remain inert text; saved scripts do not run. A portable file is a version 1 extension with embedded blocks, so older native readers reject it; use `cgx2-notebook import` to produce ordinary version 1 plus sidecars. There is no network fetch or Python/Jupyter conversion.
+
+## Running and editing
+
 From the repository root, run:
 
 ```sh
@@ -12,7 +20,7 @@ Code cells can be edited. Select **Apply edit** to update the in-memory session,
 
 **Save as** writes a `.cgnb` file beside the opened notebook. Enter a simple filename with no directory separators. Existing files require the explicit **Overwrite existing file** checkbox, including when naming the opened file. A save serializes the current session with `write_notebook`, then writes a temporary sibling and replaces or creates the destination atomically. The opened file is unchanged until explicitly selected for overwrite. Current and cached text outputs and valid asset references are retained, together with provenance. Content-addressed sidecars are copied when saving to a new filename. Reopening never marks saved output current until a real execution in that process. Reopened output is parsed before writing.
 
-This is a pure-scalar preview: immutable `let` bindings and scalar expressions only. Bindings live only in the process session. Saving retains text, outputs, and provenance, but reopening starts with no live bindings. Selected reruns execute no earlier cell source and do not provide side-effecting notebook semantics. Python/PyTorch, memory scripts, shell commands, arbitrary `.cg`, persistent side effects, rich HTML execution, and Jupyter parity are outside this crate. Kernel limits include 128 code cells, 64 KiB of code source, and 1 MiB of cumulative scalar evaluation scripts including selected reruns, plus a 1 MiB retained-state cap. This UI additionally accepts at most 32 distinct saved assets totaling 64 MiB. The HTTP request body limit is 128 KiB and request reads have a five-second total deadline.
+This is a pure-scalar preview: immutable `let` bindings and scalar expressions only. Bindings live only in the process session. Saving retains text, outputs, and provenance, but reopening starts with no live bindings. Selected reruns execute no earlier cell source and do not provide side-effecting notebook semantics. Python/PyTorch, memory scripts, shell commands, arbitrary `.cg`, persistent side effects, rich HTML execution, and Jupyter parity are outside this crate. Kernel limits include 128 code cells, 64 KiB of code source, and 1 MiB of cumulative scalar evaluation scripts including selected reruns, plus a 1 MiB retained-state cap. This UI additionally accepts at most 32 distinct saved assets totaling 12 MiB (8 MiB per asset; 16 MiB notebook file). The HTTP request body limit is 128 KiB and request reads have a five-second total deadline.
 
 The server binds only `127.0.0.1`, checks exact loopback `Host` and `Origin`, requires a random per-process token for each change, and rejects unknown routes, oversized requests, and invalid JSON. `POST /api/run-cell` accepts only `{"id":"CELL_ID"}` for an existing code cell; the browser cannot submit source or file paths for execution. It sends a restrictive Content Security Policy and `Cache-Control: no-store`. This protects the local UI from ordinary cross-origin requests; it does not protect against malicious processes or users with access to the same machine or browser profile.
 

@@ -375,6 +375,75 @@ fn cached_asset_reference_is_valid_after_save_as() {
 }
 
 #[test]
+fn portable_open_serves_bounded_image_and_exports_without_sidecars() {
+    let f = Fixture::new("#!cgnb 1\n%% markdown id=notes\n# Portable\n%% code id=seed\nlet x = 3\n%% code id=result\nx + 4\n");
+    let digest = save_asset(&f.dir.join("source.cgnb.assets"), b"image bytes").unwrap();
+    fs::write(
+        &f.input,
+        format!("#!cgnb 1\n%% markdown id=notes\n# Portable\n%% code id=seed\nlet x = 3\n%% asset id=seed mime=image/png ordinal=1 sha256={digest}\n%% code id=result\nx + 4\n%% output id=result mime=text/plain ordinal=2\n7\n"),
+    )
+    .unwrap();
+    let original = fs::read(&f.input).unwrap();
+    let notebook = parse_notebook_bytes(&original).unwrap();
+    let portable = f.dir.join("portable.cgnb");
+    fs::write(
+        &portable,
+        cgx2_notebook_format::export_self_contained(&notebook, &f.dir.join("source.cgnb.assets"))
+            .unwrap(),
+    )
+    .unwrap();
+    fs::remove_dir_all(f.dir.join("source.cgnb.assets")).unwrap();
+
+    let (port, handle) = server(&portable, 6);
+    let secret = token(port);
+    let (status, state) = request(port, "GET", "/api/state", None, None, None, None);
+    assert_eq!(status, 200);
+    let state: Value = serde_json::from_str(&state).unwrap();
+    assert_eq!(state["cells"][1]["status"], "cached");
+    assert_eq!(state["cells"][1]["outputs"][0]["mime"], "image/png");
+    assert_eq!(state["cells"][1]["outputs"][0]["size"], 11);
+    let (status, image) = request(
+        port,
+        "POST",
+        "/api/asset",
+        Some(&json!({"sha256":digest}).to_string()),
+        Some(&secret),
+        Some(&format!("http://127.0.0.1:{port}")),
+        None,
+    );
+    assert_eq!(status, 200);
+    assert_eq!(image, "image bytes");
+    let (status, _) = post(
+        port,
+        "/api/export",
+        json!({"name":"copied.cgnb","overwrite":false}),
+        &secret,
+    );
+    assert_eq!(status, 200);
+    let (status, state) = post(port, "/api/restart", json!({}), &secret);
+    assert_eq!(status, 200);
+    assert_eq!(state["cells"][2]["outputs"][0]["body"], "7");
+    let (status, _) = post(
+        port,
+        "/api/export",
+        json!({"name":"fresh.cgnb","overwrite":false}),
+        &secret,
+    );
+    assert_eq!(status, 200);
+    handle.join().unwrap();
+    let copy = fs::read(f.dir.join("copied.cgnb")).unwrap();
+    let reopened =
+        cgx2_notebook_format::open_notebook_bytes(&copy, &f.dir.join("missing.assets")).unwrap();
+    assert_eq!(reopened.assets[&digest], b"image bytes");
+    let fresh = fs::read(f.dir.join("fresh.cgnb")).unwrap();
+    let fresh =
+        cgx2_notebook_format::open_notebook_bytes(&fresh, &f.dir.join("missing.assets")).unwrap();
+    assert!(fresh.assets.is_empty());
+    assert_eq!(fs::read(&f.input).unwrap(), original);
+    assert!(!f.dir.join("copied.cgnb.assets").exists());
+}
+
+#[test]
 fn code_result_with_html_is_json_escaped_and_page_uses_local_scripts() {
     let f = Fixture::new("#!cgnb 1\n%% code id=one\n\"<script>alert(1)</script>\"\n");
     let (port, handle) = server(&f.input, 4);

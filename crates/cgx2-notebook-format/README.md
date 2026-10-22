@@ -32,16 +32,18 @@ A code cell may have one `%% provenance` header after its outputs. `schema=1` an
 
 ## Assets and portable export
 
-Pass a sidecar directory such as `example.cgnb.assets` as `asset_root` to `save_asset` and `load_asset`. Each filename is the lowercase SHA-256 digest of its bytes. A digest is validated before it becomes a path component; loads verify both file size and hash. An asset is limited to 8 MiB. Saving identical bytes reuses the same filename. Existing corrupt files and symlinks are rejected.
+Pass a sidecar directory such as `example.cgnb.assets` as `asset_root` to `save_asset` and `load_asset`. Each filename is the lowercase SHA-256 digest of its bytes. A digest is validated before it becomes a path component; loads verify both file size and hash. An asset is limited to 8 MiB. A notebook is limited to 32 distinct assets totaling 12 MiB, and the complete UTF-8 file is limited to 16 MiB. Saving identical bytes reuses the same filename. Existing corrupt files, symlink assets, and symlinks in the asset directory path are rejected.
 
 `export_self_contained` appends blocks after the notebook content, sorted by digest:
 
 ```text
-%% embedded sha256=<64 lowercase hex characters> size=<decoded byte count>
+%% embedded sha256=<64 lowercase hex characters> mime=image/png size=<decoded byte count>
 <one base64 line>
 ```
 
-`import_self_contained` verifies every embedded digest and size, requires one block for every referenced asset, then restores files into the chosen sidecar directory. It works when the original sidecar is absent. Use `import_self_contained` for exported documents; `parse_notebook` intentionally rejects embedded blocks. The caller chooses the sidecar directory; these functions do not derive paths from notebook names.
+The only portable asset MIME values are `image/png`, `image/jpeg`, `image/gif`, and `image/webp`. The embedded MIME must exactly match every output reference to that digest. Export and import reject SVG, HTML, scripts, unknown MIME, conflicting MIME references, duplicate or unreferenced blocks, traversal-like digests, hash or length mismatch, and oversized decoded or encoded data. There is no compression or external URL lookup. `parse_self_contained` validates every block in memory before exposing a `NotebookDocument`; `open_notebook_bytes` also opens ordinary version 1 files using verified sidecars. `import_self_contained` verifies before restoring files into the chosen sidecar directory. The caller chooses that directory; no path is read from notebook text.
+
+Portable export retains the `#!cgnb 1` header and readable native cells, then adds an embedded block section. It is an extension of version 1, not a new execution format. Older readers that only call `parse_notebook` reject the embedded headers and must import to ordinary version 1 plus sidecars. A portable file with no assets is identical to ordinary version 1. Saved provenance remains cached or stale after reopen; importing bytes never creates live evaluator state.
 
 ## Scope
 
