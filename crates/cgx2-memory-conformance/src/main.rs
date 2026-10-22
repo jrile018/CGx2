@@ -1,23 +1,41 @@
 use cgx2_cli::run_source_with_report;
-use cgx2_memory_conformance::{generate, MODEL_VERSION};
+use cgx2_memory_conformance::{generate, generate_v2, MODEL_VERSION, MODEL_VERSION_V2};
 
 fn main() {
     let mut args = std::env::args().skip(1);
-    let (Some(flag), Some(raw_seed), None) = (args.next(), args.next(), args.next()) else {
-        eprintln!("usage: cgx2-memory-conformance --seed N");
+    let mut raw_seed = None;
+    let mut version = MODEL_VERSION;
+    while let Some(flag) = args.next() {
+        match flag.as_str() {
+            "--seed" if raw_seed.is_none() => raw_seed = args.next(),
+            "--model-version" => {
+                version = args
+                    .next()
+                    .and_then(|value| value.parse().ok())
+                    .unwrap_or(0);
+            }
+            _ => version = 0,
+        }
+    }
+    let Some(raw_seed) = raw_seed else {
+        eprintln!("usage: cgx2-memory-conformance --seed N [--model-version 1|2]");
         std::process::exit(2);
     };
-    if flag != "--seed" {
-        eprintln!("usage: cgx2-memory-conformance --seed N");
+    if version != MODEL_VERSION && version != MODEL_VERSION_V2 {
+        eprintln!("unsupported model version: {version}; expected 1 or 2");
         std::process::exit(2);
     }
     let seed = raw_seed.parse::<u64>().unwrap_or_else(|_| {
         eprintln!("invalid unsigned seed: {raw_seed}");
         std::process::exit(2);
     });
-    let case = generate(seed);
+    let case = if version == MODEL_VERSION {
+        generate(seed)
+    } else {
+        generate_v2(seed)
+    };
     println!(
-        "model={MODEL_VERSION} seed={seed}\nsource:\n{}expected={:#?}",
+        "model={version} seed={seed}\nsource:\n{}expected={:#?}",
         case.source, case.expected
     );
     match run_source_with_report(&case.source, &[]) {
