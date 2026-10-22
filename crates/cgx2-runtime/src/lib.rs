@@ -163,17 +163,9 @@ impl Session {
     }
 
     pub fn alloc_bytes(&mut self, region: RegionId, len: usize) -> Result<Handle, AllocationError> {
-        let needs_collect = {
-            let r = self
-                .region(region)
-                .map_err(|_| AllocationError::InvalidRegion)?;
-            self.budgets.is_empty()
-                && matches!(r.mode, CollectionMode::Auto { trigger_bytes } if r.stats.committed_bytes >= trigger_bytes)
-        };
-        if needs_collect {
-            self.collect(region)
-                .map_err(|_| AllocationError::InvalidRegion)?;
-        }
+        let r = self
+            .region(region)
+            .map_err(|_| AllocationError::InvalidRegion)?;
         let requested = match len.checked_add(SLOT_METADATA_BYTES) {
             Some(requested) => requested,
             None => {
@@ -184,12 +176,35 @@ impl Session {
                 return Err(AllocationError::HostAllocation);
             }
         };
+        if requested > r.limit_bytes {
+            self.region_mut(region)
+                .expect("validated region")
+                .stats
+                .allocation_failures += 1;
+            return Err(AllocationError::RegionLimit);
+        }
+        // Vec cannot reserve a buffer larger than isize::MAX bytes on this host.
+        if len > isize::MAX as usize {
+            self.region_mut(region)
+                .expect("validated region")
+                .stats
+                .allocation_failures += 1;
+            return Err(AllocationError::HostAllocation);
+        }
         if let Err(error) = self.check_budgets(requested) {
             self.region_mut(region)
                 .expect("validated region")
                 .stats
                 .allocation_failures += 1;
             return Err(error);
+        }
+        let needs_collect = self.budgets.is_empty()
+            && matches!(r.mode, CollectionMode::Auto { trigger_bytes } if
+                r.stats.committed_bytes >= trigger_bytes
+                    || requested > r.limit_bytes.saturating_sub(r.stats.committed_bytes));
+        if needs_collect {
+            self.collect(region)
+                .map_err(|_| AllocationError::InvalidRegion)?;
         }
         let r = self
             .region_mut(region)
