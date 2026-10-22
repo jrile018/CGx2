@@ -1,0 +1,69 @@
+{
+  "schema_version": 3,
+  "kind": "candidate_pack",
+  "protocol": {
+    "time_budget_seconds": 900,
+    "token_budget": 50000,
+    "randomization_seed": 12,
+    "prompt_sha256": null,
+    "tools_sha256": null,
+    "documentation_sha256": null,
+    "dependency_lock_sha256": null,
+    "cgx2_source_sha256": null,
+    "compiler_sha256": null,
+    "dependency_sha256": null,
+    "tool_version": null,
+    "hardware": null
+  },
+  "tasks": [
+    {
+      "task_id": "memory-region-failure-v3", "status": "candidate", "tier": "small", "planned_repository_files": 5,
+      "category": "memory_sensitive", "baseline_language": "rust",
+      "baseline_rationale": "Rust's ownership and explicit error paths are the strongest available comparison for a region lifetime repair.",
+      "applicable_languages": ["cgx2", "rust"], "exclusions": {"python": "No equivalent explicit ownership semantics prepared.", "typescript": "No equivalent explicit ownership semantics prepared.", "ocaml": "No equivalent region lifetime starter prepared."},
+      "hidden_test_ref": "private:memory-region-failure-v3", "repository_snapshots": {}, "workspace_paths": {}, "reviewer_ids": [],
+      "acceptance_criteria": ["A failed allocation leaves live handles usable and does not collect a manual region.", "An explicit collect changes the collection counter exactly once.", "A handle cannot escape its closed region."]
+    },
+    {
+      "task_id": "package-api-repair-v3", "status": "candidate", "tier": "large", "planned_repository_files": 28,
+      "category": "package_api", "baseline_language": "typescript",
+      "baseline_rationale": "TypeScript has the closest mature typed package API and module graph for this API migration task.",
+      "applicable_languages": ["cgx2", "typescript"], "exclusions": {"python": "No equivalent typed API-index starter prepared.", "rust": "No equivalent package API starter prepared.", "ocaml": "No equivalent package API starter prepared."},
+      "hidden_test_ref": "private:package-api-repair-v3", "repository_snapshots": {}, "workspace_paths": {}, "reviewer_ids": [],
+      "acceptance_criteria": ["Update callers to the pinned public package API without changing unrelated modules.", "Dependency and API resolution complete without missing-symbol diagnostics.", "Existing behavior and declared error classes remain equivalent."]
+    },
+    {
+      "task_id": "native-c-boundary-v3", "status": "candidate", "tier": "small", "planned_repository_files": 8,
+      "category": "native_c", "baseline_language": "rust",
+      "baseline_rationale": "Rust's explicit unsafe FFI is the strongest applicable native C boundary baseline.",
+      "applicable_languages": ["cgx2", "rust"], "exclusions": {"python": "Python extension boundary would add a different interpreter and ABI.", "typescript": "No direct native ABI starter prepared.", "ocaml": "No equivalent reviewed C binding starter prepared."},
+      "hidden_test_ref": "private:native-c-boundary-v3", "repository_snapshots": {}, "workspace_paths": {}, "reviewer_ids": [],
+      "acceptance_criteria": ["Call the pinned fixed-shape C ABI only through an explicit unsafe boundary.", "Reject a mismatched ABI version before invocation.", "Preserve byte lengths, error codes, and release ownership on every path."]
+    },
+    {
+      "task_id": "notebook-cell-impact-v3", "status": "candidate", "tier": "large", "planned_repository_files": 24,
+      "category": "notebook_comprehension", "baseline_language": "python",
+      "baseline_rationale": "Python notebooks have the most established comparable cell state and comprehension workflow.",
+      "applicable_languages": ["cgx2", "python"], "exclusions": {"rust": "No equivalent interactive notebook starter prepared.", "typescript": "No equivalent reviewed notebook starter prepared.", "ocaml": "No equivalent notebook starter prepared."},
+      "hidden_test_ref": "private:notebook-cell-impact-v3", "repository_snapshots": {}, "workspace_paths": {}, "reviewer_ids": [],
+      "acceptance_criteria": ["Identify which cells become stale after a changed pure scalar definition.", "Explain retained values without replaying earlier cells.", "Give the same answers under a blinded rubric for both languages."]
+    },
+    {
+      "task_id": "proof-result-reading-v3", "status": "candidate", "tier": "small", "planned_repository_files": 6,
+      "category": "proof_interpretation", "baseline_language": "rust",
+      "baseline_rationale": "Rust with the same external bounded verifier is a conservative typed baseline for interpreting proof results.",
+      "applicable_languages": ["cgx2", "rust"], "exclusions": {"python": "No matched contract verifier starter prepared.", "typescript": "No matched contract verifier starter prepared.", "ocaml": "No matched contract verifier starter prepared."},
+      "hidden_test_ref": "private:proof-result-reading-v3", "repository_snapshots": {}, "workspace_paths": {}, "reviewer_ids": [],
+      "acceptance_criteria": ["Distinguish proved, disproved, and unknown outcomes with their assumptions.", "Identify the source obligation and explain a concrete counterexample without asserting unproved safety.", "Answer the behavior question under a blinded rubric."]
+    },
+    {
+      "task_id": "numeric-boundary-chain-v3", "status": "candidate", "tier": "large", "planned_repository_files": 32,
+      "category": "numerical_edge", "baseline_language": "rust",
+      "baseline_rationale": "Rust's checked integer operations provide the strongest comparable fixed-width arithmetic baseline.",
+      "applicable_languages": ["cgx2", "rust"], "exclusions": {"python": "Unbounded integers need a separately reviewed fixed-width shim.", "typescript": "Number semantics differ and no equivalent fixed-width starter is prepared.", "ocaml": "No independently reviewed fixed-width starter prepared."},
+      "hidden_test_ref": "private:numeric-boundary-chain-v3", "repository_snapshots": {}, "workspace_paths": {}, "reviewer_ids": [],
+      "acceptance_criteria": ["Preserve exact i64 boundary behavior through a multi-module call chain.", "Overflow returns the specified error class rather than a wrapped value.", "Finite inputs produce equal outputs and error locations under equivalent starters."]
+    }
+  ],
+  "expected_runs": []
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:cgx2:bench:run:v3",
+  "title": "CGx2 externally observed paired model run",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "run_id", "task_id", "language", "model_family", "model_version", "seed", "order", "started_at_utc", "finished_at_utc", "hidden_test_ref", "hidden_test_sha256", "repository_snapshot_sha256", "tokenizer_id", "tokenizer_version", "tokenizer_output_path", "tokenizer_output_sha256", "prompt_tokens", "completion_tokens", "tool_tokens", "total_tokens", "wall_seconds", "outcome", "verified_completion", "failure_cause", "final_patch_sha256", "raw_trace_path", "raw_trace_sha256", "prompt_sha256", "tools_sha256", "documentation_sha256", "dependency_lock_sha256", "cgx2_source_sha256", "compiler_sha256", "dependency_sha256", "tool_version", "hardware", "time_budget_seconds", "token_budget", "randomization_seed"],
+  "properties": {
+    "schema_version": {"const": 3}, "run_id": {"type": "string", "minLength": 1}, "task_id": {"type": "string", "minLength": 1},
+    "language": {"enum": ["cgx2", "python", "rust", "typescript", "ocaml"]},
+    "model_family": {"type": "string", "minLength": 1}, "model_version": {"type": "string", "minLength": 1},
+    "seed": {"type": "integer", "minimum": 0}, "order": {"type": "integer", "minimum": 0},
+    "started_at_utc": {"type": "string", "format": "date-time"}, "finished_at_utc": {"type": "string", "format": "date-time"},
+    "hidden_test_ref": {"type": "string", "minLength": 1}, "hidden_test_sha256": {"$ref": "#/$defs/sha"},
+    "repository_snapshot_sha256": {"$ref": "#/$defs/sha"},
+    "tokenizer_id": {"type": "string", "minLength": 1}, "tokenizer_version": {"type": "string", "minLength": 1},
+    "tokenizer_output_path": {"type": "string", "minLength": 1}, "tokenizer_output_sha256": {"$ref": "#/$defs/sha"},
+    "prompt_tokens": {"type": "integer", "minimum": 0}, "completion_tokens": {"type": "integer", "minimum": 0},
+    "tool_tokens": {"type": "integer", "minimum": 0}, "total_tokens": {"type": "integer", "minimum": 0},
+    "wall_seconds": {"type": "number", "minimum": 0}, "outcome": {"enum": ["pass", "fail", "timeout"]},
+    "verified_completion": {"type": "boolean"}, "failure_cause": {"type": ["string", "null"]},
+    "final_patch_sha256": {"$ref": "#/$defs/sha"}, "raw_trace_path": {"type": "string", "minLength": 1},
+    "raw_trace_sha256": {"$ref": "#/$defs/sha"}, "prompt_sha256": {"$ref": "#/$defs/sha"},
+    "tools_sha256": {"$ref": "#/$defs/sha"}, "documentation_sha256": {"$ref": "#/$defs/sha"},
+    "dependency_lock_sha256": {"$ref": "#/$defs/sha"}, "cgx2_source_sha256": {"$ref": "#/$defs/sha"},
+    "compiler_sha256": {"$ref": "#/$defs/sha"}, "dependency_sha256": {"$ref": "#/$defs/sha"},
+    "tool_version": {"type": "string", "minLength": 1}, "hardware": {"type": "string", "minLength": 1},
+    "time_budget_seconds": {"type": "number", "exclusiveMinimum": 0},
+    "token_budget": {"type": "integer", "minimum": 1}, "randomization_seed": {"type": "integer"}
+  },
+  "$defs": {"sha": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

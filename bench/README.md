@@ -124,6 +124,33 @@ python3 bench/holdout.py report --matrix PRIVATE/matrix.json \
 python3 bench/holdout.py report --matrix bench/fixtures/holdout/v1/matrix.json
 ```
 
+## Wave 12 candidate tasks and version 3 evidence import
+
+The [six-task candidate pack](fixtures/task-candidates/v3/pack.json) covers memory-sensitive repair, package/API use, a native C boundary, pure notebook comprehension, proof-result interpretation, and numerical edge cases. It plans three 3–10-file and three 20–100-file repository tasks. Each entry states language-neutral acceptance criteria and selects the strongest proposed applicable baseline **before** results. The pack has no actual starter repositories, independent reviews, hidden acceptance tests, model traces, or frozen compiler/dependency hashes. Its `status: candidate` entries are planning fixtures and ineligible for a holdout claim. An opaque `hidden_test_ref` is a future private identifier, not an acceptance test. Do not put private tests or gold changes into any model-visible starter.
+
+Run the standard-library-only summary and honest report smoke from the repository root:
+
+```sh
+python3 -m unittest discover -s bench/tests -q
+python3 bench/task_evidence.py summarize --pack bench/fixtures/task-candidates/v3/pack.json
+python3 bench/task_evidence.py report --pack bench/fixtures/task-candidates/v3/pack.json
+```
+
+The last two commands intentionally exit `1`. Their JSON shows six candidates, three per tier, zero validated runs, and `status`/`release_verdict: insufficient_evidence`. `summarize` lists category counts, exclusions by language, registered and validated run counts, and every missing or invalid prerequisite **before** any metric is computed. `--out PATH` writes that JSON to a separate derived report file. `validate` uses the same audit with no metric calculation. No command invokes a model or acceptance test.
+
+Version 3 is opt-in. It does not migrate or reinterpret v1 task/result files or v2 holdout matrices/traces; the Wave 11 report and task-clustered scoring remain unchanged. For a real holdout, independently review equivalent starters and hidden-test criteria, set every task to `frozen`, provide two distinct reviewer IDs and a review time before the freeze, and place each language's 3–10- or 20–100-file starter in a separate tree. Record `workspace_paths`, SHA-256 `repository_snapshots`, an external `hidden_test_path`, its SHA-256, and the opaque reference. The importer hashes each starter as SHA-256 of compact sorted-key UTF-8 JSON of sorted `[relative_path, file_sha256]` rows. It rejects symlinks, `.git` history, hidden tests in *any* model workspace, shared workspaces, and changed snapshot bytes. A human must still verify task equivalence and reviewer independence; those cannot be proven from IDs.
+
+Freeze all 60–100 tasks across both tiers and six categories. Pin `prompt_sha256`, `tools_sha256`, `documentation_sha256`, `dependency_lock_sha256`, `cgx2_source_sha256`, `compiler_sha256`, `dependency_sha256`, `tool_version`, hardware, time/token budgets, and `randomization_seed` in `protocol`. Register the complete two-family, repeated-seed, paired-language `expected_runs` grid before running models. Set `freeze.task_set_sha256`, `freeze.run_grid_sha256`, and `freeze.protocol_sha256` to SHA-256 of each object's compact sorted-key UTF-8 JSON; set `freeze.frozen_at_utc` after review and before the first run. The [pack schema](schema/task-pack-v3.schema.json) documents fields. The importer checks exact frozen hashes, model versions, pair completeness, order uniqueness, and run chronology.
+
+An external operator stores each genuine [v3 run](schema/run-v3.schema.json) and passes its file with a repeated `--run` argument. Each run references a separate raw trace file and actual tokenizer output file by relative path, with exact SHA-256s. Tokenizer output is JSON containing `tokenizer_id`, `tokenizer_version`, and nonnegative integer `input_token_ids`, `output_token_ids`, `tool_token_ids` arrays. Count input messages, model output, and tool or diagnostic payload **once** in those disjoint buckets. The importer checks array lengths against `prompt_tokens`, `completion_tokens`, `tool_tokens`, and `total_tokens`, and pins one tokenizer/version per model family. The raw trace is JSON with `run_id`, an `events` array, and `verification` containing `verifier_id`, `hidden_test_ref`, `hidden_test_sha256`, `result`, and `final_patch_sha256` matching the run. The external operator must actually execute the hidden acceptance test and save its result; a matching file alone cannot prove trace authenticity. Keep both evidence files and the run JSON outside all model workspaces.
+
+```sh
+python3 bench/task_evidence.py summarize --pack PRIVATE/pack.json --run PRIVATE/runs/a.json --run PRIVATE/runs/b.json
+python3 bench/task_evidence.py report --pack PRIVATE/pack.json --run PRIVATE/runs/a.json --run PRIVATE/runs/b.json --out PRIVATE/derived-report.json
+```
+
+Only a fully reviewed, frozen, complete run set reaches the unchanged Wave 11 `analyze_ready` scoring. A pass needs matching external hidden-test verification, positive measured time and token use, and no failure cause. A fail or timeout needs a cause; the analysis charges its **full** wall and token budgets even when the recorded failed attempt ended early. Any missing, duplicate, leaking, mismatched, out-of-order, or unpaired evidence yields `insufficient_evidence`, with no numeric completion rate or superiority verdict. A ready report separates each task's preregistered baseline (including Python) and reports task-clustered confidence intervals, paired-success tokens/time, and all-task cost-to-success as described below. Creating this pack supplies no LLM advantage evidence.
+
 ## Wave 11 task-clustered statistics
 
 The v2 analysis matches `task_id`, `model_family`, `model_version`, and `seed`, and compares CGx2 with each task's preregistered `baseline_language`. A holdout must have the same model/version/seed grid on every task, one frozen version and tokenizer per family, two families, and repeated seeds. The report includes raw registered/matched task counts, counts by tier, excluded task counts by condition, baseline-language breakdown (including Python separately), run and paired-success counts, and family/tier cells. These are mechanical checks: review quality and model trace authenticity still need independent evidence.
