@@ -1,5 +1,43 @@
 # CGx2 runtime kernel
 
+## Wave 12 checked managed objects
+
+`Session::alloc_object(region: RegionId, payload_len: usize, reference_slots: usize)
+-> Result<Handle, AllocationError>` creates a zero-filled byte payload with exactly
+`reference_slots` empty strong references. The handle starts unrooted. This is an
+opt-in direct-runtime profile; `alloc_bytes`, owned transitions, legacy `link`,
+and memory-report schema 1 keep their existing behavior. The default region
+remains auto with a 1 MiB trigger and 64 MiB committed-byte limit.
+
+`MAX_OBJECT_PAYLOAD_BYTES` is 1 MiB and `MAX_OBJECT_REFERENCE_SLOTS` is 256.
+Exceeding either returns `AllocationError::ShapeLimit`. The region charges the
+reserved payload capacity, `SLOT_METADATA_BYTES` (64), and reserved reference
+capacity times `REFERENCE_SLOT_METADATA_BYTES` (`size_of::<Option<Handle>>()`).
+Arithmetic, actual capacity, region limit, and every active `no_gc` budget are
+checked before an object slot is committed. A valid-region allocation failure
+increments `allocation_failures` once, without charging a guard or changing
+committed/live bytes. An auto collection may be reported separately when it
+preceded a later region-limit or host allocation failure.
+
+`Session::reference(owner: Handle, index: usize) -> Result<Option<Handle>,
+MemoryError>` reads a checked slot. `Session::set_reference(owner: Handle,
+index: usize, target: Option<Handle>) -> Result<(), MemoryError>` replaces it;
+`None` clears it. `NotObject` means the owner is a byte-buffer allocation,
+`InvalidReferenceSlot` means the index is outside its fixed shape, and
+`CrossRegionEdge` rejects a live target in another region. Stale owner or target
+returns `InvalidHandle`. Validation happens before mutation, and updates use
+preallocated slots: they need no collection or new charge, including inside a
+nested `no_gc` guard. Collection traces checked slots and legacy links from
+positive root counts. Only the selected region is collected; unreachable cycles
+are reclaimed, and generation changes prevent stale handles from aliasing
+reused slots. See [the reference-state model](../cgx2-memory-conformance/graph-model.md).
+
+The new direct-runtime tests cover shared children, overwritten and cleared
+slots, cycles, mixed legacy links, stale handles, bad edges, region close,
+automatic collection, manual regions, and nested guard exhaustion. They do not
+provide source-level typed heap layouts, escape checking, foreign-handle audits,
+Miri or sanitizer evidence, or a proof of universal memory safety.
+
 This standalone crate is the first, safe Rust slice of CGx2 managed memory. It stores zero-initialized byte buffers with explicit same-region references. It is not connected to the compiler or a typed object layout yet. The crate uses no `unsafe` and no external dependencies.
 
 ## Public API

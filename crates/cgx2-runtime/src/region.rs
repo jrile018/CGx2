@@ -4,6 +4,12 @@ pub const SLOT_METADATA_BYTES: usize = 64;
 pub const REGION_METADATA_BYTES: usize = 128;
 /// One stored reference is charged by its reserved vector capacity.
 pub const EDGE_METADATA_BYTES: usize = std::mem::size_of::<Handle>();
+/// One preallocated checked reference slot, charged by reserved vector capacity.
+pub const REFERENCE_SLOT_METADATA_BYTES: usize = std::mem::size_of::<Option<Handle>>();
+/// Maximum payload in the direct managed-object profile.
+pub const MAX_OBJECT_PAYLOAD_BYTES: usize = 1 << 20;
+/// Maximum checked references in one managed object.
+pub const MAX_OBJECT_REFERENCE_SLOTS: usize = 256;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum CollectionMode {
@@ -40,12 +46,15 @@ pub enum AllocationError {
     RegionLimit,
     HostAllocation,
     InvalidRegion,
+    ShapeLimit,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum MemoryError {
     InvalidHandle,
     InvalidRegion,
+    NotObject,
+    InvalidReferenceSlot,
     CrossRegionEdge,
     RegionHasRoots,
     CollectionForbidden,

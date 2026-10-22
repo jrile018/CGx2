@@ -1,5 +1,23 @@
 # Deterministic memory corpus
 
+## Wave 12 checked reference graph model
+
+`tests/graph.rs` runs 128 deterministic seeds (0 through 127), 80 transitions
+per seed, using the v1–v5 wrapping LCG (`state = state *
+6364136223846793005 + 1`, upper 32 bits for each choice). It compares an
+independent graph model with `Session` after every transition: live and stale
+handles, two checked slots per object, root counts, region-local collection,
+manual and auto modes, object charges, failure counts, and per-region memory
+reports. Operations include allocation, root/unroot, set/clear, collection,
+out-of-range slot, oversized shape, and cross-region edge failures. The exact
+model and failure atomicity rules are in [graph-model.md](graph-model.md).
+Runtime `tests/objects.rs` adds directed cycle, shared-child, legacy-link,
+region-close, auto threshold, and nested `no_gc` fault cases. The v1–v5
+conformance code and seed manifests remain unchanged. These finite tests do
+not cover host allocator fault injection, Miri, sanitizers, source-level escape
+analysis, foreign handles, or universal memory safety; the release audit gate
+remains open.
+
 Replay v1 with `cargo run -p cgx2-memory-conformance --offline -- --seed 42`. Replay v2 with `cargo run -p cgx2-memory-conformance --offline -- --seed 42 --model-version 2`. The command prints the `.cg` source, model counters, and runtime report. `cargo test -p cgx2-memory-conformance --offline` checks both manifests and failure fixtures. A failing test includes the model version, seed, source, expected counters, and observed error or report.
 
 Model version 1 uses a wrapping 64-bit linear congruential generator: `state = state * 6364136223846793005 + 1`; each choice uses the upper 32 bits modulo the number of alternatives. The CSV records model version and 128 fixed seeds. Generated cases have two explicit regions, at most 48 statements, 4096 source bytes, and payloads at most 32 bytes. Both region modes, owned moves, managed roots and drops, explicit collection, region close, and nested guards are exercised. The reference model uses the Wave 5 slot charge of 64 bytes plus payload length and the owned guard charge of 32 bytes plus payload length. Auto regions never reach their 1 MiB threshold in this generated corpus, so their automatic safepoint behavior needs the existing CLI/runtime tests.

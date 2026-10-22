@@ -16,7 +16,8 @@ use heap::{Object, Region};
 pub use owned::{OwnedBytes, OWNED_METADATA_BYTES};
 pub use region::{
     AllocationError, CollectionMode, Handle, MemoryError, RegionId, RegionStats,
-    EDGE_METADATA_BYTES, REGION_METADATA_BYTES, SLOT_METADATA_BYTES,
+    EDGE_METADATA_BYTES, MAX_OBJECT_PAYLOAD_BYTES, MAX_OBJECT_REFERENCE_SLOTS,
+    REFERENCE_SLOT_METADATA_BYTES, REGION_METADATA_BYTES, SLOT_METADATA_BYTES,
 };
 pub use report::{MemoryReport, PauseReport, RegionReport, MEMORY_REPORT_SCHEMA_VERSION};
 
@@ -250,6 +251,7 @@ impl Session {
         slot.object = Some(Object {
             bytes,
             edges: Vec::new(),
+            references: None,
             roots: 0,
             charge,
         });
@@ -263,6 +265,108 @@ impl Session {
             slot: index,
             generation,
         })
+    }
+
+    /// Allocates a bounded managed object with zero-filled bytes and empty checked references.
+    /// The returned handle is initially unrooted, like `alloc_bytes`.
+    pub fn alloc_object(
+        &mut self,
+        region: RegionId,
+        payload_len: usize,
+        reference_slots: usize,
+    ) -> Result<Handle, AllocationError> {
+        let limit_bytes = self
+            .region(region)
+            .map_err(|_| AllocationError::InvalidRegion)?
+            .limit_bytes;
+        if payload_len > MAX_OBJECT_PAYLOAD_BYTES || reference_slots > MAX_OBJECT_REFERENCE_SLOTS {
+            return Err(self.allocation_failure(region, AllocationError::ShapeLimit));
+        }
+        let minimum_charge = payload_len
+            .checked_add(SLOT_METADATA_BYTES)
+            .and_then(|n| {
+                reference_slots
+                    .checked_mul(REFERENCE_SLOT_METADATA_BYTES)
+                    .and_then(|references| n.checked_add(references))
+            })
+            .ok_or_else(|| self.allocation_failure(region, AllocationError::HostAllocation))?;
+        if minimum_charge > limit_bytes {
+            return Err(self.allocation_failure(region, AllocationError::RegionLimit));
+        }
+        self.check_budgets(minimum_charge)
+            .map_err(|error| self.allocation_failure(region, error))?;
+
+        let mut bytes = Vec::new();
+        bytes
+            .try_reserve_exact(payload_len)
+            .map_err(|_| self.allocation_failure(region, AllocationError::HostAllocation))?;
+        let mut references = Vec::new();
+        references
+            .try_reserve_exact(reference_slots)
+            .map_err(|_| self.allocation_failure(region, AllocationError::HostAllocation))?;
+        let charge = bytes
+            .capacity()
+            .checked_add(SLOT_METADATA_BYTES)
+            .and_then(|n| {
+                references
+                    .capacity()
+                    .checked_mul(REFERENCE_SLOT_METADATA_BYTES)
+                    .and_then(|reference_charge| n.checked_add(reference_charge))
+            })
+            .ok_or_else(|| self.allocation_failure(region, AllocationError::HostAllocation))?;
+        if charge > self.region(region).expect("validated region").limit_bytes {
+            return Err(self.allocation_failure(region, AllocationError::RegionLimit));
+        }
+        self.check_budgets(charge)
+            .map_err(|error| self.allocation_failure(region, error))?;
+
+        let r = self.region(region).expect("validated region");
+        let needs_collect = self.budgets.is_empty()
+            && matches!(r.mode, CollectionMode::Auto { trigger_bytes } if
+                r.stats.committed_bytes >= trigger_bytes
+                    || charge > r.limit_bytes.saturating_sub(r.stats.committed_bytes));
+        if needs_collect {
+            self.collect(region)
+                .map_err(|_| AllocationError::InvalidRegion)?;
+        }
+        let r = self.region(region).expect("validated region");
+        if charge > r.limit_bytes.saturating_sub(r.stats.committed_bytes) {
+            return Err(self.allocation_failure(region, AllocationError::RegionLimit));
+        }
+        bytes.resize(payload_len, 0);
+        references.resize(reference_slots, None);
+        let r = self.region_mut(region).expect("validated region");
+        let index = match r.vacant_slot() {
+            Ok(index) => index,
+            Err(()) => return Err(self.allocation_failure(region, AllocationError::HostAllocation)),
+        };
+        let slot = &mut self.region_mut(region).expect("validated region").slots[index];
+        let generation = slot.generation;
+        slot.object = Some(Object {
+            bytes,
+            edges: Vec::new(),
+            references: Some(references),
+            roots: 0,
+            charge,
+        });
+        let r = self.region_mut(region).expect("validated region");
+        r.stats.committed_bytes += charge;
+        r.stats.live_bytes += charge;
+        r.stats.peak_bytes = r.stats.peak_bytes.max(r.stats.committed_bytes);
+        self.charge_budgets(charge);
+        Ok(Handle {
+            region,
+            slot: index,
+            generation,
+        })
+    }
+
+    fn allocation_failure(&mut self, region: RegionId, error: AllocationError) -> AllocationError {
+        self.region_mut(region)
+            .expect("validated region")
+            .stats
+            .allocation_failures += 1;
+        error
     }
 
     /// Moves a unique owned payload into a managed slot without copying it.
@@ -313,6 +417,7 @@ impl Session {
         slot.object = Some(Object {
             bytes: value.bytes,
             edges: Vec::new(),
+            references: None,
             roots: 0,
             charge,
         });
@@ -372,6 +477,47 @@ impl Session {
             return Err(MemoryError::NotRooted);
         }
         object.roots -= 1;
+        Ok(())
+    }
+
+    /// Reads one checked reference slot of a live managed object.
+    pub fn reference(&self, owner: Handle, index: usize) -> Result<Option<Handle>, MemoryError> {
+        let region = self
+            .region(owner.region)
+            .map_err(|_| MemoryError::InvalidHandle)?;
+        let slot = region
+            .slots
+            .get(owner.slot)
+            .ok_or(MemoryError::InvalidHandle)?;
+        if slot.generation != owner.generation {
+            return Err(MemoryError::InvalidHandle);
+        }
+        let object = slot.object.as_ref().ok_or(MemoryError::InvalidHandle)?;
+        let references = object.references.as_ref().ok_or(MemoryError::NotObject)?;
+        references
+            .get(index)
+            .copied()
+            .ok_or(MemoryError::InvalidReferenceSlot)
+    }
+
+    /// Replaces or clears a checked reference without allocating or collecting.
+    pub fn set_reference(
+        &mut self,
+        owner: Handle,
+        index: usize,
+        target: Option<Handle>,
+    ) -> Result<(), MemoryError> {
+        self.reference(owner, index)?;
+        if let Some(target) = target {
+            self.read_bytes(target)?;
+            if owner.region != target.region {
+                return Err(MemoryError::CrossRegionEdge);
+            }
+        }
+        self.object_mut(owner)?
+            .references
+            .as_mut()
+            .expect("validated managed object")[index] = target;
         Ok(())
     }
 
@@ -499,13 +645,25 @@ impl Session {
                     .object
                     .as_ref()
                     .map_or(0, |object| object.edges.len());
-                for j in 0..edge_count {
-                    let child = r.slots[i]
-                        .object
-                        .as_ref()
-                        .expect("marked slot occupied")
-                        .edges[j];
-                    let target = &mut r.slots[child.slot];
+                let reference_count = r.slots[i]
+                    .object
+                    .as_ref()
+                    .and_then(|object| object.references.as_ref())
+                    .map_or(0, Vec::len);
+                for j in 0..edge_count + reference_count {
+                    let object = r.slots[i].object.as_ref().expect("marked slot occupied");
+                    let child = if j < edge_count {
+                        Some(object.edges[j])
+                    } else {
+                        object.references.as_ref().expect("reference count nonzero")[j - edge_count]
+                    };
+                    let Some(child) = child else { continue };
+                    if child.region != region {
+                        continue;
+                    }
+                    let Some(target) = r.slots.get_mut(child.slot) else {
+                        continue;
+                    };
                     if target.generation == child.generation
                         && target.object.is_some()
                         && !target.marked

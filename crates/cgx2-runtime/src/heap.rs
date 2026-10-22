@@ -4,6 +4,7 @@ use crate::PauseReport;
 pub(crate) struct Object {
     pub bytes: Vec<u8>,
     pub edges: Vec<Handle>,
+    pub references: Option<Vec<Option<Handle>>>,
     pub roots: usize,
     pub charge: usize,
 }
