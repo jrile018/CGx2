@@ -12,6 +12,7 @@ import os
 from pathlib import Path
 import shutil
 import tempfile
+from unittest import mock
 
 import isolation
 
@@ -22,10 +23,14 @@ CASES = {
     "private_read": b"denied\n",
     "alternate_file_api": b"denied\n",
     "process_exec": b"denied\n",
+    "child_process_burst": b"denied\n",
+    "descriptor_inheritance": b"denied\n",
     "network_connect": b"denied\n",
     "symlink_traversal": b"denied\n",
+    "path_traversal": b"denied\n",
     "memory_exhaustion": b"denied\n",
     "output_exhaustion": None,
+    "timeout_cleanup": "wall_timeout",
 }
 
 
@@ -65,11 +70,14 @@ def run(toolchain, compiler_relative, private_path):
             try:
                 argv = isolation.profile_argv(stage, toolchain, fd,
                                               ["/usr/bin/python3", "/workspace/.cgx2-worker.py"])
-                observed = isolation.capture(argv, fd)
+                with mock.patch.dict(isolation.LIMITS,
+                                     {"wall_seconds": 15} if name == "timeout_cleanup" else {}):
+                    observed = isolation.capture(argv, fd)
             finally:
                 os.close(fd)
         ready = b"cgx2_isolation_ready\n" in observed["stderr"]
         passed = ready and (observed["reason"] == "output_limit" if expected is None
+                            else observed["reason"] == "wall_timeout" if expected == "wall_timeout"
                             else observed["reason"] is None and observed["exit_code"] == 0
                             and observed["stdout"] == expected)
         result["cases"].append({"name": name, "passed": passed,

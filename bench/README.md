@@ -153,6 +153,12 @@ Only a fully reviewed, frozen, complete run set reaches the unchanged Wave 11 `a
 
 ## Wave 13 executable candidate set
 
+The [Wave 16 review packet](wave16-review-packet.md) records the current
+task specifications, independent reviewer fields, hidden-oracle boundary,
+and source/toolchain hashes. Scored execution now requires a verified cgroup
+v2 scope with aggregate CPU, memory, and process limits; unsupported hosts
+return `unsupported_isolation` with no candidate run.
+
 The Wave 14 [review and measurement protocol](candidate-review-protocol.md),
 [`task-cards.json`](fixtures/task-candidates/v3/task-cards.json), and
 [`evidence-unrun.json`](fixtures/task-candidates/v3/evidence-unrun.json)

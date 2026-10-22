@@ -19,9 +19,10 @@ import subprocess
 import sys
 import tempfile
 import time
+import uuid
 
 
-PROFILE_VERSION = 1
+PROFILE_VERSION = 2
 LIMITS = {
     "cpu_seconds": 90,
     "wall_seconds": 120,
@@ -30,6 +31,9 @@ LIMITS = {
     "output_bytes": 1_000_000,
     "open_files": 64,
     "processes": 32,
+    "aggregate_cpu_seconds": 90,
+    "aggregate_cpu_quota_us": 100_000,
+    "aggregate_cpu_period_us": 100_000,
     "scratch_bytes": 256 * 1024**2,
     "tmp_bytes": 16 * 1024**2,
 }
@@ -259,10 +263,123 @@ def _limits():
     os.umask(0o077)
 
 
+def _cgroup_parent():
+    """Find this process's cgroup v2 directory without trusting an environment path."""
+    mount = Path("/sys/fs/cgroup").resolve()
+    if not (mount / "cgroup.controllers").is_file():
+        raise UnsupportedIsolation("cgroup_v2_unavailable")
+    entries = [line.split("::", 1)[1] for line in Path("/proc/self/cgroup").read_text().splitlines()
+               if line.startswith("0::")]
+    if len(entries) != 1:
+        raise UnsupportedIsolation("cgroup_v2_membership_unavailable")
+    parent = (mount / entries[0].lstrip("/")).resolve()
+    if not parent.is_relative_to(mount) or not parent.is_dir():
+        raise UnsupportedIsolation("cgroup_v2_parent_invalid")
+    return parent
+
+
+class CgroupScope:
+    """One aggregate resource boundary for a worker and every descendant."""
+
+    def __init__(self):
+        self.path = None
+
+    def __enter__(self):
+        try:
+            parent = _cgroup_parent()
+            enabled = set((parent / "cgroup.subtree_control").read_text().split())
+        except OSError as error:
+            raise UnsupportedIsolation(f"cgroup_probe_failed:{error}") from error
+        required = {"cpu", "memory", "pids"}
+        if not required <= enabled:
+            raise UnsupportedIsolation("cgroup_controllers_not_delegated:" +
+                                       ",".join(sorted(required - enabled)))
+        path = parent / f"cgx2-bench-{os.getpid()}-{uuid.uuid4().hex}"
+        try:
+            path.mkdir(mode=0o700)
+            self.path = path
+            settings = {
+                "cpu.max": f"{LIMITS['aggregate_cpu_quota_us']} {LIMITS['aggregate_cpu_period_us']}",
+                "memory.max": str(LIMITS["address_bytes"]),
+                "pids.max": str(LIMITS["processes"]),
+                "memory.oom.group": "1",
+            }
+            for name, value in settings.items():
+                target = path / name
+                target.write_text(value)
+                if target.read_text().strip() != value:
+                    raise UnsupportedIsolation(f"cgroup_limit_unverified:{name}")
+            for name in ("cgroup.procs", "cgroup.events", "cgroup.kill", "cpu.stat"):
+                if not (path / name).is_file():
+                    raise UnsupportedIsolation(f"cgroup_control_missing:{name}")
+            self.cpu_usage_us()
+            return self
+        except (OSError, ValueError) as error:
+            self._cleanup()
+            raise UnsupportedIsolation(f"cgroup_setup_failed:{error}") from error
+        except BaseException:
+            self._cleanup()
+            raise
+
+    def join_self(self):
+        (self.path / "cgroup.procs").write_text(str(os.getpid()))
+        membership = Path("/proc/self/cgroup").read_text().splitlines()
+        if not any(line.startswith("0::") and line.endswith(f"/{self.path.name}")
+                   for line in membership):
+            raise OSError("cgroup_membership_unverified")
+
+    def cpu_usage_us(self):
+        try:
+            stat = (self.path / "cpu.stat").read_text().splitlines()
+            values = dict(line.split(maxsplit=1) for line in stat)
+            return int(values["usage_usec"])
+        except (OSError, KeyError, ValueError) as error:
+            raise UnsupportedIsolation(f"cgroup_cpu_stat_unavailable:{error}") from error
+
+    def _cleanup(self):
+        if self.path is None:
+            return
+        path = self.path
+        try:
+            if (path / "cgroup.kill").exists():
+                (path / "cgroup.kill").write_text("1")
+            deadline = time.monotonic() + 5
+            while (path / "cgroup.events").exists() and "populated 1" in (path / "cgroup.events").read_text():
+                if time.monotonic() >= deadline:
+                    raise UnsupportedIsolation("cgroup_cleanup_timeout")
+                time.sleep(0.05)
+            path.rmdir()
+        except OSError as error:
+            raise UnsupportedIsolation(f"cgroup_cleanup_failed:{error}") from error
+        finally:
+            self.path = None
+
+    def __exit__(self, _kind, _error, _traceback):
+        self._cleanup()
+
+
+def probe_cgroup():
+    """Verify the aggregate boundary can be provisioned before scoring."""
+    with CgroupScope() as scope:
+        return {"path": str(scope.path.parent), "controllers": ["cpu", "memory", "pids"],
+                "cpu_max": f"{LIMITS['aggregate_cpu_quota_us']} {LIMITS['aggregate_cpu_period_us']}",
+                "cpu_budget_us": LIMITS["aggregate_cpu_seconds"] * 1_000_000,
+                "memory_max": LIMITS["address_bytes"], "pids_max": LIMITS["processes"]}
+
+
 def capture(argv, seccomp_fd):
-    """Bound time and each output stream, killing the whole sandbox on excess."""
+    """Run only after aggregate controls exist; always reap the whole cgroup."""
+    with CgroupScope() as scope:
+        return _capture_in_scope(argv, seccomp_fd, scope)
+
+
+def _capture_in_scope(argv, seccomp_fd, scope):
+    def before_exec():
+        _limits()
+        scope.join_self()
+
     child = subprocess.Popen(argv, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                             pass_fds=(seccomp_fd,), preexec_fn=_limits,
+                             pass_fds=(seccomp_fd,), preexec_fn=before_exec,
                              start_new_session=True, close_fds=True)
     selector = selectors.DefaultSelector()
     buffers = {"stdout": bytearray(), "stderr": bytearray()}
@@ -272,6 +389,9 @@ def capture(argv, seccomp_fd):
     reason = None
     try:
         while selector.get_map():
+            if scope.cpu_usage_us() >= LIMITS["aggregate_cpu_seconds"] * 1_000_000:
+                reason = "aggregate_cpu_limit"
+                break
             remaining = deadline - time.monotonic()
             if remaining <= 0:
                 reason = "wall_timeout"
@@ -292,6 +412,12 @@ def capture(argv, seccomp_fd):
             os.killpg(child.pid, signal.SIGKILL)
         child.wait(timeout=5)
     finally:
+        if child.poll() is None:
+            try:
+                os.killpg(child.pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
+            child.wait(timeout=5)
         selector.close()
         child.stdout.close()
         child.stderr.close()
@@ -304,6 +430,7 @@ def probe():
     """Exercise namespace, seccomp, and Landlock before any candidate launch."""
     if sys.platform != "linux":
         raise UnsupportedIsolation("linux_required")
+    cgroup = probe_cgroup()
     if not shutil.which("bwrap"):
         raise UnsupportedIsolation("bubblewrap_missing")
     abi = landlock_abi()
@@ -333,7 +460,7 @@ def probe():
             if "No permissions to create a new namespace" in detail:
                 raise UnsupportedIsolation("user_namespace_unavailable")
             raise UnsupportedIsolation(f"namespace_or_sandbox_probe_failed:{detail[:300]}")
-        return {"landlock_abi": abi, "bubblewrap": shutil.which("bwrap"),
+        return {"cgroup": cgroup, "landlock_abi": abi, "bubblewrap": shutil.which("bwrap"),
                 "bubblewrap_sha256": file_sha256(shutil.which("bwrap")),
                 "seccomp": "network_and_privileged_syscalls_denied",
                 "network": "namespace_and_seccomp", "mounts": "allowlist_read_only",
@@ -344,6 +471,7 @@ def probe():
 
 def profile_evidence():
     return {"version": PROFILE_VERSION, "limits": LIMITS,
+            "aggregate_isolation": "dedicated cgroup v2 cpu, memory, pids with kill and cleanup",
             "outer_seccomp_denied": NETWORK_SYSCALLS + PRIVILEGED_SYSCALLS,
             "runtime_seccomp_denied": NETWORK_SYSCALLS + PRIVILEGED_SYSCALLS + PROCESS_SYSCALLS,
             "landlock": "execute only result and ELF interpreter",
