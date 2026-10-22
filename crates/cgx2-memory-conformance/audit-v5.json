@@ -1,0 +1,116 @@
+{
+  "defects_observed": 0,
+  "dynamic_checks": {
+    "miri": {
+      "result": "unavailable: cargo-miri not installed on nightly",
+      "version": null
+    },
+    "sanitizer": {
+      "result": "not configured; not run",
+      "version": null
+    }
+  },
+  "extended_opt_in": {
+    "dynamic_checks": {
+      "miri": {
+        "result": "not_run",
+        "version": null
+      },
+      "sanitizer": {
+        "result": "not_run",
+        "version": null
+      }
+    },
+    "errors": {
+      "Err(BudgetExceeded)": 20000,
+      "Err(CollectionForbidden)": 10000,
+      "Err(HostAllocation)": 10000,
+      "Err(InvalidHandle)": 210131,
+      "Err(InvalidRegion)": 130323,
+      "Err(RegionHasRoots)": 10000,
+      "Err(RegionLimit)": 86535
+    },
+    "model_version": 5,
+    "operations": {
+      "Alloc": 289853,
+      "Close": 73365,
+      "Collect": 146651,
+      "Copy": 63369,
+      "Create": 40000,
+      "GuardEnd": 20000,
+      "GuardStart": 20000,
+      "Link": 20000,
+      "MutateOwned": 20000,
+      "Owned": 10000,
+      "Promote": 20000,
+      "Read": 176762,
+      "Root": 20000,
+      "Unroot": 20000
+    },
+    "repeated_run_agreement": null,
+    "repeats": 1,
+    "schema_version": 2,
+    "seed_end_exclusive": 10000,
+    "seed_start": 0,
+    "seeds": 10000,
+    "skipped": 0,
+    "steps": 940000
+  },
+  "fixed": {
+    "dynamic_checks": {
+      "miri": {
+        "result": "not_run",
+        "version": null
+      },
+      "sanitizer": {
+        "result": "not_run",
+        "version": null
+      }
+    },
+    "errors": {
+      "Err(BudgetExceeded)": 4000,
+      "Err(CollectionForbidden)": 2000,
+      "Err(HostAllocation)": 2000,
+      "Err(InvalidHandle)": 42083,
+      "Err(InvalidRegion)": 25970,
+      "Err(RegionHasRoots)": 2000,
+      "Err(RegionLimit)": 17292
+    },
+    "model_version": 5,
+    "operations": {
+      "Alloc": 57973,
+      "Close": 14696,
+      "Collect": 29248,
+      "Copy": 12686,
+      "Create": 8000,
+      "GuardEnd": 4000,
+      "GuardStart": 4000,
+      "Link": 4000,
+      "MutateOwned": 4000,
+      "Owned": 2000,
+      "Promote": 4000,
+      "Read": 35397,
+      "Root": 4000,
+      "Unroot": 4000
+    },
+    "repeated_run_agreement": true,
+    "repeats": 2,
+    "schema_version": 2,
+    "seed_end_exclusive": 2000,
+    "seed_start": 0,
+    "seeds": 2000,
+    "skipped": 0,
+    "steps": 188000
+  },
+  "model_version": 5,
+  "repairs": [],
+  "runtime_api": "Wave 10 Session byte-object/region/owned",
+  "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "schema_version": 1,
+  "untested_dimensions": [
+    "typed object layouts",
+    "foreign Python/PyTorch/device allocation",
+    "shared-session threads",
+    "host allocator exhaustion"
+  ]
+}

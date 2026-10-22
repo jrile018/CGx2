@@ -1,6 +1,7 @@
 use cgx2_cli::run_source_with_report;
 use cgx2_memory_conformance::v3::{self, Fault, MODEL_VERSION_V3};
 use cgx2_memory_conformance::v4::{self, Coverage, MODEL_VERSION_V4};
+use cgx2_memory_conformance::v5::{self, MODEL_VERSION_V5};
 use cgx2_memory_conformance::{generate, generate_v2, MODEL_VERSION, MODEL_VERSION_V2};
 
 fn main() {
@@ -8,10 +9,19 @@ fn main() {
     let mut raw_seed = None;
     let mut corpus_count = None;
     let mut version = MODEL_VERSION;
+    let mut repeats = 2_u32;
+    let mut reduce = false;
     while let Some(flag) = args.next() {
         match flag.as_str() {
             "--seed" if raw_seed.is_none() => raw_seed = args.next(),
             "--corpus-count" if corpus_count.is_none() => corpus_count = args.next(),
+            "--repeats" => {
+                repeats = args
+                    .next()
+                    .and_then(|value| value.parse().ok())
+                    .unwrap_or(0)
+            }
+            "--reduce" => reduce = true,
             "--model-version" => {
                 version = args
                     .next()
@@ -22,16 +32,81 @@ fn main() {
         }
     }
     if raw_seed.is_some() == corpus_count.is_some() {
-        eprintln!("usage: cgx2-memory-conformance (--seed N | --corpus-count N) [--model-version 1|2|3|4]");
+        eprintln!("usage: cgx2-memory-conformance (--seed N | --corpus-count N) [--model-version 1|2|3|4|5] [--repeats N] [--reduce]");
         std::process::exit(2);
     }
     if version != MODEL_VERSION
         && version != MODEL_VERSION_V2
         && version != MODEL_VERSION_V3
         && version != MODEL_VERSION_V4
+        && version != MODEL_VERSION_V5
     {
-        eprintln!("unsupported model version: {version}; expected 1, 2, 3, or 4");
+        eprintln!("unsupported model version: {version}; expected 1, 2, 3, 4, or 5");
         std::process::exit(2);
+    }
+    if version == MODEL_VERSION_V5 {
+        if repeats == 0 || (reduce && raw_seed.is_none()) {
+            eprintln!("v5 requires --repeats >= 1 and --reduce requires --seed");
+            std::process::exit(2);
+        }
+        if let Some(raw_count) = corpus_count {
+            let count = raw_count.parse::<u64>().unwrap_or_else(|_| {
+                eprintln!("invalid unsigned corpus count: {raw_count}");
+                std::process::exit(2);
+            });
+            let mut first = None;
+            for _ in 0..repeats {
+                let mut summary = v5::Coverage::default();
+                for seed in 0..count {
+                    summary.merge(&v5::run(seed).unwrap_or_else(|error| {
+                        eprintln!("{error}");
+                        std::process::exit(1);
+                    }));
+                }
+                if first.as_ref().is_some_and(|baseline| baseline != &summary) {
+                    eprintln!("v5 repeated-run coverage disagreement");
+                    std::process::exit(1);
+                }
+                first = Some(summary);
+            }
+            println!(
+                "{}",
+                first
+                    .expect("positive repeats")
+                    .to_json(repeats, 0, Some(count))
+            );
+            return;
+        }
+        let raw_seed = raw_seed.expect("one invocation mode validated");
+        let seed = raw_seed.parse::<u64>().unwrap_or_else(|_| {
+            eprintln!("invalid unsigned seed: {raw_seed}");
+            std::process::exit(2);
+        });
+        let trace = v5::generate(seed);
+        if reduce {
+            let reduced = v5::shrink(&trace, false);
+            println!("{}", v5::format_trace(&reduced));
+            return;
+        }
+        let mut first = None;
+        for _ in 0..repeats {
+            let summary = v5::run(seed).unwrap_or_else(|error| {
+                eprintln!("{error}");
+                std::process::exit(1);
+            });
+            if first.as_ref().is_some_and(|baseline| baseline != &summary) {
+                eprintln!("v5 repeated-run coverage disagreement");
+                std::process::exit(1);
+            }
+            first = Some(summary);
+        }
+        println!(
+            "{}",
+            first
+                .expect("positive repeats")
+                .to_json(repeats, seed, seed.checked_add(1))
+        );
+        return;
     }
     if let Some(raw_count) = corpus_count {
         if version != MODEL_VERSION_V4 {

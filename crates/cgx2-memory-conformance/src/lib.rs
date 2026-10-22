@@ -5,6 +5,7 @@ use cgx2_runtime::{CollectionMode, MemoryReport, SLOT_METADATA_BYTES};
 
 pub mod v3;
 pub mod v4;
+pub mod v5;
 
 pub const MODEL_VERSION: u32 = 1;
 pub const MODEL_VERSION_V2: u32 = 2;
