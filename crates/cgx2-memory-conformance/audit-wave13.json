@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "scope": "Wave 13 direct-runtime reserve failure and checked graph assurance",
+  "model": {
+    "seed_start": 0,
+    "seed_end_exclusive": 64,
+    "scheduled_steps_per_seed": 96,
+    "random_operations_per_seed": 100,
+    "random_operations_total": 6400,
+    "manual_collections": 409,
+    "auto_collections": 576,
+    "allocation_failures": 1125,
+    "nested_no_gc_collections": 0
+  },
+  "injected_reserve_sites": [
+    "RegionTable",
+    "ManagedBytes",
+    "ObjectPayload",
+    "ObjectReferences",
+    "SlotTable (managed bytes, object, and owned promotion)",
+    "OwnedBytes",
+    "ManagedToOwned",
+    "Edges"
+  ],
+  "injection_limit": "Only capacity-growing fallible Vec try_reserve/try_reserve_exact sites are injectable; no-op reserves are not counted. Session::new, no_gc guard vector growth, report construction, and collector bookkeeping use infallible host allocation APIs.",
+  "prior_corpora": {
+    "source_and_direct_runtime_tests": "v1-v5 passed; generators and seed manifests unchanged",
+    "v4_extended": { "seeds": 10000, "steps": 1270341, "skipped": 43382 },
+    "v5_fixed": { "seeds": 2000, "steps": 188000, "repeats": 2, "repeated_run_agreement": true, "skipped": 0 },
+    "v5_extended": { "seeds": 10000, "steps": 940000, "repeats": 1, "skipped": 0 }
+  },
+  "dynamic_checks": {
+    "miri": "unavailable on installed toolchain",
+    "sanitizer": "not configured on host"
+  },
+  "release_gate": "open: finite direct-runtime tests do not establish universal memory safety or foreign/concurrent allocator behavior"
+}

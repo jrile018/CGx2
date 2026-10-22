@@ -6,4 +6,4 @@ rust-version = "1.98"
 
 [dependencies]
 cgx2-cli = { path = "../cgx2-cli" }
-cgx2-runtime = { path = "../cgx2-runtime" }
+cgx2-runtime = { path = "../cgx2-runtime", features = ["fault-injection"] }

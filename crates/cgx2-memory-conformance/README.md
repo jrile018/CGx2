@@ -61,3 +61,27 @@ Wave 10 keeps the v4 trace serialization, generator, transition model, and 2,000
 V5 is a separate transition model in `src/v5.rs`; v1–v4 traces and the Wave 10 regression tests remain unchanged. Its fixed prefix exercises intrinsically impossible allocations before an auto safepoint, auto collection at a threshold, reclaim below a threshold when capacity is insufficient, rooted failure after collection, manual region failure, nested `no_gc` budget exhaustion and forbidden collection, failed then successful owned promotion, an independent managed-to-owned copy, a rooted cycle, stale handles after collection and slot reuse, and region close. A seeded bounded tail adds further allocation, collection, copy, read, and close interleavings. Each step compares the result, region and total live/committed/peak/failure/collection counters, pause sample counts, owned payloads, and validity and bytes of every retained handle. `tests/v5.rs` also checks guard unwind after a panic and the fault-injected deletion reducer.
 
 Replay a seed with `cargo run -q -p cgx2-memory-conformance --offline -- --model-version 5 --seed 42`; add `--reduce` to print its minimized mismatch trace (or the original trace when it passes). The CI-sized test covers 64 seeds. Generate a repeated fixed audit with `--model-version 5 --corpus-count 2000 --repeats 2`; the opt-in extended audit uses `--corpus-count 10000 --repeats 1`. The machine-readable `audit-v5.json` records exact seed ranges, operation and error counts, skips, repeated-run agreement, and dynamic-check availability. This run found no runtime mismatch or repair: 2,000 seeds and 188,000 verified steps agreed on two runs; 10,000 seeds and 940,000 verified steps passed once. Miri was unavailable and no sanitizer was configured. The finite corpus covers only the public single-threaded byte-object API; typed layouts, source borrow and escape rules, foreign allocators, concurrency, and host allocator exhaustion remain outside this audit and the release memory gate remains open.
+## Wave 13 reserve-failure and graph assurance
+
+The conformance crate enables the runtime's `fault-injection` feature only for
+its direct-runtime tests. `tests/fault_injection.rs` fails each reachable
+fallible reserve in region creation, managed bytes, object payload and checked
+references, new slots, owned bytes, managed-to-owned copy, promotion, and
+legacy edge growth. Slot-table cases fill the existing capacity before
+arming, so the selected reserve requires host growth. The tests check the
+original error family, unchanged graph and
+root behavior, report counters, retained `OwnedBytes` after failed promotion,
+and zero collections within nested `no_gc` guards. A subsequent allocation
+checks that the one-shot failure did not commit a slot.
+
+`tests/graph_failure_model.rs` uses a logical-node reachability oracle with
+64 fixed seeds (`0..64`), 96 scheduled steps and 100 random operations per
+seed, and the v1–v5
+wrapping LCG (`state * 6364136223846793005 + 1`, upper 32 bits modulo choice
+count). Its fixed prefix forces stale-handle reuse, overwritten and cleared
+edges, and an unreachable cycle. Each seed then checks manual/auto regions,
+root counts, references, two forced reserve failures inside nested guards,
+success after failure, cross-region rejection, auto safepoints, collection
+suppression, region closure, every retained live or stale handle, and report
+counters after each operation. The v1–v5 corpus generators and seed manifests
+are unchanged. See `audit-wave13.json` and [graph-model.md](graph-model.md).

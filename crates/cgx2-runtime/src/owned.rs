@@ -1,4 +1,4 @@
-use crate::{AllocationError, Handle, MemoryError, Session};
+use crate::{AllocationError, Handle, MemoryError, ReserveSite, Session};
 
 /// Fixed logical header charge for a separately owned byte buffer.
 pub const OWNED_METADATA_BYTES: usize = 32;
@@ -44,6 +44,11 @@ impl Session {
             .ok_or(AllocationError::HostAllocation)?;
         self.check_budgets(minimum)?;
         let mut bytes = Vec::new();
+        if len > 0 {
+            self.fault
+                .before_reserve(ReserveSite::OwnedBytes)
+                .map_err(|_| AllocationError::HostAllocation)?;
+        }
         bytes
             .try_reserve_exact(len)
             .map_err(|_| AllocationError::HostAllocation)?;
@@ -60,16 +65,20 @@ impl Session {
     /// Copies the managed payload into separately owned storage. The handle
     /// remains valid, subject to the ordinary region collection rules.
     pub fn copy_managed_to_owned(&mut self, handle: Handle) -> Result<OwnedBytes, MemoryError> {
-        let source = self.read_bytes(handle)?;
-        let minimum = source
-            .len()
+        let len = self.read_bytes(handle)?.len();
+        let minimum = len
             .checked_add(OWNED_METADATA_BYTES)
             .ok_or(MemoryError::Allocation(AllocationError::HostAllocation))?;
         self.check_budgets(minimum)
             .map_err(MemoryError::Allocation)?;
         let mut bytes = Vec::new();
+        if len > 0 {
+            self.fault
+                .before_reserve(ReserveSite::ManagedToOwned)
+                .map_err(|_| MemoryError::Allocation(AllocationError::HostAllocation))?;
+        }
         bytes
-            .try_reserve_exact(source.len())
+            .try_reserve_exact(len)
             .map_err(|_| MemoryError::Allocation(AllocationError::HostAllocation))?;
         let charge = bytes
             .capacity()
@@ -77,7 +86,7 @@ impl Session {
             .ok_or(MemoryError::Allocation(AllocationError::HostAllocation))?;
         self.check_budgets(charge)
             .map_err(MemoryError::Allocation)?;
-        bytes.extend_from_slice(source);
+        bytes.extend_from_slice(self.read_bytes(handle)?);
         self.charge_budgets(charge);
         Ok(OwnedBytes { bytes })
     }

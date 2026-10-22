@@ -1,5 +1,33 @@
 # CGx2 runtime kernel
 
+## Wave 13 deterministic host reserve failures
+
+The opt-in Cargo feature `fault-injection` exposes
+`Session::inject_host_failure_at_reserve(index: usize)`, with a one-based
+`index`. Arming resets the per-session `host_reserve_attempts()` counter and
+`last_host_failure_site()`. The selected reserve fails once with the ordinary
+`HostAllocation` error; `disable_host_failure()` cancels an armed failure.
+`ReserveSite` identifies `RegionTable`, `ManagedBytes`, `ObjectPayload`,
+`ObjectReferences`, `SlotTable`, `OwnedBytes`, `ManagedToOwned`, and `Edges`.
+The hook runs immediately before each corresponding capacity-growth
+`Vec::try_reserve` or `try_reserve_exact`; a reserve that already fits or has
+zero requested capacity is not counted. Logical shape, region-limit, and
+`no_gc` budget checks
+still run first. The feature is disabled in ordinary runtime builds, and
+even feature builds require an explicit per-session arm call.
+
+No slot, reference, owned-value transfer, or budget charge commits on an
+injected failure. Existing failure counters retain their scope: managed
+allocation, promotion, and edge-growth failures increment the destination
+region's counter; region-table and separately owned-buffer failures have no
+destination region. An auto-region safepoint may already have collected before
+a later slot-table reserve fails; collection is suppressed throughout nested
+`no_gc` guards. The hook covers fallible reserves in managed and owned paths.
+Infallible host allocations in `Session::new`, `no_gc` guard vector growth,
+report construction, and collector bookkeeping have no `try_reserve` error
+channel and cannot be injected by this feature. It does not simulate arbitrary
+allocator exhaustion inside Rust or foreign libraries.
+
 ## Wave 12 checked managed objects
 
 `Session::alloc_object(region: RegionId, payload_len: usize, reference_slots: usize)

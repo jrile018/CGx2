@@ -2,6 +2,7 @@
 #![forbid(unsafe_code)]
 
 mod budget;
+mod fault;
 mod heap;
 mod owned;
 mod region;
@@ -12,6 +13,8 @@ use std::time::Instant;
 
 use budget::Budget;
 pub use budget::NoGcGuard;
+use fault::FaultInjection;
+pub use fault::ReserveSite;
 use heap::{Object, Region};
 pub use owned::{OwnedBytes, OWNED_METADATA_BYTES};
 pub use region::{
@@ -27,6 +30,7 @@ pub struct Session {
     id: u64,
     regions: Vec<Region>,
     pub(crate) budgets: Vec<Budget>,
+    fault: FaultInjection,
 }
 
 impl Default for Session {
@@ -49,7 +53,45 @@ impl Session {
                 64 << 20,
             )],
             budgets: Vec::new(),
+            fault: FaultInjection::default(),
         }
+    }
+
+    /// Arms a one-shot failure at the one-based index of the next fallible
+    /// host reserve. Available only to explicit conformance builds.
+    #[cfg(feature = "fault-injection")]
+    pub fn inject_host_failure_at_reserve(&mut self, index: usize) {
+        self.fault.arm(index);
+    }
+
+    #[cfg(feature = "fault-injection")]
+    pub fn disable_host_failure(&mut self) {
+        self.fault.disable();
+    }
+
+    #[cfg(feature = "fault-injection")]
+    pub fn host_reserve_attempts(&self) -> usize {
+        self.fault.attempts
+    }
+
+    #[cfg(feature = "fault-injection")]
+    pub fn last_host_failure_site(&self) -> Option<ReserveSite> {
+        self.fault.failed_site
+    }
+
+    /// Test-only visibility into slot-table capacity for targeting a real growth reserve.
+    #[cfg(feature = "fault-injection")]
+    pub fn host_slot_table_capacity(
+        &self,
+        region: RegionId,
+    ) -> Result<(usize, usize), MemoryError> {
+        let slots = &self.region(region)?.slots;
+        Ok((slots.len(), slots.capacity()))
+    }
+
+    fn vacant_slot(&mut self, region: RegionId) -> Result<usize, ()> {
+        let (regions, fault) = (&mut self.regions, &mut self.fault);
+        regions[region.index].vacant_slot(fault)
     }
 
     pub fn default_region(&self) -> RegionId {
@@ -73,6 +115,11 @@ impl Session {
         limit_bytes: usize,
     ) -> Result<RegionId, AllocationError> {
         self.check_budgets(REGION_METADATA_BYTES)?;
+        if self.regions.len() == self.regions.capacity() {
+            self.fault
+                .before_reserve(ReserveSite::RegionTable)
+                .map_err(|_| AllocationError::HostAllocation)?;
+        }
         self.regions
             .try_reserve(1)
             .map_err(|_| AllocationError::HostAllocation)?;
@@ -207,15 +254,19 @@ impl Session {
             self.collect(region)
                 .map_err(|_| AllocationError::InvalidRegion)?;
         }
-        let r = self
-            .region_mut(region)
-            .map_err(|_| AllocationError::InvalidRegion)?;
+        let r = &mut self.regions[region.index];
         if requested > r.limit_bytes.saturating_sub(r.stats.committed_bytes) {
             r.stats.allocation_failures += 1;
             return Err(AllocationError::RegionLimit);
         }
         let mut bytes = Vec::new();
-        if bytes.try_reserve_exact(len).is_err() {
+        if (len > 0
+            && self
+                .fault
+                .before_reserve(ReserveSite::ManagedBytes)
+                .is_err())
+            || bytes.try_reserve_exact(len).is_err()
+        {
             r.stats.allocation_failures += 1;
             return Err(AllocationError::HostAllocation);
         }
@@ -234,13 +285,13 @@ impl Session {
                 .allocation_failures += 1;
             return Err(error);
         }
-        let r = self.region_mut(region).expect("validated region");
+        let r = &mut self.regions[region.index];
         if charge > r.limit_bytes.saturating_sub(r.stats.committed_bytes) {
             r.stats.allocation_failures += 1;
             return Err(AllocationError::RegionLimit);
         }
         bytes.resize(len, 0);
-        let index = match r.vacant_slot() {
+        let index = match r.vacant_slot(&mut self.fault) {
             Ok(index) => index,
             Err(()) => {
                 r.stats.allocation_failures += 1;
@@ -297,10 +348,20 @@ impl Session {
             .map_err(|error| self.allocation_failure(region, error))?;
 
         let mut bytes = Vec::new();
+        if payload_len > 0 {
+            self.fault
+                .before_reserve(ReserveSite::ObjectPayload)
+                .map_err(|_| self.allocation_failure(region, AllocationError::HostAllocation))?;
+        }
         bytes
             .try_reserve_exact(payload_len)
             .map_err(|_| self.allocation_failure(region, AllocationError::HostAllocation))?;
         let mut references = Vec::new();
+        if reference_slots > 0 {
+            self.fault
+                .before_reserve(ReserveSite::ObjectReferences)
+                .map_err(|_| self.allocation_failure(region, AllocationError::HostAllocation))?;
+        }
         references
             .try_reserve_exact(reference_slots)
             .map_err(|_| self.allocation_failure(region, AllocationError::HostAllocation))?;
@@ -335,8 +396,7 @@ impl Session {
         }
         bytes.resize(payload_len, 0);
         references.resize(reference_slots, None);
-        let r = self.region_mut(region).expect("validated region");
-        let index = match r.vacant_slot() {
+        let index = match self.vacant_slot(region) {
             Ok(index) => index,
             Err(()) => return Err(self.allocation_failure(region, AllocationError::HostAllocation)),
         };
@@ -405,14 +465,16 @@ impl Session {
                 .allocation_failures += 1;
             return Err((AllocationError::RegionLimit, value));
         }
-        let r = self.region_mut(region).expect("validated region");
-        let index = match r.vacant_slot() {
+        let index = match self.vacant_slot(region) {
             Ok(index) => index,
             Err(()) => {
-                r.stats.allocation_failures += 1;
-                return Err((AllocationError::HostAllocation, value));
+                return Err((
+                    self.allocation_failure(region, AllocationError::HostAllocation),
+                    value,
+                ));
             }
         };
+        let r = self.region_mut(region).expect("validated region");
         let slot = &mut r.slots[index];
         slot.object = Some(Object {
             bytes: value.bytes,
@@ -562,7 +624,9 @@ impl Session {
                 .allocation_failures += 1;
             MemoryError::Allocation(AllocationError::HostAllocation)
         })?;
-        if edges.try_reserve_exact(needed).is_err() {
+        if self.fault.before_reserve(ReserveSite::Edges).is_err()
+            || edges.try_reserve_exact(needed).is_err()
+        {
             self.region_mut(parent.region)?.stats.allocation_failures += 1;
             return Err(MemoryError::Allocation(AllocationError::HostAllocation));
         }

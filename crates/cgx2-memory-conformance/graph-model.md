@@ -47,3 +47,20 @@ per-region reports with this model after each deterministic transition. Finite
 seed coverage and ordinary Rust tests do not establish the release memory-safety
 proof; sanitizer, Miri, source-level escape checking, and foreign-handle audits
 remain separate work.
+## Wave 13 failure oracle
+
+`tests/graph_failure_model.rs` stores logical node IDs, roots, checked edges,
+region membership, and liveness independently of runtime slot indices. At a
+collection, it computes graph reachability from positive roots in the selected
+region and marks all other nodes stale. A successful fixed-shape object adds
+`SLOT_METADATA_BYTES + 1 + 2 * REFERENCE_SLOT_METADATA_BYTES` to committed
+and live bytes; a payload/reference reserve failure increments only the
+destination region's failure count. Those failures precede any auto safepoint.
+The fixed prefix proves that a reclaimed slot's replacement handle differs
+from the stale handle, and that overwritten/cleared edges and unreachable
+cycles follow reachability rather than allocation history. Nested `no_gc`
+operations assert unchanged collection counts in both regions, including
+forced failures. After region close, all its handles are stale and the other
+region's model counters remain unchanged. Seeds `0..64` each run 96
+scheduled steps and 100 random operations after the fixed prefix; failures
+report seed and step for replay.

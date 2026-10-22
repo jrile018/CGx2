@@ -1,3 +1,4 @@
+use crate::fault::{FaultInjection, ReserveSite};
 use crate::region::{CollectionMode, Handle, RegionStats};
 use crate::PauseReport;
 
@@ -37,13 +38,16 @@ impl Region {
         }
     }
 
-    pub fn vacant_slot(&mut self) -> Result<usize, ()> {
+    pub fn vacant_slot(&mut self, fault: &mut FaultInjection) -> Result<usize, ()> {
         if let Some(index) = self
             .slots
             .iter()
             .position(|slot| slot.object.is_none() && slot.generation < u64::MAX)
         {
             return Ok(index);
+        }
+        if self.slots.len() == self.slots.capacity() {
+            fault.before_reserve(ReserveSite::SlotTable)?;
         }
         self.slots.try_reserve(1).map_err(|_| ())?;
         self.slots.push(Slot::default());
