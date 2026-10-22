@@ -1,61 +1,63 @@
-# CGx2 execution policy prototype
+# CGx2 measured CPU policy
 
-This standalone crate selects sequential or scoped-thread CPU execution for one
-reviewed operation: `i64` elementwise `value * multiplier + addend`, with checked
-arithmetic. Parallel chunks join in source order, so the first overflow has the
-same index as sequential execution. `execute_map` constructs its own pure
-`Workload` from the input slice and returns the decision and values.
+This crate runs one reviewed primitive: checked i64 elementwise
+`value * multiplier + addend`. `execute_map` constructs the pure workload from
+the input slice. Sequential and scoped-thread CPU paths return identical values,
+output order, and first-overflow index. `Policy::Auto` is the default and uses
+sequential CPU without a validated local profile. Explicit `ParallelCpu` still
+requires at least two workers and 2,048 elements. Explicit `Gpu` is unsupported.
 
-```rust
-use cgx2_execution_policy::{Capabilities, Policy, execute_map};
+## Record, validate, and use local measurements
 
-let input = vec![1_i64; 4096];
-let run = execute_map(&input, 2, 3, Policy::Auto, &Capabilities::default())?;
-assert_eq!(run.values, vec![5; 4096]);
-// Auto selects SequentialCpu until suitable measurements are supplied.
-# Ok::<(), cgx2_execution_policy::ExecuteError>(())
-```
-
-`Policy::Auto` is the default. `Capabilities::default()` has
-`parallel_workers = 1`, no measurements, and no GPU backend. `SequentialCpu`
-always runs the reference path. `ParallelCpu` requires `parallel_workers >= 2`,
-at least 2,048 elements, and a pure, independent checked-map workload with no
-observable order, aliases, CGx2 memory activity, effects, or `no_gc` guard.
-Explicit unsupported or unsafe requests return `PlanError`; `Auto` uses the
-sequential path. Direct `map_i64_checked_parallel` bounds workers to 32 and
-chunks to at least 1,024 elements, and runs sequentially for small inputs.
-
-`Measurements` names a worker count, input-size range, sample count, and expiry.
-For `Auto`, it needs at least three samples, a future `valid_until`, and the
-same worker count as the plan. Each `CostProfile` gives nanosecond intervals for
-launch/setup, CPU work per element, host/device transfer, synchronization, and
-expected memory pressure. The planner selects parallel only when its estimated
-upper end-to-end cost is strictly below the sequential lower bound. It reports
-`CostStatus::Calibrated` or `Uncalibrated` and a stable `ReasonCode`. These
-intervals are supplied by a reviewer; a core count or one noisy timing cannot
-establish benefit. No global optimum or native-language speed claim follows.
-
-Raw calibration is opt-in:
+Calibration is opt-in. It never runs from `execute_map`. Use a release build and
+save both raw samples and a profile on the machine that will execute the map:
 
 ```sh
-cargo run -p cgx2-execution-policy --bin calibrate --release --offline -- \
-  --sizes 2048,4096,65536 --workers 2,4 --samples 7 --warmups 2 \
-  > execution-policy-samples.csv
+RUSTUP_TOOLCHAIN=1.98.1 cargo run -p cgx2-execution-policy --release --offline --bin calibrate -- \
+  --sizes 8192,65536,1048576 --workers 2,4,8 --samples 7 --holdout-samples 5 --warmups 2 \
+  > samples.csv
+RUSTUP_TOOLCHAIN=1.98.1 cargo run -p cgx2-execution-policy --release --offline --bin profile -- \
+  build --raw samples.csv --out profile-1048576-4.txt --workers 4 --size 1048576 --ttl-hours 24
+RUSTUP_TOOLCHAIN=1.98.1 cargo run -p cgx2-execution-policy --release --offline --bin profile -- \
+  run --raw samples.csv --profile profile-1048576-4.txt --workers 4 --sizes 1048576,65536
 ```
 
-The CSV records every scalar, parallel, and empty scoped-thread overhead sample
-with size, requested workers, OS, architecture, available threads, and Rust
-version. Validate results on the target machine, across relevant input sizes,
-then conservatively derive interval profiles and expiry. The helper does not
-turn noisy raw samples into an automatic policy or benchmark claim. On machines
-with fewer available threads than requested workers, the result measures
-oversubscription, not parallel capacity.
+`profile run` prints backend, reason, cost status, and a deterministic result
+hash for each size. Omit `--raw` and `--profile` to see the uncalibrated
+sequential fallback. A missing or rejected saved profile also leaves Auto on
+that fallback. A profile covers its recorded element range; `build --size`
+creates a precise single-size profile from a multi-size CSV. Sizes outside the
+range fall back. Callers can use `profile::load_profile` and put its returned
+`Measurements` into `Capabilities`; on validation error, leave `measurements`
+as `None`.
 
-GPU execution is unsupported. `GpuCapability` cannot register an executable
-backend; the unit test uses a **mock cost profile** to verify that even a free
-GPU estimate cannot select GPU. A future typed-IR integration must prove
-independence, effects, aliasing, ownership, managed-session and `no_gc` state
-before constructing `Workload`. A future GPU backend also needs an executable
-operation/device probe and validated numeric, transfer, synchronization, and
-foreign-memory behavior. Foreign PyTorch device allocation is outside CGx2
-region budgets. Float reductions have no contract here.
+CSV rows are versioned and contain separate calibration and held-out repetitions
+of full `execute_map` latency, including planning, output allocation, worker
+launch, and join. The profile records schema and workload IDs, OS, architecture,
+CPU model, available threads, Rust version, worker count, size range, sample
+counts, creation and expiry times, raw CSV checksum, end-to-end cost intervals,
+and maximum held-out regret for Auto's selected backend. The loader checks
+those fields against the raw CSV and local machine before producing measurements.
+Each backend needs at least three paired repetitions in each phase at every
+included size; samples with more than a 2× within-phase spread are rejected.
+The interval spans every
+observed timing and adds 10% to the upper bound. Auto selects parallel only if
+that upper bound is strictly below the sequential lower bound. Profiles expire
+after at most seven days; the CLI defaults to 24 hours. No estimate is made
+from one run.
+
+The raw hash is a non-cryptographic integrity checksum. Keep raw data and
+profiles locally and treat them as untrusted if obtained from elsewhere. A
+profile cannot prove future performance under different contention or thermal
+conditions. [The Wave 8 local measurement](measurements/2026-10-22-report.md)
+records this host's sample path, selections, regressions, and uncertainty.
+
+## Scope
+
+`Auto` can choose parallel only for the reviewed pure checked-map primitive. It
+does not parallelize arbitrary `.cg` source or share managed `Session` handles.
+Effects, aliases, `no_gc`, memory activity, reductions, and floating-point work
+are excluded. There is no executable GPU backend; even a favorable mock cost
+cannot make GPU available. Future source integration requires checked IR and
+effect, ownership, and memory guarantees. GPU execution additionally requires
+real operation/device support and measured transfer and synchronization costs.

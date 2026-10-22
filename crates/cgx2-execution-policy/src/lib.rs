@@ -5,6 +5,8 @@
 
 use std::time::SystemTime;
 
+pub mod profile;
+
 /// No scoped workers are launched below this input size.
 pub const MIN_PARALLEL_ELEMENTS: usize = 2_048;
 /// Each scoped worker receives at least this many elements.
@@ -273,11 +275,12 @@ fn measured_costs(
     workload: &Workload,
     caps: &Capabilities,
     workers: usize,
+    now: SystemTime,
 ) -> Result<(CostInterval, CostInterval), ReasonCode> {
     let Some(m) = &caps.measurements else {
         return Err(ReasonCode::MissingMeasurements);
     };
-    if SystemTime::now() >= m.valid_until {
+    if now >= m.valid_until {
         return Err(ReasonCode::StaleMeasurements);
     }
     if m.sample_count < 3
@@ -303,6 +306,17 @@ pub fn choose(
     policy: Policy,
     workload: &Workload,
     caps: &Capabilities,
+) -> Result<Decision, PlanError> {
+    choose_at(policy, workload, caps, SystemTime::now())
+}
+
+/// Deterministic planner entry point for callers that already have a trusted clock.
+/// Ordinary execution uses [`choose`] and the system clock.
+pub fn choose_at(
+    policy: Policy,
+    workload: &Workload,
+    caps: &Capabilities,
+    now: SystemTime,
 ) -> Result<Decision, PlanError> {
     if policy == Policy::SequentialCpu {
         return Ok(sequential(
@@ -359,7 +373,7 @@ pub fn choose(
             CostStatus::Uncalibrated,
         ));
     }
-    let costs = measured_costs(workload, caps, workers);
+    let costs = measured_costs(workload, caps, workers, now);
     if policy == Policy::ParallelCpu {
         return Ok(Decision {
             selected: Backend::ParallelCpu,

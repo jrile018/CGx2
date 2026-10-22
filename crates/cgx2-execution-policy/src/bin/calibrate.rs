@@ -1,6 +1,8 @@
 //! Opt-in raw timing recorder. It never writes a policy profile automatically.
 
-use cgx2_execution_policy::{MAX_WORKERS, map_i64_checked_parallel, map_i64_checked_sequential};
+use cgx2_execution_policy::profile::current_machine;
+use cgx2_execution_policy::{Capabilities, MAX_WORKERS, Policy, execute_map};
+use std::collections::BTreeSet;
 use std::hint::black_box;
 use std::time::Instant;
 
@@ -8,6 +10,7 @@ struct Config {
     sizes: Vec<usize>,
     workers: Vec<usize>,
     samples: usize,
+    holdout_samples: usize,
     warmups: usize,
 }
 
@@ -27,9 +30,10 @@ fn parse_list(value: &str) -> Result<Vec<usize>, String> {
 
 fn parse_args() -> Result<Config, String> {
     let mut config = Config {
-        sizes: vec![2_048, 4_096, 65_536],
+        sizes: vec![4_096, 65_536],
         workers: vec![2, 4],
         samples: 7,
+        holdout_samples: 5,
         warmups: 2,
     };
     let mut args = std::env::args().skip(1);
@@ -41,18 +45,34 @@ fn parse_args() -> Result<Config, String> {
             "--sizes" => config.sizes = parse_list(&value)?,
             "--workers" => config.workers = parse_list(&value)?,
             "--samples" => config.samples = value.parse().map_err(|_| "invalid samples")?,
+            "--holdout-samples" => {
+                config.holdout_samples = value.parse().map_err(|_| "invalid holdout samples")?
+            }
             "--warmups" => config.warmups = value.parse().map_err(|_| "invalid warmups")?,
             _ => return Err(format!("unknown option: {flag}")),
         }
     }
-    if config.samples == 0
+    if !(3..=1_000).contains(&config.samples)
+        || !(3..=1_000).contains(&config.holdout_samples)
+        || config.sizes.len() > 32
+        || config.workers.len() > 16
+        || config.sizes.iter().collect::<BTreeSet<_>>().len() != config.sizes.len()
+        || config.workers.iter().collect::<BTreeSet<_>>().len() != config.workers.len()
+        || config
+            .sizes
+            .iter()
+            .any(|&size| !(2_048..=100_000_000).contains(&size))
         || config
             .workers
             .iter()
             .any(|&w| !(2..=MAX_WORKERS).contains(&w))
+        || config
+            .sizes
+            .iter()
+            .any(|&size| config.workers.iter().any(|&workers| size / 1_024 < workers))
     {
         return Err(format!(
-            "samples must be positive; workers must be 2..={MAX_WORKERS}"
+            "sizes must be unique in 2048..=100000000 and allow 1024 elements per worker; calibration and holdout samples must each be 3..=1000; workers must be unique in 2..={MAX_WORKERS}"
         ));
     }
     Ok(config)
@@ -65,51 +85,55 @@ fn time_ns(f: impl FnOnce()) -> u128 {
 }
 
 fn run(config: Config) {
-    let threads = std::thread::available_parallelism().map_or(1, |n| n.get());
-    let rustc = std::process::Command::new("rustc")
-        .arg("--version")
-        .output()
-        .ok()
-        .map(|out| String::from_utf8_lossy(&out.stdout).trim().to_owned())
-        .unwrap_or_else(|| "unknown".to_owned());
-    println!("kind,elements,workers,sample,elapsed_ns,os,arch,available_threads,rustc");
+    let machine = current_machine().expect("machine fingerprint required for calibration");
+    println!(
+        "schema,phase,kind,elements,workers,sample,elapsed_ns,os,arch,cpu,available_threads,rustc"
+    );
     for &size in &config.sizes {
         let input: Vec<i64> = (0..size).map(|i| (i % 97) as i64 - 48).collect();
         for &workers in &config.workers {
+            let caps = Capabilities {
+                parallel_workers: workers,
+                ..Capabilities::default()
+            };
             assert_eq!(
-                map_i64_checked_sequential(&input, 3, 7),
-                map_i64_checked_parallel(&input, 3, 7, workers),
+                execute_map(&input, 3, 7, Policy::SequentialCpu, &caps)
+                    .unwrap()
+                    .values,
+                execute_map(&input, 3, 7, Policy::ParallelCpu, &caps)
+                    .unwrap()
+                    .values,
                 "calibration input must agree before timing"
             );
             for _ in 0..config.warmups {
-                black_box(map_i64_checked_sequential(black_box(&input), 3, 7).unwrap());
-                black_box(map_i64_checked_parallel(black_box(&input), 3, 7, workers).unwrap());
+                black_box(
+                    execute_map(black_box(&input), 3, 7, Policy::SequentialCpu, &caps).unwrap(),
+                );
+                black_box(
+                    execute_map(black_box(&input), 3, 7, Policy::ParallelCpu, &caps).unwrap(),
+                );
             }
-            for sample in 0..config.samples {
-                let scalar = time_ns(|| {
-                    black_box(map_i64_checked_sequential(black_box(&input), 3, 7).unwrap());
-                });
-                let parallel = time_ns(|| {
-                    black_box(map_i64_checked_parallel(black_box(&input), 3, 7, workers).unwrap());
-                });
-                let overhead = time_ns(|| {
-                    std::thread::scope(|scope| {
-                        let handles: Vec<_> = (0..workers).map(|_| scope.spawn(|| {})).collect();
-                        for handle in handles {
-                            handle.join().unwrap();
-                        }
-                    });
-                });
-                for (kind, elapsed) in [
-                    ("scalar", scalar),
-                    ("parallel", parallel),
-                    ("scope_overhead", overhead),
-                ] {
-                    println!(
-                        "{kind},{size},{workers},{sample},{elapsed},{},{},{threads},{rustc}",
-                        std::env::consts::OS,
-                        std::env::consts::ARCH
-                    );
+            for (phase, samples) in [
+                ("calibration", config.samples),
+                ("holdout", config.holdout_samples),
+            ] {
+                for sample in 0..samples {
+                    for (kind, policy) in [
+                        ("sequential", Policy::SequentialCpu),
+                        ("parallel", Policy::ParallelCpu),
+                    ] {
+                        let elapsed = time_ns(|| {
+                            black_box(execute_map(black_box(&input), 3, 7, policy, &caps).unwrap());
+                        });
+                        println!(
+                            "1,{phase},{kind},{size},{workers},{sample},{elapsed},{},{},{},{},{}",
+                            machine.os,
+                            machine.arch,
+                            machine.cpu,
+                            machine.available_threads,
+                            machine.rustc
+                        );
+                    }
                 }
             }
         }
@@ -121,7 +145,7 @@ fn main() {
         Ok(config) => run(config),
         Err(error) => {
             eprintln!(
-                "{error}\nusage: calibrate [--sizes 2048,4096,65536] [--workers 2,4] [--samples 7] [--warmups 2]"
+                "{error}\nusage: calibrate [--sizes 4096,65536] [--workers 2,4] [--samples 7] [--holdout-samples 5] [--warmups 2]"
             );
             std::process::exit(2);
         }
