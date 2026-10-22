@@ -4,7 +4,7 @@ use cgx2_sema::check_module;
 use cgx2_syntax::parse_module;
 use std::process::Command;
 
-fn compare(source: &str, args: &[&str], expected_stdout: &str, success: bool) {
+fn run_python(source: &str, args: &[&str]) -> std::process::Output {
     let module = parse_module(source).unwrap();
     let typed = check_module(&module).unwrap();
     let python = emit_python(&module, &typed).unwrap();
@@ -23,7 +23,11 @@ fn compare(source: &str, args: &[&str], expected_stdout: &str, success: bool) {
         .output()
         .unwrap();
     std::fs::remove_file(path).unwrap();
+    output
+}
 
+fn compare(source: &str, args: &[&str], expected_stdout: &str, success: bool) {
+    let output = run_python(source, args);
     let rust_args = args.iter().map(|arg| (*arg).to_owned()).collect::<Vec<_>>();
     let cli_result = run_source(source, &rust_args);
     let cli_stdout = match &cli_result {
@@ -36,6 +40,50 @@ fn compare(source: &str, args: &[&str], expected_stdout: &str, success: bool) {
     assert_eq!(output.stdout, expected_stdout.as_bytes());
     if !success {
         assert!(!output.stderr.is_empty());
+    }
+}
+
+#[test]
+fn scalar_contracts_match_cli_outcome_order_and_result() {
+    let cases = [
+        ("fn main() -> i64 effects() caps():\n    requires true\n    ensures result == 7\n    7\n", "7\n", None),
+        ("fn main() -> i64:\n    requires false\n    9223372036854775807 + 1\n", "", Some("CGR015")),
+        ("fn main() -> i64:\n    ensures result == 8\n    7\n", "", Some("CGR016")),
+        ("fn main() -> i64:\n    requires 9223372036854775807 + 1 > 0\n    7\n", "", Some("CGR005")),
+        ("fn main() -> i64:\n    ensures result + 1 > result\n    9223372036854775807\n", "", Some("CGR005")),
+        ("fn main() -> i64:\n    requires false\n    ensures result == 8\n    7\n", "", Some("CGR015")),
+        ("fn main() -> i64:\n    ensures result == 7\n    let result = 6\n    return result + 1\n", "7\n", None),
+        ("fn positive(x: i64) -> Bool:\n    x > 0\nfn main() -> i64:\n    requires positive(3)\n    ensures result > 0\n    7\n", "7\n", None),
+        ("fn main() -> i64 effects(ReadArgs) caps(ArgsRead):\n    arg_count()\n", "0\n", None),
+    ];
+    for (source, stdout, code) in cases {
+        let output = run_python(source, &[]);
+        let cli = run_source(source, &[]);
+        assert_eq!(output.stdout, stdout.as_bytes(), "{source}");
+        match code {
+            None => {
+                assert!(cli.is_ok(), "{source}");
+                assert!(output.status.success(), "{source}");
+            }
+            Some(code) => {
+                assert_eq!(cli.unwrap_err().code, code, "{source}");
+                assert!(!output.status.success(), "{source}");
+                let stderr = String::from_utf8_lossy(&output.stderr);
+                assert!(stderr.contains(code), "{source}: {stderr}");
+                if matches!(code, "CGR015" | "CGR016") {
+                    let condition = if code == "CGR015" {
+                        "false"
+                    } else {
+                        "result == 8"
+                    };
+                    let start = source.find(condition).unwrap();
+                    assert!(
+                        stderr.contains(&format!("bytes [{start}, {})", start + condition.len())),
+                        "{source}: {stderr}"
+                    );
+                }
+            }
+        }
     }
 }
 

@@ -13,7 +13,7 @@ _cgx2_max = 9223372036854775807
 
 def _cgx2_i64(value):
     if _cgx2_builtins.type(value) is not _cgx2_builtins.int or not (_cgx2_min <= value <= _cgx2_max):
-        raise _cgx2_builtins.OverflowError("i64 arithmetic overflow")
+        raise _cgx2_builtins.OverflowError("CGR005: i64 arithmetic overflow")
     return value
 
 def _cgx2_add(left, right):
@@ -27,7 +27,7 @@ def _cgx2_mul(left, right):
 
 def _cgx2_div(left, right):
     if right == 0:
-        raise _cgx2_builtins.ZeroDivisionError("division by zero")
+        raise _cgx2_builtins.ZeroDivisionError("CGR006: division by zero")
     quotient = _cgx2_builtins.abs(left) // _cgx2_builtins.abs(right)
     if (left < 0) != (right < 0):
         quotient = -quotient
@@ -48,10 +48,27 @@ def _cgx2_show(value):
         return _cgx2_builtins.str(_cgx2_i64(value))
     return value
 
+class _cgx2_ContractError(_cgx2_builtins.RuntimeError):
+    def __init__(self, code, start, end):
+        self.code = code
+        self.span = (start, end)
+        super().__init__(f"{code}: contract condition failed at bytes [{start}, {end})")
+
+def _cgx2_contract_check(value, code, start, end):
+    if value is not True:
+        raise _cgx2_ContractError(code, start, end)
+
 "#;
 
 pub(crate) fn emit(module: &Module, typed: &TypedModule) -> Result<String, Vec<EmitDiagnostic>> {
     let mut errors = Vec::new();
+    for import in &module.imports {
+        errors.push(EmitDiagnostic::new(
+            "CGE001",
+            "imports are unsupported by Python emission",
+            import.span,
+        ));
+    }
     if !module.functions.is_empty() && !module.statements.is_empty() {
         errors.push(EmitDiagnostic::new(
             "CGE001",
@@ -65,6 +82,9 @@ pub(crate) fn emit(module: &Module, typed: &TypedModule) -> Result<String, Vec<E
         }
         if let Some(ty) = &function.return_type {
             validate_type(ty, &mut errors);
+        }
+        for contract in function.requires.iter().chain(&function.ensures) {
+            validate_expr(contract, &mut errors);
         }
         validate_block(&function.body, false, &mut errors);
     }
@@ -101,6 +121,12 @@ pub(crate) fn emit(module: &Module, typed: &TypedModule) -> Result<String, Vec<E
             )]);
         }
     }
+    for function in &module.functions {
+        validate_metadata(function, typed, &mut errors);
+    }
+    if !errors.is_empty() {
+        return Err(errors);
+    }
 
     let mut output = String::from(PRELUDE);
     for function in &module.functions {
@@ -111,7 +137,20 @@ pub(crate) fn emit(module: &Module, typed: &TypedModule) -> Result<String, Vec<E
             .collect::<Vec<_>>()
             .join(", ");
         output.push_str(&format!("def {}({params}):\n", python_name(&function.name)));
-        emit_block(&function.body, 1, true, &mut output);
+        if function.requires.is_empty() && function.ensures.is_empty() {
+            emit_block(&function.body, 1, true, &mut output);
+        } else {
+            for condition in &function.requires {
+                emit_contract_check(condition, "CGR015", 1, false, &mut output);
+            }
+            output.push_str("    def _cgx2_contract_body():\n");
+            emit_block(&function.body, 2, true, &mut output);
+            output.push_str("    _cgx2_contract_result = _cgx2_contract_body()\n");
+            for condition in &function.ensures {
+                emit_contract_check(condition, "CGR016", 1, true, &mut output);
+            }
+            output.push_str("    return _cgx2_contract_result\n");
+        }
         output.push('\n');
     }
     if module.functions.is_empty() {
@@ -129,6 +168,74 @@ pub(crate) fn emit(module: &Module, typed: &TypedModule) -> Result<String, Vec<E
     output.push_str("    if _cgx2_result is not None:\n");
     output.push_str("        _cgx2_sys.stdout.write(_cgx2_show(_cgx2_result) + \"\\n\")\n");
     Ok(output)
+}
+
+fn validate_metadata(
+    function: &cgx2_syntax::Function,
+    typed: &TypedModule,
+    errors: &mut Vec<EmitDiagnostic>,
+) {
+    if let Some(declaration) = &function.effects {
+        for name in &declaration.names {
+            if !matches!(name.name.as_str(), "Mutate" | "ReadArgs") {
+                errors.push(EmitDiagnostic::new(
+                    "CGE004",
+                    format!("effect `{}` is unsupported by Python emission", name.name),
+                    name.span,
+                ));
+            }
+        }
+    }
+    if let Some(declaration) = &function.capabilities {
+        for name in &declaration.names {
+            if name.name != "ArgsRead" {
+                errors.push(EmitDiagnostic::new(
+                    "CGE004",
+                    format!(
+                        "capability `{}` is unsupported by Python emission",
+                        name.name
+                    ),
+                    name.span,
+                ));
+            }
+        }
+    }
+    if let Some(summary) = typed.effects.get(&function.name) {
+        for effect in &summary.effects {
+            if !matches!(effect.as_str(), "Mutate" | "ReadArgs") {
+                errors.push(EmitDiagnostic::new(
+                    "CGE004",
+                    format!("inferred effect `{effect}` is unsupported by Python emission"),
+                    function.span,
+                ));
+            }
+        }
+        for capability in &summary.capabilities {
+            if capability != "ArgsRead" {
+                errors.push(EmitDiagnostic::new(
+                    "CGE004",
+                    format!("inferred capability `{capability}` is unsupported by Python emission"),
+                    function.span,
+                ));
+            }
+        }
+    }
+}
+
+fn emit_contract_check(
+    condition: &Expr,
+    code: &str,
+    indent: usize,
+    bind_result: bool,
+    output: &mut String,
+) {
+    output.push_str(&format!(
+        "{}_cgx2_contract_check({}, \"{code}\", {}, {})\n",
+        "    ".repeat(indent),
+        emit_expr_with_result(condition, bind_result),
+        condition.span.start,
+        condition.span.end,
+    ));
 }
 
 fn validate_type(ty: &TypeSyntax, errors: &mut Vec<EmitDiagnostic>) {
@@ -294,7 +401,14 @@ fn emit_block(stmts: &[Stmt], indent: usize, return_tail: bool, output: &mut Str
 }
 
 fn emit_expr(expr: &Expr) -> String {
+    emit_expr_with_result(expr, false)
+}
+
+fn emit_expr_with_result(expr: &Expr, bind_result: bool) -> String {
     match &expr.kind {
+        ExprKind::Name(path) if bind_result && path.segments[0] == "result" => {
+            "_cgx2_contract_result".to_owned()
+        }
         ExprKind::Name(path) => python_name(&path.segments[0]),
         ExprKind::Integer(raw) => raw.replace('_', ""),
         ExprKind::StringLiteral(raw) => {
@@ -308,7 +422,11 @@ fn emit_expr(expr: &Expr) -> String {
                 BinaryOp::Multiply => "_cgx2_mul",
                 BinaryOp::Divide => "_cgx2_div",
             };
-            format!("{helper}({}, {})", emit_expr(left), emit_expr(right))
+            format!(
+                "{helper}({}, {})",
+                emit_expr_with_result(left, bind_result),
+                emit_expr_with_result(right, bind_result)
+            )
         }
         ExprKind::Call { callee, arguments } => {
             let ExprKind::Name(path) = &callee.kind else {
@@ -321,9 +439,25 @@ fn emit_expr(expr: &Expr) -> String {
             };
             let args = arguments
                 .iter()
-                .map(|arg| emit_expr(&arg.value))
+                .map(|arg| emit_expr_with_result(&arg.value, bind_result))
                 .collect::<Vec<_>>()
                 .join(", ");
+            let comparison = match path.segments[0].as_str() {
+                "$cgx2_cmp_eq" => Some("=="),
+                "$cgx2_cmp_ne" => Some("!="),
+                "$cgx2_cmp_lt" => Some("<"),
+                "$cgx2_cmp_le" => Some("<="),
+                "$cgx2_cmp_gt" => Some(">"),
+                "$cgx2_cmp_ge" => Some(">="),
+                _ => None,
+            };
+            if let Some(op) = comparison {
+                return format!(
+                    "({} {op} {})",
+                    emit_expr_with_result(&arguments[0].value, bind_result),
+                    emit_expr_with_result(&arguments[1].value, bind_result)
+                );
+            }
             format!("{name}({args})")
         }
     }

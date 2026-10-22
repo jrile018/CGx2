@@ -65,6 +65,7 @@ fn rejects_unsupported_constructs_at_their_spans() {
         ("fn main(xs: List<i64>):\n    1\n", "List<i64>"),
         ("app.value\n", "app.value"),
         ("app.value()\n", "app.value"),
+        ("module app\nimport dep\nfn main() -> i64:\n    1\n", "dep"),
     ];
     for (source, needle) in cases {
         let module = parse_module(source).unwrap();
@@ -158,4 +159,43 @@ fn checked_memory_source_is_not_emitted_as_python() {
     let errors = emit_python(&module, &typed).unwrap_err();
     assert_eq!(errors[0].code, "CGE001");
     assert!(errors[0].message.contains("memory"));
+}
+
+#[test]
+fn unsupported_effect_and_capability_declarations_have_name_spans() {
+    for (source, needle) in [
+        ("fn main() -> i64 effects(Foreign):\n    1\n", "Foreign"),
+        (
+            "fn main() -> i64 caps(ForeignCall):\n    1\n",
+            "ForeignCall",
+        ),
+        (
+            "fn main() -> i64 effects(ManagedAlloc):\n    1\n",
+            "ManagedAlloc",
+        ),
+    ] {
+        let (module, typed) = checked(source);
+        let errors = emit_python(&module, &typed).unwrap_err();
+        assert_eq!(errors[0].code, "CGE004");
+        let start = source.find(needle).unwrap();
+        assert_eq!(
+            errors[0].span,
+            Span {
+                start,
+                end: start + needle.len()
+            }
+        );
+    }
+}
+
+#[test]
+fn undeclared_effect_fails_static_check_before_emission() {
+    let source = "fn main() -> i64 effects() caps(ArgsRead):\n    arg_count()\n";
+    let module = parse_module(source).unwrap();
+    let errors = check_module(&module).unwrap_err();
+    assert_eq!(errors[0].code, "CGT012");
+    assert_eq!(
+        &source[errors[0].span.start..errors[0].span.end],
+        "arg_count()"
+    );
 }
