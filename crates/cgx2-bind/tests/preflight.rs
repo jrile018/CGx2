@@ -197,7 +197,7 @@ fn rejects_traversal_and_symlink_escape() {
 #[test]
 fn rejects_lock_schema_and_lock_symlink_escape() {
     let (fixture, mut lock) = Fixture::c_fixture();
-    lock.schema_version = 2;
+    lock.schema_version = 3;
     fixture.write_lock(&lock);
     assert!(codes(&fixture.0).contains(&"CGB004"));
     #[cfg(unix)]

@@ -1,5 +1,6 @@
 //! Direct, version-pinned LibTorch CPU facade. No Python runtime is used.
 
+use cgx2_bind::{ClosureError, Report, checked_lock, verify_libtorch_closure};
 use cgx2_ffi_native::{Error as NativeError, Library, LibraryDeclaration};
 use std::ffi::{CStr, c_char, c_void};
 use std::path::Path;
@@ -21,6 +22,13 @@ pub enum Error {
     DifferentRuntime,
     AlreadyReleased,
     Foreign { status: i32, message: String },
+}
+
+#[derive(Debug, PartialEq, Eq)]
+pub enum PinnedError {
+    Preflight(Report),
+    Closure(ClosureError),
+    Adapter(Error),
 }
 
 impl From<NativeError> for Error {
@@ -77,6 +85,34 @@ pub struct Torch {
 }
 
 impl Torch {
+    /// Open only after schema-2 package preflight and complete ELF closure checks.
+    /// The loader's mapped paths and inodes are checked before any tensor operation.
+    ///
+    /// # Safety
+    /// The lock identifies reviewed binaries but cannot prove the facade's C ABI or
+    /// foreign handle lifetimes. The caller must validate those contracts separately.
+    pub unsafe fn open_pinned(root: &Path, binding_id: &str) -> Result<Self, PinnedError> {
+        let lock = checked_lock(root).map_err(PinnedError::Preflight)?;
+        if lock.schema_version != 2 {
+            return Err(PinnedError::Closure(ClosureError::Invalid(
+                "schema-2 closure lock required".into(),
+            )));
+        }
+        let binding = lock
+            .bindings
+            .iter()
+            .find(|binding| binding.id == binding_id && binding.route == "libtorch")
+            .ok_or_else(|| {
+                PinnedError::Closure(ClosureError::Invalid(
+                    "LibTorch binding id not found".into(),
+                ))
+            })?;
+        let verified = verify_libtorch_closure(root, binding).map_err(PinnedError::Closure)?;
+        let torch = unsafe { Self::open(verified.facade_path(), &binding.version) }
+            .map_err(PinnedError::Adapter)?;
+        verified.verify_loaded().map_err(PinnedError::Closure)?;
+        Ok(torch)
+    }
     /// `exact_version` must match the LibTorch version used to compile the facade.
     ///
     /// # Safety

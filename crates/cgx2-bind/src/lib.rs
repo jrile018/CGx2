@@ -9,6 +9,10 @@ use std::process::{Command, Stdio};
 use cgx2_package::load_checked_package;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
+mod closure;
+pub use closure::{
+    verify_libtorch_closure, ClosureError, ClosureLock, LibraryPin, VerifiedClosure,
+};
 
 const MAX_LOCK_BYTES: u64 = 1024 * 1024;
 const MAX_ARTIFACT_BYTES: u64 = 256 * 1024 * 1024;
@@ -270,7 +274,7 @@ fn inspect_package(root: &Path) -> (Report, Option<BindingLock>) {
             return (report, None);
         }
     };
-    if lock.schema_version != 1
+    if !matches!(lock.schema_version, 1 | 2)
         || lock.package != report.package
         || lock.bindings.is_empty()
         || lock.bindings.len() > MAX_BINDINGS
@@ -295,6 +299,11 @@ fn inspect_package(root: &Path) -> (Report, Option<BindingLock>) {
             report.push("CGB004", &binding.id, "duplicate binding id");
         }
         check_binding(root, binding, &mut report, &mut remaining_artifact_bytes);
+        if lock.schema_version == 2 && binding.route == "libtorch" {
+            if let Err(error) = verify_libtorch_closure(root, binding) {
+                report.push("CGB019", &binding.id, error.to_string());
+            }
+        }
         report.bindings_checked += 1;
     }
     report
