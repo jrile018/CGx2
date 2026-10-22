@@ -1,6 +1,6 @@
 # Validation plan: memory guarantees and measurable LLM value
 
-**Status:** preregistration draft, 2026-10-22. No CGx2 result has been measured. Numbers below are proposed gates to calibrate with a baseline pilot before the final holdout is opened. [Language specification](language-design.md).
+**Status:** preregistration draft, 2026-10-22. Limited scalar/runtime pilots have been measured; no release-level CGx2 benchmark result has been established. Numbers below are proposed gates to calibrate with baseline pilots before the final holdout is opened. [Language specification](language-design.md).
 
 ## Claims and priority
 
@@ -27,7 +27,7 @@ Test both `auto` and `manual` regions, owned moves/borrows, explicit conversions
 | Manual collection | Collection counter for a manual region changes only after an explicit `collect` call, including when allocations fail. |
 | `no_gc` | Exactly zero CGx2 collections in the protected region over every success, failure, nested, and cancellation path. Budget exhaustion returns `AllocationError`; it does not collect or silently increase the limit. |
 | Region isolation | Collecting/closing one region cannot corrupt handles in another; illegal cross-region escape is rejected. |
-| Foreign boundary | Python/PyTorch allocations are labeled foreign; CGx2 never claims control of their GC or device allocator. Explicit handle release and buffer aliasing are checked. |
+| Foreign boundary | Python-only host allocations and direct LibTorch tensor/device allocations are labeled foreign; CGx2 never claims control of their collectors or device allocator. Explicit handle release and buffer aliasing are checked. |
 
 Publish allocation throughput, live/peak bytes, RSS, collection frequency and pause histogram, out-of-budget rate, and owned/managed conversion cost for fixed workloads. For comparable allocation-heavy managed programs, the **provisional** resource target is peak RSS no more than 2× a tuned OCaml implementation and throughput at least 70% of that baseline; report latency distributions and revise targets only before opening the holdout. For the native owned path, the provisional target is median runtime no more than 1.25× optimized Rust and peak RSS no more than 1.5×. These ratios are workload-specific engineering targets, not properties of the design. Memory correctness gates above do not wait on performance calibration.
 
@@ -58,7 +58,8 @@ For automatic CPU/parallel/GPU selection, compare each supported backend with th
 | Workload | Baseline | Provisional target |
 | --- | --- | --- |
 | Native pure/owned CPU | Optimized Rust implementation | CGx2 median runtime ≤1.25× and peak RSS ≤1.5×. |
-| PyTorch compute-dominant inference | Direct Python with the same installed torch | CGx2 throughput ≥90% and p95 end-to-end latency ≤1.15×. |
+| Direct LibTorch compute-dominant inference | Hand-written LibTorch and direct Python using compatible pinned torch/LibTorch builds, with identical device, dtype, inputs, and synchronization | CGx2 throughput ≥90% and p95 end-to-end latency ≤1.15× versus each applicable baseline; report both separately. Confirm no Python runtime is loaded. |
+| Checked native C ABI call | Equivalent hand-written native C ABI wrapper | Preliminary median tiny-call latency ≤1.25× after calibration; report correctness, copies, version mismatch rejection, and uncertainty. |
 | Tiny Python bridge call | Equivalent hand-written PyO3 bridge | CGx2 bridge overhead ≤1.25×. |
 | Generated Rust/Python source | Direct target-language implementation | Same specified outputs/errors on supported profile; readability/editability assessed by blinded maintainers and change tasks. Unsupported features must fail emission clearly. |
 
@@ -70,7 +71,7 @@ These targets are provisional until baseline noise and workload mix are measured
 - **Security suite:** capability violations and the documented taint source-to-sink patterns are detected with source spans; measure false positives and missed seeded cases. Do not claim a general vulnerability proof.
 - **Notebook suite:** clean Run All is reproducible under pinned inputs; rerunning a cell does not replay previous side effects; changed dependencies mark outputs stale; saved text and referenced rich assets reopen; self-contained export reopens without sidecars.
 - **CLI suite:** `cgx2 run file.cg -- args` and `cgx2 file.cg -- args` pass arguments and exit codes correctly; project packages work; human and JSON diagnostics refer to CGx2 source.
-- **Portability suite:** supported Rust/Python emitted code passes the same boundary fixtures for arithmetic, strings, errors, contracts, and typed PyTorch calls. Target-specific constructs get a diagnostic, never a plausible but behavior-changing translation.
+- **Portability suite:** supported Rust/Python emitted code passes the same boundary fixtures for arithmetic, strings, errors, contracts, and supported typed PyTorch calls. The direct LibTorch runtime route and optional Python source translation are tested separately. Target-specific constructs get a diagnostic, never a plausible but behavior-changing translation.
 - **Documentation suite:** a new developer and a coding agent can find the memory rules, API, effect requirements, and unsupported target features without consulting compiler internals.
 
 ## Reporting rules

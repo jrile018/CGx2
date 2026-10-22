@@ -72,6 +72,15 @@ name = "cgx2-execution-policy"
 version = "0.1.0"
 
 [[package]]
+name = "cgx2-foreign"
+version = "0.1.0"
+dependencies = [
+ "cgx2-python-bridge",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "cgx2-memory-conformance"
 version = "0.1.0"
 dependencies = [
