@@ -1,14 +1,15 @@
-//! Bounded Wave 15 auto-safepoint oracle against logical node IDs.
+//! Bounded release corpus for auto/manual safepoints against logical node IDs.
 use cgx2_runtime::{
     AllocationError, CollectionMode, Handle, MemoryError, RegionId, RegionStats, Session,
     REFERENCE_SLOT_METADATA_BYTES, SLOT_METADATA_BYTES,
 };
 use std::time::{Duration, Instant};
 
-const SEEDS: u64 = 64;
+const SEEDS: u64 = 1024;
 const RANDOM_STEPS: usize = 96;
 const MAX_NODES: usize = 160;
-const MAX_TRACE: usize = 30 + RANDOM_STEPS + 6;
+const STEPS_PER_SEED: usize = 23 + RANDOM_STEPS + 6;
+const MAX_TRACE: usize = STEPS_PER_SEED;
 const MAX_TEST_TIME: Duration = Duration::from_secs(30);
 const CHARGE: usize = SLOT_METADATA_BYTES + 1 + 2 * REFERENCE_SLOT_METADATA_BYTES;
 const PROMOTED_CHARGE: usize = SLOT_METADATA_BYTES + 1;
@@ -83,7 +84,7 @@ impl Model {
         self.stats[region].collection_count += 1;
     }
 
-    fn check(&self, session: &Session, regions: [RegionId; 2]) -> Result<(), String> {
+    fn check(&self, session: &mut Session, regions: [RegionId; 2]) -> Result<(), String> {
         let report = session.memory_report();
         for (region, id) in regions.into_iter().enumerate() {
             let expected = if self.closed[region] {
@@ -132,10 +133,25 @@ impl Model {
             report.totals.total_collected_bytes,
             self.stats.iter().map(|s| s.total_collected_bytes).sum(),
         )?;
+        if report.totals.committed_bytes > 2 * LIMIT {
+            return Err("logical committed bytes exceeded the two-region bound".into());
+        }
         for (id, node) in self.nodes.iter().enumerate() {
             if node.live {
                 equal(session.read_bytes(node.handle), Ok(&[0][..]))
                     .map_err(|error| format!("node {id}: {error}"))?;
+                // Root counts are not exposed by the public API. Drain and restore them
+                // without allocating or collecting so every transition checks the count.
+                for _ in 0..node.roots {
+                    equal(session.unroot(node.handle), Ok(()))
+                        .map_err(|error| format!("node {id} root count: {error}"))?;
+                }
+                equal(session.unroot(node.handle), Err(MemoryError::NotRooted))
+                    .map_err(|error| format!("node {id} extra root: {error}"))?;
+                for _ in 0..node.roots {
+                    equal(session.root(node.handle), Ok(()))
+                        .map_err(|error| format!("node {id} root restore: {error}"))?;
+                }
                 if let Some(refs) = node.refs {
                     for (slot, target) in refs.into_iter().enumerate() {
                         let expected = target.map(|child| self.nodes[child].handle);
@@ -390,7 +406,7 @@ fn replay(trace: &[Op]) -> Result<(), String> {
     let mut model = Model::new();
     for (step, &op) in trace.iter().enumerate() {
         apply(op, &mut session, &mut model, regions)
-            .and_then(|()| model.check(&session, regions))
+            .and_then(|()| model.check(&mut session, regions))
             .map_err(|error| format!("step {step} {op:?}: {error}"))?;
     }
     Ok(())
@@ -489,7 +505,7 @@ fn automatic_collection_state_model_corpus() {
             "graph audit exceeded 30 seconds"
         );
         let trace = generate(seed);
-        assert!(trace.len() <= MAX_TRACE);
+        assert_eq!(trace.len(), STEPS_PER_SEED);
         if let Err(error) = replay(&trace) {
             let minimized = minimize(trace);
             panic!(
@@ -504,6 +520,9 @@ fn automatic_collection_state_model_corpus() {
         "graph audit exceeded 30 seconds"
     );
     println!(
-        "wave15 auto corpus: seeds={SEEDS} object_charge={CHARGE} promoted_charge={PROMOTED_CHARGE} trigger={TRIGGER} region_limit={LIMIT} max_trace={MAX_TRACE}"
-    );
+"release auto/manual corpus: seeds=0..{SEEDS} steps_per_seed={STEPS_PER_SEED} total_steps={} max_nodes={MAX_NODES} object_charge={CHARGE} promoted_charge={PROMOTED_CHARGE} trigger={TRIGGER} region_limit={LIMIT} logical_committed_bound={} max_trace={MAX_TRACE} time_bound_seconds={}",
+SEEDS as usize * STEPS_PER_SEED,
+2 * LIMIT,
+MAX_TEST_TIME.as_secs()
+);
 }
