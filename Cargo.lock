@@ -35,6 +35,7 @@ dependencies = [
 name = "cgx2-cli"
 version = "0.1.0"
 dependencies = [
+ "cgx2-runtime",
  "cgx2-sema",
  "cgx2-syntax",
 ]
@@ -46,6 +47,28 @@ dependencies = [
  "cgx2-cli",
  "cgx2-sema",
  "cgx2-syntax",
+]
+
+[[package]]
+name = "cgx2-emit-rust"
+version = "0.1.0"
+dependencies = [
+ "cgx2-cli",
+ "cgx2-sema",
+ "cgx2-syntax",
+]
+
+[[package]]
+name = "cgx2-execution-policy"
+version = "0.1.0"
+
+[[package]]
+name = "cgx2-notebook-cli"
+version = "0.1.0"
+dependencies = [
+ "cgx2-notebook-format",
+ "cgx2-notebook-kernel",
+ "cgx2-notebook-session",
 ]
 
 [[package]]
@@ -77,6 +100,15 @@ dependencies = [
 name = "cgx2-ownership"
 version = "0.1.0"
 dependencies = [
+ "cgx2-syntax",
+]
+
+[[package]]
+name = "cgx2-package"
+version = "0.1.0"
+dependencies = [
+ "cgx2-api-index",
+ "cgx2-sema",
  "cgx2-syntax",
 ]
 

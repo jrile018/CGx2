@@ -101,11 +101,7 @@ fn name(expr: &Expr) -> Result<String, RunError> {
     }
 }
 
-fn positional(
-    args: &[CallArg],
-    count: usize,
-    span: Span,
-) -> Result<Vec<&Expr>, RunError> {
+fn positional(args: &[CallArg], count: usize, span: Span) -> Result<Vec<&Expr>, RunError> {
     if args.len() != count || args.iter().any(|arg| arg.name.is_some()) {
         return Err(argument_error(span));
     }

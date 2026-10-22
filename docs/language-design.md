@@ -1,6 +1,6 @@
 # CGx2 language and toolchain specification
 
-**Status:** design proposal with an integrated scalar preview and standalone memory, notebook, Python, and verification components. Most first-release paths are incomplete. CGx2 uses `.cg` source files and `.cgnb` notebooks. Examples below define intended behavior, but the exact grammar is provisional until the syntax comparison in the validation plan.
+**Status:** design proposal with an integrated scalar preview and a bounded source-to-runtime memory script profile; notebook, package, Python, and verification capabilities remain partial. Most first-release paths are incomplete. CGx2 uses `.cg` source files and `.cgnb` notebooks. Examples below define intended behavior, but the exact grammar is provisional until the syntax comparison in the validation plan.
 
 ## Purpose and boundaries
 
