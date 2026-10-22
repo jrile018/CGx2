@@ -1,0 +1,7 @@
+[package]
+name = "cgx2-notebook-session"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+cgx2-notebook-format = { path = "../cgx2-notebook-format" }

@@ -36,22 +36,24 @@
 
 ### Task 1: Session construction and status
 
-- [ ] Add failing tests for valid code/Markdown cells, unknown or duplicate fact IDs, initial `NeverRun` status, and refusal to execute Markdown.
-- [ ] Run `cargo test -p cgx2-notebook-session --offline` and record failures.
-- [ ] Implement session construction, ID validation, status storage, and the executor trait.
-- [ ] Re-run the tests and verify Task 1 cases pass.
+- [x] Add failing tests for valid code/Markdown cells, unknown or duplicate fact IDs, initial `NeverRun` status, and refusal to execute Markdown.
+- [x] Run `cargo test -p cgx2-notebook-session --offline` and record failures.
+- [x] Implement session construction, ID validation, status storage, and the executor trait.
+- [x] Re-run the tests and verify Task 1 cases pass.
+
+`BTreeMap<String, CellFacts>` cannot carry duplicate fact keys to `new`; construction tests reject duplicate notebook cell IDs and unknown, missing, or Markdown fact entries.
 
 ### Task 2: Persistent execution and dependency invalidation
 
-- [ ] Add failing tests for single-cell run, rerun replacing that cell's output, no earlier side-effect replay, transitive symbol dependencies, unrelated cells, and opaque effects.
-- [ ] Run the tests to see missing behavior, then implement `run_cell`, `replace_cell`, and dependency traversal with cycle-safe visited sets.
-- [ ] Re-run the tests and verify cached outputs remain visible but marked `Stale` after edits.
+- [x] Add failing tests for single-cell run, rerun replacing that cell's output, no earlier side-effect replay, transitive symbol dependencies, unrelated cells, and opaque effects.
+- [x] Run the tests to see missing behavior, then implement `run_cell`, `replace_cell`, and dependency traversal with cycle-safe visited sets.
+- [x] Re-run the tests and verify cached outputs remain visible but marked `Stale` after edits.
 
 ### Task 3: Clean restart and error path
 
-- [ ] Add failing tests for executor failure, previous output becoming noncurrent, reset failure, fresh state on Restart and Run All, Markdown skip, and new output ordinals.
-- [ ] Run the tests to see failures, then implement `restart_and_run_all` and structured `SessionError` behavior.
-- [ ] Run `cargo test -p cgx2-notebook-session --offline`, `cargo fmt --check --manifest-path crates/cgx2-notebook-session/Cargo.toml`, and `cargo clippy -p cgx2-notebook-session --all-targets --offline -- -D warnings` from the repository root.
-- [ ] Document trait boundaries, cached-output/stale semantics, and absence of real `.cg` execution or UI. Commit only owned paths and stop for review.
+- [x] Add failing tests for executor failure, previous output becoming noncurrent, reset failure, fresh state on Restart and Run All, Markdown skip, and new output ordinals.
+- [x] Run the tests to see failures, then implement `restart_and_run_all` and structured `SessionError` behavior.
+- [x] Run `cargo test -p cgx2-notebook-session --offline`, `cargo fmt --check --manifest-path crates/cgx2-notebook-session/Cargo.toml`, and `cargo clippy -p cgx2-notebook-session --all-targets --offline -- -D warnings` from the repository root.
+- [x] Document trait boundaries, cached-output/stale semantics, and absence of real `.cg` execution or UI. Commit only owned paths and stop for review.
 
 **Acceptance:** a fake executor demonstrates persistent single-cell execution, conservative stale detection, and clean restart. This library does not yet execute CGx2 source or provide the native notebook interface.

@@ -1,0 +1,11 @@
+# CGx2 notebook session preview
+
+`cgx2-notebook-session` keeps execution state for a `cgx2_notebook_format::Notebook`. It uses the existing `.cgnb` document model and leaves reading and writing that format to `cgx2-notebook-format`.
+
+Construct `NotebookSession<E>` with one `CellFacts` entry per code cell, keyed by its stable cell ID, and a stateful `CellExecutor`. Facts contain `defines`, `reads`, and `opaque_effects` (default `false`). A future compiler adapter must supply those facts; this crate does not infer them by scanning source text. Duplicate notebook IDs, invalid IDs, missing facts, facts for Markdown, and unknown fact IDs are rejected. Because facts are supplied as a `BTreeMap`, duplicate fact keys cannot appear in the input value.
+
+`run_cell(id)` executes only that code cell on the existing executor. It replaces the cell's outputs with one `text/plain` output when `CellResult.text` is `Some`, or clears them when it is `None`. New output ordinals increase from the highest ordinal already saved in the notebook; overflow is an error. Rerunning a definition stales later readers, and `replace_cell` uses both old and new definitions to stale transitive readers. An opaque affected cell stales all later code cells. Markdown is never executed.
+
+Saved outputs remain in `notebook()` as cache and start at `NeverRun`; they do not establish current execution. `Stale` and `Failed` keep prior outputs visible while marking them noncurrent. `restart_and_run_all()` resets the executor, marks old code outputs stale, and runs code cells in file order. On reset or execution failure it stops, preserving cached outputs with noncurrent statuses. A failed cell is `Failed` and an executor error is returned with the cell ID.
+
+The executor trait is the integration boundary for a future CGx2 evaluator. This crate does not execute `.cg` source itself or provide the native notebook UI.
