@@ -22,17 +22,17 @@
 
 ### Effect policy
 
-- [ ] Add red tests for Wave 6 conversion effects, direct/transitive disallowed effects, unknown/imported call failure, allowed effects, malformed policy, deterministic JSON and exit status.
-- [ ] Implement the policy command `cgx2-security audit FILE.cg --policy POLICY.json --format text|json|sarif`, with source spans and stable rule IDs.
+- [x] Add red tests for Wave 6 conversion effects, direct/transitive disallowed effects, unknown/imported call failure, allowed effects, malformed policy, deterministic JSON and exit status.
+- [x] Implement the policy command `cgx2-security audit FILE.cg --policy POLICY.json --format text|json|sarif`, with source spans and stable rule IDs.
 
 ### Taint and SARIF
 
-- [ ] Add positive/negative fixtures for tainted `arg` flowing to a documented foreign sink, local binding propagation, a clean literal, aliasing/unsupported path marked Unknown, and UTF-8 span conversion.
-- [ ] Emit valid SARIF 2.1.0 with tests that parse its JSON and inspect rule/result locations. Include README examples and an explicit limitation table.
+- [x] Add positive/negative fixtures for tainted `arg` flowing to a documented foreign sink, local binding propagation, a clean literal, aliasing/unsupported path marked Unknown, and UTF-8 span conversion.
+- [x] Emit valid SARIF 2.1.0 with tests that parse its JSON and inspect rule/result locations. Include README examples and an explicit limitation table.
 
 ### Verification and handoff
 
-- [ ] Run `cargo test -p cgx2-effect-index -p cgx2-security --offline`, `RUSTUP_TOOLCHAIN=1.98.1 cargo fmt --all --check`, and `RUSTUP_TOOLCHAIN=1.98.1 cargo clippy -p cgx2-effect-index -p cgx2-security --all-targets --offline -- -D warnings`.
-- [ ] Commit only owned paths; report exact pattern coverage, false positives and unresolved capability enforcement.
+- [x] Run `cargo test -p cgx2-effect-index -p cgx2-security --offline`, `RUSTUP_TOOLCHAIN=1.98.1 cargo fmt --all --check`, and `RUSTUP_TOOLCHAIN=1.98.1 cargo clippy -p cgx2-effect-index -p cgx2-security --all-targets --offline -- -D warnings`.
+- [x] Commit only owned paths; report exact pattern coverage, false positives and unresolved capability enforcement.
 
 **Acceptance:** Policy and selected taint violations produce deterministic source-located findings, unknown calls are conservative, and the analyzer's limits are explicit.

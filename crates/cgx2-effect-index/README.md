@@ -14,12 +14,13 @@ The output is one JSON object followed by a newline. Fields appear in this order
 
 Each entry has `name`, `span`, `public`, `parameters` (`{"name","type"}` array), `return_type` (text or `null`), `calls`, `direct_effects`, `transitive_effects`, and `recursive`. Calls have `target` (dotted text or `null` for computed callees), `kind` (`local`, `builtin`, `foreign`, `unknown`), and call-expression `span`. Types come from source annotations; checked unannotated returns use the semantic checker inference. The top-level entry is named `<top-level>`. Functions sort by name, calls by call-site start/end then target, effects by the vocabulary order below, and cycles and members lexicographically. The graph includes calls in arguments and computed callee expressions.
 
-Only same-module named functions are resolved. A parameter or local binding with the same name makes a target unknown. Calls to other modules, computed callees, and every unlisted builtin yield `Unknown`; the index never infers dynamic dispatch or import resolution. In syntax-only mode, unbound value names yield `Unknown`; exact memory calls inside functions also include `Unknown` because the frozen checker does not model them there. Recursion appears as `recursive:true` and in `cycles` (strongly connected groups, including self-calls). Effects propagate from callees to callers and top level until no set changes.
+Only same-module named functions are resolved. A parameter, local binding, or imported namespace with the same root name makes a target unknown. Calls to other modules, computed callees, and every unlisted builtin yield `Unknown`; the index never infers dynamic dispatch or import resolution. In syntax-only mode, unbound value names yield `Unknown`; exact memory calls inside functions also include `Unknown` because the frozen checker does not model them there. Recursion appears as `recursive:true` and in `cycles` (strongly connected groups, including self-calls). Effects propagate from callees to callers and top level until no set changes.
 
 | Exact call or syntax | Direct effect |
 | --- | --- |
 | `arg`, `arg_count` | `ReadArgs` |
-| `memory.region`, `memory.owned_bytes`, `memory.alloc_bytes` | `ManagedAlloc` (CGx2 allocation, including owned buffers and region setup) |
+| `memory.region`, `memory.owned_bytes`, `memory.alloc_bytes`, `memory.copy_to_owned` | `ManagedAlloc` (CGx2 allocation, including owned buffers and region setup) |
+| `memory.promote_owned` | `ManagedAlloc`, `Mutate` (allocates managed storage and consumes the owned value) |
 | `memory.collect` | `Collect` |
 | `memory.move`, `memory.borrow_mut`, `memory.end_borrow`, `memory.drop`, `memory.close` | `Mutate` |
 | `memory.borrow`, `memory.use` | empty |

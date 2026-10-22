@@ -1,0 +1,4 @@
+fn forward(x: i64) -> i64:
+    x
+fn run() -> i64:
+    ffi.call("exec", forward(arg(0)))

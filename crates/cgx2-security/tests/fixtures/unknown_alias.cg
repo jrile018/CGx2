@@ -1,0 +1,3 @@
+let x = arg(0)
+let y = other(x)
+ffi.call("exec", y)

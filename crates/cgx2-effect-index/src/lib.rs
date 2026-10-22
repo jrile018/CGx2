@@ -135,11 +135,16 @@ pub fn index_source(source: &str, syntax_only: bool) -> Result<Index, Vec<Diagno
 
 fn build_index(module: &Module, typed: Option<&cgx2_sema::TypedModule>) -> Index {
     let names: BTreeSet<String> = module.functions.iter().map(|f| f.name.clone()).collect();
+    let imported_roots: BTreeSet<String> = module
+        .imports
+        .iter()
+        .filter_map(|path| path.segments.first().cloned())
+        .collect();
     let mut functions = module
         .functions
         .iter()
         .map(|function| {
-            let mut visitor = Visitor::new(&names, typed.is_none(), true);
+            let mut visitor = Visitor::new(&names, &imported_roots, typed.is_none(), true);
             visitor
                 .bindings
                 .push(function.parameters.iter().map(|p| p.name.clone()).collect());
@@ -181,7 +186,7 @@ fn build_index(module: &Module, typed: Option<&cgx2_sema::TypedModule>) -> Index
         })
         .collect::<Vec<_>>();
     functions.sort_by(|a, b| a.name.cmp(&b.name).then(a.span.start.cmp(&b.span.start)));
-    let mut visitor = Visitor::new(&names, typed.is_none(), false);
+    let mut visitor = Visitor::new(&names, &imported_roots, typed.is_none(), false);
     visitor.bindings.push(BTreeSet::new());
     visitor.statements(&module.statements);
     visitor.calls.sort_by(|a, b| {
@@ -228,6 +233,7 @@ fn build_index(module: &Module, typed: Option<&cgx2_sema::TypedModule>) -> Index
 
 struct Visitor<'a> {
     names: &'a BTreeSet<String>,
+    imported_roots: &'a BTreeSet<String>,
     syntax_only: bool,
     function_body: bool,
     bindings: Vec<BTreeSet<String>>,
@@ -236,9 +242,15 @@ struct Visitor<'a> {
 }
 
 impl<'a> Visitor<'a> {
-    fn new(names: &'a BTreeSet<String>, syntax_only: bool, function_body: bool) -> Self {
+    fn new(
+        names: &'a BTreeSet<String>,
+        imported_roots: &'a BTreeSet<String>,
+        syntax_only: bool,
+        function_body: bool,
+    ) -> Self {
         Self {
             names,
+            imported_roots,
             syntax_only,
             function_body,
             bindings: Vec::new(),
@@ -333,7 +345,7 @@ impl<'a> Visitor<'a> {
 
     fn classify(&mut self, name: &str) -> CallKind {
         let root = name.split('.').next().unwrap_or(name);
-        if self.is_bound(root) {
+        if self.is_bound(root) || self.imported_roots.contains(root) {
             self.effects.insert(Effect::Unknown);
             return CallKind::Unknown;
         }
@@ -350,6 +362,15 @@ impl<'a> Visitor<'a> {
                 CallKind::Builtin
             }
             "memory.region" | "memory.owned_bytes" | "memory.alloc_bytes" => {
+                self.effects.insert(Effect::ManagedAlloc);
+                CallKind::Builtin
+            }
+            "memory.promote_owned" => {
+                self.effects.insert(Effect::ManagedAlloc);
+                self.effects.insert(Effect::Mutate);
+                CallKind::Builtin
+            }
+            "memory.copy_to_owned" => {
                 self.effects.insert(Effect::ManagedAlloc);
                 CallKind::Builtin
             }

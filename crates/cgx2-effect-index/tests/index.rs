@@ -116,3 +116,31 @@ fn read_args_and_shadowed_callee_are_conservative() {
         .direct_effects
         .contains(&Effect::Unknown));
 }
+
+#[test]
+fn owned_managed_conversions_have_explicit_effects() {
+    let source = "let r = memory.region(mode: manual, limit: 256)\nlet o = memory.owned_bytes(4)\nlet m = memory.promote_owned(r, o)\nlet copied = memory.copy_to_owned(m)\n";
+    let index = index_source(source, false).unwrap();
+    let calls = &index.top_level.calls;
+    assert_eq!(calls[2].target.as_deref(), Some("memory.promote_owned"));
+    assert_eq!(calls[2].kind, CallKind::Builtin);
+    assert_eq!(calls[3].target.as_deref(), Some("memory.copy_to_owned"));
+    assert_eq!(calls[3].kind, CallKind::Builtin);
+    assert!(index
+        .top_level
+        .direct_effects
+        .contains(&Effect::ManagedAlloc));
+    assert!(index.top_level.direct_effects.contains(&Effect::Mutate));
+    assert!(!index.top_level.direct_effects.contains(&Effect::Unknown));
+}
+
+#[test]
+fn imported_namespace_cannot_be_assumed_builtin() {
+    let source = "import memory\nfn run() -> i64:\n    memory.copy_to_owned(1)\n";
+    let index = index_source(source, true).unwrap();
+    assert_eq!(index.functions[0].calls[0].kind, CallKind::Unknown);
+    assert!(index.functions[0].direct_effects.contains(&Effect::Unknown));
+    assert!(!index.functions[0]
+        .direct_effects
+        .contains(&Effect::ManagedAlloc));
+}

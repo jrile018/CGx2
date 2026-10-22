@@ -1,0 +1,9 @@
+[package]
+name = "cgx2-security"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+cgx2-effect-index = { path = "../cgx2-effect-index" }
+cgx2-syntax = { path = "../cgx2-syntax" }
+serde_json = "1"
