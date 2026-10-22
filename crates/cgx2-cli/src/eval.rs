@@ -2,8 +2,7 @@ use std::{collections::HashMap, fmt};
 
 use crate::RunError;
 use cgx2_syntax::{
-    parse_module, AssignOp, BinaryOp, Expr, ExprKind, Function, Module, Span, Stmt, StmtKind,
-    TypeSyntax,
+    AssignOp, BinaryOp, Expr, ExprKind, Function, Module, Span, Stmt, StmtKind, TypeSyntax,
 };
 
 const STEP_LIMIT: usize = 1_000_000;
@@ -52,15 +51,7 @@ struct Evaluator<'a> {
     depth: usize,
 }
 
-pub fn run_source(source: &str, args: &[String]) -> Result<RunResult, RunError> {
-    let module = parse_module(source).map_err(|diagnostics| {
-        let first = &diagnostics[0];
-        RunError {
-            code: first.code,
-            message: first.message.clone(),
-            span: Some(first.span),
-        }
-    })?;
+pub(crate) fn run_module(module: &Module, args: &[String]) -> Result<RunResult, RunError> {
     for function in &module.functions {
         if matches!(function.name.as_str(), "arg" | "arg_count") {
             return Err(error(
@@ -79,7 +70,7 @@ pub fn run_source(source: &str, args: &[String]) -> Result<RunResult, RunError> 
     }
     reject_unsupported(&module.statements)?;
     let mut evaluator = Evaluator {
-        module: &module,
+        module,
         args,
         steps: 0,
         depth: 0,
@@ -372,7 +363,7 @@ fn reject_unsupported(statements: &[Stmt]) -> Result<(), RunError> {
     Ok(())
 }
 
-fn stmt_has_memory(stmt: &Stmt) -> bool {
+pub(crate) fn stmt_has_memory(stmt: &Stmt) -> bool {
     match &stmt.kind {
         StmtKind::Let { value, .. } | StmtKind::Assign { value, .. } | StmtKind::Expr(value) => {
             expr_has_memory(value)

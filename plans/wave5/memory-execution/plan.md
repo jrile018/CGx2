@@ -29,19 +29,19 @@
 
 ### 1. End-to-end memory evaluator
 
-- [ ] Add red tests for a valid manual region script, owned move, auto region, and two-region isolation using public `run_source` and CLI. Include a scalar regression fixture.
-- [ ] Implement non-`Clone` runtime binding state and direct AST evaluation for only the checked intrinsic forms. Recheck static validity before opening any region. Use source spans for runtime errors and stable codes.
-- [ ] Exercise explicit drop/close, rooted liveness across collection, stale handle rejection, and cleanup on error. An error may leave earlier mutations inside the discarded session, matching the language design; it must not leak a success result.
+- [x] Add red tests for a valid manual region script, owned move, auto region, and two-region isolation using public `run_source` and CLI. Include a scalar regression fixture.
+- [x] Implement non-`Clone` runtime binding state and direct AST evaluation for only the checked intrinsic forms. Recheck static validity before opening any region. Use source spans for runtime errors and stable codes.
+- [x] Exercise explicit drop/close, rooted liveness across collection, stale handle rejection, and cleanup on error. An error may leave earlier mutations inside the discarded session, matching the language design; it must not leak a success result.
 
 ### 2. `no_gc` and reporting
 
-- [ ] Add nested guard tests with allocation below/above budget, across two regions, and an explicit collect attempt. Assert exact zero collection delta inside guards, including failures.
-- [ ] Implement recursive guarded block execution. Allocation errors must not trigger collection or silently increase budgets. Do not interpret Python/foreign allocation as protected by `no_gc`.
-- [ ] Add the memory report command and integration fixture. Verify `schema_version`, counters, and no output after a rejected script.
+- [x] Add nested guard tests with allocation below/above budget, across two regions, and an explicit collect attempt. Assert exact zero collection delta inside guards, including failures.
+- [x] Implement recursive guarded block execution. Allocation errors must not trigger collection or silently increase budgets. Do not interpret Python/foreign allocation as protected by `no_gc`.
+- [x] Add the memory report command and integration fixture. Verify `schema_version`, counters, and no output after a rejected script.
 
 ### 3. Verification and handoff
 
-- [ ] Run `cargo test --workspace --exclude cgx2-python-bridge --offline`, `RUSTUP_TOOLCHAIN=1.98.1 cargo fmt --all --check`, `RUSTUP_TOOLCHAIN=1.98.1 cargo clippy --workspace --exclude cgx2-python-bridge --all-targets --offline -- -D warnings`, and `python3 bench/pilot.py parity --cgx2 target/debug/cgx2` after building the current binary.
-- [ ] Document exact source operations, the 1 MiB auto trigger, runtime errors, report command, and still unsupported memory features. Commit only owned paths.
+- [x] Run `cargo test --workspace --exclude cgx2-python-bridge --offline`, `RUSTUP_TOOLCHAIN=1.98.1 cargo fmt --all --check`, `RUSTUP_TOOLCHAIN=1.98.1 cargo clippy --workspace --exclude cgx2-python-bridge --all-targets --offline -- -D warnings`, and `python3 bench/pilot.py parity --cgx2 target/debug/cgx2` after building the current binary.
+- [x] Document exact source operations, the 1 MiB auto trigger, runtime errors, report command, and still unsupported memory features. Commit only owned paths.
 
 **Acceptance:** At least one checked `.cg` program creates/manual-collects/closes a region through the actual runtime, and nested `no_gc` tests show zero collection under success and failure. This remains a bounded memory profile, not a whole-language memory-safety proof.

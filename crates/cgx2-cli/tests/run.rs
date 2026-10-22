@@ -81,11 +81,15 @@ fn syntax_errors_keep_cgs_code() {
 }
 
 #[test]
-fn low_level_run_source_rejects_memory_before_interpreting() {
-    let source = "let r = memory.region(mode: manual, limit: 4)\n";
-    let error = run_source(source, &[]).unwrap_err();
-    assert_eq!(error.code, "CGR009");
-    assert!(error.message.contains("memory execution"));
+fn low_level_run_source_checks_memory_before_interpreting() {
+    let source = "let r = memory.region(mode: manual, limit: 128)\nlet x = memory.alloc_bytes(r, 1)\nmemory.drop(x)\nmemory.collect(r)\nmemory.close(r)\n";
+    assert_eq!(run_source(source, &[]).unwrap().value, Value::Unit);
+    let error = run_source(
+        "let x = memory.owned_bytes(1)\nlet y = memory.move(x)\nx\n",
+        &[],
+    )
+    .unwrap_err();
+    assert_eq!(error.code, "CGO001");
 }
 
 #[test]

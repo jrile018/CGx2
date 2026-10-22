@@ -1,0 +1,7 @@
+let r = memory.region(mode: manual, limit: 256)
+let x = memory.alloc_bytes(r, 16)
+memory.collect(r)
+memory.use(x)
+memory.drop(x)
+memory.collect(r)
+memory.close(r)

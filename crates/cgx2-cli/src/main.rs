@@ -2,16 +2,17 @@ mod diagnostics;
 
 use std::{env, fs, path::Path, process::ExitCode};
 
-use cgx2_cli::{check_source, run_source, Value};
+use cgx2_cli::{check_source, run_checked_source, Value};
 use cgx2_syntax::{format_module, parse_module};
 
 use diagnostics::{CliDiagnostic, DiagnosticFormat};
 
-const HELP: &str = "usage: cgx2 [--diagnostic-format=json] check FILE.cg | cgx2 [--diagnostic-format=json] run FILE.cg [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 fmt FILE.cg\ncheck validates syntax, scalar types, and a bounded memory/ownership script subset; effects and capabilities are not checked; run cannot execute memory constructs";
+const HELP: &str = "usage: cgx2 [--diagnostic-format=json] check FILE.cg | cgx2 [--diagnostic-format=json] run FILE.cg [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 memory report FILE.cg [--format=json] | cgx2 fmt FILE.cg\ncheck validates syntax, scalar types, and a bounded memory/ownership script subset; run checks source before execution; memory report shows CGx2 allocations only";
 
 enum Command {
     Check { path: String },
     Run { path: String, args: Vec<String> },
+    MemoryReport { path: String, json: bool },
     Fmt { path: String },
 }
 
@@ -36,7 +37,10 @@ fn main() -> ExitCode {
 fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
     let command = parse_args(args).map_err(|error| vec![error])?;
     let path = match &command {
-        Command::Check { path } | Command::Run { path, .. } | Command::Fmt { path } => path,
+        Command::Check { path }
+        | Command::Run { path, .. }
+        | Command::MemoryReport { path, .. }
+        | Command::Fmt { path } => path,
     };
     let source = fs::read_to_string(path).map_err(|error| {
         vec![CliDiagnostic::new(
@@ -56,16 +60,35 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
             })?;
         }
         Command::Run { path, args } => {
-            check_source(&source).map_err(|errors| {
+            let (result, _) = run_checked_source(&source, &args).map_err(|errors| {
                 errors
                     .into_iter()
-                    .map(|error| CliDiagnostic::from_check(&path, error))
+                    .map(|error| CliDiagnostic::from_run(&path, error))
                     .collect::<Vec<_>>()
             })?;
-            let result = run_source(&source, &args)
-                .map_err(|error| vec![CliDiagnostic::from_run(&path, error)])?;
             if result.value != Value::Unit {
                 println!("{}", result.value);
+            }
+        }
+        Command::MemoryReport { path, json } => {
+            let (_, report) = run_checked_source(&source, &[]).map_err(|errors| {
+                errors
+                    .into_iter()
+                    .map(|error| CliDiagnostic::from_run(&path, error))
+                    .collect::<Vec<_>>()
+            })?;
+            let report = report.ok_or_else(|| {
+                vec![CliDiagnostic::new(
+                    "CGC001",
+                    "memory report requires a memory script".into(),
+                    path,
+                    None,
+                )]
+            })?;
+            if json {
+                println!("{}", report.to_json());
+            } else {
+                print!("{}", report.to_text());
             }
         }
         Command::Fmt { path } => {
@@ -107,6 +130,9 @@ fn parse_args(args: Vec<String>) -> Result<Command, CliDiagnostic> {
         }
     }
     let (mode, rest) = match filtered.first().map(String::as_str) {
+        Some("memory") if filtered.get(1).map(String::as_str) == Some("report") => {
+            ("memory-report", &filtered[2..])
+        }
         Some("check") => ("check", &filtered[1..]),
         Some("run") => ("run", &filtered[1..]),
         Some("fmt") if !json => ("fmt", &filtered[1..]),
@@ -118,6 +144,16 @@ fn parse_args(args: Vec<String>) -> Result<Command, CliDiagnostic> {
     };
     if Path::new(path).extension().and_then(|ext| ext.to_str()) != Some("cg") {
         return Err(usage());
+    }
+    if mode == "memory-report" {
+        let json = rest.len() == 2 && rest[1] == "--format=json";
+        if rest.len() != 1 && !json {
+            return Err(usage());
+        }
+        return Ok(Command::MemoryReport {
+            path: path.clone(),
+            json,
+        });
     }
     if mode == "check" || mode == "fmt" {
         if rest.len() != 1 {

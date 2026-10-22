@@ -100,16 +100,16 @@ fn help_states_check_scope() {
 }
 
 #[test]
-fn memory_check_fmt_and_run_have_distinct_contracts() {
+fn memory_check_fmt_and_run_share_checked_contract() {
     let source = "let r = memory.region(mode: manual, limit: 4096)\nno_gc(budget: 256):\n    let x = memory.alloc_bytes(r, 64)\nmemory.collect(r)\n";
     let file = SourceFile::new(source);
     assert!(invoke(&["check", file.path()]).status.success());
     let formatted = invoke(&["fmt", file.path()]);
     assert!(formatted.status.success());
     assert_eq!(formatted.stdout, source.as_bytes());
-    let run = json_errors(invoke(&["run", file.path(), "--diagnostic-format=json"]));
-    assert_eq!(run[0].code, "CGR009");
-    assert!(run[0].message.contains("memory execution"));
+    let run = invoke(&["run", file.path(), "--diagnostic-format=json"]);
+    assert!(run.status.success());
+    assert!(run.stdout.is_empty());
 
     let invalid_source =
         "let r = memory.region(mode: manual, limit: 4)\nno_gc(budget: 2):\n    memory.collect(r)\n";
