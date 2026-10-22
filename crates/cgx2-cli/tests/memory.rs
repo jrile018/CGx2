@@ -53,3 +53,25 @@ fn invalid_memory_operations_fail_static_gate_before_runtime() {
         assert_eq!(run_source(source, &[]).unwrap_err().code, code);
     }
 }
+
+#[test]
+fn promotion_survives_collection_and_copy_outlives_managed_region() {
+    let source = "let a = memory.region(mode: manual, limit: 256)\nlet b = memory.region(mode: manual, limit: 256)\nlet o = memory.owned_bytes(8)\nlet m = memory.promote_owned(a, o)\nlet other = memory.alloc_bytes(b, 1)\nmemory.collect(a)\nmemory.use(m)\nlet copy = memory.copy_to_owned(m)\nmemory.drop(m)\nmemory.collect(a)\nmemory.close(a)\nmemory.use(copy)\nmemory.use(other)\nmemory.drop(copy)\nmemory.drop(other)\nmemory.close(b)\n";
+    let report = report(source);
+    assert_eq!(report.regions[1].collection_count, 2);
+    assert_eq!(report.regions[1].total_collected_bytes, 72);
+    assert_eq!(report.regions[2].collection_count, 0);
+    assert_eq!(report.regions[2].allocation_failures, 0);
+    assert_eq!(report.totals.committed_bytes, 0);
+}
+
+#[test]
+fn conversion_failures_return_errors_without_success_report() {
+    for (source, expected) in [
+        ("let r = memory.region(mode: manual, limit: 71)\nlet o = memory.owned_bytes(8)\nlet m = memory.promote_owned(r, o)\n", "CGR013"),
+        ("let r = memory.region(mode: manual, limit: 256)\nlet o = memory.owned_bytes(8)\nno_gc(budget: 63):\n    let m = memory.promote_owned(r, o)\n", "CGR013"),
+        ("let r = memory.region(mode: manual, limit: 256)\nlet m = memory.alloc_bytes(r, 8)\nno_gc(budget: 39):\n    let copy = memory.copy_to_owned(m)\n", "CGR013"),
+    ] {
+        assert_eq!(run_source_with_report(source, &[]).unwrap_err().code, expected);
+    }
+}

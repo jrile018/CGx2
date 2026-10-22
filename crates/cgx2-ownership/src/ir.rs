@@ -40,6 +40,11 @@ pub enum Op {
         region: String,
         span: Span,
     },
+    CopyToOwned {
+        from: String,
+        to: String,
+        span: Span,
+    },
     CreateManaged {
         value: String,
         region: String,
@@ -86,6 +91,7 @@ impl Op {
             | Self::BorrowMut { span, .. }
             | Self::EndBorrow { span, .. }
             | Self::Promote { span, .. }
+            | Self::CopyToOwned { span, .. }
             | Self::CreateManaged { span, .. }
             | Self::DropValue { span, .. }
             | Self::CloseRegion { span, .. }

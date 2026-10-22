@@ -20,6 +20,45 @@ fn checks_bounded_memory_script() {
 }
 
 #[test]
+fn checks_direct_promotion_and_copy_with_precise_conversion_errors() {
+    let prefix = "let r = memory.region(mode: manual, limit: 256)\nlet o = memory.owned_bytes(8)\n";
+    let valid = format!("{prefix}let m = memory.promote_owned(r, o)\nmemory.collect(r)\nlet copy = memory.copy_to_owned(m)\nmemory.drop(m)\nmemory.close(r)\nmemory.use(copy)\n");
+    check(&valid).unwrap();
+    error(
+        &format!("{prefix}let m = memory.promote_owned(r, o)\nmemory.use(o)\n"),
+        "CGO001",
+        "memory.use(o)",
+    );
+    error(
+        &format!("{prefix}let b = memory.borrow(o)\nlet m = memory.promote_owned(r, o)\n"),
+        "CGO002",
+        "memory.promote_owned(r, o)",
+    );
+    error(
+        &format!("{prefix}memory.close(r)\nlet m = memory.promote_owned(r, o)\n"),
+        "CGO003",
+        "memory.promote_owned(r, o)",
+    );
+    error(
+        &format!("{prefix}let m = memory.promote_owned(o, r)\n"),
+        "CGM002",
+        "o",
+    );
+    error(
+        &format!("{prefix}let copy = memory.copy_to_owned(o)\n"),
+        "CGM002",
+        "o",
+    );
+    error(
+        &format!("{prefix}let m = memory.promote_owned(r, o)\nlet m = memory.copy_to_owned(m)\n"),
+        "CGM001",
+        "let m = memory.copy_to_owned(m)\n",
+    );
+    error(&format!("{prefix}let m = memory.promote_owned(r, o)\nlet copy = memory.copy_to_owned(memory.use(m))\n"), "CGM002", "memory.use(m)");
+    error("let café = memory.owned_bytes(1)\nlet moved = memory.move(café)\nlet r = memory.region(mode: manual, limit: 128)\nlet m = memory.promote_owned(r, café)\n", "CGO003", "memory.promote_owned(r, café)");
+}
+
+#[test]
 fn ownership_failures_retain_source_spans() {
     error(
         "let b = memory.owned_bytes(1)\nlet c = memory.move(b)\nb\n",

@@ -405,6 +405,89 @@ fn promote_requires_open_region_and_consumes_owned_source() {
 }
 
 #[test]
+fn copy_from_managed_keeps_source_live_and_creates_unique_owned_value() {
+    let ops = [
+        Op::OpenRegion {
+            region: "r".into(),
+            span: s(0),
+        },
+        Op::CreateManaged {
+            value: "m".into(),
+            region: "r".into(),
+            span: s(1),
+        },
+        Op::CopyToOwned {
+            from: "m".into(),
+            to: "o".into(),
+            span: s(2),
+        },
+        Op::Use {
+            value: "m".into(),
+            span: s(3),
+        },
+        Op::DropValue {
+            value: "m".into(),
+            span: s(4),
+        },
+        Op::CloseRegion {
+            region: "r".into(),
+            span: s(5),
+        },
+        Op::Use {
+            value: "o".into(),
+            span: s(6),
+        },
+    ];
+    assert_eq!(check_ops(&ops), Ok(()));
+    assert_error(
+        &[
+            ops[0].clone(),
+            ops[1].clone(),
+            Op::CopyToOwned {
+                from: "m".into(),
+                to: "m".into(),
+                span: s(7),
+            },
+        ],
+        "CGO001",
+        s(7),
+    );
+    assert_error(
+        &[
+            Op::CreateOwned {
+                value: "o".into(),
+                span: s(0),
+            },
+            Op::CopyToOwned {
+                from: "o".into(),
+                to: "x".into(),
+                span: s(8),
+            },
+        ],
+        "CGO003",
+        s(8),
+    );
+    assert_error(
+        &[
+            ops[0].clone(),
+            ops[1].clone(),
+            Op::BorrowMut {
+                value: "m".into(),
+                token: "t".into(),
+                span: s(8),
+            },
+            Op::CopyToOwned {
+                from: "m".into(),
+                to: "o".into(),
+                span: s(9),
+            },
+        ],
+        "CGO002",
+        s(9),
+    );
+}
+
+#[test]
 fn close_requires_no_live_handle_and_regions_are_isolated() {
     assert_error(
         &[

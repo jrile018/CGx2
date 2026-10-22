@@ -278,6 +278,29 @@ impl Checker {
                         self.values.insert(from.clone(), ValueState::Dead);
                     }
                 }
+                Op::CopyToOwned { from, to, span } => {
+                    if matches!(self.values.get(from), Some(ValueState::Managed(_))) {
+                        if self
+                            .borrows
+                            .values()
+                            .any(|borrow| borrow.value == *from && borrow.mutable)
+                        {
+                            self.report(
+                                "CGO002",
+                                format!("value '{from}' is mutably borrowed"),
+                                *span,
+                            );
+                        } else {
+                            self.create(to, ValueState::Owned, *span);
+                        }
+                    } else {
+                        self.report(
+                            "CGO003",
+                            format!("value '{from}' is not live managed"),
+                            *span,
+                        );
+                    }
+                }
                 Op::CloseRegion { region, span } => {
                     if self.open_region(region, *span) {
                         if self.values.values().any(|state| matches!(state, ValueState::Managed(r) | ValueState::MaybeManaged(r) if r == region)) {

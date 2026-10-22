@@ -140,13 +140,13 @@ fn memory_report_text_and_json_reflect_runtime_counters() {
     );
     let text = String::from_utf8(text.stdout).unwrap();
     assert!(text.starts_with("CGx2 memory report v1\n"));
-    assert!(text.contains("closed mode=manual limit_bytes=256 committed_bytes=0 live_bytes=0 peak_bytes=80 allocation_failures=0 collection_count=2 total_collected_bytes=80"));
-    assert!(text.contains("totals committed_bytes=0 live_bytes=0 peak_bytes=80 allocation_failures=0 collection_count=2 total_collected_bytes=80"));
+    assert!(text.contains("closed mode=manual limit_bytes=256 committed_bytes=0 live_bytes=0 peak_bytes=152 allocation_failures=0 collection_count=2 total_collected_bytes=152"));
+    assert!(text.contains("totals committed_bytes=0 live_bytes=0 peak_bytes=152 allocation_failures=0 collection_count=2 total_collected_bytes=152"));
 
     let json = invoke(&["memory", "report", path, "--format=json"]);
     assert!(json.status.success());
     let mut parser = Command::new("python3")
-        .args(["-c", "import json,sys; d=json.load(sys.stdin); assert d['schema_version']==1; assert d['regions'][1]['collection_count']==2; assert d['totals']['total_collected_bytes']==80"])
+        .args(["-c", "import json,sys; d=json.load(sys.stdin); assert d['schema_version']==1; assert d['regions'][1]['collection_count']==2; assert d['totals']['total_collected_bytes']==152"])
         .stdin(std::process::Stdio::piped())
         .spawn().unwrap();
     use std::io::Write;
@@ -164,6 +164,8 @@ fn memory_report_has_no_success_output_on_failure() {
     for (source, code) in [
         ("let r = memory.region(mode: manual, limit: 256)\nno_gc(budget: 64):\n    memory.collect(r)\n", "CGO004"),
         ("let r = memory.region(mode: manual, limit: 64)\nlet x = memory.alloc_bytes(r, 1)\n", "CGR013"),
+        ("let r = memory.region(mode: manual, limit: 71)\nlet o = memory.owned_bytes(8)\nlet m = memory.promote_owned(r, o)\n", "CGR013"),
+        ("let r = memory.region(mode: manual, limit: 256)\nlet m = memory.alloc_bytes(r, 8)\nno_gc(budget: 39):\n    let copy = memory.copy_to_owned(m)\n", "CGR013"),
     ] {
         let file = SourceFile::new(source);
         let output = invoke(&["memory", "report", file.0.to_str().unwrap(), "--format=json"]);

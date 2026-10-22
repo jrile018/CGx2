@@ -30,6 +30,15 @@ enum Op {
         name: String,
         from: String,
     },
+    Promote {
+        name: String,
+        region: String,
+        from: String,
+    },
+    CopyToOwned {
+        name: String,
+        from: String,
+    },
     Alloc {
         name: String,
         region: String,
@@ -189,6 +198,21 @@ fn lower_stmt(stmt: &Stmt) -> Result<SpannedOp, RunError> {
                         from: name(args[0])?,
                     }
                 }
+                "promote_owned" => {
+                    let args = positional(arguments, 2, value.span)?;
+                    Op::Promote {
+                        name: dest.clone(),
+                        region: name(args[0])?,
+                        from: name(args[1])?,
+                    }
+                }
+                "copy_to_owned" => {
+                    let args = positional(arguments, 1, value.span)?;
+                    Op::CopyToOwned {
+                        name: dest.clone(),
+                        from: name(args[0])?,
+                    }
+                }
                 "alloc_bytes" => {
                     let args = positional(arguments, 2, value.span)?;
                     Op::Alloc {
@@ -316,6 +340,41 @@ fn execute(
                 let value = bindings.remove(from).expect("checked owned binding");
                 bindings.insert(name.clone(), value);
             }
+            Op::Promote {
+                name,
+                region: region_name,
+                from,
+            } => {
+                let id = region(bindings, region_name, *span)?;
+                if !matches!(binding(bindings, from, *span)?, Binding::Owned(_)) {
+                    return Err(error("CGR014", "promotion requires owned bytes", *span));
+                }
+                let Binding::Owned(value) = bindings.remove(from).expect("checked owned binding")
+                else {
+                    unreachable!()
+                };
+                let handle = match session.promote_owned(id, value) {
+                    Ok(handle) => handle,
+                    Err((failure, original)) => {
+                        bindings.insert(from.clone(), Binding::Owned(original));
+                        return Err(allocation(failure, *span));
+                    }
+                };
+                session.root(handle).map_err(|e| runtime(e, *span))?;
+                bindings.insert(name.clone(), Binding::Managed(handle));
+            }
+            Op::CopyToOwned { name, from } => {
+                let Binding::Managed(handle) = binding(bindings, from, *span)? else {
+                    return Err(error("CGR014", "copy requires a managed handle", *span));
+                };
+                let value = session
+                    .copy_managed_to_owned(*handle)
+                    .map_err(|e| match e {
+                        MemoryError::Allocation(failure) => allocation(failure, *span),
+                        other => runtime(other, *span),
+                    })?;
+                bindings.insert(name.clone(), Binding::Owned(value));
+            }
             Op::Alloc {
                 name,
                 region: region_name,
@@ -413,5 +472,57 @@ mod tests {
         assert_eq!(report.regions[2].allocation_failures, 1);
         assert_eq!(report.regions[1].live_bytes, 96);
         assert_eq!(report.regions[2].live_bytes, 0);
+    }
+
+    #[test]
+    fn failed_promotion_retains_sole_owned_binding_and_does_not_collect() {
+        let source = "let r = memory.region(mode: manual, limit: 256)\nlet o = memory.owned_bytes(8)\nno_gc(budget: 63):\n    let m = memory.promote_owned(r, o)\n";
+        let module = cgx2_syntax::parse_module(source).unwrap();
+        cgx2_sema::check_module(&module).unwrap();
+        let ops = lower(&module.statements).unwrap();
+        let mut session = Session::new();
+        let mut bindings = HashMap::new();
+        let mut steps = 0;
+        assert_eq!(
+            execute(&ops, &mut session, &mut bindings, &mut steps)
+                .unwrap_err()
+                .code,
+            "CGR013"
+        );
+        assert!(matches!(bindings.get("o"), Some(Binding::Owned(bytes)) if bytes.len() == 8));
+        assert!(!bindings.contains_key("m"));
+        let region = region(&bindings, "r", Span { start: 0, end: 0 }).unwrap();
+        let stats = session.stats(region).unwrap();
+        assert_eq!(stats.committed_bytes, 0);
+        assert_eq!(stats.allocation_failures, 1);
+        assert_eq!(stats.collection_count, 0);
+    }
+
+    #[test]
+    fn copied_owned_buffer_has_distinct_storage_from_managed_source() {
+        let source = "let r = memory.region(mode: manual, limit: 256)\nlet o = memory.owned_bytes(8)\nlet m = memory.promote_owned(r, o)\nlet copy = memory.copy_to_owned(m)\n";
+        let module = cgx2_syntax::parse_module(source).unwrap();
+        cgx2_sema::check_module(&module).unwrap();
+        let ops = lower(&module.statements).unwrap();
+        let mut session = Session::new();
+        let mut bindings = HashMap::new();
+        let mut steps = 0;
+        execute(&ops, &mut session, &mut bindings, &mut steps).unwrap();
+        let Binding::Managed(handle) = bindings.get("m").unwrap() else {
+            panic!("managed binding missing")
+        };
+        let Binding::Owned(copy) = bindings.get("copy").unwrap() else {
+            panic!("owned copy missing")
+        };
+        assert_ne!(
+            session.read_bytes(*handle).unwrap().as_ptr(),
+            copy.as_slice().as_ptr()
+        );
+        assert_eq!(copy.as_slice(), &[0; 8]);
+        session.unroot(*handle).unwrap();
+        session
+            .collect(region(&bindings, "r", Span { start: 0, end: 0 }).unwrap())
+            .unwrap();
+        assert_eq!(copy.as_slice(), &[0; 8]);
     }
 }

@@ -223,6 +223,28 @@ impl Lowerer {
                 });
                 Some(Kind::Owned)
             }
+            "promote_owned" if destination.is_some() => {
+                let args = self.positional(arguments, 2, expr.span)?;
+                let region = self.reference(args[0], &[Kind::Region])?;
+                let from = self.reference(args[1], &[Kind::Owned])?;
+                self.ops.push(Op::Promote {
+                    from,
+                    to: destination.unwrap_or_default().into(),
+                    region,
+                    span: expr.span,
+                });
+                Some(Kind::Managed)
+            }
+            "copy_to_owned" if destination.is_some() => {
+                let args = self.positional(arguments, 1, expr.span)?;
+                let from = self.reference(args[0], &[Kind::Managed])?;
+                self.ops.push(Op::CopyToOwned {
+                    from,
+                    to: destination.unwrap_or_default().into(),
+                    span: expr.span,
+                });
+                Some(Kind::Owned)
+            }
             "alloc_bytes" if destination.is_some() => {
                 let args = self.positional(arguments, 2, expr.span)?;
                 let region = self.reference(args[0], &[Kind::Region])?;
