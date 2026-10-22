@@ -467,8 +467,11 @@ fn source_unknown(options: &Options, bytes: &[u8], diagnostic: &source::Diagnost
     let result = json!({
         "schema_version": 3,
         "input_sha256": hash(bytes),
-        "source": {"path": options.input, "function": options.function},
-        "verdict": {"kind": "unknown", "meaning": "source_subset_unsupported", "diagnostic": diagnostic.json()},
+        "source": {"path": options.input, "function": options.function,
+            "span": {"start": diagnostic.span.start, "end": diagnostic.span.end}},
+        "verdict": {"kind": "unknown", "meaning": "source_subset_unsupported",
+            "scope": {"requested_domains": domain_json(&options.domains), "max_cases": options.max_cases},
+            "diagnostic": diagnostic.json()},
         "proof": {"kind": "unknown", "meaning": "no_trusted_solver_proof"},
     });
     if options.format == "json" {

@@ -45,10 +45,15 @@ dependencies = [
 name = "cgx2-cli"
 version = "0.1.0"
 dependencies = [
+ "cgx2-bind",
+ "cgx2-ffi-native",
  "cgx2-foreign",
+ "cgx2-package",
  "cgx2-runtime",
  "cgx2-sema",
  "cgx2-syntax",
+ "serde_json",
+ "sha2",
 ]
 
 [[package]]
@@ -208,6 +213,8 @@ version = "0.1.0"
 name = "cgx2-verify-cli"
 version = "0.1.0"
 dependencies = [
+ "cgx2-sema",
+ "cgx2-syntax",
  "cgx2-verify-core",
  "serde_json",
  "sha2",

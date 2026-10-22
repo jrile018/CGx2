@@ -105,6 +105,11 @@ class TaskEvidenceTests(unittest.TestCase):
         self.assertIn("duplicate_condition", self.codes())
         self.assertIn("duplicate_order", self.codes())
 
+    def test_cgx2_cannot_be_its_own_baseline(self):
+        self.task["baseline_language"] = "cgx2"
+        self.freeze()
+        self.assertIn("task_schema", self.codes())
+
     def test_hidden_leak_and_changed_freeze_are_rejected(self):
         self.task["hidden_test_path"] = "cgx2/hidden.py"
         (self.root / "cgx2/hidden.py").write_text("hidden\n")

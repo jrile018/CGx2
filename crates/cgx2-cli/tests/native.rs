@@ -216,7 +216,12 @@ fn missing_export_version_assertion_and_stale_source_fail_before_execution() {
             .replace("native_fixture@1.0.0", "native_fixture@2.0.0"),
     );
     fixture.write_lock();
-    assert_eq!(fixture.code(), "CGN007");
+    // Static check validates the declaration and bytes without running metadata exports.
+    check_native_package(&fixture.root).unwrap();
+    assert_eq!(
+        run_native_package(&fixture.root, &[]).unwrap_err()[0].code,
+        "CGN007"
+    );
     fixture.lock.bindings[0].version = "1.0.0".into();
     fixture.source(
         &fixture
@@ -227,6 +232,65 @@ fn missing_export_version_assertion_and_stale_source_fail_before_execution() {
     let checked = cgx2_package::load_checked_package(&fixture.root).unwrap();
     fixture.source(&fixture.read_source().replace("double(21)", "double(20)"));
     assert_eq!(checked.verify_unchanged().unwrap_err()[0].code, "CGP018");
+}
+
+#[test]
+fn static_check_does_not_run_library_constructors() {
+    let fixture = Fixture::new();
+    let marker = fixture.root.join("constructor-marker");
+    let checked = Command::new(env!("CARGO_BIN_EXE_cgx2"))
+        .arg("check")
+        .arg(&fixture.root)
+        .env("CGX2_NATIVE_CONSTRUCTOR_MARKER", &marker)
+        .output()
+        .unwrap();
+    assert!(
+        checked.status.success(),
+        "{}",
+        String::from_utf8_lossy(&checked.stderr)
+    );
+    assert!(!marker.exists());
+    let ran = Command::new(env!("CARGO_BIN_EXE_cgx2"))
+        .arg("run")
+        .arg(&fixture.root)
+        .env("CGX2_NATIVE_CONSTRUCTOR_MARKER", &marker)
+        .output()
+        .unwrap();
+    assert!(
+        ran.status.success(),
+        "{}",
+        String::from_utf8_lossy(&ran.stderr)
+    );
+    assert_eq!(fs::read_to_string(marker).unwrap(), "loaded\n");
+}
+
+#[test]
+fn distinct_verified_libraries_do_not_alias_reused_fd_paths() {
+    let mut fixture = Fixture::new();
+    let second_artifact = fixture.root.join("libnative-second.so");
+    let status = Command::new("cc")
+        .args(["-shared", "-fPIC", "-DFIXTURE_MULTIPLIER=3", "-o"])
+        .arg(&second_artifact)
+        .arg(format!("{FIXTURE}/native.c"))
+        .status()
+        .unwrap();
+    assert!(status.success());
+    let mut second = fixture.lock.bindings[0].clone();
+    second.id = "second".into();
+    second.artifact = "libnative-second.so".into();
+    second.sha256 = format!("{:x}", Sha256::digest(fs::read(&second_artifact).unwrap()));
+    fixture.lock.bindings.push(second);
+    fixture.write_lock();
+    let source = fixture.read_source();
+    fixture.source(&source.replace(
+        "fn main()",
+        "unsafe foreign native pub fn triple(x: i64) -> i64 effects(Foreign) caps(native) = second.fixture_double runtime \"native_fixture@1.0.0\" ownership copied\n\nfn main()",
+    ).replace("double(21)", "double(20) + triple(1)"));
+    check_native_package(&fixture.root).unwrap();
+    assert_eq!(
+        run_native_package(&fixture.root, &[]).unwrap().value,
+        Value::I64(43)
+    );
 }
 
 #[test]

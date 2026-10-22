@@ -127,6 +127,7 @@ def audit(pack, base, run_paths=()):
                 or any(not isinstance(language, str) for language in applicable)
                 or len(applicable) != len(set(applicable))
                 or not isinstance(task.get("baseline_language"), str)
+                or task.get("baseline_language") == "cgx2"
                 or not {"cgx2", task.get("baseline_language")} <= set(applicable)
                 or not set(applicable) <= LANGUAGES
                 or not isinstance(task.get("baseline_rationale"), str)

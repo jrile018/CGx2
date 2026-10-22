@@ -127,6 +127,9 @@ fn unsupported_calls_effects_and_foreign_declarations_have_source_spans() {
         assert_eq!(result["verdict"]["kind"], "unknown", "{result}");
         let diagnostic = &result["verdict"]["diagnostic"];
         assert!(diagnostic["span"]["end"].as_u64().unwrap() > diagnostic["span"]["start"].as_u64().unwrap(), "{result}");
+        assert_eq!(result["source"]["span"], diagnostic["span"]);
+        assert_eq!(result["verdict"]["scope"]["max_cases"], 100_000);
+        assert_eq!(result["verdict"]["scope"]["requested_domains"][0]["name"], "x");
         assert_eq!(result["proof"]["kind"], "unknown");
     }
 }
