@@ -79,6 +79,38 @@ class HoldoutTests(unittest.TestCase):
         self.assertIsNone(report["comparison"])
         self.assertIsNone(report["conditions"])
 
+    def test_read_only_external_trace_paths_and_missing_pair(self):
+        external = self.root / "external"
+        external.mkdir()
+        paths = []
+        for language in ("cgx2", "python"):
+            path = external / f"{language}.json"
+            path.write_text(json.dumps(self.trace(language)))
+            paths.append(path)
+            (self.root / f"{language}.json").unlink()
+        self.assertEqual(holdout.audit(self.matrix, self.root, paths)["status"], "ready")
+        report = holdout.analyze(self.matrix, self.root, paths)
+        self.assertEqual(report["comparison"]["matched_runs"], 1)
+        self.assertFalse((self.root / "cgx2.json").exists())
+        self.assertEqual(holdout.audit(self.matrix, self.root, paths[:1])["status"], "incomplete")
+        self.assertIsNone(holdout.analyze(self.matrix, self.root, paths[:1])["comparison"])
+        self.assertIn("duplicate_external_trace", [f["code"] for f in
+                      holdout.audit(self.matrix, self.root, paths + paths[:1])["findings"]])
+
+    def test_holdout_requires_actual_tokenizer_and_tool_usage(self):
+        self.matrix["kind"] = "holdout"
+        codes = [finding["code"] for finding in self.audit()["findings"]]
+        self.assertIn("trace_schema", codes)
+        for language in ("cgx2", "python"):
+            trace = self.trace(language)
+            trace.update(tokenizer_version="family-tokenizer-v1", tool_tokens=0)
+            (self.root / f"{language}.json").write_text(json.dumps(trace))
+        self.assertNotIn("trace_schema", [finding["code"] for finding in self.audit()["findings"]])
+        data = self.trace("python")
+        data.update(tokenizer_version="family-tokenizer-v1", tool_tokens=1000)
+        (self.root / "python.json").write_text(json.dumps(data))
+        self.assertIn("trace_bounds", [finding["code"] for finding in self.audit()["findings"]])
+
     def test_duplicate_ids_and_mixed_budgets_are_invalid(self):
         self.matrix["tasks"].append(copy.deepcopy(self.task))
         self.assertIn("duplicate_task_id", [x["code"] for x in self.audit()["findings"]])
@@ -189,6 +221,7 @@ class HoldoutTests(unittest.TestCase):
                         trace = self.trace(language)
                         trace.update(task_id=task["task_id"], model_family=family, seed=seed,
                                      run_id=f"{number}-{family}-{seed}-{language}", order=order,
+                                     tokenizer_version=f"{family}-tokenizer-v1", tool_tokens=5,
                                      prompt_tokens=40 if language == "cgx2" else 100,
                                      completion_tokens=20 if language == "cgx2" else 50,
                                      wall_seconds=10 if language == "cgx2" else 20)
@@ -210,9 +243,20 @@ class HoldoutTests(unittest.TestCase):
         self.assertEqual(report["status"], "ready")
         self.assertEqual(report["release_verdict"], "gates_met")
         self.assertEqual(report["selected_baseline"]["runs"], 240)
-        self.assertEqual(report["comparison"]["total_token_ratio"]["confidence_interval_95"], [0.4, 0.4])
+        self.assertEqual(report["comparison"]["total_token_ratio"]["confidence_interval_95"],
+                         [65 / 155, 65 / 155])
         self.matrix["tasks"][0]["baseline_language"] = "rust"
         self.assertIn("task_freeze_mismatch", [x["code"] for x in self.audit()["findings"]])
+        self.matrix["tasks"][0]["baseline_language"] = "python"
+        missing_run = self.matrix["runs"].pop()
+        missing_pair = self.matrix["runs"].pop()
+        self.assertIn("unequal_model_grid", [x["code"] for x in self.audit()["findings"]])
+        self.matrix["runs"].append(missing_pair)
+        self.matrix["runs"].append(missing_run)
+        changed = json.loads((self.root / missing_run["trace"]).read_text())
+        changed["tokenizer_version"] = "other-tokenizer"
+        (self.root / missing_run["trace"]).write_text(json.dumps(changed))
+        self.assertIn("mixed_tokenizer_version", [x["code"] for x in self.audit()["findings"]])
 
 
 if __name__ == "__main__":

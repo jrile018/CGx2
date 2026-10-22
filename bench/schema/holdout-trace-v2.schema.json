@@ -21,6 +21,8 @@
     "time_budget_seconds": {"type": "number", "exclusiveMinimum": 0},
     "prompt_tokens": {"type": "integer", "minimum": 0},
     "completion_tokens": {"type": "integer", "minimum": 0},
+    "tool_tokens": {"type": "integer", "minimum": 0},
+    "tokenizer_version": {"$ref": "#/$defs/text"},
     "wall_seconds": {"type": "number", "minimum": 0},
     "final_patch_sha256": {"$ref": "#/$defs/sha"},
     "hidden_test_result": {"enum": ["pass", "fail", "timeout"]},
