@@ -29,20 +29,20 @@
 
 ### 1. Structured snapshot
 
-- [ ] Add red tests for default/open/closed region rows, stable order, sums, and no mutation during snapshot.
-- [ ] Add public `MemoryReport`/`RegionReport` types and `Session::memory_report`, with explicitly named byte and nanosecond fields. Document whether metadata is included in byte counters.
-- [ ] Keep report creation bounded; if retaining every pause sample could grow without bound, use a documented fixed-size histogram or cap with a dropped-sample counter.
+- [x] Add red tests for default/open/closed region rows, stable order, sums, and no mutation during snapshot.
+- [x] Add public `MemoryReport`/`RegionReport` types and `Session::memory_report`, with explicitly named byte and nanosecond fields. Document whether metadata is included in byte counters.
+- [x] Keep report creation bounded; if retaining every pause sample could grow without bound, use a documented fixed-size histogram or cap with a dropped-sample counter.
 
 ### 2. Collection timing and formatting
 
-- [ ] Add collection timing around real collector invocation, including zero-live-object cycles. Record only completed collections. A forbidden request inside `no_gc` must not add a sample.
-- [ ] Add deterministic `to_text` and `to_json` rendering (or separate functions) with versioned keys. Test exact schema and parseability without adding an unavailable dependency; a small local parser/test helper is acceptable.
-- [ ] Include mode, limit, open/closed state, live/committed/peak bytes, allocation failures, collection count, total reclaimed bytes, and pause distribution.
+- [x] Add collection timing around real collector invocation, including zero-live-object cycles. Record only completed collections. A forbidden request inside `no_gc` must not add a sample.
+- [x] Add deterministic `to_text` and `to_json` rendering (or separate functions) with versioned keys. Test exact schema and parseability without adding an unavailable dependency; a small local parser/test helper is acceptable.
+- [x] Include mode, limit, open/closed state, live/committed/peak bytes, allocation failures, collection count, total reclaimed bytes, and pause distribution.
 
 ### 3. Memory conformance regression
 
-- [ ] Add tests for nested guards across two auto regions, explicit collect rejection, region-limit and budget failure atomicity, manual-versus-auto behavior, and stale handles after close.
-- [ ] Run `cargo test -p cgx2-runtime --offline`, `RUSTUP_TOOLCHAIN=1.98.1 cargo fmt --all --check`, and `RUSTUP_TOOLCHAIN=1.98.1 cargo clippy -p cgx2-runtime --all-targets --offline -- -D warnings`.
-- [ ] Update the crate README with report fields, exact limitations, and how a later CLI can display it. Commit only owned paths.
+- [x] Add tests for nested guards across two auto regions, explicit collect rejection, region-limit and budget failure atomicity, manual-versus-auto behavior, and stale handles after close.
+- [x] Run `cargo test -p cgx2-runtime --offline`, `RUSTUP_TOOLCHAIN=1.98.1 cargo fmt --all --check`, and `RUSTUP_TOOLCHAIN=1.98.1 cargo clippy -p cgx2-runtime --all-targets --offline -- -D warnings`.
+- [x] Update the crate README with report fields, exact limitations, and how a later CLI can display it. Commit only owned paths.
 
 **Acceptance:** Reporting reflects actual CGx2 runtime activity without collecting or changing state; tests demonstrate zero collection in guarded sections and stable failure accounting. This does not establish whole-program memory safety until source and runtime are connected.

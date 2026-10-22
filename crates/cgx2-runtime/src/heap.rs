@@ -1,4 +1,5 @@
 use crate::region::{CollectionMode, Handle, RegionStats};
+use crate::PauseReport;
 
 pub(crate) struct Object {
     pub bytes: Vec<u8>,
@@ -19,6 +20,7 @@ pub(crate) struct Region {
     pub limit_bytes: usize,
     pub slots: Vec<Slot>,
     pub stats: RegionStats,
+    pub pause: PauseReport,
     pub closed: bool,
 }
 
@@ -29,6 +31,7 @@ impl Region {
             limit_bytes,
             slots: Vec::new(),
             stats: RegionStats::default(),
+            pause: PauseReport::default(),
             closed: false,
         }
     }

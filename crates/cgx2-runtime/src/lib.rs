@@ -5,8 +5,10 @@ mod budget;
 mod heap;
 mod owned;
 mod region;
+mod report;
 
 use std::sync::atomic::{AtomicU64, Ordering};
+use std::time::Instant;
 
 use budget::Budget;
 pub use budget::NoGcGuard;
@@ -16,6 +18,7 @@ pub use region::{
     AllocationError, CollectionMode, Handle, MemoryError, RegionId, RegionStats,
     EDGE_METADATA_BYTES, REGION_METADATA_BYTES, SLOT_METADATA_BYTES,
 };
+pub use report::{MemoryReport, PauseReport, RegionReport, MEMORY_REPORT_SCHEMA_VERSION};
 
 static NEXT_SESSION_ID: AtomicU64 = AtomicU64::new(1);
 
@@ -109,6 +112,54 @@ impl Session {
     }
     pub fn stats(&self, region: RegionId) -> Result<RegionStats, MemoryError> {
         Ok(self.region(region)?.stats)
+    }
+
+    /// Returns a read-only snapshot in creation order, including closed regions.
+    /// Closed IDs are never reused; they remain invalid for region operations.
+    pub fn memory_report(&self) -> MemoryReport {
+        let mut totals = RegionStats::default();
+        let regions = self
+            .regions
+            .iter()
+            .enumerate()
+            .map(|(index, region)| {
+                let stats = region.stats;
+                totals.committed_bytes =
+                    totals.committed_bytes.saturating_add(stats.committed_bytes);
+                totals.live_bytes = totals.live_bytes.saturating_add(stats.live_bytes);
+                totals.peak_bytes = totals.peak_bytes.saturating_add(stats.peak_bytes);
+                totals.allocation_failures = totals
+                    .allocation_failures
+                    .saturating_add(stats.allocation_failures);
+                totals.collection_count = totals
+                    .collection_count
+                    .saturating_add(stats.collection_count);
+                totals.total_collected_bytes = totals
+                    .total_collected_bytes
+                    .saturating_add(stats.total_collected_bytes);
+                RegionReport {
+                    id: RegionId {
+                        session: self.id,
+                        index,
+                    },
+                    is_open: !region.closed,
+                    mode: region.mode,
+                    limit_bytes: region.limit_bytes,
+                    committed_bytes: stats.committed_bytes,
+                    live_bytes: stats.live_bytes,
+                    peak_bytes: stats.peak_bytes,
+                    allocation_failures: stats.allocation_failures,
+                    collection_count: stats.collection_count,
+                    total_collected_bytes: stats.total_collected_bytes,
+                    pause: region.pause.clone(),
+                }
+            })
+            .collect();
+        MemoryReport {
+            schema_version: MEMORY_REPORT_SCHEMA_VERSION,
+            regions,
+            totals,
+        }
     }
 
     pub fn alloc_bytes(&mut self, region: RegionId, len: usize) -> Result<Handle, AllocationError> {
@@ -419,6 +470,7 @@ impl Session {
             return Err(MemoryError::CollectionForbidden);
         }
         let r = self.region_mut(region)?;
+        let started = Instant::now();
         for slot in &mut r.slots {
             slot.marked = slot.object.as_ref().is_some_and(|object| object.roots > 0);
         }
@@ -465,6 +517,7 @@ impl Session {
         r.stats.live_bytes -= collected;
         r.stats.total_collected_bytes += collected;
         r.stats.collection_count += 1;
+        r.pause.record(started.elapsed().as_nanos());
         Ok(())
     }
 }
