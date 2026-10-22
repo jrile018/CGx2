@@ -2,6 +2,12 @@
 
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
+use std::io::{Read, Write};
+use std::path::PathBuf;
+use std::process::{Command, Stdio};
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::Arc;
+use std::time::{Duration, Instant};
 
 use cgx2_cli::{check_source, run_source, Value};
 use cgx2_notebook_format::{CellKind, Notebook};
@@ -15,6 +21,72 @@ pub const MAX_SOURCE_BYTES: usize = 64 * 1024;
 pub const MAX_EVALUATION_BYTES: usize = 1024 * 1024;
 /// Compatibility alias for the cumulative evaluation budget.
 pub const MAX_REPLAY_BYTES: usize = MAX_EVALUATION_BYTES;
+pub const DEFAULT_CELL_TIMEOUT: Duration = Duration::from_secs(2);
+const WORKER_ARGUMENT: &str = "--cgx2-notebook-scalar-worker";
+
+/// Execute one scalar script in the calling notebook binary's private worker mode.
+/// The mode is deliberately not part of the public notebook command grammar.
+pub fn is_worker_argument(argument: &str) -> bool {
+    argument == WORKER_ARGUMENT
+}
+
+pub fn scalar_worker_main() -> i32 {
+    let mut script = Vec::new();
+    if std::io::stdin()
+        .take((MAX_EVALUATION_BYTES + 1) as u64)
+        .read_to_end(&mut script)
+        .is_err()
+        || script.len() > MAX_EVALUATION_BYTES
+    {
+        return 2;
+    }
+    let Ok(script) = String::from_utf8(script) else {
+        return 2;
+    };
+    let result = match run_source(&script, &[]) {
+        Ok(result) => match result.value {
+            Value::I64(number) => format!("I{number}").into_bytes(),
+            Value::Bool(boolean) => format!("B{boolean}").into_bytes(),
+            Value::String(value) => {
+                let mut bytes = vec![b'S'];
+                bytes.extend(value.into_bytes());
+                bytes
+            }
+            Value::Unit => vec![b'U'],
+        },
+        Err(error) => format!("E{}: {}", error.code, error.message).into_bytes(),
+    };
+    if std::io::stdout().write_all(&result).is_ok() {
+        0
+    } else {
+        2
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct ExecutionControl {
+    pub worker_executable: PathBuf,
+    pub timeout: Duration,
+    pub interrupted: Arc<AtomicBool>,
+}
+
+impl ExecutionControl {
+    pub fn new(worker_executable: PathBuf, timeout: Duration) -> Self {
+        Self {
+            worker_executable,
+            timeout,
+            interrupted: Arc::new(AtomicBool::new(false)),
+        }
+    }
+
+    pub fn interrupt(&self) {
+        self.interrupted.store(true, Ordering::Release);
+    }
+
+    pub fn clear_interrupt(&self) {
+        self.interrupted.store(false, Ordering::Release);
+    }
+}
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct KernelError {
@@ -54,6 +126,8 @@ fn session_error(source: SessionError) -> KernelError {
                 ("CGNK006", reason.to_owned())
             } else if let Some(reason) = message.strip_prefix("CGNK008: ") {
                 ("CGNK008", reason.to_owned())
+            } else if let Some(reason) = message.strip_prefix("CGNK010: ") {
+                ("CGNK010", reason.to_owned())
             } else {
                 ("CGNK008", message)
             };
@@ -96,6 +170,27 @@ impl NotebookKernel {
 
     pub fn notebook(&self) -> &Notebook {
         self.session.notebook()
+    }
+
+    /// Use a killable child process for each scalar statement. Callers may share
+    /// `control.interrupted` with their request handler to stop an active cell.
+    pub fn set_execution_control(&mut self, control: ExecutionControl) {
+        self.session.executor_mut().control = Some(control);
+    }
+
+    pub fn interrupt(&mut self) {
+        if let Some(control) = &self.session.executor_mut().control {
+            control.interrupt();
+        }
+    }
+
+    /// Drop live bindings and reset file-order execution without evaluating cells.
+    /// Saved outputs and provenance remain observations and display as stale.
+    pub fn restart(&mut self) -> Result<(), KernelError> {
+        self.session.restart().map_err(session_error)?;
+        self.next_code = 0;
+        self.requires_restart = false;
+        Ok(())
     }
 
     pub fn status(&self, id: &str) -> Result<CellStatus, KernelError> {
@@ -188,18 +283,10 @@ impl NotebookKernel {
         Ok(())
     }
 
-    /// Clears old code outputs and retained state, then runs all code cells in file order.
+    /// Clears retained state and runs all code cells in file order. Old output
+    /// observations remain visible if a later cell fails or is interrupted.
     pub fn restart_and_run_all(&mut self) -> Result<(), KernelError> {
-        let mut notebook = self.session.notebook().clone();
-        for cell in &mut notebook.cells {
-            if cell.kind == CellKind::Code {
-                cell.outputs.clear();
-                cell.provenance = None;
-            }
-        }
-        self.session = new_session(notebook)?;
-        self.next_code = 0;
-        self.requires_restart = false;
+        self.restart()?;
         for id in self.code_order.clone() {
             self.run_cell(&id)?;
         }
@@ -372,6 +459,7 @@ struct RetainedExecutor {
     bindings: BTreeMap<String, Vec<RetainedBinding>>,
     order: BTreeMap<String, usize>,
     evaluation_bytes: usize,
+    control: Option<ExecutionControl>,
 }
 
 impl RetainedExecutor {
@@ -406,6 +494,10 @@ impl RetainedExecutor {
     }
 
     fn execute_named(&mut self, id: &str, source: &str) -> Result<CellResult, String> {
+        let deadline = self
+            .control
+            .as_ref()
+            .map(|control| Instant::now() + control.timeout);
         facts_for_source(source).map_err(|error| error.to_string())?;
         let module = parse_module(source).map_err(|diagnostics| {
             let first = &diagnostics[0];
@@ -435,9 +527,16 @@ impl RetainedExecutor {
                 _ => unreachable!("facts_for_source rejects unsupported statements"),
             };
             self.charge(script.len())?;
-            let value = run_source(&script, &[])
-                .map_err(|error| format!("{}: {}", error.code, error.message))?
-                .value;
+            let value = match &self.control {
+                Some(control) => {
+                    run_worker(&script, control, deadline.expect("controlled deadline"))?
+                }
+                None => {
+                    run_source(&script, &[])
+                        .map_err(|error| format!("{}: {}", error.code, error.message))?
+                        .value
+                }
+            };
             if let Some(name) = defined {
                 if value == Value::Unit {
                     return Err("CGNK001: Unit bindings are unsupported".into());
@@ -465,6 +564,14 @@ impl RetainedExecutor {
         if retained_bytes > MAX_REPLAY_BYTES {
             return Err(limit_error());
         }
+        if self
+            .control
+            .as_ref()
+            .is_some_and(|control| control.interrupted.load(Ordering::Acquire))
+            || deadline.is_some_and(|deadline| Instant::now() >= deadline)
+        {
+            return Err("CGNK010: cell interrupted or timed out".into());
+        }
         for (name, value) in pending {
             self.bindings
                 .entry(name)
@@ -477,6 +584,82 @@ impl RetainedExecutor {
         Ok(CellResult {
             text: (tail != Value::Unit).then(|| tail.to_string()),
         })
+    }
+}
+
+fn run_worker(
+    script: &str,
+    control: &ExecutionControl,
+    deadline: Instant,
+) -> Result<Value, String> {
+    if control.interrupted.load(Ordering::Acquire) || Instant::now() >= deadline {
+        return Err("CGNK010: cell interrupted or timed out".into());
+    }
+    let mut child = Command::new(&control.worker_executable)
+        .arg(WORKER_ARGUMENT)
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::null())
+        .spawn()
+        .map_err(|error| format!("CGNK010: cannot start scalar worker: {error}"))?;
+    if let Err(error) = child
+        .stdin
+        .take()
+        .expect("piped stdin")
+        .write_all(script.as_bytes())
+    {
+        let _ = child.kill();
+        let _ = child.wait();
+        return Err(format!("CGNK010: cannot send scalar script: {error}"));
+    }
+    let stdout = child.stdout.take().expect("piped stdout");
+    let reader = std::thread::spawn(move || {
+        let mut bytes = Vec::new();
+        stdout
+            .take((MAX_EVALUATION_BYTES + 1) as u64)
+            .read_to_end(&mut bytes)
+            .map(|_| bytes)
+    });
+    let status = loop {
+        if control.interrupted.load(Ordering::Acquire) || Instant::now() >= deadline {
+            let _ = child.kill();
+            let _ = child.wait();
+            let _ = reader.join();
+            return Err("CGNK010: cell interrupted or timed out".into());
+        }
+        match child.try_wait() {
+            Ok(Some(status)) => break status,
+            Ok(None) => std::thread::sleep(Duration::from_millis(5)),
+            Err(error) => {
+                let _ = child.kill();
+                let _ = child.wait();
+                let _ = reader.join();
+                return Err(format!("CGNK010: scalar worker wait failed: {error}"));
+            }
+        }
+    };
+    let bytes = reader
+        .join()
+        .map_err(|_| "CGNK010: scalar worker reader panicked".to_owned())?
+        .map_err(|error| format!("CGNK010: scalar worker output failed: {error}"))?;
+    if !status.success() || bytes.is_empty() || bytes.len() > MAX_EVALUATION_BYTES {
+        return Err("CGNK010: scalar worker returned an invalid result".into());
+    }
+    let text = std::str::from_utf8(&bytes[1..])
+        .map_err(|_| "CGNK010: scalar worker returned invalid UTF-8".to_owned())?;
+    match bytes[0] {
+        b'I' => text
+            .parse()
+            .map(Value::I64)
+            .map_err(|_| "CGNK010: invalid integer result".into()),
+        b'B' => text
+            .parse()
+            .map(Value::Bool)
+            .map_err(|_| "CGNK010: invalid Boolean result".into()),
+        b'S' => Ok(Value::String(text.into())),
+        b'U' if text.is_empty() => Ok(Value::Unit),
+        b'E' => Err(text.into()),
+        _ => Err("CGNK010: invalid scalar worker result".into()),
     }
 }
 

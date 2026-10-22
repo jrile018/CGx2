@@ -52,3 +52,5 @@ Portable export retains the `#!cgnb 1` header and readable native cells, then ad
 ## Scope
 
 There is no live kernel, cell rerun, stale-dependency tracking, output rendering, HTML sanitization, or `.ipynb` conversion in this crate. The future notebook interface must provide those behaviors and use the same CGx2 parser/checker/runtime as the CLI.
+
+The provenance `state=stale` suffix records a restart without changing a cell's stable ID, source/dependency digests, evaluator, or execution/output ordinals. It is saved cache status, not evidence that the cell ran again. A later successful execution writes `result=success` with a new revision.

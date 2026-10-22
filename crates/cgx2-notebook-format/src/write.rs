@@ -61,10 +61,11 @@ pub fn write_notebook(notebook: &Notebook) -> Result<String, NotebookError> {
             }
         }
         if let Some(p) = &cell.provenance {
-            out.push_str(&format!("%% provenance id={} schema={} source_sha256={} prefix_sha256={} evaluator={} ordinal={} output_ordinal={} result={}\n",
+            out.push_str(&format!("%% provenance id={} schema={} source_sha256={} prefix_sha256={} evaluator={} ordinal={} output_ordinal={} result={}{}\n",
                 cell.id, p.schema_version, p.source_sha256, p.prefix_sha256, p.evaluator, p.ordinal,
                 p.output_ordinal.map_or_else(|| "none".into(), |ordinal| ordinal.to_string()),
-                match p.result { crate::ProvenanceResult::Success => "success", crate::ProvenanceResult::Failed => "failed" }));
+                match p.result { crate::ProvenanceResult::Success => "success", crate::ProvenanceResult::Failed => "failed" },
+                if p.stale { " state=stale" } else { "" }));
         }
         check_document_size(out.len())?;
     }

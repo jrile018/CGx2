@@ -628,3 +628,34 @@ fn selective_ui_rerun_preserves_independent_revision_and_exposes_output_digest()
         revision.as_u64().unwrap()
     );
 }
+
+#[cfg(unix)]
+#[test]
+fn interrupt_stops_active_worker_and_saved_output_is_not_current() {
+    use std::os::unix::fs::PermissionsExt;
+    use std::time::{Duration, Instant};
+    let f = Fixture::new("#!cgnb 1\n%% code id=slow\n1 + 2\n");
+    let worker = f.dir.join("sleep-worker");
+    fs::write(&worker, "#!/bin/sh\nexec sleep 2\n").unwrap();
+    fs::set_permissions(&worker, fs::Permissions::from_mode(0o700)).unwrap();
+    let mut session = UiSession::open(f.input.clone()).unwrap();
+    session.configure_worker(worker);
+    let listener = TcpListener::bind("127.0.0.1:0").unwrap();
+    let port = listener.local_addr().unwrap().port();
+    let handle = thread::spawn(move || serve_n(listener, session, 5).unwrap());
+    let secret = token(port);
+    let secret_for_run = secret.clone();
+    let run = thread::spawn(move || post(port, "/api/run-next", json!({}), &secret_for_run));
+    thread::sleep(Duration::from_millis(80));
+    let start = Instant::now();
+    assert_eq!(post(port, "/api/interrupt", json!({}), &secret).0, 200);
+    assert!(start.elapsed() < Duration::from_secs(1));
+    assert_eq!(run.join().unwrap().0, 409);
+    let (_, body) = request(port, "GET", "/api/state", None, None, None, None);
+    let state: Value = serde_json::from_str(&body).unwrap();
+    assert_eq!(state["cells"][0]["status"], "failed");
+    let (status, restarted) = post(port, "/api/restart-only", json!({}), &secret);
+    assert_eq!(status, 200);
+    assert_eq!(restarted["cells"][0]["status"], "stale");
+    handle.join().unwrap();
+}

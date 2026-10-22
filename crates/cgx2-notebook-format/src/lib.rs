@@ -50,6 +50,8 @@ pub struct Provenance {
     pub ordinal: u64,
     pub output_ordinal: Option<u64>,
     pub result: ProvenanceResult,
+    /// Restart discarded live bindings; the original execution result remains intact.
+    pub stale: bool,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

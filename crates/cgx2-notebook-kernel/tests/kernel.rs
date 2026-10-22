@@ -1,6 +1,9 @@
 use cgx2_notebook_format::{parse_notebook, write_notebook, Cell, CellKind, Notebook, Output};
-use cgx2_notebook_kernel::{facts_for_source, NotebookKernel, MAX_CODE_CELLS, MAX_SOURCE_BYTES};
+use cgx2_notebook_kernel::{
+    facts_for_source, ExecutionControl, NotebookKernel, MAX_CODE_CELLS, MAX_SOURCE_BYTES,
+};
 use cgx2_notebook_session::CellStatus;
+use std::time::{Duration, Instant};
 
 fn code(id: &str, source: &str) -> Cell {
     Cell {
@@ -163,7 +166,7 @@ fn failed_cell_does_not_enter_replay_prefix() {
         kernel.notebook().cells[1].outputs[0],
         Output::Text {
             mime: "text/plain".into(),
-            ordinal: 2,
+            ordinal: 3,
             body: "7".into()
         }
     );
@@ -187,24 +190,111 @@ fn edit_stales_transitive_readers_and_restart_recomputes() {
         kernel.notebook().cells[2].outputs[0],
         Output::Text {
             mime: "text/plain".into(),
-            ordinal: 1,
+            ordinal: 2,
             body: "10".into()
         }
     );
 }
 
 #[test]
-fn restart_failure_clears_old_outputs() {
+fn restart_failure_retains_stale_old_outputs() {
     let mut kernel =
         NotebookKernel::open(notebook(vec![code("a", "let x = 3"), code("b", "x + 4")])).unwrap();
     kernel.restart_and_run_all().unwrap();
     kernel.replace_cell("a", "let x = missing".into()).unwrap();
     assert_eq!(kernel.restart_and_run_all().unwrap_err().code, "CGNK008");
-    assert!(kernel
-        .notebook()
-        .cells
-        .iter()
-        .all(|cell| cell.outputs.is_empty()));
+    assert_eq!(kernel.status("a").unwrap(), CellStatus::Failed);
+    assert_eq!(kernel.status("b").unwrap(), CellStatus::Stale);
+    assert_eq!(output_body(&kernel.notebook().cells[1].outputs[0]), "7");
+}
+
+#[test]
+fn restart_marks_saved_observations_stale_and_reopen_never_executes() {
+    let mut kernel = NotebookKernel::open(notebook(vec![
+        code("seed", "let x = 3\nx"),
+        code("result", "x + 4"),
+    ]))
+    .unwrap();
+    kernel.restart_and_run_all().unwrap();
+    let old_revision = kernel.notebook().cells[1]
+        .provenance
+        .as_ref()
+        .unwrap()
+        .ordinal;
+    kernel.restart().unwrap();
+    assert_eq!(kernel.status("seed").unwrap(), CellStatus::Stale);
+    assert_eq!(kernel.status("result").unwrap(), CellStatus::Stale);
+    let saved = write_notebook(kernel.notebook()).unwrap();
+    let mut reopened = NotebookKernel::open(parse_notebook(&saved).unwrap()).unwrap();
+    assert_eq!(reopened.status("result").unwrap(), CellStatus::Stale);
+    assert_eq!(output_body(&reopened.notebook().cells[1].outputs[0]), "7");
+    assert_eq!(
+        reopened.notebook().cells[1]
+            .provenance
+            .as_ref()
+            .unwrap()
+            .ordinal,
+        old_revision
+    );
+    assert_eq!(reopened.run_cell("result").unwrap_err().code, "CGNK005");
+    reopened.run_cell("seed").unwrap();
+    reopened.run_cell("result").unwrap();
+    assert_eq!(reopened.status("result").unwrap(), CellStatus::Current);
+}
+
+#[cfg(unix)]
+#[test]
+fn stalled_worker_is_killed_and_later_rerun_has_clean_bindings() {
+    use std::os::unix::fs::PermissionsExt;
+    let mut kernel = NotebookKernel::open(notebook(vec![
+        code("seed", "let x = 3"),
+        code("value", "let y = x + 4\ny"),
+        code("reader", "y + 1"),
+    ]))
+    .unwrap();
+    kernel.restart_and_run_all().unwrap();
+    let seed_revision = kernel.notebook().cells[0]
+        .provenance
+        .as_ref()
+        .unwrap()
+        .ordinal;
+    let seed_output = kernel.notebook().cells[0].outputs.clone();
+    let temp = std::env::temp_dir().join(format!("cgx2-notebook-sleep-{}", std::process::id()));
+    std::fs::write(&temp, "#!/bin/sh\nexec sleep 2\n").unwrap();
+    std::fs::set_permissions(&temp, std::fs::Permissions::from_mode(0o700)).unwrap();
+    kernel.set_execution_control(ExecutionControl::new(
+        temp.clone(),
+        Duration::from_millis(25),
+    ));
+    let start = Instant::now();
+    let error = kernel.rerun_cell("value").unwrap_err();
+    let _ = std::fs::remove_file(temp);
+    assert_eq!(error.code, "CGNK010");
+    assert!(start.elapsed() < Duration::from_secs(1));
+    assert_eq!(kernel.status("value").unwrap(), CellStatus::Failed);
+    assert_eq!(kernel.status("reader").unwrap(), CellStatus::Stale);
+    assert_eq!(kernel.status("seed").unwrap(), CellStatus::Current);
+    let saved = write_notebook(kernel.notebook()).unwrap();
+    let reopened = NotebookKernel::open(parse_notebook(&saved).unwrap()).unwrap();
+    assert_eq!(reopened.status("value").unwrap(), CellStatus::Failed);
+    assert_eq!(reopened.status("reader").unwrap(), CellStatus::Stale);
+    assert_eq!(output_body(&reopened.notebook().cells[2].outputs[0]), "8");
+    assert_eq!(
+        kernel.notebook().cells[0]
+            .provenance
+            .as_ref()
+            .unwrap()
+            .ordinal,
+        seed_revision
+    );
+    assert_eq!(kernel.notebook().cells[0].outputs, seed_output);
+    kernel.set_execution_control(ExecutionControl::new(
+        std::path::PathBuf::from(env!("CARGO_BIN_EXE_cgx2-notebook-scalar-worker")),
+        Duration::from_secs(2),
+    ));
+    kernel.rerun_cell("value").unwrap();
+    kernel.rerun_cell("reader").unwrap();
+    assert_eq!(output_body(&kernel.notebook().cells[2].outputs[0]), "8");
 }
 
 #[test]

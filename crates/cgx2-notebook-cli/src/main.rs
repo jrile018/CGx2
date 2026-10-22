@@ -14,13 +14,17 @@ use cgx2_notebook_format::{
     export_document, open_notebook_bytes, parse_self_contained, save_asset, write_notebook,
     CellKind, Notebook, NotebookDocument, MAX_NOTEBOOK_BYTES,
 };
-use cgx2_notebook_kernel::NotebookKernel;
+use cgx2_notebook_kernel::{
+    is_worker_argument, scalar_worker_main, ExecutionControl, NotebookKernel, DEFAULT_CELL_TIMEOUT,
+};
+use std::time::Duration;
 
 static TEMP_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
 const HELP: &str = "cgx2-notebook: clean, pure scalar notebook file runner\n\
 Usage:\n\
-  cgx2-notebook run INPUT.cgnb --out OUTPUT.cgnb [--edit-cell ID --source CG_CODE] [--force]\n\
+  cgx2-notebook run INPUT.cgnb --out OUTPUT.cgnb [--edit-cell ID --source CG_CODE] [--timeout-ms N] [--force]\n\
+  cgx2-notebook restart INPUT.cgnb --out OUTPUT.cgnb [--force]\n\
   cgx2-notebook inspect INPUT.cgnb\n\
   cgx2-notebook show INPUT.cgnb CELL_ID\n\
   cgx2-notebook export INPUT.cgnb --out PORTABLE.cgnb [--force]\n\
@@ -53,6 +57,12 @@ enum Command {
         force: bool,
         edit_cell: Option<String>,
         source: Option<String>,
+        timeout: Duration,
+    },
+    Restart {
+        input: PathBuf,
+        output: PathBuf,
+        force: bool,
     },
 }
 
@@ -76,6 +86,17 @@ impl fmt::Display for CommandError {
 }
 
 fn main() -> ExitCode {
+    if env::args()
+        .nth(1)
+        .as_deref()
+        .is_some_and(is_worker_argument)
+    {
+        return if scalar_worker_main() == 0 {
+            ExitCode::SUCCESS
+        } else {
+            ExitCode::FAILURE
+        };
+    }
     let result = parse_command(env::args_os().skip(1)).and_then(execute);
     match result {
         Ok(()) => ExitCode::SUCCESS,
@@ -125,7 +146,7 @@ fn parse_command(mut args: impl Iterator<Item = OsString>) -> Result<Command, Co
         }
         return Ok(Command::Show(input, id));
     }
-    if command == "run" || command == "export" || command == "import" {
+    if command == "run" || command == "restart" || command == "export" || command == "import" {
         let input = PathBuf::from(args.next().ok_or_else(|| {
             CommandError::Usage(format!("{} requires INPUT.cgnb", command.to_string_lossy()))
         })?);
@@ -134,6 +155,8 @@ fn parse_command(mut args: impl Iterator<Item = OsString>) -> Result<Command, Co
         let mut force = false;
         let mut edit_cell = None;
         let mut source = None;
+        let mut timeout = DEFAULT_CELL_TIMEOUT;
+        let mut timeout_seen = false;
         while let Some(arg) = args.next() {
             if arg == "--out" {
                 if output.is_some() {
@@ -172,6 +195,24 @@ fn parse_command(mut args: impl Iterator<Item = OsString>) -> Result<Command, Co
                         .into_string()
                         .map_err(|_| CommandError::Usage("source must be UTF-8".into()))?,
                 );
+            } else if command == "run" && arg == "--timeout-ms" {
+                if timeout_seen {
+                    return Err(CommandError::Usage(
+                        "--timeout-ms may appear only once".into(),
+                    ));
+                }
+                timeout_seen = true;
+                let millis = args
+                    .next()
+                    .ok_or_else(|| CommandError::Usage("--timeout-ms requires N".into()))?
+                    .into_string()
+                    .map_err(|_| CommandError::Usage("timeout must be UTF-8".into()))?
+                    .parse::<u64>()
+                    .map_err(|_| CommandError::Usage("timeout must be an integer".into()))?;
+                if !(1..=60_000).contains(&millis) {
+                    return Err(CommandError::Usage("timeout must be 1..=60000 ms".into()));
+                }
+                timeout = Duration::from_millis(millis);
             } else {
                 return Err(CommandError::Usage(format!(
                     "unexpected argument: {}",
@@ -194,6 +235,13 @@ fn parse_command(mut args: impl Iterator<Item = OsString>) -> Result<Command, Co
                 force,
                 edit_cell,
                 source,
+                timeout,
+            }
+        } else if command == "restart" {
+            Command::Restart {
+                input,
+                output,
+                force,
             }
         } else if command == "export" {
             Command::Export {
@@ -248,7 +296,7 @@ fn execute(command: Command) -> Result<(), CommandError> {
                                 cell.id, status_name(status), p.schema_version, p.ordinal,
                                 p.output_ordinal.map_or_else(|| "none".into(), |ordinal| ordinal.to_string()),
                                 p.evaluator, p.source_sha256, p.prefix_sha256,
-                                if p.result == cgx2_notebook_format::ProvenanceResult::Success { "success" } else { "failed" });
+                                provenance_result_name(p.result));
                         } else {
                             println!("{}\tcode\t{}", cell.id, status_name(status));
                         }
@@ -267,7 +315,7 @@ fn execute(command: Command) -> Result<(), CommandError> {
             if let Some(p) = &cell.provenance {
                 println!("cell={id} schema={} execution_revision={} source_sha256={} dependency_sha256={} result={}",
                     p.schema_version, p.ordinal, p.source_sha256, p.prefix_sha256,
-                    if p.result == cgx2_notebook_format::ProvenanceResult::Success { "success" } else { "failed" });
+                    provenance_result_name(p.result));
             }
             for output in &cell.outputs {
                 if let cgx2_notebook_format::Output::Text {
@@ -287,14 +335,25 @@ fn execute(command: Command) -> Result<(), CommandError> {
             force,
             edit_cell,
             source,
+            timeout,
         } => {
             check_output_collision(&output, force)?;
             let notebook = read_notebook(&input)?;
             let mut kernel = NotebookKernel::open(notebook)
                 .map_err(|error| CommandError::Input(error.to_string()))?;
-            kernel
-                .restart_and_run_all()
-                .map_err(|error| CommandError::Cell(error.to_string()))?;
+            kernel.set_execution_control(ExecutionControl::new(
+                env::current_exe().map_err(|error| CommandError::Cell(error.to_string()))?,
+                timeout,
+            ));
+            let run_result = kernel.restart_and_run_all();
+            if let Err(error) = run_result {
+                if error.code == "CGNK010" {
+                    let text = write_notebook(kernel.notebook())
+                        .map_err(|error| CommandError::Output(error.to_string()))?;
+                    atomic_write(&output, text.as_bytes(), force)?;
+                }
+                return Err(CommandError::Cell(error.to_string()));
+            }
             if let (Some(id), Some(source)) = (edit_cell, source) {
                 kernel
                     .replace_cell(&id, source)
@@ -303,6 +362,21 @@ fn execute(command: Command) -> Result<(), CommandError> {
                     .rerun_affected(&id)
                     .map_err(|error| CommandError::Cell(error.to_string()))?;
             }
+            let text = write_notebook(kernel.notebook())
+                .map_err(|error| CommandError::Output(error.to_string()))?;
+            atomic_write(&output, text.as_bytes(), force)
+        }
+        Command::Restart {
+            input,
+            output,
+            force,
+        } => {
+            check_output_collision(&output, force)?;
+            let mut kernel = NotebookKernel::open(read_notebook(&input)?)
+                .map_err(|error| CommandError::Input(error.to_string()))?;
+            kernel
+                .restart()
+                .map_err(|error| CommandError::Cell(error.to_string()))?;
             let text = write_notebook(kernel.notebook())
                 .map_err(|error| CommandError::Output(error.to_string()))?;
             atomic_write(&output, text.as_bytes(), force)
@@ -344,6 +418,14 @@ fn status_name(status: cgx2_notebook_session::CellStatus) -> &'static str {
         CellStatus::Current => "current",
         CellStatus::Stale => "stale",
         CellStatus::Failed => "failed",
+    }
+}
+
+fn provenance_result_name(result: cgx2_notebook_format::ProvenanceResult) -> &'static str {
+    use cgx2_notebook_format::ProvenanceResult;
+    match result {
+        ProvenanceResult::Success => "success",
+        ProvenanceResult::Failed => "failed",
     }
 }
 

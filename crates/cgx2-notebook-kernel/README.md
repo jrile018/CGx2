@@ -17,3 +17,5 @@ kernel.rerun_affected("seed")?;
 assert!(write_notebook(kernel.notebook())?.contains("mime=text/plain"));
 # Ok::<(), Box<dyn std::error::Error>>(())
 ```
+
+`restart()` discards retained bindings and marks saved code outputs stale without evaluating. `restart_and_run_all()` then executes file order from the clean state. Reopening a saved `.cgnb` never evaluates. `set_execution_control(ExecutionControl::new(worker_executable, timeout))` runs each scalar statement in a killable child process; the default CLI/UI timeout is 2 seconds per cell, measured from the start of `execute_named`. The worker is polled every 5 ms and killed on timeout or an `interrupt()` signal. `CGNK010` identifies interruption, timeout, or worker failure. The parent only commits pending bindings after the whole cell succeeds, so an interrupted cell cannot become current. The bounded subprocess covers scalar evaluation; in-process parse, dependency extraction, and static checking use the existing 64 KiB source limit and are not preemptible by the timeout. No external side effects are supported by this scalar subset.

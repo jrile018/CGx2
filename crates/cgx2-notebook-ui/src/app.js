@@ -22,7 +22,7 @@ function render(data) {
     const section = el("article", "cell");
     section.append(el("h2", "", `${cell.kind} · ${cell.id}`));
     section.append(el("p", "status", `Status: ${cell.status}`));
-    if (cell.provenance) section.append(el("p", "provenance", `Run #${cell.provenance.ordinal} (${cell.provenance.result}) · ${cell.provenance.evaluator} · source ${cell.provenance.sourceSha256} · prefix ${cell.provenance.prefixSha256}`));
+    if (cell.provenance) section.append(el("p", "provenance", `Run #${cell.provenance.ordinal} (${cell.provenance.result}${cell.provenance.stale ? ", stale cache" : ""}) · ${cell.provenance.evaluator} · source ${cell.provenance.sourceSha256} · prefix ${cell.provenance.prefixSha256}`));
     if (cell.kind === "code") {
       const editor = el("textarea");
       editor.value = pending.get(cell.id) ?? cell.source;
@@ -73,7 +73,8 @@ async function send(path, body) {
 async function command(path, body) {
   if (busy) return;
   busy = true;
-  for (const button of document.querySelectorAll("button")) button.disabled = true;
+  for (const button of document.querySelectorAll("button:not(#interrupt)")) button.disabled = true;
+  document.getElementById("interrupt").disabled = false;
   try {
     let data = current;
     for (const [id, source] of pending) {
@@ -90,7 +91,7 @@ async function command(path, body) {
     notice.textContent = `${error}`;
     notice.className = "error";
   }
-  finally { busy = false; for (const button of document.querySelectorAll("button")) button.disabled = false; }
+  finally { busy = false; for (const button of document.querySelectorAll("button")) button.disabled = false; document.getElementById("interrupt").disabled = true; }
 }
 async function refresh() {
   const response = await fetch("/api/state", {cache:"no-store"});
@@ -98,6 +99,12 @@ async function refresh() {
 }
 document.getElementById("next").addEventListener("click", () => command("/api/run-next", {}));
 document.getElementById("restart").addEventListener("click", () => command("/api/restart", {}));
+document.getElementById("restart-only").addEventListener("click", () => command("/api/restart-only", {}));
+document.getElementById("interrupt").addEventListener("click", async () => {
+  if (!busy) return;
+  try { await send("/api/interrupt", {}); notice.textContent = "Interrupt requested; waiting for the scalar worker to stop."; }
+  catch (error) { notice.textContent = `${error}`; notice.className = "error"; }
+});
 document.getElementById("save").addEventListener("click", () => {
   const input = document.getElementById("save-name");
   command("/api/save", {name:input.value || input.placeholder, overwrite:document.getElementById("overwrite").checked});

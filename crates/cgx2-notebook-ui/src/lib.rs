@@ -6,13 +6,14 @@ use std::io::{self, Read, Write};
 use std::net::{TcpListener, TcpStream};
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicU64, Ordering};
+use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 
 use cgx2_notebook_format::{
     export_document, open_notebook_bytes, parse_notebook_bytes, save_asset, write_notebook,
     CellKind, Output, MAX_NOTEBOOK_BYTES,
 };
-use cgx2_notebook_kernel::NotebookKernel;
+use cgx2_notebook_kernel::{ExecutionControl, NotebookKernel, DEFAULT_CELL_TIMEOUT};
 use cgx2_notebook_session::CellStatus;
 use serde_json::{json, Value};
 
@@ -30,6 +31,7 @@ pub struct UiSession {
     token: String,
     last_error: Option<String>,
     needs_restart: bool,
+    control: Option<ExecutionControl>,
 }
 
 impl UiSession {
@@ -79,7 +81,20 @@ impl UiSession {
             token,
             last_error: None,
             needs_restart: false,
+            control: None,
         })
+    }
+
+    pub fn configure_worker(&mut self, executable: PathBuf) {
+        let control = ExecutionControl::new(executable, DEFAULT_CELL_TIMEOUT);
+        self.kernel.set_execution_control(control.clone());
+        self.control = Some(control);
+    }
+
+    fn clear_interrupt(&self) {
+        if let Some(control) = &self.control {
+            control.clear_interrupt();
+        }
     }
 
     fn state(&self) -> Value {
@@ -113,7 +128,10 @@ impl UiSession {
                     "schemaVersion":p.schema_version, "sourceSha256":p.source_sha256,
                     "prefixSha256":p.prefix_sha256, "evaluator":p.evaluator,
                     "ordinal":p.ordinal, "outputOrdinal":p.output_ordinal,
-                    "result":if p.result == cgx2_notebook_format::ProvenanceResult::Success {"success"} else {"failed"}}));
+                    "result":match p.result {
+                        cgx2_notebook_format::ProvenanceResult::Success => "success",
+                        cgx2_notebook_format::ProvenanceResult::Failed => "failed",
+                    }, "stale": p.stale}));
                 json!({"id":cell.id, "kind":if cell.kind == CellKind::Code {"code"} else {"markdown"},
                     "source":cell.source, "status":status, "outputs":outputs, "provenance":provenance})
             })
@@ -123,6 +141,7 @@ impl UiSession {
     }
 
     fn run_next(&mut self) -> Result<(), String> {
+        self.clear_interrupt();
         if self.needs_restart {
             return Err("an edit requires Run this cell or Restart and run all".into());
         }
@@ -134,6 +153,7 @@ impl UiSession {
     }
 
     fn run_cell(&mut self, id: &str) -> Result<(), String> {
+        self.clear_interrupt();
         let result = self
             .kernel
             .rerun_affected(id)
@@ -147,6 +167,13 @@ impl UiSession {
     }
 
     fn restart(&mut self) -> Result<(), String> {
+        self.clear_interrupt();
+        self.needs_restart = false;
+        self.kernel.restart().map_err(|error| error.to_string())
+    }
+
+    fn restart_and_run_all(&mut self) -> Result<(), String> {
+        self.clear_interrupt();
         self.needs_restart = false;
         self.kernel
             .restart_and_run_all()
@@ -472,8 +499,8 @@ fn dispatch(session: &mut UiSession, request: Request, port: u16) -> Vec<u8> {
         }
         (
             "POST",
-            "/api/run-next" | "/api/run-cell" | "/api/restart" | "/api/edit" | "/api/save"
-            | "/api/export",
+            "/api/run-next" | "/api/run-cell" | "/api/restart" | "/api/restart-only" | "/api/edit"
+            | "/api/save" | "/api/export",
         ) => {
             if request.headers.get("x-cgx2-token") != Some(&session.token) {
                 return error_response(403, "missing or invalid token");
@@ -500,7 +527,8 @@ fn dispatch(session: &mut UiSession, request: Request, port: u16) -> Vec<u8> {
                     }
                     _ => Err("run-cell requires one notebook cell ID".into()),
                 },
-                "/api/restart" if value == json!({}) => session.restart(),
+                "/api/restart" if value == json!({}) => session.restart_and_run_all(),
+                "/api/restart-only" if value == json!({}) => session.restart(),
                 "/api/edit" => match (
                     value.get("id").and_then(Value::as_str),
                     value.get("source").and_then(Value::as_str),
@@ -557,9 +585,47 @@ fn dispatch(session: &mut UiSession, request: Request, port: u16) -> Vec<u8> {
     }
 }
 
-pub fn serve(listener: TcpListener, mut session: UiSession) -> io::Result<()> {
+fn interrupt_response(
+    request: &Request,
+    port: u16,
+    token: &str,
+    control: Option<&ExecutionControl>,
+) -> Vec<u8> {
+    let host = format!("127.0.0.1:{port}");
+    if request.headers.get("host") != Some(&host)
+        || request.headers.get("origin") != Some(&format!("http://{host}"))
+        || request
+            .headers
+            .get("x-cgx2-token")
+            .is_none_or(|value| value != token)
+    {
+        return error_response(403, "invalid Host, Origin or token");
+    }
+    if request
+        .headers
+        .get("content-type")
+        .is_none_or(|value| value != "application/json")
+        || serde_json::from_slice::<Value>(&request.body).ok() != Some(json!({}))
+    {
+        return error_response(400, "interrupt requires an empty JSON object");
+    }
+    let Some(control) = control else {
+        return error_response(409, "scalar worker unavailable");
+    };
+    control.interrupt();
+    response(
+        200,
+        "application/json; charset=utf-8",
+        json_bytes(&json!({"interrupted":true})),
+    )
+}
+
+pub fn serve(listener: TcpListener, session: UiSession) -> io::Result<()> {
     let port = listener.local_addr()?.port();
     listener.set_nonblocking(true)?;
+    let token = session.token.clone();
+    let control = session.control.clone();
+    let shared = Arc::new(Mutex::new(session));
     let start = Instant::now();
     let mut requests = 0;
     while start.elapsed() < MAX_LIFETIME && requests < MAX_REQUESTS {
@@ -568,11 +634,25 @@ pub fn serve(listener: TcpListener, mut session: UiSession) -> io::Result<()> {
                 requests += 1;
                 stream.set_read_timeout(Some(IO_TIMEOUT))?;
                 stream.set_write_timeout(Some(IO_TIMEOUT))?;
-                let reply = match read_request(&mut stream) {
-                    Ok(request) => dispatch(&mut session, request, port),
-                    Err((status, message)) => error_response(status, &message),
-                };
-                let _ = stream.write_all(&reply);
+                let request = read_request(&mut stream);
+                if let Ok(request) = &request {
+                    if request.method == "POST" && request.path == "/api/interrupt" {
+                        let reply = interrupt_response(request, port, &token, control.as_ref());
+                        let _ = stream.write_all(&reply);
+                        continue;
+                    }
+                }
+                let shared = Arc::clone(&shared);
+                std::thread::spawn(move || {
+                    let reply = match request {
+                        Ok(request) => match shared.lock() {
+                            Ok(mut session) => dispatch(&mut session, request, port),
+                            Err(_) => error_response(500, "notebook session unavailable"),
+                        },
+                        Err((status, message)) => error_response(status, &message),
+                    };
+                    let _ = stream.write_all(&reply);
+                });
             }
             Err(error) if error.kind() == io::ErrorKind::WouldBlock => {
                 std::thread::sleep(Duration::from_millis(20))
@@ -583,17 +663,39 @@ pub fn serve(listener: TcpListener, mut session: UiSession) -> io::Result<()> {
     Ok(())
 }
 
-pub fn serve_n(listener: TcpListener, mut session: UiSession, count: usize) -> io::Result<()> {
+pub fn serve_n(listener: TcpListener, session: UiSession, count: usize) -> io::Result<()> {
     let port = listener.local_addr()?.port();
+    let token = session.token.clone();
+    let control = session.control.clone();
+    let shared = Arc::new(Mutex::new(session));
+    let mut handlers = Vec::new();
     for _ in 0..count {
         let (mut stream, _) = listener.accept()?;
         stream.set_read_timeout(Some(IO_TIMEOUT))?;
         stream.set_write_timeout(Some(IO_TIMEOUT))?;
-        let reply = match read_request(&mut stream) {
-            Ok(request) => dispatch(&mut session, request, port),
-            Err((status, message)) => error_response(status, &message),
-        };
-        stream.write_all(&reply)?;
+        let request = read_request(&mut stream);
+        if let Ok(request) = &request {
+            if request.method == "POST" && request.path == "/api/interrupt" {
+                stream.write_all(&interrupt_response(request, port, &token, control.as_ref()))?;
+                continue;
+            }
+        }
+        let shared = Arc::clone(&shared);
+        handlers.push(std::thread::spawn(move || {
+            let reply = match request {
+                Ok(request) => match shared.lock() {
+                    Ok(mut session) => dispatch(&mut session, request, port),
+                    Err(_) => error_response(500, "notebook session unavailable"),
+                },
+                Err((status, message)) => error_response(status, &message),
+            };
+            stream.write_all(&reply)
+        }));
+    }
+    for handler in handlers {
+        handler
+            .join()
+            .map_err(|_| io::Error::other("notebook handler panicked"))??;
     }
     Ok(())
 }

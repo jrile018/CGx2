@@ -46,6 +46,7 @@ pub fn make_provenance(
         ordinal,
         output_ordinal,
         result: ProvenanceResult::Success,
+        stale: false,
     }
 }
 

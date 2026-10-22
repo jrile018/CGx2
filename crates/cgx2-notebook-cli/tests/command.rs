@@ -73,7 +73,7 @@ fn run_saves_fresh_reopenable_output_without_touching_input() {
     assert!(!String::from_utf8_lossy(&saved).contains("stale"));
     assert!(matches!(
         &notebook.cells[2].outputs[..],
-        [CellOutput::Text { mime, ordinal: 1, body }]
+        [CellOutput::Text { mime, ordinal: 11, body }]
             if mime == "text/plain" && body.trim() == "7"
     ));
     assert!(notebook.cells[2].provenance.is_some());
@@ -85,6 +85,47 @@ fn run_saves_fresh_reopenable_output_without_touching_input() {
         "{text}"
     );
     assert!(text.contains("source_sha256="), "{text}");
+}
+
+#[test]
+fn restart_roundtrip_preserves_saved_revision_as_stale_without_running() {
+    let fixture = Fixture::new();
+    let input = fixture.write("source.cgnb", INPUT);
+    let executed = fixture.path("executed.cgnb");
+    assert!(
+        run(&[Path::new("run"), &input, Path::new("--out"), &executed])
+            .status
+            .success()
+    );
+    let stale = fixture.path("stale.cgnb");
+    let result = run(&[Path::new("restart"), &executed, Path::new("--out"), &stale]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let inspected = run(&[Path::new("inspect"), &stale]);
+    let listing = String::from_utf8(inspected.stdout).unwrap();
+    assert!(listing.contains("result\tcode\tstale"), "{listing}");
+    let saved = parse_notebook_bytes(&fs::read(&stale).unwrap()).unwrap();
+    assert_eq!(
+        saved.cells[2].outputs,
+        parse_notebook_bytes(&fs::read(&executed).unwrap())
+            .unwrap()
+            .cells[2]
+            .outputs
+    );
+    assert_eq!(
+        saved.cells[2].provenance.as_ref().unwrap().result,
+        cgx2_notebook_format::ProvenanceResult::Success
+    );
+    assert!(saved.cells[2].provenance.as_ref().unwrap().stale);
+    assert!(!run(&[
+        Path::new("run"),
+        &stale,
+        Path::new("--out"),
+        &fixture.path("bad.cgnb"),
+        Path::new("--timeout-ms"),
+        Path::new("0")
+    ])
+    .status
+    .success());
 }
 
 #[test]
@@ -137,7 +178,7 @@ fn same_path_needs_force_and_can_be_replaced_after_success() {
         Path::new("--force"),
     ]);
     assert!(forced.status.success(), "{}", stderr(&forced));
-    assert!(fs::read_to_string(input).unwrap().contains("ordinal=1\n7"));
+    assert!(fs::read_to_string(input).unwrap().contains("ordinal=11\n7"));
 }
 
 #[test]

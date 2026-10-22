@@ -130,8 +130,13 @@ pub fn parse_notebook(text: &str) -> Result<Notebook, NotebookError> {
                         sha256: sha256.to_owned(),
                     });
                 }
-                ["%%", "provenance", id_field, schema_field, source_field, prefix_field, evaluator_field, ordinal_field, output_ordinal_field, result_field] =>
+                ["%%", "provenance", id_field, schema_field, source_field, prefix_field, evaluator_field, ordinal_field, output_ordinal_field, result_field, state @ ..] =>
                 {
+                    let stale = match state {
+                        [] => false,
+                        ["state=stale"] => true,
+                        _ => return Err(malformed(zero_line + 1, line)),
+                    };
                     let id = id_field
                         .strip_prefix("id=")
                         .ok_or_else(|| malformed(zero_line + 1, line))?;
@@ -190,6 +195,7 @@ pub fn parse_notebook(text: &str) -> Result<Notebook, NotebookError> {
                         ordinal,
                         output_ordinal,
                         result,
+                        stale,
                     });
                 }
                 _ => return Err(malformed(zero_line + 1, line)),

@@ -3,6 +3,7 @@ use std::net::TcpListener;
 use std::path::PathBuf;
 use std::process::ExitCode;
 
+use cgx2_notebook_kernel::{is_worker_argument, scalar_worker_main};
 use cgx2_notebook_ui::{serve, UiSession};
 
 fn run() -> Result<(), String> {
@@ -26,7 +27,8 @@ fn run() -> Result<(), String> {
     if args.next().is_some() {
         return Err("too many arguments".into());
     }
-    let session = UiSession::open(input)?;
+    let mut session = UiSession::open(input)?;
+    session.configure_worker(env::current_exe().map_err(|error| error.to_string())?);
     let listener = TcpListener::bind(("127.0.0.1", port))
         .map_err(|error| format!("cannot bind 127.0.0.1:{port}: {error}"))?;
     println!(
@@ -40,6 +42,17 @@ fn run() -> Result<(), String> {
 }
 
 fn main() -> ExitCode {
+    if env::args()
+        .nth(1)
+        .as_deref()
+        .is_some_and(is_worker_argument)
+    {
+        return if scalar_worker_main() == 0 {
+            ExitCode::SUCCESS
+        } else {
+            ExitCode::FAILURE
+        };
+    }
     match run() {
         Ok(()) => ExitCode::SUCCESS,
         Err(error) => {

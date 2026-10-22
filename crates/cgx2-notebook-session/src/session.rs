@@ -134,6 +134,7 @@ impl<E: CellExecutor> NotebookSession<E> {
                 };
                 if provenance.source_sha256 != source_hash(&cell.source)
                     || provenance.prefix_sha256 != expected_dependency
+                    || provenance.stale
                 {
                     CellStatus::Stale
                 } else if provenance.result == ProvenanceResult::Failed {
@@ -171,6 +172,18 @@ impl<E: CellExecutor> NotebookSession<E> {
 
     pub fn notebook(&self) -> &Notebook {
         &self.notebook
+    }
+
+    pub fn executor_mut(&mut self) -> &mut E {
+        &mut self.executor
+    }
+
+    /// Reset execution while retaining saved outputs and their provenance.
+    pub fn restart(&mut self) -> Result<(), SessionError> {
+        self.pending_affected.clear();
+        let result = self.executor.reset().map_err(SessionError::ResetFailed);
+        self.stale_all_code();
+        result
     }
 
     /// Downstream cells affected by the selected cell's latest edit or rerun.
@@ -362,12 +375,7 @@ impl<E: CellExecutor> NotebookSession<E> {
     }
 
     pub fn restart_and_run_all(&mut self) -> Result<(), SessionError> {
-        self.pending_affected.clear();
-        if let Err(message) = self.executor.reset() {
-            self.stale_all_code();
-            return Err(SessionError::ResetFailed(message));
-        }
-        self.stale_all_code();
+        self.restart()?;
         let code_ids: Vec<String> = self
             .notebook
             .cells
@@ -406,9 +414,12 @@ impl<E: CellExecutor> NotebookSession<E> {
     }
 
     fn mark_stale(&mut self, index: usize) {
-        let cell = &self.notebook.cells[index];
+        let cell = &mut self.notebook.cells[index];
         if !cell.outputs.is_empty() || self.statuses[&cell.id] != CellStatus::NeverRun {
             self.statuses.insert(cell.id.clone(), CellStatus::Stale);
+            if let Some(provenance) = &mut cell.provenance {
+                provenance.stale = true;
+            }
         }
     }
 
