@@ -1,0 +1,91 @@
+use std::collections::HashSet;
+
+use crate::{check_document_size, valid_id, valid_mime, CellKind, Notebook, NotebookError, Output};
+
+pub fn write_notebook(notebook: &Notebook) -> Result<String, NotebookError> {
+    if notebook.version != 1 {
+        return Err(NotebookError::UnsupportedVersion(
+            notebook.version.to_string(),
+        ));
+    }
+    let mut out = String::from("#!cgnb 1\n");
+    let mut seen = HashSet::new();
+    for cell in &notebook.cells {
+        if !valid_id(&cell.id) {
+            return Err(NotebookError::InvalidCellId(cell.id.clone()));
+        }
+        if !seen.insert(&cell.id) {
+            return Err(NotebookError::DuplicateCellId(cell.id.clone()));
+        }
+        if cell.kind == CellKind::Markdown && !cell.outputs.is_empty() {
+            return Err(NotebookError::InvalidOutput(
+                "Markdown cells cannot have outputs".into(),
+            ));
+        }
+        out.push_str(match cell.kind {
+            CellKind::Code => "%% code id=",
+            CellKind::Markdown => "%% markdown id=",
+        });
+        out.push_str(&cell.id);
+        out.push('\n');
+        write_body(&mut out, &cell.source);
+        for output in &cell.outputs {
+            match output {
+                Output::Text {
+                    mime,
+                    ordinal,
+                    body,
+                } => {
+                    validate_mime(mime)?;
+                    out.push_str(&format!(
+                        "%% output id={} mime={} ordinal={}\n",
+                        cell.id, mime, ordinal
+                    ));
+                    write_body(&mut out, body);
+                }
+                Output::Asset {
+                    mime,
+                    ordinal,
+                    sha256,
+                } => {
+                    validate_mime(mime)?;
+                    if !crate::assets::valid_digest(sha256) {
+                        return Err(NotebookError::InvalidDigest(sha256.clone()));
+                    }
+                    out.push_str(&format!(
+                        "%% asset id={} mime={} ordinal={} sha256={}\n",
+                        cell.id, mime, ordinal, sha256
+                    ));
+                }
+            }
+        }
+        check_document_size(out.len())?;
+    }
+    Ok(out)
+}
+
+fn validate_mime(mime: &str) -> Result<(), NotebookError> {
+    if valid_mime(mime) {
+        Ok(())
+    } else {
+        Err(NotebookError::InvalidOutput(format!(
+            "invalid MIME type: {mime}"
+        )))
+    }
+}
+
+fn write_body(out: &mut String, body: &str) {
+    for line in body.split_inclusive('\n') {
+        if line.is_empty() {
+            continue;
+        }
+        let slashes = line.bytes().take_while(|byte| *byte == b'\\').count();
+        if line[slashes..].starts_with("%%") {
+            out.push('\\');
+        }
+        out.push_str(line);
+    }
+    if !body.is_empty() && !body.ends_with('\n') {
+        out.push_str("\n%% end\n");
+    }
+}
