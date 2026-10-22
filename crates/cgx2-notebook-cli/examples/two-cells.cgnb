@@ -1,0 +1,8 @@
+#!cgnb 1
+%% markdown id=about
+# A clean scalar run
+The result cell uses the binding from the first code cell.
+%% code id=seed
+let x = 3
+%% code id=result
+x + 4

@@ -29,19 +29,19 @@
 
 ### 1. Command and file workflow
 
-- [ ] Add red integration tests for `run`, `inspect`, output collision, unknown command, extension validation, and invalid `.cgnb` bytes.
-- [ ] Implement command parser, format/kernel integration, diagnostics, and explicit output path behavior. Keep command errors distinct from code-cell errors.
-- [ ] Add a checked-in example `.cgnb` and README invocation that can be copied by a new user.
+- [x] Add red integration tests for `run`, `inspect`, output collision, unknown command, extension validation, and invalid `.cgnb` bytes.
+- [x] Implement command parser, format/kernel integration, diagnostics, and explicit output path behavior. Keep command errors distinct from code-cell errors.
+- [x] Add a checked-in example `.cgnb` and README invocation that can be copied by a new user.
 
 ### 2. Failure atomicity and serialization
 
-- [ ] Test that stale input outputs are cleared and new outputs serialize and reopen correctly. Markdown and assets must survive.
-- [ ] Test failed cell, output directory denial, and forced replacement behavior using temporary directories. No empty or partial output should be left as success.
-- [ ] Document the pure-scalar, sequential replay limits inherited from the kernel.
+- [x] Test that stale input outputs are cleared and new outputs serialize and reopen correctly. Markdown and source assets survive; stale rich outputs are dropped.
+- [x] Test failed cell, output directory denial, and forced replacement behavior using temporary directories. No empty or partial output should be left as success.
+- [x] Document the pure-scalar, sequential replay limits inherited from the kernel.
 
 ### 3. Verification and handoff
 
-- [ ] Run `cargo test -p cgx2-notebook-cli --offline`, `RUSTUP_TOOLCHAIN=1.98.1 cargo fmt --all --check`, and `RUSTUP_TOOLCHAIN=1.98.1 cargo clippy -p cgx2-notebook-cli --all-targets --offline -- -D warnings`.
-- [ ] Commit only owned paths and report a command transcript on the example.
+- [x] Run `cargo test -p cgx2-notebook-cli --offline`, `RUSTUP_TOOLCHAIN=1.98.1 cargo fmt --all --check`, and `RUSTUP_TOOLCHAIN=1.98.1 cargo clippy -p cgx2-notebook-cli --all-targets --offline -- -D warnings`.
+- [x] Commit only owned paths and report a command transcript on the example.
 
 **Acceptance:** A user can run a `.cgnb` file from the command line and reopen the fresh result, with no silent overwrite or claim of full notebook UI semantics.
