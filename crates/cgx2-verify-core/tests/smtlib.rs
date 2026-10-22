@@ -27,7 +27,7 @@ fn emits_i64_bounds_overflow_guards_and_three_checks() {
     assert!(text.contains("(<= v_78 9223372036854775807)"));
     assert!(text.contains("(<= (+ v_78 1) 9223372036854775807)"));
     assert!(text.contains("(not (and"));
-    assert_eq!(text.matches("(check-sat)").count(), 3);
+    assert_eq!(text.matches("(check-sat)").count(), 4);
 }
 
 #[test]
@@ -65,19 +65,19 @@ fn uninterpreted_calls_keep_argument_sorts_and_disclose_i64_bounds() {
 #[test]
 fn protocol_requires_valid_precondition_and_unsat_negation() {
     assert_eq!(
-        parse_solver_result("unsat\nsat\nunsat\n", "", SolverExit::Code(0)),
+        parse_solver_result("unsat\nsat\nunsat\nunsat\n", "", SolverExit::Code(0)),
         SolverResponse::Unsat
     );
     assert_eq!(
-        parse_solver_result("unsat\nsat\nsat\n", "", SolverExit::Code(0)),
+        parse_solver_result("unsat\nsat\nsat\nunsat\n", "", SolverExit::Code(0)),
         SolverResponse::SatCandidate
     );
     assert_eq!(
-        parse_solver_result("unsat\nunsat\nunsat\n", "", SolverExit::Code(0)),
+        parse_solver_result("unsat\nunsat\nunsat\nunsat\n", "", SolverExit::Code(0)),
         SolverResponse::Unknown(UnknownReason::InconsistentPrecondition)
     );
     assert!(matches!(
-        parse_solver_result("sat\nsat\nunsat\n", "", SolverExit::Code(0)),
+        parse_solver_result("sat\nsat\nunsat\nunsat\n", "", SolverExit::Code(0)),
         SolverResponse::Unknown(_)
     ));
 }
@@ -85,7 +85,7 @@ fn protocol_requires_valid_precondition_and_unsat_negation() {
 #[test]
 fn protocol_rejects_unknown_timeout_missing_and_malformed() {
     assert_eq!(
-        parse_solver_result("unsat\nsat\nunknown\n", "", SolverExit::Code(0)),
+        parse_solver_result("unsat\nsat\nunknown\nunsat\n", "", SolverExit::Code(0)),
         SolverResponse::Unknown(UnknownReason::SolverUnknown)
     );
     assert_eq!(
@@ -101,7 +101,7 @@ fn protocol_rejects_unknown_timeout_missing_and_malformed() {
         SolverResponse::Unknown(UnknownReason::MalformedResponse)
     );
     assert_eq!(
-        parse_solver_result("unsat\nsat\nunsat\n", "error", SolverExit::Code(0)),
+        parse_solver_result("unsat\nsat\nunsat\nunsat\n", "error", SolverExit::Code(0)),
         SolverResponse::Unknown(UnknownReason::MalformedResponse)
     );
 }
@@ -113,7 +113,7 @@ fn fake_solver_command_covers_success_missing_and_timeout() {
     assert_eq!(
         run_solver(
             "/bin/sh",
-            &["-c", "printf 'unsat\\nsat\\nunsat\\n'"],
+            &["-c", "printf 'unsat\\nsat\\nunsat\\nunsat\\n'"],
             &script,
             Duration::from_secs(1)
         ),

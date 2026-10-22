@@ -51,7 +51,7 @@ pub fn parse_solver_result(stdout: &str, stderr: &str, exit_status: SolverExit) 
         .map(str::trim)
         .filter(|line| !line.is_empty())
         .collect::<Vec<_>>();
-    if statuses.len() != 3
+    if statuses.len() != 4
         || statuses
             .iter()
             .any(|status| !matches!(*status, "sat" | "unsat" | "unknown"))
@@ -69,10 +69,10 @@ pub fn parse_solver_result(stdout: &str, stderr: &str, exit_status: SolverExit) 
     if statuses[1] == "unsat" {
         return SolverResponse::Unknown(UnknownReason::InconsistentPrecondition);
     }
-    match statuses[2] {
-        "unsat" => SolverResponse::Unsat,
-        "sat" => SolverResponse::SatCandidate,
-        _ => SolverResponse::Unknown(UnknownReason::MalformedResponse),
+    if statuses[2] == "sat" || statuses[3] == "sat" {
+        SolverResponse::SatCandidate
+    } else {
+        SolverResponse::Unsat
     }
 }
 

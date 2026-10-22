@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet};
 
-use crate::{Contract, Expr, Sort, ValidationError};
+use crate::{Contract, Expr, Failure, Sort, ValidationError};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum SmtError {
@@ -12,9 +12,7 @@ struct Encoded {
     defined: String,
 }
 
-/// Emit three queries: precondition overflow, precondition satisfiability,
-/// then the negation of the postcondition (including checked overflow).
-pub fn emit_smtlib(contract: &Contract) -> Result<String, SmtError> {
+fn context(contract: &Contract) -> Result<(String, Encoded, Encoded), SmtError> {
     contract.validate().map_err(SmtError::InvalidContract)?;
     let mut functions = BTreeMap::new();
     let variables = contract
@@ -35,7 +33,7 @@ pub fn emit_smtlib(contract: &Contract) -> Result<String, SmtError> {
         &mut functions,
         &mut foreign_bounds,
     );
-    let mut text = String::from("(set-logic QF_UFLIA)\n; i64 values are mathematical Ints constrained to the signed 64-bit range.\n; Uninterpreted functions, if declared, represent pure total external results.\n");
+    let mut text = String::from("(set-option :produce-models true)\n(set-logic QF_UFLIA)\n; i64 values are mathematical Ints constrained to the signed 64-bit range.\n; Uninterpreted functions, if declared, represent pure total external results.\n");
     for parameter in &contract.parameters {
         let symbol = symbol("v", &parameter.name);
         text.push_str(&format!(
@@ -61,18 +59,51 @@ pub fn emit_smtlib(contract: &Contract) -> Result<String, SmtError> {
     for bound in foreign_bounds {
         text.push_str(&format!("(assert {bound})\n"));
     }
+    Ok((text, requires, ensures))
+}
+
+/// Four independent checks in fixed order: undefined requires, satisfiable
+/// requires, false ensures, and undefined (overflowing) ensures.
+pub fn emit_smtlib(contract: &Contract) -> Result<String, SmtError> {
+    let (mut text, requires, ensures) = context(contract)?;
     text.push_str(&format!(
-        "(push 1)\n(assert (not {}))\n(check-sat)\n(pop 1)\n",
+        "; vc:requires_defined\n(push 1)\n(assert (not {}))\n(check-sat)\n(pop 1)\n",
         requires.defined
     ));
     text.push_str(&format!(
-        "(push 1)\n(assert (and {} {}))\n(check-sat)\n",
+        "; vc:requires_satisfiable\n(push 1)\n(assert (and {} {}))\n(check-sat)\n(pop 1)\n",
         requires.defined, requires.term
     ));
     text.push_str(&format!(
-        "(push 1)\n(assert (or (not {}) (not {})))\n(check-sat)\n(pop 1)\n(pop 1)\n",
-        ensures.defined, ensures.term
+        "; vc:ensures_false\n(push 1)\n(assert (and {} {} {} (not {})))\n(check-sat)\n(pop 1)\n",
+        requires.defined, requires.term, ensures.defined, ensures.term
     ));
+    text.push_str(&format!(
+        "; vc:ensures_overflow\n(push 1)\n(assert (and {} {} (not {})))\n(check-sat)\n(pop 1)\n",
+        requires.defined, requires.term, ensures.defined
+    ));
+    Ok(text)
+}
+
+/// Query one reported violation again and request all parameter values.
+pub fn emit_witness_smtlib(contract: &Contract, failure: Failure) -> Result<String, SmtError> {
+    let (mut text, requires, ensures) = context(contract)?;
+    let violation = match failure {
+        Failure::EnsuresFalse => format!("(and {} (not {}))", ensures.defined, ensures.term),
+        Failure::Overflow => format!("(not {})", ensures.defined),
+    };
+    text.push_str(&format!(
+        "(assert (and {} {} {violation}))\n(check-sat)\n",
+        requires.defined, requires.term
+    ));
+    if !contract.parameters.is_empty() {
+        let names = contract
+            .parameters
+            .iter()
+            .map(|p| symbol("v", &p.name))
+            .collect::<Vec<_>>();
+        text.push_str(&format!("(get-value ({}))\n", names.join(" ")));
+    }
     Ok(text)
 }
 
@@ -83,7 +114,7 @@ fn sort_name(sort: Sort) -> &'static str {
     }
 }
 
-fn symbol(prefix: &str, name: &str) -> String {
+pub(crate) fn symbol(prefix: &str, name: &str) -> String {
     let mut result = String::from(prefix);
     result.push('_');
     for byte in name.bytes() {

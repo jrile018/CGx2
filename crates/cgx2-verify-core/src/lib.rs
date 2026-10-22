@@ -3,13 +3,15 @@
 mod bounded;
 mod eval;
 mod expr;
+mod model;
 mod smtlib;
 mod solver;
 
 pub use bounded::{verify_bounded, Counterexample, Domain, Failure, Scope, UnknownReason, Verdict};
 pub use eval::{eval, EvalError, Value};
 pub use expr::{Contract, Expr, Parameter, Sort, ValidationError};
-pub use smtlib::{emit_smtlib, SmtError};
+pub use model::validate_solver_witness;
+pub use smtlib::{emit_smtlib, emit_witness_smtlib, SmtError};
 pub use solver::{
     observe_solver, parse_solver_result, run_solver, SolverExit, SolverObservation, SolverResponse,
     SOLVER_OUTPUT_LIMIT,
