@@ -70,7 +70,7 @@ fn primitive_round_trip_and_integer_overflow_is_conversion_error() {
     let empty = bridge.call(&tuple, &[]).unwrap();
     assert!(matches!(
         bridge.to_value(&empty).unwrap(),
-        BridgeValue::Handle(_)
+        BridgeValue::Tuple(values) if values.is_empty()
     ));
     let int = bridge.getattr(&builtins, "int").unwrap();
     let value = bridge.call(&int, &[BridgeValue::I64(42)]).unwrap();

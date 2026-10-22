@@ -1,4 +1,5 @@
 use pyo3::prelude::*;
+use std::collections::BTreeMap;
 
 /// An owned reference to an object in the linked CPython interpreter.
 #[derive(Debug)]
@@ -18,5 +19,9 @@ pub enum BridgeValue {
     I64(i64),
     F64(f64),
     String(String),
+    Bytes(Vec<u8>),
+    List(Vec<BridgeValue>),
+    Tuple(Vec<BridgeValue>),
+    Dict(BTreeMap<String, BridgeValue>),
     Handle(PyHandle),
 }

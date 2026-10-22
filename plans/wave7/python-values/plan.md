@@ -22,18 +22,18 @@
 
 ### Conversion and call API
 
-- [ ] Add red tests for keyword forwarding, duplicate/invalid keyword names, nested round trips, byte copies, recursion/cycle limits, and overflow.
-- [ ] Implement value conversion with explicit budgets and opaque fallback. Keep error paths free of leaked Python references.
-- [ ] Implement `call_kwargs`; have `call` delegate if that preserves behavior without breaking existing callers.
+- [x] Add red tests for keyword forwarding, duplicate/invalid keyword names, nested round trips, byte copies, recursion/cycle limits, and overflow.
+- [x] Implement value conversion with explicit budgets and opaque fallback. Keep error paths free of leaked Python references.
+- [x] Implement `call_kwargs`; have `call` delegate if that preserves behavior without breaking existing callers.
 
 ### Foreign memory and documentation
 
-- [ ] Test that cloned handles alias and remain valid after the original is dropped, while copied structured values remain independent. Confirm Python exceptions stay distinguishable from conversion errors.
-- [ ] Update crate README with exact API signatures, build-time interpreter selection, copy-vs-handle table, foreign allocator limits, and two real stdlib examples.
+- [x] Test that cloned handles alias and remain valid after the original is dropped, while copied structured values remain independent. Confirm Python exceptions stay distinguishable from conversion errors.
+- [x] Update crate README with exact API signatures, build-time interpreter selection, copy-vs-handle table, foreign allocator limits, and two real stdlib examples.
 
 ### Verification and handoff
 
-- [ ] Run `cargo test -p cgx2-python-bridge --offline -- --nocapture` with the matching Python development library configured, `RUSTUP_TOOLCHAIN=1.98.1 cargo fmt --all --check`, and `RUSTUP_TOOLCHAIN=1.98.1 cargo clippy -p cgx2-python-bridge --all-targets --offline -- -D warnings`.
-- [ ] Commit only owned paths; report the interpreter and whether real PyTorch ran or skipped.
+- [x] Run `cargo test -p cgx2-python-bridge --offline -- --nocapture` with the matching Python development library configured, `RUSTUP_TOOLCHAIN=1.98.1 cargo fmt --all --check`, and `RUSTUP_TOOLCHAIN=1.98.1 cargo clippy -p cgx2-python-bridge --all-targets --offline -- -D warnings`.
+- [x] Commit only owned paths; report the interpreter and whether real PyTorch ran or skipped.
 
 **Acceptance:** Python stdlib keyword/structured calls work through bounded, explicit conversions, with opaque fallback and honest foreign-memory ownership.
