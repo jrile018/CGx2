@@ -8,6 +8,8 @@
 
 All four keys are required, with no defaults:
 
+Version 1 scalar packages remain valid. A version 2 manifest uses the same required keys and additionally requires `binding_lock = "cgx2-bind.lock.json"`, a relative contained `.json` path. Version 1 rejects this key. The package loader records the path through `CheckedPackage::binding_lock()`; `cgx2-bind check` validates the referenced lock and artifact. The package API index's schema version 2 is independent of the manifest schema version.
+
 ```toml
 schema_version = 1
 name = "demo"

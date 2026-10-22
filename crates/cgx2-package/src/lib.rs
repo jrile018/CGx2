@@ -187,6 +187,7 @@ struct Manifest {
     name: String,
     entry: LocatedString,
     sources: Vec<LocatedString>,
+    binding_lock: Option<PathBuf>,
 }
 
 struct ParsedSource {
@@ -236,11 +237,16 @@ impl CheckedModule {
 pub struct CheckedPackage {
     root: PathBuf,
     manifest_sha256: String,
+    binding_lock: Option<PathBuf>,
     index: PackageIndex,
     modules: Vec<CheckedModule>,
 }
 
 impl CheckedPackage {
+    /// Relative lock path explicitly named by a schema 2 manifest.
+    pub fn binding_lock(&self) -> Option<&Path> {
+        self.binding_lock.as_deref()
+    }
     pub fn root(&self) -> &Path {
         &self.root
     }
@@ -654,6 +660,7 @@ pub fn load_checked_package(root: &Path) -> Result<CheckedPackage, Vec<PackageDi
     Ok(CheckedPackage {
         root: canonical_root,
         manifest_sha256,
+        binding_lock: manifest.binding_lock,
         index: PackageIndex {
             schema_version: 2,
             name: manifest.name,
@@ -804,6 +811,22 @@ fn canonicalize_contained(path: &Path, root: &Path) -> Result<PathBuf, PackageDi
     Ok(canonical)
 }
 
+fn valid_binding_path(path: &Path, value: &str) -> bool {
+    !value.is_empty()
+        && value.len() <= 240
+        && !value.contains('\\')
+        && !value.chars().any(char::is_control)
+        && value
+            .split('/')
+            .all(|part| !part.is_empty() && part != "." && part != "..")
+        && path
+            .extension()
+            .is_some_and(|extension| extension == "json")
+        && path
+            .components()
+            .all(|component| matches!(component, Component::Normal(_)))
+}
+
 fn valid_source_path(path: &Path, value: &str) -> bool {
     !value.is_empty()
         && value.len() <= 240
@@ -879,7 +902,10 @@ fn parse_manifest(source: &str, file: &Path) -> Result<Manifest, Vec<PackageDiag
             continue;
         };
         let key = raw_key.trim();
-        if !matches!(key, "schema_version" | "name" | "entry" | "sources") {
+        if !matches!(
+            key,
+            "schema_version" | "name" | "entry" | "sources" | "binding_lock"
+        ) {
             errors.push(PackageDiagnostic::new(
                 "CGP001",
                 format!("unknown manifest key {key}"),
@@ -913,10 +939,10 @@ fn parse_manifest(source: &str, file: &Path) -> Result<Manifest, Vec<PackageDiag
         return Err(errors);
     }
     let (schema, schema_span) = fields["schema_version"];
-    if schema != "1" {
+    if !matches!(schema, "1" | "2") {
         errors.push(PackageDiagnostic::new(
             "CGP003",
-            "schema_version must be the integer 1",
+            "schema_version must be the integer 1 or 2",
             file,
             Some(schema_span),
         ));
@@ -959,6 +985,39 @@ fn parse_manifest(source: &str, file: &Path) -> Result<Manifest, Vec<PackageDiag
     if !errors.is_empty() {
         return Err(errors);
     }
+    let binding_lock = fields.get("binding_lock").and_then(|(raw, span)| {
+        let Some((value, rest)) = parse_string(raw) else {
+            errors.push(PackageDiagnostic::new(
+                "CGP003",
+                "binding_lock must be a quoted path",
+                file,
+                Some(*span),
+            ));
+            return None;
+        };
+        let path = PathBuf::from(&value);
+        if !rest.is_empty() || schema != "2" || !valid_binding_path(&path, &value) {
+            errors.push(PackageDiagnostic::new(
+                "CGP011",
+                "binding_lock requires schema_version 2 and a contained .json path",
+                file,
+                Some(*span),
+            ));
+            return None;
+        }
+        Some(path)
+    });
+    if schema == "2" && !fields.contains_key("binding_lock") {
+        errors.push(PackageDiagnostic::new(
+            "CGP006",
+            "schema_version 2 requires binding_lock",
+            file,
+            Some(schema_span),
+        ));
+    }
+    if !errors.is_empty() {
+        return Err(errors);
+    }
     let sources = sources
         .unwrap()
         .into_iter()
@@ -971,6 +1030,7 @@ fn parse_manifest(source: &str, file: &Path) -> Result<Manifest, Vec<PackageDiag
         name: name.unwrap().0,
         entry: entry.unwrap(),
         sources,
+        binding_lock,
     })
 }
 

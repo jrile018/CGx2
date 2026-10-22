@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "package": "torch_unavailable",
+  "bindings": [
+    {
+      "id": "torch_cpu",
+      "route": "libtorch",
+      "library": "torch",
+      "version": "2.6.0",
+      "artifact": "libtorch_missing.so",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "os": "linux",
+      "arch": "x86_64",
+      "abi": "libtorch-stable",
+      "calling_convention": "c",
+      "layout": "scalar-v1",
+      "symbols": [
+        {
+          "name": "torch_tensor",
+          "parameters": ["i64"],
+          "result": "i64",
+          "ownership": "none",
+          "owner": null,
+          "release": null,
+          "error": "status",
+          "effects": ["foreign"],
+          "capabilities": ["native"]
+        }
+      ]
+    }
+  ]
+}

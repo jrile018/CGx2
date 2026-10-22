@@ -1,0 +1,5 @@
+schema_version = 2
+name = "torch_unavailable"
+entry = "src/main.cg"
+sources = ["src/main.cg"]
+binding_lock = "cgx2-bind.lock.json"
