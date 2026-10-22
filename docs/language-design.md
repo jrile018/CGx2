@@ -1,6 +1,6 @@
 # CGx2 language and toolchain specification
 
-**Status:** design proposal with an integrated scalar native-build preview, a bounded source-to-runtime memory script profile with owned/managed conversions, static local package imports, a local pure-scalar notebook UI, and an external finite-domain contract command; Python and source verification capabilities remain partial. Most first-release paths are incomplete. CGx2 uses `.cg` source files and `.cgnb` notebooks. Examples below define intended behavior, but the exact grammar is provisional until the syntax comparison in the validation plan.
+**Status:** design proposal with an integrated scalar native-build preview including checked local package calls, a bounded source-to-runtime memory script profile with owned/managed conversions, a 1,000-seed direct-runtime memory state machine, a local pure-scalar notebook UI with selected-cell rerun, an advisory security policy, and an external finite-domain contract command; Python and source verification capabilities remain partial. Most first-release paths are incomplete. CGx2 uses `.cg` source files and `.cgnb` notebooks. Examples below define intended behavior, but the exact grammar is provisional until the syntax comparison in the validation plan.
 
 ## Purpose and boundaries
 

@@ -62,6 +62,7 @@ name = "cgx2-emit-rust"
 version = "0.1.0"
 dependencies = [
  "cgx2-cli",
+ "cgx2-package",
  "cgx2-sema",
  "cgx2-syntax",
 ]
@@ -137,6 +138,7 @@ dependencies = [
  "cgx2-api-index",
  "cgx2-sema",
  "cgx2-syntax",
+ "sha2",
 ]
 
 [[package]]
@@ -149,6 +151,15 @@ dependencies = [
 [[package]]
 name = "cgx2-runtime"
 version = "0.1.0"
+
+[[package]]
+name = "cgx2-security"
+version = "0.1.0"
+dependencies = [
+ "cgx2-effect-index",
+ "cgx2-syntax",
+ "serde_json",
+]
 
 [[package]]
 name = "cgx2-sema"
@@ -181,6 +192,7 @@ version = "0.1.0"
 dependencies = [
  "cgx2-cli",
  "cgx2-emit-rust",
+ "cgx2-package",
  "cgx2-sema",
  "cgx2-syntax",
  "sha2",
