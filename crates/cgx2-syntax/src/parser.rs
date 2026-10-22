@@ -1,0 +1,442 @@
+use std::mem::discriminant;
+
+use crate::{
+    lex, AssignOp, BinaryOp, Expr, ExprKind, Function, Module, Parameter, Path, Span, Stmt,
+    StmtKind, SyntaxDiagnostic, Token, TokenKind, TypeSyntax,
+};
+
+/// Parse a candidate CGx2 module or standalone script.
+pub fn parse_module(source: &str) -> Result<Module, Vec<SyntaxDiagnostic>> {
+    let tokens = lex(source)?;
+    let mut parser = Parser {
+        tokens,
+        pos: 0,
+        errors: Vec::new(),
+    };
+    let name = if parser.at(&TokenKind::Module) {
+        parser.advance();
+        let path = parser.parse_path();
+        parser.end_statement();
+        path
+    } else {
+        None
+    };
+    let mut functions = Vec::new();
+    let mut statements = Vec::new();
+    while !parser.at(&TokenKind::Eof) {
+        let before = parser.pos;
+        if parser.at(&TokenKind::Pub) || parser.at(&TokenKind::Fn) {
+            if let Some(function) = parser.parse_function() {
+                functions.push(function);
+            }
+        } else if parser.at(&TokenKind::Indent) || parser.at(&TokenKind::Dedent) {
+            parser.error("CGS102", "unexpected indentation boundary");
+            parser.advance();
+        } else if parser.at(&TokenKind::Newline) {
+            parser.advance();
+        } else if let Some(stmt) = parser.parse_stmt() {
+            statements.push(stmt);
+        }
+        if parser.pos == before {
+            parser.recover();
+        }
+    }
+    let module = Module {
+        name,
+        functions,
+        statements,
+        span: Span {
+            start: 0,
+            end: source.len(),
+        },
+    };
+    if !module.functions.is_empty() && !module.statements.is_empty() {
+        let span = module
+            .statements
+            .first()
+            .map(|stmt| stmt.span)
+            .unwrap_or(module.span);
+        parser.errors.push(SyntaxDiagnostic {
+            code: "CGS105",
+            message: "function items and top-level script statements cannot be mixed in this candidate grammar".into(),
+            span,
+        });
+    }
+    if parser.errors.is_empty() {
+        Ok(module)
+    } else {
+        Err(parser.errors)
+    }
+}
+
+struct Parser {
+    tokens: Vec<Token>,
+    pos: usize,
+    errors: Vec<SyntaxDiagnostic>,
+}
+
+impl Parser {
+    fn peek(&self) -> &Token {
+        &self.tokens[self.pos.min(self.tokens.len() - 1)]
+    }
+    fn at(&self, kind: &TokenKind) -> bool {
+        discriminant(&self.peek().kind) == discriminant(kind)
+    }
+    fn advance(&mut self) -> Token {
+        let result = self.peek().clone();
+        if self.pos + 1 < self.tokens.len() {
+            self.pos += 1;
+        }
+        result
+    }
+    fn eat(&mut self, kind: &TokenKind) -> Option<Token> {
+        if self.at(kind) {
+            Some(self.advance())
+        } else {
+            None
+        }
+    }
+    fn error(&mut self, code: &'static str, message: &str) {
+        self.errors.push(SyntaxDiagnostic {
+            code,
+            message: message.into(),
+            span: self.peek().span,
+        });
+    }
+    fn expect(&mut self, kind: &TokenKind, code: &'static str, message: &str) -> Option<Token> {
+        if self.at(kind) {
+            Some(self.advance())
+        } else {
+            self.error(code, message);
+            None
+        }
+    }
+    fn name(&mut self) -> Option<(String, Span)> {
+        if let TokenKind::Name(value) = &self.peek().kind {
+            let value = value.clone();
+            let span = self.advance().span;
+            Some((value, span))
+        } else {
+            self.error("CGS103", "expected name");
+            None
+        }
+    }
+    fn parse_path(&mut self) -> Option<Path> {
+        let (first, start) = self.name()?;
+        let mut segments = vec![first];
+        let mut end = start.end;
+        while self.eat(&TokenKind::Dot).is_some() {
+            let (segment, span) = self.name()?;
+            segments.push(segment);
+            end = span.end;
+        }
+        Some(Path {
+            segments,
+            span: Span {
+                start: start.start,
+                end,
+            },
+        })
+    }
+    fn parse_type(&mut self) -> Option<TypeSyntax> {
+        let path = self.parse_path()?;
+        let mut end = path.span.end;
+        let mut arguments = Vec::new();
+        if self.eat(&TokenKind::LAngle).is_some() {
+            loop {
+                arguments.push(self.parse_type()?);
+                if self.eat(&TokenKind::Comma).is_none() {
+                    break;
+                }
+            }
+            end = self
+                .expect(
+                    &TokenKind::RAngle,
+                    "CGS103",
+                    "expected > after type arguments",
+                )?
+                .span
+                .end;
+        }
+        Some(TypeSyntax {
+            span: Span {
+                start: path.span.start,
+                end,
+            },
+            path,
+            arguments,
+        })
+    }
+    fn parse_function(&mut self) -> Option<Function> {
+        let start = self.peek().span.start;
+        let public = self.eat(&TokenKind::Pub).is_some();
+        self.expect(&TokenKind::Fn, "CGS103", "expected fn")?;
+        let (name, _) = self.name()?;
+        self.expect(
+            &TokenKind::LParen,
+            "CGS103",
+            "expected ( after function name",
+        )?;
+        let mut parameters = Vec::new();
+        if !self.at(&TokenKind::RParen) {
+            loop {
+                let (param_name, param_span) = self.name()?;
+                self.expect(
+                    &TokenKind::Colon,
+                    "CGS103",
+                    "expected : after parameter name",
+                )?;
+                let ty = self.parse_type()?;
+                parameters.push(Parameter {
+                    name: param_name,
+                    span: Span {
+                        start: param_span.start,
+                        end: ty.span.end,
+                    },
+                    ty,
+                });
+                if self.eat(&TokenKind::Comma).is_none() {
+                    break;
+                }
+            }
+        }
+        self.expect(&TokenKind::RParen, "CGS103", "expected ) after parameters")?;
+        let return_type = if self.eat(&TokenKind::Arrow).is_some() {
+            Some(self.parse_type()?)
+        } else {
+            None
+        };
+        let (body, end) = self.parse_suite()?;
+        Some(Function {
+            public,
+            name,
+            parameters,
+            return_type,
+            body,
+            span: Span { start, end },
+        })
+    }
+    fn parse_suite(&mut self) -> Option<(Vec<Stmt>, usize)> {
+        self.expect(&TokenKind::Colon, "CGS101", "expected : before block")?;
+        self.expect(
+            &TokenKind::Newline,
+            "CGS103",
+            "expected newline after block header",
+        )?;
+        self.expect(&TokenKind::Indent, "CGS104", "expected indented block")?;
+        let mut body = Vec::new();
+        while !self.at(&TokenKind::Dedent) && !self.at(&TokenKind::Eof) {
+            let before = self.pos;
+            if self.at(&TokenKind::Indent) {
+                self.error("CGS102", "unexpected indentation boundary");
+                self.advance();
+            } else if let Some(stmt) = self.parse_stmt() {
+                body.push(stmt);
+            }
+            if self.pos == before {
+                self.recover();
+            }
+        }
+        let end = self
+            .expect(&TokenKind::Dedent, "CGS102", "unexpected end of block")?
+            .span
+            .end;
+        Some((body, end))
+    }
+    fn parse_stmt(&mut self) -> Option<Stmt> {
+        let start = self.peek().span.start;
+        let kind = if self.eat(&TokenKind::Let).is_some() {
+            let mutable = self.eat(&TokenKind::Mut).is_some();
+            let (name, _) = self.name()?;
+            let annotation = if self.eat(&TokenKind::Colon).is_some() {
+                Some(self.parse_type()?)
+            } else {
+                None
+            };
+            self.expect(&TokenKind::Equal, "CGS103", "expected = in let binding")?;
+            let value = self.parse_expr(0)?;
+            StmtKind::Let {
+                mutable,
+                name,
+                annotation,
+                value,
+            }
+        } else if self.eat(&TokenKind::Return).is_some() {
+            let value = if self.at(&TokenKind::Newline) {
+                None
+            } else {
+                Some(self.parse_expr(0)?)
+            };
+            StmtKind::Return(value)
+        } else if self.eat(&TokenKind::For).is_some() {
+            let (binding, _) = self.name()?;
+            self.expect(&TokenKind::In, "CGS103", "expected in after loop binding")?;
+            let iter = self.parse_expr(0)?;
+            let (body, end) = self.parse_suite()?;
+            return Some(Stmt {
+                kind: StmtKind::For {
+                    binding,
+                    iter,
+                    body,
+                },
+                span: Span { start, end },
+            });
+        } else {
+            let target = self.parse_expr(0)?;
+            let op = if self.eat(&TokenKind::Equal).is_some() {
+                Some(AssignOp::Set)
+            } else if self.eat(&TokenKind::PlusEqual).is_some() {
+                Some(AssignOp::Add)
+            } else {
+                None
+            };
+            if let Some(op) = op {
+                let ExprKind::Name(path) = target.kind else {
+                    self.error("CGS103", "assignment target must be a name");
+                    return None;
+                };
+                let value = self.parse_expr(0)?;
+                StmtKind::Assign {
+                    target: path,
+                    op,
+                    value,
+                }
+            } else {
+                StmtKind::Expr(target)
+            }
+        };
+        let end = self.end_statement()?;
+        Some(Stmt {
+            kind,
+            span: Span { start, end },
+        })
+    }
+    fn end_statement(&mut self) -> Option<usize> {
+        if let Some(newline) = self.eat(&TokenKind::Newline) {
+            Some(newline.span.end)
+        } else {
+            self.error("CGS103", "expected newline after statement");
+            None
+        }
+    }
+    fn parse_expr(&mut self, min_bp: u8) -> Option<Expr> {
+        let mut left = self.parse_primary()?;
+        loop {
+            if self.at(&TokenKind::LParen) && 7 >= min_bp {
+                self.advance();
+                let mut arguments = Vec::new();
+                if !self.at(&TokenKind::RParen) {
+                    loop {
+                        arguments.push(self.parse_expr(0)?);
+                        if self.eat(&TokenKind::Comma).is_none() {
+                            break;
+                        }
+                    }
+                }
+                let end = self
+                    .expect(
+                        &TokenKind::RParen,
+                        "CGS103",
+                        "expected ) after call arguments",
+                    )?
+                    .span
+                    .end;
+                let start = left.span.start;
+                left = Expr {
+                    kind: ExprKind::Call {
+                        callee: Box::new(left),
+                        arguments,
+                    },
+                    span: Span { start, end },
+                };
+                continue;
+            }
+            let (op, bp) = match self.peek().kind {
+                TokenKind::Plus => (BinaryOp::Add, 1),
+                TokenKind::Minus => (BinaryOp::Subtract, 1),
+                TokenKind::Star => (BinaryOp::Multiply, 3),
+                TokenKind::Slash => (BinaryOp::Divide, 3),
+                _ => break,
+            };
+            if bp < min_bp {
+                break;
+            }
+            self.advance();
+            let right = self.parse_expr(bp + 1)?;
+            let span = Span {
+                start: left.span.start,
+                end: right.span.end,
+            };
+            left = Expr {
+                kind: ExprKind::Binary {
+                    left: Box::new(left),
+                    op,
+                    right: Box::new(right),
+                },
+                span,
+            };
+        }
+        Some(left)
+    }
+    fn parse_primary(&mut self) -> Option<Expr> {
+        let token = self.peek().clone();
+        match token.kind {
+            TokenKind::Name(_) => {
+                let path = self.parse_path()?;
+                Some(Expr {
+                    span: path.span,
+                    kind: ExprKind::Name(path),
+                })
+            }
+            TokenKind::Integer(value) => {
+                self.advance();
+                Some(Expr {
+                    kind: ExprKind::Integer(value),
+                    span: token.span,
+                })
+            }
+            TokenKind::StringLiteral(value) => {
+                self.advance();
+                Some(Expr {
+                    kind: ExprKind::StringLiteral(value),
+                    span: token.span,
+                })
+            }
+            TokenKind::True | TokenKind::False => {
+                self.advance();
+                Some(Expr {
+                    kind: ExprKind::Boolean(matches!(token.kind, TokenKind::True)),
+                    span: token.span,
+                })
+            }
+            TokenKind::LParen => {
+                self.advance();
+                let mut expr = self.parse_expr(0)?;
+                let end = self
+                    .expect(&TokenKind::RParen, "CGS103", "expected )")?
+                    .span
+                    .end;
+                expr.span = Span {
+                    start: token.span.start,
+                    end,
+                };
+                Some(expr)
+            }
+            _ => {
+                self.error("CGS103", "expected expression");
+                None
+            }
+        }
+    }
+    fn recover(&mut self) {
+        while !self.at(&TokenKind::Newline)
+            && !self.at(&TokenKind::Dedent)
+            && !self.at(&TokenKind::Eof)
+        {
+            self.advance();
+        }
+        if self.at(&TokenKind::Newline) || self.at(&TokenKind::Dedent) {
+            self.advance();
+        }
+    }
+}

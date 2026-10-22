@@ -1,0 +1,122 @@
+use crate::Span;
+use std::fmt;
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Path {
+    pub segments: Vec<String>,
+    pub span: Span,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct TypeSyntax {
+    pub path: Path,
+    pub arguments: Vec<TypeSyntax>,
+    pub span: Span,
+}
+
+impl fmt::Display for TypeSyntax {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.path.segments.join("."))?;
+        if !self.arguments.is_empty() {
+            write!(f, "<")?;
+            for (i, arg) in self.arguments.iter().enumerate() {
+                if i > 0 {
+                    write!(f, ", ")?;
+                }
+                write!(f, "{arg}")?;
+            }
+            write!(f, ">")?;
+        }
+        Ok(())
+    }
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Module {
+    pub name: Option<Path>,
+    pub functions: Vec<Function>,
+    pub statements: Vec<Stmt>,
+    pub span: Span,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Function {
+    pub public: bool,
+    pub name: String,
+    pub parameters: Vec<Parameter>,
+    pub return_type: Option<TypeSyntax>,
+    pub body: Vec<Stmt>,
+    pub span: Span,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Parameter {
+    pub name: String,
+    pub ty: TypeSyntax,
+    pub span: Span,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Stmt {
+    pub kind: StmtKind,
+    pub span: Span,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum StmtKind {
+    Let {
+        mutable: bool,
+        name: String,
+        annotation: Option<TypeSyntax>,
+        value: Expr,
+    },
+    Assign {
+        target: Path,
+        op: AssignOp,
+        value: Expr,
+    },
+    Return(Option<Expr>),
+    Expr(Expr),
+    For {
+        binding: String,
+        iter: Expr,
+        body: Vec<Stmt>,
+    },
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum AssignOp {
+    Set,
+    Add,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Expr {
+    pub kind: ExprKind,
+    pub span: Span,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum ExprKind {
+    Name(Path),
+    Integer(String),
+    StringLiteral(String),
+    Boolean(bool),
+    Binary {
+        left: Box<Expr>,
+        op: BinaryOp,
+        right: Box<Expr>,
+    },
+    Call {
+        callee: Box<Expr>,
+        arguments: Vec<Expr>,
+    },
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum BinaryOp {
+    Add,
+    Subtract,
+    Multiply,
+    Divide,
+}

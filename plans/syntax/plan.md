@@ -48,12 +48,12 @@ Create `crates/cgx2-syntax/Cargo.toml`, `src/lib.rs`, `src/lexer.rs`, `src/ast.r
 - produces: [token stream and `Span` contract]
 - estimate: M
 - coordination_risk: low
-- status: pending
+- status: complete
 
-- [ ] Create the crate and tests `lex_simple_function`, `lex_nested_indentation`, `reject_tab_indentation`, `retain_unicode_byte_spans`, and `ignore_comment_only_indentation`.
-- [ ] Run `cargo test --manifest-path crates/cgx2-syntax/Cargo.toml --offline` and observe the new tests fail before lexer behavior exists.
-- [ ] Implement tokens for names, keywords, punctuation, literals, operators, NEWLINE, INDENT, DEDENT, and EOF. Reject tabs in leading indentation; recover from bad tokens.
-- [ ] Run the same command; all lexer tests pass, including CRLF and UTF-8 spans.
+- [x] Create the crate and tests `lex_simple_function`, `lex_nested_indentation`, `reject_tab_indentation`, `retain_unicode_byte_spans`, and `ignore_comment_only_indentation`.
+- [x] Run `cargo test --manifest-path crates/cgx2-syntax/Cargo.toml --offline` and observe the new tests fail before lexer behavior exists.
+- [x] Implement tokens for names, keywords, punctuation, literals, operators, NEWLINE, INDENT, DEDENT, and EOF. Reject tabs in leading indentation; recover from bad tokens.
+- [x] Run the same command; all lexer tests pass, including CRLF and UTF-8 spans.
 
 ### T2: AST and parser
 
@@ -64,12 +64,12 @@ Create `crates/cgx2-syntax/Cargo.toml`, `src/lib.rs`, `src/lexer.rs`, `src/ast.r
 - produces: [`parse_module` and documented AST]
 - estimate: L
 - coordination_risk: low
-- status: pending
+- status: complete
 
-- [ ] Add failing parse tests for the two functions in the specification, a top-level script, nested `for`, call/arithmetic precedence, missing colon, and unexpected dedent.
-- [ ] Run the crate test command and confirm parse cases fail for missing behavior.
-- [ ] Implement recursive-descent parsing with bounded error recovery at NEWLINE/DEDENT, preserving spans on every node.
-- [ ] Run the crate test command; valid cases return AST, invalid cases return stable `CGS` diagnostics and never panic.
+- [x] Add failing parse tests for the two functions in the specification, a top-level script, nested `for`, call/arithmetic precedence, missing colon, and unexpected dedent.
+- [x] Run the crate test command and confirm parse cases fail for missing behavior.
+- [x] Implement recursive-descent parsing with bounded error recovery at NEWLINE/DEDENT, preserving spans on every node.
+- [x] Run the crate test command; valid cases return AST, invalid cases return stable `CGS` diagnostics and never panic.
 
 ### T3: Canonical formatter and handoff
 
@@ -80,12 +80,12 @@ Create `crates/cgx2-syntax/Cargo.toml`, `src/lib.rs`, `src/lexer.rs`, `src/ast.r
 - produces: [`format_module`, fixture corpus, public API README]
 - estimate: M
 - coordination_risk: low
-- status: pending
+- status: complete
 
-- [ ] Add failing formatter tests for four-space indentation, blank-line placement, idempotence, and parse/format/parse AST equivalence on every valid fixture.
-- [ ] Run the crate test command to observe formatter failures, then implement a deterministic printer with a trailing newline.
-- [ ] Run `cargo fmt --manifest-path crates/cgx2-syntax/Cargo.toml --check`, `cargo clippy --manifest-path crates/cgx2-syntax/Cargo.toml --offline -- -D warnings`, and the crate tests.
-- [ ] Document syntax supported and rejected, diagnostic codes, AST API, and the remaining grammar decisions in the crate README.
-- [ ] Commit only owned paths. Stop and report test results, commit ID, limitations, and any proposed interface change for the later compiler.
+- [x] Add failing formatter tests for four-space indentation, blank-line placement, idempotence, and parse/format/parse AST equivalence on every valid fixture.
+- [x] Run the crate test command to observe formatter failures, then implement a deterministic printer with a trailing newline.
+- [x] Run `cargo fmt --manifest-path crates/cgx2-syntax/Cargo.toml --check`, `cargo clippy --manifest-path crates/cgx2-syntax/Cargo.toml --offline -- -D warnings`, and the crate tests.
+- [x] Document syntax supported and rejected, diagnostic codes, AST API, and the remaining grammar decisions in the crate README.
+- [x] Commit only owned paths. Stop and report test results, commit ID, limitations, and any proposed interface change for the later compiler.
 
 **Acceptance:** the exact checks above pass offline; both specification examples parse; malformed indentation and syntax get byte spans; formatting is idempotent. No claim is made that indentation has beaten braces for LLMs.
