@@ -3,7 +3,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use cgx2_syntax::{AssignOp, Expr, ExprKind, Function, Module, Path, Span, Stmt, StmtKind};
 
 use crate::types::resolve;
-use crate::{Type, TypeDiagnostic};
+use crate::{effects, EffectSummary, Type, TypeDiagnostic};
 
 /// A resolved function signature. Private unannotated returns are inferred from the body.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -39,6 +39,7 @@ impl SpanTypes {
 pub struct TypedModule {
     pub functions: BTreeMap<String, FunctionSignature>,
     pub expressions: SpanTypes,
+    pub effects: BTreeMap<String, EffectSummary>,
 }
 
 /// Package-supplied declarations. Keys in `public_functions` are fully qualified
@@ -71,6 +72,8 @@ struct Checker {
     scopes: Vec<BTreeMap<String, Binding>>,
     imports: BTreeSet<String>,
     imported: ImportedSignatures,
+    effect_summaries: BTreeMap<String, EffectSummary>,
+    module: Module,
 }
 
 /// Check all functions and script statements, returning every discovered diagnostic.
@@ -98,7 +101,11 @@ pub fn check_module_with_imports(
                 module.imports[0].span,
             )]);
         }
-        return result;
+        return result.map_err(|mut diagnostics| {
+            let (_, effect_diagnostics) = effects::analyze(module);
+            diagnostics.extend(effect_diagnostics);
+            diagnostics
+        });
     }
     let mut checker = Checker {
         functions: BTreeMap::new(),
@@ -111,7 +118,12 @@ pub fn check_module_with_imports(
             .map(|p| p.segments.join("."))
             .collect(),
         imported: imported.clone(),
+        effect_summaries: BTreeMap::new(),
+        module: module.clone(),
     };
+    let (effect_summaries, effect_diagnostics) = effects::analyze(module);
+    checker.effect_summaries = effect_summaries;
+    checker.diagnostics.extend(effect_diagnostics);
     checker.insert_builtin("arg_count", vec![], Type::I64);
     checker.insert_builtin("arg", vec![Type::I64], Type::String);
     for function in &module.functions {
@@ -152,6 +164,7 @@ pub fn check_module_with_imports(
     Ok(TypedModule {
         functions,
         expressions: checker.expressions,
+        effects: checker.effect_summaries,
     })
 }
 
@@ -266,6 +279,9 @@ fn function_order(functions: &[Function]) -> Vec<&Function> {
         state.insert(name.into(), 1);
         if let Some(function) = index.get(name) {
             let mut calls = Vec::new();
+            for contract in function.requires.iter().chain(&function.ensures) {
+                calls_in_expr(contract, &mut calls);
+            }
             for statement in &function.body {
                 calls_in_stmt(statement, &mut calls);
             }
@@ -366,6 +382,41 @@ impl Checker {
                 self.define(&parameter.name, ty.clone(), false, name_span);
             }
         }
+        if !function.requires.is_empty() || !function.ensures.is_empty() {
+            let scalar = |ty: &Type| matches!(ty, Type::I64 | Type::Bool);
+            if signature.parameters.iter().flatten().any(|ty| !scalar(ty))
+                || signature.result.as_ref().is_none_or(|ty| !scalar(ty))
+            {
+                self.report(
+                    "CGT014",
+                    "contracts require annotated i64/Bool parameters and return",
+                    function.span,
+                );
+            }
+            if function.parameters.iter().any(|p| p.name == "result") {
+                self.report(
+                    "CGT014",
+                    "`result` is reserved in contracted functions",
+                    function.span,
+                );
+            }
+            for expr in &function.requires {
+                self.check_contract(expr);
+            }
+            if let Some(result) = &signature.result {
+                self.scopes.last_mut().expect("scope").insert(
+                    "result".into(),
+                    Binding {
+                        ty: result.clone(),
+                        mutable: false,
+                    },
+                );
+            }
+            for expr in &function.ensures {
+                self.check_contract(expr);
+            }
+            self.scopes.last_mut().expect("scope").remove("result");
+        }
         let tail = self.check_block(&function.body, signature.result.as_ref());
         self.scopes.pop();
         if let Some((actual, span)) = tail {
@@ -382,6 +433,19 @@ impl Checker {
                     entry.result = Some(actual);
                 }
             }
+        }
+    }
+
+    fn check_contract(&mut self, expr: &Expr) {
+        if !effects::contract_calls_are_safe(expr, &self.effect_summaries, &self.module) {
+            self.report(
+                "CGT014",
+                "contract call has effects, is unknown, or may recurse",
+                expr.span,
+            );
+        }
+        if let Some(ty) = self.check_expr(expr) {
+            self.expect_type(&ty, &Type::Bool, expr.span);
         }
     }
 
@@ -591,6 +655,39 @@ impl Checker {
                     self.report("CGT003", "callee must be a function name", expr.span);
                     return None;
                 };
+                if let [name] = path.segments.as_slice() {
+                    if matches!(
+                        name.as_str(),
+                        "$cgx2_cmp_eq"
+                            | "$cgx2_cmp_ne"
+                            | "$cgx2_cmp_lt"
+                            | "$cgx2_cmp_le"
+                            | "$cgx2_cmp_gt"
+                            | "$cgx2_cmp_ge"
+                    ) {
+                        if arguments.len() != 2 {
+                            self.report("CGT005", "comparison requires two operands", expr.span);
+                            return None;
+                        }
+                        let valid =
+                            matches!(arg_types.as_slice(), [Some(Type::I64), Some(Type::I64)])
+                                || (matches!(name.as_str(), "$cgx2_cmp_eq" | "$cgx2_cmp_ne")
+                                    && matches!(
+                                        arg_types.as_slice(),
+                                        [Some(Type::Bool), Some(Type::Bool)]
+                                    ));
+                        if !valid {
+                            self.report(
+                                "CGT003",
+                                "comparison requires compatible scalar operands",
+                                expr.span,
+                            );
+                            return None;
+                        }
+                        self.expressions.insert(expr.span, Type::Bool);
+                        return Some(Type::Bool);
+                    }
+                }
                 let signature = if path.segments.len() == 1 {
                     self.functions.get(&path.segments[0]).cloned()
                 } else {

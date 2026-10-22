@@ -8,6 +8,49 @@ fn kinds(source: &str) -> Vec<TokenKind> {
 }
 
 #[test]
+fn contract_header_and_prelude_round_trip() {
+    let source = "pub fn safe(x: i64) -> Bool effects() caps():\n    requires x >= 0\n    ensures result == true\n    true\n\nfn count() -> i64 effects(ReadArgs) caps(ArgsRead):\n    arg_count()\n";
+    let parsed = parse_module(source).unwrap();
+    assert!(parsed.functions[0]
+        .effects
+        .as_ref()
+        .unwrap()
+        .names
+        .is_empty());
+    assert_eq!(parsed.functions[0].requires.len(), 1);
+    assert_eq!(parsed.functions[0].ensures.len(), 1);
+    assert_eq!(
+        parsed.functions[1].effects.as_ref().unwrap().names[0].name,
+        "ReadArgs"
+    );
+    let formatted = format_module(&parsed);
+    assert_eq!(formatted, source);
+    assert_eq!(format_module(&parse_module(&formatted).unwrap()), source);
+}
+
+#[test]
+fn invalid_or_duplicate_declarations_are_source_located() {
+    for source in [
+        "fn f() effects(ReadArgs, ReadArgs):\n    1\n",
+        "fn f() effects(Mystery):\n    1\n",
+        "fn f() caps(Mystery):\n    1\n",
+        "fn f() effects() effects():\n    1\n",
+    ] {
+        let errors = parse_module(source).unwrap_err();
+        assert!(errors.iter().any(|d| d.code == "CGS110"), "{errors:?}");
+        assert!(errors.iter().all(|d| d.span.end <= source.len()));
+    }
+}
+
+#[test]
+fn legacy_requires_names_remain_ordinary_expressions() {
+    let source = "fn f(requires: Bool) -> Bool:\n    requires\n";
+    assert_eq!(format_module(&parse_module(source).unwrap()), source);
+    let source = "fn requires(x: Bool) -> Bool:\n    x\n\nfn f() -> Bool:\n    requires(true)\n";
+    assert_eq!(format_module(&parse_module(source).unwrap()), source);
+}
+
+#[test]
 fn imports_have_utf8_byte_spans_and_round_trip_in_source_order() {
     let source = "module café.main\nimport café.math\nimport café.text\npub fn run() -> i64:\n    café.math.double(3)\n";
     let parsed = parse_module(source).unwrap();

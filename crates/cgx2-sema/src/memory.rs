@@ -63,6 +63,7 @@ pub(crate) fn check_memory_module(
         Ok(TypedModule {
             functions: BTreeMap::new(),
             expressions: SpanTypes::default(),
+            effects: BTreeMap::new(),
         })
     } else {
         Err(lowerer.diagnostics)

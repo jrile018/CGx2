@@ -1,8 +1,8 @@
 use std::{collections::BTreeSet, mem::discriminant};
 
 use crate::{
-    lex, AssignOp, BinaryOp, CallArg, Expr, ExprKind, Function, Module, Parameter, Path, Span,
-    Stmt, StmtKind, SyntaxDiagnostic, Token, TokenKind, TypeSyntax,
+    lex, AssignOp, BinaryOp, CallArg, Declaration, DeclaredName, Expr, ExprKind, Function, Module,
+    Parameter, Path, Span, Stmt, StmtKind, SyntaxDiagnostic, Token, TokenKind, TypeSyntax,
 };
 
 /// Parse a candidate CGx2 module or standalone script.
@@ -100,6 +100,15 @@ struct Parser {
 }
 
 impl Parser {
+    fn at_name(&self, name: &str) -> bool {
+        matches!(&self.peek().kind, TokenKind::Name(value) if value == name)
+    }
+    fn at_contract_line(&self) -> bool {
+        (self.at_name("requires") || self.at_name("ensures"))
+            && self.tokens.get(self.pos + 1).is_some_and(|next| {
+                !matches!(next.kind, TokenKind::Newline) && next.span.start > self.peek().span.end
+            })
+    }
     fn peek(&self) -> &Token {
         &self.tokens[self.pos.min(self.tokens.len() - 1)]
     }
@@ -230,13 +239,106 @@ impl Parser {
         } else {
             None
         };
-        let (body, end) = self.parse_suite()?;
+        let mut effects = None;
+        let mut capabilities = None;
+        while self.at_name("effects") || self.at_name("caps") {
+            let is_effects = self.at_name("effects");
+            let declaration = self.parse_declaration(is_effects)?;
+            let slot = if is_effects {
+                &mut effects
+            } else {
+                &mut capabilities
+            };
+            if slot.is_some() {
+                self.errors.push(SyntaxDiagnostic {
+                    code: "CGS110",
+                    message: "duplicate declaration".into(),
+                    span: declaration.span,
+                });
+            } else {
+                *slot = Some(declaration);
+            }
+        }
+        self.expect(&TokenKind::Colon, "CGS101", "expected : before block")?;
+        self.expect(
+            &TokenKind::Newline,
+            "CGS103",
+            "expected newline after block header",
+        )?;
+        self.expect(&TokenKind::Indent, "CGS104", "expected indented block")?;
+        let mut requires = Vec::new();
+        let mut ensures = Vec::new();
+        while self.at_contract_line() {
+            let pre = self.at_name("requires");
+            self.advance();
+            let expr = self.parse_expr(0)?;
+            self.end_statement()?;
+            if pre {
+                requires.push(expr);
+            } else {
+                ensures.push(expr);
+            }
+        }
+        let mut body = Vec::new();
+        while !self.at(&TokenKind::Dedent) && !self.at(&TokenKind::Eof) {
+            let before = self.pos;
+            if let Some(stmt) = self.parse_stmt() {
+                body.push(stmt);
+            }
+            if self.pos == before {
+                self.recover();
+            }
+        }
+        let end = self
+            .expect(&TokenKind::Dedent, "CGS102", "unexpected end of block")?
+            .span
+            .end;
         Some(Function {
             public,
             name,
             parameters,
             return_type,
+            effects,
+            capabilities,
+            requires,
+            ensures,
             body,
+            span: Span { start, end },
+        })
+    }
+    fn parse_declaration(&mut self, effects: bool) -> Option<Declaration> {
+        let start = self.advance().span.start;
+        self.expect(&TokenKind::LParen, "CGS103", "expected ( in declaration")?;
+        let mut names = Vec::new();
+        let mut seen = BTreeSet::new();
+        while !self.at(&TokenKind::RParen) && !self.at(&TokenKind::Eof) {
+            let (name, span) = self.name()?;
+            let valid = if effects {
+                matches!(
+                    name.as_str(),
+                    "ReadArgs" | "ManagedAlloc" | "Collect" | "Mutate" | "Foreign" | "Unknown"
+                )
+            } else {
+                matches!(name.as_str(), "ArgsRead" | "MemoryCollect" | "ForeignCall")
+            };
+            if !valid || !seen.insert(name.clone()) {
+                self.errors.push(SyntaxDiagnostic {
+                    code: "CGS110",
+                    message: format!("unknown or duplicate declaration name `{name}`"),
+                    span,
+                });
+            }
+            names.push(DeclaredName { name, span });
+            if self.eat(&TokenKind::Comma).is_none() {
+                break;
+            }
+        }
+        let end = self
+            .expect(&TokenKind::RParen, "CGS103", "expected ) in declaration")?
+            .span
+            .end;
+        Some(Declaration {
+            names,
             span: Span { start, end },
         })
     }
@@ -382,6 +484,51 @@ impl Parser {
                         arguments,
                     },
                     span: Span { start, end },
+                };
+                continue;
+            }
+            let comparison = match self.peek().kind {
+                TokenKind::EqualEqual => Some("$cgx2_cmp_eq"),
+                TokenKind::NotEqual => Some("$cgx2_cmp_ne"),
+                TokenKind::LAngle => Some("$cgx2_cmp_lt"),
+                TokenKind::LessEqual => Some("$cgx2_cmp_le"),
+                TokenKind::RAngle => Some("$cgx2_cmp_gt"),
+                TokenKind::GreaterEqual => Some("$cgx2_cmp_ge"),
+                _ => None,
+            };
+            if let Some(name) = comparison {
+                if min_bp > 0 {
+                    break;
+                }
+                let operator = self.advance().span;
+                let right = self.parse_expr(1)?;
+                let span = Span {
+                    start: left.span.start,
+                    end: right.span.end,
+                };
+                left = Expr {
+                    kind: ExprKind::Call {
+                        callee: Box::new(Expr {
+                            kind: ExprKind::Name(Path {
+                                segments: vec![name.into()],
+                                span: operator,
+                            }),
+                            span: operator,
+                        }),
+                        arguments: vec![
+                            CallArg {
+                                name: None,
+                                span: left.span,
+                                value: left,
+                            },
+                            CallArg {
+                                name: None,
+                                span: right.span,
+                                value: right,
+                            },
+                        ],
+                    },
+                    span,
                 };
                 continue;
             }

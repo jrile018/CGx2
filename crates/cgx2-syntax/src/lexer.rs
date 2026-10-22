@@ -44,6 +44,10 @@ pub enum TokenKind {
     Colon,
     Arrow,
     Equal,
+    EqualEqual,
+    NotEqual,
+    LessEqual,
+    GreaterEqual,
     PlusEqual,
     Plus,
     Minus,
@@ -234,6 +238,14 @@ pub fn lex(source: &str) -> Result<Vec<Token>, Vec<SyntaxDiagnostic>> {
                 (Some(TokenKind::Arrow), 2)
             } else if rest.starts_with("+=") {
                 (Some(TokenKind::PlusEqual), 2)
+            } else if rest.starts_with("==") {
+                (Some(TokenKind::EqualEqual), 2)
+            } else if rest.starts_with("!=") {
+                (Some(TokenKind::NotEqual), 2)
+            } else if rest.starts_with("<=") {
+                (Some(TokenKind::LessEqual), 2)
+            } else if rest.starts_with(">=") {
+                (Some(TokenKind::GreaterEqual), 2)
             } else {
                 (
                     match ch {

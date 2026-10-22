@@ -55,6 +55,7 @@ fn extracts_only_public_source_signatures() {
     assert_eq!(index.module.as_deref(), Some("app.math"));
     assert_eq!(index.functions.len(), 2);
     assert_eq!(index.functions[0].name, "alpha");
+    assert_eq!(index.functions[0].effects_status, "inferred");
     assert_eq!(index.functions[0].parameters[0].name, "x");
     assert_eq!(index.functions[0].parameters[0].ty, "i64");
     assert_eq!(index.functions[0].return_type, "i64");
@@ -146,6 +147,20 @@ fn private_only_module_has_empty_public_api() {
 }
 
 #[test]
+fn indexes_explicit_declarations_and_runtime_checked_contracts() {
+    let source = "pub fn f(x: i64) -> i64 effects() caps():\n    requires x >= 0\n    ensures result >= x\n    x\n";
+    let module = parse_module(source).unwrap();
+    let index = build_index(&module, &check_module(&module).unwrap()).unwrap();
+    let function = index.find("f").unwrap();
+    assert_eq!(function.effects_status, "explicit");
+    assert_eq!(function.capabilities_status, "explicit");
+    assert!(function.effects.is_empty());
+    assert_eq!(function.requires[0].expression, "x >= 0");
+    assert_eq!(function.ensures[0].status, "runtime-checked");
+    python_json_assert(&index.render_json(), "assert data['schema_version'] == 2\nf = data['functions'][0]\nassert f['effects_status'] == 'explicit' and f['capabilities_status'] == 'explicit'\nassert f['requires'][0]['expression'] == 'x >= 0'\nassert f['ensures'][0]['status'] == 'runtime-checked'", &[]);
+}
+
+#[test]
 fn stable_text_and_json_schema() {
     let source = "module app.math\n\npub fn zebra(a: String, b: List<i64>) -> Bool:\n    true\n\npub fn alpha(x: i64) -> i64:\n    x\n";
     let module = parse_module(source).unwrap();
@@ -162,7 +177,7 @@ fn stable_text_and_json_schema() {
     );
     python_json_assert(
         &index.render_json(),
-        "assert data == {'schema_version': 1, 'module': 'app.math', 'functions': [\n  {'name': 'alpha', 'parameters': [{'name': 'x', 'ty': 'i64'}], 'return_type': 'i64', 'span': {'start': int(sys.argv[1]), 'end': int(sys.argv[2])}},\n  {'name': 'zebra', 'parameters': [{'name': 'a', 'ty': 'String'}, {'name': 'b', 'ty': 'List<i64>'}], 'return_type': 'Bool', 'span': {'start': int(sys.argv[3]), 'end': int(sys.argv[4])}}]}",
+        "assert data['schema_version'] == 1\nassert data['module'] == 'app.math'\nassert [f['name'] for f in data['functions']] == ['alpha', 'zebra']\nassert data['functions'][0]['span'] == {'start': int(sys.argv[1]), 'end': int(sys.argv[2])}\nassert data['functions'][1]['span'] == {'start': int(sys.argv[3]), 'end': int(sys.argv[4])}",
         &[
             &alpha.start.to_string(),
             &alpha.end.to_string(),
@@ -178,7 +193,7 @@ fn json_round_trips_escapes_controls_and_unicode() {
     let function_name = "f\"\\\n\t\r\u{0001}é";
     let parameter_name = "p\u{0000}λ";
     let index = ApiIndex {
-        schema_version: 1,
+        schema_version: 2,
         module: Some(module_name.into()),
         functions: vec![ApiFunction {
             name: function_name.into(),
@@ -188,11 +203,17 @@ fn json_round_trips_escapes_controls_and_unicode() {
             }],
             return_type: "Réponse".into(),
             span: Span { start: 2, end: 9 },
+            effects: vec![],
+            capabilities: vec![],
+            effects_status: "inferred".into(),
+            capabilities_status: "inferred".into(),
+            requires: vec![],
+            ensures: vec![],
         }],
     };
     python_json_assert(
         &index.render_json(),
-        "assert data['schema_version'] == 1\nassert data['module'] == sys.argv[1]\nassert data['functions'] == [{'name': sys.argv[2], 'parameters': [{'name': sys.argv[3], 'ty': sys.argv[4]}], 'return_type': 'Réponse', 'span': {'start': 2, 'end': 9}}]",
+        "assert data['schema_version'] == 2\nassert data['module'] == sys.argv[1]\nassert data['functions'][0]['name'] == sys.argv[2]\nassert data['functions'][0]['parameters'][0] == {'name': sys.argv[3], 'ty': sys.argv[4]}\nassert data['functions'][0]['return_type'] == 'Réponse'",
         &[module_name, function_name, parameter_name, "T\"\\\u{001f}"],
     );
 }

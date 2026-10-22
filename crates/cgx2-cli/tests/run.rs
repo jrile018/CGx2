@@ -5,6 +5,45 @@ fn value(source: &str) -> Value {
 }
 
 #[test]
+fn bounded_source_contracts_gate_body_and_return() {
+    let true_contract =
+        "fn main() -> i64 effects() caps():\n    requires true\n    ensures result == 7\n    7\n";
+    assert_eq!(value(true_contract), Value::I64(7));
+    let pre = "fn main() -> i64:\n    requires false\n    9223372036854775807 + 1\n";
+    let error = run_source(pre, &[]).unwrap_err();
+    assert_eq!(error.code, "CGR015");
+    assert_eq!(
+        &pre[error.span.unwrap().start..error.span.unwrap().end],
+        "false"
+    );
+    let post = "fn main() -> i64:\n    ensures result == 8\n    7\n";
+    let error = run_source(post, &[]).unwrap_err();
+    assert_eq!(error.code, "CGR016");
+    assert_eq!(
+        &post[error.span.unwrap().start..error.span.unwrap().end],
+        "result == 8"
+    );
+}
+
+#[test]
+fn pure_contract_calls_execute_with_existing_step_limit() {
+    let source = "fn positive(x: i64) -> Bool effects() caps():\n    x > 0\nfn main() -> i64 effects() caps():\n    requires positive(2)\n    7\n";
+    assert_eq!(value(source), Value::I64(7));
+    let mut source = String::new();
+    source.push_str("fn f0() -> Bool:\n    true\n");
+    for i in 1..22 {
+        source.push_str(&format!(
+            "fn f{i}() -> Bool:\n    f{}() == f{}()\n",
+            i - 1,
+            i - 1
+        ));
+    }
+    source.push_str("fn main() -> i64:\n    requires f21()\n    1\n");
+    let error = run_source(&source, &[]).unwrap_err();
+    assert_eq!(error.code, "CGR010");
+}
+
+#[test]
 fn literal_tail_values_and_precedence() {
     assert_eq!(value("1 + 2 * 3\n"), Value::I64(7));
     assert_eq!(value("(1 + 2) * 3\n"), Value::I64(9));

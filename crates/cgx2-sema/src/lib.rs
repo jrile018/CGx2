@@ -2,6 +2,7 @@
 
 mod check;
 mod diagnostic;
+mod effects;
 mod memory;
 mod types;
 
@@ -10,4 +11,5 @@ pub use check::{
     ImportedSignatures, SpanTypes, TypedModule,
 };
 pub use diagnostic::TypeDiagnostic;
+pub use effects::EffectSummary;
 pub use types::Type;

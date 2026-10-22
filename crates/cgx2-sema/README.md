@@ -6,7 +6,9 @@ For static local packages, call `collect_public_signatures(&module)` on each par
 
 `TypedModule.functions` is a `BTreeMap<String, FunctionSignature>` keyed by function name. It includes the reserved preview builtins `arg_count() -> i64` and `arg(i64) -> String`, which have synthetic `Span { start: 0, end: 0 }`. `FunctionSignature` exposes `public`, ordered `parameters`, `return_type`, and declaration `span`. Private functions without a return annotation infer their return type from the final statement. Unannotated recursive return inference is unsupported; annotate those functions. `TypedModule.expressions` is a `SpanTypes` index: `get(span)` retrieves an expression's `Type`, and `iter()` yields `(Span, &Type)` pairs in byte-offset order. Failed expressions have no entry.
 
-The checked subset has `i64`, `Bool`, `String`, `Unit`, and nested `List<T>` types; local `let` inference and annotations; lexical scopes in `for` bodies; immutable and mutable assignment; `i64` arithmetic; calls; explicit returns; and tail-expression returns. A `for` iterator must be `List<T>`, and its binding has type `T`. Public functions require an explicit return annotation. Integer literals must fit signed `i64`; arithmetic overflow remains a runtime error. The checker recognizes only the two argument builtins above.
+The checked subset has `i64`, `Bool`, `String`, `Unit`, and nested `List<T>` types; local `let` inference and annotations; lexical scopes in `for` bodies; immutable and mutable assignment; `i64` arithmetic and scalar comparisons; calls; explicit returns; and tail-expression returns. A `for` iterator must be `List<T>`, and its binding has type `T`. Public functions require an explicit return annotation. Integer literals must fit signed `i64`; arithmetic overflow remains a runtime error. The checker recognizes only the two argument builtins above.
+
+`TypedModule.effects` records conservative local-call closure for each function. `effects()` means explicitly pure; omitted effects are inferred for legacy source. `caps()` means no capabilities; omitted capabilities are inferred. `arg` and `arg_count` require `ReadArgs` plus `ArgsRead`; assignment contributes `Mutate`. Known `memory.collect` and foreign-qualified calls are classified but remain outside scalar function execution. Imported or unresolved calls contribute `Unknown` in explicit signatures and cannot pass as pure. Declarations do not grant capabilities. Contracts must be pure Boolean expressions over `i64`/`Bool` parameters and an annotated scalar return; `result` is available only in `ensures`. Effectful, unknown, or recursive contract calls are rejected. No contract is labeled proved.
 
 | Code | Meaning |
 | --- | --- |
@@ -21,8 +23,12 @@ The checked subset has `i64`, `Bool`, `String`, `Unit`, and nested `List<T>` typ
 | `CGT009` | Imported function is private |
 | `CGT010` | Imported function has a non-scalar signature |
 | `CGT011` | Standalone check cannot execute/import package modules |
+| `CGT012` | Effect outside an explicit declaration or unknown call |
+| `CGT013` | Required capability omitted from an explicit declaration |
+| `CGT014` | Invalid or effectful contract |
+| `CGT015` | Effect analysis bound exhausted |
 
-This crate does not execute code, check runtime overflow or memory limits, or implement effects or capabilities. Function values and qualified names are outside the scalar preview. The syntax parser has no list literal, so list iteration is checked from typed parameters or other future expressions.
+This crate does not execute code or check runtime overflow or memory limits. Function values and qualified names are outside the scalar preview. The syntax parser has no list literal, so list iteration is checked from typed parameters or other future expressions.
 
 ## Bounded memory-source profile
 

@@ -1,5 +1,5 @@
 use cgx2_sema::{check_module, check_module_with_imports, ImportedSignatures, TypedModule};
-use cgx2_syntax::{Module, Span};
+use cgx2_syntax::{format_expression, Module, Span};
 
 use crate::IndexError;
 
@@ -15,6 +15,19 @@ pub struct ApiFunction {
     pub name: String,
     pub parameters: Vec<ApiParameter>,
     pub return_type: String,
+    pub span: Span,
+    pub effects: Vec<String>,
+    pub capabilities: Vec<String>,
+    pub effects_status: String,
+    pub capabilities_status: String,
+    pub requires: Vec<ApiContract>,
+    pub ensures: Vec<ApiContract>,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ApiContract {
+    pub expression: String,
+    pub status: String,
     pub span: Span,
 }
 
@@ -70,6 +83,68 @@ fn build_index_checked(
                     .collect(),
                 return_type: signature.return_type.to_string(),
                 span: function.span,
+                effects: function.effects.as_ref().map_or_else(
+                    || {
+                        checked.effects[&function.name]
+                            .effects
+                            .iter()
+                            .cloned()
+                            .collect()
+                    },
+                    |declaration| {
+                        declaration
+                            .names
+                            .iter()
+                            .map(|name| name.name.clone())
+                            .collect()
+                    },
+                ),
+                capabilities: function.capabilities.as_ref().map_or_else(
+                    || {
+                        checked.effects[&function.name]
+                            .capabilities
+                            .iter()
+                            .cloned()
+                            .collect()
+                    },
+                    |declaration| {
+                        declaration
+                            .names
+                            .iter()
+                            .map(|name| name.name.clone())
+                            .collect()
+                    },
+                ),
+                effects_status: if function.effects.is_some() {
+                    "explicit"
+                } else {
+                    "inferred"
+                }
+                .into(),
+                capabilities_status: if function.capabilities.is_some() {
+                    "explicit"
+                } else {
+                    "inferred"
+                }
+                .into(),
+                requires: function
+                    .requires
+                    .iter()
+                    .map(|expr| ApiContract {
+                        expression: format_expression(expr),
+                        status: "runtime-checked".into(),
+                        span: expr.span,
+                    })
+                    .collect(),
+                ensures: function
+                    .ensures
+                    .iter()
+                    .map(|expr| ApiContract {
+                        expression: format_expression(expr),
+                        status: "runtime-checked".into(),
+                        span: expr.span,
+                    })
+                    .collect(),
             }
         })
         .collect::<Vec<_>>();
@@ -81,7 +156,16 @@ fn build_index_checked(
     });
 
     Ok(ApiIndex {
-        schema_version: 1,
+        schema_version: if module.functions.iter().any(|function| {
+            function.effects.is_some()
+                || function.capabilities.is_some()
+                || !function.requires.is_empty()
+                || !function.ensures.is_empty()
+        }) {
+            2
+        } else {
+            1
+        },
         module: module.name.as_ref().map(|path| path.segments.join(".")),
         functions,
     })

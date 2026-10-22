@@ -51,7 +51,38 @@ fn write_function(out: &mut String, function: &Function) {
         out.push_str(" -> ");
         out.push_str(&ty.to_string());
     }
+    for (label, declaration) in [
+        ("effects", &function.effects),
+        ("caps", &function.capabilities),
+    ] {
+        if let Some(declaration) = declaration {
+            out.push(' ');
+            out.push_str(label);
+            out.push('(');
+            out.push_str(
+                &declaration
+                    .names
+                    .iter()
+                    .map(|name| name.name.as_str())
+                    .collect::<Vec<_>>()
+                    .join(", "),
+            );
+            out.push(')');
+        }
+    }
     out.push_str(":\n");
+    for (label, contracts) in [
+        ("requires", &function.requires),
+        ("ensures", &function.ensures),
+    ] {
+        for contract in contracts {
+            out.push_str("    ");
+            out.push_str(label);
+            out.push(' ');
+            write_expr(out, contract, 0);
+            out.push('\n');
+        }
+    }
     for stmt in &function.body {
         write_stmt(out, stmt, 1);
     }
@@ -133,9 +164,31 @@ fn precedence(expr: &Expr) -> u8 {
             op: BinaryOp::Add | BinaryOp::Subtract,
             ..
         } => 1,
-        ExprKind::Binary { .. } => 3,
+        ExprKind::Binary {
+            op: BinaryOp::Multiply | BinaryOp::Divide,
+            ..
+        } => 3,
+        ExprKind::Call { callee, .. } if comparison_symbol(callee).is_some() => 0,
         ExprKind::Call { .. } => 7,
         _ => 9,
+    }
+}
+
+fn comparison_symbol(callee: &Expr) -> Option<&'static str> {
+    let ExprKind::Name(path) = &callee.kind else {
+        return None;
+    };
+    match path.segments.as_slice() {
+        [name] => match name.as_str() {
+            "$cgx2_cmp_eq" => Some(" == "),
+            "$cgx2_cmp_ne" => Some(" != "),
+            "$cgx2_cmp_lt" => Some(" < "),
+            "$cgx2_cmp_le" => Some(" <= "),
+            "$cgx2_cmp_gt" => Some(" > "),
+            "$cgx2_cmp_ge" => Some(" >= "),
+            _ => None,
+        },
+        _ => None,
     }
 }
 
@@ -160,6 +213,16 @@ fn write_expr(out: &mut String, expr: &Expr, required: u8) {
             write_expr(out, right, bp + 1);
         }
         ExprKind::Call { callee, arguments } => {
+            if let (Some(symbol), [left, right]) = (comparison_symbol(callee), arguments.as_slice())
+            {
+                write_expr(out, &left.value, 0);
+                out.push_str(symbol);
+                write_expr(out, &right.value, 1);
+                if parenthesize {
+                    out.push(')');
+                }
+                return;
+            }
             write_expr(out, callee, 7);
             out.push('(');
             for (index, arg) in arguments.iter().enumerate() {
@@ -178,4 +241,11 @@ fn write_expr(out: &mut String, expr: &Expr, required: u8) {
     if parenthesize {
         out.push(')');
     }
+}
+
+/// Canonical expression text for source-visible contract summaries.
+pub fn format_expression(expr: &Expr) -> String {
+    let mut out = String::new();
+    write_expr(&mut out, expr, 0);
+    out
 }

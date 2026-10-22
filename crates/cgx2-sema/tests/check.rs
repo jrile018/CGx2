@@ -1,4 +1,6 @@
-use cgx2_sema::{check_module, Type};
+use cgx2_sema::{
+    check_module, check_module_with_imports, collect_public_signatures, ImportedSignatures, Type,
+};
 use cgx2_syntax::{parse_module, Span};
 
 #[test]
@@ -15,6 +17,88 @@ fn standalone_check_rejects_import_execution_at_import_span() {
 
 fn check(source: &str) -> cgx2_sema::TypedModule {
     check_module(&parse_module(source).unwrap()).unwrap()
+}
+
+#[test]
+fn explicit_effects_and_capabilities_gate_direct_and_transitive_calls() {
+    error(
+        "fn f() -> String effects() caps():\n    arg(0)\n",
+        "CGT012",
+        "arg(0)",
+    );
+    error(
+        "fn f() -> String effects(ReadArgs) caps():\n    arg(0)\n",
+        "CGT013",
+        "arg(0)",
+    );
+    error(
+        "fn helper() -> i64:\n    arg_count()\nfn f() -> i64 effects() caps():\n    helper()\n",
+        "CGT012",
+        "helper()",
+    );
+    error(
+        "fn helper() -> i64:\n    arg_count()\nfn f() -> i64 effects(ReadArgs) caps():\n    helper()\n",
+        "CGT013",
+        "helper()",
+    );
+    error(
+        "fn f() -> i64 effects() caps():\n    missing()\n",
+        "CGT012",
+        "missing()",
+    );
+    error(
+        "fn f() -> Unit effects() caps():\n    memory.collect(1)\n",
+        "CGT012",
+        "memory.collect(1)",
+    );
+    error(
+        "fn f() -> Unit effects(Collect) caps():\n    memory.collect(1)\n",
+        "CGT013",
+        "memory.collect(1)",
+    );
+    let typed = check("fn f() -> i64 effects(ReadArgs) caps(ArgsRead):\n    arg_count()\n");
+    assert!(typed.effects["f"].effects_explicit);
+    assert!(typed.effects["f"].capabilities.contains("ArgsRead"));
+    let dependency = parse_module("module dep\npub fn value() -> i64:\n    1\n").unwrap();
+    let mut imports = ImportedSignatures::default();
+    imports.modules.insert("dep".into());
+    imports.public_functions.insert(
+        "dep.value".into(),
+        collect_public_signatures(&dependency)
+            .unwrap()
+            .remove("value")
+            .unwrap(),
+    );
+    let source = "module app\nimport dep\nfn f() -> i64 effects() caps():\n    dep.value()\n";
+    let errors = check_module_with_imports(&parse_module(source).unwrap(), &imports).unwrap_err();
+    assert!(errors
+        .iter()
+        .any(|d| d.code == "CGT012" && &source[d.span.start..d.span.end] == "dep.value()"));
+}
+
+#[test]
+fn contracts_require_pure_bool_scalar_expressions() {
+    check("fn f(x: i64) -> i64 effects() caps():\n    requires x >= 0\n    ensures result >= x\n    x\n");
+    error(
+        "fn f() -> Bool:\n    requires arg_count() == 0\n    true\n",
+        "CGT014",
+        "arg_count() == 0",
+    );
+    error(
+        "fn f(x: i64) -> i64:\n    requires x + 1\n    x\n",
+        "CGT003",
+        "x + 1",
+    );
+    error(
+        "fn f() -> Bool:\n    requires f()\n    true\n",
+        "CGT014",
+        "f()",
+    );
+    error(
+        "fn f(result: i64) -> i64:\n    ensures result == 1\n    result\n",
+        "CGT014",
+        "fn f(result: i64) -> i64:\n    ensures result == 1\n    result\n",
+    );
 }
 
 fn error(source: &str, code: &str, text: &str) {

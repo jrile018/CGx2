@@ -35,7 +35,41 @@ impl ApiIndex {
             out.push_str(&function.span.start.to_string());
             out.push_str(",\"end\":");
             out.push_str(&function.span.end.to_string());
-            out.push_str("}}");
+            out.push('}');
+            if self.schema_version == 2 {
+                out.push_str(",\"effects\":");
+                push_json_array(&mut out, &function.effects);
+                out.push_str(",\"effects_status\":");
+                push_json_string(&mut out, &function.effects_status);
+                out.push_str(",\"capabilities\":");
+                push_json_array(&mut out, &function.capabilities);
+                out.push_str(",\"capabilities_status\":");
+                push_json_string(&mut out, &function.capabilities_status);
+                for (name, contracts) in [
+                    ("requires", &function.requires),
+                    ("ensures", &function.ensures),
+                ] {
+                    out.push_str(",\"");
+                    out.push_str(name);
+                    out.push_str("\":[");
+                    for (i, contract) in contracts.iter().enumerate() {
+                        if i > 0 {
+                            out.push(',');
+                        }
+                        out.push_str("{\"expression\":");
+                        push_json_string(&mut out, &contract.expression);
+                        out.push_str(",\"status\":");
+                        push_json_string(&mut out, &contract.status);
+                        out.push_str(",\"span\":{\"start\":");
+                        out.push_str(&contract.span.start.to_string());
+                        out.push_str(",\"end\":");
+                        out.push_str(&contract.span.end.to_string());
+                        out.push_str("}}");
+                    }
+                    out.push(']');
+                }
+            }
+            out.push('}');
         }
         out.push_str("]}");
         out
@@ -58,14 +92,49 @@ impl ApiIndex {
             }
             out.push_str(") -> ");
             out.push_str(&function.return_type);
+            if self.schema_version == 2 {
+                out.push_str(" effects(");
+                out.push_str(&function.effects.join(", "));
+                out.push_str(") [");
+                out.push_str(&function.effects_status);
+                out.push(']');
+                out.push_str(" caps(");
+                out.push_str(&function.capabilities.join(", "));
+                out.push_str(") [");
+                out.push_str(&function.capabilities_status);
+                out.push(']');
+            }
             out.push_str(" [");
             out.push_str(&function.span.start.to_string());
             out.push_str(", ");
             out.push_str(&function.span.end.to_string());
             out.push_str(")\n");
+            if self.schema_version == 2 {
+                for contract in &function.requires {
+                    out.push_str("    requires ");
+                    out.push_str(&contract.expression);
+                    out.push_str(" [runtime-checked]\n");
+                }
+                for contract in &function.ensures {
+                    out.push_str("    ensures ");
+                    out.push_str(&contract.expression);
+                    out.push_str(" [runtime-checked]\n");
+                }
+            }
         }
         out
     }
+}
+
+fn push_json_array(out: &mut String, values: &[String]) {
+    out.push('[');
+    for (i, value) in values.iter().enumerate() {
+        if i > 0 {
+            out.push(',');
+        }
+        push_json_string(out, value);
+    }
+    out.push(']');
 }
 
 fn push_json_string(out: &mut String, value: &str) {

@@ -245,6 +245,21 @@ impl Evaluator<'_> {
                     ));
                 };
                 let name = single_name(&path.segments, path.span)?;
+                if matches!(
+                    name,
+                    "$cgx2_cmp_eq"
+                        | "$cgx2_cmp_ne"
+                        | "$cgx2_cmp_lt"
+                        | "$cgx2_cmp_le"
+                        | "$cgx2_cmp_gt"
+                        | "$cgx2_cmp_ge"
+                ) {
+                    let values = arguments
+                        .iter()
+                        .map(|a| self.eval_expr(&a.value, scope))
+                        .collect::<Result<Vec<_>, _>>()?;
+                    return comparison_values(name, &values, expr.span);
+                }
                 let function = if matches!(name, "arg" | "arg_count") {
                     None
                 } else {
@@ -331,15 +346,35 @@ impl Evaluator<'_> {
                 },
             );
         }
-        let result = self.eval_block(&function.body, &mut scope);
+        let result = (|| {
+            for condition in &function.requires {
+                if self.eval_expr(condition, &scope)? != Value::Bool(true) {
+                    return Err(error("CGR015", "requires condition failed", condition.span));
+                }
+            }
+            let value = match self.eval_block(&function.body, &mut scope)? {
+                Flow::Continue(value) | Flow::Return(value) => value,
+            };
+            if let Some(ty) = &function.return_type {
+                check_type(ty, &value)?;
+            }
+            scope.insert(
+                "result".into(),
+                Binding {
+                    value: value.clone(),
+                    mutable: false,
+                    annotation: None,
+                },
+            );
+            for condition in &function.ensures {
+                if self.eval_expr(condition, &scope)? != Value::Bool(true) {
+                    return Err(error("CGR016", "ensures condition failed", condition.span));
+                }
+            }
+            Ok(value)
+        })();
         self.depth -= 1;
-        let value = match result? {
-            Flow::Continue(value) | Flow::Return(value) => value,
-        };
-        if let Some(ty) = &function.return_type {
-            check_type(ty, &value)?;
-        }
-        Ok(value)
+        result
     }
 }
 
@@ -468,6 +503,40 @@ fn binary_values(left: &Value, right: &Value, op: BinaryOp, span: Span) -> Resul
     result
         .map(Value::I64)
         .ok_or_else(|| error("CGR005", "i64 arithmetic overflow", span))
+}
+
+fn comparison_values(name: &str, values: &[Value], span: Span) -> Result<Value, RunError> {
+    expect_arity(name, 2, values.len(), span)?;
+    let outcome = match (&values[0], &values[1]) {
+        (Value::I64(a), Value::I64(b)) => match name {
+            "$cgx2_cmp_eq" => a == b,
+            "$cgx2_cmp_ne" => a != b,
+            "$cgx2_cmp_lt" => a < b,
+            "$cgx2_cmp_le" => a <= b,
+            "$cgx2_cmp_gt" => a > b,
+            "$cgx2_cmp_ge" => a >= b,
+            _ => return Err(error("CGR009", "unknown comparison", span)),
+        },
+        (Value::Bool(a), Value::Bool(b)) => match name {
+            "$cgx2_cmp_eq" => a == b,
+            "$cgx2_cmp_ne" => a != b,
+            _ => {
+                return Err(error(
+                    "CGR004",
+                    "ordered comparison requires i64 operands",
+                    span,
+                ))
+            }
+        },
+        _ => {
+            return Err(error(
+                "CGR004",
+                "comparison requires compatible scalar operands",
+                span,
+            ))
+        }
+    };
+    Ok(Value::Bool(outcome))
 }
 
 fn decode_string(raw: &str, span: Span) -> Result<String, RunError> {

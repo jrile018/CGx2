@@ -46,7 +46,24 @@ pub struct Function {
     pub name: String,
     pub parameters: Vec<Parameter>,
     pub return_type: Option<TypeSyntax>,
+    /// `None` retains legacy inference; `Some([])` is an explicit pure declaration.
+    pub effects: Option<Declaration>,
+    pub capabilities: Option<Declaration>,
+    pub requires: Vec<Expr>,
+    pub ensures: Vec<Expr>,
     pub body: Vec<Stmt>,
+    pub span: Span,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Declaration {
+    pub names: Vec<DeclaredName>,
+    pub span: Span,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct DeclaredName {
+    pub name: String,
     pub span: Span,
 }
 

@@ -60,6 +60,19 @@ fn check_source_accepts_scalar_script_and_module() {
 }
 
 #[test]
+fn contract_failure_is_json_source_located_after_unicode() {
+    let source = "module café\n\nfn main() -> i64 effects() caps():\n    requires false\n    1\n";
+    let file = SourceFile::new(source);
+    assert!(invoke(&["check", file.path()]).status.success());
+    let errors = json_errors(invoke(&["run", file.path(), "--diagnostic-format=json"]));
+    assert_eq!(errors.len(), 1);
+    assert_eq!(errors[0].code, "CGR015");
+    let span = errors[0].span.unwrap();
+    assert_eq!(&source[span.start..span.end], "false");
+    assert_eq!(span.start, source.find("false").unwrap());
+}
+
+#[test]
 fn check_source_preserves_codes_and_byte_spans() {
     error_span("missing\n", "CGT001", "missing");
     error_span("let x: i64 = true\n", "CGT003", "true");
