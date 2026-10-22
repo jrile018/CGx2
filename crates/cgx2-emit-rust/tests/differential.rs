@@ -150,16 +150,54 @@ fn checked_arithmetic_and_argument_errors_match_cli() {
 }
 
 #[test]
+fn native_contracts_match_cli_and_preserve_error_order() {
+    compare(
+        "fn main() -> i64 effects() caps():\n    requires true\n    ensures result == 7\n    7\n",
+        &[],
+        "7\n",
+        None,
+    );
+    compare(
+        "fn main() -> i64:\n    requires false\n    9223372036854775807 + 1\n",
+        &[],
+        "",
+        Some("requires condition failed"),
+    );
+    compare(
+        "fn main() -> i64:\n    ensures result == 8\n    7\n",
+        &[],
+        "",
+        Some("ensures condition failed"),
+    );
+}
+
+#[test]
+fn unsupported_pure_contract_call_has_source_span() {
+    let source = "fn positive(x: i64) -> Bool effects() caps():\n    x > 0\nfn main() -> i64 effects() caps():\n    requires positive(2)\n    7\n";
+    let module = parse_module(source).unwrap();
+    let typed = check_module(&module).unwrap();
+    let errors = emit_rust(&module, &typed).unwrap_err();
+    assert_eq!(errors[0].code, "CGRS001");
+    assert!(errors[0].message.contains("contract expression"));
+    let start = source.find("positive(2)").unwrap();
+    assert_eq!(
+        errors[0].span,
+        Span {
+            start,
+            end: start + "positive(2)".len()
+        }
+    );
+}
+
+#[test]
 fn unsupported_and_stale_sources_have_spans() {
     let valid = parse_module("1\n").unwrap();
     let summary = check_module(&valid).unwrap();
     for (source, needle) in [
         ("for x in 1:\n    x\n", "for x in 1:\n    x\n"),
-        ("no_gc(budget: 4):\n    1\n", "no_gc(budget: 4):\n    1\n"),
         ("app.value()\n", "app.value"),
         ("app.value\n", "app.value"),
         ("arg(x: 1)\n", "x: 1"),
-        ("memory.collect(r)\n", "memory.collect(r)"),
         ("mystery()\n", "mystery"),
     ] {
         let module = parse_module(source).unwrap();

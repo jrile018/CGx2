@@ -1,0 +1,123 @@
+// Generated CGx2 memory script support. All storage and collection use cgx2_runtime::Session.
+use std::collections::HashMap;
+use cgx2_runtime::{AllocationError, CollectionMode, Handle, MemoryError, OwnedBytes, RegionId, Session};
+
+enum Binding { Region(RegionId), Owned(OwnedBytes), Managed(Handle), Borrow(String) }
+
+fn allocation(error: AllocationError, span: (usize, usize)) -> String {
+    format!("CGR013 at {}..{}: memory allocation failed: {error:?}", span.0, span.1)
+}
+fn runtime(error: MemoryError, span: (usize, usize)) -> String {
+    format!("CGR014 at {}..{}: memory operation failed: {error:?}", span.0, span.1)
+}
+fn step(steps: &mut usize, span: (usize, usize)) -> Result<(), String> {
+    if *steps >= 1_000_000 {
+        return Err(format!("CGR010 at {}..{}: execution step limit of 1000000 exceeded", span.0, span.1));
+    }
+    *steps += 1;
+    Ok(())
+}
+fn binding<'a>(bindings: &'a HashMap<&'static str, Binding>, name: &str, span: (usize, usize)) -> Result<&'a Binding, String> {
+    bindings.get(name).ok_or_else(|| format!("CGR014 at {}..{}: inactive memory binding `{name}`", span.0, span.1))
+}
+fn region(bindings: &HashMap<&'static str, Binding>, name: &str, span: (usize, usize)) -> Result<RegionId, String> {
+    match binding(bindings, name, span)? {
+        Binding::Region(id) => Ok(*id),
+        _ => Err(format!("CGR014 at {}..{}: `{name}` is not a region", span.0, span.1)),
+    }
+}
+fn open(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, mode: CollectionMode, limit: usize, span: (usize, usize)) -> Result<(), String> {
+    let id = session.create_region(mode, limit).map_err(|e| allocation(e, span))?;
+    bindings.insert(name, Binding::Region(id));
+    Ok(())
+}
+fn owned(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, size: usize, span: (usize, usize)) -> Result<(), String> {
+    let value = session.alloc_owned_bytes(size).map_err(|e| allocation(e, span))?;
+    bindings.insert(name, Binding::Owned(value));
+    Ok(())
+}
+fn move_owned(bindings: &mut HashMap<&'static str, Binding>, name: &'static str, from: &'static str, span: (usize, usize)) -> Result<(), String> {
+    if !matches!(binding(bindings, from, span)?, Binding::Owned(_)) {
+        return Err(format!("CGR014 at {}..{}: move requires owned bytes", span.0, span.1));
+    }
+    let value = bindings.remove(from).expect("checked owned binding");
+    bindings.insert(name, value);
+    Ok(())
+}
+fn promote(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, region_name: &'static str, from: &'static str, span: (usize, usize)) -> Result<(), String> {
+    let id = region(bindings, region_name, span)?;
+    if !matches!(binding(bindings, from, span)?, Binding::Owned(_)) {
+        return Err(format!("CGR014 at {}..{}: promotion requires owned bytes", span.0, span.1));
+    }
+    let Binding::Owned(value) = bindings.remove(from).expect("checked owned binding") else { unreachable!() };
+    let handle = match session.promote_owned(id, value) {
+        Ok(handle) => handle,
+        Err((failure, original)) => {
+            bindings.insert(from, Binding::Owned(original));
+            return Err(allocation(failure, span));
+        }
+    };
+    session.root(handle).map_err(|e| runtime(e, span))?;
+    bindings.insert(name, Binding::Managed(handle));
+    Ok(())
+}
+fn copy_owned(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, from: &'static str, span: (usize, usize)) -> Result<(), String> {
+    let Binding::Managed(handle) = binding(bindings, from, span)? else {
+        return Err(format!("CGR014 at {}..{}: copy requires a managed handle", span.0, span.1));
+    };
+    let value = session.copy_managed_to_owned(*handle).map_err(|e| match e {
+        MemoryError::Allocation(failure) => allocation(failure, span),
+        other => runtime(other, span),
+    })?;
+    bindings.insert(name, Binding::Owned(value));
+    Ok(())
+}
+fn alloc(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, region_name: &'static str, size: usize, span: (usize, usize)) -> Result<(), String> {
+    let id = region(bindings, region_name, span)?;
+    let handle = session.alloc_bytes(id, size).map_err(|e| allocation(e, span))?;
+    session.root(handle).map_err(|e| runtime(e, span))?;
+    bindings.insert(name, Binding::Managed(handle));
+    Ok(())
+}
+fn borrow(bindings: &mut HashMap<&'static str, Binding>, name: &'static str, target: &'static str, span: (usize, usize)) -> Result<(), String> {
+    match binding(bindings, target, span)? {
+        Binding::Owned(_) | Binding::Managed(_) => (),
+        _ => return Err(format!("CGR014 at {}..{}: borrow requires a live value", span.0, span.1)),
+    }
+    bindings.insert(name, Binding::Borrow(target.to_owned()));
+    Ok(())
+}
+fn use_value(session: &Session, bindings: &HashMap<&'static str, Binding>, name: &'static str, span: (usize, usize)) -> Result<(), String> {
+    match binding(bindings, name, span)? {
+        Binding::Owned(bytes) => { let _ = bytes.as_slice(); }
+        Binding::Managed(handle) => { session.read_bytes(*handle).map_err(|e| runtime(e, span))?; }
+        _ => return Err(format!("CGR014 at {}..{}: use requires a live value", span.0, span.1)),
+    }
+    Ok(())
+}
+fn drop_value(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, span: (usize, usize)) -> Result<(), String> {
+    if let Binding::Managed(handle) = binding(bindings, name, span)? {
+        session.unroot(*handle).map_err(|e| runtime(e, span))?;
+    }
+    if !matches!(binding(bindings, name, span)?, Binding::Owned(_) | Binding::Managed(_)) {
+        return Err(format!("CGR014 at {}..{}: drop requires a live value", span.0, span.1));
+    }
+    bindings.remove(name);
+    Ok(())
+}
+fn end_borrow(bindings: &mut HashMap<&'static str, Binding>, name: &'static str, span: (usize, usize)) -> Result<(), String> {
+    match binding(bindings, name, span)? {
+        Binding::Borrow(target) => { binding(bindings, target.as_str(), span)?; }
+        _ => return Err(format!("CGR014 at {}..{}: end_borrow requires a token", span.0, span.1)),
+    }
+    bindings.remove(name);
+    Ok(())
+}
+fn collect(session: &mut Session, bindings: &HashMap<&'static str, Binding>, region_name: &'static str, span: (usize, usize)) -> Result<(), String> {
+    let id = region(bindings, region_name, span)?;
+    session.collect(id).map_err(|e| runtime(e, span))
+}
+fn close(session: &mut Session, bindings: &HashMap<&'static str, Binding>, region_name: &'static str, span: (usize, usize)) -> Result<(), String> {
+    let id = region(bindings, region_name, span)?;
+    session.close_region(id).map_err(|e| runtime(e, span))
+}

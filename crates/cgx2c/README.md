@@ -1,4 +1,4 @@
-# cgx2c scalar native compiler preview
+# cgx2c native compiler preview
 
 From the repository root, with Rust 1.98 and `rustc` installed:
 
@@ -11,7 +11,9 @@ rustc --edition=2024 /tmp/cgx2-hello.rs -o /tmp/cgx2-hello-manual
 
 If the emitted `.rs` filename contains spaces or punctuation, add `--crate-name cgx2_generated` to the manual `rustc` command. `cgx2c build` uses a fixed temporary Rust filename and accepts such output paths directly.
 
-`build FILE.cg --out BINARY [--release] [--force] [--rustc PATH]` checks and emits the scalar profile, then invokes `rustc` with argument vectors. `--release` adds `-O`. The default compiler is `rustc` on `PATH`; `CGX2C_RUSTC` or `--rustc PATH` selects another executable. `emit-rust FILE.cg --out FILE.rs [--force]` writes the deterministic, readable emitter output. Both commands require an explicit output. Existing output requires `--force`; an output that is the input file and existing symlink outputs are rejected. Source is limited to 4 MiB and emitted Rust to 32 MiB.
+`build FILE.cg --out BINARY [--release] [--force] [--rustc PATH]` checks and emits the scalar or bounded memory-script profile, then invokes `rustc` with argument vectors. `--release` adds `-O`. The default compiler is `rustc` on `PATH`; `CGX2C_RUSTC` or `--rustc PATH` selects another executable. `emit-rust FILE.cg --out FILE.rs [--force]` writes the deterministic, readable emitter output. Both commands require an explicit output. Existing output requires `--force`; an output that is the input file and existing symlink outputs are rejected. Source is limited to 4 MiB and emitted Rust to 32 MiB.
+
+For memory scripts, `build` first compiles the checked in-tree `cgx2-runtime` source to a temporary rlib, then links generated Rust to it. This preview expects the runtime source at the adjacent workspace path used when `cgx2c` was built. `emit-rust` writes source that requires `--extern cgx2_runtime=...`; see the emitter README for manual `rustc` commands. The supported memory operations and contract expressions are listed there. Native memory execution produces no success report; failures exit nonzero with an operation byte span.
 
 To build the checked three-module example, run from the repository root:
 
@@ -30,4 +32,4 @@ After a successful build, stdout contains a build metadata receipt with SHA-256 
 
 Source diagnostics retain the syntax (`CGS`), type (`CGT`/`CGM`/`CGO`), or Rust target (`CGRS`) code and UTF-8 byte span. `CGXC001` is command usage, `CGXC002` source I/O, `CGXC004` an unsafe or occupied output, `CGXC005` a `rustc` failure, and `CGXC006` staging/install I/O. Compiler stderr is capped at 8 KiB and control characters are sanitized.
 
-The compiler accepts only the checked scalar Rust-emitter profile. Package imports work only through `--package`; standalone file build remains unchanged. Memory regions, `no_gc`, loops, foreign calls, Python/PyTorch, effects/contracts, dynamic calls, recursion, and script-style package entries remain target errors. Package outputs are compared with independent expected values and selected single-file equivalents; there is no multi-file interpreter oracle yet. This is not full native CGx2, and a successful build makes no performance claim.
+The compiler accepts checked scalar and bounded memory-script Rust-emitter profiles. Package imports work only through `--package`; package memory scripts remain unsupported. Scalar `requires`/`ensures` execute for the supported expression subset; unsupported pure calls in contracts are source-located target errors. Declared effects and capabilities must pass the existing static checker. Loops, foreign calls, Python/PyTorch, dynamic calls, recursion, and script-style package entries remain target errors. Package outputs are compared with independent expected values and selected single-file equivalents; there is no multi-file interpreter oracle yet. This is not full native CGx2, and a successful build makes no performance claim.

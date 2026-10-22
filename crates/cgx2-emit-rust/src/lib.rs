@@ -1,8 +1,14 @@
 //! Readable, standalone Rust output for checked CGx2 scalar programs.
 
+mod memory;
+
+pub use memory::is_memory_script;
+
 use cgx2_package::CheckedPackage;
 use cgx2_sema::{Type, TypedModule, check_module};
-use cgx2_syntax::{AssignOp, BinaryOp, Expr, ExprKind, Module, Span, Stmt, StmtKind, TypeSyntax};
+use cgx2_syntax::{
+    AssignOp, BinaryOp, Expr, ExprKind, Function, Module, Span, Stmt, StmtKind, TypeSyntax,
+};
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::PathBuf;
 
@@ -109,6 +115,7 @@ pub fn emit_package_rust(package: &CheckedPackage) -> Result<String, Vec<Package
                 Some(&allowed),
                 &mut local_errors,
             );
+            validate_contracts(function, &mut local_errors);
             errors.extend(local_errors.into_iter().map(|d| package_error(source, d)));
         }
         for signature in source.typed().functions.values() {
@@ -201,7 +208,7 @@ pub fn emit_package_rust(package: &CheckedPackage) -> Result<String, Vec<Package
                 rust_type(&signature.return_type)
             ));
             out.push_str("    ctx.enter()?;\n    let result = (|| -> Result<_, String> {\n");
-            emit_block_package(&function.body, 2, &mut out, name);
+            emit_function_body(function, 2, &mut out, Some(name));
             out.push_str("    })();\n    ctx.leave();\n    result\n}\n\n");
         }
     }
@@ -248,6 +255,9 @@ impl EmitDiagnostic {
 
 /// Emit a standalone Rust 2024 program from a checked scalar module.
 pub fn emit_rust(module: &Module, checked: &TypedModule) -> Result<String, Vec<EmitDiagnostic>> {
+    if memory::is_memory_script(module) {
+        return memory::emit_memory_rust(module, checked);
+    }
     let mut errors = Vec::new();
     let functions = module
         .functions
@@ -269,6 +279,7 @@ pub fn emit_rust(module: &Module, checked: &TypedModule) -> Result<String, Vec<E
             validate_type(ty, &mut errors);
         }
         validate_block(&function.body, false, &functions, None, &mut errors);
+        validate_contracts(function, &mut errors);
     }
     validate_block(&module.statements, true, &functions, None, &mut errors);
     if !module.functions.is_empty() {
@@ -323,7 +334,7 @@ pub fn emit_rust(module: &Module, checked: &TypedModule) -> Result<String, Vec<E
         ));
         out.push_str("    ctx.enter()?;\n");
         out.push_str("    let result = (|| -> Result<_, String> {\n");
-        emit_block(&function.body, 2, &mut out);
+        emit_function_body(function, 2, &mut out, None);
         out.push_str("    })();\n    ctx.leave();\n    result\n}\n\n");
     }
     if module.functions.is_empty() {
@@ -413,6 +424,50 @@ fn validate_type(ty: &TypeSyntax, errors: &mut Vec<EmitDiagnostic>) {
             format!("type {ty} is unsupported by Rust scalar emission"),
             ty.span,
         ));
+    }
+}
+
+fn validate_contracts(function: &Function, errors: &mut Vec<EmitDiagnostic>) {
+    for condition in function.requires.iter().chain(&function.ensures) {
+        validate_contract_expr(condition, errors);
+    }
+}
+
+fn comparison_operator(name: &str) -> Option<&'static str> {
+    match name {
+        "$cgx2_cmp_eq" => Some("=="),
+        "$cgx2_cmp_ne" => Some("!="),
+        "$cgx2_cmp_lt" => Some("<"),
+        "$cgx2_cmp_le" => Some("<="),
+        "$cgx2_cmp_gt" => Some(">"),
+        "$cgx2_cmp_ge" => Some(">="),
+        _ => None,
+    }
+}
+
+fn validate_contract_expr(expr: &Expr, errors: &mut Vec<EmitDiagnostic>) {
+    match &expr.kind {
+        ExprKind::Name(path) if path.segments.len() == 1 => (),
+        ExprKind::Integer(raw) if raw.replace('_', "").parse::<i64>().is_ok() => (),
+        ExprKind::Boolean(_) => (),
+        ExprKind::Binary { left, right, .. } => {
+            validate_contract_expr(left, errors);
+            validate_contract_expr(right, errors);
+        }
+        ExprKind::Call { callee, arguments }
+            if matches!(&callee.kind, ExprKind::Name(path) if path.segments.len() == 1 && comparison_operator(&path.segments[0]).is_some())
+                && arguments.len() == 2
+                && arguments.iter().all(|arg| arg.name.is_none()) =>
+        {
+            for arg in arguments {
+                validate_contract_expr(&arg.value, errors);
+            }
+        }
+        _ => errors.push(EmitDiagnostic::new(
+            "CGRS001",
+            "contract expression is unsupported by Rust emission",
+            expr.span,
+        )),
     }
 }
 
@@ -521,6 +576,7 @@ fn validate_expr(
                 let name = path.segments.join(".");
                 if path.segments.len() == 1
                     && !matches!(name.as_str(), "arg" | "arg_count")
+                    && comparison_operator(&name).is_none()
                     && !functions.contains(name.as_str())
                 {
                     errors.push(EmitDiagnostic::new(
@@ -642,8 +698,38 @@ fn emit_block(stmts: &[Stmt], indent: usize, out: &mut String) {
     emit_block_context(stmts, indent, out, None);
 }
 
-fn emit_block_package(stmts: &[Stmt], indent: usize, out: &mut String, module: &str) {
-    emit_block_context(stmts, indent, out, Some(module));
+fn emit_function_body(function: &Function, indent: usize, out: &mut String, module: Option<&str>) {
+    if function.requires.is_empty() && function.ensures.is_empty() {
+        emit_block_context(&function.body, indent, out, module);
+        return;
+    }
+    let pad = "    ".repeat(indent);
+    for condition in &function.requires {
+        out.push_str(&format!(
+            "{pad}if !({}?) {{ return Err(\"CGR015 at {}..{}: requires condition failed\".into()); }}\n",
+            emit_expr_context(condition, module), condition.span.start, condition.span.end
+        ));
+    }
+    out.push_str(&format!(
+        "{pad}let cgx2_value = (|| -> Result<_, String> {{\n"
+    ));
+    emit_block_context(&function.body, indent + 1, out, module);
+    out.push_str(&format!(
+        "{pad}}})();\n{pad}let cgx2_value = cgx2_value?;\n"
+    ));
+    if !function.ensures.is_empty() {
+        out.push_str(&format!(
+            "{pad}let {} = cgx2_value.clone();\n",
+            rust_name("result")
+        ));
+        for condition in &function.ensures {
+            out.push_str(&format!(
+                "{pad}if !({}?) {{ return Err(\"CGR016 at {}..{}: ensures condition failed\".into()); }}\n",
+                emit_expr_context(condition, module), condition.span.start, condition.span.end
+            ));
+        }
+    }
+    out.push_str(&format!("{pad}Ok(cgx2_value)\n"));
 }
 
 fn emit_block_context(stmts: &[Stmt], indent: usize, out: &mut String, module: Option<&str>) {
@@ -744,6 +830,10 @@ fn emit_expr_context(expr: &Expr, module: Option<&str>) -> String {
             let call = match path.segments.as_slice() {
                 [name] if name == "arg_count" => "cgx2_arg_count(args)".to_owned(),
                 [name] if name == "arg" => format!("cgx2_arg(args, {args})"),
+                [name] if comparison_operator(name).is_some() => {
+                    let op = comparison_operator(name).expect("validated comparison");
+                    format!("Ok::<_, String>(cgx2_arg_0 {op} cgx2_arg_1)")
+                }
                 _ => {
                     let full_name = if path.segments.len() > 1 {
                         path.segments.join(".")

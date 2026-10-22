@@ -163,6 +163,31 @@ fn scalar_binary_matches_checked_cli_on_debug_and_release() {
 }
 
 #[test]
+fn native_memory_build_runs_existing_fixture_and_preserves_failure() {
+    let case = Case::new();
+    let fixture = include_str!("../../cgx2-cli/tests/fixtures/memory.cg");
+    let source = case.source("memory.cg", fixture);
+    let output = case.0.join("memory binary");
+    let built = case.invoke(&["build", str_path(&source), "--out", str_path(&output)]);
+    assert!(built.status.success(), "{}", stderr(&built));
+    let actual = Command::new(&output).output().unwrap();
+    assert!(actual.status.success(), "{}", stderr(&actual));
+    assert!(actual.stdout.is_empty());
+    assert!(actual.stderr.is_empty());
+
+    let failing = "let r = memory.region(mode: manual, limit: 256)\nno_gc(budget: 95):\n    let x = memory.alloc_bytes(r, 32)\n";
+    let source = case.source("failure.cg", failing);
+    let output = case.0.join("failure binary");
+    let built = case.invoke(&["build", str_path(&source), "--out", str_path(&output)]);
+    assert!(built.status.success(), "{}", stderr(&built));
+    let actual = Command::new(&output).output().unwrap();
+    assert!(!actual.status.success());
+    assert!(actual.stdout.is_empty());
+    assert!(stderr(&actual).contains("CGR013"), "{}", stderr(&actual));
+    assert!(stderr(&actual).contains("at "), "{}", stderr(&actual));
+}
+
+#[test]
 fn diagnostics_and_failing_compiler_do_not_replace_output() {
     let case = Case::new();
     let output = case.0.join("existing binary");
@@ -175,8 +200,8 @@ fn diagnostics_and_failing_compiler_do_not_replace_output() {
             "CGRS001",
         ),
         (
-            "let r = memory.region(mode: manual, limit: 256)\n",
-            "CGRS001",
+            "let r = memory.region(mode: manual, limit: 256)\nlet x = memory.alloc_bytes(r, 8)\nfor y in x:\n    memory.use(y)\n",
+            "CGM001",
         ),
     ] {
         let source = case.source("invalid.cg", source_text);

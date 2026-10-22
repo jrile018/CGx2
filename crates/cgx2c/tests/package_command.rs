@@ -152,6 +152,57 @@ fn package_call_depth_uses_standalone_limit() {
 }
 
 #[test]
+fn package_contracts_run_before_and_after_body_or_fail_with_span() {
+    let c = Case::new();
+    c.manifest(&["src/main.cg", "src/math.cg"]);
+    c.write(
+        "src/main.cg",
+        "module demo.main\nimport demo.math\nfn main() -> i64:\n    demo.math.value(7)\n",
+    );
+    let math = |requires: &str, ensures: &str| {
+        format!(
+            "module demo.math\npub fn value(x: i64) -> i64 effects() caps():\n    requires {requires}\n    ensures {ensures}\n    x\n"
+        )
+    };
+    for (i, (pre, post, expected)) in [
+        ("x > 0", "result == x", None),
+        ("false", "result == x", Some("requires condition failed")),
+        ("true", "result == 8", Some("ensures condition failed")),
+    ]
+    .into_iter()
+    .enumerate()
+    {
+        c.write("src/math.cg", &math(pre, post));
+        let binary = c.0.join(format!("contract {i}"));
+        let built = c.build(&binary, false);
+        assert!(built.status.success(), "{}", err(&built));
+        let output = Command::new(&binary).output().unwrap();
+        match expected {
+            Some(message) => {
+                assert!(!output.status.success());
+                assert!(err(&output).contains(message), "{}", err(&output));
+                assert!(err(&output).contains("CGR01"));
+                assert!(output.stdout.is_empty());
+            }
+            None => {
+                assert!(output.status.success(), "{}", err(&output));
+                assert_eq!(output.stdout, b"7\n");
+            }
+        }
+    }
+    c.write("src/math.cg", "module demo.math\nfn helper() -> Bool effects() caps():\n    true\npub fn value(x: i64) -> i64 effects() caps():\n    requires helper()\n    x\n");
+    let rejected = c.build(&c.0.join("unsupported contract"), false);
+    assert!(!rejected.status.success());
+    assert!(err(&rejected).contains("CGRS001"), "{}", err(&rejected));
+    assert!(
+        err(&rejected).contains("contract expression is unsupported"),
+        "{}",
+        err(&rejected)
+    );
+    assert!(err(&rejected).contains(".cg:"), "{}", err(&rejected));
+}
+
+#[test]
 fn private_missing_typed_cycle_and_memory_fail_before_rustc() {
     let c = Case::new();
     c.manifest(&["src/main.cg", "src/math.cg"]);

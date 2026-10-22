@@ -1,6 +1,6 @@
 # cgx2-emit-rust
 
-`cgx2-emit-rust` emits a standalone Rust 2024 program from a parsed, successfully checked CGx2 scalar module:
+`cgx2-emit-rust` emits Rust 2024 from a parsed, successfully checked CGx2 scalar module or bounded memory script:
 
 ```rust
 use cgx2_emit_rust::emit_rust;
@@ -23,6 +23,15 @@ Arithmetic uses checked signed `i64` operations in debug and optimized builds. O
 
 `emit_package_rust(&CheckedPackage)` emits a single Rust 2024 program from `cgx2-package::load_checked_package`. It lowers dependency-first modules and encodes each fully qualified function name as a collision-free Rust identifier, including dotted names, Unicode, and Rust keywords. Calls to public functions require an explicit listed import; private same-module calls remain available. `PackageEmitDiagnostic` adds a manifest-relative source path to the usual code, message, and byte span. The package entry needs a zero-argument `main` returning `i64`, `Bool`, `String`, or `Unit`. Package modules cannot contain script statements. The package caller checks source hashes before saving output.
 
-Memory regions, owned values, `no_gc`, loops, named arguments, qualified or unknown calls, foreign calls, effects, and Python/PyTorch execution are outside this target. This is a scalar source emitter, not the full native backend. Edits to generated Rust do not round-trip to `.cg`.
+For script-only memory source, `emit_rust` selects a separate native path. It supports literal `usize` byte sizes; `memory.region(mode: auto|manual, limit: N)`; `alloc_bytes`, `owned_bytes`, `move`, `promote_owned`, `copy_to_owned`, `borrow`/`borrow_mut`, `use`, `drop`, `end_borrow`, `collect`, and `close`; and nested `no_gc(budget: N)`. Generated code calls the public `cgx2_runtime::Session` API with the same 1 MiB auto trigger, roots managed handles, and reports runtime operation failures with source byte spans. It prints nothing on success, matching `cgx2 run` for this profile. Compile the emitted file with a local `cgx2-runtime` rlib, for example:
+
+```sh
+rustc --edition=2021 --crate-name cgx2_runtime --crate-type=lib crates/cgx2-runtime/src/lib.rs -o /tmp/libcgx2_runtime.rlib
+rustc --edition=2024 --crate-name cgx2_generated generated.rs --extern cgx2_runtime=/tmp/libcgx2_runtime.rlib -o /tmp/generated
+```
+
+Scalar `requires` and `ensures` expressions using Boolean literals, `i64` literals, parameters, `result`, arithmetic, and scalar comparisons execute before the body and after a successful return. A failure exits nonzero with `CGR015` or `CGR016` and the condition's byte span. A source-valid pure function call inside a contract receives `CGRS001` with its source span; it is never silently omitted. Explicit effects and capabilities remain subject to the existing checker before emission. Package emission applies the same contract handling to every function.
+
+Memory operations inside functions, mixed scalar/memory scripts, nonliteral sizes, loops, foreign calls, and Python/PyTorch execution remain unsupported. A native memory binary does not yet expose a memory report. Generated source is a bounded profile, not the full native backend or an SMT proof. Edits to generated Rust do not round-trip to `.cg`.
 
 Run `cargo test -p cgx2-emit-rust --offline` for differential tests against `cgx2-cli::run_source` in debug and optimized Rust builds. Those tests compare output, success or failure, and error messages for deterministic fixtures.
