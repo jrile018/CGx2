@@ -12,6 +12,8 @@ pub const MAX_VALUE_DEPTH: usize = 16;
 pub const MAX_VALUE_ELEMENTS: usize = 4096;
 pub const MAX_VALUE_BYTES: usize = 1_048_576;
 pub const MAX_KEYWORDS: usize = 128;
+/// Maximum retained bytes across a Python failure's class, message, and traceback.
+pub const MAX_PYTHON_FAILURE_BYTES: usize = 16_384;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PythonFailure {
@@ -99,10 +101,21 @@ pub(crate) fn python_failure(py: Python<'_>, error: PyErr) -> PythonFailure {
         .and_then(|tb| tb.format().ok())
         .unwrap_or_default();
     PythonFailure {
-        exception_type,
-        message,
-        traceback,
+        exception_type: cap_utf8(exception_type, 256),
+        message: cap_utf8(message, 4_096),
+        traceback: cap_utf8(traceback, MAX_PYTHON_FAILURE_BYTES - 256 - 4_096),
     }
+}
+
+fn cap_utf8(mut value: String, max_bytes: usize) -> String {
+    if value.len() > max_bytes {
+        let mut end = max_bytes;
+        while !value.is_char_boundary(end) {
+            end -= 1;
+        }
+        value.truncate(end);
+    }
+    value
 }
 
 pub(crate) fn python_exception(py: Python<'_>, error: PyErr) -> BridgeError {
@@ -622,6 +635,7 @@ fn bridge_to_python(py: Python<'_>, arg: &BridgeValue) -> Result<Py<PyAny>, Brid
 
 #[cfg(test)]
 mod tests {
+    use pyo3::exceptions::PyValueError;
     use pyo3::types::PyModule;
 
     use super::*;
@@ -645,6 +659,20 @@ mod tests {
                     ..
                 } if version == "fake-1"
             ));
+        });
+    }
+
+    #[test]
+    fn python_failure_caps_unicode_message_without_losing_class() {
+        Python::attach(|py| {
+            let failure = python_failure(py, PyValueError::new_err("雪".repeat(10_000)));
+            assert_eq!(failure.exception_type, "ValueError");
+            assert!(failure.message.len() <= 4_096);
+            assert!(failure.message.is_char_boundary(failure.message.len()));
+            assert!(
+                failure.exception_type.len() + failure.message.len() + failure.traceback.len()
+                    <= MAX_PYTHON_FAILURE_BYTES
+            );
         });
     }
 }

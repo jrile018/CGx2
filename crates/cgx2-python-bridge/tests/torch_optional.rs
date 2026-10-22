@@ -6,6 +6,10 @@ fn torch_probe_reports_real_capability_or_missing_package() {
     let probe = bridge.probe_torch();
     assert_eq!(probe.python_version, bridge.python_version());
     assert_eq!(probe.python_prefix, bridge.python_prefix());
+    eprintln!(
+        "linked CPython: {} | prefix: {}",
+        probe.python_version, probe.python_prefix
+    );
     match probe.status {
         TorchStatus::Available { torch_version } => assert!(!torch_version.is_empty()),
         TorchStatus::Unavailable { failure } => {
