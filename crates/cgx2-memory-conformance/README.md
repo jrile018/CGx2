@@ -1,5 +1,8 @@
 # Deterministic memory corpus
 
+Wave 15's real auto-threshold model, reserve-boundary tests and gate matrix are
+in [release-gate-wave15.md](release-gate-wave15.md).
+
 Wave 14's bounded graph and reserve audit, including the explicit release-gate
 matrix and replay limits, is in [release-gate-wave14.md](release-gate-wave14.md).
 
