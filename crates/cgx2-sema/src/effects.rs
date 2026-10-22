@@ -104,14 +104,16 @@ pub(crate) fn analyze(module: &Module) -> (BTreeMap<String, EffectSummary>, Vec<
             stmt_sites(stmt, &mut observations);
         }
         sites.insert(function.name.clone(), observations);
-        summaries.insert(
-            function.name.clone(),
-            EffectSummary {
-                effects_explicit: function.effects.is_some(),
-                capabilities_explicit: function.capabilities.is_some(),
-                ..EffectSummary::default()
-            },
-        );
+        let mut summary = EffectSummary {
+            effects_explicit: function.effects.is_some(),
+            capabilities_explicit: function.capabilities.is_some(),
+            ..EffectSummary::default()
+        };
+        if function.foreign.is_some() {
+            summary.effects.insert("Foreign".into());
+            summary.capabilities.insert("ForeignCall".into());
+        }
+        summaries.insert(function.name.clone(), summary);
     }
     let mut diagnostics = Vec::new();
     let limit = module.functions.len().saturating_mul(10).saturating_add(1);
@@ -153,6 +155,22 @@ pub(crate) fn analyze(module: &Module) -> (BTreeMap<String, EffectSummary>, Vec<
     }
     for function in &module.functions {
         let inferred = &summaries[&function.name];
+        if function.foreign.is_none() && inferred.effects.contains("Foreign") {
+            if function.effects.is_none() {
+                diagnostics.push(TypeDiagnostic::new(
+                    "CGT012",
+                    "Foreign effect must be explicit".into(),
+                    function.span,
+                ));
+            }
+            if function.capabilities.is_none() {
+                diagnostics.push(TypeDiagnostic::new(
+                    "CGT013",
+                    "ForeignCall capability must be explicit".into(),
+                    function.span,
+                ));
+            }
+        }
         for site in &sites[&function.name] {
             let (effects, capabilities) = if let Some(callee) = &site.callee {
                 if let Some(called) = summaries.get(callee) {

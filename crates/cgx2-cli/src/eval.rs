@@ -1,6 +1,7 @@
 use std::{collections::HashMap, fmt};
 
 use crate::RunError;
+use cgx2_foreign::{registry_from_source, BridgeValue, PythonBridge, SourceCall, ValueShape};
 use cgx2_syntax::{
     AssignOp, BinaryOp, Expr, ExprKind, Function, Module, Span, Stmt, StmtKind, TypeSyntax,
 };
@@ -280,6 +281,12 @@ impl Evaluator<'_> {
                     .iter()
                     .map(|a| self.eval_expr(&a.value, scope))
                     .collect::<Result<Vec<_>, _>>()?;
+                if let Some(foreign) = function
+                    .as_ref()
+                    .filter(|function| function.foreign.is_some())
+                {
+                    return self.call_foreign(foreign, values, expr.span);
+                }
                 match name {
                     "arg_count" => {
                         expect_arity(name, 0, values.len(), expr.span)?;
@@ -316,6 +323,66 @@ impl Evaluator<'_> {
                     }
                 }
             }
+        }
+    }
+
+    fn call_foreign(
+        &self,
+        function: &Function,
+        args: Vec<Value>,
+        span: Span,
+    ) -> Result<Value, RunError> {
+        expect_arity(&function.name, function.parameters.len(), args.len(), span)?;
+        let binding = function.foreign.as_ref().expect("foreign function");
+        let target = &binding.target.segments;
+        let module = target[..target.len() - 1].join(".");
+        let attribute = target.last().expect("checked Python target");
+        let positional: Vec<_> = function
+            .parameters
+            .iter()
+            .map(|parameter| foreign_shape(&parameter.ty))
+            .collect();
+        let call = SourceCall {
+            key: &function.name,
+            module: &module,
+            attribute,
+            positional: &positional,
+            returns: foreign_shape(
+                function
+                    .return_type
+                    .as_ref()
+                    .expect("checked foreign return"),
+            ),
+        };
+        let registry =
+            registry_from_source(&[call]).map_err(|err| error("CGR017", err.to_string(), span))?;
+        let bridge = PythonBridge::new().map_err(|err| error("CGR017", err.to_string(), span))?;
+        let values: Vec<_> = args
+            .into_iter()
+            .map(|value| match value {
+                Value::I64(value) => BridgeValue::I64(value),
+                Value::Bool(value) => BridgeValue::Bool(value),
+                Value::String(value) => BridgeValue::String(value),
+                Value::Unit => BridgeValue::None,
+            })
+            .collect();
+        let returned = registry
+            .call(&bridge, &function.name, &values, &[])
+            .map_err(|err| {
+                let code = match err.category() {
+                    "module_unavailable" => "CGR018",
+                    "attribute_missing" => "CGR019",
+                    "python_exception" => "CGR020",
+                    "return_conversion" => "CGR021",
+                    _ => "CGR017",
+                };
+                error(code, err.to_string(), span)
+            })?;
+        match returned {
+            BridgeValue::I64(value) => Ok(Value::I64(value)),
+            BridgeValue::Bool(value) => Ok(Value::Bool(value)),
+            BridgeValue::String(value) => Ok(Value::String(value)),
+            _ => Err(error("CGR021", "unsupported Python return shape", span)),
         }
     }
 
@@ -375,6 +442,15 @@ impl Evaluator<'_> {
         })();
         self.depth -= 1;
         result
+    }
+}
+
+fn foreign_shape(ty: &TypeSyntax) -> ValueShape {
+    match ty.to_string().as_str() {
+        "i64" => ValueShape::I64,
+        "Bool" => ValueShape::Bool,
+        "String" => ValueShape::String,
+        _ => unreachable!("foreign types statically checked"),
     }
 }
 

@@ -109,6 +109,29 @@ pub struct Registry {
     pub(crate) calls: BTreeMap<String, CallDeclaration>,
 }
 
+/// Source-backed allowlist entry. The same strict declaration parser validates it.
+pub struct SourceCall<'a> {
+    pub key: &'a str,
+    pub module: &'a str,
+    pub attribute: &'a str,
+    pub positional: &'a [ValueShape],
+    pub returns: ValueShape,
+}
+
+pub fn registry_from_source(calls: &[SourceCall<'_>]) -> Result<Registry, ForeignError> {
+    let entries: Vec<Value> = calls.iter().map(|call| json!({
+        "key": call.key,
+        "module": call.module,
+        "attribute": [call.attribute],
+        "positional": call.positional.iter().map(|shape| shape.as_str()).collect::<Vec<_>>(),
+        "keywords": {},
+        "returns": call.returns.as_str(),
+        "effect": "Foreign",
+        "ownership": "copied",
+    })).collect();
+    parse_declarations(&json!({"version": 1, "calls": entries}).to_string())
+}
+
 impl Registry {
     pub fn get(&self, key: &str) -> Option<&CallDeclaration> {
         self.calls.get(key)

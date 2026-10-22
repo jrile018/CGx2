@@ -27,7 +27,22 @@ cargo run -p cgx2-cli --offline -- memory report program.cg --format=json
 - `let`, `let mut`, `=`, `+=`, expression statements, and function `return` work. The last expression in a script or function body supplies its value; other final statements yield `Unit`. Function calls have local parameter and binding scopes. Annotations may name only the four scalar types and are checked at runtime; unannotated mutable bindings also retain their initial value type. `arg_count()` returns the number of program arguments; `arg(i64)` returns an argument or errors on a negative or missing index. Those names are reserved.
 - Execution stops after 1,000,000 statements or expressions, or at a call depth of 64. The depth guard also protects the host stack from recursive programs.
 
-For scalar functions, `requires` is evaluated before the body and `ensures` after a successful return, with `result` bound to that return value. Both checks share the existing 1,000,000-step and 64-call-depth limits. Failure returns `CGR015` or `CGR016` at the contract expression span, exits nonzero, and prints no success value. Contracts are runtime-checked, never proved. Memory values, foreign calls, imports, and recursive contract calls are unsupported. `for` loops and generic/non-scalar types remain unsupported by the scalar interpreter. It does not provide native performance.
+For scalar functions, `requires` is evaluated before the body and `ensures` after a successful return, with `result` bound to that return value. Both checks share the existing 1,000,000-step and 64-call-depth limits. Failure returns `CGR015` or `CGR016` at the contract expression span, exits nonzero, and prints no success value. Contracts are runtime-checked, never proved. Memory values, imports, and recursive contract calls are unsupported. `for` loops and generic/non-scalar types remain unsupported by the scalar interpreter. It does not provide native performance.
+
+## Explicit Python-only source calls
+
+```cg
+foreign python pub fn isqrt(x: i64) -> i64 effects(Foreign) caps(ForeignCall) = math.isqrt runtime "local:cpython" ownership copied
+
+fn main() -> i64 effects(Foreign) caps(ForeignCall):
+    requires true
+    ensures result == 9
+    isqrt(81)
+```
+
+Save this as `example.cg`, then run `cgx2 check example.cg` and `cgx2 run example.cg`. The declaration is the local allowlist: the source names an exact CPython module and callable, a copied scalar signature, a `Foreign` effect, a `ForeignCall` capability, and the explicit `local:cpython` runtime identity. That identity uses the locally linked CPython installation; it does not pin a package version or make the result reproducible across hosts. No Python import occurs during `check`. The caller must explicitly permit the foreign effect and capability. The host validates types and arity before import. `requires` in `main` runs before the foreign call; `ensures` runs after a successful typed return.
+
+Only `i64`, `Bool`, and `String` parameters and results with `ownership copied` are supported. Borrowed/mutable buffers, handles, keyword arguments, callbacks, arbitrary dynamic imports/evaluation, and `torch` on this route are rejected. Python module/callable lookup, exceptions, and return conversion produce `CGR018`–`CGR021` errors at the `.cg` call span, including JSON diagnostics. Python owns its allocations; they are outside CGx2 region and `no_gc` accounting. This is the Python-only CPython route, separate from the direct native LibTorch route. Native and Python source emitters have not been adapted for this AST marker and must reject it during integration.
 
 ## Bounded memory scripts
 

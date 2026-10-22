@@ -36,8 +36,8 @@ assert!(matches!(result, BridgeValue::F64(3.0)));
 
 `Registry::to_json()` emits deterministic compact JSON for API tooling. `ForeignError::category()` gives `declaration`, `blocked_call`, `argument`, `module_unavailable`, `attribute_missing`, `python_exception`, or `return_conversion`. Python exceptions retain capped class, message, and traceback. A missing module or attribute is distinct from a Python exception or wrong return shape.
 
-## Later `.cg` adapter
+## `.cg` source adapter
 
-A source adapter should resolve a declared key statically, attach its source span to any `ForeignError` category, require the caller's `Foreign` effect and any project capability needed for the library, and label Python-owned memory as foreign. It should pin the selected CPython environment through `PYO3_PYTHON` at build time and expose the declaration in the public API index. This crate does not implement `.cg` syntax, effect checking, capabilities, or source calls in Wave 9.
+The Wave 10 CLI adapter builds `SourceCall` entries from checked `foreign python fn` declarations and passes them through `registry_from_source`, which uses this crate's strict allowlist parser. `Registry::call` still validates arguments before import and checks the copied return shape. The source checker and CLI attach the call span and enforce `Foreign`/`ForeignCall`; this host crate remains the runtime boundary. `local:cpython` identifies the linked local runtime, not a pinned package environment. The route does not load PyTorch or substitute for direct LibTorch.
 
 Run `cargo test -p cgx2-foreign --offline`. Embedded CPython must have a matching development link library; `LIBRARY_PATH` can point at its directory. Run bridge tests separately to exercise `probe_torch()` against the linked interpreter. Real PyTorch absence is a skipped external capability gate.

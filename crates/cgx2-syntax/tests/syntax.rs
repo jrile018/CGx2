@@ -8,6 +8,29 @@ fn kinds(source: &str) -> Vec<TokenKind> {
 }
 
 #[test]
+fn python_foreign_declaration_round_trips_with_source_spans() {
+    let source = "foreign python fn isqrt(x: i64) -> i64 effects(Foreign) caps(ForeignCall) = math.isqrt runtime \"local:cpython\" ownership copied\n\nfn main() -> i64 effects(Foreign) caps(ForeignCall):\n    isqrt(9)\n";
+    let parsed = parse_module(source).unwrap();
+    let binding = parsed.functions[0].foreign.as_ref().unwrap();
+    assert_eq!(binding.route, "python");
+    assert_eq!(
+        &source[binding.target.span.start..binding.target.span.end],
+        "math.isqrt"
+    );
+    assert_eq!(format_module(&parsed), source);
+}
+
+#[test]
+fn foreign_route_and_duplicate_declarations_are_diagnosed() {
+    let header = "foreign python fn f(x: i64) -> i64 effects(Foreign) caps(ForeignCall) = math.isqrt runtime \"local:cpython\" ownership copied\n";
+    let duplicate = format!("{header}{header}");
+    assert!(parse_module(&duplicate).is_err());
+    let unknown = header.replace("foreign python", "foreign wasm");
+    let errors = parse_module(&unknown).unwrap_err();
+    assert!(errors.iter().any(|error| error.code == "CGS111"));
+}
+
+#[test]
 fn contract_header_and_prelude_round_trip() {
     let source = "pub fn safe(x: i64) -> Bool effects() caps():\n    requires x >= 0\n    ensures result == true\n    true\n\nfn count() -> i64 effects(ReadArgs) caps(ArgsRead):\n    arg_count()\n";
     let parsed = parse_module(source).unwrap();

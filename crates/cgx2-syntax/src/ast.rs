@@ -52,6 +52,17 @@ pub struct Function {
     pub requires: Vec<Expr>,
     pub ensures: Vec<Expr>,
     pub body: Vec<Stmt>,
+    /// Distinct marker: source emitters must reject this until they implement the route.
+    pub foreign: Option<ForeignBinding>,
+    pub span: Span,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ForeignBinding {
+    pub route: String,
+    pub target: Path,
+    pub runtime: String,
+    pub ownership: String,
     pub span: Span,
 }
 

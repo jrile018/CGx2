@@ -36,7 +36,7 @@ impl ApiIndex {
             out.push_str(",\"end\":");
             out.push_str(&function.span.end.to_string());
             out.push('}');
-            if self.schema_version == 2 {
+            if self.schema_version >= 2 {
                 out.push_str(",\"effects\":");
                 push_json_array(&mut out, &function.effects);
                 out.push_str(",\"effects_status\":");
@@ -69,6 +69,22 @@ impl ApiIndex {
                     out.push(']');
                 }
             }
+            if self.schema_version >= 3 {
+                out.push_str(",\"foreign\":");
+                if let Some(foreign) = &function.foreign {
+                    out.push_str("{\"route\":");
+                    push_json_string(&mut out, &foreign.route);
+                    out.push_str(",\"target\":");
+                    push_json_string(&mut out, &foreign.target);
+                    out.push_str(",\"ownership\":");
+                    push_json_string(&mut out, &foreign.ownership);
+                    out.push_str(",\"runtime\":");
+                    push_json_string(&mut out, &foreign.runtime);
+                    out.push('}');
+                } else {
+                    out.push_str("null");
+                }
+            }
             out.push('}');
         }
         out.push_str("]}");
@@ -92,7 +108,7 @@ impl ApiIndex {
             }
             out.push_str(") -> ");
             out.push_str(&function.return_type);
-            if self.schema_version == 2 {
+            if self.schema_version >= 2 {
                 out.push_str(" effects(");
                 out.push_str(&function.effects.join(", "));
                 out.push_str(") [");
@@ -109,7 +125,7 @@ impl ApiIndex {
             out.push_str(", ");
             out.push_str(&function.span.end.to_string());
             out.push_str(")\n");
-            if self.schema_version == 2 {
+            if self.schema_version >= 2 {
                 for contract in &function.requires {
                     out.push_str("    requires ");
                     out.push_str(&contract.expression);
@@ -120,6 +136,17 @@ impl ApiIndex {
                     out.push_str(&contract.expression);
                     out.push_str(" [runtime-checked]\n");
                 }
+            }
+            if let Some(foreign) = &function.foreign {
+                out.push_str("    foreign route=");
+                out.push_str(&foreign.route);
+                out.push_str(" target=");
+                out.push_str(&foreign.target);
+                out.push_str(" ownership=");
+                out.push_str(&foreign.ownership);
+                out.push_str(" runtime=");
+                out.push_str(&foreign.runtime);
+                out.push('\n');
             }
         }
         out

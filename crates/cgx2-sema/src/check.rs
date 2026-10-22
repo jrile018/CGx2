@@ -93,6 +93,109 @@ pub fn check_module_with_imports(
     module: &Module,
     imported: &ImportedSignatures,
 ) -> Result<TypedModule, Vec<TypeDiagnostic>> {
+    let mut foreign_errors = Vec::new();
+    for function in &module.functions {
+        if let Some(binding) = &function.foreign {
+            let supported = |ty: &cgx2_syntax::TypeSyntax| {
+                matches!(ty.to_string().as_str(), "i64" | "Bool" | "String")
+            };
+            if function
+                .return_type
+                .as_ref()
+                .is_none_or(|ty| !supported(ty))
+            {
+                foreign_errors.push(TypeDiagnostic::new(
+                    "CGT016",
+                    "foreign result must be i64, Bool, or String".into(),
+                    function
+                        .return_type
+                        .as_ref()
+                        .map_or(function.span, |ty| ty.span),
+                ));
+            }
+            for parameter in &function.parameters {
+                if !supported(&parameter.ty) {
+                    foreign_errors.push(TypeDiagnostic::new(
+                        "CGT016",
+                        "foreign parameter must be copied i64, Bool, or String".into(),
+                        parameter.ty.span,
+                    ));
+                }
+            }
+            if binding.route != "python"
+                || binding.ownership != "copied"
+                || binding.runtime != "local:cpython"
+            {
+                foreign_errors.push(TypeDiagnostic::new("CGT016", "Python foreign declaration requires copied ownership and runtime \"local:cpython\"".into(), binding.span));
+            }
+            if binding
+                .target
+                .segments
+                .first()
+                .is_some_and(|name| name == "torch")
+            {
+                foreign_errors.push(TypeDiagnostic::new(
+                    "CGT016",
+                    "torch is reserved for the direct LibTorch route".into(),
+                    binding.target.span,
+                ));
+            }
+            let target_name = binding.target.segments.join(".");
+            if matches!(
+                target_name.as_str(),
+                "builtins.eval"
+                    | "builtins.exec"
+                    | "builtins.compile"
+                    | "builtins.__import__"
+                    | "importlib.import_module"
+                    | "runpy.run_module"
+                    | "runpy.run_path"
+            ) {
+                foreign_errors.push(TypeDiagnostic::new(
+                    "CGT016",
+                    "dynamic Python evaluation and import targets are forbidden".into(),
+                    binding.target.span,
+                ));
+            }
+            if binding.target.segments.len() < 2
+                || !binding.target.segments.iter().all(|part| {
+                    part.bytes()
+                        .all(|byte| byte.is_ascii_alphanumeric() || byte == b'_')
+                })
+            {
+                foreign_errors.push(TypeDiagnostic::new(
+                    "CGT016",
+                    "Python target must be a dotted ASCII module and callable".into(),
+                    binding.target.span,
+                ));
+            }
+            if function
+                .effects
+                .as_ref()
+                .is_none_or(|decl| !decl.names.iter().any(|name| name.name == "Foreign"))
+            {
+                foreign_errors.push(TypeDiagnostic::new(
+                    "CGT012",
+                    "foreign declaration requires effects(Foreign)".into(),
+                    function.span,
+                ));
+            }
+            if function
+                .capabilities
+                .as_ref()
+                .is_none_or(|decl| !decl.names.iter().any(|name| name.name == "ForeignCall"))
+            {
+                foreign_errors.push(TypeDiagnostic::new(
+                    "CGT013",
+                    "foreign declaration requires caps(ForeignCall)".into(),
+                    function.span,
+                ));
+            }
+        }
+    }
+    if !foreign_errors.is_empty() {
+        return Err(foreign_errors);
+    }
     if let Some(result) = crate::memory::check_memory_module(module) {
         if !module.imports.is_empty() {
             return Err(vec![TypeDiagnostic::new(
@@ -366,6 +469,9 @@ impl Checker {
     }
 
     fn check_function(&mut self, function: &Function) {
+        if function.foreign.is_some() {
+            return;
+        }
         let Some(signature) = self.functions.get(&function.name).cloned() else {
             return;
         };

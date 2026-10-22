@@ -209,6 +209,7 @@ fn json_round_trips_escapes_controls_and_unicode() {
             capabilities_status: "inferred".into(),
             requires: vec![],
             ensures: vec![],
+            foreign: None,
         }],
     };
     python_json_assert(
@@ -216,6 +217,25 @@ fn json_round_trips_escapes_controls_and_unicode() {
         "assert data['schema_version'] == 2\nassert data['module'] == sys.argv[1]\nassert data['functions'][0]['name'] == sys.argv[2]\nassert data['functions'][0]['parameters'][0] == {'name': sys.argv[3], 'ty': sys.argv[4]}\nassert data['functions'][0]['return_type'] == 'Réponse'",
         &[module_name, function_name, parameter_name, "T\"\\\u{001f}"],
     );
+}
+
+#[test]
+fn public_python_binding_exposes_route_target_and_runtime() {
+    let source = "foreign python pub fn isqrt(x: i64) -> i64 effects(Foreign) caps(ForeignCall) = math.isqrt runtime \"local:cpython\" ownership copied\n";
+    let module = parse_module(source).unwrap();
+    let typed = check_module(&module).unwrap();
+    let index = build_index(&module, &typed).unwrap();
+    assert_eq!(index.schema_version, 3);
+    let foreign = index.find("isqrt").unwrap().foreign.as_ref().unwrap();
+    assert_eq!(foreign.route, "python");
+    assert_eq!(foreign.target, "math.isqrt");
+    assert_eq!(foreign.ownership, "copied");
+    assert_eq!(foreign.runtime, "local:cpython");
+    let json = index.render_json();
+    assert!(json.contains("\"foreign\":{\"route\":\"python\",\"target\":\"math.isqrt\",\"ownership\":\"copied\",\"runtime\":\"local:cpython\"}"));
+    assert!(index
+        .render_text()
+        .contains("foreign route=python target=math.isqrt ownership=copied runtime=local:cpython"));
 }
 
 #[test]

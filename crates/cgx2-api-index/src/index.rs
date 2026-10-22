@@ -22,6 +22,15 @@ pub struct ApiFunction {
     pub capabilities_status: String,
     pub requires: Vec<ApiContract>,
     pub ensures: Vec<ApiContract>,
+    pub foreign: Option<ApiForeign>,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ApiForeign {
+    pub route: String,
+    pub target: String,
+    pub ownership: String,
+    pub runtime: String,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -145,6 +154,12 @@ fn build_index_checked(
                         span: expr.span,
                     })
                     .collect(),
+                foreign: function.foreign.as_ref().map(|binding| ApiForeign {
+                    route: binding.route.clone(),
+                    target: binding.target.segments.join("."),
+                    ownership: binding.ownership.clone(),
+                    runtime: binding.runtime.clone(),
+                }),
             }
         })
         .collect::<Vec<_>>();
@@ -156,7 +171,13 @@ fn build_index_checked(
     });
 
     Ok(ApiIndex {
-        schema_version: if module.functions.iter().any(|function| {
+        schema_version: if module
+            .functions
+            .iter()
+            .any(|function| function.foreign.is_some())
+        {
+            3
+        } else if module.functions.iter().any(|function| {
             function.effects.is_some()
                 || function.capabilities.is_some()
                 || !function.requires.is_empty()

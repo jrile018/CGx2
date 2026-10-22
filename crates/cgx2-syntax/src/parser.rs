@@ -1,8 +1,9 @@
 use std::{collections::BTreeSet, mem::discriminant};
 
 use crate::{
-    lex, AssignOp, BinaryOp, CallArg, Declaration, DeclaredName, Expr, ExprKind, Function, Module,
-    Parameter, Path, Span, Stmt, StmtKind, SyntaxDiagnostic, Token, TokenKind, TypeSyntax,
+    lex, AssignOp, BinaryOp, CallArg, Declaration, DeclaredName, Expr, ExprKind, ForeignBinding,
+    Function, Module, Parameter, Path, Span, Stmt, StmtKind, SyntaxDiagnostic, Token, TokenKind,
+    TypeSyntax,
 };
 
 /// Parse a candidate CGx2 module or standalone script.
@@ -42,8 +43,19 @@ pub fn parse_module(source: &str) -> Result<Module, Vec<SyntaxDiagnostic>> {
     let mut statements = Vec::new();
     while !parser.at(&TokenKind::Eof) {
         let before = parser.pos;
-        if parser.at(&TokenKind::Pub) || parser.at(&TokenKind::Fn) {
+        if parser.at_name("foreign") || parser.at(&TokenKind::Pub) || parser.at(&TokenKind::Fn) {
             if let Some(function) = parser.parse_function() {
+                if function.foreign.is_some()
+                    && functions
+                        .iter()
+                        .any(|prior: &Function| prior.name == function.name)
+                {
+                    parser.errors.push(SyntaxDiagnostic {
+                        code: "CGS111",
+                        message: format!("duplicate foreign declaration `{}`", function.name),
+                        span: function.span,
+                    });
+                }
                 functions.push(function);
             }
         } else if parser.at(&TokenKind::Import) {
@@ -202,6 +214,20 @@ impl Parser {
     }
     fn parse_function(&mut self) -> Option<Function> {
         let start = self.peek().span.start;
+        let route = if self.at_name("foreign") {
+            self.advance();
+            let (route, span) = self.name()?;
+            if route != "python" {
+                self.errors.push(SyntaxDiagnostic {
+                    code: "CGS111",
+                    message: format!("unsupported foreign route `{route}`"),
+                    span,
+                });
+            }
+            Some(route)
+        } else {
+            None
+        };
         let public = self.eat(&TokenKind::Pub).is_some();
         self.expect(&TokenKind::Fn, "CGS103", "expected fn")?;
         let (name, _) = self.name()?;
@@ -259,6 +285,60 @@ impl Parser {
                 *slot = Some(declaration);
             }
         }
+        if let Some(route) = route {
+            self.expect(
+                &TokenKind::Equal,
+                "CGS111",
+                "expected = before Python target",
+            )?;
+            let target = self.parse_path()?;
+            if !self.at_name("runtime") {
+                self.error("CGS111", "expected runtime identity");
+                return None;
+            }
+            self.advance();
+            let runtime = if let TokenKind::StringLiteral(raw) = &self.peek().kind {
+                let raw = raw.clone();
+                self.advance();
+                raw.trim_matches('"').to_owned()
+            } else {
+                self.error("CGS111", "expected quoted runtime identity");
+                return None;
+            };
+            if !self.at_name("ownership") {
+                self.error("CGS111", "expected ownership declaration");
+                return None;
+            }
+            self.advance();
+            let (ownership, ownership_span) = self.name()?;
+            if ownership != "copied" {
+                self.errors.push(SyntaxDiagnostic {
+                    code: "CGS111",
+                    message: "foreign scalar ownership must be copied".into(),
+                    span: ownership_span,
+                });
+            }
+            let end = self.end_statement()?;
+            return Some(Function {
+                public,
+                name,
+                parameters,
+                return_type,
+                effects,
+                capabilities,
+                requires: vec![],
+                ensures: vec![],
+                body: vec![],
+                foreign: Some(ForeignBinding {
+                    route,
+                    target,
+                    runtime,
+                    ownership,
+                    span: Span { start, end },
+                }),
+                span: Span { start, end },
+            });
+        }
         self.expect(&TokenKind::Colon, "CGS101", "expected : before block")?;
         self.expect(
             &TokenKind::Newline,
@@ -303,6 +383,7 @@ impl Parser {
             requires,
             ensures,
             body,
+            foreign: None,
             span: Span { start, end },
         })
     }

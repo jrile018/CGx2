@@ -6,8 +6,8 @@ mod lexer;
 mod parser;
 
 pub use ast::{
-    AssignOp, BinaryOp, CallArg, Declaration, DeclaredName, Expr, ExprKind, Function, Module,
-    Parameter, Path, Stmt, StmtKind, TypeSyntax,
+    AssignOp, BinaryOp, CallArg, Declaration, DeclaredName, Expr, ExprKind, ForeignBinding,
+    Function, Module, Parameter, Path, Stmt, StmtKind, TypeSyntax,
 };
 pub use format::{format_expression, format_module};
 pub use lexer::{lex, Span, SyntaxDiagnostic, Token, TokenKind};

@@ -15,3 +15,4 @@ path = "src/main.rs"
 cgx2-syntax = { path = "../cgx2-syntax" }
 cgx2-sema = { path = "../cgx2-sema" }
 cgx2-runtime = { path = "../cgx2-runtime" }
+cgx2-foreign = { path = "../cgx2-foreign" }

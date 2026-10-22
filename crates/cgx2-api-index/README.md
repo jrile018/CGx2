@@ -3,7 +3,7 @@
 This library indexes one checked `cgx2_syntax::Module`. Call
 `cgx2_sema::check_module(&module)` first, then
 `cgx2_api_index::build_index(&module, &typed)`. It returns an `ApiIndex` with
-`schema_version: 1` for legacy source or `2` when declarations/contracts are present, an optional dot-joined module name, and public source
+`schema_version: 1` for legacy source, `2` when declarations/contracts are present, or `3` when a foreign declaration exists, an optional dot-joined module name, and public source
 functions sorted by name and declaration byte span. `find(name)` matches an
 exact name and returns `None` for a missing public function. A missing module
 declaration is represented by `module: None`; it is distinct from a missing
@@ -23,6 +23,8 @@ For an imported package module, use `build_index_with_imports(&module, &typed,
 `check_module_with_imports`. It rechecks against that environment and keeps the
 per-module API schema at version 1 or 2. Package graph fields belong to
 `cgx2-package` schema version 2.
+
+A public `foreign python pub fn` entry in schema 3 carries `foreign.route`, `foreign.target`, `foreign.ownership`, and `foreign.runtime` alongside its scalar signature, `Foreign` effect, and `ForeignCall` capability. The route is Python-only and `runtime: "local:cpython"` records the linked local runtime identity; it is not a package-version pin. An ordinary public function has `foreign: null` in schema 3. See the runnable example in `cgx2-cli/README.md`.
 
 ## Schema versions
 

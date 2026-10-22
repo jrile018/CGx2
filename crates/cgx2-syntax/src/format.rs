@@ -32,6 +32,11 @@ pub fn format_module(module: &Module) -> String {
 }
 
 fn write_function(out: &mut String, function: &Function) {
+    if let Some(binding) = &function.foreign {
+        out.push_str("foreign ");
+        out.push_str(&binding.route);
+        out.push(' ');
+    }
     if function.public {
         out.push_str("pub ");
     }
@@ -69,6 +74,16 @@ fn write_function(out: &mut String, function: &Function) {
             );
             out.push(')');
         }
+    }
+    if let Some(binding) = &function.foreign {
+        out.push_str(" = ");
+        out.push_str(&binding.target.segments.join("."));
+        out.push_str(" runtime \"");
+        out.push_str(&binding.runtime);
+        out.push_str("\" ownership ");
+        out.push_str(&binding.ownership);
+        out.push('\n');
+        return;
     }
     out.push_str(":\n");
     for (label, contracts) in [
