@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "scope": "Wave 3 checked scalar CLI; six fixed pairs; process startup included in runtime samples",
+  "tasks": [
+    {"id": "precedence", "cgx2": "precedence.cg", "python": "precedence.py", "args": [], "oracle": {"stdout": "93\n", "exit_class": "success", "error_class": null}, "workload": "one fixed arithmetic expression"},
+    {"id": "calls", "cgx2": "calls.cg", "python": "calls.py", "args": [], "oracle": {"stdout": "101\n", "exit_class": "success", "error_class": null}, "workload": "two nested affine calls"},
+    {"id": "mutation", "cgx2": "mutation.cg", "python": "mutation.py", "args": [], "oracle": {"stdout": "70\n", "exit_class": "success", "error_class": null}, "workload": "two scalar accumulator updates"},
+    {"id": "argument_count", "cgx2": "argument_count.cg", "python": "argument_count.py", "args": ["red", "blue", "green"], "oracle": {"stdout": "22\n", "exit_class": "success", "error_class": null}, "workload": "three arguments and one affine call"},
+    {"id": "argument_text", "cgx2": "argument_text.cg", "python": "argument_text.py", "args": ["hello 世界"], "oracle": {"stdout": "hello 世界\n", "exit_class": "success", "error_class": null}, "workload": "one Unicode argument lookup"},
+    {"id": "overflow", "cgx2": "overflow.cg", "python": "overflow.py", "args": [], "oracle": {"stdout": "", "exit_class": "error", "error_class": "i64_overflow"}, "workload": "one checked i64 addition at the upper boundary"}
+  ]
+}

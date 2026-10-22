@@ -1,6 +1,24 @@
 # CGx2 baseline and pilot benchmark harness
 
-This is an on-demand, standard-library-only harness for calibrating tasks and measurement noise. It does not invoke a model, install dependencies, implement CGx2, or make a release judgment. The public fixtures are synthetic or harness-only and are **not evidence of a CGx2 result**.
+This is an on-demand, standard-library-only harness for calibrating tasks and measurement noise. It does not invoke a model, install dependencies, implement CGx2, or make a release judgment. The older smoke and sample-result fixtures are synthetic or harness-only and are **not evidence of a CGx2 result**. The Wave 4 pilot below records real CLI invocations but is too narrow for a release claim.
+
+## Wave 4 executable scalar pilot
+
+The versioned [six-pair corpus](fixtures/pilot/v1/manifest.json) runs against the Wave 3 checked scalar CLI and Python. It covers fixed arithmetic, nested calls, mutation, argument count, a Unicode argument, and checked i64 overflow. The `.cg` and `.py` sources are frozen public fixtures, each with an independent expected stdout and success/error class. Overflow requires `CGR005` from CGx2 and `PILOT_I64_OVERFLOW` from Python. This corpus uses no loops, arrays, FFI, memory operations, notebooks, or Python libraries beyond `sys`. The Python overflow case explicitly checks its result because Python integers do not overflow at i64 boundaries.
+
+From the repository root:
+
+```sh
+python3 -m unittest discover -s bench/tests
+python3 bench/pilot.py parity --build
+python3 bench/pilot.py runtime --cgx2 target/debug/cgx2 --warmups 2 --repetitions 10
+```
+
+`--build` runs `cargo build --offline -p cgx2-cli` before measurement and records its separate wall time. `--cgx2 PATH` uses an existing executable. `--python PATH` selects the interpreter; the default is the interpreter running `pilot.py`. Both modes accept `--manifest PATH`, `--timeout SECONDS` (default 5), and `--out-dir PATH`. The runtime mode also accepts `--warmups N` (default 2, minimum 1) and `--repetitions N` (default 10, minimum 10). The default output is a new unique directory under `/tmp`; an explicit output directory must not exist. Parity writes `parity.json`, and runtime writes `runtime.json` with its own full parity preflight. A failed preflight prevents timing, exits nonzero, and remains in the JSON. Failures during timing retain their raw samples and invalidate the summary. A missing executable, check failure, timeout, wrong stdout, wrong error class, or unexpected stderr is explicit.
+
+The output records every source and executable SHA-256, host, CPU, compiler and interpreter versions, arguments, workload description, check and run status, exact deterministic stdout comparison, stderr diagnostic excerpt, and per-process wall time. Runtime records order and phase for every sample, alternates which language starts each pair, and excludes warmups from median and interquartile range. The metric is **fresh subprocess wall time**, including interpreter/CLI startup and excluding the separately measured build. The first parity invocation is recorded but is not a controlled cold-start benchmark. These tiny tasks are dominated by startup and cannot establish native CGx2 runtime performance. A future native benchmark needs behaviorally equivalent long-running or in-process workloads, pinned CPU affinity and thread counts, repeated independent processes, and separate cold/warm reporting. Do not quote a ratio without the JSON raw samples and validity fields.
+
+The `utf8_bytes`, `characters`, `lines`, and `lexical_tokens_descriptive` fields describe source length. Lexical tokens are **not model tokens**. To pilot LLM repair quality with the existing `runner.py`, independently review six equivalent task descriptions and acceptance tests, then create one `task.schema.json` manifest per task, language, model version, and seed. Pin identical task prompts, allowed tools, documentation budget, model versions, seeds, dependency locks, time budgets, and randomized task order. Keep hidden acceptance tests outside each model workspace. Record real `trace_path` JSON fields `output_tokens`, `total_tokens`, `iterations`, and `human_interventions`; preserve each failure and its budget charge. Do not infer these fields from source length or invoke a model from this pilot. Six public scalar pairs are a tooling check and noise sample, not a fresh holdout or evidence for first-release LLM productivity.
 
 ## Run the public smoke checks
 
