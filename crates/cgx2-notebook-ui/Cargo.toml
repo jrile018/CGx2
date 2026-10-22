@@ -1,0 +1,15 @@
+[package]
+name = "cgx2-notebook-ui"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "cgx2-notebook-ui"
+path = "src/main.rs"
+
+[dependencies]
+cgx2-notebook-format = { path = "../cgx2-notebook-format" }
+cgx2-notebook-kernel = { path = "../cgx2-notebook-kernel" }
+cgx2-notebook-session = { path = "../cgx2-notebook-session" }
+getrandom = "=0.2.17"
+serde_json = "=1.0.149"
