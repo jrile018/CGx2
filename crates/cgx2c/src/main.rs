@@ -18,6 +18,23 @@ const USAGE: &str = "usage: cgx2c build FILE.cg --out BINARY [--release] [--forc
 const MAX_SOURCE: u64 = 4 * 1024 * 1024;
 const MAX_GENERATED: usize = 32 * 1024 * 1024;
 const MAX_STDERR: usize = 8 * 1024;
+const RUNTIME_SOURCES: [(&str, &str); 6] = [
+    ("lib.rs", include_str!("../../cgx2-runtime/src/lib.rs")),
+    (
+        "budget.rs",
+        include_str!("../../cgx2-runtime/src/budget.rs"),
+    ),
+    ("heap.rs", include_str!("../../cgx2-runtime/src/heap.rs")),
+    ("owned.rs", include_str!("../../cgx2-runtime/src/owned.rs")),
+    (
+        "region.rs",
+        include_str!("../../cgx2-runtime/src/region.rs"),
+    ),
+    (
+        "report.rs",
+        include_str!("../../cgx2-runtime/src/report.rs"),
+    ),
+];
 static NEXT_DIR: AtomicU64 = AtomicU64::new(0);
 
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -149,7 +166,11 @@ fn run(args: Vec<OsString>) -> Result<(), CliError> {
     }
     let binary_path = temporary.path.join("program");
     let runtime = if needs_runtime {
-        Some(compile_runtime(&options.rustc, &temporary.path)?)
+        Some(compile_runtime(
+            &options.rustc,
+            &temporary.path,
+            options.release,
+        )?)
     } else {
         None
     };
@@ -158,7 +179,7 @@ fn run(args: Vec<OsString>) -> Result<(), CliError> {
         &generated_path,
         &binary_path,
         options.release,
-        runtime.as_deref(),
+        runtime.as_ref().map(|(path, _)| path.as_path()),
     )?;
     let built = fs::metadata(&binary_path)
         .map_err(|e| CliError::new("CGXC005", format!("rustc succeeded without a binary: {e}")))?;
@@ -174,11 +195,12 @@ fn run(args: Vec<OsString>) -> Result<(), CliError> {
     let (toolchain, target) = rustc_version(&options.rustc);
     let hash = Sha256::digest(source.as_bytes());
     println!(
-        "cgx2c build metadata: source_sha256={hash:x} rustc={} toolchain={} target={} profile={} output={}",
+        "cgx2c build metadata: source_sha256={hash:x} rustc={} toolchain={} target={} profile={} runtime_sha256={} output={}",
         options.rustc.to_string_lossy(),
         toolchain,
         target,
         if options.release { "release" } else { "debug" },
+        runtime.as_ref().map_or("none", |(_, hash)| hash.as_str()),
         options.output.display()
     );
     Ok(())
@@ -446,30 +468,51 @@ impl Drop for PrivateDir {
     }
 }
 
-fn compile_runtime(rustc: &OsString, staging: &Path) -> Result<PathBuf, CliError> {
-    let source = Path::new(env!("CARGO_MANIFEST_DIR")).join("../cgx2-runtime/src/lib.rs");
+fn compile_runtime(
+    rustc: &OsString,
+    staging: &Path,
+    release: bool,
+) -> Result<(PathBuf, String), CliError> {
+    let source_dir = staging.join("runtime-src");
+    fs::create_dir(&source_dir).map_err(|e| {
+        CliError::new(
+            "CGXC006",
+            format!("cannot stage embedded cgx2-runtime: {e}"),
+        )
+    })?;
+    let mut hasher = Sha256::new();
+    for (name, contents) in RUNTIME_SOURCES {
+        hasher.update(name.as_bytes());
+        hasher.update([0]);
+        hasher.update(contents.as_bytes());
+        hasher.update([0]);
+        fs::write(source_dir.join(name), contents).map_err(|e| {
+            CliError::new(
+                "CGXC006",
+                format!("cannot stage embedded cgx2-runtime: {e}"),
+            )
+        })?;
+    }
+    let hash = format!("{:x}", hasher.finalize());
+    let source = source_dir.join("lib.rs");
     let output = staging.join("libcgx2_runtime.rlib");
-    let result = Command::new(rustc)
+    let mut command = Command::new(rustc);
+    command
         .arg("--edition=2021")
         .arg("--crate-name")
         .arg("cgx2_runtime")
         .arg("--crate-type=lib")
         .arg(&source)
+        .arg("-C")
+        .arg(if release {
+            "opt-level=3"
+        } else {
+            "opt-level=0"
+        })
         .arg("-o")
-        .arg(&output)
-        .output()
-        .map_err(|e| CliError::new("CGXC005", format!("cannot compile local cgx2-runtime: {e}")))?;
-    if !result.status.success() {
-        let message = String::from_utf8_lossy(&result.stderr);
-        return Err(CliError::new(
-            "CGXC005",
-            format!(
-                "local cgx2-runtime compilation failed: {}",
-                message.chars().take(MAX_STDERR).collect::<String>()
-            ),
-        ));
-    }
-    Ok(output)
+        .arg(&output);
+    run_rustc(command)?;
+    Ok((output, hash))
 }
 
 fn compile(
@@ -490,9 +533,15 @@ fn compile(
             .arg("--extern")
             .arg(format!("cgx2_runtime={}", runtime.display()));
     }
-    if release {
-        command.arg("-O");
-    }
+    command.arg("-C").arg(if release {
+        "opt-level=3"
+    } else {
+        "opt-level=0"
+    });
+    run_rustc(command)
+}
+
+fn run_rustc(mut command: Command) -> Result<(), CliError> {
     let mut child = command
         .stdout(Stdio::null())
         .stderr(Stdio::piped())

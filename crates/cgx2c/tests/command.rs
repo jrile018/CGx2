@@ -49,6 +49,149 @@ fn stderr(output: &Output) -> String {
     String::from_utf8_lossy(&output.stderr).into_owned()
 }
 
+fn copy_tree(source: &Path, destination: &Path) {
+    fs::create_dir(destination).unwrap();
+    for entry in fs::read_dir(source).unwrap() {
+        let entry = entry.unwrap();
+        let target = destination.join(entry.file_name());
+        if entry.file_type().unwrap().is_dir() {
+            copy_tree(&entry.path(), &target);
+        } else {
+            fs::copy(entry.path(), target).unwrap();
+        }
+    }
+}
+
+#[test]
+fn moved_compiler_builds_memory_without_its_source_checkout() {
+    let case = Case::new();
+    let workspace = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .parent()
+        .unwrap()
+        .parent()
+        .unwrap();
+    let checkout = case.0.join("disposable checkout");
+    fs::create_dir(&checkout).unwrap();
+    for file in ["Cargo.toml", "Cargo.lock"] {
+        fs::copy(workspace.join(file), checkout.join(file)).unwrap();
+    }
+    copy_tree(&workspace.join("crates"), &checkout.join("crates"));
+    let built = Command::new("cargo")
+        .args(["build", "-p", "cgx2c", "--offline", "--manifest-path"])
+        .arg(checkout.join("Cargo.toml"))
+        .arg("--target-dir")
+        .arg(case.0.join("target"))
+        .output()
+        .unwrap();
+    assert!(built.status.success(), "{}", stderr(&built));
+    let installed = case.0.join("installed cgx2c");
+    fs::copy(case.0.join("target/debug/cgx2c"), &installed).unwrap();
+    fs::remove_dir_all(checkout).unwrap();
+
+    let source = case.source(
+        "memory.cg",
+        include_str!("../../cgx2-cli/tests/fixtures/memory.cg"),
+    );
+    let binary = case.0.join("memory program");
+    let result = Command::new(installed)
+        .args(["build", str_path(&source), "--out", str_path(&binary)])
+        .output()
+        .unwrap();
+    assert!(result.status.success(), "{}", stderr(&result));
+    let execution = Command::new(binary).output().unwrap();
+    assert!(execution.status.success(), "{}", stderr(&execution));
+}
+
+#[cfg(unix)]
+#[test]
+fn memory_runtime_and_program_use_requested_profile_and_match_cli() {
+    use std::os::unix::fs::PermissionsExt;
+
+    let case = Case::new();
+    let wrapper = case.0.join("logged rustc");
+    fs::write(
+        &wrapper,
+        "#!/bin/sh\n{ printf 'BEGIN\\n'; printf '%s\\n' \"$@\"; printf 'END\\n'; } >> \"$CGX2C_ARG_LOG\"\nexec rustc \"$@\"\n",
+    )
+    .unwrap();
+    fs::set_permissions(&wrapper, fs::Permissions::from_mode(0o700)).unwrap();
+
+    let fixtures = [
+        (
+            "manual.cg",
+            "let r = memory.region(mode: manual, limit: 1048640)\nlet x = memory.alloc_bytes(r, 1048576)\nmemory.drop(x)\nmemory.collect(r)\nlet y = memory.alloc_bytes(r, 1048576)\nmemory.use(y)\n",
+            true,
+        ),
+        (
+            "no_gc.cg",
+            "let r = memory.region(mode: manual, limit: 256)\nno_gc(budget: 95):\n    let x = memory.alloc_bytes(r, 32)\n",
+            false,
+        ),
+    ];
+    let mut identities = Vec::new();
+    for release in [false, true] {
+        for (name, text, succeeds) in fixtures {
+            let source = case.source(name, text);
+            let binary = case.0.join(format!("{name}-{release}"));
+            let log = case.0.join(format!("args-{name}-{release}"));
+            let mut command = Command::new(env!("CARGO_BIN_EXE_cgx2c"));
+            command
+                .args([
+                    "build",
+                    str_path(&source),
+                    "--out",
+                    str_path(&binary),
+                    "--rustc",
+                    str_path(&wrapper),
+                ])
+                .env("CGX2C_ARG_LOG", &log);
+            if release {
+                command.arg("--release");
+            }
+            let built = command.output().unwrap();
+            assert!(built.status.success(), "{}", stderr(&built));
+            let receipt = String::from_utf8(built.stdout).unwrap();
+            let identity = receipt
+                .split_whitespace()
+                .find_map(|part| part.strip_prefix("runtime_sha256="))
+                .unwrap();
+            assert_eq!(identity.len(), 64);
+            identities.push(identity.to_owned());
+
+            let arguments = fs::read_to_string(log).unwrap();
+            let invocations: Vec<_> = arguments.split("BEGIN\n").skip(1).collect();
+            assert_eq!(invocations.len(), 3, "{arguments}");
+            let optimization = if release {
+                "opt-level=3"
+            } else {
+                "opt-level=0"
+            };
+            assert!(invocations[0].contains("cgx2_runtime\n"), "{arguments}");
+            assert!(
+                invocations[0].contains(&format!("-C\n{optimization}\n")),
+                "{arguments}"
+            );
+            assert!(invocations[1].contains("generated.rs\n"), "{arguments}");
+            assert!(
+                invocations[1].contains(&format!("-C\n{optimization}\n")),
+                "{arguments}"
+            );
+
+            let cli = run_checked_source(text, &[]);
+            let native = Command::new(binary).output().unwrap();
+            assert_eq!(cli.is_ok(), succeeds);
+            assert_eq!(native.status.success(), succeeds, "{}", stderr(&native));
+            assert!(native.stdout.is_empty());
+            if succeeds {
+                assert!(native.stderr.is_empty());
+            } else {
+                assert!(stderr(&native).contains(&cli.unwrap_err()[0].message));
+            }
+        }
+    }
+    assert!(identities.iter().all(|identity| identity == &identities[0]));
+}
+
 #[test]
 fn parsing_and_artifact_errors_are_distinct() {
     let case = Case::new();
