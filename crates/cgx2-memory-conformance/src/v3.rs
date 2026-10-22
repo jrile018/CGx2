@@ -799,6 +799,7 @@ fn execute(
     model: &mut Model,
     ops: &[Op],
     base: usize,
+    observe: &mut dyn FnMut(&Op, &str),
 ) -> Result<(), String> {
     let mut index = 0;
     while index < ops.len() {
@@ -821,17 +822,20 @@ fn execute(
             model.apply(op);
             compare(&guard, actual, model)
                 .map_err(|e| format!("step {} {op:?}: {e}", base + index))?;
+            observe(op, "Ok");
             execute(
                 &mut guard,
                 actual,
                 model,
                 &ops[index + 1..end - 1],
                 base + index + 1,
+                observe,
             )?;
             drop(guard);
             model.apply(&Op::GuardEnd);
             compare(session, actual, model)
                 .map_err(|e| format!("step {} GuardEnd: {e}", base + end - 1))?;
+            observe(&Op::GuardEnd, "Ok");
             index = end;
             continue;
         }
@@ -848,16 +852,27 @@ fn execute(
         }
         compare(session, actual, model)
             .map_err(|e| format!("step {} {op:?}: {e}", base + index))?;
+        observe(op, &expected);
         index += 1;
     }
     Ok(())
 }
 
 pub fn run_trace(trace: &[Op], fault: Fault) -> Result<(), String> {
+    run_trace_observed(trace, fault, &mut |_, _| {})
+}
+
+/// Runs the same v3 transition model while reporting each verified step.
+/// An observer never receives a step whose result or counters mismatched.
+pub fn run_trace_observed(
+    trace: &[Op],
+    fault: Fault,
+    observe: &mut dyn FnMut(&Op, &str),
+) -> Result<(), String> {
     let mut session = Session::new();
     let mut actual = Actual::new(&session);
     let mut model = Model::new(fault);
-    execute(&mut session, &mut actual, &mut model, trace, 0)
+    execute(&mut session, &mut actual, &mut model, trace, 0, observe)
 }
 pub fn run(seed: u64, fault: Fault) -> Result<(), String> {
     let trace = generate(seed);

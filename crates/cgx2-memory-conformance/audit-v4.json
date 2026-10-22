@@ -1,0 +1,218 @@
+{
+  "audit_date": "2026-10-22",
+  "commands": {
+    "clippy": "cargo clippy -p cgx2-runtime -p cgx2-memory-conformance --all-targets --offline -- -D warnings",
+    "extended": "cargo run -q -p cgx2-memory-conformance --offline -- --model-version 4 --corpus-count 10000",
+    "fixed": "cargo run -q -p cgx2-memory-conformance --offline -- --model-version 4 --corpus-count 2000",
+    "format": "cargo fmt --all --check",
+    "replay": "cargo run -q -p cgx2-memory-conformance --offline -- --model-version 4 --seed 42",
+    "tests": "cargo test -p cgx2-runtime -p cgx2-memory-conformance --offline"
+  },
+  "execution_limits": {
+    "note": "wall and CPU times are observed measurements, not an enforced timeout",
+    "trace_step_limit": 128,
+    "wall_timeout_enforced": false
+  },
+  "extended": {
+    "coverage": {
+      "families": {
+        "auto_after_guard": 10000,
+        "close_recreate_isolation": 10000,
+        "close_with_roots": 10000,
+        "cross_region_link": 10000,
+        "failed_move_keeps_owner": 10000,
+        "independent_copy": 10000,
+        "nested_guard_failure": 10000,
+        "roots_through_links": 10000,
+        "stale_after_slot_reuse": 10000,
+        "wrong_session_handle": 10000,
+        "wrong_session_region": 10000,
+        "zero_length_region_limit": 10000
+      },
+      "model_version": 4,
+      "operations": {
+        "Alloc": 202728,
+        "Close": 64325,
+        "Collect": 117758,
+        "Copy": 64315,
+        "Create": 40000,
+        "ForeignRead": 44119,
+        "ForeignRegionAlloc": 67986,
+        "GuardEnd": 67535,
+        "GuardStart": 67535,
+        "Link": 88370,
+        "MutateOwned": 54333,
+        "Owned": 54208,
+        "Promote": 64441,
+        "Read": 133916,
+        "Root": 64676,
+        "Unroot": 74096
+      },
+      "outcomes": {
+        "Err(Allocation(BudgetExceeded))": 831,
+        "Err(BudgetExceeded)": 57060,
+        "Err(CollectionForbidden)": 54218,
+        "Err(CrossRegionEdge)": 10086,
+        "Err(InvalidHandle)": 300669,
+        "Err(InvalidRegion)": 195395,
+        "Err(NotRooted)": 11810,
+        "Err(RegionHasRoots)": 10934,
+        "Err(RegionLimit)": 10002,
+        "Ok": 533973,
+        "Ok(bytes)": 41981,
+        "Skipped": 43382
+      },
+      "schema_version": 1,
+      "seeds": 10000,
+      "skipped": 43382,
+      "skipped_by_operation": {
+        "Copy": 10000,
+        "MutateOwned": 16669,
+        "Promote": 16713
+      },
+      "steps": 1270341
+    },
+    "observed_failures": 0,
+    "passes": 1,
+    "seed_range": [
+      0,
+      9999
+    ],
+    "timing": {
+      "cpu_system_seconds": 0.0,
+      "cpu_user_seconds": 1.79,
+      "max_rss_kib": 27500,
+      "wall_seconds": 1.79
+    }
+  },
+  "fixed": {
+    "byte_identical_summaries": true,
+    "coverage": {
+      "families": {
+        "auto_after_guard": 2000,
+        "close_recreate_isolation": 2000,
+        "close_with_roots": 2000,
+        "cross_region_link": 2000,
+        "failed_move_keeps_owner": 2000,
+        "independent_copy": 2000,
+        "nested_guard_failure": 2000,
+        "roots_through_links": 2000,
+        "stale_after_slot_reuse": 2000,
+        "wrong_session_handle": 2000,
+        "wrong_session_region": 2000,
+        "zero_length_region_limit": 2000
+      },
+      "model_version": 4,
+      "operations": {
+        "Alloc": 40238,
+        "Close": 12883,
+        "Collect": 23624,
+        "Copy": 12725,
+        "Create": 8000,
+        "ForeignRead": 8854,
+        "ForeignRegionAlloc": 13649,
+        "GuardEnd": 13495,
+        "GuardStart": 13495,
+        "Link": 17470,
+        "MutateOwned": 10937,
+        "Owned": 10896,
+        "Promote": 12925,
+        "Read": 26997,
+        "Root": 12963,
+        "Unroot": 14920
+      },
+      "outcomes": {
+        "Err(Allocation(BudgetExceeded))": 153,
+        "Err(BudgetExceeded)": 11247,
+        "Err(CollectionForbidden)": 10821,
+        "Err(CrossRegionEdge)": 2017,
+        "Err(InvalidHandle)": 60255,
+        "Err(InvalidRegion)": 39190,
+        "Err(NotRooted)": 2325,
+        "Err(RegionHasRoots)": 2168,
+        "Err(RegionLimit)": 2000,
+        "Ok": 106736,
+        "Ok(bytes)": 8386,
+        "Skipped": 8773
+      },
+      "schema_version": 1,
+      "seeds": 2000,
+      "skipped": 8773,
+      "skipped_by_operation": {
+        "Copy": 2000,
+        "MutateOwned": 3391,
+        "Promote": 3382
+      },
+      "steps": 254071
+    },
+    "observed_failures": 0,
+    "passes": 2,
+    "seed_range": [
+      0,
+      1999
+    ],
+    "timing": [
+      {
+        "cpu_system_seconds": 0.0,
+        "cpu_user_seconds": 0.36,
+        "max_rss_kib": 28160,
+        "wall_seconds": 0.36
+      },
+      {
+        "cpu_system_seconds": 0.0,
+        "cpu_user_seconds": 0.35,
+        "max_rss_kib": 27344,
+        "wall_seconds": 0.36
+      }
+    ]
+  },
+  "host": {
+    "architecture": "x86_64",
+    "cpu": "AMD Ryzen 7 9800X3D 8-Core Processor",
+    "logical_cpus": 16
+  },
+  "legacy_replay_seeds": {
+    "v1": 128,
+    "v2": 256,
+    "v3": 1000
+  },
+  "limits": {
+    "nested_guards": 2,
+    "operations_per_trace": 128,
+    "payload_bytes": 64,
+    "regions_per_trace": 4,
+    "retained_handles_and_owned_values": 128
+  },
+  "miri": {
+    "reason": "the stable and installed nightly toolchains do not have the miri component",
+    "status": "not_run"
+  },
+  "model_version": 4,
+  "open_hard_gates": [
+    "finite safe-Rust byte-object traces cannot prove all safe CGx2 memory access",
+    "source-level ownership/escape and typed native codegen remain outside this corpus",
+    "foreign memory is neither allocated nor charged by this runtime corpus",
+    "Miri/sanitizer and host-allocation-failure coverage remain unmeasured"
+  ],
+  "runtime_defects_found": [],
+  "runtime_regression_tests": [
+    "unwinding_nested_guards_does_not_collect_or_leave_a_budget_active",
+    "closed_region_id_and_handles_remain_stale_after_new_region_is_created"
+  ],
+  "runtime_repairs": [],
+  "sanitizers": {
+    "reason": "no sanitizer-instrumented runtime or sanitizer test setup was already installed in this workspace",
+    "status": "not_run"
+  },
+  "schema_version": 1,
+  "toolchain": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "untested_state_dimensions": [
+    "more than 4 regions, 128 operations, 128 retained handles/owned values, 64-byte payloads, or 2 nested guards",
+    "arbitrary typed object layouts and generated native managed-memory code",
+    "concurrent sessions and shared-session thread safety",
+    "source-level borrow/escape checking and notebook cell reruns",
+    "foreign Python/PyTorch/C/device memory and their collectors",
+    "host allocator fault injection and OS-level memory pressure",
+    "pause duration and histogram determinism"
+  ]
+}
