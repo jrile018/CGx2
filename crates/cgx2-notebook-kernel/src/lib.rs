@@ -1,9 +1,10 @@
 //! Checked, bounded retained-state execution of pure scalar CGx2 cells.
+mod project;
 
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
 use std::io::{Read, Write};
-use std::path::PathBuf;
+use std::path::{Path as FsPath, PathBuf};
 use std::process::{Command, Stdio};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
@@ -17,6 +18,7 @@ use cgx2_notebook_session::{
     CellExecutor, CellFacts, CellResult, CellStatus, NotebookSession, SessionError,
 };
 use cgx2_syntax::{parse_module, Expr, ExprKind, Function, Path, StmtKind};
+use project::Project;
 
 pub const MAX_CODE_CELLS: usize = 128;
 pub const MAX_SOURCE_BYTES: usize = 64 * 1024;
@@ -298,14 +300,27 @@ pub struct NotebookKernel {
 
 impl NotebookKernel {
     pub fn open(notebook: Notebook) -> Result<Self, KernelError> {
+        Self::open_with_project(notebook, None)
+    }
+
+    /// Open with an explicit local project root. The package checker remains the
+    /// source of truth; execution uses only a narrowed notebook scalar lowering.
+    pub fn open_with_project(
+        notebook: Notebook,
+        root: Option<&FsPath>,
+    ) -> Result<Self, KernelError> {
         validate_limits(&notebook)?;
+        let project = root
+            .map(Project::load)
+            .transpose()
+            .map_err(|message| error("CGNK012", message))?;
         let code_order = notebook
             .cells
             .iter()
             .filter(|cell| cell.kind == CellKind::Code)
             .map(|cell| cell.id.clone())
             .collect();
-        let session = new_session(notebook)?;
+        let session = new_session(notebook, project)?;
         Ok(Self {
             session,
             code_order,
@@ -425,7 +440,8 @@ impl NotebookKernel {
         cell.source = source.clone();
         validate_limits(&proposed)?;
         let known_functions = known_functions_before(&proposed, id);
-        let _ = new_session(proposed)?;
+        let project = self.session.executor_mut().project.clone();
+        let validated = new_session(proposed, project)?;
         self.session
             .replace_cell(
                 id,
@@ -433,6 +449,8 @@ impl NotebookKernel {
                 facts_or_opaque(&source, &known_functions, false),
             )
             .map_err(session_error)?;
+        self.session
+            .replace_package_provenance(validated.package_provenance().clone());
         self.requires_restart = true;
         Ok(())
     }
@@ -491,9 +509,14 @@ fn validate_limits(notebook: &Notebook) -> Result<(), KernelError> {
     Ok(())
 }
 
-fn new_session(notebook: Notebook) -> Result<NotebookSession<RetainedExecutor>, KernelError> {
+fn new_session(
+    notebook: Notebook,
+    project: Option<Project>,
+) -> Result<NotebookSession<RetainedExecutor>, KernelError> {
     let mut facts = BTreeMap::new();
     let mut known_functions = BTreeSet::new();
+    let mut imported = BTreeMap::<String, String>::new();
+    let mut package_provenance = BTreeMap::new();
     for cell in notebook
         .cells
         .iter()
@@ -509,12 +532,80 @@ fn new_session(notebook: Notebook) -> Result<NotebookSession<RetainedExecutor>, 
         });
         let cell_facts = facts_or_opaque(&cell.source, &known_functions, safe_unresolved_call);
         if let Ok(module) = parse_module(&cell.source) {
+            if module.name.is_some() {
+                return Err(error(
+                    "CGNK012",
+                    format!("cell {} cannot declare a module", cell.id),
+                ));
+            }
+            if !module.imports.is_empty() && project.is_none() {
+                return Err(error(
+                    "CGNK012",
+                    format!("cell {} import requires --project ROOT", cell.id),
+                ));
+            }
+            if let Some(project) = &project {
+                if cell.source.contains("__cgx2_pkg") {
+                    return Err(error(
+                        "CGNK012",
+                        format!("cell {} uses reserved package symbol prefix", cell.id),
+                    ));
+                }
+                let mut used = BTreeSet::new();
+                for read in &cell_facts.reads {
+                    if let Some(name) = imported.get(read) {
+                        used.insert(name.clone());
+                    }
+                }
+                if !module.imports.is_empty()
+                    && (!module.statements.is_empty() || !module.functions.is_empty())
+                {
+                    return Err(error(
+                        "CGNK012",
+                        format!("cell {}: imports must occupy their own code cell", cell.id),
+                    ));
+                }
+                project
+                    .lower_cell(&cell.source, &module, &imported)
+                    .map_err(|message| error("CGNK012", format!("cell {}: {message}", cell.id)))?;
+                for path in &module.imports {
+                    let (short, full) = project.resolve_import(path).map_err(|message| {
+                        error("CGNK012", format!("cell {}: {message}", cell.id))
+                    })?;
+                    if imported.contains_key(&short) {
+                        return Err(error(
+                            "CGNK012",
+                            format!(
+                                "cell {}: duplicate module short name {short} at {}..{}",
+                                cell.id, path.span.start, path.span.end
+                            ),
+                        ));
+                    }
+                    imported.insert(short, full.clone());
+                    used.insert(full);
+                }
+                project
+                    .functions_for(&imported)
+                    .map_err(|message| error("CGNK012", format!("cell {}: {message}", cell.id)))?;
+                if let Some(provenance) = project
+                    .provenance(&used)
+                    .map_err(|message| error("CGNK012", message))?
+                {
+                    package_provenance.insert(cell.id.clone(), provenance);
+                }
+            }
             if !cell_facts.opaque_effects {
                 known_functions.extend(
                     module
                         .functions
                         .iter()
                         .map(|function| function.name.clone()),
+                );
+                known_functions.extend(
+                    module
+                        .imports
+                        .iter()
+                        .filter_map(|path| path.segments.last().cloned()),
                 );
             }
         }
@@ -549,9 +640,11 @@ fn new_session(notebook: Notebook) -> Result<NotebookSession<RetainedExecutor>, 
         .collect();
     let executor = RetainedExecutor {
         order,
+        project,
         ..RetainedExecutor::default()
     };
-    NotebookSession::new(notebook, facts, executor).map_err(session_error)
+    NotebookSession::new_with_packages(notebook, facts, executor, package_provenance)
+        .map_err(session_error)
 }
 
 fn known_functions_before(notebook: &Notebook, id: &str) -> BTreeSet<String> {
@@ -568,6 +661,12 @@ fn known_functions_before(notebook: &Notebook, id: &str) -> BTreeSet<String> {
                     .functions
                     .iter()
                     .map(|function| function.name.clone()),
+            );
+            known.extend(
+                module
+                    .imports
+                    .iter()
+                    .filter_map(|path| path.segments.last().cloned()),
             );
         }
     }
@@ -623,7 +722,7 @@ fn collect_call_names(expression: &Expr, names: &mut BTreeSet<String>) {
         }
         ExprKind::Call { callee, arguments } => {
             if let ExprKind::Name(path) = &callee.kind {
-                if let Ok(name) = simple_name(path) {
+                if let Some(name) = path.segments.first() {
                     if !name.starts_with("$cgx2_cmp_") {
                         names.insert(name.to_owned());
                     }
@@ -643,13 +742,31 @@ pub fn facts_for_source(source: &str) -> Result<CellFacts, KernelError> {
         let first = &diagnostics[0];
         error("CGNK008", format!("{}: {}", first.code, first.message))
     })?;
-    if module.name.is_some() || !module.imports.is_empty() {
+    if module.name.is_some() {
         return Err(error(
             "CGNK001",
-            "module declarations and imports are unsupported in notebook execution",
+            "module declarations are unsupported in notebook execution",
         ));
     }
     let mut facts = CellFacts::default();
+    if !module.imports.is_empty() {
+        if !module.functions.is_empty() || !module.statements.is_empty() {
+            return Err(error("CGNK012", "imports must occupy their own code cell"));
+        }
+        for path in &module.imports {
+            let short = path
+                .segments
+                .last()
+                .ok_or_else(|| error("CGNK012", "empty import"))?;
+            if !facts.defines.insert(short.clone()) {
+                return Err(error(
+                    "CGNK012",
+                    format!("duplicate module short name {short}"),
+                ));
+            }
+        }
+        return Ok(facts);
+    }
     if !module.functions.is_empty() {
         if module.functions.len() > MAX_PURE_FUNCTIONS {
             return Err(error("CGNK006", "too many pure functions in one cell"));
@@ -794,7 +911,10 @@ fn collect_expression(
                     "computed calls are unsupported in pure notebook cells",
                 ));
             };
-            let name = simple_name(path)?;
+            let name = match path.segments.as_slice() {
+                [short, _function] => short.as_str(),
+                _ => simple_name(path)?,
+            };
             if matches!(name, "arg" | "arg_count") {
                 return Err(error(
                     "CGNK011",
@@ -981,10 +1101,18 @@ struct RetainedFunction {
     cell_id: String,
 }
 
+#[derive(Debug, Clone)]
+struct RetainedImport {
+    module: String,
+    cell_id: String,
+}
+
 #[derive(Debug, Default)]
 struct RetainedExecutor {
     bindings: BTreeMap<String, Vec<RetainedBinding>>,
     functions: BTreeMap<String, RetainedFunction>,
+    imports: BTreeMap<String, RetainedImport>,
+    project: Option<Project>,
     order: BTreeMap<String, usize>,
     evaluation_bytes: usize,
     control: Option<ExecutionControl>,
@@ -1004,7 +1132,18 @@ impl RetainedExecutor {
             .filter(|function| self.order[&function.cell_id] < selected_index)
             .collect();
         retained.sort_by_key(|function| self.order[&function.cell_id]);
-        let mut result = String::new();
+        let mut result = if let Some(project) = &self.project {
+            project.functions_for(
+                &self
+                    .imports
+                    .iter()
+                    .filter(|(_, binding)| self.order[&binding.cell_id] < selected_index)
+                    .map(|(short, binding)| (short.clone(), binding.module.clone()))
+                    .collect(),
+            )?
+        } else {
+            String::new()
+        };
         for function in retained {
             result.push_str(&function.source);
             result.push('\n');
@@ -1056,6 +1195,53 @@ impl RetainedExecutor {
     }
 
     fn execute_named(&mut self, id: &str, source: &str) -> Result<CellResult, String> {
+        let Some(project) = &self.project else {
+            return self.execute_pure_named(id, source);
+        };
+        project.verify_unchanged()?;
+        facts_for_source(source).map_err(|error| error.to_string())?;
+        let module = parse_module(source).map_err(|diagnostics| {
+            let first = &diagnostics[0];
+            format!(
+                "{}: {} at {}..{}",
+                first.code, first.message, first.span.start, first.span.end
+            )
+        })?;
+        let selected_index = self.order.get(id).copied().unwrap_or(usize::MAX);
+        let mut imported: BTreeMap<String, String> = self
+            .imports
+            .iter()
+            .filter(|(_, binding)| self.order[&binding.cell_id] < selected_index)
+            .map(|(short, binding)| (short.clone(), binding.module.clone()))
+            .collect();
+        if !module.imports.is_empty() {
+            for path in &module.imports {
+                let (short, full) = project.resolve_import(path)?;
+                if imported.insert(short.clone(), full.clone()).is_some() {
+                    return Err(format!(
+                        "CGNK012: duplicate module short name {short} at {}..{}",
+                        path.span.start, path.span.end
+                    ));
+                }
+            }
+            project.functions_for(&imported)?;
+            for path in &module.imports {
+                let (short, full) = project.resolve_import(path)?;
+                self.imports.insert(
+                    short,
+                    RetainedImport {
+                        module: full,
+                        cell_id: id.to_owned(),
+                    },
+                );
+            }
+            return Ok(CellResult { text: None });
+        }
+        let lowered = project.lower_cell(source, &module, &imported)?;
+        self.execute_pure_named(id, &lowered)
+    }
+
+    fn execute_pure_named(&mut self, id: &str, source: &str) -> Result<CellResult, String> {
         let deadline = self
             .control
             .as_ref()
@@ -1374,11 +1560,14 @@ impl CellExecutor for RetainedExecutor {
         });
         self.functions
             .retain(|_, function| !invalidated.contains(&function.cell_id));
+        self.imports
+            .retain(|_, binding| !invalidated.contains(&binding.cell_id));
     }
 
     fn reset(&mut self) -> Result<(), String> {
         self.bindings.clear();
         self.functions.clear();
+        self.imports.clear();
         self.evaluation_bytes = 0;
         Ok(())
     }

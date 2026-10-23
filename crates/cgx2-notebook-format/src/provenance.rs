@@ -46,6 +46,7 @@ pub fn make_provenance(
         ordinal,
         output_ordinal,
         result: ProvenanceResult::Success,
+        package: None,
         stale: false,
     }
 }
@@ -70,6 +71,18 @@ pub(crate) fn validate_provenance(cell: &Cell) -> Result<(), NotebookError> {
             }
         })
         || (cell.outputs.is_empty() != provenance.output_ordinal.is_none())
+        || provenance.package.as_ref().is_some_and(|package| {
+            !crate::assets::valid_digest(&package.manifest_sha256)
+                || package.modules.is_empty()
+                || package.modules.iter().any(|(name, hash)| {
+                    name.split('.').any(|segment| {
+                        segment.is_empty()
+                            || !segment
+                                .chars()
+                                .all(|c| c.is_ascii_alphanumeric() || c == '_')
+                    }) || !crate::assets::valid_digest(hash)
+                })
+        })
     {
         return Err(NotebookError::InvalidProvenance(format!(
             "cell {} has unsupported or mismatched fields",

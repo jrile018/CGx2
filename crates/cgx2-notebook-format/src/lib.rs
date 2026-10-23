@@ -5,6 +5,7 @@ mod parse;
 mod provenance;
 mod write;
 
+use std::collections::BTreeMap;
 use std::fmt;
 use std::io;
 
@@ -51,8 +52,17 @@ pub struct Provenance {
     pub ordinal: u64,
     pub output_ordinal: Option<u64>,
     pub result: ProvenanceResult,
+    /// Exact checked package inputs used by this cell, when it imports local code.
+    pub package: Option<PackageProvenance>,
     /// Restart discarded live bindings; the original execution result remains intact.
     pub stale: bool,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct PackageProvenance {
+    pub manifest_sha256: String,
+    /// Full module name to checked source SHA-256.
+    pub modules: BTreeMap<String, String>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

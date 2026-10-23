@@ -1,0 +1,4 @@
+module demo.alpha
+
+pub fn double(x: i64) -> i64 effects() caps():
+ x * 2
