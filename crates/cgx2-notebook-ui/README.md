@@ -1,5 +1,7 @@
 # CGx2 loopback notebook UI
 
+Markdown `![alt](asset:sha256:<64 lowercase hex>)` references render through the token-protected asset route after digest and image-type validation. Source text is shown verbatim; the UI builds image elements with DOM APIs and blob URLs under its restrictive Content Security Policy. Other Markdown links remain text and trigger no file or network fetch.
+
 For a parameter sweep, use `cgx2-notebook sweep INPUT.cgnb CELL_ID --value
 LITERAL --out-dir DIRECTORY` from a terminal. Open an individual result with
 `cgx2-notebook-ui open DIRECTORY/trial-01.cgnb`; repeat for other trials.

@@ -9,6 +9,8 @@ cgx2-notebook inspect /tmp/factor-sweep/trial-01.cgnb
 cgx2-notebook inspect /tmp/factor-sweep/trial-02.cgnb
 ```
 
+[sweep-portable-images.cgnb](examples/sweep-portable-images.cgnb) is a self-contained example with two one-pixel PNGs referenced from Markdown using `![alt](asset:sha256:<digest>)`. Sweep trials embed those verified images in each `trial-NN.cgnb`, so a successful or failed trial reopens after the original input and sidecar are removed. Clean execution discards stale code outputs while preserving Markdown image references. `run`, `restart`, and `delete` also carry still-referenced verified assets into their output files. Arbitrary Markdown file paths and URLs remain text and are never copied or fetched.
+
 `sweep` requires a code cell containing exactly one immutable `i64`, `Bool`, or
 `String` literal binding. Each `--value` is a CGx2 literal of that same checked
 type. The command accepts 1–32 distinct values, each at most 4,096 UTF-8 bytes.

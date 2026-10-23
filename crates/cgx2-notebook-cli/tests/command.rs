@@ -3,7 +3,9 @@ use std::path::{Path, PathBuf};
 use std::process::{Command, Output};
 use std::sync::atomic::{AtomicU64, Ordering};
 
-use cgx2_notebook_format::{parse_notebook_bytes, save_asset, Output as CellOutput};
+use cgx2_notebook_format::{
+    open_notebook_bytes, parse_notebook_bytes, save_asset, Output as CellOutput,
+};
 
 static NEXT: AtomicU64 = AtomicU64::new(0);
 
@@ -195,6 +197,62 @@ fn sweep_saves_independent_trials_and_reopens_failure_provenance() {
     );
     let reopened = run(&[Path::new("inspect"), &restarted]);
     assert!(String::from_utf8_lossy(&reopened.stdout).contains("quotient\tcode\tstale"));
+}
+
+#[test]
+fn sweep_embeds_two_markdown_images_in_success_and_failed_trials() {
+    let fixture = Fixture::new();
+    let input = fixture.path("input.cgnb");
+    let assets = fixture.path("input.cgnb.assets");
+    let first = save_asset(&assets, b"\x89PNG\r\n\x1a\nfirst").unwrap();
+    let second = save_asset(&assets, b"GIF89asecond").unwrap();
+    let source = include_str!("../examples/sweep-factor.cgnb").replace(
+        "# Pure scalar sweep",
+        &format!("![one](asset:sha256:{first})\n![two](asset:sha256:{second})"),
+    );
+    fs::write(&input, source).unwrap();
+    let output = fixture.path("sweep-images");
+    let args = [
+        "sweep",
+        input.to_str().unwrap(),
+        "factor",
+        "--value",
+        "2",
+        "--value",
+        "0",
+        "--out-dir",
+        output.to_str().unwrap(),
+    ];
+    let result = run_str(&args);
+    assert!(result.status.success(), "{}", stderr(&result));
+    assert!(
+        !run_str(&args).status.success(),
+        "existing output must not be overwritten"
+    );
+    fs::remove_file(input).unwrap();
+    fs::remove_dir_all(assets).unwrap();
+    for (index, expected) in [
+        (1, cgx2_notebook_format::ProvenanceResult::Success),
+        (2, cgx2_notebook_format::ProvenanceResult::Failed),
+    ] {
+        let bytes = fs::read(output.join(format!("trial-{index:02}.cgnb"))).unwrap();
+        let opened = open_notebook_bytes(&bytes, &fixture.path("gone.assets")).unwrap();
+        assert_eq!(opened.assets.len(), 2);
+        assert!(opened.assets.contains_key(&first));
+        assert!(opened.assets.contains_key(&second));
+        assert_eq!(
+            opened.notebook.cells[2].provenance.as_ref().unwrap().result,
+            expected
+        );
+        assert!(String::from_utf8_lossy(&bytes).contains("%% embedded sha256="));
+    }
+    let rerun = fixture.path("rerun.cgnb");
+    let trial = output.join("trial-01.cgnb");
+    let result = run(&[Path::new("run"), &trial, Path::new("--out"), &rerun]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let reopened =
+        open_notebook_bytes(&fs::read(rerun).unwrap(), &fixture.path("gone.assets")).unwrap();
+    assert_eq!(reopened.assets.len(), 2);
 }
 
 #[test]

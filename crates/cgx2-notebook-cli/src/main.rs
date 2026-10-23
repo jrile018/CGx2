@@ -1,6 +1,6 @@
 //! File command for clean, pure-scalar CGx2 notebook execution.
 
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 use std::env;
 use std::ffi::{OsStr, OsString};
 use std::fmt;
@@ -12,8 +12,9 @@ use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use cgx2_notebook_format::{
-    export_document, open_notebook_bytes, parse_self_contained, save_asset, write_notebook,
-    CellKind, Notebook, NotebookDocument, MAX_NOTEBOOK_BYTES,
+    export_document, markdown_image_digests, open_notebook_bytes, parse_self_contained,
+    referenced_asset_digests, save_asset, write_notebook, CellKind, Notebook, NotebookDocument,
+    MAX_NOTEBOOK_BYTES,
 };
 use cgx2_notebook_kernel::{
     is_worker_argument, scalar_worker_main, validate_pure_sweep_notebook, ExecutionControl,
@@ -465,8 +466,8 @@ fn execute(command: Command) -> Result<(), CommandError> {
             timeout,
         } => {
             check_output_collision(&output, force)?;
-            let notebook = read_notebook(&input)?;
-            let mut kernel = NotebookKernel::open(notebook)
+            let document = read_document(&input)?;
+            let mut kernel = NotebookKernel::open(document.notebook)
                 .map_err(|error| CommandError::Input(error.to_string()))?;
             kernel.set_execution_control(ExecutionControl::new(
                 env::current_exe().map_err(|error| CommandError::Cell(error.to_string()))?,
@@ -475,7 +476,7 @@ fn execute(command: Command) -> Result<(), CommandError> {
             let run_result = kernel.restart_and_run_all();
             if let Err(error) = run_result {
                 if error.code == "CGNK010" {
-                    let text = write_notebook(kernel.notebook())
+                    let text = portable_text(kernel.notebook(), &document.assets)
                         .map_err(|error| CommandError::Output(error.to_string()))?;
                     atomic_write(&output, text.as_bytes(), force)?;
                 }
@@ -489,7 +490,7 @@ fn execute(command: Command) -> Result<(), CommandError> {
                     .rerun_affected(&id)
                     .map_err(|error| CommandError::Cell(error.to_string()))?;
             }
-            let text = write_notebook(kernel.notebook())
+            let text = portable_text(kernel.notebook(), &document.assets)
                 .map_err(|error| CommandError::Output(error.to_string()))?;
             atomic_write(&output, text.as_bytes(), force)
         }
@@ -500,12 +501,13 @@ fn execute(command: Command) -> Result<(), CommandError> {
             force,
         } => {
             check_output_collision(&output, force)?;
-            let mut kernel = NotebookKernel::open(read_notebook(&input)?)
+            let document = read_document(&input)?;
+            let mut kernel = NotebookKernel::open(document.notebook)
                 .map_err(|error| CommandError::Input(error.to_string()))?;
             kernel
                 .remove_cell(&id)
                 .map_err(|error| CommandError::Cell(error.to_string()))?;
-            let text = write_notebook(kernel.notebook())
+            let text = portable_text(kernel.notebook(), &document.assets)
                 .map_err(|error| CommandError::Output(error.to_string()))?;
             atomic_write(&output, text.as_bytes(), force)
         }
@@ -515,12 +517,13 @@ fn execute(command: Command) -> Result<(), CommandError> {
             force,
         } => {
             check_output_collision(&output, force)?;
-            let mut kernel = NotebookKernel::open(read_notebook(&input)?)
+            let document = read_document(&input)?;
+            let mut kernel = NotebookKernel::open(document.notebook)
                 .map_err(|error| CommandError::Input(error.to_string()))?;
             kernel
                 .restart()
                 .map_err(|error| CommandError::Cell(error.to_string()))?;
-            let text = write_notebook(kernel.notebook())
+            let text = portable_text(kernel.notebook(), &document.assets)
                 .map_err(|error| CommandError::Output(error.to_string()))?;
             atomic_write(&output, text.as_bytes(), force)
         }
@@ -626,7 +629,24 @@ fn execute_sweep(
             destination.display()
         )));
     }
-    let mut notebook = read_notebook(input)?;
+    let document = read_document(input)?;
+    let mut notebook = document.notebook;
+    let mut markdown_digests = BTreeSet::new();
+    for cell in notebook
+        .cells
+        .iter()
+        .filter(|cell| cell.kind == CellKind::Markdown)
+    {
+        markdown_digests.extend(
+            markdown_image_digests(&cell.source)
+                .map_err(|error| CommandError::Input(error.to_string()))?,
+        );
+    }
+    let markdown_assets = document
+        .assets
+        .into_iter()
+        .filter(|(digest, _)| markdown_digests.contains(digest))
+        .collect();
     validate_pure_sweep_notebook(&notebook)
         .map_err(|error| CommandError::Input(error.to_string()))?;
     let parameter_cell = notebook
@@ -696,7 +716,7 @@ fn execute_sweep(
         kernel.set_execution_control(ExecutionControl::new(worker.clone(), timeout));
         let result = kernel.restart_and_run_all();
         let filename = format!("trial-{:02}.cgnb", index + 1);
-        let text = write_notebook(kernel.notebook())
+        let text = export_document(kernel.notebook(), &markdown_assets)
             .map_err(|error| CommandError::Output(error.to_string()))?;
         fs::write(stage.0.join(&filename), text).map_err(|error| output_io(&destination, error))?;
         if index != 0 {
@@ -800,6 +820,19 @@ fn provenance_result_name(result: cgx2_notebook_format::ProvenanceResult) -> &'s
 
 fn read_notebook(path: &Path) -> Result<Notebook, CommandError> {
     Ok(read_document(path)?.notebook)
+}
+
+fn portable_text(
+    notebook: &Notebook,
+    verified_assets: &BTreeMap<String, Vec<u8>>,
+) -> Result<String, cgx2_notebook_format::NotebookError> {
+    let references = referenced_asset_digests(notebook)?;
+    let assets = verified_assets
+        .iter()
+        .filter(|(digest, _)| references.contains(*digest))
+        .map(|(digest, bytes)| (digest.clone(), bytes.clone()))
+        .collect();
+    export_document(notebook, &assets)
 }
 
 fn read_document(path: &Path) -> Result<NotebookDocument, CommandError> {

@@ -12,6 +12,13 @@ function el(tag, cls, text) {
   if (text !== undefined) node.textContent = text;
   return node;
 }
+function loadImage(img, digest) {
+  fetch("/api/asset", {method:"POST", headers:{"Content-Type":"application/json", "X-CGX2-Token":token},
+    body:JSON.stringify({sha256:digest}), cache:"no-store"})
+    .then(response => { if (!response.ok) throw new Error("asset unavailable"); return response.blob(); })
+    .then(blob => { if (img.isConnected) { const url = URL.createObjectURL(blob); imageUrls.push(url); img.src = url; } })
+    .catch(() => { if (img.isConnected) img.replaceWith(el("span", "error", "Saved image unavailable")); });
+}
 function render(data) {
   const saveName = document.getElementById("save-name").value;
   for (const url of imageUrls) URL.revokeObjectURL(url);
@@ -40,7 +47,17 @@ function render(data) {
       run.setAttribute("aria-label", `Run cell ${cell.id}`);
       run.addEventListener("click", () => command("/api/run-cell", {id:cell.id}));
       section.append(run);
-    } else section.append(el("pre", "", cell.source));
+    } else {
+      section.append(el("pre", "", cell.source));
+      for (const match of cell.source.matchAll(/!\[([^\]\n]*)\]\(asset:sha256:([0-9a-f]{64})\)/g)) {
+        const figure = el("figure", "output");
+        const img = el("img");
+        img.alt = match[1];
+        figure.append(img);
+        section.append(figure);
+        loadImage(img, match[2]);
+      }
+    }
     const remove = el("button", "", "Delete cell");
     remove.setAttribute("aria-label", `Delete cell ${cell.id}`);
     remove.addEventListener("click", () => command("/api/delete", {id:cell.id}));
@@ -55,11 +72,7 @@ function render(data) {
         img.alt = `Saved image output for ${cell.id}`;
         figure.append(img);
         section.append(figure);
-        fetch("/api/asset", {method:"POST", headers:{"Content-Type":"application/json", "X-CGX2-Token":token},
-          body:JSON.stringify({sha256:output.body}), cache:"no-store"})
-          .then(response => { if (!response.ok) throw new Error("asset unavailable"); return response.blob(); })
-          .then(blob => { if (img.isConnected) { const url = URL.createObjectURL(blob); imageUrls.push(url); img.src = url; } })
-          .catch(() => { if (img.isConnected) img.replaceWith(el("span", "error", "Saved image unavailable")); });
+        loadImage(img, output.body);
       }
     }
     cells.append(section);

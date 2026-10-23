@@ -447,6 +447,65 @@ fn cached_asset_reference_is_valid_after_save_as() {
 }
 
 #[test]
+fn markdown_image_route_save_and_export_use_verified_asset() {
+    let f = Fixture::new("#!cgnb 1\n%% markdown id=notes\n# Figure\n");
+    let image = b"GIF89afigure";
+    let digest = save_asset(&f.dir.join("source.cgnb.assets"), image).unwrap();
+    fs::write(
+        &f.input,
+        format!("#!cgnb 1\n%% markdown id=notes\n![A figure](asset:sha256:{digest})\n"),
+    )
+    .unwrap();
+    let (port, handle) = server(&f.input, 5);
+    let secret = token(port);
+    let (status, script) = request(port, "GET", "/app.js", None, None, None, None);
+    assert_eq!(status, 200);
+    assert!(script.contains("document.createElement"));
+    assert!(script.contains("loadImage(img, match[2])"));
+    let (status, served) = request(
+        port,
+        "POST",
+        "/api/asset",
+        Some(&json!({"sha256":digest}).to_string()),
+        Some(&secret),
+        Some(&format!("http://127.0.0.1:{port}")),
+        None,
+    );
+    assert_eq!(status, 200);
+    assert_eq!(served.as_bytes(), image);
+    assert_eq!(
+        post(
+            port,
+            "/api/save",
+            json!({"name":"saved.cgnb","overwrite":false}),
+            &secret
+        )
+        .0,
+        200
+    );
+    assert_eq!(
+        load_asset(&f.dir.join("saved.cgnb.assets"), &digest).unwrap(),
+        image
+    );
+    assert_eq!(
+        post(
+            port,
+            "/api/export",
+            json!({"name":"portable.cgnb","overwrite":false}),
+            &secret
+        )
+        .0,
+        200
+    );
+    handle.join().unwrap();
+    fs::remove_dir_all(f.dir.join("source.cgnb.assets")).unwrap();
+    let portable = fs::read(f.dir.join("portable.cgnb")).unwrap();
+    let reopened =
+        cgx2_notebook_format::open_notebook_bytes(&portable, &f.dir.join("gone.assets")).unwrap();
+    assert_eq!(reopened.assets[&digest], image);
+}
+
+#[test]
 fn portable_open_serves_bounded_image_and_exports_without_sidecars() {
     let f = Fixture::new("#!cgnb 1\n%% markdown id=notes\n# Portable\n%% code id=seed\nlet x = 3\n%% code id=result\nx + 4\n");
     let digest = save_asset(&f.dir.join("source.cgnb.assets"), b"image bytes").unwrap();

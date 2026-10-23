@@ -9,8 +9,9 @@ use std::fmt;
 use std::io;
 
 pub use assets::{
-    export_document, export_self_contained, import_self_contained, load_asset, open_notebook_bytes,
-    parse_self_contained, save_asset, NotebookDocument, MAX_DISTINCT_ASSETS, MAX_TOTAL_ASSET_BYTES,
+    export_document, export_self_contained, image_mime, import_self_contained, load_asset,
+    markdown_image_digests, open_notebook_bytes, parse_self_contained, referenced_asset_digests,
+    save_asset, NotebookDocument, MAX_DISTINCT_ASSETS, MAX_TOTAL_ASSET_BYTES,
 };
 pub use parse::{parse_notebook, parse_notebook_bytes};
 pub use provenance::{

@@ -189,7 +189,8 @@ fn total_and_single_asset_limits_apply_before_encoding() {
             ..
         })
     ));
-    let tiny = save_asset(&root, b"a").unwrap();
-    let text = export_self_contained(&sample(&tiny), &root).unwrap();
+    let tiny_root = fixture.path("tiny.assets");
+    let tiny = save_asset(&tiny_root, b"a").unwrap();
+    let text = export_self_contained(&sample(&tiny), &tiny_root).unwrap();
     assert!(parse_self_contained(&text.replace("size=1", "size=8388609")).is_err());
 }

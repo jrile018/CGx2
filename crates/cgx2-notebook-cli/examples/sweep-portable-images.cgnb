@@ -1,0 +1,13 @@
+#!cgnb 1
+%% markdown id=figures
+# Portable one-pixel figures
+![Blue pixel](asset:sha256:07a6e66d8ae9bc52e3bd1e942b7ac57415e3f571220f5ac95d277d7160cf67b0)
+![Orange pixel](asset:sha256:709a1e6a76f64a59ea16569679a902a435e9616871dc247b5e2a09c7637ffca6)
+%% code id=factor
+let factor = 2
+%% code id=quotient
+10 / factor
+%% embedded sha256=07a6e66d8ae9bc52e3bd1e942b7ac57415e3f571220f5ac95d277d7160cf67b0 mime=image/png size=70
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGNgSDvzHwADzgIyupqDXwAAAABJRU5ErkJggg==
+%% embedded sha256=709a1e6a76f64a59ea16569679a902a435e9616871dc247b5e2a09c7637ffca6 mime=image/png size=70
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGN416H0HwAGmAKYicSx3QAAAABJRU5ErkJggg==

@@ -38,6 +38,8 @@ Kernel-produced display is one UTF-8 output body with MIME exactly text/plain, a
 
 Pass a sidecar directory such as `example.cgnb.assets` as `asset_root` to `save_asset` and `load_asset`. Each filename is the lowercase SHA-256 digest of its bytes. A digest is validated before it becomes a path component; loads verify both file size and hash. An asset is limited to 8 MiB. A notebook is limited to 32 distinct assets totaling 12 MiB, and the complete UTF-8 file is limited to 16 MiB. Saving identical bytes reuses the same filename. Existing corrupt files, symlink assets, and symlinks in the asset directory path are rejected.
 
+Markdown cells may reference verified images using exactly `![alt](asset:sha256:<64 lowercase hex>)`. PNG, JPEG, GIF, and WebP are detected from their byte signatures; no filename, Markdown MIME claim, URL, or host path selects the MIME. Relative and absolute file links and network links remain inert Markdown text: they are not loaded, copied, fetched, or rewritten. The parser rejects malformed `asset:` image targets. Ordinary sidecar open requires every referenced digest and rejects extra sidecar entries; portable export requires the referenced and embedded digest sets to match exactly. The existing 8 MiB per image, 12 MiB total, 32 distinct asset, and 16 MiB document limits apply to Markdown images as well as saved image outputs.
+
 `export_self_contained` appends blocks after the notebook content, sorted by digest:
 
 ```text
@@ -48,6 +50,8 @@ Pass a sidecar directory such as `example.cgnb.assets` as `asset_root` to `save_
 The only portable asset MIME values are `image/png`, `image/jpeg`, `image/gif`, and `image/webp`. The embedded MIME must exactly match every output reference to that digest. Export and import reject SVG, HTML, scripts, unknown MIME, conflicting MIME references, duplicate or unreferenced blocks, traversal-like digests, hash or length mismatch, and oversized decoded or encoded data. There is no compression or external URL lookup. `parse_self_contained` validates every block in memory before exposing a `NotebookDocument`; `open_notebook_bytes` also opens ordinary version 1 files using verified sidecars. `import_self_contained` verifies before restoring files into the chosen sidecar directory. The caller chooses that directory; no path is read from notebook text.
 
 Portable export retains the `#!cgnb 1` header and readable native cells, then adds an embedded block section. It is an extension of version 1, not a new execution format. Older readers that only call `parse_notebook` reject the embedded headers and must import to ordinary version 1 plus sidecars. A portable file with no assets is identical to ordinary version 1. Saved provenance remains cached or stale after reopen; importing bytes never creates live evaluator state.
+
+An older version 1 reader can safely treat the new Markdown image target as inert Markdown text. Older exporters may omit its asset, so use this implementation to make portable copies. Path-based symlink checks reject symlinks present during validation, but a concurrent replacement of a checked path component remains possible because asset I/O is not descriptor-relative.
 
 ## Scope
 

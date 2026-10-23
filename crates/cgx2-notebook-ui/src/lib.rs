@@ -10,8 +10,8 @@ use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 
 use cgx2_notebook_format::{
-    export_document, open_notebook_bytes, parse_notebook_bytes, save_asset, write_notebook,
-    CellKind, Output, MAX_NOTEBOOK_BYTES,
+    export_document, image_mime, markdown_image_digests, open_notebook_bytes, parse_notebook_bytes,
+    referenced_asset_digests, save_asset, write_notebook, CellKind, Output, MAX_NOTEBOOK_BYTES,
 };
 use cgx2_notebook_kernel::{ExecutionControl, NotebookKernel, DEFAULT_CELL_TIMEOUT};
 use cgx2_notebook_session::CellStatus;
@@ -37,20 +37,14 @@ pub struct UiSession {
 impl UiSession {
     fn referenced_assets(&self) -> Result<BTreeMap<String, Vec<u8>>, String> {
         let mut referenced = BTreeMap::new();
-        for output in self
-            .kernel
-            .notebook()
-            .cells
-            .iter()
-            .flat_map(|cell| &cell.outputs)
+        for digest in
+            referenced_asset_digests(self.kernel.notebook()).map_err(|error| error.to_string())?
         {
-            if let Output::Asset { sha256, .. } = output {
-                let bytes = self
-                    .assets
-                    .get(sha256)
-                    .ok_or_else(|| format!("missing verified asset {sha256}"))?;
-                referenced.insert(sha256.clone(), bytes.clone());
-            }
+            let bytes = self
+                .assets
+                .get(&digest)
+                .ok_or_else(|| format!("missing verified asset {digest}"))?;
+            referenced.insert(digest, bytes.clone());
         }
         Ok(referenced)
     }
@@ -232,6 +226,8 @@ impl UiSession {
             save_asset(&target_assets, bytes)
                 .map_err(|error| format!("cannot save asset: {error}"))?;
         }
+        open_notebook_bytes(text.as_bytes(), &target_assets)
+            .map_err(|error| format!("cannot validate saved assets: {error}"))?;
         atomic_write(&destination, text.as_bytes(), overwrite)
     }
 
@@ -504,10 +500,25 @@ fn dispatch(session: &mut UiSession, request: Request, port: u16) -> Vec<u8> {
                     Output::Asset { mime, sha256, .. } if sha256 == digest => Some(mime.as_str()),
                     _ => None,
                 });
-            let Some(mime) = mime else {
+            let Some(bytes) = session.assets.get(digest) else {
                 return error_response(404, "unknown asset");
             };
-            let Some(bytes) = session.assets.get(digest) else {
+            let markdown_reference = session
+                .kernel
+                .notebook()
+                .cells
+                .iter()
+                .filter(|cell| cell.kind == CellKind::Markdown)
+                .any(|cell| {
+                    markdown_image_digests(&cell.source)
+                        .is_ok_and(|digests| digests.contains(digest))
+                });
+            let mime = if markdown_reference {
+                image_mime(bytes)
+            } else {
+                mime
+            };
+            let Some(mime) = mime else {
                 return error_response(404, "unknown asset");
             };
             response(200, mime, bytes.clone())

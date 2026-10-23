@@ -211,6 +211,7 @@ pub fn parse_notebook(text: &str) -> Result<Notebook, NotebookError> {
     for cell in &notebook.cells {
         crate::provenance::validate_provenance(cell)?;
     }
+    crate::assets::referenced_asset_digests(&notebook)?;
     Ok(notebook)
 }
 

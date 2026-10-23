@@ -3,6 +3,7 @@ use std::collections::HashSet;
 use crate::{check_document_size, valid_id, valid_mime, CellKind, Notebook, NotebookError, Output};
 
 pub fn write_notebook(notebook: &Notebook) -> Result<String, NotebookError> {
+    crate::assets::referenced_asset_digests(notebook)?;
     if notebook.version != 1 {
         return Err(NotebookError::UnsupportedVersion(
             notebook.version.to_string(),
