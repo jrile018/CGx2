@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "purpose": "release",
+  "operator": "local-unreviewed",
+  "compiler": null,
+  "jobs": [
+    {"id": "host-isolation", "adapter": "isolation-probe"},
+    {"id": "candidate-intake", "adapter": "task-study", "args": ["--pack", "bench/fixtures/task-candidates/v3/pack.json"]},
+    {"id": "public-syntax-context", "adapter": "public-export", "args": ["--task", "precedence", "--variant", "indent"]},
+    {"id": "native-queue", "adapter": "native-runtime"},
+    {"id": "libtorch-queue", "adapter": "libtorch-runtime"},
+    {"id": "solver-owner", "adapter": "owner", "gate": "trusted-solver", "args": ["/external-owner/cgx2-trusted-solver-evidence-v1"]},
+    {"id": "leak-owner", "adapter": "owner", "gate": "leak-check", "args": ["/external-owner/cgx2-leak-evidence-v1"]}
+  ]
+}
