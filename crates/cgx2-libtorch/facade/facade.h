@@ -26,6 +26,15 @@ CGX2_EXPORT int32_t cgx2_torch_add(const void *left, const void *right, void **o
 CGX2_EXPORT int32_t cgx2_torch_length(const void *tensor, uint64_t *output);
 CGX2_EXPORT int32_t cgx2_torch_copy_f64(const void *tensor, double *output, uint64_t capacity);
 CGX2_EXPORT int32_t cgx2_torch_release(void *tensor);
+/* Additive matrix API version 2 on facade ABI v1. Matrix handles are owned
+ * outputs, borrowed by math/shape/copy, and released by cgx2_torch_release.
+ * CPU float64 values are contiguous row-major. Dimensions are nonzero and
+ * rows*cols is at most 1,048,576; copy capacity must equal rows*cols. */
+CGX2_EXPORT uint32_t cgx2_torch_matrix_api_version(void);
+CGX2_EXPORT int32_t cgx2_torch_matrix_f64_cpu(const double *values, uint64_t rows, uint64_t cols, void **output);
+CGX2_EXPORT int32_t cgx2_torch_matmul(const void *left, const void *right, void **output);
+CGX2_EXPORT int32_t cgx2_torch_matrix_shape(const void *matrix, uint64_t *rows, uint64_t *cols);
+CGX2_EXPORT int32_t cgx2_torch_matrix_copy_f64(const void *matrix, double *output, uint64_t capacity);
 #ifdef __cplusplus
 }
 #endif

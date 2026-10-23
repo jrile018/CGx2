@@ -4,7 +4,8 @@ use std::process::Command;
 use std::sync::atomic::{AtomicU64, Ordering};
 
 use cgx2_bind::{
-    check_package, libtorch_facade_symbols, render_lock, Binding, BindingLock, Symbol,
+    check_package, libtorch_facade_symbols, libtorch_matrix_facade_symbols, render_lock, Binding,
+    BindingLock, Symbol,
 };
 use sha2::{Digest, Sha256};
 
@@ -270,6 +271,39 @@ fn libtorch_mock_fixture(flags: &[&str]) -> (Fixture, BindingLock) {
     };
     fixture.write_lock(&lock);
     (fixture, lock)
+}
+
+#[test]
+fn matrix_preflight_requires_exact_v2_exports_and_keeps_v1_valid() {
+    let (fixture, mut lock) = libtorch_mock_fixture(&[]);
+    assert!(check_package(&fixture.0).passed());
+    lock.bindings[0].layout = "tensor-f64-cpu-matrix-v2".into();
+    lock.bindings[0].symbols = libtorch_matrix_facade_symbols();
+    fixture.write_lock(&lock);
+    assert!(check_package(&fixture.0).passed());
+    lock.bindings[0]
+        .symbols
+        .retain(|symbol| symbol.name != "cgx2_torch_matmul");
+    fixture.write_lock(&lock);
+    assert!(check_package(&fixture.0)
+        .diagnostics
+        .iter()
+        .any(|d| d.code == "CGB018"));
+
+    let (missing, mut missing_lock) = libtorch_mock_fixture(&["-DMOCK_MISSING_MATRIX_COPY"]);
+    missing_lock.bindings[0].layout = "tensor-f64-cpu-matrix-v2".into();
+    missing_lock.bindings[0].symbols = libtorch_matrix_facade_symbols();
+    missing.write_lock(&missing_lock);
+    assert!(check_package(&missing.0)
+        .diagnostics
+        .iter()
+        .any(|d| d.code == "CGB015"));
+    missing_lock.bindings[0].abi = "cgx2-libtorch-facade-v2".into();
+    missing.write_lock(&missing_lock);
+    assert!(check_package(&missing.0)
+        .diagnostics
+        .iter()
+        .any(|d| d.code == "CGB006"));
 }
 
 #[test]

@@ -1,5 +1,31 @@
 # cgx2-libtorch
 
+## Additive CPU matrix API v2
+
+`Torch::open_pinned` accepts a schema-2 binding with layout
+`tensor-f64-cpu-matrix-v2`. Its exact lock contains all nine v1 vector exports
+plus `cgx2_torch_matrix_api_version` and four matrix exports. The facade's
+existing C ABI remains version 1 for v1 package compatibility; the separate
+matrix API version must return 2. Old `tensor-f64-cpu-v1` locks and vector calls
+continue to work. `Torch::open_matrix` is an unsafe unpinned local entry for
+reviewed facades and tests.
+
+`from_f64_matrix(rows, cols, values)` copies nonempty contiguous row-major
+CPU `float64` data into LibTorch. Both dimensions must be nonzero; checked
+`rows * cols * 8` must fit and the product is capped at 1,048,576 elements
+(8 MiB). `Matrix::matmul` accepts `[m, k]` and `[k, n]`, checks the output
+bound, and returns a distinct owned handle. `shape`, `copy_into` (exact output
+length), `to_vec_bounded(maximum)`, and `release` enforce the known shape and
+one-release lifetime. A failed call cleans an unaliased returned handle if the
+pinned closure remains verified; a duplicate pointer is never freed behind a
+live owner. A failed release consumes the Rust owner because the facade may
+already have freed it. CGx2 owns wrapper handles and host copies; LibTorch
+owns tensor storage and allocations outside CGx2 GC budgets.
+
+This is a direct C++ LibTorch adapter, not general `.cg` matrix syntax,
+arbitrary Python-library access, or a GPU route. The copied local Torch 2.11
+CPU run is recorded in [REAL-MATRIX-CPU-EVIDENCE.md](REAL-MATRIX-CPU-EVIDENCE.md).
+
 Wave 18's copied package path is documented in [PREPARE.md](PREPARE.md), with
 the verified local CPU run in [REAL-CPU-EVIDENCE.md](REAL-CPU-EVIDENCE.md).
 `prepare_pinned.py` copies the facade and non-system `DT_NEEDED` libraries

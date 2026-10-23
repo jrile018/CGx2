@@ -9,6 +9,7 @@
 
 namespace {
 constexpr size_t MAX_ERROR_BYTES = 4096;
+constexpr uint64_t MAX_MATRIX_ELEMENTS = 1048576;
 thread_local char last_error[MAX_ERROR_BYTES + 1] = {};
 
 void set_error(const char *message) noexcept {
@@ -41,6 +42,24 @@ const torch::Tensor &checked(const void *raw) {
     const auto &tensor = *static_cast<const torch::Tensor *>(raw);
     if (!tensor.device().is_cpu() || tensor.scalar_type() != torch::kFloat64 || tensor.dim() != 1)
         throw std::invalid_argument("expected one-dimensional CPU float64 tensor");
+    return tensor;
+}
+
+uint64_t matrix_elements(uint64_t rows, uint64_t cols) {
+    if (!rows || !cols || rows > static_cast<uint64_t>(std::numeric_limits<int64_t>::max()) ||
+        cols > static_cast<uint64_t>(std::numeric_limits<int64_t>::max()) ||
+        rows > MAX_MATRIX_ELEMENTS / cols || rows > SIZE_MAX / sizeof(double) / cols)
+        throw std::invalid_argument("invalid or excessive matrix shape");
+    return rows * cols;
+}
+
+const torch::Tensor &checked_matrix(const void *raw) {
+    if (!raw) throw std::invalid_argument("null matrix handle");
+    const auto &tensor = *static_cast<const torch::Tensor *>(raw);
+    if (!tensor.device().is_cpu() || tensor.scalar_type() != torch::kFloat64 || tensor.dim() != 2 ||
+        !tensor.is_contiguous())
+        throw std::invalid_argument("expected two-dimensional CPU float64 matrix");
+    matrix_elements(static_cast<uint64_t>(tensor.size(0)), static_cast<uint64_t>(tensor.size(1)));
     return tensor;
 }
 }
@@ -93,6 +112,51 @@ int32_t cgx2_torch_release(void *raw) {
     return translate([&] {
         if (!raw) throw std::invalid_argument("null tensor handle");
         delete static_cast<torch::Tensor *>(raw);
+    });
+}
+
+uint32_t cgx2_torch_matrix_api_version(void) { return 2; }
+
+int32_t cgx2_torch_matrix_f64_cpu(const double *values, uint64_t rows, uint64_t cols, void **output) {
+    if (output) *output = nullptr;
+    return translate([&] {
+        const auto count = matrix_elements(rows, cols);
+        if (!output || !values) throw std::invalid_argument("invalid matrix input");
+        auto tensor = torch::empty({static_cast<int64_t>(rows), static_cast<int64_t>(cols)},
+                                   torch::TensorOptions().dtype(torch::kFloat64).device(torch::kCPU));
+        std::memcpy(tensor.data_ptr<double>(), values, static_cast<size_t>(count) * sizeof(double));
+        *output = new torch::Tensor(std::move(tensor));
+    });
+}
+
+int32_t cgx2_torch_matmul(const void *left, const void *right, void **output) {
+    if (output) *output = nullptr;
+    return translate([&] {
+        if (!output) throw std::invalid_argument("null output");
+        const auto &a = checked_matrix(left);
+        const auto &b = checked_matrix(right);
+        if (a.size(1) != b.size(0)) throw std::invalid_argument("matrix shape mismatch");
+        matrix_elements(static_cast<uint64_t>(a.size(0)), static_cast<uint64_t>(b.size(1)));
+        *output = new torch::Tensor(torch::matmul(a, b));
+    });
+}
+
+int32_t cgx2_torch_matrix_shape(const void *raw, uint64_t *rows, uint64_t *cols) {
+    return translate([&] {
+        if (!rows || !cols) throw std::invalid_argument("null shape output");
+        const auto &matrix = checked_matrix(raw);
+        *rows = static_cast<uint64_t>(matrix.size(0));
+        *cols = static_cast<uint64_t>(matrix.size(1));
+    });
+}
+
+int32_t cgx2_torch_matrix_copy_f64(const void *raw, double *output, uint64_t capacity) {
+    return translate([&] {
+        const auto &matrix = checked_matrix(raw);
+        const auto count = matrix_elements(static_cast<uint64_t>(matrix.size(0)),
+                                           static_cast<uint64_t>(matrix.size(1)));
+        if (!output || capacity != count) throw std::invalid_argument("matrix output capacity mismatch");
+        std::memcpy(output, matrix.data_ptr<double>(), static_cast<size_t>(count) * sizeof(double));
     });
 }
 }

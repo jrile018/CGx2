@@ -36,6 +36,11 @@ impl Mock {
         unsafe { Torch::open(&self.0, "2.6.0") }.unwrap()
     }
 
+    fn open_matrix(&self) -> Torch {
+        // SAFETY: mock.c implements the additive matrix API v2 C signatures.
+        unsafe { Torch::open_matrix(&self.0, "2.6.0") }.unwrap()
+    }
+
     fn counter(&self, name: &str) -> u64 {
         // SAFETY: mock.c defines this test-only zero-argument counter signature.
         unsafe {
@@ -48,6 +53,126 @@ impl Mock {
             function()
         }
     }
+}
+
+#[test]
+fn mock_matrix_non_square_math_copy_and_lifetimes() {
+    let mock = Mock::compile(&[]);
+    let torch = mock.open_matrix();
+    let mut a = torch
+        .from_f64_matrix(2, 3, &[1., 2., 3., 4., 5., 6.])
+        .unwrap();
+    let b = torch
+        .from_f64_matrix(3, 2, &[7., 8., 9., 10., 11., 12.])
+        .unwrap();
+    let mut product = a.matmul(&b).unwrap();
+    assert_eq!(product.shape().unwrap(), [2, 2]);
+    assert_eq!(product.to_vec_bounded(4).unwrap(), [58., 64., 139., 154.]);
+    let mut copy = [0.; 4];
+    product.copy_into(&mut copy).unwrap();
+    assert_eq!(copy, [58., 64., 139., 154.]);
+    assert_eq!(
+        product.copy_into(&mut [0.; 3]),
+        Err(Error::CapacityMismatch {
+            expected: 4,
+            provided: 3
+        })
+    );
+    assert!(matches!(
+        product.to_vec_bounded(3),
+        Err(Error::LengthLimitExceeded {
+            reported: 4,
+            maximum: 3
+        })
+    ));
+    assert_eq!(mock.counter("cgx2_mock_live_count"), 3);
+    product.release().unwrap();
+    assert_eq!(product.release(), Err(Error::AlreadyReleased));
+    a.release().unwrap();
+    drop((a, b, product));
+    assert_eq!(mock.counter("cgx2_mock_live_count"), 0);
+    assert_eq!(mock.counter("cgx2_mock_release_count"), 3);
+}
+
+#[test]
+fn mock_matrix_rejects_invalid_shapes_aliases_partial_errors_and_bad_exports() {
+    let mock = Mock::compile(&[]);
+    let torch = mock.open_matrix();
+    assert!(matches!(
+        torch.from_f64_matrix(0, 1, &[]),
+        Err(Error::InvalidMatrixShape)
+    ));
+    assert!(matches!(
+        torch.from_f64_matrix(usize::MAX, 2, &[]),
+        Err(Error::InvalidMatrixShape)
+    ));
+    assert!(matches!(
+        torch.from_f64_matrix(1, 1_048_577, &[]),
+        Err(Error::InvalidMatrixShape)
+    ));
+    assert!(matches!(
+        torch.from_f64_matrix(2, 2, &[1.]),
+        Err(Error::CapacityMismatch {
+            expected: 4,
+            provided: 1
+        })
+    ));
+    let a = torch.from_f64_matrix(1, 2, &[1., 2.]).unwrap();
+    let b = torch.from_f64_matrix(1, 2, &[3., 4.]).unwrap();
+    assert!(matches!(
+        a.matmul(&b),
+        Err(Error::MatrixDimensionMismatch {
+            left_cols: 2,
+            right_rows: 1
+        })
+    ));
+    assert!(matches!(
+        torch.from_f64_matrix(1, 1, &[-203.]),
+        Err(Error::Foreign { .. })
+    ));
+    assert_eq!(mock.counter("cgx2_mock_live_count"), 2);
+    assert!(matches!(
+        torch.from_f64_matrix(1, 1, &[-204.]),
+        Err(Error::Foreign { .. })
+    ));
+    assert_eq!(mock.counter("cgx2_mock_live_count"), 2);
+    let bad_shape = torch.from_f64_matrix(1, 1, &[-202.]).unwrap();
+    assert!(matches!(
+        bad_shape.shape(),
+        Err(Error::MatrixShapeMismatch { .. })
+    ));
+    let bad_copy = torch.from_f64_matrix(1, 1, &[-201.]).unwrap();
+    assert!(matches!(
+        bad_copy.to_vec_bounded(1),
+        Err(Error::Foreign { .. })
+    ));
+    let alias = torch.from_f64_matrix(1, 1, &[-205.]).unwrap();
+    let unit = torch.from_f64_matrix(1, 1, &[1.]).unwrap();
+    assert!(matches!(alias.matmul(&unit), Err(Error::Foreign { .. })));
+    let failing = torch.from_f64_matrix(1, 1, &[-206.]).unwrap();
+    let before = mock.counter("cgx2_mock_live_count");
+    assert!(matches!(failing.matmul(&unit), Err(Error::Foreign { .. })));
+    assert_eq!(mock.counter("cgx2_mock_live_count"), before);
+    let second = mock.open_matrix();
+    let foreign = second.from_f64_matrix(1, 1, &[1.]).unwrap();
+    assert!(matches!(
+        unit.matmul(&foreign),
+        Err(Error::DifferentRuntime)
+    ));
+    drop((a, b, bad_shape, bad_copy, alias, unit, failing, foreign));
+    assert_eq!(mock.counter("cgx2_mock_live_count"), 0);
+    let wrong = Mock::compile(&["-DMOCK_MATRIX_API_VERSION=3"]);
+    assert_eq!(
+        unsafe { Torch::open_matrix(&wrong.0, "2.6.0") }.err(),
+        Some(Error::MatrixApiVersion { reported: 3 })
+    );
+    let missing = Mock::compile(&["-DMOCK_MISSING_MATRIX_COPY"]);
+    assert_eq!(
+        unsafe { Torch::open_matrix(&missing.0, "2.6.0") }.err(),
+        Some(Error::Native(cgx2_ffi_native::Error::MissingSymbol(
+            "cgx2_torch_matrix_copy_f64".into()
+        )))
+    );
 }
 impl Drop for Mock {
     fn drop(&mut self) {
