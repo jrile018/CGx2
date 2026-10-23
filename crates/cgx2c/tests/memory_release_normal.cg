@@ -1,0 +1,14 @@
+fn finish() -> Unit effects(ManagedAlloc, Collect, Mutate) caps(MemoryCollect):
+    let region = memory.region(mode: manual, limit: 1024)
+    let parent = memory.alloc_object(region, 8, 1)
+    let child = memory.alloc_object(region, 4, 0)
+    memory.set_reference(parent, 0, child)
+    memory.drop(child)
+    memory.collect(region)
+    memory.clear_reference(parent, 0)
+    memory.drop(parent)
+    memory.collect(region)
+    memory.close(region)
+
+fn main() -> Unit effects(ManagedAlloc, Collect, Mutate) caps(MemoryCollect):
+    finish()

@@ -1,0 +1,14 @@
+fn guarded() -> Unit effects(ManagedAlloc, Mutate):
+    let region = memory.region(mode: manual, limit: 512)
+    no_gc(budget: 256):
+        let parent = memory.alloc_object(region, 8, 1)
+        no_gc(budget: 128):
+            let child = memory.alloc_object(region, 4, 0)
+            memory.set_reference(parent, 0, child)
+            memory.drop(child)
+        memory.clear_reference(parent, 0)
+        memory.drop(parent)
+    memory.close(region)
+
+fn main() -> Unit effects(ManagedAlloc, Mutate):
+    guarded()

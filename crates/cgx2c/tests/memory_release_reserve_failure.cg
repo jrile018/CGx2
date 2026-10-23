@@ -1,0 +1,10 @@
+fn reserve() -> Unit effects(ManagedAlloc, Mutate):
+    let region = memory.region(mode: manual, limit: 512)
+    let held = memory.alloc_bytes(region, 8)
+    let denied = memory.alloc_object(region, 8, 1)
+    memory.drop(denied)
+    memory.drop(held)
+    memory.close(region)
+
+fn main() -> Unit effects(ManagedAlloc, Mutate):
+    reserve()

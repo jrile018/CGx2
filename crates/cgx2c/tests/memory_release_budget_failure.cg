@@ -1,0 +1,12 @@
+fn exhaust() -> Unit effects(ManagedAlloc, Mutate):
+    let region = memory.region(mode: manual, limit: 512)
+    no_gc(budget: 512):
+        no_gc(budget: 128):
+            let held = memory.alloc_bytes(region, 8)
+            let denied = memory.alloc_bytes(region, 32)
+            memory.drop(denied)
+            memory.drop(held)
+    memory.close(region)
+
+fn main() -> Unit effects(ManagedAlloc, Mutate):
+    exhaust()
