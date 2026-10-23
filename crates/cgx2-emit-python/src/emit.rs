@@ -456,12 +456,12 @@ fn emit_record(record: &Record, output: &mut String) {
             .join(", ")
     ));
     output.push_str(&format!(
-        "    def __init__(self, *, {}):\n",
+        "    def __init__(_cgx2_self, *, {}):\n",
         fields.join(", ")
     ));
     for field in &fields {
         output.push_str(&format!(
-            "        _cgx2_builtins.object.__setattr__(self, {field:?}, {field})\n"
+            "        _cgx2_builtins.object.__setattr__(_cgx2_self, {field:?}, {field})\n"
         ));
     }
     output.push_str("    def __setattr__(self, name, value):\n        raise _cgx2_builtins.AttributeError('immutable CGx2 record')\n");

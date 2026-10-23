@@ -973,6 +973,22 @@ fn retained_records_cross_cells_and_reopen_cleanly() {
 }
 
 #[test]
+fn unicode_record_names_survive_worker_and_retained_replay() {
+    let mut kernel = NotebookKernel::open(notebook(vec![
+        code("definition", "record 座標:\n    位置: i64\n"),
+        code("value", "let p = 座標(位置: 7)"),
+        code("read", "p.位置"),
+    ]))
+    .unwrap();
+    kernel.restart_and_run_all().unwrap();
+    assert_eq!(output_body(&kernel.notebook().cells[2].outputs[0]), "7");
+    let saved = write_notebook(kernel.notebook()).unwrap();
+    let mut reopened = NotebookKernel::open(parse_notebook(&saved).unwrap()).unwrap();
+    reopened.restart_and_run_all().unwrap();
+    assert_eq!(output_body(&reopened.notebook().cells[2].outputs[0]), "7");
+}
+
+#[test]
 fn record_definition_edit_stales_dependents_and_reruns_selected_cells() {
     let mut kernel =
         NotebookKernel::open(parse_notebook(include_str!("fixtures/pure-records.cgnb")).unwrap())

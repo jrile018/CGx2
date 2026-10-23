@@ -82,6 +82,19 @@ fn generated_record_instances_are_immutable() {
 }
 
 #[test]
+fn record_field_names_do_not_collide_with_python_receiver_or_slots() {
+    let source = "record Point:\n    self: i64\n    __slots__: Bool\n    _cgx2_self: i64\nfn main() -> Point:\n    Point(self: 7, __slots__: true, _cgx2_self: 9)\n";
+    let cli = run_source(source, &[]).unwrap();
+    let output = run_python(source);
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    assert_eq!(output.stdout, format!("{}\n", cli.value).as_bytes());
+}
+
+#[test]
 fn constructor_preserves_first_checked_arithmetic_error() {
     for (fields, code) in [
         ("y: 1 / 0, x: 9223372036854775807 + 1", "CGR006"),

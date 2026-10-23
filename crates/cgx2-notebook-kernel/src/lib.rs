@@ -1632,9 +1632,11 @@ fn cell_diagnostic(
 const MAX_RECORD_IDENTIFIER_BYTES: usize = u16::MAX as usize;
 
 fn valid_record_identifier(name: &str) -> bool {
-    let mut bytes = name.bytes();
-    matches!(bytes.next(), Some(b'a'..=b'z' | b'A'..=b'Z' | b'_'))
-        && bytes.all(|byte| byte.is_ascii_alphanumeric() || byte == b'_')
+    let mut chars = name.chars();
+    chars
+        .next()
+        .is_some_and(|ch| ch == '_' || ch.is_alphabetic())
+        && chars.all(|ch| ch == '_' || ch.is_alphanumeric())
         && name.len() <= MAX_RECORD_IDENTIFIER_BYTES
 }
 
@@ -1946,6 +1948,20 @@ impl CellExecutor for RetainedExecutor {
 #[cfg(test)]
 mod record_protocol_tests {
     use super::{decode_worker_record, encode_worker_record, Value, MAX_EVALUATION_BYTES};
+
+    #[test]
+    fn record_protocol_preserves_source_unicode_identifiers() {
+        let fields = vec![("位置".to_owned(), Value::I64(7))];
+        let encoded = encode_worker_record("座標", &fields).unwrap();
+        assert_eq!(
+            decode_worker_record(&encoded).unwrap(),
+            Value::Record {
+                name: "座標".to_owned(),
+                fields,
+            }
+        );
+        assert!(encode_worker_record("1bad", &[("x".into(), Value::I64(1))]).is_err());
+    }
 
     #[test]
     fn record_roundtrip_and_malformed_payloads() {
