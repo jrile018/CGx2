@@ -1,3 +1,5 @@
+#![cfg(feature = "in-process")]
+
 use cgx2_foreign::{BridgeValue, ForeignError, PythonBridge, parse_declarations};
 
 fn registry() -> cgx2_foreign::Registry {

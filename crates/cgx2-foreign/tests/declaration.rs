@@ -1,4 +1,5 @@
 use cgx2_foreign::{ForeignError, parse_declarations};
+#[cfg(feature = "in-process")]
 use cgx2_python_bridge::{BridgeValue, PythonBridge};
 
 fn valid() -> String {
@@ -6,6 +7,7 @@ fn valid() -> String {
 }
 
 #[test]
+#[cfg(feature = "in-process")]
 fn valid_declaration_is_canonical_and_does_not_import() {
     let bridge = PythonBridge::new().unwrap();
     let sys = bridge.import_module("sys").unwrap();
@@ -93,4 +95,12 @@ fn malformed_declarations_fail_closed() {
         call(&"x".repeat(65_537)),
         ForeignError::Declaration(_)
     ));
+}
+
+#[test]
+fn metadata_round_trip_needs_no_python_host() {
+    let registry = parse_declarations(&valid()).unwrap();
+    assert_eq!(registry.get("sqrt").unwrap().module(), "math");
+    let canonical = registry.to_json();
+    assert_eq!(parse_declarations(&canonical).unwrap().to_json(), canonical);
 }

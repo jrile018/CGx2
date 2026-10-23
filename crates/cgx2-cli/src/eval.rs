@@ -1,7 +1,7 @@
 use std::{collections::HashMap, fmt};
 
 use crate::RunError;
-use cgx2_foreign::{registry_from_source, BridgeValue, PythonBridge, SourceCall, ValueShape};
+use cgx2_foreign::{registry_from_source, ScalarValue, SourceCall, ValueShape, WorkerConfig};
 use cgx2_syntax::{
     AssignOp, BinaryOp, Expr, ExprKind, Function, Module, Span, Stmt, StmtKind, TypeSyntax,
 };
@@ -472,19 +472,18 @@ impl Evaluator<'_> {
         };
         let registry =
             registry_from_source(&[call]).map_err(|err| error("CGR017", err.to_string(), span))?;
-        let bridge = PythonBridge::new().map_err(|err| error("CGR017", err.to_string(), span))?;
         let values: Vec<_> = args
             .into_iter()
             .map(|value| match value {
-                Value::I64(value) => BridgeValue::I64(value),
-                Value::Bool(value) => BridgeValue::Bool(value),
-                Value::String(value) => BridgeValue::String(value),
-                Value::Record { .. } => BridgeValue::None,
-                Value::Unit => BridgeValue::None,
+                Value::I64(value) => ScalarValue::I64(value),
+                Value::Bool(value) => ScalarValue::Bool(value),
+                Value::String(value) => ScalarValue::String(value),
+                Value::Record { .. } => unreachable!("checked scalar argument"),
+                Value::Unit => unreachable!("checked scalar argument"),
             })
             .collect();
         let returned = registry
-            .call(&bridge, &function.name, &values, &[])
+            .call_worker(&WorkerConfig::default(), &function.name, &values)
             .map_err(|err| {
                 let code = match err.category() {
                     "module_unavailable" => "CGR018",
@@ -495,11 +494,18 @@ impl Evaluator<'_> {
                 };
                 error(code, err.to_string(), span)
             })?;
-        match returned {
-            BridgeValue::I64(value) => Ok(Value::I64(value)),
-            BridgeValue::Bool(value) => Ok(Value::Bool(value)),
-            BridgeValue::String(value) => Ok(Value::String(value)),
-            _ => Err(error("CGR021", "unsupported Python return shape", span)),
+        if std::env::var_os("CGX2_PYTHON_TRACE").as_deref() == Some(std::ffi::OsStr::new("1")) {
+            eprintln!(
+                "Python worker executable={:?} version={:?} prefix={:?}",
+                returned.provenance.executable,
+                returned.provenance.version,
+                returned.provenance.prefix
+            );
+        }
+        match returned.value {
+            ScalarValue::I64(value) => Ok(Value::I64(value)),
+            ScalarValue::Bool(value) => Ok(Value::Bool(value)),
+            ScalarValue::String(value) => Ok(Value::String(value)),
         }
     }
 

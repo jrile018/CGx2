@@ -1,4 +1,6 @@
-use cgx2_python_bridge::{BridgeError, PythonFailure};
+#[cfg(feature = "in-process")]
+use cgx2_python_bridge::BridgeError;
+use cgx2_python_bridge::PythonFailure;
 use std::fmt;
 
 /// Stable source-facing categories for the later `.cg` adapter.
@@ -38,6 +40,7 @@ impl ForeignError {
         }
     }
 
+    #[cfg(feature = "in-process")]
     pub(crate) fn from_bridge(error: BridgeError, during_return: bool) -> Self {
         match error {
             BridgeError::ModuleUnavailable { module, failure } => {

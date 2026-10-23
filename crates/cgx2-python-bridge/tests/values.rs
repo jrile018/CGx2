@@ -1,3 +1,5 @@
+#![cfg(feature = "in-process")]
+
 use cgx2_python_bridge::{BridgeError, BridgeValue, PythonBridge};
 use std::collections::BTreeMap;
 

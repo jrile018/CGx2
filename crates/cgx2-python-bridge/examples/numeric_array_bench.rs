@@ -1,4 +1,4 @@
-//! Run with `cargo run --release -p cgx2-python-bridge --example numeric_array_bench --offline`.
+//! Run with `cargo run --release -p cgx2-python-bridge --features in-process --example numeric_array_bench --offline`.
 //! Reports observed embedded-CPython call and copy cost on this host only.
 use cgx2_python_bridge::{BridgeValue, PythonBridge};
 use std::time::Instant;

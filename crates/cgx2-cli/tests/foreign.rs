@@ -139,3 +139,82 @@ fn cli_json_reports_utf8_foreign_call_span() {
         "{stderr}"
     );
 }
+
+#[test]
+fn missing_worker_keeps_first_error_and_utf8_call_span() {
+    let code = format!("module café\n\n{}", source("math.isqrt", "i64", "81", ""));
+    let path = std::env::temp_dir().join(format!("cgx2-missing-worker-{}.cg", std::process::id()));
+    fs::write(&path, &code).unwrap();
+    let output = Command::new(env!("CARGO_BIN_EXE_cgx2"))
+        .args(["run", path.to_str().unwrap(), "--diagnostic-format=json"])
+        .env("CGX2_PYTHON_WORKER", "/missing/cgx2-worker.py")
+        .output()
+        .unwrap();
+    fs::remove_file(path).unwrap();
+    assert!(!output.status.success());
+    assert!(output.stdout.is_empty());
+    let stderr = String::from_utf8(output.stderr).unwrap();
+    assert_eq!(stderr.lines().count(), 1);
+    assert!(stderr.contains("\"code\":\"CGR017\""), "{stderr}");
+    assert!(
+        stderr.contains(&format!(
+            "\"start\":{},\"end\":{}",
+            code.find("host(81)").unwrap(),
+            code.find("host(81)").unwrap() + 8
+        )),
+        "{stderr}"
+    );
+}
+
+#[test]
+fn native_scalar_execution_never_discovers_python() {
+    let output = Command::new(env!("CARGO_BIN_EXE_cgx2"))
+        .args([
+            "run",
+            concat!(env!("CARGO_MANIFEST_DIR"), "/tests/fixtures/answer.cg"),
+        ])
+        .env("CGX2_PYTHON", "/missing/python")
+        .env("CGX2_PYTHON_WORKER", "/missing/worker.py")
+        .output()
+        .unwrap();
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+}
+
+#[test]
+fn worker_error_frames_preserve_all_runtime_classes_and_first_call_span() {
+    let code = format!("module café\n\n{}", source("math.isqrt", "i64", "81", ""));
+    let root = std::env::temp_dir().join(format!("cgx2-worker-errors-{}", std::process::id()));
+    fs::create_dir_all(&root).unwrap();
+    let path = root.join("main.cg");
+    fs::write(&path, &code).unwrap();
+    for (status, category) in [(1, "CGR018"), (2, "CGR019"), (3, "CGR020"), (4, "CGR021")] {
+        let script = root.join("worker.py");
+        fs::write(&script, format!("import os,struct,sys\ndef s(x):\n b=x.encode();return struct.pack('>I',len(b))+b\np=b'CGX2PY01R'+s('cpython')+s(sys.executable)+s(sys.version)+s(sys.prefix)+bytes([{status}])\nif {status} in (1,2,4):p+=s('math' if {status}==1 else 'missing')\nif {status}!=4:p+=s('ValueError')+s('failure')+s('traceback')\nos.write(1,p)\n")).unwrap();
+        let output = Command::new(env!("CARGO_BIN_EXE_cgx2"))
+            .args(["run", path.to_str().unwrap(), "--diagnostic-format=json"])
+            .env("CGX2_PYTHON_WORKER", &script)
+            .output()
+            .unwrap();
+        assert!(!output.status.success());
+        assert!(output.stdout.is_empty());
+        let stderr = String::from_utf8(output.stderr).unwrap();
+        assert_eq!(stderr.lines().count(), 1);
+        assert!(
+            stderr.contains(&format!("\"code\":\"{category}\"")),
+            "{stderr}"
+        );
+        assert!(
+            stderr.contains(&format!(
+                "\"start\":{},\"end\":{}",
+                code.find("host(81)").unwrap(),
+                code.find("host(81)").unwrap() + 8
+            )),
+            "{stderr}"
+        );
+    }
+    fs::remove_dir_all(root).unwrap();
+}

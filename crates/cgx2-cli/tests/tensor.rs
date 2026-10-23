@@ -594,3 +594,23 @@ fn real_pinned_float32_matrix_source_when_available() {
         assert!((actual - expected).abs() <= 1e-5);
     }
 }
+
+#[test]
+fn direct_float64_and_float32_cli_never_discovers_python() {
+    let _guard = TEST_LOCK.lock().unwrap();
+    for fixture in [Fixture::matrix(), Fixture::matrix_f32()] {
+        let output = Command::new(env!("CARGO_BIN_EXE_cgx2"))
+            .arg("run")
+            .arg(&fixture.root)
+            .env("CGX2_PYTHON", "/missing/python")
+            .env("CGX2_PYTHON_WORKER", "/missing/worker.py")
+            .output()
+            .unwrap();
+        assert!(
+            output.status.success(),
+            "{}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(String::from_utf8_lossy(&output.stdout).contains("58"));
+    }
+}

@@ -1,3 +1,5 @@
+#![cfg(feature = "in-process")]
+
 use cgx2_python_bridge::{BridgeError, BridgeValue, MAX_F64_ARRAY_ELEMENTS, PythonBridge};
 
 fn eval(bridge: &PythonBridge, expression: &str) -> cgx2_python_bridge::PyHandle {
