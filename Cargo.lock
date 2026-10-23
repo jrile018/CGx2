@@ -45,6 +45,7 @@ dependencies = [
 name = "cgx2-cli"
 version = "0.1.0"
 dependencies = [
+ "cgx2-api-index",
  "cgx2-bind",
  "cgx2-ffi-native",
  "cgx2-foreign",

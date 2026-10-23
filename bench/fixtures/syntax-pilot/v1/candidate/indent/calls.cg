@@ -1,5 +1,5 @@
 fn affine(x: i64, scale: i64, shift: i64) -> i64:
-    x * scale + shift
+    TODO()
 
 fn main() -> i64:
-    affine(affine(7, 3, 2), 4, 9)
+    TODO()

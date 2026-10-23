@@ -5,77 +5,102 @@
   "context_budget_tokens": 8192,
   "token_budget": 4096,
   "time_budget_seconds": 120,
-  "common_prompt": "Implement the language-neutral behavior using only the provided scalar API and example invocation.",
+  "common_prompt": "Implement the described behavior by replacing TODO() in the provided starter. Keep the public API. Use only the normalized syntax-pilot compiler tools.",
   "allowed_tools": [
-    "cgx2c emit-rust",
-    "cgx2c build"
+    "syntax-pilot emit-rust",
+    "syntax-pilot build"
   ],
   "tasks": [
     {
       "id": "precedence",
       "public_api": "fn main() -> i64",
-      "expected_behavior": "Evaluate a fixed arithmetic expression using standard precedence.",
+      "expected_behavior": "Return the sum of seven and five multiplied by the difference of nine and three, then add the integer quotient of 84 divided by four.",
       "example_args": [],
-      "variants": {
+      "starter_variants": {
         "indent": "candidate/indent/precedence.cg",
         "brace": "candidate/brace/precedence.cg"
+      },
+      "reference_variants": {
+        "indent": "private/reference/indent/precedence.cg",
+        "brace": "private/reference/brace/precedence.cg"
       }
     },
     {
       "id": "calls",
       "public_api": "fn affine(x: i64, scale: i64, shift: i64) -> i64; fn main() -> i64",
-      "expected_behavior": "Evaluate nested calls to an affine scalar function.",
+      "expected_behavior": "affine(x, scale, shift) returns x times scale plus shift. main returns affine(affine(7, 3, 2), 4, 9).",
       "example_args": [],
-      "variants": {
+      "starter_variants": {
         "indent": "candidate/indent/calls.cg",
         "brace": "candidate/brace/calls.cg"
+      },
+      "reference_variants": {
+        "indent": "private/reference/indent/calls.cg",
+        "brace": "private/reference/brace/calls.cg"
       }
     },
     {
       "id": "mutation",
       "public_api": "top-level scalar statements",
-      "expected_behavior": "Update a scalar accumulator twice and return it.",
+      "expected_behavior": "Start a mutable scalar accumulator at 11, add 17 times 3, then add 8, and output the final value.",
       "example_args": [],
-      "variants": {
+      "starter_variants": {
         "indent": "candidate/indent/mutation.cg",
         "brace": "candidate/brace/mutation.cg"
+      },
+      "reference_variants": {
+        "indent": "private/reference/indent/mutation.cg",
+        "brace": "private/reference/brace/mutation.cg"
       }
     },
     {
       "id": "argument_count",
       "public_api": "fn adjust(n: i64) -> i64; fn main() -> i64",
-      "expected_behavior": "Read the program argument count and apply an affine adjustment.",
+      "expected_behavior": "adjust(n) returns seven times n plus one. main passes the count of program arguments to adjust and returns its result.",
       "example_args": [
         "red",
         "blue",
         "green"
       ],
-      "variants": {
+      "starter_variants": {
         "indent": "candidate/indent/argument_count.cg",
         "brace": "candidate/brace/argument_count.cg"
+      },
+      "reference_variants": {
+        "indent": "private/reference/indent/argument_count.cg",
+        "brace": "private/reference/brace/argument_count.cg"
       }
     },
     {
       "id": "argument_text",
       "public_api": "top-level arg(0) expression",
-      "expected_behavior": "Return the first program argument as UTF-8 text.",
+      "expected_behavior": "Output the first program argument as UTF-8 text, preserving all characters.",
       "example_args": [
         "hello 世界"
       ],
-      "variants": {
+      "starter_variants": {
         "indent": "candidate/indent/argument_text.cg",
         "brace": "candidate/brace/argument_text.cg"
+      },
+      "reference_variants": {
+        "indent": "private/reference/indent/argument_text.cg",
+        "brace": "private/reference/brace/argument_text.cg"
       }
     },
     {
       "id": "overflow",
       "public_api": "top-level checked i64 expression",
-      "expected_behavior": "Report checked i64 overflow with a failing exit status.",
+      "expected_behavior": "Add one to the largest signed 64-bit integer. The program must report checked i64 overflow with a failing exit status.",
       "example_args": [],
-      "variants": {
+      "starter_variants": {
         "indent": "candidate/indent/overflow.cg",
         "brace": "candidate/brace/overflow.cg"
+      },
+      "reference_variants": {
+        "indent": "private/reference/indent/overflow.cg",
+        "brace": "private/reference/brace/overflow.cg"
       }
     }
-  ]
+  ],
+  "tool_contract": "The operator provides the same syntax-pilot wrapper for both variants; it normalizes brace source to canonical .cg before invoking cgx2c. Direct cgx2c invocation on brace source is unsupported."
 }

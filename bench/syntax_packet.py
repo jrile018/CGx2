@@ -69,64 +69,104 @@ def _load(packet):
     return manifest, oracle
 
 
+def _starter_shape(source):
+    """A public starter contains only API headers and unresolved placeholders."""
+    lines = [line.strip() for line in source.splitlines() if line.strip()]
+    return "TODO()" in lines and all(
+        line == "TODO()" or (line.startswith("fn ") and line.endswith(":"))
+        for line in lines
+    )
+
+
+def _headers(source):
+    return [line.strip() for line in source.splitlines()
+            if line.strip().startswith("fn ") and line.strip().endswith(":")]
+
+
 def validate(packet=PACKET, compiler=None):
     packet = Path(packet).resolve()
     manifest, oracle = _load(packet)
     findings = []
     cases = []
     hash_lock = json.loads((packet / "packet-hashes.json").read_text())
-    hash_paths = {"packet.json", "private/oracle.json"}
     tasks = manifest.get("tasks", [])
-    if (not tasks or len({t["id"] for t in tasks}) != len(tasks) or
+    if (not isinstance(tasks, list) or not tasks or
+            any(not isinstance(t, dict) or not isinstance(t.get("id"), str) or
+                not re.fullmatch(r"[a-z][a-z0-9_]*", t["id"]) for t in tasks) or
+            len({t["id"] for t in tasks}) != len(tasks) or
             set(oracle.get("cases", {})) != {t["id"] for t in tasks}):
         raise ValueError("task and private oracle IDs differ")
     if (manifest.get("context_budget_tokens", 0) <= 0 or
             manifest.get("time_budget_seconds", 0) <= 0 or
             manifest.get("token_budget", 0) <= 0):
         raise ValueError("shared budgets must be positive")
+    if manifest.get("allowed_tools") != ["syntax-pilot emit-rust", "syntax-pilot build"]:
+        raise ValueError("paired variants require the same normalized compiler tools")
+
     expected_sources = {f"{variant}/{task['id']}.cg" for task in tasks
                         for variant in ("indent", "brace")}
+    hash_paths = {"packet.json", "private/oracle.json"}
     hash_paths.update(f"candidate/{name}" for name in expected_sources)
+    hash_paths.update(f"private/reference/{name}" for name in expected_sources)
     if (hash_lock.get("schema_version") != 1 or
             set(hash_lock.get("sha256", {})) != hash_paths or
             any(sha((packet / name).read_bytes()) != expected
                 for name, expected in hash_lock["sha256"].items())):
-        raise ValueError("packet or private oracle differs from frozen SHA-256")
+        raise ValueError("packet or private reference differs from frozen SHA-256")
     candidate = packet / "candidate"
-    actual_sources = {str(path.relative_to(candidate)) for path in candidate.rglob("*")
-                      if path.is_file() or path.is_symlink()}
-    if actual_sources != expected_sources or any(path.is_symlink() for path in candidate.rglob("*")):
-        raise ValueError("candidate tree has unexpected files or symlinks")
+    reference = packet / "private/reference"
+    for root, label in ((candidate, "candidate"), (reference, "private reference")):
+        actual_sources = {str(path.relative_to(root)) for path in root.rglob("*")
+                          if path.is_file() or path.is_symlink()}
+        if (actual_sources != expected_sources or root.is_symlink() or
+                any(path.is_symlink() for path in root.rglob("*"))):
+            raise ValueError(f"{label} tree has unexpected files or symlinks")
+
     with tempfile.TemporaryDirectory(prefix="cgx2-syntax-") as tmp:
         for task in tasks:
             name = task["id"]
-            if (task.get("variants") != {"indent": f"candidate/indent/{name}.cg",
-                                         "brace": f"candidate/brace/{name}.cg"} or
+            starter_paths = {variant: f"candidate/{variant}/{name}.cg"
+                             for variant in ("indent", "brace")}
+            reference_paths = {variant: f"private/reference/{variant}/{name}.cg"
+                               for variant in ("indent", "brace")}
+            if (task.get("starter_variants") != starter_paths or
+                    task.get("reference_variants") != reference_paths or
                     not isinstance(task.get("public_api"), str) or not task["public_api"] or
-                    not isinstance(task.get("expected_behavior"), str) or not task["expected_behavior"] or
+                    not isinstance(task.get("expected_behavior"), str) or
+                    not task["expected_behavior"] or
                     not isinstance(task.get("example_args"), list) or
                     any(not isinstance(arg, str) for arg in task["example_args"])):
                 raise ValueError(f"invalid paired task contract: {name}")
-            indent = packet / "candidate/indent" / f"{name}.cg"
-            brace = packet / "candidate/brace" / f"{name}.cg"
-            if (not indent.is_file() or not brace.is_file() or
-                    indent.is_symlink() or brace.is_symlink()):
-                raise ValueError(f"missing candidate source: {name}")
-            # The exact canonical bytes establish equal parsed operations when
-            # the same compiler parses both, beyond a lexical token-count proxy.
-            canonical = indent.read_text()
-            normalized = normalize_brace(brace.read_text())
-            if normalized != canonical:
-                findings.append(f"{name}:normalized_source_mismatch")
-            row = {"task_id": name, "indent_source_bytes": len(indent.read_bytes()),
-                   "brace_source_bytes": len(brace.read_bytes()),
-                   "normalized_sha256": sha(normalized.encode()),
-                   "indent_sha256": sha(indent.read_bytes()),
-                   "same_semantic_units": normalized == canonical,
+            starter_indent = (packet / starter_paths["indent"]).read_text()
+            starter_brace = (packet / starter_paths["brace"]).read_text()
+            reference_indent = (packet / reference_paths["indent"]).read_text()
+            reference_brace = (packet / reference_paths["brace"]).read_text()
+            normalized_starter = normalize_brace(starter_brace)
+            normalized_reference = normalize_brace(reference_brace)
+            starter_parity = normalized_starter == starter_indent
+            reference_parity = normalized_reference == reference_indent
+            if not starter_parity:
+                findings.append(f"{name}:starter_syntax_mismatch")
+            if not reference_parity:
+                findings.append(f"{name}:reference_syntax_mismatch")
+            if (not _starter_shape(starter_indent) or
+                    "TODO()" in reference_indent or
+                    starter_indent == reference_indent or
+                    _headers(starter_indent) != _headers(reference_indent)):
+                findings.append(f"{name}:starter_leaks_or_changes_reference_api")
+            row = {"task_id": name,
+                   "indent_source_bytes": len(starter_indent.encode()),
+                   "brace_source_bytes": len(starter_brace.encode()),
+                   "normalized_sha256": sha(normalized_starter.encode()),
+                   "indent_sha256": sha(starter_indent.encode()),
+                   "same_semantic_units": starter_parity and reference_parity,
+                   "starter_parity": starter_parity,
+                   "private_reference_parity": reference_parity,
                    "compiler_check": "unrun"}
-            if compiler is not None and normalized == canonical:
-                sources = []
-                for variant, content in (("indent", canonical), ("brace", normalized)):
+            if compiler is not None and reference_parity:
+                outputs = []
+                for variant, content in (("indent", reference_indent),
+                                         ("brace", normalized_reference)):
                     source_path = Path(tmp) / f"{name}-{variant}.cg"
                     source_path.write_text(content)
                     rust_path = Path(tmp) / f"{name}-{variant}.rs"
@@ -147,10 +187,11 @@ def validate(packet=PACKET, compiler=None):
                                 run.stdout.decode("utf-8", errors="replace") == expected["stdout"] and
                                 (not expected.get("stderr_contains") or
                                  expected["stderr_contains"].encode() in run.stderr))
-                    sources.append((sha(rust_path.read_bytes()), run.returncode,
+                    outputs.append((sha(rust_path.read_bytes()), run.returncode,
                                     run.stdout, accepted))
-                if len(sources) == 2:
-                    row["compiler_check"] = "pass" if sources[0] == sources[1] and sources[0][3] else "fail"
+                if len(outputs) == 2:
+                    row["compiler_check"] = ("pass" if outputs[0] == outputs[1] and
+                                             outputs[0][3] else "fail")
                     if row["compiler_check"] == "fail":
                         findings.append(f"{name}:compiler_or_acceptance_mismatch")
             cases.append(row)

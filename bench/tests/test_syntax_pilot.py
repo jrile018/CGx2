@@ -10,6 +10,7 @@ import unittest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import readiness
 import syntax_packet
+import syntax_tool
 import syntax_trace
 
 
@@ -19,6 +20,20 @@ class SyntaxPacketTests(unittest.TestCase):
         self.assertEqual(result["case_count"], 6)
         self.assertEqual(result["findings"], [])
         self.assertTrue(all(row["same_semantic_units"] for row in result["cases"]))
+        self.assertTrue(all(row["starter_parity"] and row["private_reference_parity"]
+                            for row in result["cases"]))
+
+    def test_public_starters_are_incomplete_and_references_are_private(self):
+        packet = syntax_packet.PACKET
+        manifest = json.loads((packet / "packet.json").read_text())
+        for task in manifest["tasks"]:
+            for variant in ("indent", "brace"):
+                starter = (packet / task["starter_variants"][variant]).read_text()
+                reference = (packet / task["reference_variants"][variant]).read_text()
+                self.assertIn("TODO()", starter)
+                self.assertNotIn("TODO()", reference)
+                self.assertNotEqual(starter, reference)
+                self.assertTrue(task["reference_variants"][variant].startswith("private/"))
 
     def test_rejects_unbalanced_and_unsupported_braces(self):
         for source in ("fn main() -> i64 {\n    1;\n",
@@ -32,9 +47,45 @@ class SyntaxPacketTests(unittest.TestCase):
             packet = Path(tmp) / "packet"
             shutil.copytree(syntax_packet.PACKET, packet)
             source = packet / "candidate/brace/precedence.cg"
+            source.write_text(source.read_text().replace("TODO()", "42"))
+            with self.assertRaisesRegex(ValueError, "frozen SHA-256"):
+                syntax_packet.validate(packet)
+
+    def test_frozen_private_reference_hash_detects_drift(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            packet = Path(tmp) / "packet"
+            shutil.copytree(syntax_packet.PACKET, packet)
+            source = packet / "private/reference/indent/precedence.cg"
             source.write_text(source.read_text().replace("84", "85"))
             with self.assertRaisesRegex(ValueError, "frozen SHA-256"):
                 syntax_packet.validate(packet)
+
+    def test_rehashed_solution_in_candidate_still_fails_leak_guard(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            packet = Path(tmp) / "packet"
+            shutil.copytree(syntax_packet.PACKET, packet)
+            candidate = packet / "candidate/indent/precedence.cg"
+            reference = packet / "private/reference/indent/precedence.cg"
+            candidate.write_bytes(reference.read_bytes())
+            brace = packet / "candidate/brace/precedence.cg"
+            private_brace = packet / "private/reference/brace/precedence.cg"
+            brace.write_bytes(private_brace.read_bytes())
+            hashes = packet / "packet-hashes.json"
+            lock = json.loads(hashes.read_text())
+            for path in (candidate, brace):
+                name = str(path.relative_to(packet))
+                lock["sha256"][name] = hashlib.sha256(path.read_bytes()).hexdigest()
+            hashes.write_text(json.dumps(lock))
+            result = syntax_packet.validate(packet)
+            self.assertEqual(result["status"], "invalid")
+            self.assertIn("precedence:starter_leaks_or_changes_reference_api", result["findings"])
+
+    def test_same_compiler_wrapper_normalizes_both_variants(self):
+        packet = syntax_packet.PACKET
+        indent = (packet / "candidate/indent/calls.cg").read_text()
+        brace = (packet / "candidate/brace/calls.cg").read_text()
+        self.assertEqual(syntax_tool.canonical_source(indent, "indent"),
+                         syntax_tool.canonical_source(brace, "brace"))
 
 
 class SyntaxTraceTests(unittest.TestCase):

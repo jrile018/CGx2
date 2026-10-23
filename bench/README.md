@@ -266,4 +266,4 @@ The completion noninferiority gate is `met` only when its lower 95% bound is str
 
 ## Wave 17 public syntax pilot readiness
 
-The six-case paired syntax packet, exact-token trace contract, and one-command readiness report are documented in [fixtures/syntax-pilot/v1/README.md](fixtures/syntax-pilot/v1/README.md). It is a compiler-checked scalar pilot, with independent human review and model trials still unrun. The brace form is normalized to canonical `.cg` only in the test harness.
+The six-case paired syntax packet, exact-token trace contract, and one-command readiness report are documented in [fixtures/syntax-pilot/v1/README.md](fixtures/syntax-pilot/v1/README.md). Public candidate files are incomplete `TODO()` starters; complete compiler-checked examples and acceptance outputs remain under `private/` and must stay outside model workspaces. Independent human review and model trials are still unrun. The experimental brace form is normalized to canonical `.cg` by the same operator-provided compiler wrapper for both variants.

@@ -17,6 +17,14 @@ Six commits were integrated: 1,024-seed direct-runtime memory corpus and cleanup
 
 Combined offline Rust workspace tests excluding socket UI, UI loopback tests, formatting, Clippy with warnings denied, and 83 Python benchmark tests pass. On this host the isolation probe returns `unsupported_isolation:cgroup_controllers_not_delegated:cpu,memory,pids`; Z3/CVC5 are absent. A real LibTorch run was reported by a worker but is not yet reproducible from committed pins. The memory correctness, trusted proof, independently reviewed benchmark tasks and paired LLM trials remain open release gates.
 
+## Review result (2026-10-23)
+
+All six bounded worker commits were reviewed and integrated on `wave17/integration`. The runtime now reports actual root registrations; the source interpreter and native failure paths do not yet consume that census. Memory functions accept checked scalar byte sizes in their bounded profile. The LibTorch preparation path creates deterministic schema-2 pins, but a normal copied package and a committed, reproducible real CPU run remain to be demonstrated. Notebook cells can retain bounded pure functions. The proof audit checks its supported SMT encoding against a finite evaluator; a live trusted solver result remains unrun.
+
+The benchmark review found that the initial public candidate files contained complete answers. The coordinator moved complete examples to `private/reference/`, replaced candidates with `TODO()` starters, added a common brace-normalizing compiler wrapper, and froze both starter and reference hashes. The packet now passes six private-reference compiler checks, but there are zero genuine paired LLM trials and no improvement claim. A LibTorch test fixture was repaired to close an intentionally loaded shared library before its temporary files are removed. The root `Cargo.lock` was updated for the CLI's new API-index dependency.
+
+Combined offline workspace Rust tests, 95 Python benchmark tests, format, Clippy, notebook UI tests, and benchmark readiness passed. The host does not delegate the CPU, memory, and PID cgroup controllers, so the scored candidate isolation gate is unsupported here. These results do not close the memory, real foreign-library, live proof, or measured LLM release gates. `main` has not been changed.
+
 ## Coordinator gate
 
 Review exact commits and ownership before integrating, run combined tests and source-to-native fixtures, and fix proven defects on the integration branch. A direct-runtime test does not establish whole-language memory safety; a solver response without checked obligations is not a global proof; a local tensor test without archived pins is not portable compatibility evidence; a benchmark packet without independent review/model trials is not an LLM result. `main` remains unchanged pending the user's review.

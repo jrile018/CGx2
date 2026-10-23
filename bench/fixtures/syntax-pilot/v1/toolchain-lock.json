@@ -1,10 +1,1 @@
-{
-  "schema_version": 1,
-  "build_recipe": "cargo build --offline --locked -p cgx2c --target-dir /tmp/cgx2-wave17-target",
-  "compiler_source_git_tree": "be7cffebe9d2b74931f5418506f7f918b130f82c",
-  "cargo_lock_sha256": "974d2ff633c12611f8323ea2eb4761959fad75c14baf7d7e628feccbbef0ed5a",
-  "rustc_version": "rustc 1.98.1 (48a229cea 2026-09-01)",
-  "rustc_sha256": "859254978c0a0402c32f949f6de0d99aee73be8d15f45aac00ae1448aac51e74",
-  "cargo_version": "cargo 1.98.1 (797e8a9bc 2026-08-05)",
-  "cargo_sha256": "da77c8b33849312255ccde3179198ada4c8deb370488d050286146b1d1b27e14"
-}
+{"schema_version":1,"build_recipe":"cargo build --offline --locked -p cgx2c --target-dir /tmp/cgx2-wave17-target","compiler_source_git_tree":"9f492ff60062ae51dd8271818c0d96862eca0df0","cargo_lock_sha256":"3003e85f953638c510085b2b132aee6cf1164201d758fad396034ae1077e2544","rustc_version":"rustc 1.98.1 (48a229cea 2026-09-01)","rustc_sha256":"859254978c0a0402c32f949f6de0d99aee73be8d15f45aac00ae1448aac51e74","cargo_version":"cargo 1.98.1 (797e8a9bc 2026-08-05)","cargo_sha256":"da77c8b33849312255ccde3179198ada4c8deb370488d050286146b1d1b27e14"}
