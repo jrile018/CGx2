@@ -39,3 +39,13 @@ All twelve workers completed. IDs were resolved from exact worktree metadata and
 | analysis | `01a1698a-44ec-7942-ba44-753f20ea5acd` | 59446db | repair-required |
 | evidence | `01a1698a-4e64-7e00-ab15-a0ae0052bf36` | d224bf1 | reviewed-bounded-delivery |
 | docs | `01a1698a-673a-7593-b8b7-a4c53f09a8d0` | 9e96ac4 | repair-required |
+
+## Repair wave dispatched
+
+Base: `2b9855c48713794d4cf819bc391813c1260f287b`. All three worktrees and permanent chats are confirmed active; original client IDs are preserved in thread-state.json.
+
+| Repair | Permanent chat ID | Worktree | Status |
+| --- | --- | --- | --- |
+| verifier-size | `01a16aed-eaa7-77f0-94cc-0a40c1daa7b0` | /home/john-riley/.codex/worktrees/18ee/lang | running |
+| analysis-contracts | `01a16aed-f621-7703-962a-c328604fef77` | /home/john-riley/.codex/worktrees/9bbd/lang | running |
+| docs-current | `01a16aee-0c58-7263-9b81-049eb0f96358` | /home/john-riley/.codex/worktrees/b26d/lang | running |

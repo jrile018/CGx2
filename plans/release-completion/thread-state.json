@@ -111,5 +111,39 @@
       "afterCursor": "a547530d-eeb9-4027-9a45-ba50f451091f:1"
     }
   ],
-  "repairs": []
+  "repairs": [
+    {
+      "lane": "verifier-size",
+      "title": "CGx2 bounded SMT emission repair",
+      "threadId": "01a16aed-eaa7-77f0-94cc-0a40c1daa7b0",
+      "worktree": "/home/john-riley/.codex/worktrees/18ee/lang",
+      "hostId": "local",
+      "status": "running",
+      "base": "2b9855c48713794d4cf819bc391813c1260f287b",
+      "afterCursor": "db656518-696a-4de1-8b93-8544637fc493:1",
+      "clientThreadId": "client-new-thread:a96aa5f1-0010-4c13-b100-8742ecc5b405"
+    },
+    {
+      "lane": "analysis-contracts",
+      "title": "CGx2 contract call graph completion",
+      "threadId": "01a16aed-f621-7703-962a-c328604fef77",
+      "worktree": "/home/john-riley/.codex/worktrees/9bbd/lang",
+      "hostId": "local",
+      "status": "running",
+      "base": "2b9855c48713794d4cf819bc391813c1260f287b",
+      "afterCursor": "464ec763-0e1e-4392-92b1-4217a9de67dd:1",
+      "clientThreadId": "client-new-thread:3b53f70d-2b5f-422e-8a8d-e6b9791b0157"
+    },
+    {
+      "lane": "docs-current",
+      "title": "CGx2 integrated command guide",
+      "threadId": "01a16aee-0c58-7263-9b81-049eb0f96358",
+      "worktree": "/home/john-riley/.codex/worktrees/b26d/lang",
+      "hostId": "local",
+      "status": "running",
+      "base": "2b9855c48713794d4cf819bc391813c1260f287b",
+      "afterCursor": "3a32e8c3-e84d-438b-8b06-cf5874ff8a32:1",
+      "clientThreadId": "client-new-thread:02781688-c89f-4782-88b2-47dc67b853c7"
+    }
+  ]
 }
