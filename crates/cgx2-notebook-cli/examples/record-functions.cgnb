@@ -1,0 +1,28 @@
+#!cgnb 1
+%% markdown id=notes
+# Local record functions
+Immutable nominal records cross pure function and cell boundaries. Constructors
+accept named fields in source order; display keeps declaration order. Edit the
+record schema to stale its functions and callers, then rerun the record cell.
+%% code id=record
+record Point:
+    x: i64
+    active: Bool
+%% code id=functions
+fn identity(p: Point) -> Point:
+    p
+
+fn shifted(p: Point, delta: i64) -> Point:
+    Point(active: p.active, x: p.x + delta)
+
+fn coordinate(p: Point) -> i64:
+    p.x
+%% code id=parameter
+let delta = 1
+%% code id=value
+let point = shifted(identity(Point(active: true, x: 41)), delta)
+point
+%% code id=read
+coordinate(point)
+%% code id=independent
+6 * 7

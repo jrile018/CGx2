@@ -10,6 +10,62 @@ use cgx2_notebook_format::{
 static NEXT: AtomicU64 = AtomicU64::new(0);
 
 #[test]
+fn record_functions_run_inspect_and_clean_sweep_agree() {
+    let fixture = Fixture::new();
+    let example = include_str!("../examples/record-functions.cgnb");
+    let input = fixture.write("records.cgnb", example);
+    let output = fixture.path("executed.cgnb");
+    let result = run(&[Path::new("run"), &input, Path::new("--out"), &output]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let executed = parse_notebook_bytes(&fs::read(&output).unwrap()).unwrap();
+    let read = executed
+        .cells
+        .iter()
+        .find(|cell| cell.id == "read")
+        .unwrap();
+    assert!(matches!(&read.outputs[0], CellOutput::Text { body, .. } if body == "42"));
+    let result = run(&[Path::new("inspect"), &output]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    assert!(String::from_utf8_lossy(&result.stdout).contains("functions\tcode\tcached"));
+
+    let sweep = fixture.path("sweep-records");
+    let result = run_str(&[
+        "sweep",
+        input.to_str().unwrap(),
+        "parameter",
+        "--value",
+        "2",
+        "--value",
+        "-1",
+        "--out-dir",
+        sweep.to_str().unwrap(),
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    for (index, delta) in [2, -1].iter().enumerate() {
+        let trial = parse_notebook_bytes(
+            &fs::read(sweep.join(format!("trial-{:02}.cgnb", index + 1))).unwrap(),
+        )
+        .unwrap();
+        let clean_input = fixture.write(
+            "clean.cgnb",
+            &example.replace("let delta = 1", &format!("let delta = {delta}")),
+        );
+        let clean_output = fixture.path(&format!("clean-result-{index}.cgnb"));
+        let result = run(&[
+            Path::new("run"),
+            &clean_input,
+            Path::new("--out"),
+            &clean_output,
+        ]);
+        assert!(result.status.success(), "{}", stderr(&result));
+        let clean = parse_notebook_bytes(&fs::read(clean_output).unwrap()).unwrap();
+        for (trial, clean) in trial.cells.iter().zip(&clean.cells) {
+            assert_eq!(trial.outputs, clean.outputs, "cell {}", trial.id);
+        }
+    }
+}
+
+#[test]
 fn pure_function_fixture_runs_and_inspects_cached_status() {
     let fixture = Fixture::new();
     let input = fixture.write(

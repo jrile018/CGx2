@@ -14,6 +14,79 @@ use serde_json::{json, Value};
 static NEXT: AtomicU64 = AtomicU64::new(0);
 
 #[test]
+fn record_function_annotations_drive_http_rerun_and_saved_provenance() {
+    let fixture = Fixture::new(include_str!(
+        "../../cgx2-notebook-cli/examples/record-functions.cgnb"
+    ));
+    let (port, handle) = server(&fixture.input, 7);
+    let secret = token(port);
+    let (status, state) = post(port, "/api/restart", json!({}), &secret);
+    assert_eq!(status, 200, "{state}");
+    assert_eq!(state["cells"][5]["outputs"][0]["body"], "42");
+    let independent = state["cells"][6]["provenance"].clone();
+    let (_, state) = post(
+        port,
+        "/api/edit",
+        json!({
+            "id":"record", "source":"record Point:\n    active: Bool\n    x: i64\n"
+        }),
+        &secret,
+    );
+    assert_eq!(state["cells"][2]["status"], "stale");
+    assert_eq!(state["cells"][4]["status"], "stale");
+    assert_eq!(state["cells"][6]["status"], "current");
+    let (status, state) = post(port, "/api/run-cell", json!({"id":"record"}), &secret);
+    assert_eq!(status, 200, "{state}");
+    assert_eq!(
+        state["cells"][4]["outputs"][0]["body"],
+        "Point(active: true, x: 42)"
+    );
+    assert_eq!(state["cells"][6]["provenance"], independent);
+    assert_eq!(
+        post(
+            port,
+            "/api/save",
+            json!({"name":"records.cgnb","overwrite":false}),
+            &secret
+        )
+        .0,
+        200
+    );
+    let (_, state) = post(port, "/api/delete", json!({"id":"record"}), &secret);
+    assert_eq!(state["cells"][1]["status"], "stale");
+    assert_eq!(state["cells"][4]["status"], "stale");
+    assert_eq!(
+        post(
+            port,
+            "/api/save",
+            json!({"name":"deleted.cgnb","overwrite":false}),
+            &secret
+        )
+        .0,
+        200
+    );
+    handle.join().unwrap();
+    let saved = parse_notebook_bytes(&fs::read(fixture.dir.join("records.cgnb")).unwrap()).unwrap();
+    let mut reopened = cgx2_notebook_kernel::NotebookKernel::open(saved).unwrap();
+    assert_eq!(
+        reopened.status("read").unwrap(),
+        cgx2_notebook_session::CellStatus::Cached
+    );
+    reopened.restart_and_run_all().unwrap();
+    let deleted =
+        parse_notebook_bytes(&fs::read(fixture.dir.join("deleted.cgnb")).unwrap()).unwrap();
+    let reopened = cgx2_notebook_kernel::NotebookKernel::open(deleted).unwrap();
+    assert_eq!(
+        reopened.status("read").unwrap(),
+        cgx2_notebook_session::CellStatus::Stale
+    );
+    assert_eq!(
+        reopened.status("independent").unwrap(),
+        cgx2_notebook_session::CellStatus::Cached
+    );
+}
+
+#[test]
 fn deleting_pure_function_exposes_stale_output_and_missing_definition() {
     let fixture = Fixture::new(include_str!(
         "../../cgx2-notebook-kernel/tests/fixtures/pure-functions.cgnb"

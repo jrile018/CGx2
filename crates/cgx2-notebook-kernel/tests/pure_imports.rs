@@ -315,3 +315,28 @@ fn imported_record_function_is_rejected_at_cell_boundary() {
     assert_eq!(error.cell_id.as_deref(), Some("import"));
     assert!(error.message.contains("at 7.."), "{error}");
 }
+
+#[test]
+fn local_function_cannot_use_an_imported_record_annotation() {
+    let project = Project::new();
+    project.write(
+        "src/alpha.cg",
+        "module demo.alpha\nrecord Point:\n    x: i64\npub fn value() -> i64 effects() caps():\n    1\n",
+    );
+    let mut kernel = NotebookKernel::open_with_project(
+        Notebook {
+            version: 1,
+            cells: vec![
+                code("import", "import demo.alpha\n"),
+                code("bad", "fn ignored(p: alpha.Point) -> i64:\n    1\n"),
+            ],
+        },
+        Some(project.root()),
+    )
+    .unwrap();
+    kernel.run_cell("import").unwrap();
+    let error = kernel.run_cell("bad").unwrap_err();
+    assert_eq!(error.cell_id.as_deref(), Some("bad"));
+    assert_eq!(error.code, "CGNK011");
+    assert!(error.message.contains("at "), "{error}");
+}

@@ -1,5 +1,22 @@
 # CGx2 notebook command
 
+## Local record functions
+
+```sh
+cgx2-notebook run crates/cgx2-notebook-cli/examples/record-functions.cgnb \
+  --out /tmp/record-functions-result.cgnb
+cgx2-notebook sweep crates/cgx2-notebook-cli/examples/record-functions.cgnb parameter \
+  --value 2 --value -1 --out-dir /tmp/record-functions-sweep
+```
+
+[record-functions.cgnb](examples/record-functions.cgnb) passes immutable local
+records through identity, construction, and field projection functions across
+cells. Record annotations participate in invalidation even for unused
+parameters. The ordinary worker, replay-byte, step, and depth bounds apply.
+Imported/foreign-layout records, generic/nested records, mutation, contracts,
+and effectful functions remain unsupported. Reopening restores cached outputs;
+Restart and Run All recomputes them from source.
+
 ## Checked local pure imports
 
 Run [the two-module example](examples/pure-imports/pure-imports.cgnb) with:

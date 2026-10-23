@@ -647,10 +647,14 @@ fn new_session(
             if notebook.cells[index + 1..].iter().any(|later| {
                 later.kind == CellKind::Code && facts[&later.id].defines.contains(read)
             }) {
-                return Err(error("CGNK009", format!(
-                    "cell {} has a forward dependency on {read}; dependency cycles and forward references are unsupported",
-                    cell.id
-                )));
+                return Err(KernelError {
+                    code: "CGNK009",
+                    message: format!(
+                        "cell {} has a forward dependency on {}; dependency cycles and forward references are unsupported at 0..{}",
+                        cell.id, read.strip_prefix("type:").unwrap_or(read), cell.source.len()
+                    ),
+                    cell_id: Some(cell.id.clone()),
+                });
             }
         }
     }
@@ -830,6 +834,9 @@ pub fn facts_for_source(source: &str) -> Result<CellFacts, KernelError> {
                 ),
             ));
         }
+        // Type names occupy their own namespace: a value binding named Point
+        // must not hide the producer of a Point annotation from invalidation.
+        facts.defines.insert(format!("type:{}", record.name));
     }
     if module.functions.len() > MAX_PURE_FUNCTIONS {
         return Err(error("CGNK006", "too many pure functions in one cell"));
@@ -863,7 +870,10 @@ pub fn facts_for_source(source: &str) -> Result<CellFacts, KernelError> {
         }
     }
     facts.reads.retain(|name| {
-        !module.records.iter().any(|record| &record.name == name)
+        !module
+            .records
+            .iter()
+            .any(|record| &record.name == name || format!("type:{}", record.name) == *name)
             && !module
                 .functions
                 .iter()
@@ -891,14 +901,14 @@ fn validate_function(function: &Function, facts: &mut CellFacts) -> Result<(), K
         || !function.requires.is_empty()
         || !function.ensures.is_empty()
     {
-        return Err(error("CGNK011", "effect, capability, foreign, and contract declarations are unsupported in pure notebook functions"));
+        return Err(error("CGNK011", format!("effect, capability, foreign, and contract declarations are unsupported in pure notebook functions at {}..{}", function.span.start, function.span.end)));
     }
     if function.parameters.len() > MAX_FUNCTION_PARAMETERS {
         return Err(error("CGNK006", "too many pure function parameters"));
     }
     let mut locals = BTreeSet::new();
     for parameter in &function.parameters {
-        scalar_type(&parameter.ty.to_string())?;
+        function_type(&parameter.ty, facts)?;
         if !locals.insert(parameter.name.clone()) {
             return Err(error("CGNK001", "duplicate pure function parameter"));
         }
@@ -906,10 +916,10 @@ fn validate_function(function: &Function, facts: &mut CellFacts) -> Result<(), K
     let Some(return_type) = &function.return_type else {
         return Err(error(
             "CGNK001",
-            "pure notebook functions require a scalar return type",
+            "pure notebook functions require a scalar or local record return type",
         ));
     };
-    scalar_type(&return_type.to_string())?;
+    function_type(return_type, facts)?;
     if !facts.defines.insert(function.name.clone()) {
         return Err(error("CGNK001", "duplicate pure function name in cell"));
     }
@@ -928,15 +938,23 @@ fn validate_function(function: &Function, facts: &mut CellFacts) -> Result<(), K
     Ok(())
 }
 
-fn scalar_type(name: &str) -> Result<(), KernelError> {
-    if matches!(name, "i64" | "Bool" | "String") {
-        Ok(())
-    } else {
-        Err(error(
-            "CGNK011",
-            format!("unsupported pure notebook scalar type {name}"),
-        ))
+fn function_type(ty: &cgx2_syntax::TypeSyntax, facts: &mut CellFacts) -> Result<(), KernelError> {
+    if ty.arguments.is_empty() && ty.path.segments.len() == 1 {
+        let name = &ty.path.segments[0];
+        if !matches!(name.as_str(), "i64" | "Bool" | "String") {
+            // Resolve nominal names with the shared checker against the records
+            // visible at execution. Even an unused annotation is a dependency.
+            facts.reads.insert(format!("type:{name}"));
+        }
+        return Ok(());
     }
+    Err(error(
+        "CGNK011",
+        format!(
+            "unsupported pure notebook type {ty}; expected a scalar or local record at {}..{}",
+            ty.span.start, ty.span.end
+        ),
+    ))
 }
 
 fn collect_external_reads(
@@ -1215,6 +1233,31 @@ impl RetainedExecutor {
         source: &str,
     ) -> Result<String, String> {
         let selected_index = self.order.get(id).copied().unwrap_or(usize::MAX);
+        let visible_records: BTreeSet<_> = self
+            .records
+            .iter()
+            .filter(|(_, record)| self.order[&record.cell_id] < selected_index)
+            .map(|(name, _)| name.as_str())
+            .chain(module.records.iter().map(|record| record.name.as_str()))
+            .collect();
+        for function in &module.functions {
+            for ty in function
+                .parameters
+                .iter()
+                .map(|parameter| &parameter.ty)
+                .chain(function.return_type.iter())
+            {
+                let name = ty.to_string();
+                if !matches!(name.as_str(), "i64" | "Bool" | "String")
+                    && !visible_records.contains(name.as_str())
+                {
+                    return Err(format!(
+                        "CGNK011: type {ty} is not a visible local record at {}..{}",
+                        ty.span.start, ty.span.end
+                    ));
+                }
+            }
+        }
         let mut retained: Vec<_> = self
             .functions
             .values()
