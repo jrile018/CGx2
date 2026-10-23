@@ -6,6 +6,7 @@
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::SystemTime;
 
+pub mod owned_v1;
 pub mod profile;
 
 /// No scoped workers are launched below this input size.
@@ -458,15 +459,25 @@ pub fn map_i64_checked_sequential(
     multiplier: i64,
     addend: i64,
 ) -> Result<Vec<i64>, MapError> {
-    input
-        .iter()
-        .enumerate()
-        .map(|(index, &value)| checked_value(value, multiplier, addend, index))
-        .collect()
+    map_i64_checked_sequential_cancellable(input, multiplier, addend, &AtomicBool::new(false))
 }
 
-/// Scoped workers evaluate disjoint chunks. Results are joined in source order,
-/// preserving the first overflow index even when later chunks finish first.
+/// Checked scalar map with cooperative cancellation and fallible output allocation.
+pub fn map_i64_checked_sequential_cancellable(
+    input: &[i64],
+    multiplier: i64,
+    addend: i64,
+    cancellation: &AtomicBool,
+) -> Result<Vec<i64>, MapError> {
+    checked_sequential(
+        CheckedInputs::Map(input, multiplier),
+        addend,
+        cancellation,
+        false,
+    )
+}
+
+/// Legacy worker clamping and small-input sequential fallback are preserved.
 pub fn map_i64_checked_parallel(
     input: &[i64],
     multiplier: i64,
@@ -476,37 +487,28 @@ pub fn map_i64_checked_parallel(
     let workers = requested_workers
         .min(MAX_WORKERS)
         .min(input.len() / MIN_CHUNK_ELEMENTS);
+    let cancellation = AtomicBool::new(false);
     if workers < 2 || input.len() < MIN_PARALLEL_ELEMENTS {
-        return map_i64_checked_sequential(input, multiplier, addend);
+        return map_i64_checked_sequential_cancellable(input, multiplier, addend, &cancellation);
     }
-    let chunk_size = input.len().div_ceil(workers);
-    std::thread::scope(|scope| {
-        let handles: Vec<_> = input
-            .chunks(chunk_size)
-            .enumerate()
-            .map(|(chunk, slice)| {
-                scope.spawn(move || {
-                    slice
-                        .iter()
-                        .enumerate()
-                        .map(|(offset, &value)| {
-                            checked_value(value, multiplier, addend, chunk * chunk_size + offset)
-                        })
-                        .collect::<Result<Vec<_>, _>>()
-                })
-            })
-            .collect();
-        let mut output = Vec::with_capacity(input.len());
-        let mut first_error = None;
-        for handle in handles {
-            match handle.join().expect("pure map worker panicked") {
-                Ok(chunk) => output.extend(chunk),
-                Err(error) if first_error.is_none() => first_error = Some(error),
-                Err(_) => {}
-            }
-        }
-        first_error.map_or(Ok(output), Err)
-    })
+    map_i64_checked_parallel_cancellable(input, multiplier, addend, workers, &cancellation)
+}
+
+/// Strict worker validation, matching the cancellable zip primitive.
+pub fn map_i64_checked_parallel_cancellable(
+    input: &[i64],
+    multiplier: i64,
+    addend: i64,
+    requested_workers: usize,
+    cancellation: &AtomicBool,
+) -> Result<Vec<i64>, MapError> {
+    checked_parallel(
+        CheckedInputs::Map(input, multiplier),
+        addend,
+        requested_workers,
+        cancellation,
+        ZipFaults::default(),
+    )
 }
 
 /// Checked `left[i] * right[i] + addend` in input order.
@@ -527,30 +529,82 @@ fn zip_map_sequential_inner(
     fail_allocation: bool,
 ) -> Result<Vec<i64>, MapError> {
     check_lengths(left, right)?;
+    checked_sequential(
+        CheckedInputs::Zip(left, right),
+        addend,
+        cancellation,
+        fail_allocation,
+    )
+}
+
+// Only the two reviewed integer primitives, never arbitrary closures or sessions.
+#[derive(Clone, Copy)]
+enum CheckedInputs<'a> {
+    Map(&'a [i64], i64),
+    Zip(&'a [i64], &'a [i64]),
+}
+
+impl CheckedInputs<'_> {
+    fn len(self) -> usize {
+        match self {
+            Self::Map(input, _) | Self::Zip(input, _) => input.len(),
+        }
+    }
+    fn value(self, index: usize, addend: i64) -> Result<i64, MapError> {
+        match self {
+            Self::Map(input, multiplier) => checked_value(input[index], multiplier, addend, index),
+            Self::Zip(left, right) => checked_value(left[index], right[index], addend, index),
+        }
+    }
+}
+
+fn checked_sequential(
+    input: CheckedInputs<'_>,
+    addend: i64,
+    cancellation: &AtomicBool,
+    fail_allocation: bool,
+) -> Result<Vec<i64>, MapError> {
+    checked_sequential_with_faults(
+        input,
+        addend,
+        cancellation,
+        ZipFaults {
+            fail_output_allocation: fail_allocation,
+            ..ZipFaults::default()
+        },
+    )
+}
+
+fn checked_sequential_with_faults(
+    input: CheckedInputs<'_>,
+    addend: i64,
+    cancellation: &AtomicBool,
+    faults: ZipFaults<'_>,
+) -> Result<Vec<i64>, MapError> {
     if cancellation.load(Ordering::Relaxed) {
         return Err(MapError::Cancelled);
     }
-    let mut output = allocate_output(left.len(), fail_allocation)?;
-    let mut first_error = None;
-    for (index, (&l, &r)) in left.iter().zip(right).enumerate() {
-        if index.is_multiple_of(256) && cancellation.load(Ordering::Relaxed) {
-            break;
+    let mut output = allocate_output(input.len(), faults.fail_output_allocation)?;
+    let mut result = Ok(());
+    for index in 0..input.len() {
+        if faults.cancel_at_index == Some(index) {
+            cancellation.store(true, Ordering::Relaxed);
         }
-        match checked_value(l, r, addend, index) {
+        if index.is_multiple_of(256) && cancellation.load(Ordering::Relaxed) {
+            return Err(MapError::Cancelled);
+        }
+        match input.value(index, addend) {
             Ok(value) => output.push(value),
             Err(error) => {
-                first_error = Some(error);
+                result = Err(error);
                 break;
             }
         }
     }
     if cancellation.load(Ordering::Relaxed) {
-        Err(MapError::Cancelled)
-    } else if let Some(error) = first_error {
-        Err(error)
-    } else {
-        Ok(output)
+        return Err(MapError::Cancelled);
     }
+    result.map(|()| output)
 }
 
 fn check_lengths(left: &[i64], right: &[i64]) -> Result<(), MapError> {
@@ -579,6 +633,8 @@ fn allocate_output(len: usize, fail_allocation: bool) -> Result<Vec<i64>, MapErr
 struct ZipFaults<'a> {
     panic_chunk: Option<usize>,
     cancel_chunk: Option<usize>,
+    cancel_at_index: Option<usize>,
+    fail_spawn_chunk: Option<usize>,
     fail_output_allocation: bool,
     fail_chunk_allocation: Option<usize>,
     completed_chunks: Option<&'a std::sync::atomic::AtomicUsize>,
@@ -626,44 +682,72 @@ fn zip_map_parallel_inner(
     faults: ZipFaults<'_>,
 ) -> Result<Vec<i64>, MapError> {
     check_lengths(left, right)?;
-    if !(2..=MAX_WORKERS).contains(&requested_workers)
-        || left.len() < MIN_PARALLEL_ELEMENTS
-        || requested_workers > left.len() / MIN_CHUNK_ELEMENTS
+    checked_parallel(
+        CheckedInputs::Zip(left, right),
+        addend,
+        requested_workers,
+        cancellation,
+        faults,
+    )
+}
+
+fn validate_workers(elements: usize, requested: usize) -> Result<(), MapError> {
+    if !(2..=MAX_WORKERS).contains(&requested)
+        || elements < MIN_PARALLEL_ELEMENTS
+        || requested > elements / MIN_CHUNK_ELEMENTS
     {
-        return Err(MapError::InvalidWorkers {
-            requested: requested_workers,
-        });
+        return Err(MapError::InvalidWorkers { requested });
     }
+    Ok(())
+}
+
+fn checked_parallel(
+    input: CheckedInputs<'_>,
+    addend: i64,
+    requested_workers: usize,
+    cancellation: &AtomicBool,
+    faults: ZipFaults<'_>,
+) -> Result<Vec<i64>, MapError> {
+    validate_workers(input.len(), requested_workers)?;
     if cancellation.load(Ordering::Relaxed) {
         return Err(MapError::Cancelled);
     }
-    let mut output = allocate_output(left.len(), faults.fail_output_allocation)?;
-    let chunk_size = left.len().div_ceil(requested_workers);
+    let mut output = allocate_output(input.len(), faults.fail_output_allocation)?;
+    let chunk_size = input.len().div_ceil(requested_workers);
     std::thread::scope(|scope| {
         let mut handles = Vec::new();
         handles
             .try_reserve_exact(requested_workers)
             .map_err(|_| MapError::AllocationFailed)?;
-        for (chunk, (l, r)) in left
-            .chunks(chunk_size)
-            .zip(right.chunks(chunk_size))
-            .enumerate()
-        {
-            handles.push(scope.spawn(move || {
+        let mut first_error = None;
+        for chunk in 0..input.len().div_ceil(chunk_size) {
+            if faults.fail_spawn_chunk == Some(chunk) {
+                first_error = Some(MapError::AllocationFailed);
+                break;
+            }
+            let start = chunk * chunk_size;
+            let end = start.saturating_add(chunk_size).min(input.len());
+            // Unlike Scope::spawn, resource refusal is returned, not panicked.
+            let handle = std::thread::Builder::new().spawn_scoped(scope, move || {
                 if faults.panic_chunk == Some(chunk) {
-                    panic!("injected zip worker panic");
+                    panic!("injected checked worker panic");
                 }
                 if faults.cancel_chunk == Some(chunk) {
                     cancellation.store(true, Ordering::Relaxed);
                 }
                 let result = (|| {
                     let mut values =
-                        allocate_output(l.len(), faults.fail_chunk_allocation == Some(chunk))?;
-                    for (offset, (&a, &b)) in l.iter().zip(r).enumerate() {
-                        if offset.is_multiple_of(256) && cancellation.load(Ordering::Relaxed) {
+                        allocate_output(end - start, faults.fail_chunk_allocation == Some(chunk))?;
+                    for index in start..end {
+                        if faults.cancel_at_index == Some(index) {
+                            cancellation.store(true, Ordering::Relaxed);
+                        }
+                        if (index - start).is_multiple_of(256)
+                            && cancellation.load(Ordering::Relaxed)
+                        {
                             return Err(MapError::Cancelled);
                         }
-                        values.push(checked_value(a, b, addend, chunk * chunk_size + offset)?);
+                        values.push(input.value(index, addend)?);
                     }
                     Ok(values)
                 })();
@@ -671,15 +755,22 @@ fn zip_map_parallel_inner(
                     completed.fetch_add(1, Ordering::Relaxed);
                 }
                 result
-            }));
+            });
+            match handle {
+                Ok(handle) => handles.push(handle),
+                Err(_) => {
+                    first_error = Some(MapError::AllocationFailed);
+                    break;
+                }
+            }
         }
-        let mut first_error = None;
+        let mut worker_error = None;
         for (chunk, handle) in handles.into_iter().enumerate() {
             match handle.join() {
                 Ok(Ok(values)) => output.extend(values),
-                Ok(Err(error)) if first_error.is_none() => first_error = Some(error),
-                Err(_) if first_error.is_none() => {
-                    first_error = Some(MapError::WorkerPanicked { chunk });
+                Ok(Err(error)) if worker_error.is_none() => worker_error = Some(error),
+                Err(_) if worker_error.is_none() => {
+                    worker_error = Some(MapError::WorkerPanicked { chunk })
                 }
                 _ => {}
             }
@@ -687,7 +778,7 @@ fn zip_map_parallel_inner(
         if cancellation.load(Ordering::Relaxed) {
             Err(MapError::Cancelled)
         } else {
-            first_error.map_or(Ok(output), Err)
+            worker_error.or(first_error).map_or(Ok(output), Err)
         }
     })
 }
@@ -720,6 +811,38 @@ pub fn execute_map(
         Backend::ParallelCpu => {
             map_i64_checked_parallel(input, multiplier, addend, decision.workers)
         }
+        Backend::Gpu => unreachable!("GPU has no executable backend"),
+    }
+    .map_err(ExecuteError::Map)?;
+    Ok(Execution { decision, values })
+}
+
+/// Scalar counterpart of [`execute_zip_map_cancellable`]. Validation precedes
+/// cancellation; unlike the legacy direct map, explicit workers must be feasible.
+pub fn execute_map_cancellable(
+    input: &[i64],
+    multiplier: i64,
+    addend: i64,
+    policy: Policy,
+    caps: &Capabilities,
+    cancellation: &AtomicBool,
+) -> Result<Execution, ExecuteError> {
+    if policy == Policy::ParallelCpu {
+        validate_workers(input.len(), caps.parallel_workers).map_err(ExecuteError::Map)?;
+    }
+    let decision = choose(policy, &Workload::checked_i64_map(input.len()), caps)
+        .map_err(ExecuteError::Plan)?;
+    let values = match decision.selected {
+        Backend::SequentialCpu => {
+            map_i64_checked_sequential_cancellable(input, multiplier, addend, cancellation)
+        }
+        Backend::ParallelCpu => map_i64_checked_parallel_cancellable(
+            input,
+            multiplier,
+            addend,
+            decision.workers,
+            cancellation,
+        ),
         Backend::Gpu => unreachable!("GPU has no executable backend"),
     }
     .map_err(ExecuteError::Map)?;
@@ -944,5 +1067,107 @@ mod tests {
             Err(MapError::Cancelled)
         );
         assert!(cancellation.load(Ordering::Relaxed));
+    }
+    #[test]
+    fn both_primitives_cancel_after_computation_and_join_on_spawn_refusal() {
+        let left = vec![2; 4099];
+        let right = vec![3; left.len()];
+        for input in [
+            CheckedInputs::Map(&left, 3),
+            CheckedInputs::Zip(&left, &right),
+        ] {
+            for index in [0, 1, 255, 256, 4098] {
+                let cancellation = AtomicBool::new(false);
+                assert_eq!(
+                    checked_sequential_with_faults(
+                        input,
+                        7,
+                        &cancellation,
+                        ZipFaults {
+                            cancel_at_index: Some(index),
+                            ..ZipFaults::default()
+                        }
+                    ),
+                    Err(MapError::Cancelled)
+                );
+                let completed = std::sync::atomic::AtomicUsize::new(0);
+                cancellation.store(false, Ordering::Relaxed);
+                assert_eq!(
+                    checked_parallel(
+                        input,
+                        7,
+                        3,
+                        &cancellation,
+                        ZipFaults {
+                            cancel_at_index: Some(index),
+                            completed_chunks: Some(&completed),
+                            ..ZipFaults::default()
+                        }
+                    ),
+                    Err(MapError::Cancelled)
+                );
+                assert_eq!(completed.load(Ordering::Relaxed), 3);
+            }
+            for fail_chunk in [0, 1, 2] {
+                let completed = std::sync::atomic::AtomicUsize::new(0);
+                assert_eq!(
+                    checked_parallel(
+                        input,
+                        7,
+                        3,
+                        &AtomicBool::new(false),
+                        ZipFaults {
+                            fail_spawn_chunk: Some(fail_chunk),
+                            completed_chunks: Some(&completed),
+                            ..ZipFaults::default()
+                        }
+                    ),
+                    Err(MapError::AllocationFailed)
+                );
+                assert_eq!(completed.load(Ordering::Relaxed), fail_chunk);
+            }
+            for faults in [
+                ZipFaults {
+                    panic_chunk: Some(1),
+                    ..ZipFaults::default()
+                },
+                ZipFaults {
+                    fail_chunk_allocation: Some(1),
+                    ..ZipFaults::default()
+                },
+                ZipFaults {
+                    fail_output_allocation: true,
+                    ..ZipFaults::default()
+                },
+            ] {
+                let completed = std::sync::atomic::AtomicUsize::new(0);
+                let result = checked_parallel(
+                    input,
+                    7,
+                    3,
+                    &AtomicBool::new(false),
+                    ZipFaults {
+                        completed_chunks: Some(&completed),
+                        ..faults
+                    },
+                );
+                let expected = if faults.panic_chunk.is_some() {
+                    MapError::WorkerPanicked { chunk: 1 }
+                } else {
+                    MapError::AllocationFailed
+                };
+                assert_eq!(result, Err(expected));
+                assert_eq!(
+                    completed.load(Ordering::Relaxed),
+                    if faults.fail_output_allocation {
+                        0
+                    } else if faults.panic_chunk.is_some() {
+                        2
+                    } else {
+                        3
+                    }
+                );
+            }
+        }
     }
 }
