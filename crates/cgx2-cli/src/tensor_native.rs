@@ -2,9 +2,9 @@
 use std::path::Path;
 
 use cgx2_bind::checked_lock;
-use cgx2_libtorch::Torch;
+use cgx2_libtorch::{Torch, F32_DTYPE_CODE};
 use cgx2_package::{load_checked_package, CheckedPackage};
-use cgx2_sema::{tensor_profile, MatrixLiteral, TensorOperation, TensorProfile};
+use cgx2_sema::{tensor_profile, MatrixLiteral, MatrixLiteralF32, TensorOperation, TensorProfile};
 
 use super::{diagnostic, NativeDiagnostic};
 
@@ -88,6 +88,7 @@ fn prepare(root: &Path) -> Result<Option<Prepared>, Vec<NativeDiagnostic>> {
     let layout = match profile.operation {
         TensorOperation::VectorAdd { .. } => "tensor-f64-cpu-v1",
         TensorOperation::MatrixMultiply { .. } => "tensor-f64-cpu-matrix-v2",
+        TensorOperation::MatrixMultiplyF32 { .. } => "tensor-f32-cpu-matrix-v3",
     };
     if binding.route != "libtorch"
         || binding.library != "cgx2.libtorch.cpu"
@@ -97,7 +98,7 @@ fn prepare(root: &Path) -> Result<Option<Prepared>, Vec<NativeDiagnostic>> {
     {
         return Err(vec![diagnostic(
             "CGN004",
-            "source tensor adapter differs from the pinned CPU float64 facade",
+            "source tensor adapter differs from the pinned CPU facade layout, version, or ABI",
             source,
             Some(profile.declaration_span),
         )]);
@@ -184,6 +185,9 @@ pub(super) fn maybe_run(
         TensorOperation::MatrixMultiply { left, right } => {
             run_matrix(&torch, left, right, source, prepared.profile.call_span)?
         }
+        TensorOperation::MatrixMultiplyF32 { left, right } => {
+            run_matrix_f32(&torch, left, right, source, prepared.profile.call_span)?
+        }
     };
     Ok(Some(value))
 }
@@ -250,6 +254,84 @@ fn run_matrix(
             errors.push(diagnostic(
                 "CGR025",
                 format!("matrix handle release failed: {error:?}"),
+                source,
+                Some(span),
+            ));
+        }
+    }
+    if errors.is_empty() {
+        Ok(result.expect("result has no error"))
+    } else {
+        Err(errors)
+    }
+}
+
+fn run_matrix_f32(
+    torch: &Torch,
+    left: &MatrixLiteralF32,
+    right: &MatrixLiteralF32,
+    source: &Path,
+    span: cgx2_syntax::Span,
+) -> Result<String, Vec<NativeDiagnostic>> {
+    let failure = |message| diagnostic("CGR024", message, source, Some(span));
+    let mut left_handle = None;
+    let mut right_handle = None;
+    let mut product = None;
+    let result = (|| {
+        left_handle = Some(
+            torch
+                .from_f32_matrix(left.rows, left.cols, &left.values)
+                .map_err(|error| failure(format!("float32 matrix input failed: {error:?}")))?,
+        );
+        right_handle = Some(
+            torch
+                .from_f32_matrix(right.rows, right.cols, &right.values)
+                .map_err(|error| failure(format!("float32 matrix input failed: {error:?}")))?,
+        );
+        product = Some(
+            left_handle
+                .as_ref()
+                .expect("created left matrix")
+                .matmul(right_handle.as_ref().expect("created right matrix"))
+                .map_err(|error| {
+                    failure(format!("float32 matrix multiplication failed: {error:?}"))
+                })?,
+        );
+        let product_ref = product.as_ref().expect("created product matrix");
+        let expected = [left.rows, right.cols];
+        let info = product_ref
+            .info()
+            .map_err(|error| failure(format!("float32 matrix info failed: {error:?}")))?;
+        if info.shape != expected {
+            return Err(failure(
+                "matrix facade returned unexpected output shape".into(),
+            ));
+        }
+        if info.dtype != F32_DTYPE_CODE {
+            return Err(failure("matrix facade returned wrong float32 dtype".into()));
+        }
+        let mut values = vec![0.0_f32; expected[0] * expected[1]];
+        product_ref
+            .copy_into(&mut values)
+            .map_err(|error| failure(format!("float32 matrix copy failed: {error:?}")))?;
+        if values.iter().any(|value| !value.is_finite()) {
+            return Err(failure("matrix result is not finite float32".into()));
+        }
+        let rows: Vec<_> = values
+            .chunks(expected[1])
+            .map(|row| format!("{row:?}"))
+            .collect();
+        Ok(format!("[{}]", rows.join(", ")))
+    })();
+    let mut errors: Vec<_> = result.as_ref().err().cloned().into_iter().collect();
+    for matrix in [&mut product, &mut right_handle, &mut left_handle]
+        .into_iter()
+        .flatten()
+    {
+        if let Err(error) = matrix.release() {
+            errors.push(diagnostic(
+                "CGR025",
+                format!("float32 matrix handle release failed: {error:?}"),
                 source,
                 Some(span),
             ));

@@ -13,6 +13,12 @@ pub struct MatrixLiteral {
     pub cols: usize,
     pub values: Vec<f64>,
 }
+#[derive(Clone, Debug, PartialEq)]
+pub struct MatrixLiteralF32 {
+    pub rows: usize,
+    pub cols: usize,
+    pub values: Vec<f32>,
+}
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum TensorOperation {
@@ -23,6 +29,10 @@ pub enum TensorOperation {
     MatrixMultiply {
         left: MatrixLiteral,
         right: MatrixLiteral,
+    },
+    MatrixMultiplyF32 {
+        left: MatrixLiteralF32,
+        right: MatrixLiteralF32,
     },
 }
 
@@ -150,6 +160,36 @@ fn matrix(expr: &Expr) -> Result<MatrixLiteral, Vec<TypeDiagnostic>> {
     })
 }
 
+fn matrix_f32(expr: &Expr) -> Result<MatrixLiteralF32, Vec<TypeDiagnostic>> {
+    let matrix = matrix(expr)?;
+    let values = matrix
+        .values
+        .into_iter()
+        .map(|value| {
+            // Rust's f64-to-f32 cast uses IEEE round-to-nearest, ties-to-even.
+            let narrowed = value as f32;
+            if !narrowed.is_finite() {
+                return Err(error(
+                    "float32 matrix element overflows to Infinity",
+                    expr.span,
+                ));
+            }
+            if value != 0.0 && narrowed == 0.0 {
+                return Err(error(
+                    "float32 matrix element underflows to zero",
+                    expr.span,
+                ));
+            }
+            Ok(narrowed)
+        })
+        .collect::<Result<Vec<_>, _>>()?;
+    Ok(MatrixLiteralF32 {
+        rows: matrix.rows,
+        cols: matrix.cols,
+        values,
+    })
+}
+
 /// Recognize and check the entire bounded source profile before loading native code.
 pub fn tensor_profile(module: &Module) -> Result<Option<TensorProfile>, Vec<TypeDiagnostic>> {
     let tensor: Vec<_> = module
@@ -159,7 +199,9 @@ pub fn tensor_profile(module: &Module) -> Result<Option<TensorProfile>, Vec<Type
             function.foreign.as_ref().is_some_and(|binding| {
                 binding.route == "native"
                     && binding.target.segments.get(1).is_some_and(|symbol| {
-                        symbol == "cgx2_torch_add" || symbol == "cgx2_torch_matmul"
+                        symbol == "cgx2_torch_add"
+                            || symbol == "cgx2_torch_matmul"
+                            || symbol == "cgx2_torch_matmul_f32"
                     })
             })
         })
@@ -261,7 +303,23 @@ pub fn tensor_profile(module: &Module) -> Result<Option<TensorProfile>, Vec<Type
             expr.span,
         ));
     }
-    let operation = if binding.target.segments[1] == "cgx2_torch_matmul" {
+    let operation = if binding.target.segments[1] == "cgx2_torch_matmul_f32" {
+        let left = matrix_f32(&arguments[0].value)?;
+        let right = matrix_f32(&arguments[1].value)?;
+        if left.cols != right.rows {
+            return Err(error(
+                "matrix multiplication requires left columns equal right rows",
+                expr.span,
+            ));
+        }
+        if left.rows * right.cols > MAX_MATRIX_ELEMENTS {
+            return Err(error(
+                "matrix output capacity exceeds 1,024 elements",
+                expr.span,
+            ));
+        }
+        TensorOperation::MatrixMultiplyF32 { left, right }
+    } else if binding.target.segments[1] == "cgx2_torch_matmul" {
         let left = matrix(&arguments[0].value)?;
         let right = matrix(&arguments[1].value)?;
         if left.cols != right.rows {
