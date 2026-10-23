@@ -1,0 +1,4 @@
+foreign python fn root(x: i64) -> i64 effects(Foreign) caps(ForeignCall) = math.isqrt runtime "local:cpython" ownership copied
+
+fn main() -> i64 effects(Foreign) caps(ForeignCall):
+    root(9223372030926249001)

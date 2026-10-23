@@ -1,0 +1,103 @@
+{
+  "note": "Repeated exact setup mistakes to retain full commands, sources and diagnostics; no accepted timing observations preceded these corrections.",
+  "runs": [
+    {
+      "name": "missing_build_subcommand",
+      "source": "fn main() -> i64:\n    let mut x = arg_count() + 17\n    for i in range(0, 2000000):\n        x = (x * 31 + i) % 1000000007\n    x\n",
+      "observation": {
+        "command": [
+          "/home/john-riley/.codex/worktrees/9412/lang/bench/target/wave24-local/cargo/release/cgx2c",
+          "/home/john-riley/.codex/worktrees/9412/lang/bench/target/wave24-local/missing_build_subcommand.cg",
+          "--out",
+          "/home/john-riley/.codex/worktrees/9412/lang/bench/target/wave24-local/missing_build_subcommand.bin",
+          "--release"
+        ],
+        "cwd": "/home/john-riley/.codex/worktrees/9412/lang",
+        "deadline_s": 30,
+        "started_utc": "2026-10-23T11:36:02.945507+00:00",
+        "status": "completed",
+        "exit_status": 1,
+        "stdout": "",
+        "stderr": "CGXC001: usage: cgx2c build FILE.cg --out BINARY [--release] [--force] [--rustc PATH] [--test-fail-reserve N]\n       cgx2c emit-rust FILE.cg --out FILE.rs [--force]\n       cgx2c build --package ROOT --out BINARY [--release] [--force] [--rustc PATH]\n       cgx2c emit-rust --package ROOT --out FILE.rs [--force]\n--test-fail-reserve is an explicit test-only host allocation fault for memory scripts\n",
+        "wall_s": 0.0009634840025682934,
+        "usage_raw": "Command exited with non-zero status 1\n0.00 0.00 2732\n",
+        "user_cpu_s": 0.0,
+        "system_cpu_s": 0.0,
+        "peak_rss_kib": 2732
+      }
+    },
+    {
+      "name": "unsupported_remainder_operator",
+      "source": "fn main() -> i64:\n    let mut x = arg_count() + 17\n    for i in range(0, 2000000):\n        x = (x * 31 + i) % 1000000007\n    x\n",
+      "observation": {
+        "command": [
+          "/home/john-riley/.codex/worktrees/9412/lang/bench/target/wave24-local/cargo/release/cgx2c",
+          "build",
+          "/home/john-riley/.codex/worktrees/9412/lang/bench/target/wave24-local/unsupported_remainder_operator.cg",
+          "--out",
+          "/home/john-riley/.codex/worktrees/9412/lang/bench/target/wave24-local/unsupported_remainder_operator.bin",
+          "--release"
+        ],
+        "cwd": "/home/john-riley/.codex/worktrees/9412/lang",
+        "deadline_s": 30,
+        "started_utc": "2026-10-23T11:36:02.946665+00:00",
+        "status": "completed",
+        "exit_status": 1,
+        "stdout": "",
+        "stderr": "CGS004: /home/john-riley/.codex/worktrees/9412/lang/bench/target/wave24-local/unsupported_remainder_operator.cg:108..109: unexpected character '%'\n",
+        "wall_s": 0.0007720729990978725,
+        "usage_raw": "Command exited with non-zero status 1\n0.00 0.00 2820\n",
+        "user_cpu_s": 0.0,
+        "system_cpu_s": 0.0,
+        "peak_rss_kib": 2820
+      }
+    },
+    {
+      "name": "missing_foreign_equals",
+      "source": "foreign python fn root(x: i64) -> i64 effects(Foreign) caps(ForeignCall) math.isqrt runtime \"local:cpython\" ownership copied\n\nfn main() -> i64 effects(Foreign) caps(ForeignCall):\n    root(9223372030926249001)\n",
+      "observation": {
+        "command": [
+          "/home/john-riley/.codex/worktrees/9412/lang/bench/target/wave24-local/cargo/release/cgx2",
+          "run",
+          "/home/john-riley/.codex/worktrees/9412/lang/bench/target/wave24-local/missing_foreign_equals.cg"
+        ],
+        "cwd": "/home/john-riley/.codex/worktrees/9412/lang",
+        "deadline_s": 30,
+        "started_utc": "2026-10-23T11:36:02.947549+00:00",
+        "status": "completed",
+        "exit_status": 1,
+        "stdout": "",
+        "stderr": "CGS111: /home/john-riley/.codex/worktrees/9412/lang/bench/target/wave24-local/missing_foreign_equals.cg:73..77: expected = before foreign target\nCGS103: /home/john-riley/.codex/worktrees/9412/lang/bench/target/wave24-local/missing_foreign_equals.cg:84..91: expected newline after statement\nCGS103: /home/john-riley/.codex/worktrees/9412/lang/bench/target/wave24-local/missing_foreign_equals.cg:92..107: expected newline after statement\nCGS103: /home/john-riley/.codex/worktrees/9412/lang/bench/target/wave24-local/missing_foreign_equals.cg:108..117: expected newline after statement\nCGS103: /home/john-riley/.codex/worktrees/9412/lang/bench/target/wave24-local/missing_foreign_equals.cg:118..124: expected newline after statement\nCGS105: /home/john-riley/.codex/worktrees/9412/lang/bench/target/wave24-local/missing_foreign_equals.cg:118..125: function items and top-level script statements cannot be mixed in this candidate grammar\n",
+        "wall_s": 0.0007518230049754493,
+        "usage_raw": "Command exited with non-zero status 1\n0.00 0.00 2976\n",
+        "user_cpu_s": 0.0,
+        "system_cpu_s": 0.0,
+        "peak_rss_kib": 2976
+      }
+    },
+    {
+      "name": "execution_step_limit",
+      "source": "fn main() -> i64:\n    let mut x = arg_count() + 17\n    for i in range(0, 2000000):\n        let y = x * 31 + i\n        x = y - y / 1000000007 * 1000000007\n    x\n",
+      "observation": {
+        "command": [
+          "/home/john-riley/.codex/worktrees/9412/lang/bench/target/wave24-local/scalar",
+          "a"
+        ],
+        "cwd": "/home/john-riley/.codex/worktrees/9412/lang",
+        "deadline_s": 30,
+        "started_utc": "2026-10-23T11:36:25.149416+00:00",
+        "status": "completed",
+        "exit_status": 1,
+        "stdout": "",
+        "stderr": "CGR010 at 99..109: execution step limit of 1000000 exceeded\n",
+        "wall_s": 0.0012203049991512671,
+        "usage_raw": "Command exited with non-zero status 1\n0.00 0.00 2340\n",
+        "user_cpu_s": 0.0,
+        "system_cpu_s": 0.0,
+        "peak_rss_kib": 2340
+      },
+      "binary_sha256": "e31bd4397a86c97b2437ab600d2d365c5f398dee09d68b058a2324a411d13838"
+    }
+  ],
+  "cargo_log": "   Compiling version_check v0.9.5\n   Compiling typenum v1.20.1\n   Compiling proc-macro2 v1.0.107\n   Compiling unicode-ident v1.0.26\n   Compiling cgx2-syntax v0.1.0 (/home/john-riley/.codex/worktrees/9412/lang/crates/cgx2-syntax)\n   Compiling quote v1.0.47\n   Compiling serde_core v1.0.229\n   Compiling cpufeatures v0.2.17\n   Compiling cfg-if v1.0.5\n   Compiling zmij v1.0.23\n   Compiling serde_json v1.0.149\n   Compiling serde v1.0.229\n   Compiling itoa v1.0.18\n   Compiling memchr v2.8.3\n   Compiling cgx2-ffi-native v0.1.0 (/home/john-riley/.codex/worktrees/9412/lang/crates/cgx2-ffi-native)\n   Compiling cgx2-python-bridge v0.1.0 (/home/john-riley/.codex/worktrees/9412/lang/crates/cgx2-python-bridge)\n   Compiling cgx2-runtime v0.1.0 (/home/john-riley/.codex/worktrees/9412/lang/crates/cgx2-runtime)\n   Compiling generic-array v0.14.7\n   Compiling cgx2-ownership v0.1.0 (/home/john-riley/.codex/worktrees/9412/lang/crates/cgx2-ownership)\n   Compiling cgx2-sema v0.1.0 (/home/john-riley/.codex/worktrees/9412/lang/crates/cgx2-sema)\n   Compiling syn v3.0.6\n   Compiling crypto-common v0.1.7\n   Compiling block-buffer v0.10.4\n   Compiling cgx2-api-index v0.1.0 (/home/john-riley/.codex/worktrees/9412/lang/crates/cgx2-api-index)\n   Compiling digest v0.10.7\n   Compiling sha2 v0.10.9\n   Compiling cgx2-package v0.1.0 (/home/john-riley/.codex/worktrees/9412/lang/crates/cgx2-package)\n   Compiling cgx2-emit-rust v0.1.0 (/home/john-riley/.codex/worktrees/9412/lang/crates/cgx2-emit-rust)\n   Compiling serde_derive v1.0.229\n   Compiling cgx2c v0.1.0 (/home/john-riley/.codex/worktrees/9412/lang/crates/cgx2c)\n   Compiling cgx2-bind v0.1.0 (/home/john-riley/.codex/worktrees/9412/lang/crates/cgx2-bind)\n   Compiling cgx2-foreign v0.1.0 (/home/john-riley/.codex/worktrees/9412/lang/crates/cgx2-foreign)\n   Compiling cgx2-libtorch v0.1.0 (/home/john-riley/.codex/worktrees/9412/lang/crates/cgx2-libtorch)\n   Compiling cgx2-cli v0.1.0 (/home/john-riley/.codex/worktrees/9412/lang/crates/cgx2-cli)\n    Finished `release` profile [optimized] target(s) in 3.61s\n"
+}

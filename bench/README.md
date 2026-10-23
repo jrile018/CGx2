@@ -282,3 +282,8 @@ samples with package/tool hashes and marks small-sample or unavailable claims.
 source and C-facade/C++ cases. New builds default to release; external binary
 profiles remain unverified. Fixed numeric tolerance, source caps, sample
 gates, base CLI Python linkage and unavailable routes are retained.
+
+Wave 24 frozen scalar-native and isolated Python-child baselines:
+[NATIVE-WORKER-BASELINES.md](NATIVE-WORKER-BASELINES.md),
+[preregistration](WAVE24-NATIVE-WORKER-PREREGISTRATION.md), and
+[results with limitations](WAVE24-NATIVE-WORKER-RESULTS.md).

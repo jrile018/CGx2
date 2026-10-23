@@ -1,0 +1,25 @@
+{
+  "checks": [
+    {
+      "file": "bench/results/wave24-native-worker-baselines.json",
+      "sha256": "997972db819355874d5a1670536ad3478567fa8d883b6e67015782283f523745",
+      "all_64_execution_pairs_valid": true,
+      "summary_recomputed": true,
+      "harness_source_hash_matches": true,
+      "binary_hashes_match_retained_artifacts": true
+    },
+    {
+      "file": "bench/results/wave24-native-worker-confirmation.json",
+      "sha256": "1d341ad97be06e05da31b8eca1f422ab51865ef3fc372ce8378b069400f47298",
+      "all_64_execution_pairs_valid": true,
+      "summary_recomputed": true,
+      "harness_source_hash_matches": true,
+      "binary_hashes_match_retained_artifacts": true
+    }
+  ],
+  "confirmation_audits_valid": true,
+  "assembly_archive_hash_and_roundtrip_valid": true,
+  "public_readiness_pins_and_all_cases_pass": true,
+  "tracked_non_bench_sources_equal_frozen_base": true,
+  "method": "Recomputed via native_worker_baselines.digest/summarize/schedule/source_state; verified gzip JSON and pinned readiness statuses."
+}
