@@ -22,8 +22,18 @@ fn opt_in_failure_report_preserves_primary_diagnostic_and_success_output() {
     assert_eq!(failure["rollback_preserved"], true);
     assert_eq!(failure["operation_failure"]["rooted_handles"], 1);
     assert_eq!(failure["operation_failure"]["rooted_edges"], 0);
+    assert_eq!(failure["operation_failure"]["runtime_rooted_handles"], 1);
+    assert_eq!(
+        failure["operation_failure"]["runtime_root_registrations"],
+        1
+    );
+    assert!(failure["operation_failure"]["runtime_root_census_error"].is_null());
     assert_eq!(failure["final_unwind"]["rooted_handles"], 0);
     assert_eq!(failure["final_unwind"]["rooted_edges"], 0);
+    assert_eq!(failure["final_unwind"]["runtime_rooted_handles"], 0);
+    assert_eq!(failure["final_unwind"]["runtime_root_registrations"], 0);
+    assert!(failure["final_unwind"]["runtime_root_census_error"].is_null());
+    assert_eq!(failure["cleanup_errors"], serde_json::json!([]));
     assert_eq!(failure["final_unwind"]["memory"], failure["memory"]);
     assert!(
         failure["memory"]["totals"]["collection_count"]

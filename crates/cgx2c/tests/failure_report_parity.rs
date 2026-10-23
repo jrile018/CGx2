@@ -144,8 +144,32 @@ fn compare_failure(
     let final_unwind = failure.final_unwind.as_ref().expect("final snapshot");
     assert_eq!(operation.rooted_handles, Some(roots as usize), "{name}");
     assert_eq!(operation.rooted_edges, Some(edges as usize), "{name}");
+    assert_eq!(
+        operation.runtime_rooted_handles,
+        Some(roots as usize),
+        "{name}"
+    );
+    assert_eq!(
+        operation.runtime_root_registrations,
+        Some(roots as usize),
+        "{name}"
+    );
+    assert_eq!(operation.runtime_root_census_error, None, "{name}");
     assert_eq!(final_unwind.rooted_handles, Some(0), "{name}");
     assert_eq!(final_unwind.rooted_edges, Some(0), "{name}");
+    assert_eq!(final_unwind.runtime_rooted_handles, Some(0), "{name}");
+    assert_eq!(final_unwind.runtime_root_registrations, Some(0), "{name}");
+    assert_eq!(final_unwind.runtime_root_census_error, None, "{name}");
+    assert!(failure.cleanup_errors.is_empty(), "{name}");
+    if name == "failure_runtime_root_lifecycle.cg" {
+        let (regions, totals) = semantic_json(&operation.memory.to_json());
+        assert!(
+            regions.iter().any(|region| region[1] == 0 && region[7] > 0),
+            "prepared region must be collected and closed"
+        );
+        assert!(totals[4] > 0, "prepared region must be collected");
+        assert_eq!(operation.runtime_root_registrations, Some(2));
+    }
     let interpreted = failure.report.expect("partial report").to_json();
     for release in [false, true] {
         let binary = case.path(&format!("{name}-{release}"));
@@ -176,8 +200,29 @@ fn compare_failure(
         let native_final = native.split_once("\"final_unwind\":").unwrap().1;
         assert_eq!(number(native_operation, "rooted_handles"), roots, "{name}");
         assert_eq!(number(native_operation, "rooted_edges"), edges, "{name}");
+        assert_eq!(
+            number(native_operation, "runtime_rooted_handles"),
+            roots,
+            "{name}"
+        );
+        assert_eq!(
+            number(native_operation, "runtime_root_registrations"),
+            roots,
+            "{name}"
+        );
         assert_eq!(number(native_final, "rooted_handles"), 0, "{name}");
         assert_eq!(number(native_final, "rooted_edges"), 0, "{name}");
+        assert_eq!(number(native_final, "runtime_rooted_handles"), 0, "{name}");
+        assert_eq!(
+            number(native_final, "runtime_root_registrations"),
+            0,
+            "{name}"
+        );
+        assert!(
+            native.contains("\"runtime_root_census_error\":null"),
+            "{name}"
+        );
+        assert!(native.contains("\"cleanup_errors\":[]"), "{name}");
         assert_eq!(
             semantic_json(native_operation),
             semantic_json(&operation.memory.to_json()),
@@ -276,6 +321,14 @@ fn source_runtime_failures_match_native_debug_and_release() {
         "CGR013",
         "HostAllocation",
         Some(6),
+        2,
+        1,
+    );
+    compare_failure(
+        "failure_runtime_root_lifecycle.cg",
+        "CGR013",
+        "HostAllocation",
+        Some(8),
         2,
         1,
     );

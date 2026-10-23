@@ -203,6 +203,9 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
                                     serde_json::json!({
                                         "rooted_handles": snapshot.rooted_handles,
                                         "rooted_edges": snapshot.rooted_edges,
+                                        "runtime_rooted_handles": snapshot.runtime_rooted_handles,
+                                        "runtime_root_registrations": snapshot.runtime_root_registrations,
+                                        "runtime_root_census_error": snapshot.runtime_root_census_error,
                                         "memory": memory,
                                     })
                                 })
@@ -219,6 +222,7 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
                                     "memory": memory,
                                     "operation_failure": failure.operation_failure.as_deref().and_then(snapshot_json),
                                     "final_unwind": failure.final_unwind.as_deref().and_then(snapshot_json),
+                                    "cleanup_errors": failure.cleanup_errors,
                                 })
                             );
                         }

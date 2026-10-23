@@ -15,20 +15,26 @@ pub(crate) struct MemoryFailure {
     pub rollback_preserved: Option<bool>,
     pub operation_failure: Option<Box<FailureSnapshot>>,
     pub final_unwind: Option<Box<FailureSnapshot>>,
+    pub cleanup_errors: Vec<String>,
 }
 
 #[derive(Default)]
 struct FailureState {
     rollback: Option<bool>,
     operation: Option<FailureObservation>,
+    cleanup_errors: Vec<String>,
 }
 
-/// Roots are live managed bindings in the active source scopes. Edges are
-/// occupied reference slots on those roots; the runtime report supplies the
-/// per-region and total byte, failure, and collection counters.
+/// Source roots are distinct live managed bindings in active source scopes.
+/// Runtime roots count live `Session` registrations, including duplicates.
+/// Edges are occupied reference slots on source roots; the memory report
+/// supplies byte, failure, and collection counters.
 pub struct FailureSnapshot {
     pub rooted_handles: Option<usize>,
     pub rooted_edges: Option<usize>,
+    pub runtime_rooted_handles: Option<usize>,
+    pub runtime_root_registrations: Option<usize>,
+    pub runtime_root_census_error: Option<String>,
     pub memory: MemoryReport,
 }
 
@@ -36,15 +42,30 @@ struct FailureObservation {
     handles: HashSet<Handle>,
     edges: usize,
     observable: bool,
+    runtime_rooted_handles: Option<usize>,
+    runtime_root_registrations: Option<usize>,
+    runtime_root_census_error: Option<String>,
     memory: MemoryReport,
 }
 
 impl FailureObservation {
     fn new(session: &Session, bindings: &HashMap<String, Binding>) -> Self {
+        let (runtime_rooted_handles, runtime_root_registrations, runtime_root_census_error) =
+            match session.root_census() {
+                Ok(census) => (
+                    Some(census.rooted_handles),
+                    Some(census.root_registrations),
+                    None,
+                ),
+                Err(error) => (None, None, Some(format!("{error:?}"))),
+            };
         let mut observation = Self {
             handles: HashSet::new(),
             edges: 0,
             observable: true,
+            runtime_rooted_handles,
+            runtime_root_registrations,
+            runtime_root_census_error,
             memory: session.memory_report(),
         };
         observation.add_roots(session, bindings);
@@ -67,6 +88,9 @@ impl FailureObservation {
         FailureSnapshot {
             rooted_handles: self.observable.then_some(self.handles.len()),
             rooted_edges: self.observable.then_some(self.edges),
+            runtime_rooted_handles: self.runtime_rooted_handles,
+            runtime_root_registrations: self.runtime_root_registrations,
+            runtime_root_census_error: self.runtime_root_census_error,
             memory: self.memory,
         }
     }
@@ -565,6 +589,7 @@ fn execute_with_functions(
                     for binding in locals.into_values() {
                         if let Binding::Managed(handle) = binding {
                             if let Err(failure) = session.unroot(handle) {
+                                failure_state.cleanup_errors.push(format!("{failure:?}"));
                                 cleanup_error.get_or_insert_with(|| runtime(failure, *span));
                             }
                         }
@@ -826,6 +851,7 @@ pub(crate) fn run_module_with_failure(
         rollback_preserved: None,
         operation_failure: None,
         final_unwind: None,
+        cleanup_errors: Vec::new(),
     };
     let ops = lower(&module.statements).map_err(lower_failure)?;
     let functions = module
@@ -899,7 +925,9 @@ pub(crate) fn run_module_with_failure(
         for binding in bindings.into_values() {
             if let Binding::Managed(handle) = binding {
                 // Keep the original source diagnostic even if cleanup fails.
-                let _ = session.unroot(handle);
+                if let Err(failure) = session.unroot(handle) {
+                    failure_state.cleanup_errors.push(format!("{failure:?}"));
+                }
             }
         }
         let final_unwind = observe_rollback
@@ -910,6 +938,7 @@ pub(crate) fn run_module_with_failure(
             rollback_preserved: failure_state.rollback,
             operation_failure,
             final_unwind,
+            cleanup_errors: failure_state.cleanup_errors,
         });
     }
     Ok(session.memory_report())
@@ -918,6 +947,29 @@ pub(crate) fn run_module_with_failure(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn runtime_census_counts_duplicate_registrations_beyond_source_bindings() {
+        let source = "let r = memory.region(mode: manual, limit: 256)\nlet value = memory.alloc_object(r, 8, 0)\n";
+        let module = cgx2_syntax::parse_module(source).unwrap();
+        cgx2_sema::check_module(&module).unwrap();
+        let ops = lower(&module.statements).unwrap();
+        let mut session = Session::new();
+        let mut bindings = HashMap::new();
+        let mut steps = 0;
+        execute(&ops, &mut session, &mut bindings, &mut steps).unwrap();
+        let Binding::Managed(handle) = bindings["value"] else {
+            panic!("managed value missing")
+        };
+        session.root(handle).unwrap();
+        let snapshot = FailureObservation::new(&session, &bindings).finish();
+        assert_eq!(snapshot.rooted_handles, Some(1));
+        assert_eq!(snapshot.runtime_rooted_handles, Some(1));
+        assert_eq!(snapshot.runtime_root_registrations, Some(2));
+        assert_eq!(snapshot.runtime_root_census_error, None);
+        session.unroot(handle).unwrap();
+        session.unroot(handle).unwrap();
+    }
 
     #[test]
     fn failed_object_allocation_keeps_prior_reference_and_region_state() {
