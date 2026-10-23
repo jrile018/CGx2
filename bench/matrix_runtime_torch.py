@@ -23,6 +23,7 @@ def main():
     parser.add_argument('n', type=int)
     parser.add_argument('warmup', type=int)
     parser.add_argument('reps', type=int)
+    parser.add_argument('--dtype', choices=['f64', 'f32'], default='f64')
     args = parser.parse_args()
     if os.environ.get('OMP_NUM_THREADS') != '1' or os.environ.get('MKL_NUM_THREADS') != '1':
         raise SystemExit('OMP_NUM_THREADS and MKL_NUM_THREADS must be 1')
@@ -33,9 +34,13 @@ def main():
     torch.set_num_interop_threads(1)
     left, right = inputs(args.m, args.k, args.n)
 
+    dtype = torch.float32 if args.dtype == 'f32' else torch.float64
+    # Round once before timing, as in the C++ workers and independent reference.
+    left = torch.tensor(left, dtype=dtype).tolist()
+    right = torch.tensor(right, dtype=dtype).tolist()
     def call():
-        a = torch.tensor(left, dtype=torch.float64, device='cpu').reshape(args.m, args.k)
-        b = torch.tensor(right, dtype=torch.float64, device='cpu').reshape(args.k, args.n)
+        a = torch.tensor(left, dtype=dtype, device='cpu').reshape(args.m, args.k)
+        b = torch.tensor(right, dtype=dtype, device='cpu').reshape(args.k, args.n)
         begin = time.perf_counter_ns()
         c = torch.matmul(a, b)
         matmul_ns = time.perf_counter_ns() - begin
@@ -43,6 +48,7 @@ def main():
 
     output, _ = call()
     result = {'version': torch.__version__.split('+')[0],
+              'dtype': args.dtype, 'shape': [args.m, args.n],
               'torch_root': str(Path(torch.__file__).resolve().parent), 'output': output}
     if args.phase == 'warm':
         for _ in range(args.warmup):

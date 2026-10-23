@@ -1,6 +1,7 @@
 # Local real matrix runtime baselines
 
-This harness measures two distinct CPU float64 questions on Torch 2.11.0:
+This harness measures two distinct CPU matrix questions on Torch 2.11.0
+(default `--dtype f64`; explicitly select `--dtype f32` with a v3 package):
 independent cold `cgx2 run PACKAGE` versus a hand-written LibTorch C++
 process at `[2,3] @ [3,2]` and `[16,16] @ [16,16]`, and warm repeated
 direct C facade calls versus the same C++ API at `[128,128] @ [128,128]`
@@ -15,12 +16,15 @@ route's current 32x32 literal ceiling limits the cold question.
 The preset is 3 cold runs per source and C++ route, 30 completed warm samples
 per C++ and facade route, 5 warmup calls, 300 seconds per process, 600 seconds
 per build command, and 240 seconds cold budget per route and shape. The same
-row-major float64 inputs, one CPU intra-op and inter-op thread, CPU device,
+row-major inputs of the selected dtype, one CPU intra-op and inter-op thread, CPU device,
 tensor creation, matmul, output copy, and handle release apply to both warm
 routes. A scalar reference is checked with absolute and relative tolerance
-`1e-9`. Every route must agree on the SHA-256 of output values quantized to
-nine decimal places; separate hashes of each route's unquantized output JSON
-are retained as provenance. A failed, mismatched, timed-out, or changed-closure
+`1e-9` for f64 and fixed `atol=1e-5`, `rtol=1e-5` for f32. f32 inputs
+are rounded to binary32 before the scalar reference and all routes. Each
+route and every pair of routes must agree numerically within tolerance.
+Separate raw and nine-decimal quantized hashes are provenance only; hash
+equality is not required. Source dimensions and row lengths, and worker
+shape/dtype metadata, are checked before accepting output. A failed, mismatched, timed-out, or changed-closure
 run invalidates the report. Stopped cold runs remain recorded and excluded.
 Warm p95 is unavailable below 20 completed samples per route. The median
 bootstrap 95% interval uses 2,000 deterministic resamples and is unavailable
@@ -44,7 +48,9 @@ python3 bench/matrix_runtime.py \
 ```
 
 Add `--python-torch /absolute/path/to/python` only if that interpreter has
-CPU Torch 2.11.0. The command builds the CGx2 binaries offline and builds the
+CPU Torch 2.11.0. The command builds the CGx2 binaries offline (`--build-profile release` by
+default; `debug` is explicitly selectable) in a fresh private Cargo target
+directory and builds the
 C++ baseline from local Torch headers. `--cold-reps`, `--warm-reps`,
 `--warmup`, `--timeout`, `--build-timeout`, and `--cold-budget-seconds` adjust
 the recorded budgets. The package is cloned into a temporary workspace with
@@ -56,7 +62,7 @@ built tool hashes. No network access or hidden credentials are used.
 The driver validates the package lock/evidence version, byte equivalence of
 the C++ baseline's LibTorch libraries, `cgx2-bind check`, C facade identity,
 ABI/API version, and every route's output against a scalar reference before
-timing. It also compares quantized output hashes across routes. Timed runs
+timing. It also compares route values within the selected fixed tolerance. Timed runs
 that mismatch, fail, or time out make the whole report `invalid`, with no
 scored summary. Cold runs stopped by the budget are recorded as stopped, not
 completed. Mock facades cannot pass the real package and library checks.
@@ -138,3 +144,20 @@ was reindented by two lines after the timed build. The report retains its
 original source hash and records the final source hash; an independent build
 with the same compiler, Torch root, and CMake flags produced a byte-identical
 C++ executable. No timings or output hashes were edited after the run.
+
+## Wave 23 release f32 protocol
+
+[Preregistered settings and exact rerun command](WAVE23-F32-PREREGISTRATION.md)
+select real f32/v3 explicitly. Schema 3 adds Cargo artifact profile
+attestations tied to executable hashes, build commands/environment, C++
+compile/link flags and cache, toolchain versions, source hashes, and actual
+base CLI Python linkage. Externally supplied `--cgx2`/`--binder` executables
+are marked `unverified-profile`; the path name is not optimization evidence.
+
+Historical Wave 21/22 JSON and the f64 default remain available. Historical
+hash-equality descriptions and debug timings describe those runs only.
+The f32 facade uses distinct typed create/matmul/copy calls and validates
+v3 shape/dtype; it is not a relabeled f64 result. Direct C ABI timings exclude
+Rust pinned-loader closure validation. The base CLI still links libpython.
+Optional Python Torch needs a working interpreter with the exact selected
+CPU Torch installation; unavailable routes remain explicit.

@@ -1,0 +1,219 @@
+{
+  "build_provenance": {
+    "command": [
+      "/usr/bin/python3",
+      "bench/matrix_runtime.py",
+      "--dtype",
+      "f32",
+      "--build-profile",
+      "release",
+      "--package",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-f32-package",
+      "--torch-root",
+      "/home/john-riley/Desktop/Projects/Optiver/.venv/lib/python3.12/site-packages/torch",
+      "--compiler",
+      "/usr/bin/x86_64-linux-gnu-g++-15",
+      "--cold-reps",
+      "5",
+      "--warm-reps",
+      "30",
+      "--warmup",
+      "5",
+      "--timeout",
+      "300",
+      "--build-timeout",
+      "600",
+      "--cold-budget-seconds",
+      "600",
+      "--out",
+      "bench/results/wave23-f32-release.json"
+    ],
+    "comparison": "selected observations only; no release/debug speed claim",
+    "environment": {
+      "LD_LIBRARY_PATH": "/home/john-riley/projects/lang/target/cgx2-wave21-f32-package",
+      "LIBRARY_PATH": "/tmp/cgx2-wave22-linker"
+    },
+    "requested_rust_profile": "release"
+  },
+  "cases": [],
+  "conditions": {
+    "build_timeout_seconds": 600,
+    "cold_budget_seconds": 600,
+    "cold_reps": 5,
+    "cold_shapes": [
+      [
+        2,
+        3,
+        2
+      ],
+      [
+        16,
+        16,
+        16
+      ]
+    ],
+    "device": "CPU",
+    "dtype": "f32",
+    "input_rounding": "IEEE binary32 before scalar reference and all routes",
+    "interop_threads": 1,
+    "intraop_threads": 1,
+    "matrix_element_limit": 1048576,
+    "row_major": true,
+    "source_dimension_limit": 32,
+    "source_element_limit": 1024,
+    "timeout_seconds": 300,
+    "tolerance_abs": 1e-05,
+    "tolerance_rel": 1e-05,
+    "warm_reps": 30,
+    "warm_shapes": [
+      [
+        128,
+        128,
+        128
+      ],
+      [
+        512,
+        512,
+        512
+      ]
+    ],
+    "warmup": 5
+  },
+  "errors": [
+    "[('/home/john-riley/projects/lang/target/cgx2-wave21-f32-package/libtorch_cpu.so', '/tmp/cgx2-matrix-bench-xgtxam6a/package/libtorch_cpu.so', \"[Errno 122] Disk quota exceeded: '/home/john-riley/projects/lang/target/cgx2-wave21-f32-package/libtorch_cpu.so' -> '/tmp/cgx2-matrix-bench-xgtxam6a/package/libtorch_cpu.so'\"), ('/home/john-riley/projects/lang/target/cgx2-wave21-f32-package/cgx2-libtorch-closure.lock.json', '/tmp/cgx2-matrix-bench-xgtxam6a/package/cgx2-libtorch-closure.lock.json', '[Errno 122] Disk quota exceeded'), ('/home/john-riley/projects/lang/target/cgx2-wave21-f32-package/libtorch.so', '/tmp/cgx2-matrix-bench-xgtxam6a/package/libtorch.so', '[Errno 122] Disk quota exceeded'), ('/home/john-riley/projects/lang/target/cgx2-wave21-f32-package/cgx2.toml', '/tmp/cgx2-matrix-bench-xgtxam6a/package/cgx2.toml', '[Errno 122] Disk quota exceeded'), ('/home/john-riley/projects/lang/target/cgx2-wave21-f32-package/libc10.so', '/tmp/cgx2-matrix-bench-xgtxam6a/package/libc10.so', '[Errno 122] Disk quota exceeded'), ('/home/john-riley/projects/lang/target/cgx2-wave21-f32-package/src/main.cg', '/tmp/cgx2-matrix-bench-xgtxam6a/package/src/main.cg', '[Errno 122] Disk quota exceeded'), ('/home/john-riley/projects/lang/target/cgx2-wave21-f32-package/libgomp.so.1', '/tmp/cgx2-matrix-bench-xgtxam6a/package/libgomp.so.1', '[Errno 122] Disk quota exceeded'), ('/home/john-riley/projects/lang/target/cgx2-wave21-f32-package/libcgx2_libtorch_facade.so', '/tmp/cgx2-matrix-bench-xgtxam6a/package/libcgx2_libtorch_facade.so', '[Errno 122] Disk quota exceeded')]"
+  ],
+  "exclusions": [],
+  "host": {
+    "logical_cpus": 16,
+    "machine": "x86_64",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43"
+  },
+  "inputs": {
+    "compiler": "/usr/bin/x86_64-linux-gnu-g++-15",
+    "package": "/home/john-riley/projects/lang/target/cgx2-wave21-f32-package",
+    "python_torch": null,
+    "torch_root": "/home/john-riley/Desktop/Projects/Optiver/.venv/lib/python3.12/site-packages/torch"
+  },
+  "interval_method": {
+    "bootstrap_percentile_indexes": [
+      49,
+      1949
+    ],
+    "bootstrap_seed": 20261023,
+    "median": "2000 bootstrap resamples, percentile 95% CI; n>=5",
+    "p95": "nearest rank; n>=20, otherwise unavailable"
+  },
+  "package_hashes": {
+    "cgx2-bind.lock.json": "51c669ebb5c90105012278d9f479067a8be8171f73a3db44a89761d913ecd768",
+    "cgx2-libtorch-closure.lock.json": "f76e00876b3587a5817590fb9541f5241d0b56453d83e48a5d68099c695fbced",
+    "cgx2-libtorch-evidence.json": "e250afbf46c1a4f65f0c820b3e2f8cb71885e39119c09d1cb93c98dbf1425c13",
+    "cgx2.toml": "be4382c0eb86acdc941bc30754e6bbeb08f2dc88c1215f793aa8bd7131e5ce5d",
+    "libc10.so": "e8ad028c6a3b3f787b619f35d3c772485476c029c2e9faca659a56212ae7c00a",
+    "libcgx2_libtorch_facade.so": "c4a95053537fb52f69f2da2a490b169cff0214d580d00d679b54c85147806bec",
+    "libgomp.so.1": "78511033caddec6ccae8f4d62b94d56135f377c4cee33120e6d7df2ef499f69f",
+    "libtorch.so": "59a95807d56ca89993351a173839f160ca9c2c6ec6f6b89a5e691d8f1392d3ff",
+    "libtorch_cpu.so": "ad0bcc0225bf260968e0464982b78c2f25358400769720ce63c209ffc9929313",
+    "src/main.cg": "614cb0146fc3b8416dae6139a34c0c78a0e6b11041bc5e3779c249db24813a8c"
+  },
+  "phases": {
+    "cold_source_adapter_copy": "unmeasured",
+    "cold_source_loader": "included in whole process; independently unmeasured",
+    "cold_source_validation": "measured separately as whole cgx2 check process",
+    "warm_adapter_copy_release": "measured only as aggregate inclusive-minus-matmul",
+    "warm_facade_loader": "direct C ABI; full pinned Rust closure checks excluded",
+    "warm_matmul": "measured inside each call"
+  },
+  "pinned_torch_version": "2.11.0",
+  "runs": [],
+  "schema_version": 3,
+  "scope_exclusions": [
+    "GPU",
+    "LLM authoring",
+    "inference workloads",
+    "arbitrary CGx2 source shapes"
+  ],
+  "setup_runs": [
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cpu_ns": 0,
+      "exit_code": 0,
+      "peak_rss_kib": 4556,
+      "stderr": "",
+      "stdout": "9b8f6f5610e697429b364528fa32a6b716aa288a\n",
+      "timeout": false,
+      "wall_ns": 1296086
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "cpu_ns": 0,
+      "exit_code": 0,
+      "peak_rss_kib": 6004,
+      "stderr": "",
+      "stdout": " M bench/MATRIX-RUNTIME.md\n M bench/matrix_runtime.py\n M bench/matrix_runtime_cpp/main.cpp\n M bench/matrix_runtime_torch.py\n M bench/tests/test_matrix_runtime.py\n?? .serena/\n?? bench/WAVE23-F32-PREREGISTRATION.md\n",
+      "timeout": false,
+      "wall_ns": 11622489
+    },
+    {
+      "argv": [
+        "rustc",
+        "-vV"
+      ],
+      "cpu_ns": 0,
+      "exit_code": 0,
+      "peak_rss_kib": 30284,
+      "stderr": "",
+      "stdout": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+      "timeout": false,
+      "wall_ns": 5894411
+    },
+    {
+      "argv": [
+        "cargo",
+        "-V"
+      ],
+      "cpu_ns": 0,
+      "exit_code": 0,
+      "peak_rss_kib": 13816,
+      "stderr": "",
+      "stdout": "cargo 1.98.1 (797e8a9bc 2026-08-05)\n",
+      "timeout": false,
+      "wall_ns": 3980177
+    },
+    {
+      "argv": [
+        "cmake",
+        "--version"
+      ],
+      "cpu_ns": 0,
+      "exit_code": 0,
+      "peak_rss_kib": 18076,
+      "stderr": "",
+      "stdout": "cmake version 4.2.3\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
+      "timeout": false,
+      "wall_ns": 18465242
+    },
+    {
+      "argv": [
+        "/usr/bin/x86_64-linux-gnu-g++-15",
+        "--version"
+      ],
+      "cpu_ns": 0,
+      "exit_code": 0,
+      "peak_rss_kib": 3320,
+      "stderr": "",
+      "stdout": "x86_64-linux-gnu-g++-15 (Ubuntu 15.2.0-16ubuntu1) 15.2.0\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+      "timeout": false,
+      "wall_ns": 2263007
+    }
+  ],
+  "status": "invalid",
+  "unavailable": []
+}

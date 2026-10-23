@@ -1,7 +1,9 @@
 import importlib.util
+import json
 import os
 from pathlib import Path
 import sys
+import tempfile
 import unittest
 
 
@@ -59,8 +61,75 @@ class MatrixRuntimeTests(unittest.TestCase):
         report = {'exclusions': []}
         case = {'shape': [128, 128, 128]}
         with self.assertRaises(runtime.Invalid):
-            runtime.same_outputs(report, case, {'cpp': 'a', 'facade': 'b'}, 'validation')
-        self.assertEqual(report['exclusions'][0]['reason'], 'route_hash_mismatch')
+            runtime.same_outputs(report, case, {'cpp': [1.], 'facade': [2.]}, 'validation')
+        self.assertEqual(report['exclusions'][0]['reason'], 'route_tolerance_mismatch')
+
+    def test_f32_rounding_source_and_caps(self):
+        a, b = runtime.inputs(16, 16, 16, 'f32')
+        self.assertNotEqual(b[0], runtime.inputs(16, 16, 16)[1][0])
+        self.assertEqual(a[0], -3 / 8)
+        self.assertIn('torch_cpu.cgx2_torch_matmul_f32', runtime.source(16, 16, 16, 'f32'))
+        self.assertIn(repr(b[0]), runtime.source(16, 16, 16, 'f32'))
+        runtime.source(32, 32, 32, 'f32')
+        with self.assertRaises(runtime.Invalid):
+            runtime.source(128, 128, 128, 'f32')
+
+    def test_fixed_f32_tolerance_shape_dtype_and_nonfinite(self):
+        expected = [1., 0.]
+        def output(values, **changes):
+            payload = dict(version=runtime.VERSION, dtype='f32', shape=[1, 2], output=values)
+            payload.update(changes)
+            return {'stdout': json.dumps(payload)}
+        # Hashes can differ despite numerical agreement, including across a rounding boundary.
+        first = runtime.checked_output(output([1., 0.]), expected, 'cpp', 'f32', (1, 2, 2))
+        second = runtime.checked_output(output([1.000009, 0.000009]), expected,
+                                        'facade', 'f32', (1, 2, 2))
+        self.assertNotEqual(first[0], second[0])
+        self.assertNotEqual(first[1], second[1])
+        runtime.same_outputs({'exclusions': []}, {'shape': [1, 2, 2]},
+                             {'cpp': [1., 0.], 'facade': [1.000009, 0.000009]},
+                             'validation', 'f32')
+        for run in (output([1.00003, 0.]), output([1., 0.000011]),
+                    output([float('nan'), 0.]), output([float('inf'), 0.]),
+                    output([1., 0.], dtype='f64'), output([1., 0.], shape=[2, 1]),
+                    {'stdout': '[[1],[0]]'}, output([1.])):
+            with self.subTest(run=run), self.assertRaises(runtime.Invalid):
+                runtime.checked_output(run, expected, 'cpp', 'f32', (1, 2, 2))
+        # Both routes can pass the scalar reference yet disagree with each other.
+        with self.assertRaises(runtime.Invalid):
+            runtime.same_outputs({'exclusions': []}, {'shape': [1, 1, 1]},
+                                 {'cpp': [0.000009], 'facade': [-0.000009]},
+                                 'validation', 'f32')
+
+    def test_external_profile_never_inferred_from_filename(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            binary = Path(tmp) / 'release/cgx2'
+            binary.parent.mkdir()
+            binary.write_bytes(b'not proof of optimization')
+            unknown = runtime.artifact_provenance(binary, [])
+            self.assertEqual(unknown['profile_status'], 'unverified-profile')
+            self.assertIsNone(unknown['cargo_profile'])
+            profile = {'opt_level': '3', 'debug_assertions': False}
+            verified = runtime.artifact_provenance(binary, [
+                {'executable': str(binary), 'profile': profile}])
+            self.assertEqual(verified['cargo_profile'], profile)
+            self.assertEqual(verified['sha256'], unknown['sha256'])
+
+    def test_package_dtype_layout_mismatch(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            package = Path(tmp)
+            (package / 'cgx2.toml').write_text('')
+            facade = package / 'libcgx2_libtorch_facade.so'
+            facade.write_bytes(b'fixture only')
+            (package / 'cgx2-libtorch-closure.lock.json').write_text('{}')
+            (package / 'cgx2-libtorch-evidence.json').write_text(json.dumps({
+                'torch_version': runtime.VERSION, 'facade_sha256': runtime.digest(facade)}))
+            lock = package / 'cgx2-bind.lock.json'
+            lock.write_text(json.dumps({'bindings': [{'id': 'torch_cpu',
+                'version': runtime.VERSION, 'layout': 'tensor-f64-cpu-matrix-v2'}]}))
+            runtime.package_checks(package)
+            with self.assertRaisesRegex(runtime.Invalid, 'tensor-f32-cpu-matrix-v3'):
+                runtime.package_checks(package, 'f32')
 
     def test_timeout_run_is_recorded_as_exclusion(self):
         run = runtime.run_timed([sys.executable, '-c', 'import time; time.sleep(2)'],

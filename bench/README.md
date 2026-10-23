@@ -274,3 +274,11 @@ The offline Torch 2.11.0 CPU float64 source, direct facade, hand-written
 LibTorch C++, and optional matching Python procedure is in
 [MATRIX-RUNTIME.md](MATRIX-RUNTIME.md). It emits raw process and warm-call
 samples with package/tool hashes and marks small-sample or unavailable claims.
+
+## Wave 23 release f32 baselines
+
+[Preregistered settings](WAVE23-F32-PREREGISTRATION.md) and
+[results with raw evidence](WAVE23-F32-RESULTS.md) cover explicit real f32/v3
+source and C-facade/C++ cases. New builds default to release; external binary
+profiles remain unverified. Fixed numeric tolerance, source caps, sample
+gates, base CLI Python linkage and unavailable routes are retained.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail-closed, offline CPU float64 matrix baseline harness (Torch 2.11.0)."""
+"""Fail-closed, offline CPU f64/f32 matrix baselines (Torch 2.11.0)."""
 import argparse
 import hashlib
 import json
@@ -10,6 +10,7 @@ import platform
 import random
 import shutil
 import statistics
+import struct
 import subprocess
 import sys
 import tempfile
@@ -21,6 +22,7 @@ COLD_CASES = ((2, 3, 2), (16, 16, 16))
 WARM_CASES = ((128, 128, 128), (512, 512, 512))
 MAX_MATRIX_ELEMENTS = 1_048_576
 TOLERANCE = 1e-9
+F32_TOLERANCE = 1e-5
 
 
 class Invalid(RuntimeError):
@@ -35,15 +37,18 @@ def digest(path):
     return h.hexdigest()
 
 
-def inputs(m, k, n):
+def inputs(m, k, n, dtype='f64'):
     if (m, k, n) == (2, 3, 2):
         return [1., 2., 3., 4., 5., 6.], [7., 8., 9., 10., 11., 12.]
-    return ([(i % 7 - 3) / 8 for i in range(m * k)],
+    data = ([(i % 7 - 3) / 8 for i in range(m * k)],
             [(i % 5 - 2) / 7 for i in range(k * n)])
+    return tuple([struct.unpack('f', struct.pack('f', v))[0] for v in xs]
+                 for xs in data) if dtype == 'f32' else data
 
 
-def reference(m, k, n):
-    a, b = inputs(m, k, n)
+def reference(m, k, n, dtype='f64'):
+    # Independent scalar double accumulation of inputs rounded to the selected dtype.
+    a, b = inputs(m, k, n, dtype)
     return [sum(a[i * k + z] * b[z * n + j] for z in range(k))
             for i in range(m) for j in range(n)]
 
@@ -54,13 +59,16 @@ def literal(data, rows, cols):
                             for i in range(rows)) + ']'
 
 
-def source(m, k, n):
-    a, b = inputs(m, k, n)
-    return ('unsafe foreign native pub fn matmul_f64_cpu(left: String, right: String) -> String '
-            'effects(Foreign) caps(native) = torch_cpu.cgx2_torch_matmul '
+def source(m, k, n, dtype='f64'):
+    if min(m, k, n) < 1 or max(m, k, n) > 32 or max(m*k, k*n, m*n) > 1024:
+        raise Invalid('cold source cap: dimensions 1..32, at most 1024 elements')
+    a, b = inputs(m, k, n, dtype)
+    symbol = 'cgx2_torch_matmul_f32' if dtype == 'f32' else 'cgx2_torch_matmul'
+    return (f'unsafe foreign native pub fn matmul_{dtype}_cpu(left: String, right: String) -> String '
+            f'effects(Foreign) caps(native) = torch_cpu.{symbol} '
             f'runtime "cgx2.libtorch.cpu@{VERSION}" ownership copied\n\n'
             'fn main() -> String effects(Foreign) caps(native):\n'
-            f'    matmul_f64_cpu("{literal(a, m, k)}", "{literal(b, k, n)}")\n')
+            f'    matmul_{dtype}_cpu("{literal(a, m, k)}", "{literal(b, k, n)}")\n')
 
 
 def clone_package(original, destination):
@@ -84,10 +92,10 @@ def clone_package(original, destination):
     return destination
 
 
-def write_source(package, shape):
+def write_source(package, shape, dtype='f64'):
     file = package / 'src/main.cg'
     replacement = file.with_suffix('.new')
-    replacement.write_text(source(*shape))
+    replacement.write_text(source(*shape, dtype))
     replacement.replace(file)
 
 
@@ -124,8 +132,10 @@ def run_timed(command, timeout, env, cwd=ROOT):
                 'stderr': stderr.decode('utf-8', 'replace')[-4000:]}
 
 
-def require_run(command, timeout, env):
+def require_run(command, timeout, env, report=None):
     result = run_timed(command, timeout, env)
+    if report is not None:
+        report.setdefault('setup_runs', []).append(result)
     if result['timeout']:
         raise Invalid(f'timed out: {command[0]}')
     if result['exit_code'] != 0:
@@ -133,21 +143,32 @@ def require_run(command, timeout, env):
     return result
 
 
-def checked_output(run, expected, route):
+def output_values(payload):
+    return [v for row in payload for v in row] if isinstance(payload, list) else payload['output']
+
+
+def checked_output(run, expected, route, dtype='f64', shape=None):
     try:
         payload = json.loads(run['stdout'])
         if isinstance(payload, list):
-            flat = [v for row in payload for v in row]
+            if shape and (len(payload) != shape[0] or any(
+                    not isinstance(row, list) or len(row) != shape[2] for row in payload)):
+                raise Invalid(f'{route}: wrong output shape')
         else:
             if payload['version'] != VERSION:
                 raise Invalid(f'{route}: Torch version mismatch')
-            flat = payload['output']
+            if dtype == 'f32' and payload.get('dtype') != dtype:
+                raise Invalid(f'{route}: wrong output dtype')
+            if shape and payload.get('shape') != [shape[0], shape[2]]:
+                raise Invalid(f'{route}: wrong output shape')
+        flat = output_values(payload)
+        tolerance = F32_TOLERANCE if dtype == 'f32' else TOLERANCE
         if len(flat) != len(expected) or any(
                 isinstance(value, bool) or not isinstance(value, (int, float)) or
                 not math.isfinite(value) or
-                abs(value - target) > TOLERANCE + TOLERANCE * abs(target)
+                abs(value - target) > tolerance + tolerance * abs(target)
                 for value, target in zip(flat, expected)):
-            raise Invalid(f'{route}: output differs from float64 reference')
+            raise Invalid(f'{route}: output differs from {dtype} scalar reference')
         canonical = ','.join(f'{float(value):.9f}' for value in flat).encode()
         raw = json.dumps(flat, separators=(',', ':'), allow_nan=False).encode()
         return hashlib.sha256(canonical).hexdigest(), hashlib.sha256(raw).hexdigest(), payload
@@ -178,6 +199,7 @@ def record_run(report, run, shape, route, phase, index=None):
         record['index'] = index
     report['runs'].append(record)
     if run['timeout'] or run['exit_code'] != 0:
+        record['partial_stdout'] = run['stdout']
         reason = 'timeout' if run['timeout'] else 'nonzero_exit'
         report['exclusions'].append({'shape': list(shape), 'route': route,
                                      'phase': phase, 'index': index, 'reason': reason})
@@ -209,13 +231,14 @@ def observations(cases):
         if case['question'] == 'cold_source_vs_cpp':
             cpp = routes['cpp']['cold_wall']['median_ns']
             source = routes['source']['cold_wall']['median_ns']
-            row['source_cold_over_cpp'] = source / cpp
+            row['source_cold_over_cpp_observation'] = source / cpp if cpp and source else None
+            row['cold_claim'] = 'observations only; no release/debug speed comparison'
         else:
             cpp = routes['cpp']['warm_inclusive_wall']['median_ns']
             facade = routes['facade']['warm_inclusive_wall']['median_ns']
             row['facade_warm_throughput_over_cpp'] = cpp / facade
-            cpp_p95 = routes['cpp']['warm_inclusive_wall']['p95_ns']
-            facade_p95 = routes['facade']['warm_inclusive_wall']['p95_ns']
+            cpp_p95 = routes['cpp']['warm_inclusive_wall'].get('p95_ns')
+            facade_p95 = routes['facade']['warm_inclusive_wall'].get('p95_ns')
             row['facade_warm_p95_over_cpp'] = (facade_p95 / cpp_p95
                                                if cpp_p95 and facade_p95 else None)
             if 'python' in routes:
@@ -225,7 +248,7 @@ def observations(cases):
     return observed
 
 
-def package_checks(package):
+def package_checks(package, dtype='f64'):
     if any(path.is_symlink() for path in package.rglob('*')):
         raise Invalid('pinned package must contain regular files, not symlinks')
     needed = ('cgx2.toml', 'cgx2-bind.lock.json', 'cgx2-libtorch-closure.lock.json',
@@ -238,34 +261,68 @@ def package_checks(package):
     matches = [b for b in binding['bindings'] if b['id'] == 'torch_cpu']
     if len(matches) != 1 or matches[0]['version'] != VERSION or evidence['torch_version'] != VERSION:
         raise Invalid('package Torch version differs from 2.11.0')
-    if matches[0]['layout'] != 'tensor-f64-cpu-matrix-v2':
-        raise Invalid('matrix v2 package required')
+    layout = 'tensor-f32-cpu-matrix-v3' if dtype == 'f32' else 'tensor-f64-cpu-matrix-v2'
+    if matches[0]['layout'] != layout:
+        raise Invalid(f'{dtype} package requires {layout}')
     if evidence['facade_sha256'] != digest(package / 'libcgx2_libtorch_facade.so'):
         raise Invalid('evidence facade hash differs from package bytes')
     return {str(path.relative_to(package)): digest(path)
             for path in sorted(package.rglob('*')) if path.is_file()}
 
 
-def build(args, output_dir, env):
-    cgx2 = Path(args.cgx2) if args.cgx2 else ROOT / 'target/debug/cgx2'
-    binder = Path(args.binder) if args.binder else ROOT / 'target/debug/cgx2-bind'
+def artifact_provenance(path, artifacts):
+    matches = [row for row in artifacts if row.get('executable') and
+               Path(row['executable']).resolve() == path.resolve()]
+    return {'path': str(path.resolve()), 'sha256': digest(path),
+            'profile_status': 'cargo_artifact_verified' if matches else 'unverified-profile',
+            'cargo_profile': matches[-1]['profile'] if matches else None}
+
+
+def build(args, output_dir, env, report):
+    # A private target directory ties Cargo artifact profiles to the bytes just built.
+    target = output_dir / 'rust-build'
+    profile_dir = target / args.build_profile
+    cgx2 = Path(args.cgx2) if args.cgx2 else profile_dir / 'cgx2'
+    binder = Path(args.binder) if args.binder else profile_dir / 'cgx2-bind'
+    artifacts = []
     if not args.cgx2 or not args.binder:
         command = ['cargo', 'build', '--offline', '--locked', '-p', 'cgx2-cli',
-                   '--bins', '-p', 'cgx2-bind']
-        require_run(command, args.build_timeout, env)
+                   '--bins', '-p', 'cgx2-bind', '--target-dir', str(target),
+                   '--message-format=json']
+        if args.build_profile == 'release':
+            command.append('--release')
+        result = require_run(command, args.build_timeout, env, report)
+        artifacts = [json.loads(line) for line in result['stdout'].splitlines()
+                     if line.startswith('{')]
+        artifacts = [row for row in artifacts if row.get('reason') == 'compiler-artifact']
     if not cgx2.is_file() or not binder.is_file():
         raise Invalid('cgx2 or cgx2-bind binary unavailable')
+    report['build_provenance']['rust_binaries'] = {
+        name: artifact_provenance(path, artifacts) for name, path in
+        [('cgx2', cgx2), ('cgx2-native', cgx2.with_name('cgx2-native')), ('cgx2-bind', binder)]}
     build_dir = output_dir / 'cpp-build'
     command = ['cmake', '-S', str(ROOT / 'bench/matrix_runtime_cpp'), '-B', str(build_dir),
                f'-DCMAKE_PREFIX_PATH={args.torch_root}',
                f'-DCMAKE_CXX_COMPILER={args.compiler}',
-               f'-DCGX2_EXPECT_TORCH_VERSION={VERSION}', '-DCMAKE_BUILD_TYPE=Release']
-    require_run(command, args.build_timeout, env)
+               f'-DCGX2_EXPECT_TORCH_VERSION={VERSION}', '-DCMAKE_BUILD_TYPE=Release',
+               '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON']
+    require_run(command, args.build_timeout, env, report)
     require_run(['cmake', '--build', str(build_dir), '--config', 'Release', '-j2'],
-                args.build_timeout, env)
+                args.build_timeout, env, report)
     cpp = build_dir / 'cgx2_matrix_baseline'
     if not cpp.is_file():
         raise Invalid('hand-written LibTorch C++ baseline unavailable')
+    report['build_provenance']['cpp'] = {
+        'profile': 'Release', 'sha256': digest(cpp),
+        'compile_commands': json.loads((build_dir / 'compile_commands.json').read_text()),
+        'link_command': (build_dir / 'CMakeFiles/cgx2_matrix_baseline.dir/link.txt').read_text(),
+        'cmake_cache': (build_dir / 'CMakeCache.txt').read_text()}
+    for name, path in [('cgx2', cgx2), ('cgx2-native', cgx2.with_name('cgx2-native'))]:
+        linkage = require_run(['ldd', path], args.timeout, env, report)
+        report.setdefault('python_linkage', {})[name] = {
+            'method': 'ldd transitive ELF linkage (not a /proc mapped-library census)',
+            'libpython_present': 'libpython' in linkage['stdout'],
+            'output': linkage['stdout'], 'sha256': digest(path)}
     return cgx2.resolve(), binder.resolve(), cpp.resolve()
 
 
@@ -273,23 +330,33 @@ def validated_run(report, command, timeout, env, shape, route, phase, expected, 
     run = run_timed(command, timeout, env)
     record = record_run(report, run, shape, route, phase, index)
     try:
-        canonical, raw, payload = checked_output(run, expected, route)
+        canonical, raw, payload = checked_output(
+            run, expected, route, report['conditions']['dtype'], shape)
     except Invalid:
+        record['invalid_stdout'] = run['stdout']
         report['exclusions'].append({'shape': list(shape), 'route': route,
                                      'phase': phase, 'index': index,
                                      'reason': 'wrong_output'})
         raise
+    values = output_values(payload)
+    record['reference_max_abs_error'] = max(abs(x-y) for x, y in zip(values, expected))
     record['canonical_output_sha256'] = canonical
     record['raw_output_sha256'] = raw
     return record, canonical, raw, payload
 
 
-def same_outputs(report, case, outputs, phase):
-    if len(set(outputs.values())) != 1:
+def same_outputs(report, case, outputs, phase, dtype='f64'):
+    tolerance = F32_TOLERANCE if dtype == 'f32' else TOLERANCE
+    values = list(outputs.values())
+    if any(len(a) != len(b) or any(
+            abs(x-y) > tolerance + tolerance * abs(y) or
+            abs(x-y) > tolerance + tolerance * abs(x)
+            for x, y in zip(a, b))
+           for a in values for b in values):
         report['exclusions'].append({'shape': case['shape'], 'phase': phase,
-                                     'reason': 'route_hash_mismatch'})
-        raise Invalid(f'{phase} output hashes differ at {case["shape"]}: {outputs}')
-    case['canonical_output_sha256'] = next(iter(outputs.values()))
+                                     'reason': 'route_tolerance_mismatch'})
+        raise Invalid(f'{phase} route values differ at {case["shape"]}')
+    case.setdefault('numeric_checks', {})[phase] = 'all route pairs within fixed tolerance'
 
 
 def main():
@@ -300,6 +367,9 @@ def main():
     parser.add_argument('--compiler', default='/usr/bin/c++')
     parser.add_argument('--cgx2', type=Path)
     parser.add_argument('--binder', type=Path)
+    parser.add_argument('--dtype', choices=['f64', 'f32'], default='f64',
+                        help='explicit precision; f32 requires a pinned v3 package')
+    parser.add_argument('--build-profile', choices=['release', 'debug'], default='release')
     parser.add_argument('--python-torch', type=Path,
                         help='optional Python with compatible CPU Torch 2.11.0')
     parser.add_argument('--cold-reps', type=int, default=3)
@@ -319,7 +389,16 @@ def main():
                 'CUDA_VISIBLE_DEVICES': '',
                 'LD_LIBRARY_PATH': str(args.package.resolve())})
     report = {
-        'schema_version': 2, 'status': 'invalid', 'pinned_torch_version': VERSION,
+        'schema_version': 3, 'status': 'invalid', 'pinned_torch_version': VERSION,
+        'build_provenance': {
+            'requested_rust_profile': args.build_profile,
+            'environment': {key: value for key, value in env.items() if key in
+                            ('RUSTFLAGS', 'CARGO_ENCODED_RUSTFLAGS', 'RUSTC_WRAPPER',
+                             'RUSTC_WORKSPACE_WRAPPER', 'LIBRARY_PATH', 'LD_LIBRARY_PATH',
+                             'CXXFLAGS', 'CXX', 'CC', 'CFLAGS', 'RUSTUP_TOOLCHAIN', 'TMPDIR') or
+                            key.startswith('CARGO_PROFILE_')},
+            'command': [sys.executable, *sys.argv],
+            'comparison': 'selected observations only; no release/debug speed claim'},
         'inputs': {'package': str(args.package), 'torch_root': str(args.torch_root),
                    'compiler': str(args.compiler),
                    'python_torch': str(args.python_torch) if args.python_torch else None},
@@ -327,9 +406,13 @@ def main():
                              'arbitrary CGx2 source shapes'],
         'conditions': {'cold_shapes': list(COLD_CASES), 'warm_shapes': list(WARM_CASES),
                        'matrix_element_limit': MAX_MATRIX_ELEMENTS,
-                       'device': 'CPU', 'dtype': 'float64', 'row_major': True,
+                       'source_dimension_limit': 32, 'source_element_limit': 1024,
+                       'device': 'CPU', 'dtype': args.dtype, 'row_major': True,
+                       'input_rounding': 'IEEE binary32 before scalar reference and all routes'
+                       if args.dtype == 'f32' else 'IEEE binary64',
                        'intraop_threads': 1, 'interop_threads': 1,
-                       'tolerance_abs': TOLERANCE, 'tolerance_rel': TOLERANCE,
+                       'tolerance_abs': F32_TOLERANCE if args.dtype == 'f32' else TOLERANCE,
+                       'tolerance_rel': F32_TOLERANCE if args.dtype == 'f32' else TOLERANCE,
                        'cold_reps': args.cold_reps, 'warm_reps': args.warm_reps,
                        'warmup': args.warmup, 'timeout_seconds': args.timeout,
                        'build_timeout_seconds': args.build_timeout,
@@ -339,18 +422,28 @@ def main():
                             'bootstrap_percentile_indexes': [49, 1949],
                             'p95': 'nearest rank; n>=20, otherwise unavailable'},
         'phases': {'cold_source_validation': 'measured separately as whole cgx2 check process',
+                   'cold_source_loader': 'included in whole process; independently unmeasured',
                    'cold_source_adapter_copy': 'unmeasured',
+                   'warm_facade_loader': 'direct C ABI; full pinned Rust closure checks excluded',
                    'warm_matmul': 'measured inside each call',
                    'warm_adapter_copy_release': 'measured only as aggregate inclusive-minus-matmul'},
         'host': {'platform': platform.platform(), 'logical_cpus': os.cpu_count(),
-                 'machine': platform.machine()},
+                 'machine': platform.machine(),
+                 'cpu_model': next((line.split(':', 1)[1].strip() for line in
+                                    Path('/proc/cpuinfo').read_text().splitlines()
+                                    if line.startswith('model name')), 'unavailable')
+                 if Path('/proc/cpuinfo').is_file() else 'unavailable'},
         'runs': [], 'cases': [], 'errors': [], 'exclusions': [], 'unavailable': []}
     try:
         if platform.system() != 'Linux' or not Path('/usr/bin/time').is_file():
             raise Invalid('Linux and /usr/bin/time required for per-process resources')
         package = args.package.resolve(strict=True)
         torch_root = args.torch_root.resolve(strict=True)
-        report['package_hashes'] = package_checks(package)
+        report['package_hashes'] = package_checks(package, args.dtype)
+        for command in (['git', 'rev-parse', 'HEAD'], ['git', 'status', '--porcelain'],
+                        ['rustc', '-vV'], ['cargo', '-V'], ['cmake', '--version'],
+                        [args.compiler, '--version']):
+            require_run(command, args.build_timeout, env, report)
         for library in ('libtorch.so', 'libtorch_cpu.so', 'libc10.so'):
             if digest(package / library) != digest(torch_root / 'lib' / library):
                 raise Invalid(f'baseline LibTorch library differs pinned package: {library}')
@@ -367,7 +460,7 @@ def main():
             closure_hashes = {name: digest(measured_package / name)
                               for name in closure_files}
             measured_env = dict(env, LD_LIBRARY_PATH=str(measured_package))
-            cgx2, binder, cpp = build(args, workspace, measured_env)
+            cgx2, binder, cpp = build(args, workspace, measured_env, report)
             tool_files = (cgx2, binder, cpp, cgx2.with_name('cgx2-native'),
                           ROOT / 'Cargo.lock', ROOT / 'bench/matrix_runtime.py',
                           ROOT / 'bench/matrix_runtime_cpp/main.cpp',
@@ -382,7 +475,7 @@ def main():
             report['toolchain_hashes'][str(Path(args.compiler).resolve())] = digest(
                 Path(args.compiler).resolve())
             facade = measured_package / 'libcgx2_libtorch_facade.so'
-            require_run([binder, 'check', measured_package], args.timeout, measured_env)
+            require_run([binder, 'check', measured_package], args.timeout, measured_env, report)
             python = args.python_torch.resolve(strict=True) if args.python_torch else None
             if python:
                 report['toolchain_hashes'][str(python)] = digest(python)
@@ -391,24 +484,25 @@ def main():
 
             for shape in COLD_CASES:
                 m, k, n = shape
-                write_source(measured_package, shape)
-                expected = reference(*shape)
+                write_source(measured_package, shape, args.dtype)
+                expected = reference(*shape, args.dtype)
                 case = {'shape': list(shape), 'question': 'cold_source_vs_cpp',
                         'routes': {}, 'output_hashes': {}}
                 report['cases'].append(case)
+                case['source_sha256'] = digest(measured_package / 'src/main.cg')
                 commands = {
                     'source': [cgx2, 'run', measured_package],
                     'cpp': [cpp, 'baseline', 'cold', m, k, n, args.warmup,
-                            args.warm_reps, facade]}
+                            args.warm_reps, facade, args.dtype]}
                 hashes = {}
                 for route, command in commands.items():
-                    _, canonical, raw, _ = validated_run(
+                    _, canonical, raw, payload = validated_run(
                         report, command, args.timeout, measured_env, shape,
                         route, 'validation', expected)
-                    hashes[route] = canonical
+                    hashes[route] = output_values(payload)
                     case['output_hashes'][route] = {'canonical_sha256': canonical,
                                                     'raw_sha256': raw}
-                same_outputs(report, case, hashes, 'validation')
+                same_outputs(report, case, hashes, 'validation', args.dtype)
                 check = run_timed([cgx2, 'check', measured_package], args.timeout,
                                   measured_env)
                 record_run(report, check, shape, 'source', 'check_manifest_closure')
@@ -424,28 +518,29 @@ def main():
                                                          'phase': 'cold', 'index': index,
                                                          'reason': 'stopped_budget'})
                             break
-                        record, canonical, _, _ = validated_run(
+                        record, canonical, _, payload = validated_run(
                             report, command, args.timeout, measured_env, shape,
                             route, 'cold', expected, index)
-                        if canonical != hashes[route]:
-                            raise Invalid(f'{route} cold output hash changed at {shape}')
+                        same_outputs(report, case, {'validated': hashes[route],
+                                     route: output_values(payload)}, 'cold', args.dtype)
                         samples.append(record['wall_ns'])
                     case['routes'][route] = {'cold_wall': interval(samples)}
 
             for shape in WARM_CASES:
                 m, k, n = shape
-                expected = reference(*shape)
+                expected = reference(*shape, args.dtype)
                 case = {'shape': list(shape), 'question': 'warm_facade_vs_cpp',
                         'routes': {}, 'output_hashes': {}}
                 report['cases'].append(case)
                 commands = {
                     'cpp': [cpp, 'baseline', 'warm', m, k, n, args.warmup,
-                            args.warm_reps, facade],
+                            args.warm_reps, facade, args.dtype],
                     'facade': [cpp, 'facade', 'warm', m, k, n, args.warmup,
-                               args.warm_reps, facade]}
+                               args.warm_reps, facade, args.dtype]}
                 if python:
                     commands['python'] = [python, ROOT / 'bench/matrix_runtime_torch.py',
-                                          'warm', m, k, n, args.warmup, args.warm_reps]
+                                          'warm', m, k, n, args.warmup, args.warm_reps,
+                                          '--dtype', args.dtype]
                 hashes = {}
                 for route, command in commands.items():
                     validation_command = list(command)
@@ -455,35 +550,36 @@ def main():
                         shape, route, 'validation', expected)
                     if route == 'python' and Path(payload['torch_root']).resolve() != torch_root:
                         raise Invalid('Python Torch installation differs pinned header/library root')
-                    hashes[route] = canonical
+                    hashes[route] = output_values(payload)
                     case['output_hashes'][route] = {'canonical_sha256': canonical,
                                                     'raw_sha256': raw}
-                same_outputs(report, case, hashes, 'validation')
+                same_outputs(report, case, hashes, 'validation', args.dtype)
+                warm_outputs = {}
                 for route, command in commands.items():
                     record, canonical, raw, payload = validated_run(
                         report, command, args.timeout, measured_env, shape,
                         route, 'warm', expected)
-                    if canonical != hashes[route]:
-                        raise Invalid(f'{route} warm output hash changed at {shape}')
+                    warm_outputs[route] = output_values(payload)
+                    same_outputs(report, case, {'validated': hashes[route],
+                                 route: warm_outputs[route]}, 'warm_repeat', args.dtype)
                     if route == 'python' and Path(payload['torch_root']).resolve() != torch_root:
                         raise Invalid('Python Torch installation differs pinned header/library root')
+                    record['samples'] = payload.get('samples')
                     samples = checked_samples(payload, args.warm_reps, route, shape)
-                    record['samples'] = samples
                     case['output_hashes'][route]['warm_raw_sha256'] = raw
                     case['routes'][route] = {
                         'warm_inclusive_wall': interval([s['wall_ns'] for s in samples]),
                         'warm_matmul_wall': interval([s['matmul_wall_ns'] for s in samples]),
                         'warm_non_matmul_wall': interval(
                             [s['wall_ns'] - s['matmul_wall_ns'] for s in samples])}
-                same_outputs(report, case, {r: case['output_hashes'][r]['canonical_sha256']
-                                            for r in commands}, 'warm')
-            if package_checks(package) != report['package_hashes'] or any(
+                same_outputs(report, case, warm_outputs, 'warm', args.dtype)
+            if package_checks(package, args.dtype) != report['package_hashes'] or any(
                     digest(measured_package / name) != value
                     for name, value in closure_hashes.items()):
                 raise Invalid('pinned package or measured closure changed during run')
             report['status'] = 'valid'
             report['summary'] = {
-                'scope': 'two cold source shapes and two larger warm float64 CPU shapes',
+                'scope': f'two cold source shapes and two larger warm {args.dtype} CPU shapes',
                 'source_cold_vs_cpp': 'compare whole-process cold wall intervals',
                 'facade_warm_vs_cpp': 'compare transfer-inclusive per-call intervals',
                 'phase_limits': 'cold check is a separate process; warm non-matmul aggregates creation, copy, release and timer overhead',

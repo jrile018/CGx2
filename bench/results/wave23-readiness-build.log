@@ -1,0 +1,17 @@
+   Compiling version_check v0.9.5
+   Compiling typenum v1.20.1
+   Compiling cgx2-syntax v0.1.0 (/home/john-riley/.codex/worktrees/4725/lang/crates/cgx2-syntax)
+   Compiling cpufeatures v0.2.17
+   Compiling cfg-if v1.0.5
+   Compiling generic-array v0.14.7
+   Compiling cgx2-ownership v0.1.0 (/home/john-riley/.codex/worktrees/4725/lang/crates/cgx2-ownership)
+   Compiling cgx2-sema v0.1.0 (/home/john-riley/.codex/worktrees/4725/lang/crates/cgx2-sema)
+   Compiling crypto-common v0.1.7
+   Compiling block-buffer v0.10.4
+   Compiling digest v0.10.7
+   Compiling sha2 v0.10.9
+   Compiling cgx2-api-index v0.1.0 (/home/john-riley/.codex/worktrees/4725/lang/crates/cgx2-api-index)
+   Compiling cgx2-package v0.1.0 (/home/john-riley/.codex/worktrees/4725/lang/crates/cgx2-package)
+   Compiling cgx2-emit-rust v0.1.0 (/home/john-riley/.codex/worktrees/4725/lang/crates/cgx2-emit-rust)
+   Compiling cgx2c v0.1.0 (/home/john-riley/.codex/worktrees/4725/lang/crates/cgx2c)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.29s
