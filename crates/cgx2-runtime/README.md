@@ -107,3 +107,7 @@ Run `cargo test -p cgx2-runtime --offline`, `RUSTUP_TOOLCHAIN=1.98.1 cargo fmt -
 The Wave 9 memory audit adds a 2,000-seed fixed and 10,000-seed extended direct-runtime corpus in `../cgx2-memory-conformance/`, plus regression tests for nested guard unwinding and region close followed by creation of a new region. Every v4 operation compares public results and deterministic counters with an independent model. The corpus found no runtime defect, so the public `Session` API, collection modes, `no_gc` accounting, and report schema are unchanged. See `../cgx2-memory-conformance/audit-v4.json` for operation and error counts, skipped steps, timings, and open hard gates. These finite byte-object tests do not establish thread safety, arbitrary typed layout safety, or foreign memory coverage.
 
 Wave 10 adds focused allocation failure tests and seeded regression traces for two defects: auto collection previously ran before fixed impossibility checks, and a reclaimable allocation below the trigger previously returned `RegionLimit`. The frozen v4 generator and model do not cover these new transitions; the focused traces check them separately. Host allocator exhaustion, sanitizer coverage, and formal memory-safety proof remain open.
+
+## Wave 23 pressure model
+
+`tests/automatic_pressure_wave23.rs` runs the shared independent graph/pressure oracle in normal and fault-feature builds. See [the Wave 23 evidence report](../cgx2-memory-conformance/release-gate-wave23.md) for seed replay, reserve ordering, measured coverage, and instrumentation limits.

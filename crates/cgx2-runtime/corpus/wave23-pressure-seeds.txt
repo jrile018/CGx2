@@ -1,0 +1,21 @@
+# Fixed replay corpus; decimal u64 seeds. Expanded runs use consecutive seeds.
+0
+1
+2
+3
+7
+11
+19
+23
+42
+97
+127
+255
+256
+1023
+4096
+65535
+104729
+4294967295
+1311768467463790320
+18446744073709551615

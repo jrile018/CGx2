@@ -91,3 +91,7 @@ success after failure, cross-region rejection, auto safepoints, collection
 suppression, region closure, every retained live or stale handle, and report
 counters after each operation. The v1–v5 corpus generators and seed manifests
 are unchanged. See `audit-wave13.json` and [graph-model.md](graph-model.md).
+
+## Wave 23 automatic collection evidence
+
+The shared `automatic_pressure_wave23` test adds structurally varied direct-runtime pressure sequences and failure recovery. [The evidence report](release-gate-wave23.md) records exact commands, seeds, checked collection/transition coverage, source boundaries, and the blocked leak check; [the audit JSON](audit-wave23.json) retains the full coverage counters.

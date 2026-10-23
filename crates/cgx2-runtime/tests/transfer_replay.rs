@@ -1,5 +1,7 @@
 //! Deterministic direct-runtime cross-region replay. Source-level cases live in cgx2c.
-use cgx2_runtime::{AllocationError, CollectionMode, Handle, MemoryError, RegionId, Session};
+#[cfg(feature = "fault-injection")]
+use cgx2_runtime::AllocationError;
+use cgx2_runtime::{CollectionMode, Handle, MemoryError, RegionId, Session};
 
 #[derive(Debug, PartialEq, Eq)]
 struct Step {
