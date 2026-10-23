@@ -1,7 +1,10 @@
 use cgx2_execution_policy::{
     Backend, Capabilities, ExecuteError, MapError, Policy, ReasonCode, execute_zip_map,
-    zip_map_i64_checked_parallel, zip_map_i64_checked_sequential,
+    execute_zip_map_cancellable, map_i64_checked_parallel, map_i64_checked_sequential,
+    zip_map_i64_checked_parallel, zip_map_i64_checked_parallel_cancellable,
+    zip_map_i64_checked_sequential,
 };
+use std::sync::atomic::AtomicBool;
 
 fn next(seed: &mut u64) -> u64 {
     *seed = seed
@@ -35,11 +38,21 @@ fn bounded_seeded_corpus_matches_every_backend() {
         let left: Vec<_> = (0..size).map(|_| value(&mut seed)).collect();
         let right: Vec<_> = (0..size).map(|_| value(&mut seed)).collect();
         let addend = value(&mut seed);
+        let multiplier = value(&mut seed);
         let reference = zip_map_i64_checked_sequential(&left, &right, addend);
+        let map_reference = map_i64_checked_sequential(&left, multiplier, addend);
         for workers in [2, 3, 4, 8] {
+            assert_eq!(
+                map_i64_checked_parallel(&left, multiplier, addend, workers),
+                map_reference,
+                "map seed=0x5eedead case={case} workers={workers}"
+            );
             let result = zip_map_i64_checked_parallel(&left, &right, addend, workers);
             if size >= 2048 && workers <= size / 1024 {
-                assert_eq!(result, reference, "case={case} workers={workers}");
+                assert_eq!(
+                    result, reference,
+                    "zip seed=0x5eedead case={case} workers={workers}"
+                );
                 let caps = Capabilities {
                     parallel_workers: workers,
                     ..Capabilities::default()
@@ -138,4 +151,77 @@ fn uncalibrated_auto_is_sequential_and_gpu_is_unsupported() {
         execute_zip_map(&left, &right, 7, Policy::Gpu, &caps),
         Err(ExecuteError::Plan(_))
     ));
+}
+
+#[test]
+fn requested_cancellation_and_validation_precedence() {
+    let cancelled = AtomicBool::new(true);
+    let left = vec![2; 4_099];
+    let right = vec![3; left.len()];
+    assert_eq!(
+        zip_map_i64_checked_parallel_cancellable(&left, &right, 7, 3, &cancelled),
+        Err(MapError::Cancelled)
+    );
+    assert_eq!(
+        zip_map_i64_checked_parallel_cancellable(&left, &right[..1], 7, 3, &cancelled),
+        Err(MapError::LengthMismatch {
+            left: left.len(),
+            right: 1
+        })
+    );
+    assert_eq!(
+        zip_map_i64_checked_parallel_cancellable(&left, &right, 7, 0, &cancelled),
+        Err(MapError::InvalidWorkers { requested: 0 })
+    );
+    for policy in [Policy::SequentialCpu, Policy::ParallelCpu, Policy::Auto] {
+        let caps = Capabilities {
+            parallel_workers: 3,
+            ..Capabilities::default()
+        };
+        assert_eq!(
+            execute_zip_map_cancellable(&left, &right, 7, policy, &caps, &cancelled),
+            Err(ExecuteError::Map(MapError::Cancelled))
+        );
+    }
+}
+
+#[test]
+fn exact_chunk_boundaries_and_both_pure_maps_match() {
+    for size in [0, 1, 2_047, 2_048, 2_049, 3_071, 3_072, 4_099, 8_193] {
+        let mut left = vec![2; size];
+        let right = vec![3; size];
+        let expected = zip_map_i64_checked_sequential(&left, &right, 7);
+        assert_eq!(expected, Ok(vec![13; size]));
+        let map_expected = map_i64_checked_sequential(&left, 3, 7);
+        for workers in [2, 3, 4, 8] {
+            assert_eq!(
+                map_i64_checked_parallel(&left, 3, 7, workers),
+                map_expected,
+                "map size={size} workers={workers}"
+            );
+            let result = zip_map_i64_checked_parallel(&left, &right, 7, workers);
+            if size >= 2_048 && workers <= size / 1_024 {
+                assert_eq!(result, expected, "zip size={size} workers={workers}");
+            } else {
+                assert_eq!(result, Err(MapError::InvalidWorkers { requested: workers }));
+            }
+        }
+        if size >= 2_048 {
+            for index in [0, size / 2, size - 1] {
+                left[index] = i64::MAX;
+                let overflow = Err(MapError::Overflow { index });
+                assert_eq!(zip_map_i64_checked_sequential(&left, &right, 7), overflow);
+                for workers in [2, 3, 4, 8] {
+                    if workers <= size / 1_024 {
+                        assert_eq!(
+                            zip_map_i64_checked_parallel(&left, &right, 7, workers),
+                            overflow,
+                            "overflow size={size} workers={workers} index={index}"
+                        );
+                    }
+                }
+                left[index] = 2;
+            }
+        }
+    }
 }
