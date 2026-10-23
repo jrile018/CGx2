@@ -1,0 +1,1 @@
+{"schema_version":2,"allowed_effects":["ReadArgs","Foreign"],"allowed_capabilities":["ArgsRead","ForeignCall"],"allow_unknown":false}

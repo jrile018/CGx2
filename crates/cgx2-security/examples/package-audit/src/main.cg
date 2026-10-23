@@ -1,0 +1,4 @@
+module audit.main
+import audit.forward
+pub fn main() -> String effects(ReadArgs, Foreign) caps(ArgsRead, ForeignCall):
+    audit.forward.forward(arg(0))

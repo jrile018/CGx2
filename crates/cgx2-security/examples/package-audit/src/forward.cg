@@ -1,0 +1,4 @@
+module audit.forward
+import audit.foreign
+pub fn forward(x: String) -> String effects(Foreign) caps(ForeignCall):
+    audit.foreign.stringify(x)

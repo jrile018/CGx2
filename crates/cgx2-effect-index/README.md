@@ -50,3 +50,41 @@ The corresponding text view lists each entry, call site, direct effects, and pro
 Conditional guards and both branches contribute call sites and transitive
 function effects/capabilities. Branch binding sets are scoped independently;
 a literal guard does not remove an inactive branch from the static index.
+
+## Checked package API and command (release S1-10)
+
+```sh
+cargo run --offline -p cgx2-effect-index -- --package crates/cgx2-security/examples/package-audit --format json
+```
+
+`package_v1::index_package(root)` calls `cgx2_package::load_checked_package`;
+`index_checked_package(&CheckedPackage)` accepts an existing immutable checked
+snapshot. Neither accepts caller-invented imported signatures or trusted effects.
+`PackageAnalysis::entries()` exposes manifest-relative `Identity { source, name }`,
+declarations, resolved calls, body-derived effects and capabilities. Function
+summaries come directly from `CheckedModule::typed().effects`; explicit annotations
+are upper bounds, so an effectful annotation on a pure body does not invent effects.
+Each imported function edge must match the loader's exact public resolved name and
+call span. Private, unimported, duplicate, shadowed or computed invalid source is
+rejected by the checked loader rather than downgraded to successful analysis.
+Unknown admitted calls remain `Resolution::Unknown` and add `Unknown`.
+
+The versioned JSON analysis tag is `checked_package_effects_v1` (schema 1, distinct
+from the single-file schema). It includes relative source paths, UTF-8 byte spans,
+source SHA-256 values and the manifest SHA-256. Entries sort by source/name; calls
+sort by span/name; effects and capabilities sort lexically. Function identities
+remain distinct even when multiple modules export the same short name. Checked
+range/comparison intrinsics and local/imported record constructors are pure in the
+current profile. Both conditional branches and loop bodies contribute static
+summaries even when inactive. Loops that violate the frozen checker's purity
+restriction remain input errors. Foreign declarations contribute their checked
+`Foreign` effect and `native`/`ForeignCall` capability without opening libraries.
+
+`verify_unchanged`, `to_json` and `to_text` revalidate manifest/source bytes and
+canonical paths. Serializers return `Result`; a drifted snapshot cannot publish
+fresh output. Data read directly through accessors describes the captured snapshot
+and callers must verify provenance before publishing it. `--package` rejects
+`--syntax-only`; existing single-file interfaces and JSON remain unchanged.
+
+The owned S1-10 delivery evidence and Stage 3 handoff are in
+[`../cgx2-security/EVIDENCE.md`](../cgx2-security/EVIDENCE.md).

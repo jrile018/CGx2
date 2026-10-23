@@ -1,0 +1,3 @@
+module audit.foreign
+# A harmless boundary for the advisory taint-flow example. Analysis never executes it.
+foreign python pub fn stringify(x: String) -> String effects(Foreign) caps(ForeignCall) = builtins.str runtime "local:cpython" ownership copied

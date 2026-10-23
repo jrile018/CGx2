@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "columnKind": "unicodeCodePoints",
+      "results": [
+        {
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/forward.cg"
+                },
+                "region": {
+                  "endColumn": 31,
+                  "endLine": 4,
+                  "startColumn": 5,
+                  "startLine": 4
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "tainted argument reaches checked foreign declaration"
+          },
+          "relatedLocations": [
+            {
+              "id": 1,
+              "message": {
+                "text": "taint origin or checked declaration"
+              },
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main.cg"
+                },
+                "region": {
+                  "endColumn": 33,
+                  "endLine": 4,
+                  "startColumn": 27,
+                  "startLine": 4
+                }
+              }
+            },
+            {
+              "id": 2,
+              "message": {
+                "text": "taint origin or checked declaration"
+              },
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/foreign.cg"
+                },
+                "region": {
+                  "endColumn": 1,
+                  "endLine": 4,
+                  "startColumn": 1,
+                  "startLine": 3
+                }
+              }
+            }
+          ],
+          "ruleId": "CGSEC003"
+        },
+        {
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/forward.cg"
+                },
+                "region": {
+                  "endColumn": 31,
+                  "endLine": 4,
+                  "startColumn": 5,
+                  "startLine": 4
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "foreign argument taint is unknown"
+          },
+          "relatedLocations": [
+            {
+              "id": 1,
+              "message": {
+                "text": "taint origin or checked declaration"
+              },
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/foreign.cg"
+                },
+                "region": {
+                  "endColumn": 1,
+                  "endLine": 4,
+                  "startColumn": 1,
+                  "startLine": 3
+                }
+              }
+            }
+          ],
+          "ruleId": "CGSEC004"
+        },
+        {
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/forward.cg"
+                },
+                "region": {
+                  "endColumn": 31,
+                  "endLine": 4,
+                  "startColumn": 5,
+                  "startLine": 4
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "foreign return taint is unknown; implementation is outside checked source"
+          },
+          "relatedLocations": [
+            {
+              "id": 1,
+              "message": {
+                "text": "taint origin or checked declaration"
+              },
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/foreign.cg"
+                },
+                "region": {
+                  "endColumn": 1,
+                  "endLine": 4,
+                  "startColumn": 1,
+                  "startLine": 3
+                }
+              }
+            }
+          ],
+          "ruleId": "CGSEC004"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "name": "cgx2-security",
+          "rules": [
+            {
+              "id": "CGSEC001",
+              "name": "Disallowed effect"
+            },
+            {
+              "id": "CGSEC002",
+              "name": "Unknown call"
+            },
+            {
+              "id": "CGSEC003",
+              "name": "Tainted foreign sink"
+            },
+            {
+              "id": "CGSEC004",
+              "name": "Unknown taint path"
+            },
+            {
+              "id": "CGSEC005",
+              "name": "Disallowed capability"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "version": "2.1.0"
+}
