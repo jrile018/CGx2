@@ -1,4 +1,6 @@
-# CGx2 iterative parallel delivery roadmap
+# CGx2 parallel delivery roadmap
+
+Current plan: [finite completion backlog and 12 ready chats](release-completion/README.md). This supersedes open-ended two-lane continuation after reviewed Wave 28; historical wave records below remain evidence.
 
 ## Goal and completion standard
 

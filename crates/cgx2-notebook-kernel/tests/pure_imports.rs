@@ -197,7 +197,7 @@ fn notebook_pure_function_can_call_directly_imported_module() {
 }
 
 #[test]
-fn rejects_nonpublic_effectful_duplicate_and_transitive_calls() {
+fn rejects_nonpublic_effectful_duplicate_calls_and_accepts_checked_transitive_calls() {
     let project = Project::new();
     let hidden = Notebook {
         version: 1,
@@ -227,13 +227,37 @@ fn rejects_nonpublic_effectful_duplicate_and_transitive_calls() {
     );
 
     project.write("src/alpha.cg", "module demo.alpha\nimport demo.beta\npub fn double(x: i64) -> i64 effects() caps():\n demo.beta.triple(x)\n");
-    let error = NotebookKernel::open_with_project(notebook(), Some(project.root()))
-        .unwrap_err()
-        .to_string();
-    assert!(
-        error.contains("CGT012") && error.contains("alpha.cg"),
-        "{error}"
-    );
+    let mut kernel = NotebookKernel::open_with_project(notebook(), Some(project.root())).unwrap();
+    kernel.restart_and_run_all().unwrap();
+    assert_eq!(body(&kernel.notebook().cells[3]), "64");
+    let provenance = kernel.notebook().cells[3].provenance.as_ref().unwrap();
+    let modules = &provenance.package.as_ref().unwrap().modules;
+    assert!(modules.contains_key("demo.alpha"));
+    assert!(modules.contains_key("demo.beta"));
+
+    let loops = Notebook {
+        version: 1,
+        cells: vec![
+            code("import", "import demo.alpha\n"),
+            code("function", "fn sum() -> i64:\n    let mut n = 0\n    for i in range(0, 4):\n        n += alpha.double(i)\n    n\n"),
+            code("result", "sum()\n"),
+        ],
+    };
+    let mut kernel = NotebookKernel::open_with_project(loops, Some(project.root())).unwrap();
+    kernel.restart_and_run_all().unwrap();
+    assert_eq!(body(&kernel.notebook().cells[2]), "18");
+    let saved = write_notebook(kernel.notebook()).unwrap();
+    let restored = parse_notebook(&saved).unwrap();
+    let modules = &restored.cells[2]
+        .provenance
+        .as_ref()
+        .unwrap()
+        .package
+        .as_ref()
+        .unwrap()
+        .modules;
+    assert!(modules.contains_key("demo.alpha"));
+    assert!(modules.contains_key("demo.beta"));
 
     project.write(
         "src/alpha.cg",

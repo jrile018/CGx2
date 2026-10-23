@@ -18,3 +18,7 @@ Use private build/temp directories in each worktree. A shared Cargo target colli
 ## Integration acceptance
 
 Review exact commits/ownership, integrate on an isolated branch and keep `main` unchanged. Run combined offline all-feature workspace/UI/benchmark tests, fmt, Clippy, compiler readiness with any coordinator pin refresh, real f32/native Python isolation and memory regression suites. Check imported summary provenance/visibility/capability propagation, truthful public indexes and retained standalone unknown behavior. Check local mutation scope, loop cost before replay, imported helper purity, dependency invalidation and cancellation/failure atomicity. Include a combined notebook calling an explicitly pure multi-module wrapper from a bounded local loop. Update milestones and remaining release gates after review; do not award completion for plans.
+
+## Integrated review
+
+Both deliveries are reviewed on riley/release-completion-plan. See [verification and evidence](REVIEW.md). The next work is the [12-chat finite completion plan](../release-completion/README.md).
