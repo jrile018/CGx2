@@ -216,6 +216,38 @@ fn compare_failure(
 #[test]
 fn source_runtime_failures_match_native_debug_and_release() {
     compare_failure(
+        "reusable_memory_negative.cg",
+        "CGR013",
+        "byte size is negative",
+        None,
+        0,
+        0,
+    );
+    compare_failure(
+        "reusable_memory_region_failure.cg",
+        "CGR013",
+        "RegionLimit",
+        None,
+        0,
+        0,
+    );
+    compare_failure(
+        "reusable_memory_budget_failure.cg",
+        "CGR013",
+        "BudgetExceeded",
+        None,
+        0,
+        0,
+    );
+    compare_failure(
+        "reusable_memory_i64_max.cg",
+        "CGR013",
+        "RegionLimit",
+        None,
+        0,
+        0,
+    );
+    compare_failure(
         "source_graph_dangling.cg",
         "CGR014",
         "InvalidHandle",

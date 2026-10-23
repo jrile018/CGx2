@@ -1,0 +1,4 @@
+fn allocate(size: i64) -> Unit effects(ManagedAlloc):
+ let block = memory.owned_bytes(size)
+fn main() -> Unit effects(ManagedAlloc):
+ allocate(0 - 1)

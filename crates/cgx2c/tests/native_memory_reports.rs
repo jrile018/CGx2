@@ -194,6 +194,7 @@ fn source_graph_reports_match_interpreter_in_debug_and_release() {
 fn native_reports_match_interpreter_and_failure_counters_in_both_profiles() {
     let case = Case::new();
     let fixtures = [
+        ("reusable_memory_success.cg", None, 0, None),
         ("memory_functions.cg", None, 1, None),
         ("memory_functions_no_gc.cg", None, 0, None),
         (

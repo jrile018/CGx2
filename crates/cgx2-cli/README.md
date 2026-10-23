@@ -52,7 +52,7 @@ The runtime charges promotion's destination region for the payload's reserved ca
 
 
 ## Bounded memory functions
-A function module can put the supported memory operations inside local `fn name() -> Unit effects(...) caps(...):` bodies and call them with direct zero-argument statement calls. `main()` is the entry point. Calls share one `cgx2_runtime::Session` and the caller's active `no_gc` guards, but each call has private handle bindings. Managed handles still rooted at function exit are unrooted during local cleanup; local regions must be closed explicitly. Static checks reject recursion, calls with arguments, non-`Unit` results, bare handle result expressions, handle capture or escape, dynamic allocation sizes, missing effects/capabilities, collection through a call inside `no_gc`, and unsupported scalar mixing. `check`, `run`, JSON diagnostics, and `fmt` use this source profile; the `cgx2-api-index` library indexes checked public memory functions. A runtime error points to the failing `.cg` operation and emits no success value or memory report. Native compilation of this function profile is not supported yet.
+Memory functions use direct statement calls and private handle bindings. `main()` has no parameters and returns `Unit`; other local functions may take explicit `i64` parameters and return `Unit`. A parameter may be forwarded to another acyclic local function or supplied as `memory.alloc_bytes(region, size)` or `memory.owned_bytes(size)`. Call arguments admit `i64` literals, parameters, and checked `i64` arithmetic. The interpreter converts a dynamic signed byte size to target `usize` before allocation: zero is valid; negative or target-overflow values fail with `CGR013` at the size argument. Region and `no_gc` allocation failures also use `CGR013` at that argument. Calls share one runtime session and active `no_gc` guards; remaining managed handles are unrooted on return or error. Recursion, handle arguments/results, implicit capture, mixed scalar/memory statements, foreign calls, dynamic region limits/budgets/object shapes/indices, and arbitrary control flow remain rejected. `cgx2 check`, `run`, and `api FILE.cg --json` use the same checked profile. Runtime failures expose partial memory reports through `run_checked_source_with_failure`.
 
 ## Checked source object graphs
 
@@ -73,3 +73,18 @@ Run `cgx2 memory failure-report FILE.cg` (or `cargo run --offline -p cgx2-cli --
 Library callers can use `run_checked_source_with_failure` to receive `RunFailure { error, report, rollback_preserved, operation_failure, final_unwind }`. The `failure-injection-test` Cargo feature additionally exposes `run_checked_source_with_failure_at_reserve(source, args, index)` for one-based host reserve fault parity; ordinary builds do not arm a fault. Report counters cover CGx2 storage only.
 
 **Root observation limit:** `final_unwind.rooted_handles` and `rooted_edges` describe the cleared source-binding observation after cleanup. They do not independently count registrations in the runtime root table. A zero here does not prove `Session::unroot` succeeded or close the memory release gate.
+
+## Reusable byte-size example
+
+```cg
+pub fn reserve(size: i64) -> Unit effects(ManagedAlloc, Mutate):
+ let region = memory.region(mode: manual, limit: 256)
+ let block = memory.alloc_bytes(region, size)
+ memory.drop(block)
+ memory.close(region)
+fn main() -> Unit effects(ManagedAlloc, Mutate):
+ reserve(0)
+ reserve(8)
+```
+
+`cgx2 check FILE.cg`, `cgx2 run FILE.cg`, and `cgx2 api FILE.cg --json` use this same source. `0 - 1` is a signed negative call argument; a subsequent allocation fails with `CGR013` at `size`. On a 64-bit target every nonnegative `i64` fits `usize`, so `i64::MAX` reaches the region-limit check; a narrower target can reject it during conversion.

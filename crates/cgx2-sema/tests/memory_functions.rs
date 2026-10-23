@@ -24,12 +24,22 @@ fn accepts_local_memory_functions_and_conversions() {
 }
 
 #[test]
+fn scalar_parameters_are_checked_at_calls_and_only_admitted_as_byte_sizes() {
+    check("fn make(n: i64) -> Unit effects(ManagedAlloc):\n let value = memory.owned_bytes(n)\nfn relay(n: i64) -> Unit effects(ManagedAlloc):\n make(n)\nfn main() -> Unit effects(ManagedAlloc):\n relay(0 - 1)\n").unwrap();
+    has_error("fn make(n: i64) -> Unit effects(ManagedAlloc):\n let value = memory.owned_bytes(n)\nfn main() -> Unit effects(ManagedAlloc):\n make()\n", "CGM002", "make()");
+    has_error("fn make(n: i64) -> Unit effects(ManagedAlloc):\n let value = memory.owned_bytes(n)\nfn main() -> Unit effects(ManagedAlloc):\n make(true)\n", "CGM002", "true");
+    has_error("fn make(n: i64) -> Unit effects(ManagedAlloc):\n let value = memory.owned_bytes(n)\nfn main() -> Unit effects(ManagedAlloc):\n make(9223372036854775808)\n", "CGM002", "9223372036854775808");
+    has_error("fn make(n: i64) -> Unit effects(ManagedAlloc):\n let region = memory.region(mode: manual, limit: n)\n memory.close(region)\nfn main() -> Unit effects(ManagedAlloc):\n make(8)\n", "CGM002", "n");
+    has_error("fn make(n: Bool) -> Unit effects(ManagedAlloc):\n let value = memory.owned_bytes(n)\nfn main() -> Unit effects(ManagedAlloc):\n make(8)\n", "CGM002", "n: Bool");
+}
+
+#[test]
 fn rejects_cross_boundary_handles_and_dynamic_sizes() {
     has_error("fn build() -> Unit effects(ManagedAlloc):\n    let o = memory.owned_bytes(8)\n    return o\nfn main() -> Unit effects(ManagedAlloc):\n    build()\n", "CGM001", "return o");
-    has_error("fn build(n: i64) -> Unit effects(ManagedAlloc):\n    let o = memory.owned_bytes(n)\nfn main() -> Unit effects(ManagedAlloc):\n    build(8)\n", "CGM001", "fn build(n: i64) -> Unit effects(ManagedAlloc):\n    let o = memory.owned_bytes(n)\n");
+    check("fn build(n: i64) -> Unit effects(ManagedAlloc):\n    let o = memory.owned_bytes(n)\nfn main() -> Unit effects(ManagedAlloc):\n    build(8)\n").unwrap();
     has_error("fn build() -> Unit effects(ManagedAlloc):\n    let o = memory.owned_bytes(n)\nfn main() -> Unit effects(ManagedAlloc):\n    build()\n", "CGM002", "n");
     has_error("fn build() -> Unit effects(Mutate):\n    memory.use(outer)\nfn main() -> Unit effects(ManagedAlloc, Mutate):\n    let outer = memory.owned_bytes(8)\n    build()\n", "CGM002", "outer");
-    has_error("fn build() -> Unit effects(ManagedAlloc):\n    let o = memory.owned_bytes(8)\nfn main() -> Unit effects(ManagedAlloc):\n    build(o)\n", "CGM001", "build(o)");
+    has_error("fn build() -> Unit effects(ManagedAlloc):\n    let o = memory.owned_bytes(8)\nfn main() -> Unit effects(ManagedAlloc):\n    build(o)\n", "CGM002", "build(o)");
     has_error("fn build() -> Unit effects(ManagedAlloc, Mutate):\n    let o = memory.owned_bytes(8)\n    let b = memory.borrow(o)\n    return b\nfn main() -> Unit effects(ManagedAlloc, Mutate):\n    build()\n", "CGM001", "return b");
     has_error("fn build() -> Unit effects(ManagedAlloc):\n    let o = memory.owned_bytes(8)\n    o\nfn main() -> Unit effects(ManagedAlloc):\n    build()\n", "CGM001", "o");
 }

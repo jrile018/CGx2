@@ -41,9 +41,9 @@ backslashes; other Unicode text remains UTF-8. `render_text()` starts with
 `module NAME` (or `module <unnamed>`), then writes one sorted signature per
 line as `pub fn NAME(PARAM: TYPE) -> TYPE effects(...) [STATUS] caps(...) [STATUS] [START, END)`, followed by contract summaries labeled `runtime-checked`.
 
-Explicit effect/capability lists retain declared names; omitted lists contain conservative inferred names and use status `inferred`. Each contract has canonical expression text, a source span, and status `runtime-checked`. No contract is labeled proved. This is a per-module library; documentation comments are not indexed, and a `cgx2 api` CLI command requires later integration.
+Explicit effect/capability lists retain declared names; omitted lists contain conservative inferred names and use status `inferred`. Contracts carry canonical expression text, source span, and `runtime-checked` status; none is labeled proved. `cgx2 api FILE.cg --json` renders this checked per-module index. Documentation comments are not indexed.
 
 
-A checked public memory function appears with zero parameters, `Unit` return, and its explicit/transitive effects and capabilities in schema 2. Handles cannot cross its call boundary; the index does not imply native compilation support for the memory function profile.
+A checked public memory function exposes its declared `i64` scalar parameters, `Unit` result, and explicit or transitive effects and capabilities in schema 2. Memory handles cannot cross call boundaries. For example, `pub fn allocate(size: i64) -> Unit effects(ManagedAlloc)` has `{"name":"size","ty":"i64"}` in `parameters`.
 
-Checked source object-reference operations stay local to zero-argument memory functions. The index records the public function's `Unit` signature and declared or inferred `ManagedAlloc`, `Mutate`, and `Collect` effects and `MemoryCollect` capability; it does not expose object handles as API parameters or results. `build_index` rechecks the bounded object shape and same-region rules, so invalid graph source returns `IndexError::InvalidModule`. The index does not claim native graph compilation.
+Checked object-reference operations stay within local memory functions. The index records `ManagedAlloc`, `Mutate`, and `Collect` effects and `MemoryCollect` capability when required; it never exposes object handles as API parameters or results. `build_index` rechecks bounded object shape and same-region rules, returning `IndexError::InvalidModule` for invalid source.

@@ -1,5 +1,5 @@
 //! Conservative source lowering for scripts and bounded local memory functions.
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 use cgx2_ownership::{check_ops, Op};
 use cgx2_syntax::{CallArg, Expr, ExprKind, Module, Path, Span, Stmt, StmtKind};
@@ -27,6 +27,7 @@ struct ObjectShape {
 
 #[derive(Default)]
 struct Lowerer {
+    scalar_parameters: BTreeSet<String>,
     bindings: BTreeMap<String, Kind>,
     objects: BTreeMap<String, ObjectShape>,
     references: BTreeMap<String, String>,
@@ -38,6 +39,7 @@ struct Lowerer {
 #[derive(Clone)]
 struct LocalCall {
     name: String,
+    arguments: Vec<CallArg>,
     span: Span,
     in_no_gc: bool,
 }
@@ -105,19 +107,12 @@ fn without_local_calls(
                 if let ExprKind::Call { callee, arguments } = &expr.kind {
                     if let ExprKind::Name(path) = &callee.kind {
                         if let [name] = path.segments.as_slice() {
-                            if !arguments.is_empty() {
-                                diagnostics.push(TypeDiagnostic::new(
-                                    "CGM001",
-                                    "memory function calls take no arguments".into(),
-                                    expr.span,
-                                ));
-                            } else {
-                                calls.push(LocalCall {
-                                    name: name.clone(),
-                                    span: expr.span,
-                                    in_no_gc,
-                                });
-                            }
+                            calls.push(LocalCall {
+                                name: name.clone(),
+                                arguments: arguments.clone(),
+                                span: expr.span,
+                                in_no_gc,
+                            });
                             continue;
                         }
                     }
@@ -171,6 +166,19 @@ fn transitively_collects(
         })
 }
 
+fn scalar_argument(expr: &Expr, parameters: &BTreeSet<String>) -> bool {
+    match &expr.kind {
+        ExprKind::Integer(raw) => raw.replace('_', "").parse::<i64>().is_ok(),
+        ExprKind::Name(path) => {
+            matches!(path.segments.as_slice(), [name] if parameters.contains(name))
+        }
+        ExprKind::Binary { left, right, .. } => {
+            scalar_argument(left, parameters) && scalar_argument(right, parameters)
+        }
+        _ => false,
+    }
+}
+
 fn check_memory_functions(module: &Module) -> Result<TypedModule, Vec<TypeDiagnostic>> {
     let mut diagnostics = Vec::new();
     if let Some(stmt) = module.statements.first() {
@@ -184,18 +192,36 @@ fn check_memory_functions(module: &Module) -> Result<TypedModule, Vec<TypeDiagno
     let mut calls = BTreeMap::new();
     let mut direct_collect = BTreeMap::new();
     for function in &module.functions {
-        if !function.parameters.is_empty()
-            || function
-                .return_type
-                .as_ref()
-                .is_none_or(|ty| ty.to_string() != "Unit")
+        if function
+            .return_type
+            .as_ref()
+            .is_none_or(|ty| ty.to_string() != "Unit")
             || function.foreign.is_some()
             || !function.requires.is_empty()
             || !function.ensures.is_empty()
         {
             diagnostics.push(TypeDiagnostic::new(
                 "CGM001",
-                "memory functions require zero parameters, explicit Unit result, and no foreign binding or contracts".into(),
+                "memory functions require explicit Unit result and no foreign binding or contracts"
+                    .into(),
+                function.span,
+            ));
+        }
+        let mut parameter_names = BTreeSet::new();
+        for parameter in &function.parameters {
+            if parameter.ty.to_string() != "i64" || !parameter_names.insert(parameter.name.clone())
+            {
+                diagnostics.push(TypeDiagnostic::new(
+                    "CGM002",
+                    "memory function parameters must be unique i64 scalars".into(),
+                    parameter.span,
+                ));
+            }
+        }
+        if function.name == "main" && !function.parameters.is_empty() {
+            diagnostics.push(TypeDiagnostic::new(
+                "CGM002",
+                "memory main() takes no parameters".into(),
                 function.span,
             ));
         }
@@ -210,14 +236,17 @@ fn check_memory_functions(module: &Module) -> Result<TypedModule, Vec<TypeDiagno
             function.name.clone(),
             FunctionSignature {
                 public: function.public,
-                parameters: Vec::new(),
+                parameters: function.parameters.iter().map(|_| Type::I64).collect(),
                 return_type: Type::Unit,
                 span: function.span,
             },
         );
         let mut local_calls = Vec::new();
         let body = without_local_calls(&function.body, false, &mut local_calls, &mut diagnostics);
-        let mut lowerer = Lowerer::default();
+        let mut lowerer = Lowerer {
+            scalar_parameters: parameter_names,
+            ..Lowerer::default()
+        };
         lowerer.block(&body);
         diagnostics.extend(lowerer.diagnostics);
         if let Err(errors) = check_ops(&lowerer.ops) {
@@ -258,6 +287,32 @@ fn check_memory_functions(module: &Module) -> Result<TypedModule, Vec<TypeDiagno
     }
     for (caller, sites) in &calls {
         for site in sites {
+            if let Some(target) = module.functions.iter().find(|f| f.name == site.name) {
+                if site.arguments.len() != target.parameters.len()
+                    || site.arguments.iter().any(|arg| arg.name.is_some())
+                {
+                    diagnostics.push(TypeDiagnostic::new(
+                        "CGM002",
+                        "memory call arity or argument labels do not match".into(),
+                        site.span,
+                    ));
+                }
+                let parameters: BTreeSet<String> = module
+                    .functions
+                    .iter()
+                    .find(|f| f.name == *caller)
+                    .map(|f| f.parameters.iter().map(|p| p.name.clone()).collect())
+                    .unwrap_or_default();
+                for arg in &site.arguments {
+                    if !scalar_argument(&arg.value, &parameters) {
+                        diagnostics.push(TypeDiagnostic::new(
+                            "CGM002",
+                            "memory call argument must be an i64 scalar".into(),
+                            arg.value.span,
+                        ));
+                    }
+                }
+            }
             if !signatures.contains_key(&site.name) {
                 diagnostics.push(TypeDiagnostic::new(
                     "CGM001",
@@ -376,7 +431,7 @@ impl Lowerer {
                         );
                         continue;
                     }
-                    if self.bindings.contains_key(name) {
+                    if self.bindings.contains_key(name) || self.scalar_parameters.contains(name) {
                         self.report(format!("duplicate memory binding `{name}`"), stmt.span);
                         continue;
                     }
@@ -459,7 +514,7 @@ impl Lowerer {
             }
             "owned_bytes" if destination.is_some() => {
                 let args = self.positional(arguments, 1, expr.span)?;
-                self.bytes(args[0], "size")?;
+                self.size(args[0])?;
                 self.ops.push(Op::CreateOwned {
                     value: destination.unwrap_or_default().into(),
                     span: expr.span,
@@ -501,7 +556,7 @@ impl Lowerer {
             "alloc_bytes" if destination.is_some() => {
                 let args = self.positional(arguments, 2, expr.span)?;
                 let region = self.reference(args[0], &[Kind::Region])?;
-                self.bytes(args[1], "size")?;
+                self.size(args[1])?;
                 self.ops.push(Op::CreateManaged {
                     value: destination.unwrap_or_default().into(),
                     region,
@@ -688,6 +743,14 @@ impl Lowerer {
             expr.span,
         );
         None
+    }
+    fn size(&mut self, expr: &Expr) -> Option<()> {
+        if let ExprKind::Name(path) = &expr.kind {
+            if matches!(path.segments.as_slice(), [name] if self.scalar_parameters.contains(name)) {
+                return Some(());
+            }
+        }
+        self.bytes(expr, "size").map(|_| ())
     }
 
     fn reference(&mut self, expr: &Expr, allowed: &[Kind]) -> Option<String> {

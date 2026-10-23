@@ -2,15 +2,17 @@ mod diagnostics;
 
 use std::{env, fs, path::Path, process::ExitCode};
 
+use cgx2_api_index::build_index;
 use cgx2_cli::{check_source, run_checked_source, run_checked_source_with_failure, Value};
 use cgx2_syntax::{format_module, parse_module};
 
 use diagnostics::{CliDiagnostic, DiagnosticFormat};
 
-const HELP: &str = "usage: cgx2 [--diagnostic-format=json] check FILE.cg|PACKAGE | cgx2 [--diagnostic-format=json] run FILE.cg|PACKAGE [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 memory report FILE.cg [--format=json] | cgx2 memory failure-report FILE.cg | cgx2 fmt FILE.cg\ncheck validates syntax, scalar types, and a bounded memory/ownership script subset; a schema 2 PACKAGE directory can run the bounded pinned native C profile through cgx2-native; memory report shows CGx2 allocations only";
+const HELP: &str = "usage: cgx2 [--diagnostic-format=json] check FILE.cg|PACKAGE | cgx2 [--diagnostic-format=json] run FILE.cg|PACKAGE [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 api FILE.cg --json | cgx2 memory report FILE.cg [--format=json] | cgx2 memory failure-report FILE.cg | cgx2 fmt FILE.cg\ncheck validates syntax, scalar types, and a bounded memory/ownership script subset; a schema 2 PACKAGE directory can run the bounded pinned native C profile through cgx2-native; memory report shows CGx2 allocations only";
 
 enum Command {
     Check { path: String },
+    Api { path: String, json: bool },
     Run { path: String, args: Vec<String> },
     MemoryReport { path: String, json: bool },
     FailureReport { path: String },
@@ -40,6 +42,7 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
     let command = parse_args(args).map_err(|error| vec![error])?;
     let path = match &command {
         Command::Check { path }
+        | Command::Api { path, .. }
         | Command::Run { path, .. }
         | Command::MemoryReport { path, .. }
         | Command::FailureReport { path }
@@ -115,6 +118,28 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
                     .map(|error| CliDiagnostic::from_check(&path, error))
                     .collect::<Vec<_>>()
             })?;
+        }
+        Command::Api { path, json } => {
+            let typed = check_source(&source).map_err(|errors| {
+                errors
+                    .into_iter()
+                    .map(|error| CliDiagnostic::from_check(&path, error))
+                    .collect::<Vec<_>>()
+            })?;
+            let module = parse_module(&source).expect("checked source parses");
+            let index = build_index(&module, &typed).map_err(|error| {
+                vec![CliDiagnostic::new(
+                    "CGC001",
+                    error.to_string(),
+                    path.clone(),
+                    None,
+                )]
+            })?;
+            if json {
+                println!("{}", index.render_json());
+            } else {
+                print!("{}", index.render_text());
+            }
         }
         Command::Run { path, args } => {
             let (result, _) = run_checked_source(&source, &args).map_err(|errors| {
@@ -249,6 +274,7 @@ fn parse_args(args: Vec<String>) -> Result<Command, CliDiagnostic> {
             ("memory-failure-report", &filtered[2..])
         }
         Some("check") => ("check", &filtered[1..]),
+        Some("api") if !json => ("api", &filtered[1..]),
         Some("run") => ("run", &filtered[1..]),
         Some("fmt") if !json => ("fmt", &filtered[1..]),
         Some(path) if path.ends_with(".cg") || Path::new(path).is_dir() => ("run", &filtered[..]),
@@ -277,6 +303,17 @@ fn parse_args(args: Vec<String>) -> Result<Command, CliDiagnostic> {
             return Err(usage());
         }
         return Ok(Command::FailureReport { path: path.clone() });
+    }
+    if mode == "api" {
+        if Path::new(path).is_dir()
+            || (rest.len() != 1 && !(rest.len() == 2 && rest[1] == "--json"))
+        {
+            return Err(usage());
+        }
+        return Ok(Command::Api {
+            path: path.clone(),
+            json: rest.len() == 2,
+        });
     }
     if mode == "check" || mode == "fmt" {
         if rest.len() != 1 {

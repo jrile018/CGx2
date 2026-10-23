@@ -104,6 +104,7 @@ const STEP_LIMIT: usize = 1_000_000;
 enum Op {
     Call {
         name: String,
+        arguments: Vec<Expr>,
     },
     NoGc {
         budget: usize,
@@ -116,7 +117,7 @@ enum Op {
     },
     Owned {
         name: String,
-        size: usize,
+        size: Expr,
     },
     Move {
         name: String,
@@ -134,7 +135,7 @@ enum Op {
     Alloc {
         name: String,
         region: String,
-        size: usize,
+        size: Expr,
     },
     AllocObject {
         name: String,
@@ -213,6 +214,45 @@ fn bytes(expr: &Expr) -> Result<usize, RunError> {
             .map_err(|_| argument_error(expr.span)),
         _ => Err(argument_error(expr.span)),
     }
+}
+fn scalar(expr: &Expr, parameters: &HashMap<String, i64>) -> Result<i64, RunError> {
+    match &expr.kind {
+        ExprKind::Integer(raw) => raw
+            .replace('_', "")
+            .parse::<i64>()
+            .map_err(|_| error("CGR013", "i64 scalar out of range", expr.span)),
+        ExprKind::Name(path) if path.segments.len() == 1 => parameters
+            .get(&path.segments[0])
+            .copied()
+            .ok_or_else(|| argument_error(expr.span)),
+        ExprKind::Binary { left, op, right } => {
+            let a = scalar(left, parameters)?;
+            let b = scalar(right, parameters)?;
+            let result = match op {
+                cgx2_syntax::BinaryOp::Add => a.checked_add(b),
+                cgx2_syntax::BinaryOp::Subtract => a.checked_sub(b),
+                cgx2_syntax::BinaryOp::Multiply => a.checked_mul(b),
+                cgx2_syntax::BinaryOp::Divide => a.checked_div(b),
+            };
+            result.ok_or_else(|| error("CGR013", "i64 scalar arithmetic failed", expr.span))
+        }
+        _ => Err(argument_error(expr.span)),
+    }
+}
+fn checked_size(expr: &Expr, parameters: &HashMap<String, i64>) -> Result<usize, RunError> {
+    if let ExprKind::Name(path) = &expr.kind {
+        if path.segments.len() == 1 {
+            let value = scalar(expr, parameters)?;
+            return usize::try_from(value).map_err(|_| {
+                error(
+                    "CGR013",
+                    "byte size is negative or outside target usize range",
+                    expr.span,
+                )
+            });
+        }
+    }
+    bytes(expr)
 }
 
 fn name(expr: &Expr) -> Result<String, RunError> {
@@ -300,7 +340,7 @@ fn lower_stmt(stmt: &Stmt) -> Result<SpannedOp, RunError> {
                     let args = positional(arguments, 1, value.span)?;
                     Op::Owned {
                         name: dest.clone(),
-                        size: bytes(args[0])?,
+                        size: args[0].clone(),
                     }
                 }
                 "move" => {
@@ -330,7 +370,7 @@ fn lower_stmt(stmt: &Stmt) -> Result<SpannedOp, RunError> {
                     Op::Alloc {
                         name: dest.clone(),
                         region: name(args[0])?,
-                        size: bytes(args[1])?,
+                        size: args[1].clone(),
                     }
                 }
                 "alloc_object" => {
@@ -367,12 +407,10 @@ fn lower_stmt(stmt: &Stmt) -> Result<SpannedOp, RunError> {
                     return Err(unsupported(callee.span));
                 };
                 if let [local] = path.segments.as_slice() {
-                    if !arguments.is_empty() {
-                        return Err(argument_error(expr.span));
-                    }
                     return Ok(SpannedOp {
                         op: Op::Call {
                             name: local.clone(),
+                            arguments: arguments.iter().map(|arg| arg.value.clone()).collect(),
                         },
                         span: expr.span,
                     });
@@ -458,12 +496,17 @@ fn region(
     }
 }
 
+type FunctionBodies = HashMap<String, (Vec<String>, Vec<SpannedOp>)>;
+struct CallContext<'a> {
+    functions: &'a FunctionBodies,
+    scalars: &'a HashMap<String, i64>,
+}
 fn execute_with_functions(
     ops: &[SpannedOp],
     session: &mut Session,
     bindings: &mut HashMap<String, Binding>,
     steps: &mut usize,
-    functions: &HashMap<String, Vec<SpannedOp>>,
+    context: &CallContext<'_>,
     failure_state: &mut FailureState,
     observe_rollback: bool,
 ) -> Result<(), RunError> {
@@ -488,21 +531,33 @@ fn execute_with_functions(
             .flatten();
         let result = (|| -> Result<(), RunError> {
             match op {
-                Op::Call { name } => {
-                    let body = functions.get(name).ok_or_else(|| {
+                Op::Call { name, arguments } => {
+                    let (parameters, body) = context.functions.get(name).ok_or_else(|| {
                         error(
                             "CGR014",
                             format!("unknown local memory function `{name}`"),
                             *span,
                         )
                     })?;
+                    if parameters.len() != arguments.len() {
+                        return Err(argument_error(*span));
+                    }
+                    let values = arguments
+                        .iter()
+                        .map(|arg| scalar(arg, context.scalars))
+                        .collect::<Result<Vec<_>, _>>()?;
+                    let local_scalars: HashMap<String, i64> =
+                        parameters.iter().cloned().zip(values).collect();
                     let mut locals = HashMap::new();
                     let result = execute_with_functions(
                         body,
                         session,
                         &mut locals,
                         steps,
-                        functions,
+                        &CallContext {
+                            functions: context.functions,
+                            scalars: &local_scalars,
+                        },
                         failure_state,
                         observe_rollback,
                     );
@@ -526,7 +581,7 @@ fn execute_with_functions(
                         &mut guard,
                         bindings,
                         steps,
-                        functions,
+                        context,
                         failure_state,
                         observe_rollback,
                     )?;
@@ -538,9 +593,15 @@ fn execute_with_functions(
                     bindings.insert(name.clone(), Binding::Region(id));
                 }
                 Op::Owned { name, size } => {
+                    let failure_span = if matches!(&size.kind, ExprKind::Name(_)) {
+                        size.span
+                    } else {
+                        *span
+                    };
+                    let size = checked_size(size, context.scalars)?;
                     let value = session
-                        .alloc_owned_bytes(*size)
-                        .map_err(|e| allocation(e, *span))?;
+                        .alloc_owned_bytes(size)
+                        .map_err(|e| allocation(e, failure_span))?;
                     bindings.insert(name.clone(), Binding::Owned(value));
                 }
                 Op::Move { name, from } => {
@@ -591,10 +652,16 @@ fn execute_with_functions(
                     region: region_name,
                     size,
                 } => {
+                    let failure_span = if matches!(&size.kind, ExprKind::Name(_)) {
+                        size.span
+                    } else {
+                        *span
+                    };
+                    let size = checked_size(size, context.scalars)?;
                     let id = region(bindings, region_name, *span)?;
                     let handle = session
-                        .alloc_bytes(id, *size)
-                        .map_err(|e| allocation(e, *span))?;
+                        .alloc_bytes(id, size)
+                        .map_err(|e| allocation(e, failure_span))?;
                     session.root(handle).map_err(|e| runtime(e, *span))?;
                     bindings.insert(name.clone(), Binding::Managed(handle));
                 }
@@ -731,12 +798,17 @@ fn execute(
     bindings: &mut HashMap<String, Binding>,
     steps: &mut usize,
 ) -> Result<(), RunError> {
+    let functions = HashMap::new();
+    let scalars = HashMap::new();
     execute_with_functions(
         ops,
         session,
         bindings,
         steps,
-        &HashMap::new(),
+        &CallContext {
+            functions: &functions,
+            scalars: &scalars,
+        },
         &mut FailureState::default(),
         false,
     )
@@ -759,7 +831,17 @@ pub(crate) fn run_module_with_failure(
     let functions = module
         .functions
         .iter()
-        .map(|function| lower(&function.body).map(|body| (function.name.clone(), body)))
+        .map(|function| {
+            lower(&function.body).map(|body| {
+                (
+                    function.name.clone(),
+                    (
+                        function.parameters.iter().map(|p| p.name.clone()).collect(),
+                        body,
+                    ),
+                )
+            })
+        })
         .collect::<Result<HashMap<_, _>, _>>()
         .map_err(lower_failure)?;
     let mut session = Session::new();
@@ -772,6 +854,11 @@ pub(crate) fn run_module_with_failure(
     let mut bindings = HashMap::new();
     let mut steps = 0;
     let mut failure_state = FailureState::default();
+    let empty_scalars = HashMap::new();
+    let context = CallContext {
+        functions: &functions,
+        scalars: &empty_scalars,
+    };
     let result = if let Some(main) = module
         .functions
         .iter()
@@ -780,6 +867,7 @@ pub(crate) fn run_module_with_failure(
         let entry = [SpannedOp {
             op: Op::Call {
                 name: "main".into(),
+                arguments: Vec::new(),
             },
             span: main.span,
         }];
@@ -788,7 +876,7 @@ pub(crate) fn run_module_with_failure(
             &mut session,
             &mut bindings,
             &mut steps,
-            &functions,
+            &context,
             &mut failure_state,
             observe_rollback,
         )
@@ -798,7 +886,7 @@ pub(crate) fn run_module_with_failure(
             &mut session,
             &mut bindings,
             &mut steps,
-            &functions,
+            &context,
             &mut failure_state,
             observe_rollback,
         )

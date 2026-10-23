@@ -39,6 +39,54 @@ fn size(expr: &Expr) -> Result<usize, EmitDiagnostic> {
         .parse::<usize>()
         .map_err(|_| unsupported("memory size is outside usize range", expr.span))
 }
+fn scalar_expr(expr: &Expr, parameters: &BTreeMap<&str, usize>) -> Result<String, EmitDiagnostic> {
+    match &expr.kind {
+        ExprKind::Integer(raw) => raw
+            .replace('_', "")
+            .parse::<i64>()
+            .map(|value| format!("{value}i64"))
+            .map_err(|_| unsupported("i64 scalar out of range", expr.span)),
+        ExprKind::Name(path) if path.segments.len() == 1 => parameters
+            .get(path.segments[0].as_str())
+            .map(|index| format!("cgx2_param_{index}"))
+            .ok_or_else(|| unsupported("unknown scalar parameter", expr.span)),
+        ExprKind::Binary { left, op, right } => {
+            let left = scalar_expr(left, parameters)?;
+            let right = scalar_expr(right, parameters)?;
+            let method = match op {
+                cgx2_syntax::BinaryOp::Add => "checked_add",
+                cgx2_syntax::BinaryOp::Subtract => "checked_sub",
+                cgx2_syntax::BinaryOp::Multiply => "checked_mul",
+                cgx2_syntax::BinaryOp::Divide => "checked_div",
+            };
+            let message = quote_rust(&format!(
+                "CGR013 at {}..{}: i64 scalar arithmetic failed",
+                expr.span.start, expr.span.end
+            ));
+            Ok(format!(
+                "({left}).{method}({right}).ok_or_else(|| String::from({message}))?"
+            ))
+        }
+        _ => Err(unsupported(
+            "memory call argument must be i64 scalar",
+            expr.span,
+        )),
+    }
+}
+fn size_expr(expr: &Expr, parameters: &BTreeMap<&str, usize>) -> Result<String, EmitDiagnostic> {
+    if matches!(&expr.kind, ExprKind::Name(_)) {
+        let scalar = scalar_expr(expr, parameters)?;
+        let message = quote_rust(&format!(
+            "CGR013 at {}..{}: byte size is negative or outside target usize range",
+            expr.span.start, expr.span.end
+        ));
+        Ok(format!(
+            "usize::try_from({scalar}).map_err(|_| String::from({message}))?"
+        ))
+    } else {
+        Ok(size(expr)?.to_string())
+    }
+}
 
 fn name(expr: &Expr) -> Result<&str, EmitDiagnostic> {
     match &expr.kind {
@@ -92,7 +140,8 @@ fn emit_block(
     stmts: &[Stmt],
     out: &mut String,
     indent: usize,
-    functions: &BTreeMap<&str, usize>,
+    functions: &BTreeMap<&str, (usize, usize)>,
+    parameters: &BTreeMap<&str, usize>,
 ) -> Result<(), EmitDiagnostic> {
     let pad = "    ".repeat(indent);
     for stmt in stmts {
@@ -102,7 +151,7 @@ fn emit_block(
             StmtKind::NoGc { budget, body } => {
                 let budget = size(budget)?;
                 out.push_str(&format!("{pad}{{\n{pad}    let mut cgx2_guard = session.no_gc({budget});\n{pad}    let session = &mut *cgx2_guard;\n"));
-                emit_block(body, out, indent + 1, functions)?;
+                emit_block(body, out, indent + 1, functions, parameters)?;
                 out.push_str(&format!("{pad}}}\n"));
             }
             StmtKind::Let {
@@ -138,10 +187,18 @@ fn emit_block(
                             size(&limit.expect("checked").value)?
                         )
                     }
-                    "owned_bytes" => format!(
-                        "owned(session, &mut bindings, {dest}, {}, {span})?;",
-                        size(positional(args, 1, value.span)?[0])?
-                    ),
+                    "owned_bytes" => {
+                        let size_arg = positional(args, 1, value.span)?[0];
+                        let failure_span = if matches!(&size_arg.kind, ExprKind::Name(_)) {
+                            format!("({}, {})", size_arg.span.start, size_arg.span.end)
+                        } else {
+                            span.clone()
+                        };
+                        format!(
+                            "owned(session, &mut bindings, {dest}, {}, {failure_span})?;",
+                            size_expr(size_arg, parameters)?
+                        )
+                    }
                     "move" => format!(
                         "move_owned(&mut bindings, {dest}, {}, {span})?;",
                         quote_rust(name(positional(args, 1, value.span)?[0])?)
@@ -160,10 +217,15 @@ fn emit_block(
                     ),
                     "alloc_bytes" => {
                         let args = positional(args, 2, value.span)?;
+                        let failure_span = if matches!(&args[1].kind, ExprKind::Name(_)) {
+                            format!("({}, {})", args[1].span.start, args[1].span.end)
+                        } else {
+                            span.clone()
+                        };
                         format!(
-                            "alloc(session, &mut bindings, {dest}, {}, {}, {span})?;",
+                            "alloc(session, &mut bindings, {dest}, {}, {}, {failure_span})?;",
                             quote_rust(name(args[0])?),
-                            size(args[1])?
+                            size_expr(args[1], parameters)?
                         )
                     }
                     "alloc_object" => {
@@ -201,22 +263,27 @@ fn emit_block(
                     && let ExprKind::Name(path) = &callee.kind
                     && let [local] = path.segments.as_slice()
                 {
-                    if !arguments.is_empty() {
-                        return Err(unsupported(
-                            "local memory calls take no arguments",
-                            expr.span,
-                        ));
-                    }
-                    let Some(index) = functions.get(local.as_str()) else {
+                    let Some(&(index, arity)) = functions.get(local.as_str()) else {
                         return Err(unsupported(
                             format!("unknown local memory function `{local}`"),
                             callee.span,
                         ));
                     };
+                    if arguments.len() != arity || arguments.iter().any(|arg| arg.name.is_some()) {
+                        return Err(unsupported("local memory call arity mismatch", expr.span));
+                    }
+                    let values = arguments
+                        .iter()
+                        .map(|arg| scalar_expr(&arg.value, parameters))
+                        .collect::<Result<Vec<_>, _>>()?;
+                    let values = values
+                        .iter()
+                        .map(|value| format!(", {value}"))
+                        .collect::<String>();
                     emit_checked_statement(
                         out,
                         &pad,
-                        &format!("cgx2_memory_function_{index}(session, steps, {span})?;"),
+                        &format!("cgx2_memory_function_{index}(session, steps, {span}{values})?;"),
                     );
                     continue;
                 }
@@ -295,25 +362,42 @@ pub(crate) fn emit_memory_rust(
             )]);
         }
     }
-    let functions: BTreeMap<&str, usize> = module
+    let functions: BTreeMap<&str, (usize, usize)> = module
         .functions
         .iter()
         .enumerate()
-        .map(|(index, function)| (function.name.as_str(), index))
+        .map(|(index, function)| (function.name.as_str(), (index, function.parameters.len())))
         .collect();
     let mut out = String::from("// Generated CGx2 native memory program. Requires cgx2-runtime.\n");
     out.push_str(include_str!("memory_runtime.rs.txt"));
     out.push_str(include_str!("memory_report.rs.txt"));
     for (index, function) in module.functions.iter().enumerate() {
+        let parameter_list = (0..function.parameters.len())
+            .map(|index| format!(", cgx2_param_{index}: i64"))
+            .collect::<String>();
         out.push_str(&format!(
-            "\nfn cgx2_memory_function_{index}(session: &mut Session, steps: &mut usize, call_span: (usize, usize)) -> Result<(), String> {{\n    let mut bindings: HashMap<&'static str, Binding> = HashMap::new();\n    let result = (|| -> Result<(), String> {{\n"
+            "\nfn cgx2_memory_function_{index}(session: &mut Session, steps: &mut usize, call_span: (usize, usize){parameter_list}) -> Result<(), String> {{\n    let mut bindings: HashMap<&'static str, Binding> = HashMap::new();\n    let result = (|| -> Result<(), String> {{\n"
         ));
-        emit_block(&function.body, &mut out, 2, &functions).map_err(|error| vec![error])?;
+        let parameters = function
+            .parameters
+            .iter()
+            .enumerate()
+            .map(|(index, parameter)| (parameter.name.as_str(), index))
+            .collect();
+        emit_block(&function.body, &mut out, 2, &functions, &parameters)
+            .map_err(|error| vec![error])?;
         out.push_str("        Ok(())\n    })();\n    let mut cleanup_error = None;\n    for value in bindings.into_values() {\n        if let Binding::Managed(handle) = value {\n            if let Err(failure) = session.unroot(handle) {\n                cleanup_error.get_or_insert_with(|| runtime(failure, call_span));\n            }\n        }\n    }\n    result?;\n    if let Some(failure) = cleanup_error { return Err(failure); }\n    Ok(())\n}\n");
     }
     out.push_str("\nfn main() {\n    let report_path = match cgx2_report_path() {\n        Ok(path) => path,\n        Err(message) => { eprintln!(\"{message}\"); std::process::exit(1); }\n    };\n    CGX2_OBSERVE.with(|value| value.set(report_path.is_some()));\n    let mut session = Session::new();\n    #[cfg(feature = \"fault-injection\")]\n    session.inject_host_failure_at_reserve(option_env!(\"CGX2_TEST_FAIL_RESERVE\").expect(\"test fault index\").parse().expect(\"valid test fault index\"));\n    let mut bindings: HashMap<&'static str, Binding> = HashMap::new();\n    let mut steps = 0;\n    let result = (|| -> Result<(), String> {\n        let session = &mut session;\n        let steps = &mut steps;\n");
     if module.functions.is_empty() {
-        emit_block(&module.statements, &mut out, 2, &functions).map_err(|error| vec![error])?;
+        emit_block(
+            &module.statements,
+            &mut out,
+            2,
+            &functions,
+            &BTreeMap::new(),
+        )
+        .map_err(|error| vec![error])?;
     } else {
         let main = module
             .functions
@@ -325,7 +409,7 @@ pub(crate) fn emit_memory_rust(
                     module.span,
                 )]
             })?;
-        let index = functions["main"];
+        let index = functions["main"].0;
         let span = format!("({}, {})", main.span.start, main.span.end);
         out.push_str(&format!(
             "        step(steps, {span})?;\n        cgx2_memory_function_{index}(session, steps, {span})?;\n"

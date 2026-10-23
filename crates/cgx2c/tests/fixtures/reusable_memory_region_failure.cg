@@ -1,0 +1,7 @@
+fn allocate(size: i64) -> Unit effects(ManagedAlloc, Mutate):
+ let region = memory.region(mode: manual, limit: 71)
+ let block = memory.alloc_bytes(region, size)
+ memory.drop(block)
+ memory.close(region)
+fn main() -> Unit effects(ManagedAlloc, Mutate):
+ allocate(8)

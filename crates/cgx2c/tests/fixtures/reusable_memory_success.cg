@@ -1,0 +1,13 @@
+pub fn allocate(size: i64) -> Unit effects(ManagedAlloc, Mutate):
+ let region = memory.region(mode: manual, limit: 256)
+ let block = memory.alloc_bytes(region, size)
+ memory.drop(block)
+ memory.close(region)
+fn forward(size: i64) -> Unit effects(ManagedAlloc, Mutate):
+ allocate(size)
+fn own(size: i64) -> Unit effects(ManagedAlloc):
+ let block = memory.owned_bytes(size)
+fn main() -> Unit effects(ManagedAlloc, Mutate):
+ forward(0)
+ forward(4 + 4)
+ own(0)
