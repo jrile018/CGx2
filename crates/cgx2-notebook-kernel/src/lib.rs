@@ -1,5 +1,8 @@
-//! Checked, bounded retained-state execution of pure scalar CGx2 cells.
+//! Checked, bounded retained-state execution of replay-safe local CGx2 computation.
+mod cost;
 mod project;
+
+use cost::validate_static_bounds;
 
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
@@ -861,9 +864,16 @@ fn collect_call_names_statement(statement: &cgx2_syntax::Stmt, names: &mut BTree
                 collect_call_names_statement(stmt, names);
             }
         }
-        StmtKind::Let { value, .. } | StmtKind::Expr(value) | StmtKind::Return(Some(value)) => {
-            collect_call_names(value, names)
+        StmtKind::For { body, .. } => {
+            // The iterator has already been proved to be a literal range, not a call dependency.
+            for stmt in body {
+                collect_call_names_statement(stmt, names);
+            }
         }
+        StmtKind::Let { value, .. }
+        | StmtKind::Assign { value, .. }
+        | StmtKind::Expr(value)
+        | StmtKind::Return(Some(value)) => collect_call_names(value, names),
         _ => {}
     }
 }
@@ -1035,7 +1045,7 @@ fn validate_function(function: &Function, facts: &mut CellFacts) -> Result<(), K
         || function
             .effects
             .as_ref()
-            .is_some_and(|decl| !decl.names.is_empty())
+            .is_some_and(|decl| decl.names.iter().any(|name| name.name != "Mutate"))
         || function
             .capabilities
             .as_ref()
@@ -1043,15 +1053,15 @@ fn validate_function(function: &Function, facts: &mut CellFacts) -> Result<(), K
         || !function.requires.is_empty()
         || !function.ensures.is_empty()
     {
-        return Err(error("CGNK011", format!("effect, capability, foreign, and contract declarations are unsupported in pure notebook functions at {}..{}", function.span.start, function.span.end)));
+        return Err(error("CGNK011", format!("notebook functions allow only verified local Mutate and no capabilities, foreign bindings or contracts at {}..{}", function.span.start, function.span.end)));
     }
     if function.parameters.len() > MAX_FUNCTION_PARAMETERS {
         return Err(error("CGNK006", "too many pure function parameters"));
     }
-    let mut locals = BTreeSet::new();
+    let mut locals = BTreeMap::new();
     for parameter in &function.parameters {
         function_type(&parameter.ty, facts)?;
-        if !locals.insert(parameter.name.clone()) {
+        if locals.insert(parameter.name.clone(), false).is_some() {
             return Err(error("CGNK001", "duplicate pure function parameter"));
         }
     }
@@ -1065,31 +1075,159 @@ fn validate_function(function: &Function, facts: &mut CellFacts) -> Result<(), K
     if !facts.defines.insert(function.name.clone()) {
         return Err(error("CGNK001", "duplicate pure function name in cell"));
     }
-    collect_function_block(&function.body, &mut locals, facts)?;
+    collect_function_block(&function.body, &mut locals, facts, false)?;
     Ok(())
 }
 
 fn collect_function_block(
     body: &[cgx2_syntax::Stmt],
-    locals: &mut BTreeSet<String>,
+    locals: &mut BTreeMap<String, bool>,
     facts: &mut CellFacts,
+    in_loop: bool,
 ) -> Result<(), KernelError> {
     for statement in body {
+        let names = locals.keys().cloned().collect();
         match &statement.kind {
-            StmtKind::If { condition, then_body, else_body } => {
-                collect_expression(condition, locals, facts, true)?;
-                collect_function_block(then_body, &mut locals.clone(), facts)?;
-                collect_function_block(else_body, &mut locals.clone(), facts)?;
+            StmtKind::If {
+                condition,
+                then_body,
+                else_body,
+            } => {
+                collect_expression(condition, &names, facts, true)?;
+                collect_function_block(then_body, &mut locals.clone(), facts, in_loop)?;
+                collect_function_block(else_body, &mut locals.clone(), facts, in_loop)?;
             }
-            StmtKind::Let { mutable: false, name, annotation, value } => {
-                if let Some(ty) = annotation { function_type(ty, facts)?; }
-                collect_expression(value, locals, facts, true)?;
-                locals.insert(name.clone());
+            StmtKind::For {
+                binding,
+                iter,
+                body,
+            } => {
+                literal_range_trips(iter)?;
+                let mut scope = locals.clone();
+                scope.insert(binding.clone(), false);
+                collect_function_block(body, &mut scope, facts, true)?;
             }
-            StmtKind::Expr(value) | StmtKind::Return(Some(value)) => collect_expression(value, locals, facts, true)?,
-            StmtKind::Return(None) => {},
-            _ => return Err(error("CGNK011", "pure function bodies support immutable bindings, if/else, expressions and returns only")),
+            StmtKind::Let {
+                mutable,
+                name,
+                annotation,
+                value,
+            } => {
+                if let Some(ty) = annotation {
+                    function_type(ty, facts)?;
+                }
+                collect_expression(value, &names, facts, true)?;
+                // Cloning the environment at block entry preserves lexical shadowing.
+                // The shared checker diagnoses duplicate declarations in the same scope.
+                locals.insert(name.clone(), *mutable);
+            }
+            StmtKind::Assign { target, value, .. } => {
+                if !matches!(target.segments.as_slice(), [name] if locals.get(name) == Some(&true))
+                {
+                    return Err(error(
+                        "CGNK011",
+                        format!(
+                            "assignment requires an in-scope function-local mutable i64 at {}..{}",
+                            target.span.start, target.span.end
+                        ),
+                    ));
+                }
+                collect_expression(value, &names, facts, true)?;
+            }
+            StmtKind::Expr(value) => collect_expression(value, &names, facts, true)?,
+            StmtKind::Return(value) if !in_loop => {
+                if let Some(value) = value {
+                    collect_expression(value, &names, facts, true)?;
+                }
+            }
+            _ => {
+                return Err(error(
+                    "CGNK011",
+                    format!(
+                        "unsupported local computation statement at {}..{}",
+                        statement.span.start, statement.span.end
+                    ),
+                ))
+            }
         }
+    }
+    Ok(())
+}
+
+/// Only syntax literals count as static bounds. Subtraction, calls and names do not.
+fn literal_range_trips(iter: &Expr) -> Result<usize, KernelError> {
+    let invalid = || {
+        error(
+            "CGNK011",
+            format!(
+                "range requires two positional signed i64 literal bounds at {}..{}",
+                iter.span.start, iter.span.end
+            ),
+        )
+    };
+    let ExprKind::Call { callee, arguments } = &iter.kind else {
+        return Err(invalid());
+    };
+    if !matches!(&callee.kind, ExprKind::Name(path) if path.segments.as_slice() == ["range"])
+        || arguments.len() != 2
+        || arguments.iter().any(|arg| arg.name.is_some())
+    {
+        return Err(invalid());
+    }
+    let literal = |expr: &Expr| match &expr.kind {
+        ExprKind::Integer(value) => value.parse::<i64>().map_err(|_| invalid()),
+        _ => Err(invalid()),
+    };
+    let start = literal(&arguments[0].value)?;
+    let end = literal(&arguments[1].value)?;
+    // The full i64 domain difference fits i128, including MIN..MAX.
+    Ok(usize::try_from((i128::from(end) - i128::from(start)).max(0)).unwrap_or(usize::MAX))
+}
+
+fn validate_mutable_types(
+    body: &[cgx2_syntax::Stmt],
+    is_i64: &impl Fn(cgx2_syntax::Span) -> bool,
+) -> Result<(), cgx2_syntax::Span> {
+    for statement in body {
+        match &statement.kind {
+            StmtKind::Let {
+                mutable: true,
+                value,
+                ..
+            } if !is_i64(value.span) => return Err(value.span),
+            StmtKind::If {
+                then_body,
+                else_body,
+                ..
+            } => {
+                validate_mutable_types(then_body, is_i64)?;
+                validate_mutable_types(else_body, is_i64)?;
+            }
+            StmtKind::For { body, .. } => validate_mutable_types(body, is_i64)?,
+            _ => {}
+        }
+    }
+    Ok(())
+}
+
+fn validate_checked_mutables(
+    checked: &str,
+    source: &str,
+    module: &cgx2_syntax::Module,
+    is_i64: impl Fn(cgx2_syntax::Span) -> bool,
+) -> Result<(), String> {
+    let syntax = parse_module(checked).map_err(|_| "CGNK010: invalid checked source")?;
+    for function in &syntax.functions {
+        validate_mutable_types(&function.body, &is_i64).map_err(|span| {
+            cell_diagnostic(
+                "CGNK011",
+                "mutable notebook locals must be i64",
+                span,
+                checked,
+                source,
+                module,
+            )
+        })?;
     }
     Ok(())
 }
@@ -1192,162 +1330,6 @@ fn simple_name(path: &Path) -> Result<&str, KernelError> {
             "CGNK001",
             "qualified names are unsupported in notebook scalar execution",
         )),
-    }
-}
-
-fn validate_static_bounds(
-    function_source: &str,
-    module: &cgx2_syntax::Module,
-    retained_bindings: usize,
-) -> Result<(), String> {
-    let functions = parse_module(function_source).map_err(|diagnostics| {
-        let first = &diagnostics[0];
-        format!("{}: {}", first.code, first.message)
-    })?;
-    if functions.functions.len() > MAX_PURE_FUNCTIONS {
-        return Err(format!("CGNK006: combined retained source has {} pure functions and {} bytes; limits are {MAX_PURE_FUNCTIONS} functions and {MAX_REPLAY_BYTES} bytes", functions.functions.len(), function_source.len()));
-    }
-    let records = functions
-        .records
-        .iter()
-        .map(|record| record.name.as_str())
-        .collect::<BTreeSet<_>>();
-    let mut by_name = BTreeMap::new();
-    for function in &functions.functions {
-        if by_name.insert(function.name.as_str(), function).is_some() {
-            return Err(format!(
-                "CGNK011: duplicate pure function {}",
-                function.name
-            ));
-        }
-    }
-    for name in by_name.keys() {
-        let cost = function_cost(name, &by_name, &records, &mut Vec::new())?;
-        if cost > MAX_STATIC_STEPS {
-            return Err("CGNK006: pure function step budget exceeded".into());
-        }
-    }
-    let statement_count = module.statements.len();
-    let mut cell_cost = statement_count
-        .saturating_mul(retained_bindings.saturating_add(statement_count))
-        .saturating_mul(3);
-    for statement in &module.statements {
-        cell_cost = cell_cost.saturating_add(statement_cost(
-            statement,
-            &by_name,
-            &records,
-            &mut Vec::new(),
-        )?);
-    }
-    if cell_cost > MAX_STATIC_STEPS {
-        return Err("CGNK006: cell step budget exceeded".into());
-    }
-    Ok(())
-}
-
-fn function_cost(
-    name: &str,
-    functions: &BTreeMap<&str, &Function>,
-    records: &BTreeSet<&str>,
-    stack: &mut Vec<String>,
-) -> Result<usize, String> {
-    if stack.iter().any(|item| item == name) {
-        return Err(format!(
-            "CGNK011: recursive pure function {name} is unsupported"
-        ));
-    }
-    if stack.len() >= 32 {
-        return Err("CGNK006: pure function call depth exceeded".into());
-    }
-    let function = functions.get(name).ok_or_else(|| {
-        format!("CGNK011: unresolved call {name}; define or rerun a pure function before this cell; file, network, and foreign effects cannot run")
-    })?;
-    stack.push(name.to_owned());
-    let mut cost = 0usize;
-    for statement in &function.body {
-        cost = cost.saturating_add(statement_cost(statement, functions, records, stack)?);
-        if cost > MAX_STATIC_STEPS {
-            break;
-        }
-    }
-    stack.pop();
-    Ok(cost)
-}
-
-fn statement_cost(
-    statement: &cgx2_syntax::Stmt,
-    functions: &BTreeMap<&str, &Function>,
-    records: &BTreeSet<&str>,
-    stack: &mut Vec<String>,
-) -> Result<usize, String> {
-    if let StmtKind::If {
-        condition,
-        then_body,
-        else_body,
-    } = &statement.kind
-    {
-        let mut cost =
-            1usize.saturating_add(expression_cost(condition, functions, records, stack)?);
-        // Count both branches conservatively for the replay admission bound.
-        for stmt in then_body.iter().chain(else_body) {
-            cost = cost.saturating_add(statement_cost(stmt, functions, records, stack)?);
-        }
-        return Ok(cost);
-    }
-    if matches!(statement.kind, StmtKind::Return(None)) {
-        return Ok(1);
-    }
-    let expression = match &statement.kind {
-        StmtKind::Let { value, .. } | StmtKind::Expr(value) | StmtKind::Return(Some(value)) => {
-            value
-        }
-        _ => return Err("CGNK011: unsupported statement in pure notebook cell".into()),
-    };
-    Ok(1usize.saturating_add(expression_cost(expression, functions, records, stack)?))
-}
-
-fn expression_cost(
-    expression: &Expr,
-    functions: &BTreeMap<&str, &Function>,
-    records: &BTreeSet<&str>,
-    stack: &mut Vec<String>,
-) -> Result<usize, String> {
-    match &expression.kind {
-        ExprKind::Name(_)
-        | ExprKind::Integer(_)
-        | ExprKind::StringLiteral(_)
-        | ExprKind::Boolean(_) => Ok(1),
-        ExprKind::Binary { left, right, .. } => Ok(1usize
-            .saturating_add(expression_cost(left, functions, records, stack)?)
-            .saturating_add(expression_cost(right, functions, records, stack)?)),
-        ExprKind::Call { callee, arguments } => {
-            let ExprKind::Name(path) = &callee.kind else {
-                return Err("CGNK011: computed calls are unsupported".into());
-            };
-            let name = simple_name(path).map_err(|error| error.to_string())?;
-            let mut cost = 1usize;
-            for argument in arguments {
-                cost = cost.saturating_add(expression_cost(
-                    &argument.value,
-                    functions,
-                    records,
-                    stack,
-                )?);
-            }
-            if !matches!(
-                name,
-                "$cgx2_cmp_eq"
-                    | "$cgx2_cmp_ne"
-                    | "$cgx2_cmp_lt"
-                    | "$cgx2_cmp_le"
-                    | "$cgx2_cmp_gt"
-                    | "$cgx2_cmp_ge"
-            ) && !records.contains(name)
-            {
-                cost = cost.saturating_add(function_cost(name, functions, records, stack)?);
-            }
-            Ok(cost)
-        }
     }
 }
 
@@ -1610,7 +1592,8 @@ impl RetainedExecutor {
             format!("{}: {}", first.code, first.message)
         })?;
         let functions = self.function_sources(id, &module, source)?;
-        validate_static_bounds(&functions, &module, self.bindings.len())?;
+        let replay_prefix = self.prefix(id, &BTreeMap::new())?;
+        validate_static_bounds(&functions, &module, &replay_prefix)?;
 
         let body_source = module
             .statements
@@ -1624,7 +1607,7 @@ impl RetainedExecutor {
                 return Err(limit_error());
             }
             self.charge(checked.len())?;
-            check_source(&checked).map_err(|diagnostics| {
+            let typed = check_source(&checked).map_err(|diagnostics| {
                 let first = &diagnostics[0];
                 cell_diagnostic(
                     &first.code,
@@ -1634,6 +1617,12 @@ impl RetainedExecutor {
                     source,
                     &module,
                 )
+            })?;
+            validate_checked_mutables(&checked, source, &module, |span| {
+                typed
+                    .expressions
+                    .get(span)
+                    .is_some_and(|ty| ty.to_string() == "i64")
             })?;
             self.check_deadline(deadline)?;
             if self.binding_bytes() + self.definition_bytes(id, &module) > MAX_REPLAY_BYTES {
@@ -1655,7 +1644,7 @@ impl RetainedExecutor {
             return Err(limit_error());
         }
         self.charge(checked.len())?;
-        check_source(&checked).map_err(|diagnostics| {
+        let typed = check_source(&checked).map_err(|diagnostics| {
             let first = &diagnostics[0];
             cell_diagnostic(
                 &first.code,
@@ -1665,6 +1654,12 @@ impl RetainedExecutor {
                 source,
                 &module,
             )
+        })?;
+        validate_checked_mutables(&checked, source, &module, |span| {
+            typed
+                .expressions
+                .get(span)
+                .is_some_and(|ty| ty.to_string() == "i64")
         })?;
         let mut pending = BTreeMap::new();
         let mut tail = Value::Unit;

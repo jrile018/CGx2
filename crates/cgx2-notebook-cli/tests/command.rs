@@ -10,6 +10,111 @@ use cgx2_notebook_format::{
 static NEXT: AtomicU64 = AtomicU64::new(0);
 
 #[test]
+fn local_loop_cli_edit_save_reopen_sweep_and_export_recompute_locals() {
+    let fixture = Fixture::new();
+    let project = Path::new(env!("CARGO_MANIFEST_DIR")).join("examples/local-loops");
+    let input = project.join("local-loops.cgnb");
+    let executed = fixture.path("loops-executed.cgnb");
+    let revised = fixture.path("loops-revised.cgnb");
+    let exported = fixture.path("loops-exported.cgnb");
+    let restored = fixture.path("loops-restored.cgnb");
+    let result = run_str(&[
+        "run",
+        input.to_str().unwrap(),
+        "--project",
+        project.to_str().unwrap(),
+        "--out",
+        executed.to_str().unwrap(),
+        "--edit-cell",
+        "parameter",
+        "--source",
+        "let seed = 10",
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let result = run_str(&[
+        "run",
+        executed.to_str().unwrap(),
+        "--project",
+        project.to_str().unwrap(),
+        "--out",
+        revised.to_str().unwrap(),
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let book = parse_notebook_bytes(&fs::read(&revised).unwrap()).unwrap();
+    let answer = book.cells.iter().find(|c| c.id == "value").unwrap();
+    assert!(matches!(&answer.outputs[0], CellOutput::Text { body, .. } if body == "28"));
+    let result = run_str(&[
+        "inspect",
+        revised.to_str().unwrap(),
+        "--project",
+        project.to_str().unwrap(),
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    assert!(String::from_utf8_lossy(&result.stdout).contains("value\tcode\tcached"));
+    let result = run(&[Path::new("export"), &revised, Path::new("--out"), &exported]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let result = run_str(&[
+        "run",
+        exported.to_str().unwrap(),
+        "--project",
+        project.to_str().unwrap(),
+        "--out",
+        restored.to_str().unwrap(),
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let reopened = parse_notebook_bytes(&fs::read(&restored).unwrap()).unwrap();
+    for (before, after) in book.cells.iter().zip(&reopened.cells) {
+        for (before, after) in before.outputs.iter().zip(&after.outputs) {
+            assert!(
+                matches!((before, after), (CellOutput::Text { body: a, .. }, CellOutput::Text { body: b, .. }) if a == b)
+            );
+        }
+    }
+    let sweep = fixture.path("loops-sweep");
+    let result = run_str(&[
+        "sweep",
+        input.to_str().unwrap(),
+        "parameter",
+        "--value",
+        "2",
+        "--value",
+        "5",
+        "--value",
+        "-1",
+        "--project",
+        project.to_str().unwrap(),
+        "--out-dir",
+        sweep.to_str().unwrap(),
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    for (i, seed) in [2, 5, -1].into_iter().enumerate() {
+        let clean_input = fixture.write(
+            &format!("loops-clean-{i}.cgnb"),
+            &include_str!("../examples/local-loops/local-loops.cgnb")
+                .replace("let seed = 2", &format!("let seed = {seed}")),
+        );
+        let clean_output = fixture.path(&format!("loops-clean-output-{i}.cgnb"));
+        let result = run_str(&[
+            "run",
+            clean_input.to_str().unwrap(),
+            "--project",
+            project.to_str().unwrap(),
+            "--out",
+            clean_output.to_str().unwrap(),
+        ]);
+        assert!(result.status.success(), "{}", stderr(&result));
+        let trial = parse_notebook_bytes(
+            &fs::read(sweep.join(format!("trial-{:02}.cgnb", i + 1))).unwrap(),
+        )
+        .unwrap();
+        let clean = parse_notebook_bytes(&fs::read(clean_output).unwrap()).unwrap();
+        for (trial, clean) in trial.cells.iter().zip(&clean.cells) {
+            assert_eq!(trial.outputs, clean.outputs, "{}", trial.id);
+        }
+    }
+}
+
+#[test]
 fn record_functions_run_inspect_and_clean_sweep_agree() {
     let fixture = Fixture::new();
     let example = include_str!("../examples/record-functions.cgnb");

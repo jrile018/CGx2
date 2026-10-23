@@ -1,0 +1,4 @@
+module compute.math
+
+pub fn bump(x: i64) -> i64 effects() caps():
+    x + 1

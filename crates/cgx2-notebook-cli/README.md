@@ -1,5 +1,25 @@
 # CGx2 notebook command
 
+## Local accumulator and range functions
+
+```sh
+cgx2-notebook run crates/cgx2-notebook-cli/examples/local-loops/local-loops.cgnb \
+  --project crates/cgx2-notebook-cli/examples/local-loops --out /tmp/local-sums.cgnb
+cgx2-notebook sweep crates/cgx2-notebook-cli/examples/local-loops/local-loops.cgnb parameter \
+  --value 2 --value 5 --value -1 --project crates/cgx2-notebook-cli/examples/local-loops \
+  --out-dir /tmp/local-sums-sweep
+```
+
+[The example](examples/local-loops/local-loops.cgnb) uses local mutable i64
+accumulators, signed literal-bound ranges, nested loops/conditionals and a pure
+imported helper. Each invocation/restart/sweep initializes its locals anew.
+The compiler retains `Mutate`; the notebook separately verifies local-only
+computation for replay. Loop bodies may call only pure helpers. Captured,
+parameter/index/record mutation and external effects remain unsupported;
+imported module bodies keep the Wave 27 profile. The existing 100,000 static
+steps include nested/call/replay work before worker execution. Save/reopen and
+export keep observations and need the matching external `--project`.
+
 ## Local record functions
 
 ```sh
@@ -13,8 +33,8 @@ cgx2-notebook sweep crates/cgx2-notebook-cli/examples/record-functions.cgnb para
 records through identity, construction, and field projection functions across
 cells. Record annotations participate in invalidation even for unused
 parameters. The ordinary worker, replay-byte, step, and depth bounds apply.
-Imported/foreign-layout records, generic/nested records, mutation, contracts,
-and effectful functions remain unsupported. Reopening restores cached outputs;
+Foreign-layout records, generic/nested records, record mutation, contracts,
+and externally effectful functions remain unsupported. Reopening restores cached outputs;
 Restart and Run All recomputes them from source.
 
 ## Checked local pure imports
