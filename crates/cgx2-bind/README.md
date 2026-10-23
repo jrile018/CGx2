@@ -1,5 +1,17 @@
 # CGx2 pinned native binding preflight
 
+For opt-in loader diagnostics, set `CGX2_LOADER_TRACE=1` before starting the
+process. The setting is sampled once at the first instrumented operation;
+unset values and values other than `1` produce no timing output. Best-effort
+stderr lines have the form `cgx2-loader pid=PID phase=NAME ns=N bytes=B`.
+They measure package/closure preflight, preloaded/loaded verification, full
+pinned-file hashes, map reads, and ELF inspection (including subprocess work).
+Durations are inclusive, may nest, and include failed attempts; they must not
+be added together or interpreted as successful verification. `bytes` counts
+bytes passed to the hash; it is zero for other phases. Diagnostics never
+participate in trust decisions. See the [Wave 24 evidence](evidence/wave24/REPORT.md)
+for measurements and the remaining hashing cost.
+
 For a prepared LibTorch deployment, `cgx2-bind check PACKAGE` validates the
 schema-2 lock against the **copied facade** in `PACKAGE` and the closure lock
 against its copied non-system dependencies plus pinned host libraries. Run it

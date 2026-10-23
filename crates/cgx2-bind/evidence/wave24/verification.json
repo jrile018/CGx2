@@ -1,0 +1,206 @@
+{
+  "checks": [
+    {
+      "argv": [
+        "cargo",
+        "+1.98.1",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "cgx2-bind",
+        "-p",
+        "cgx2-libtorch"
+      ],
+      "environment": {
+        "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/build",
+        "TMPDIR": "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/tmp"
+      },
+      "exit_code": 0,
+      "passed": 31,
+      "ignored": 5,
+      "log": "owned-tests.log"
+    },
+    {
+      "argv": [
+        "cargo",
+        "+1.98.1",
+        "test",
+        "--release",
+        "--locked",
+        "--offline",
+        "-p",
+        "cgx2-libtorch",
+        "--",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "environment": {
+        "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/build",
+        "TMPDIR": "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/tmp",
+        "LD_LIBRARY_PATH": "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/package",
+        "CGX2_LIBTORCH_PACKAGE": "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/package",
+        "CGX2_LIBTORCH_REAL_PACKAGE": "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/package",
+        "CGX2_LIBTORCH_FACADE": "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/package/libcgx2_libtorch_facade.so",
+        "CGX2_LIBTORCH_VERSION": "2.11.0",
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "passed": 5,
+      "log": "real-libtorch-tests.log"
+    },
+    {
+      "argv": [
+        "cargo",
+        "+1.98.1",
+        "test",
+        "--locked",
+        "--offline",
+        "-p",
+        "cgx2-cli",
+        "--test",
+        "tensor"
+      ],
+      "environment": {
+        "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/build",
+        "TMPDIR": "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/tmp"
+      },
+      "exit_code": 0,
+      "passed": 13,
+      "environment_gated_bodies_skipped": 2,
+      "log": "cli-mock-tests.log"
+    },
+    {
+      "argv": [
+        "cargo",
+        "+1.98.1",
+        "test",
+        "--release",
+        "--locked",
+        "--offline",
+        "-p",
+        "cgx2-cli",
+        "--test",
+        "tensor",
+        "real_pinned_float32_matrix_source_when_available",
+        "--",
+        "--nocapture"
+      ],
+      "environment": {
+        "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/build",
+        "TMPDIR": "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/tmp",
+        "LD_LIBRARY_PATH": "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/package",
+        "CGX2_LIBTORCH_F32_SOURCE_PACKAGE": "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/package",
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "passed": 1,
+      "log": "real-source-test.log"
+    },
+    {
+      "argv": [
+        "cargo",
+        "+1.98.1",
+        "clippy",
+        "--locked",
+        "--offline",
+        "-p",
+        "cgx2-bind",
+        "-p",
+        "cgx2-libtorch",
+        "--all-targets",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "environment": {
+        "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/build",
+        "TMPDIR": "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/tmp"
+      },
+      "exit_code": 0,
+      "log": "clippy.log"
+    },
+    {
+      "argv": [
+        "rustfmt",
+        "+1.98.1",
+        "--check",
+        "--edition",
+        "2021",
+        "crates/cgx2-bind/src/lib.rs",
+        "crates/cgx2-bind/src/closure.rs",
+        "crates/cgx2-bind/src/trace.rs",
+        "crates/cgx2-bind/tests/preflight.rs",
+        "crates/cgx2-bind/examples/hash_buffers.rs"
+      ],
+      "exit_code": 0,
+      "log": "format.log"
+    },
+    {
+      "argv": [
+        "rustfmt",
+        "+1.98.1",
+        "--check",
+        "--edition",
+        "2024",
+        "crates/cgx2-libtorch/tests/closure.rs"
+      ],
+      "exit_code": 0,
+      "log": "format.log"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--exit-code",
+        "HEAD",
+        "--",
+        "Cargo.toml",
+        "Cargo.lock"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "cargo",
+        "+1.98.1",
+        "build",
+        "--release",
+        "--locked",
+        "--offline",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2-bind",
+        "--bins"
+      ],
+      "environment": {
+        "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/build",
+        "TMPDIR": "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/tmp"
+      },
+      "exit_code": 0,
+      "log": "final-build.log",
+      "binary_cmp_to_measured_snapshots": "both cgx2 and cgx2-native identical"
+    }
+  ],
+  "limits": [
+    "No bridge-feature/ASan/LSan/GPU runs",
+    "f64 real source body skipped; mock source and real f64 adapter exercised",
+    "No speedup established; original hashing retained",
+    "Initial setup retry overwrote first failed attempt timing; second failure retained",
+    "Fixed timing block order and no host isolation; short test build overlapped first final-trace sample"
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "label": "frozen-base",
+  "binary": "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/base/cgx2",
+  "binary_sha256": "f551d63b571fe5181209e788be72ba5e812347aab5a4707b189280fc8ad67e7e",
+  "environment": {
+    "LD_LIBRARY_PATH": "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/package",
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1"
+  },
+  "hashes": {
+    "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/package/cgx2-bind.lock.json": "51c669ebb5c90105012278d9f479067a8be8171f73a3db44a89761d913ecd768",
+    "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/package/cgx2-libtorch-evidence.json": "d967fa647ce125a44deb5802ab2df2c8ac134855848560c0f511cf589feb5d2a",
+    "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/package/libtorch_cpu.so": "ad0bcc0225bf260968e0464982b78c2f25358400769720ce63c209ffc9929313",
+    "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/package/cgx2-libtorch-closure.lock.json": "1b8136e2043a16a6de2f7e67e576af77a38a72c35745548b9e8e289077adeb37",
+    "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/package/libtorch.so": "59a95807d56ca89993351a173839f160ca9c2c6ec6f6b89a5e691d8f1392d3ff",
+    "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/package/cgx2.toml": "be4382c0eb86acdc941bc30754e6bbeb08f2dc88c1215f793aa8bd7131e5ce5d",
+    "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/package/libc10.so": "e8ad028c6a3b3f787b619f35d3c772485476c029c2e9faca659a56212ae7c00a",
+    "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/package/libgomp.so.1": "78511033caddec6ccae8f4d62b94d56135f377c4cee33120e6d7df2ef499f69f",
+    "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/package/libcgx2_libtorch_facade.so": "c4a95053537fb52f69f2da2a490b169cff0214d580d00d679b54c85147806bec",
+    "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/package/src/main.cg": "37de6c4410c0e76d295e9678e3a71c9b46c3100713fcf7f1da7fca2abb64ef0a"
+  },
+  "closure_hashes": {
+    "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "bda779ea9e9ad234f60315477d7cfd0bdde861cd8ddd9df8cdaf62f18c4cec14",
+    "/usr/lib/x86_64-linux-gnu/libc.so.6": "85e64f97e348786a8fb4d9f3d52fec289e2fb86bba20f0731dfe61990525e0f7",
+    "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/package/libc10.so": "e8ad028c6a3b3f787b619f35d3c772485476c029c2e9faca659a56212ae7c00a",
+    "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/package/libcgx2_libtorch_facade.so": "c4a95053537fb52f69f2da2a490b169cff0214d580d00d679b54c85147806bec",
+    "/usr/lib/x86_64-linux-gnu/libdl.so.2": "59d725ca30596a9863f4fa2552a7125f834842abc86b40890231c129358965d2",
+    "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": "9d339ecb409578d6a5d587e6c537a8f9589b8a13fefba30d167433a4b5758bee",
+    "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/package/libgomp.so.1": "78511033caddec6ccae8f4d62b94d56135f377c4cee33120e6d7df2ef499f69f",
+    "/usr/lib/x86_64-linux-gnu/libm.so.6": "1c488db6f4fe8cecb72456bc018de000b7a9b539c2994864b0416b5e8371b3d8",
+    "/usr/lib/x86_64-linux-gnu/libpthread.so.0": "1327fc40710691dbd94e88b6cf4efce27fefe8fbb93f7d1164a75b4dccaea696",
+    "/usr/lib/x86_64-linux-gnu/librt.so.1": "9f3cc59207bcaaac74aaf7aca961f4816f0f4d945e4bd1c3cb98ec516becf161",
+    "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.35": "5bb0d21308f123b6ad46c6f35b42cedfcb8d6d439a53aa3dae04d880aaffdde3",
+    "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/package/libtorch.so": "59a95807d56ca89993351a173839f160ca9c2c6ec6f6b89a5e691d8f1392d3ff",
+    "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/package/libtorch_cpu.so": "ad0bcc0225bf260968e0464982b78c2f25358400769720ce63c209ffc9929313"
+  },
+  "cargo_lock_sha256": "936c7f8c58f522aa98e4f2bd96e0ebf69c31e4b9d9af982bf9c8695d255d7850",
+  "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "runs": [
+    {
+      "argv": [
+        "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/base/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/package"
+      ],
+      "timeout": false,
+      "exit_code": 0,
+      "stdout": "[[58.0, 64.0], [139.0, 154.0]]\n",
+      "stderr": "",
+      "wall_ns": 6668344314,
+      "numeric_ok": true
+    },
+    {
+      "argv": [
+        "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/base/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/package"
+      ],
+      "timeout": false,
+      "exit_code": 0,
+      "stdout": "[[58.0, 64.0], [139.0, 154.0]]\n",
+      "stderr": "",
+      "wall_ns": 6703488003,
+      "numeric_ok": true
+    },
+    {
+      "argv": [
+        "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/base/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/package"
+      ],
+      "timeout": false,
+      "exit_code": 0,
+      "stdout": "[[58.0, 64.0], [139.0, 154.0]]\n",
+      "stderr": "",
+      "wall_ns": 6629899190,
+      "numeric_ok": true
+    },
+    {
+      "argv": [
+        "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/base/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/package"
+      ],
+      "timeout": false,
+      "exit_code": 0,
+      "stdout": "[[58.0, 64.0], [139.0, 154.0]]\n",
+      "stderr": "",
+      "wall_ns": 6657789344,
+      "numeric_ok": true
+    },
+    {
+      "argv": [
+        "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/base/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/package"
+      ],
+      "timeout": false,
+      "exit_code": 0,
+      "stdout": "[[58.0, 64.0], [139.0, 154.0]]\n",
+      "stderr": "",
+      "wall_ns": 6661612673,
+      "numeric_ok": true
+    }
+  ],
+  "ldd": "\tlinux-vdso.so.1 (0x0000772a7c17f000)\n\tlibgcc_s.so.1 => /usr/lib/x86_64-linux-gnu/libgcc_s.so.1 (0x0000772a7bfaf000)\n\tlibc.so.6 => /usr/lib/x86_64-linux-gnu/libc.so.6 (0x0000772a7bc00000)\n\t/lib64/ld-linux-x86-64.so.2 (0x0000772a7c181000)\n",
+  "readelf": "\nDynamic section at offset 0x1752f8 contains 29 entries:\n  Tag        Type                         Name/Value\n 0x0000000000000001 (NEEDED)             Shared library: [libgcc_s.so.1]\n 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]\n 0x0000000000000001 (NEEDED)             Shared library: [ld-linux-x86-64.so.2]\n 0x000000000000001e (FLAGS)              BIND_NOW\n 0x000000006ffffffb (FLAGS_1)            Flags: NOW PIE\n 0x0000000000000015 (DEBUG)              0x0\n 0x0000000000000007 (RELA)               0x16d0\n 0x0000000000000008 (RELASZ)             35928 (bytes)\n 0x0000000000000009 (RELAENT)            24 (bytes)\n 0x000000006ffffff9 (RELACOUNT)          1389\n 0x0000000000000017 (JMPREL)             0xa328\n 0x0000000000000002 (PLTRELSZ)           48 (bytes)\n 0x0000000000000003 (PLTGOT)             0x178558\n 0x0000000000000014 (PLTREL)             RELA\n 0x0000000000000006 (SYMTAB)             0x340\n 0x000000000000000b (SYMENT)             24 (bytes)\n 0x0000000000000005 (STRTAB)             0x1024\n 0x000000000000000a (STRSZ)              1707 (bytes)\n 0x000000006ffffef5 (GNU_HASH)           0x1008\n 0x0000000000000019 (INIT_ARRAY)         0x1729f8\n 0x000000000000001b (INIT_ARRAYSZ)       16 (bytes)\n 0x000000000000001a (FINI_ARRAY)         0x1729f0\n 0x000000000000001c (FINI_ARRAYSZ)       8 (bytes)\n 0x000000000000000c (INIT)               0x171964\n 0x000000000000000d (FINI)               0x171980\n 0x000000006ffffff0 (VERSYM)             0xda8\n 0x000000006ffffffe (VERNEED)            0xe88\n 0x000000006fffffff (VERNEEDNUM)         3\n 0x0000000000000000 (NULL)               0x0\n",
+  "native_helper_sha256": "eb00c591cfa638f1f5be5c0674c133ab00f080496aa9a6c500a5bfd4a8adb5d8",
+  "cgx2-native_ldd": "\tlinux-vdso.so.1 (0x0000739ec1db6000)\n\tlibgcc_s.so.1 => /usr/lib/x86_64-linux-gnu/libgcc_s.so.1 (0x0000739ec1baf000)\n\tlibc.so.6 => /usr/lib/x86_64-linux-gnu/libc.so.6 (0x0000739ec1800000)\n\t/lib64/ld-linux-x86-64.so.2 (0x0000739ec1db8000)\n",
+  "cgx2-native_readelf": "\nDynamic section at offset 0x1ac3f8 contains 29 entries:\n  Tag        Type                         Name/Value\n 0x0000000000000001 (NEEDED)             Shared library: [libgcc_s.so.1]\n 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]\n 0x0000000000000001 (NEEDED)             Shared library: [ld-linux-x86-64.so.2]\n 0x000000000000001e (FLAGS)              BIND_NOW\n 0x000000006ffffffb (FLAGS_1)            Flags: NOW PIE\n 0x0000000000000015 (DEBUG)              0x0\n 0x0000000000000007 (RELA)               0x16f0\n 0x0000000000000008 (RELASZ)             39072 (bytes)\n 0x0000000000000009 (RELAENT)            24 (bytes)\n 0x000000006ffffff9 (RELACOUNT)          1518\n 0x0000000000000017 (JMPREL)             0xaf90\n 0x0000000000000002 (PLTRELSZ)           48 (bytes)\n 0x0000000000000003 (PLTGOT)             0x1af7d0\n 0x0000000000000014 (PLTREL)             RELA\n 0x0000000000000006 (SYMTAB)             0x340\n 0x000000000000000b (SYMENT)             24 (bytes)\n 0x0000000000000005 (STRTAB)             0x104c\n 0x000000000000000a (STRSZ)              1695 (bytes)\n 0x000000006ffffef5 (GNU_HASH)           0x1030\n 0x0000000000000019 (INIT_ARRAY)         0x1a9008\n 0x000000000000001b (INIT_ARRAYSZ)       16 (bytes)\n 0x000000000000001a (FINI_ARRAY)         0x1a9000\n 0x000000000000001c (FINI_ARRAYSZ)       8 (bytes)\n 0x000000000000000c (INIT)               0x1a7f74\n 0x000000000000000d (FINI)               0x1a7f90\n 0x000000006ffffff0 (VERSYM)             0xdd8\n 0x000000006ffffffe (VERNEED)            0xebc\n 0x000000006fffffff (VERNEEDNUM)         3\n 0x0000000000000000 (NULL)               0x0\n",
+  "helper_metadata_note": "Backfilled from the unchanged frozen helper snapshot after the measurement; hash independently agrees with base-maps.json."
+}

@@ -1,0 +1,21 @@
+sha2 v0.10.9
+├── sha2 feature "default"
+│   ├── cgx2-bind v0.1.0 (/home/john-riley/.codex/worktrees/dee5/lang/crates/cgx2-bind)
+│   │   └── cgx2-bind feature "default"
+│   │       ├── cgx2-cli v0.1.0 (/home/john-riley/.codex/worktrees/dee5/lang/crates/cgx2-cli)
+│   │       │   └── cgx2-cli feature "default" (command-line)
+│   │       └── cgx2-libtorch v0.1.0 (/home/john-riley/.codex/worktrees/dee5/lang/crates/cgx2-libtorch)
+│   │           └── cgx2-libtorch feature "default"
+│   │               └── cgx2-cli v0.1.0 (/home/john-riley/.codex/worktrees/dee5/lang/crates/cgx2-cli) (*)
+│   ├── cgx2-notebook-format v0.1.0 (/home/john-riley/.codex/worktrees/dee5/lang/crates/cgx2-notebook-format)
+│   │   └── cgx2-notebook-format feature "default" (command-line)
+│   │       └── cgx2-notebook-session v0.1.0 (/home/john-riley/.codex/worktrees/dee5/lang/crates/cgx2-notebook-session)
+│   │           └── cgx2-notebook-session feature "default" (command-line)
+│   └── cgx2-package v0.1.0 (/home/john-riley/.codex/worktrees/dee5/lang/crates/cgx2-package)
+│       └── cgx2-package feature "default"
+│           ├── cgx2-bind v0.1.0 (/home/john-riley/.codex/worktrees/dee5/lang/crates/cgx2-bind) (*)
+│           └── cgx2-cli v0.1.0 (/home/john-riley/.codex/worktrees/dee5/lang/crates/cgx2-cli) (*)
+│   [dev-dependencies]
+│   └── cgx2-cli v0.1.0 (/home/john-riley/.codex/worktrees/dee5/lang/crates/cgx2-cli) (*)
+└── sha2 feature "std"
+    └── sha2 feature "default" (*)

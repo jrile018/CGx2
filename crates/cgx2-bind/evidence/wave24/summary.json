@@ -1,0 +1,347 @@
+{
+  "frozen-base": {
+    "wall_ns": {
+      "n": 5,
+      "median": 6661612673,
+      "min": 6629899190,
+      "max": 6703488003
+    },
+    "binary_sha256": "f551d63b571fe5181209e788be72ba5e812347aab5a4707b189280fc8ad67e7e",
+    "phases": {}
+  },
+  "before-trace": {
+    "wall_ns": {
+      "n": 5,
+      "median": 6685496328,
+      "min": 6638653675,
+      "max": 6712205554
+    },
+    "binary_sha256": "ef3ae62e08fdd31195a1b1c5e597831eb43247c0672499a60ed645c61cc32d68",
+    "phases": {
+      "pinned_hash": {
+        "count": {
+          "n": 5,
+          "median": 429,
+          "min": 429,
+          "max": 429
+        },
+        "ns": {
+          "n": 5,
+          "median": 6508977228,
+          "min": 6473715738,
+          "max": 6523104789
+        },
+        "bytes": {
+          "n": 5,
+          "median": 15010978785,
+          "min": 15010978785,
+          "max": 15010978785
+        }
+      },
+      "elf_dynamic": {
+        "count": {
+          "n": 5,
+          "median": 69,
+          "min": 69,
+          "max": 69
+        },
+        "ns": {
+          "n": 5,
+          "median": 41710741,
+          "min": 39957194,
+          "max": 42014317
+        },
+        "bytes": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        }
+      },
+      "closure_preflight": {
+        "count": {
+          "n": 5,
+          "median": 3,
+          "min": 3,
+          "max": 3
+        },
+        "ns": {
+          "n": 5,
+          "median": 614049800,
+          "min": 609494030,
+          "max": 616029441
+        },
+        "bytes": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        }
+      },
+      "package_preflight": {
+        "count": {
+          "n": 5,
+          "median": 2,
+          "min": 2,
+          "max": 2
+        },
+        "ns": {
+          "n": 5,
+          "median": 411418976,
+          "min": 406262567,
+          "max": 412886800
+        },
+        "bytes": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        }
+      },
+      "read_maps": {
+        "count": {
+          "n": 5,
+          "median": 30,
+          "min": 30,
+          "max": 30
+        },
+        "ns": {
+          "n": 5,
+          "median": 1358374,
+          "min": 1287615,
+          "max": 1365562
+        },
+        "bytes": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        }
+      },
+      "verify_preloaded": {
+        "count": {
+          "n": 5,
+          "median": 1,
+          "min": 1,
+          "max": 1
+        },
+        "ns": {
+          "n": 5,
+          "median": 197822805,
+          "min": 195046046,
+          "max": 223384577
+        },
+        "bytes": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        }
+      },
+      "verify_loaded": {
+        "count": {
+          "n": 5,
+          "median": 29,
+          "min": 29,
+          "max": 29
+        },
+        "ns": {
+          "n": 5,
+          "median": 5724925785,
+          "min": 5710265083,
+          "max": 5764876906
+        },
+        "bytes": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        }
+      }
+    }
+  },
+  "final-trace": {
+    "wall_ns": {
+      "n": 5,
+      "median": 6644537145,
+      "min": 6612960406,
+      "max": 6805811755
+    },
+    "binary_sha256": "ef3ae62e08fdd31195a1b1c5e597831eb43247c0672499a60ed645c61cc32d68",
+    "phases": {
+      "pinned_hash": {
+        "count": {
+          "n": 5,
+          "median": 429,
+          "min": 429,
+          "max": 429
+        },
+        "ns": {
+          "n": 5,
+          "median": 6479868010,
+          "min": 6450685148,
+          "max": 6629716171
+        },
+        "bytes": {
+          "n": 5,
+          "median": 15010978785,
+          "min": 15010978785,
+          "max": 15010978785
+        }
+      },
+      "elf_dynamic": {
+        "count": {
+          "n": 5,
+          "median": 69,
+          "min": 69,
+          "max": 69
+        },
+        "ns": {
+          "n": 5,
+          "median": 41430707,
+          "min": 40040548,
+          "max": 43741956
+        },
+        "bytes": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        }
+      },
+      "closure_preflight": {
+        "count": {
+          "n": 5,
+          "median": 3,
+          "min": 3,
+          "max": 3
+        },
+        "ns": {
+          "n": 5,
+          "median": 618764002,
+          "min": 613385431,
+          "max": 670929153
+        },
+        "bytes": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        }
+      },
+      "package_preflight": {
+        "count": {
+          "n": 5,
+          "median": 2,
+          "min": 2,
+          "max": 2
+        },
+        "ns": {
+          "n": 5,
+          "median": 412629817,
+          "min": 410434388,
+          "max": 458132124
+        },
+        "bytes": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        }
+      },
+      "read_maps": {
+        "count": {
+          "n": 5,
+          "median": 30,
+          "min": 30,
+          "max": 30
+        },
+        "ns": {
+          "n": 5,
+          "median": 1254067,
+          "min": 1160804,
+          "max": 1430456
+        },
+        "bytes": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        }
+      },
+      "verify_preloaded": {
+        "count": {
+          "n": 5,
+          "median": 1,
+          "min": 1,
+          "max": 1
+        },
+        "ns": {
+          "n": 5,
+          "median": 197901220,
+          "min": 196828052,
+          "max": 215303440
+        },
+        "bytes": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        }
+      },
+      "verify_loaded": {
+        "count": {
+          "n": 5,
+          "median": 29,
+          "min": 29,
+          "max": 29
+        },
+        "ns": {
+          "n": 5,
+          "median": 5711361306,
+          "min": 5686535480,
+          "max": 5793679295
+        },
+        "bytes": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        }
+      }
+    }
+  },
+  "final-untraced": {
+    "wall_ns": {
+      "n": 5,
+      "median": 6631972295,
+      "min": 6628130830,
+      "max": 6650071356
+    },
+    "binary_sha256": "ef3ae62e08fdd31195a1b1c5e597831eb43247c0672499a60ed645c61cc32d68",
+    "phases": {}
+  },
+  "isolated_buffer_ns": {
+    "65536": {
+      "n": 5,
+      "median": 192466309,
+      "min": 189284678,
+      "max": 212194413
+    },
+    "262144": {
+      "n": 5,
+      "median": 191671017,
+      "min": 189582279,
+      "max": 201062095
+    },
+    "1048576": {
+      "n": 5,
+      "median": 190523923,
+      "min": 188994345,
+      "max": 196451147
+    }
+  },
+  "numeric_stdout_identical": "[[58.0, 64.0], [139.0, 154.0]]\n",
+  "package_hashes_identical": true,
+  "scope": "inclusive nested timers; no sums of inclusive phases or p95"
+}

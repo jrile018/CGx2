@@ -73,6 +73,7 @@ impl VerifiedClosure {
 
     /// Reject already mapped conflicting modules before dlopen can run constructors.
     pub fn verify_preloaded(&self) -> Result<(), ClosureError> {
+        let _scope = crate::trace::Scope::new("verify_preloaded");
         self.verify_loader_environment()?;
         self.verify_modules(false)
     }
@@ -125,6 +126,7 @@ impl VerifiedClosure {
 
     /// Compare mapped file identity with every pinned inode after dlopen and before calls.
     pub fn verify_loaded(&self) -> Result<(), ClosureError> {
+        let _scope = crate::trace::Scope::new("verify_loaded");
         self.verify_modules(true)
     }
 
@@ -314,6 +316,7 @@ impl VerifiedClosure {
 
 #[cfg(target_os = "linux")]
 fn read_maps() -> Result<String, ClosureError> {
+    let _scope = crate::trace::Scope::new("read_maps");
     let file = File::open("/proc/self/maps").map_err(|error| {
         ClosureError::UnverifiedLoader(format!("cannot open /proc/self/maps: {error}"))
     })?;
@@ -338,6 +341,7 @@ pub fn verify_libtorch_closure(
     root: &Path,
     binding: &Binding,
 ) -> Result<VerifiedClosure, ClosureError> {
+    let _scope = crate::trace::Scope::new("closure_preflight");
     if binding.route != "libtorch" {
         return Err(invalid("binding route must be libtorch"));
     }
@@ -517,6 +521,7 @@ fn read_limited(path: &Path, max: u64) -> Result<Vec<u8>, ClosureError> {
 }
 
 fn hash_file(file: &mut File) -> Result<String, ClosureError> {
+    let mut scope = crate::trace::Scope::new("pinned_hash");
     file.seek(SeekFrom::Start(0))
         .map_err(|error| invalid(error.to_string()))?;
     let mut digest = Sha256::new();
@@ -529,6 +534,7 @@ fn hash_file(file: &mut File) -> Result<String, ClosureError> {
             break;
         }
         digest.update(&buffer[..read]);
+        scope.bytes += read as u64;
     }
     Ok(format!("{:x}", digest.finalize()))
 }
@@ -537,6 +543,7 @@ fn elf_dynamic(
     path: &Path,
     enforce_search_policy: bool,
 ) -> Result<(Option<String>, Vec<String>), ClosureError> {
+    let _scope = crate::trace::Scope::new("elf_dynamic");
     let mut child = Command::new("readelf")
         .arg("-d")
         .arg(path)

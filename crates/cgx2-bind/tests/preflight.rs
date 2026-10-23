@@ -98,6 +98,39 @@ fn codes(root: &Path) -> Vec<&'static str> {
 }
 
 #[test]
+fn opt_in_trace_preserves_success_and_first_failure_report() {
+    let (fixture, _) = Fixture::c_fixture();
+    for broken in [false, true] {
+        if broken {
+            fs::write(fixture.0.join("libfixture.so"), b"changed").unwrap();
+        }
+        let invoke = |trace: &str| {
+            Command::new(env!("CARGO_BIN_EXE_cgx2-bind"))
+                .arg("check")
+                .arg(&fixture.0)
+                .args(["--format", "json"])
+                .env("CGX2_LOADER_TRACE", trace)
+                .output()
+                .unwrap()
+        };
+        let plain = invoke("0");
+        let traced = invoke("1");
+        let other = invoke("true");
+        assert_eq!(plain.status.success(), !broken);
+        assert_eq!(plain.status, traced.status);
+        assert_eq!(plain.stdout, traced.stdout);
+        assert_eq!(plain.stdout, other.stdout);
+        assert!(plain.stderr.is_empty());
+        assert!(other.stderr.is_empty());
+        let diagnostic = String::from_utf8(traced.stderr).unwrap();
+        assert!(diagnostic.contains("phase=package_preflight ns="));
+        assert!(diagnostic
+            .lines()
+            .all(|line| line.starts_with("cgx2-loader pid=")));
+    }
+}
+
+#[test]
 fn c_fixture_passes_and_cli_outputs_stable_json() {
     if std::env::consts::OS != "linux" {
         return;

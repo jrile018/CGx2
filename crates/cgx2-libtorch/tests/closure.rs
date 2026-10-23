@@ -398,6 +398,47 @@ fn changed_dependency_after_preflight_is_rejected_before_loading() {
 }
 
 #[test]
+fn same_inode_same_size_restored_mtime_is_rehashed_and_retry_succeeds() {
+    let _loader_guard = LOADER_TEST_LOCK.lock().unwrap();
+    let fixture = Fixture::new("2.6.0");
+    let closure = verify_libtorch_closure(&fixture.root, &fixture.binding).unwrap();
+    let path = fixture.root.join(DEP);
+    let original = fs::read(&path).unwrap();
+    let before = fs::metadata(&path).unwrap();
+    let mut altered = original.clone();
+    // Change only trailing ELF section metadata, preserving DT_SONAME and
+    // DT_NEEDED. No foreign code is executed while the content is changed.
+    *altered.last_mut().unwrap() ^= 1;
+    fs::write(&path, &altered).unwrap();
+    let restore_mtime = || {
+        fs::File::options()
+            .write(true)
+            .open(&path)
+            .unwrap()
+            .set_times(fs::FileTimes::new().set_modified(before.modified().unwrap()))
+            .unwrap();
+    };
+    restore_mtime();
+    let after = fs::metadata(&path).unwrap();
+    assert_eq!(before.ino(), after.ino());
+    assert_eq!(before.len(), after.len());
+    assert_eq!(before.modified().unwrap(), after.modified().unwrap());
+    for _ in 0..2 {
+        assert!(matches!(
+            closure.verify_preloaded(),
+            Err(cgx2_bind::ClosureError::Invalid(message))
+                if message.contains("mapped inode changed bytes")
+        ));
+    }
+    fs::write(&path, &original).unwrap();
+    restore_mtime();
+    closure.verify_preloaded().unwrap();
+    // Also exercise an independent open after a failed verification.
+    let torch = unsafe { Torch::open_pinned(&fixture.root, "torch_cpu") }.unwrap();
+    assert_eq!(torch.from_f64(&[3.0]).unwrap().to_vec().unwrap(), vec![3.0]);
+}
+
+#[test]
 fn mock_package_preparation_is_repeatable_and_rejects_ambiguous_needed() {
     let _loader_guard = LOADER_TEST_LOCK.lock().unwrap();
     let fixture = Fixture::new("2.6.0");

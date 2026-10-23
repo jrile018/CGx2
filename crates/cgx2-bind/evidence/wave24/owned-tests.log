@@ -1,0 +1,124 @@
+   Compiling version_check v0.9.5
+   Compiling proc-macro2 v1.0.107
+   Compiling typenum v1.20.1
+   Compiling unicode-ident v1.0.26
+   Compiling quote v1.0.47
+   Compiling cgx2-syntax v0.1.0 (/home/john-riley/.codex/worktrees/dee5/lang/crates/cgx2-syntax)
+   Compiling serde_core v1.0.229
+   Compiling zmij v1.0.23
+   Compiling serde_json v1.0.149
+   Compiling cfg-if v1.0.5
+   Compiling cpufeatures v0.2.17
+   Compiling serde v1.0.229
+   Compiling itoa v1.0.18
+   Compiling memchr v2.8.3
+   Compiling cgx2-ffi-native v0.1.0 (/home/john-riley/.codex/worktrees/dee5/lang/crates/cgx2-ffi-native)
+   Compiling generic-array v0.14.7
+   Compiling cgx2-ownership v0.1.0 (/home/john-riley/.codex/worktrees/dee5/lang/crates/cgx2-ownership)
+   Compiling cgx2-sema v0.1.0 (/home/john-riley/.codex/worktrees/dee5/lang/crates/cgx2-sema)
+   Compiling syn v3.0.6
+   Compiling crypto-common v0.1.7
+   Compiling block-buffer v0.10.4
+   Compiling digest v0.10.7
+   Compiling sha2 v0.10.9
+   Compiling cgx2-api-index v0.1.0 (/home/john-riley/.codex/worktrees/dee5/lang/crates/cgx2-api-index)
+   Compiling cgx2-package v0.1.0 (/home/john-riley/.codex/worktrees/dee5/lang/crates/cgx2-package)
+   Compiling serde_derive v1.0.229
+   Compiling cgx2-bind v0.1.0 (/home/john-riley/.codex/worktrees/dee5/lang/crates/cgx2-bind)
+   Compiling cgx2-libtorch v0.1.0 (/home/john-riley/.codex/worktrees/dee5/lang/crates/cgx2-libtorch)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.29s
+     Running unittests src/lib.rs (target/wave24-loader/build/debug/deps/cgx2_bind-95e92af018d6f191)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin/cgx2-bind.rs (target/wave24-loader/build/debug/deps/cgx2_bind-695660e6c751ff9f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/preflight.rs (target/wave24-loader/build/debug/deps/preflight-3be68025af6386c3)
+
+running 12 tests
+test unavailable_libtorch_is_reported_without_fallback ... ok
+test rejects_contract_platform_and_unknown_fields ... ok
+test rejects_lock_schema_and_lock_symlink_escape ... ok
+test rejects_traversal_and_symlink_escape ... ok
+test rejects_excessive_binding_and_symbol_counts_before_inspection ... ok
+test rejects_hash_identity_symbol_and_missing_artifact ... ok
+test c_fixture_passes_and_cli_outputs_stable_json ... ok
+test opt_in_trace_preserves_success_and_first_failure_report ... ok
+test mock_facade_preflight_rejects_missing_export ... ok
+test mock_facade_preflight_pins_exact_bytes_and_c_signatures_without_loading ... ok
+test float32_matrix_preflight_requires_exact_v3_exports ... ok
+test matrix_preflight_requires_exact_v2_exports_and_keeps_v1_valid ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running unittests src/lib.rs (target/wave24-loader/build/debug/deps/cgx2_libtorch-3f68a1d49b035844)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/closure.rs (target/wave24-loader/build/debug/deps/closure-c5369aaf5020d0d9)
+
+running 6 tests
+test real_pinned_libtorch_when_installed ... ignored, requires a reviewed schema-2 package and exact compatible LibTorch installation
+test real_pinned_matrix_when_installed ... ignored, requires a reviewed schema-2 matrix package and exact compatible LibTorch installation
+test changed_dependency_after_preflight_is_rejected_before_loading ... ok
+test closure_accepts_and_rejects_changed_version_and_loader_substitution ... ok
+test same_inode_same_size_restored_mtime_is_rehashed_and_retry_succeeds ... ok
+test mock_package_preparation_is_repeatable_and_rejects_ambiguous_needed ... ok
+
+test result: ok. 4 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 0.69s
+
+     Running tests/matrix_f32.rs (target/wave24-loader/build/debug/deps/matrix_f32-5cbd105d3cba4d56)
+
+running 4 tests
+test real_pinned_float32_reference_and_cycles ... ignored, requires CGX2_LIBTORCH_REAL_PACKAGE with a pinned CPU float32 v3 facade
+test mock_float32_rejects_invalid_inputs_and_facade_faults ... ok
+test mock_float32_math_and_repeated_lifecycle ... ok
+test mock_float32_rejects_wrong_version_and_missing_symbol ... ok
+
+test result: ok. 3 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/matrix_lifetime.rs (target/wave24-loader/build/debug/deps/matrix_lifetime-253b5286ff10d110)
+
+running 3 tests
+test real_pinned_matrix_element_boundaries ... ignored, requires a reviewed schema-2 pinned real LibTorch matrix package
+test mock_matrix_repeated_lifecycle_and_exact_fault_classes ... ok
+test mock_matrix_version_and_export_rejection ... ok
+
+test result: ok. 2 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/route.rs (target/wave24-loader/build/debug/deps/route-791a6d86e88eeb5d)
+
+running 11 tests
+test real_libtorch_cpu_when_installed ... ignored, requires CGX2_LIBTORCH_FACADE and CGX2_LIBTORCH_VERSION for a real LibTorch artifact
+test static_route_contains_no_python_link ... ok
+test mock_facade_c_copy_checks_capacity_before_writing ... ok
+test mock_facade_failed_create_cleans_handle_and_never_publishes_values ... ok
+test mock_matrix_non_square_math_copy_and_lifetimes ... ok
+test mock_facade_rejects_bad_shape_profile_and_cross_adapter_handle ... ok
+test aliased_add_and_release_error_keep_single_owner ... ok
+test mock_facade_cpu_contract_and_raii ... ok
+test aliased_output_never_releases_an_existing_handle ... ok
+test mock_matrix_rejects_invalid_shapes_aliases_partial_errors_and_bad_exports ... ok
+test mock_facade_rejects_wrong_metadata_and_missing_export ... ok
+
+test result: ok. 10 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+   Doc-tests cgx2_bind
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_libtorch
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

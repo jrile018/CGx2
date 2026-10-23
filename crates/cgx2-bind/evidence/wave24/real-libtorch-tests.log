@@ -1,0 +1,54 @@
+   Compiling cgx2-libtorch v0.1.0 (/home/john-riley/.codex/worktrees/dee5/lang/crates/cgx2-libtorch)
+    Finished `release` profile [optimized] target(s) in 0.68s
+     Running unittests src/lib.rs (target/wave24-loader/build/release/deps/cgx2_libtorch-426cf5dc3f54d1c4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/closure.rs (target/wave24-loader/build/release/deps/closure-01a8560b46b6b617)
+
+running 2 tests
+test real_pinned_libtorch_when_installed ... ok
+test real_pinned_matrix_when_installed ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 12.95s
+
+     Running tests/matrix_f32.rs (target/wave24-loader/build/release/deps/matrix_f32-e837219ce232be9e)
+
+running 1 test
+test real_pinned_float32_reference_and_cycles ... opening pinned float32 package
+pinned float32 package open
+starting pinned float32 cycle 1
+left created
+right created
+product created
+pinned float32 cycle 1 passed
+starting pinned float32 cycle 2
+left created
+right created
+product created
+pinned float32 cycle 2 passed
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 12.27s
+
+     Running tests/matrix_lifetime.rs (target/wave24-loader/build/release/deps/matrix_lifetime-dd33255f6621dbb6)
+
+running 1 test
+test real_pinned_matrix_element_boundaries ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 6.22s
+
+     Running tests/route.rs (target/wave24-loader/build/release/deps/route-aef914c73479c809)
+
+running 1 test
+test real_libtorch_cpu_when_installed ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.08s
+
+   Doc-tests cgx2_libtorch
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

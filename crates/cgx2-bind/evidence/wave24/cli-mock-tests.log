@@ -1,0 +1,23 @@
+   Compiling cgx2-python-bridge v0.1.0 (/home/john-riley/.codex/worktrees/dee5/lang/crates/cgx2-python-bridge)
+   Compiling cgx2-runtime v0.1.0 (/home/john-riley/.codex/worktrees/dee5/lang/crates/cgx2-runtime)
+   Compiling cgx2-foreign v0.1.0 (/home/john-riley/.codex/worktrees/dee5/lang/crates/cgx2-foreign)
+   Compiling cgx2-cli v0.1.0 (/home/john-riley/.codex/worktrees/dee5/lang/crates/cgx2-cli)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.81s
+     Running tests/tensor.rs (target/wave24-loader/build/debug/deps/tensor-f4c066ae10f2f4e7)
+
+running 13 tests
+test real_pinned_float32_matrix_source_when_available ... ok
+test real_pinned_matrix_source_when_available ... ok
+test checked_cg_source_runs_mock_cpu_facade_without_python ... ok
+test checked_float32_matrix_source_runs_mock_v3_facade_repeatedly ... ok
+test checked_matrix_source_runs_pinned_v2_facade_repeatedly ... ok
+test float32_source_rejects_layout_version_dtype_and_nonfinite_results ... ok
+test direct_float64_and_float32_cli_never_discovers_python ... ok
+test float32_source_rejects_missing_export_before_dispatch ... ok
+test matrix_profile_rejects_missing_and_multiple_source_packages ... ok
+test matrix_runtime_rejects_nonfinite_output_and_missing_artifact ... ok
+test matrix_source_and_binding_errors_are_located_before_loading ... ok
+test nonfinite_result_is_rejected_after_foreign_copy ... ok
+test source_rejections_and_artifact_errors_are_located ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.85s

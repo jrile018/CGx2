@@ -10,6 +10,7 @@ use cgx2_package::load_checked_package;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 mod closure;
+mod trace;
 pub use closure::{
     verify_libtorch_closure, ClosureError, ClosureLock, LibraryPin, VerifiedClosure,
 };
@@ -361,6 +362,7 @@ pub fn check_package(root: &Path) -> Report {
 }
 
 fn inspect_package(root: &Path) -> (Report, Option<BindingLock>) {
+    let _scope = trace::Scope::new("package_preflight");
     let mut report = Report::new();
     let checked = match load_checked_package(root) {
         Ok(package) => package,

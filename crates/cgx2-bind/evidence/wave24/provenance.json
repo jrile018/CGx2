@@ -1,0 +1,42 @@
+{
+  "base_commit": "425cb0a5467d98b2cf9565be19067b2f39f23fff",
+  "host": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+  "cpu_model": "AMD Ryzen 7 9800X3D 8-Core Processor",
+  "logical_cpus": 16,
+  "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "cargo": "cargo 1.98.1 (797e8a9bc 2026-08-05)\n",
+  "build_argv": [
+    "cargo",
+    "+1.98.1",
+    "build",
+    "--locked",
+    "--offline",
+    "--release",
+    "-p",
+    "cgx2-cli",
+    "-p",
+    "cgx2-bind",
+    "--bins"
+  ],
+  "build_environment": {
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/build",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/dee5/lang/target/wave24-loader/tmp"
+  },
+  "optional_build_environment": {
+    "RUSTFLAGS": null,
+    "CARGO_ENCODED_RUSTFLAGS": null,
+    "RUSTC_WRAPPER": null,
+    "CARGO_PROFILE_RELEASE_OPT_LEVEL": null,
+    "CARGO_PROFILE_RELEASE_LTO": null
+  },
+  "hashes": {
+    "Cargo.toml": "9400b7dfbc400f91b3d648265dbd18001ec96157eb202fe88e3b95a312c9ffd7",
+    "Cargo.lock": "936c7f8c58f522aa98e4f2bd96e0ebf69c31e4b9d9af982bf9c8695d255d7850",
+    "target/wave24-loader/base/cgx2": "f551d63b571fe5181209e788be72ba5e812347aab5a4707b189280fc8ad67e7e",
+    "target/wave24-loader/base/cgx2-native": "eb00c591cfa638f1f5be5c0674c133ab00f080496aa9a6c500a5bfd4a8adb5d8",
+    "target/wave24-loader/trace/cgx2": "ef3ae62e08fdd31195a1b1c5e597831eb43247c0672499a60ed645c61cc32d68",
+    "target/wave24-loader/trace/cgx2-native": "f282caee7881e81c118e114b2091177f802345eebd24dfc4463504f658ab7d24"
+  },
+  "readelf_version": "GNU readelf (GNU Binutils for Ubuntu) 2.46",
+  "concurrency_note": "No CPU isolation or host-load control. A short owned-test build overlapped the first final-trace repetition; it is retained without exclusion. Timing blocks run in fixed order."
+}
