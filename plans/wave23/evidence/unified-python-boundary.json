@@ -1,0 +1,65 @@
+{
+  "artifacts": [
+    {
+      "path": "/home/john-riley/projects/lang/target/debug/cgx2",
+      "sha256": "a5f73d305da224df07fe2607854c4bd58515e80907476d0fcd6ee92a3b6bf8b7",
+      "bytes": 39717648,
+      "needed": [
+        "libgcc_s.so.1",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "ldd": "\tlinux-vdso.so.1 (0x0000735335b34000)\n\tlibgcc_s.so.1 => /usr/lib/x86_64-linux-gnu/libgcc_s.so.1 (0x0000735335adf000)\n\tlibc.so.6 => /usr/lib/x86_64-linux-gnu/libc.so.6 (0x0000735335200000)\n\t/lib64/ld-linux-x86-64.so.2 (0x0000735335b36000)\n"
+    },
+    {
+      "path": "/home/john-riley/projects/lang/target/debug/cgx2-native",
+      "sha256": "8b1624a23e7daff29d884e4163ea21e676ea9894a6d97db4e5973513e797ee8e",
+      "bytes": 30392192,
+      "needed": [
+        "libgcc_s.so.1",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "ldd": "\tlinux-vdso.so.1 (0x00007a1d8e1ca000)\n\tlibgcc_s.so.1 => /usr/lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007a1d8e175000)\n\tlibc.so.6 => /usr/lib/x86_64-linux-gnu/libc.so.6 (0x00007a1d8d800000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007a1d8e1cc000)\n"
+    }
+  ],
+  "native_scalar": {
+    "source": "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/cgx2-boundary-evidence-t61w25oe/scalar.cg",
+    "completed": true,
+    "map_samples": 19,
+    "mapped_files": [
+      "/etc/ld.so.cache",
+      "/home/john-riley/projects/lang/target/debug/cgx2",
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1"
+    ],
+    "child_executables": [],
+    "python_child_executables": [],
+    "stdout": "5000\n",
+    "stderr": ""
+  },
+  "explicit_python": {
+    "source": "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/cgx2-boundary-evidence-t61w25oe/explicit.cg",
+    "completed": true,
+    "map_samples": 100,
+    "mapped_files": [
+      "/etc/ld.so.cache",
+      "/home/john-riley/projects/lang/target/debug/cgx2",
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1"
+    ],
+    "child_executables": [
+      "/usr/bin/python3.14"
+    ],
+    "python_child_executables": [
+      "/usr/bin/python3.14"
+    ],
+    "stdout": "9\n",
+    "stderr": "Python worker executable=\"/usr/bin/python3\" version=\"3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]\" prefix=\"/usr\"\n"
+  },
+  "real_f32": {
+    "skipped": "no reviewed --real-f32-package supplied"
+  }
+}

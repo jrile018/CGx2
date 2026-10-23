@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-23",
+  "branch": "riley/wave23-review",
+  "integrated_head": "f33663b",
+  "rust": "1.98.1",
+  "workspace": {
+    "passed": 730,
+    "ignored": 5,
+    "http_passed": 19
+  },
+  "python_benchmark_tests": 112,
+  "pressure": {
+    "seed": 0,
+    "count": 2048,
+    "steps": 256,
+    "features": "fault-injection",
+    "passed": 6
+  },
+  "checks": {
+    "workspace-test.log": {
+      "path": "/home/john-riley/projects/lang/target/wave23-workspace-test.log",
+      "sha256": "af6630c26864b096d5164fcd57d838cfe4f1d58972fb2ff7e760ebe67b7e7df4"
+    },
+    "benchmark-test.log": {
+      "path": "/home/john-riley/projects/lang/target/wave23-benchmark-test.log",
+      "sha256": "a8da05c112dd117f3aa1da3d5da22c74316e5d88221cb9d6637dce043d2ef639"
+    },
+    "clippy.log": {
+      "path": "/home/john-riley/projects/lang/target/wave23-clippy.log",
+      "sha256": "b7c5fd06344efda910489ee539a6af15a5f47555dbf0cc76737d56bcf22def31"
+    },
+    "readiness.json": {
+      "path": "/home/john-riley/projects/lang/target/wave23-readiness.json",
+      "sha256": "dfcfe6f8a85586b86fe6d620f5a8d45d7ee1d4700303f781ba1f83913f6b9749"
+    },
+    "pressure-test.log": {
+      "path": "/home/john-riley/projects/lang/target/wave23-pressure-test.log",
+      "sha256": "1a72f699a792643576620ca0357d2bc8a5de4ebd1b918f8fe9c53f2fea97e19c"
+    },
+    "release-build.log": {
+      "path": "/home/john-riley/projects/lang/target/wave23-release-build.log",
+      "sha256": "0f38c442047d35e7d8fd45388773823423e7cfbaea359dce0d0ffac8e5c0c9de"
+    },
+    "unified-build.log": {
+      "path": "/home/john-riley/projects/lang/target/wave23-unified-build.log",
+      "sha256": "6d77f64dfc8c5325b90fdbe05d8be367bdd578bcccec24f275c5ffee7d03dd6e"
+    }
+  }
+}
