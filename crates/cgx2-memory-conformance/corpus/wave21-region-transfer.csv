@@ -1,0 +1,5 @@
+case,source_mode,destination_mode,close_first
+manual_to_auto_source_first,manual,auto,source
+manual_to_auto_destination_first,manual,auto,destination
+auto_to_manual_source_first,auto,manual,source
+auto_to_manual_destination_first,auto,manual,destination

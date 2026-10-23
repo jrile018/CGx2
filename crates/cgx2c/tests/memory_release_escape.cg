@@ -1,0 +1,5 @@
+fn main() -> Unit effects(ManagedAlloc, Mutate):
+    let source = memory.region(mode: manual, limit: 1024)
+    let value = memory.alloc_bytes(source, 4)
+    memory.close(source)
+    memory.use(value)

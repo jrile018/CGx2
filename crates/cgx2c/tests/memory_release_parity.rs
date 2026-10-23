@@ -1,7 +1,7 @@
 //! Bounded source/native memory unwind evidence. See the owned Wave 20 gate.
 use cgx2_cli::{
-    MemoryReport, Value, run_checked_source, run_checked_source_with_failure,
-    run_checked_source_with_failure_at_reserve,
+    run_checked_source, run_checked_source_with_failure,
+    run_checked_source_with_failure_at_reserve, MemoryReport, Value,
 };
 use std::{
     fs,
@@ -71,6 +71,18 @@ fn totals(json: &str) -> Vec<u64> {
 
 fn report_totals(report: &MemoryReport) -> Vec<u64> {
     totals(&report.to_json())
+}
+
+fn without_session_ids(json: &str) -> String {
+    let mut result = String::new();
+    let mut rest = json;
+    while let Some((before, after)) = rest.split_once("\"session\":") {
+        result.push_str(before);
+        result.push_str("\"session\":_");
+        rest = after.trim_start_matches(|ch: char| ch.is_ascii_digit());
+    }
+    result.push_str(rest);
+    result
 }
 
 fn build_and_run(
@@ -231,5 +243,66 @@ fn budget_and_host_reserve_failures_preserve_first_error_and_unwind_roots() {
             );
             assert_eq!(totals(native_final)[0], committed as u64, "{name}");
         }
+    }
+}
+
+#[test]
+fn explicit_cross_region_copy_matches_native_and_escape_is_rejected() {
+    let scratch = Scratch::new();
+    let source_text = fs::read_to_string(source("memory_release_transfer.cg")).unwrap();
+    let (result, Some(interpreter)) = run_checked_source(&source_text, &[]).unwrap() else {
+        panic!("missing interpreter memory report");
+    };
+    assert_eq!(result.value, Value::Unit);
+    assert_eq!(interpreter.totals.committed_bytes, 0);
+    assert_eq!(interpreter.totals.live_bytes, 0);
+    assert_eq!(interpreter.totals.collection_count, 0);
+    assert_eq!(interpreter.regions.len(), 3);
+    assert!(interpreter.regions.iter().skip(1).all(|row| !row.is_open));
+    for release in [false, true] {
+        let (output, native) = build_and_run("memory_release_transfer.cg", release, None, &scratch);
+        assert_eq!(output.status.code(), Some(0), "{output:?}");
+        assert!(output.stdout.is_empty() && output.stderr.is_empty());
+        assert!(native.contains("\"status\":\"ok\""));
+        assert_eq!(totals(&native), report_totals(&interpreter));
+        let native_memory = native
+            .trim_end()
+            .split_once("\"memory\":")
+            .unwrap()
+            .1
+            .strip_suffix('}')
+            .unwrap();
+        assert_eq!(
+            without_session_ids(native_memory),
+            without_session_ids(&interpreter.to_json()),
+            "full region report mismatch, release={release}"
+        );
+        assert!(native.contains("\"is_open\":false,\"mode\":\"manual\""));
+        assert!(native.contains("\"is_open\":false,\"mode\":\"auto\""));
+    }
+
+    let escape = source("memory_release_escape.cg");
+    let source_text = fs::read_to_string(&escape).unwrap();
+    let diagnostics = run_checked_source(&source_text, &[]).unwrap_err();
+    assert_eq!(diagnostics[0].code, "CGO003");
+    assert!(diagnostics[0].message.contains("live handles"));
+    for release in [false, true] {
+        let mut build = Command::new(env!("CARGO_BIN_EXE_cgx2c"));
+        build.args(["build", escape.to_str().unwrap(), "--out"]);
+        build.arg(scratch.path(if release {
+            "escape-release"
+        } else {
+            "escape-debug"
+        }));
+        if release {
+            build.arg("--release");
+        }
+        let output = build.output().unwrap();
+        assert!(!output.status.success());
+        let stderr = String::from_utf8(output.stderr).unwrap();
+        assert!(
+            stderr.contains("CGO003") && stderr.contains("live handles"),
+            "{stderr}"
+        );
     }
 }
