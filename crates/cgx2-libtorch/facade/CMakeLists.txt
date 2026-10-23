@@ -12,8 +12,11 @@ endif()
 add_library(cgx2_libtorch_facade SHARED facade.cpp)
 target_compile_features(cgx2_libtorch_facade PRIVATE cxx_std_20)
 separate_arguments(CGX2_TORCH_CXX_FLAGS NATIVE_COMMAND "${TORCH_CXX_FLAGS}")
+file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/cgx2-torch-cxx-flags.txt" "${TORCH_CXX_FLAGS}")
 target_compile_options(cgx2_libtorch_facade PRIVATE ${CGX2_TORCH_CXX_FLAGS})
 target_compile_definitions(cgx2_libtorch_facade PRIVATE CGX2_TORCH_VERSION="${Torch_VERSION}")
 target_link_libraries(cgx2_libtorch_facade PRIVATE ${TORCH_LIBRARIES})
 target_include_directories(cgx2_libtorch_facade PRIVATE ${TORCH_INCLUDE_DIRS})
-set_target_properties(cgx2_libtorch_facade PROPERTIES CXX_VISIBILITY_PRESET hidden VISIBILITY_INLINES_HIDDEN YES)
+set_target_properties(cgx2_libtorch_facade PROPERTIES
+  CXX_VISIBILITY_PRESET hidden VISIBILITY_INLINES_HIDDEN YES
+  BUILD_WITH_INSTALL_RPATH YES INSTALL_RPATH "$ORIGIN")

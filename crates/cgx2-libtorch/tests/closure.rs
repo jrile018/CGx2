@@ -392,6 +392,103 @@ fn changed_dependency_after_preflight_is_rejected_before_loading() {
 }
 
 #[test]
+fn mock_package_preparation_is_repeatable_and_rejects_ambiguous_needed() {
+    let fixture = Fixture::new("2.6.0");
+    fs::create_dir(fixture.root.join("lib")).unwrap();
+    let compiler = fs::canonicalize("/usr/bin/cc").unwrap();
+    fs::write(
+        fixture.root.join("CMakeCache.txt"),
+        format!(
+            "CGX2_EXPECT_TORCH_VERSION:UNINITIALIZED=2.6.0\nCMAKE_CXX_COMPILER:FILEPATH={}\nCMAKE_PREFIX_PATH:UNINITIALIZED={}\n",
+            compiler.display(),
+            fixture.root.display()
+        ),
+    )
+    .unwrap();
+    fs::write(
+        fixture.root.join("cgx2-torch-cxx-flags.txt"),
+        "-D_GLIBCXX_USE_CXX11_ABI=0",
+    )
+    .unwrap();
+    let script = Path::new(env!("CARGO_MANIFEST_DIR")).join("prepare_pinned.py");
+    let run = |package: &Path| {
+        Command::new("python3")
+            .arg(&script)
+            .args([
+                "--facade",
+                fixture.root.join(FACADE).to_str().unwrap(),
+                "--libtorch-root",
+                fixture.root.to_str().unwrap(),
+                "--build-dir",
+                fixture.root.to_str().unwrap(),
+                "--package",
+                package.to_str().unwrap(),
+                "--version",
+                "2.6.0",
+                "--compiler",
+                compiler.to_str().unwrap(),
+                "--cxx11-abi",
+                "0",
+                "--torch-cxx-flags=-D_GLIBCXX_USE_CXX11_ABI=0",
+                "--build-command",
+                "cc -shared mock fixture",
+                "--lib-dir",
+                fixture.root.to_str().unwrap(),
+            ])
+            .output()
+            .unwrap()
+    };
+    let first = run(&fixture.root);
+    assert!(
+        first.status.success(),
+        "{}",
+        String::from_utf8_lossy(&first.stderr)
+    );
+    let locks = [
+        "cgx2-bind.lock.json",
+        "cgx2-libtorch-closure.lock.json",
+        "cgx2-libtorch-evidence.json",
+    ]
+    .map(|name| fs::read(fixture.root.join(name)).unwrap());
+    let second = run(&fixture.root);
+    assert!(
+        second.status.success(),
+        "{}",
+        String::from_utf8_lossy(&second.stderr)
+    );
+    for (name, bytes) in [
+        "cgx2-bind.lock.json",
+        "cgx2-libtorch-closure.lock.json",
+        "cgx2-libtorch-evidence.json",
+    ]
+    .into_iter()
+    .zip(locks)
+    {
+        assert_eq!(fs::read(fixture.root.join(name)).unwrap(), bytes);
+    }
+    assert!(check_package(&fixture.root).passed());
+    let torch = unsafe { Torch::open_pinned(&fixture.root, "torch_cpu") }.unwrap();
+    assert!(matches!(
+        torch.from_f64(&[1.0, 2.0]),
+        Err(Error::Foreign { status: 1, .. })
+    ));
+    drop(torch);
+
+    fs::copy(fixture.root.join(DEP), fixture.root.join("lib").join(DEP)).unwrap();
+    let ambiguous = run(&fixture.root);
+    assert!(!ambiguous.status.success());
+    assert!(String::from_utf8_lossy(&ambiguous.stderr).contains("ambiguous DT_NEEDED"));
+
+    fs::remove_file(fixture.root.join("lib").join(DEP)).unwrap();
+    let substituted = fixture.root.join("substituted");
+    fs::create_dir(&substituted).unwrap();
+    std::os::unix::fs::symlink(fixture.root.join(FACADE), substituted.join(FACADE)).unwrap();
+    let symlink = run(&substituted);
+    assert!(!symlink.status.success());
+    assert!(String::from_utf8_lossy(&symlink.stderr).contains("symlink-substituted"));
+}
+
+#[test]
 #[ignore = "requires a reviewed schema-2 package and exact compatible LibTorch installation"]
 fn real_pinned_libtorch_when_installed() {
     let root =
@@ -402,7 +499,7 @@ fn real_pinned_libtorch_when_installed() {
     let mut y = torch.from_f64(&[4.0, 5.0, 6.0]).unwrap();
     let mut sum = x.add(&y).unwrap();
     assert_eq!(sum.shape().unwrap(), [3]);
-    assert_eq!(sum.to_vec().unwrap(), vec![5.0, 7.0, 9.0]);
+    assert_eq!(sum.to_vec_bounded(3).unwrap(), vec![5.0, 7.0, 9.0]);
     sum.release().unwrap();
     x.release().unwrap();
     y.release().unwrap();
