@@ -29,6 +29,9 @@ struct ObjectShape {
 struct Lowerer {
     scalar_parameters: BTreeSet<String>,
     bindings: BTreeMap<String, Kind>,
+    names: BTreeMap<String, String>,
+    branch_depth: usize,
+    pending_locals: BTreeSet<String>,
     objects: BTreeMap<String, ObjectShape>,
     references: BTreeMap<String, String>,
     closed_regions: std::collections::BTreeSet<String>,
@@ -57,23 +60,6 @@ pub(crate) fn check_memory_module(
             .any(|f| f.body.iter().any(has_memory))
     {
         return None;
-    }
-    fn conditional(body: &[Stmt]) -> Option<Span> {
-        body.iter().find_map(|stmt| match &stmt.kind {
-            StmtKind::If { .. } => Some(stmt.span),
-            StmtKind::NoGc { body, .. } | StmtKind::For { body, .. } => conditional(body),
-            _ => None,
-        })
-    }
-    if let Some(span) = conditional(&module.statements)
-        .or_else(|| module.functions.iter().find_map(|f| conditional(&f.body)))
-    {
-        return Some(Err(vec![TypeDiagnostic::new(
-            "CGM001",
-            "conditional memory programs are unsupported; ownership joins are not implemented"
-                .into(),
-            span,
-        )]));
     }
     if !module.functions.is_empty() {
         return Some(check_memory_functions(module));
@@ -109,11 +95,18 @@ fn without_local_calls(
     let mut retained = Vec::new();
     for stmt in statements {
         match &stmt.kind {
-            StmtKind::If { .. } => diagnostics.push(TypeDiagnostic::new(
-                "CGM001",
-                "conditional memory programs are unsupported".into(),
-                stmt.span,
-            )),
+            StmtKind::If {
+                condition,
+                then_body,
+                else_body,
+            } => retained.push(Stmt {
+                kind: StmtKind::If {
+                    condition: condition.clone(),
+                    then_body: without_local_calls(then_body, in_no_gc, calls, diagnostics),
+                    else_body: without_local_calls(else_body, in_no_gc, calls, diagnostics),
+                },
+                span: stmt.span,
+            }),
             StmtKind::Expr(Expr {
                 kind: ExprKind::Name(_),
                 ..
@@ -186,6 +179,27 @@ fn transitively_collects(
             next.iter()
                 .any(|call| transitively_collects(&call.name, calls, direct, visited))
         })
+}
+
+// These walks deliberately inspect both possible paths, including literal guards.
+fn contains_collect(ops: &[Op]) -> bool {
+    ops.iter().any(|op| match op {
+        Op::Collect { .. } => true,
+        Op::If {
+            then_ops, else_ops, ..
+        } => contains_collect(then_ops) || contains_collect(else_ops),
+        _ => false,
+    })
+}
+
+fn closes_region(ops: &[Op], region: &str) -> bool {
+    ops.iter().any(|op| match op {
+        Op::CloseRegion { region: closed, .. } => closed == region,
+        Op::If {
+            then_ops, else_ops, ..
+        } => closes_region(then_ops, region) && closes_region(else_ops, region),
+        _ => false,
+    })
 }
 
 fn scalar_argument(expr: &Expr, parameters: &BTreeSet<String>) -> bool {
@@ -280,9 +294,7 @@ fn check_memory_functions(module: &Module) -> Result<TypedModule, Vec<TypeDiagno
         }
         for op in &lowerer.ops {
             if let Op::OpenRegion { region, .. } = op {
-                if !lowerer.ops.iter().any(|later| {
-                    matches!(later, Op::CloseRegion { region: closed, .. } if closed == region)
-                }) {
+                if !closes_region(&lowerer.ops, region) {
                     diagnostics.push(TypeDiagnostic::new(
                         "CGM001",
                         format!("local region `{region}` must be closed before return"),
@@ -291,13 +303,7 @@ fn check_memory_functions(module: &Module) -> Result<TypedModule, Vec<TypeDiagno
                 }
             }
         }
-        direct_collect.insert(
-            function.name.clone(),
-            lowerer
-                .ops
-                .iter()
-                .any(|op| matches!(op, Op::Collect { .. })),
-        );
+        direct_collect.insert(function.name.clone(), contains_collect(&lowerer.ops));
         calls.insert(function.name.clone(), local_calls);
     }
     if !signatures.contains_key("main") {
@@ -425,6 +431,22 @@ fn expr_has_memory(expr: &Expr) -> bool {
     }
 }
 
+fn guard_operand(expr: &Expr, parameters: &BTreeSet<String>) -> bool {
+    match &expr.kind {
+        ExprKind::Integer(raw) => raw.replace('_', "").parse::<i64>().is_ok(),
+        ExprKind::Name(path) => {
+            matches!(path.segments.as_slice(), [name] if parameters.contains(name))
+        }
+        _ => false,
+    }
+}
+
+fn branch_initializer(expr: &Expr) -> bool {
+    matches!(&expr.kind, ExprKind::Call { callee, .. }
+        if matches!(&callee.kind, ExprKind::Name(path) if matches!(path.segments.as_slice(), [namespace, op]
+            if namespace == "memory" && matches!(op.as_str(), "owned_bytes" | "alloc_bytes" | "move" | "promote_owned" | "copy_to_owned" | "borrow" | "borrow_mut"))))
+}
+
 impl Lowerer {
     fn report(&mut self, message: impl Into<String>, span: Span) {
         self.diagnostics
@@ -439,8 +461,22 @@ impl Lowerer {
     fn block(&mut self, statements: &[Stmt]) {
         for stmt in statements {
             match &stmt.kind {
-                StmtKind::If { .. } => {
-                    self.report("conditional memory programs are unsupported", stmt.span)
+                StmtKind::If {
+                    condition,
+                    then_body,
+                    else_body,
+                } => {
+                    self.guard(condition);
+                    let (then_ops, then_closed, then_pending) = self.arm(then_body, stmt.span);
+                    let (else_ops, else_closed, else_pending) = self.arm(else_body, stmt.span);
+                    self.closed_regions
+                        .extend(then_closed.into_iter().chain(else_closed));
+                    self.pending_locals = then_pending.union(&else_pending).cloned().collect();
+                    self.ops.push(Op::If {
+                        then_ops,
+                        else_ops,
+                        span: stmt.span,
+                    });
                 }
                 StmtKind::NoGc { budget, body } => {
                     self.bytes(budget, "budget");
@@ -465,8 +501,21 @@ impl Lowerer {
                         self.report(format!("duplicate memory binding `{name}`"), stmt.span);
                         continue;
                     }
-                    if let Some(kind) = self.call(value, Some(name)) {
+                    if self.branch_depth > 0 && !branch_initializer(value) {
+                        self.report("conditional memory declarations require byte temporaries or borrow tokens", stmt.span);
+                        continue;
+                    }
+                    let internal = if self.branch_depth > 0 {
+                        format!("$arm{}:{name}", stmt.span.start)
+                    } else {
+                        name.clone()
+                    };
+                    if let Some(kind) = self.call(value, Some(&internal)) {
                         self.bindings.insert(name.clone(), kind);
+                        self.names.insert(name.clone(), internal.clone());
+                        if self.branch_depth > 0 {
+                            self.pending_locals.insert(internal);
+                        }
                     }
                 }
                 StmtKind::Expr(expr) => {
@@ -491,6 +540,55 @@ impl Lowerer {
                 }
             }
         }
+    }
+
+    fn guard(&mut self, expr: &Expr) {
+        let valid = match &expr.kind {
+            ExprKind::Boolean(_) => true,
+            ExprKind::Call { callee, arguments } => {
+                matches!(&callee.kind, ExprKind::Name(path) if matches!(path.segments.as_slice(), [name] if matches!(name.as_str(), "$cgx2_cmp_eq" | "$cgx2_cmp_ne" | "$cgx2_cmp_lt" | "$cgx2_cmp_le" | "$cgx2_cmp_gt" | "$cgx2_cmp_ge")))
+                    && arguments.len() == 2
+                    && arguments.iter().all(|arg| {
+                        arg.name.is_none() && guard_operand(&arg.value, &self.scalar_parameters)
+                    })
+            }
+            _ => false,
+        };
+        if !valid {
+            self.argument_error("conditional memory guard requires Bool literal or one comparison of two i64 literals/parameters", expr.span);
+        }
+    }
+
+    // Each arm gets a separate source-name environment and internal names. Only
+    // outer ownership facts flow through Op::If; locals must finish explicitly.
+    fn arm(&mut self, body: &[Stmt], span: Span) -> (Vec<Op>, BTreeSet<String>, BTreeSet<String>) {
+        let bindings = self.bindings.clone();
+        let names = self.names.clone();
+        let objects = self.objects.clone();
+        let references = self.references.clone();
+        let closed = self.closed_regions.clone();
+        let pending = self.pending_locals.clone();
+        let parent_ops = std::mem::take(&mut self.ops);
+        self.branch_depth += 1;
+        self.block(body);
+        self.branch_depth -= 1;
+        let leaked: Vec<_> = self.pending_locals.difference(&pending).cloned().collect();
+        for name in leaked {
+            self.report(format!("conditional memory local `{name}` requires explicit drop/end_borrow on every path"), span);
+        }
+        let inherited_pending = self
+            .pending_locals
+            .intersection(&pending)
+            .cloned()
+            .collect();
+        let ops = std::mem::replace(&mut self.ops, parent_ops);
+        let arm_closed = std::mem::replace(&mut self.closed_regions, closed);
+        self.bindings = bindings;
+        self.names = names;
+        self.objects = objects;
+        self.references = references;
+        self.pending_locals = pending;
+        (ops, arm_closed, inherited_pending)
     }
 
     fn call(&mut self, expr: &Expr, destination: Option<&str>) -> Option<Kind> {
@@ -554,6 +652,7 @@ impl Lowerer {
             "move" if destination.is_some() => {
                 let args = self.positional(arguments, 1, expr.span)?;
                 let from = self.reference(args[0], &[Kind::Owned])?;
+                self.pending_locals.remove(&from);
                 self.ops.push(Op::Move {
                     from,
                     to: destination.unwrap_or_default().into(),
@@ -565,6 +664,7 @@ impl Lowerer {
                 let args = self.positional(arguments, 2, expr.span)?;
                 let region = self.reference(args[0], &[Kind::Region])?;
                 let from = self.reference(args[1], &[Kind::Owned])?;
+                self.pending_locals.remove(&from);
                 self.ops.push(Op::Promote {
                     from,
                     to: destination.unwrap_or_default().into(),
@@ -685,6 +785,9 @@ impl Lowerer {
                     _ => &[Kind::Owned, Kind::Managed, Kind::Object][..],
                 };
                 let name = self.reference(args[0], expected)?;
+                if operation == "drop" || operation == "end_borrow" {
+                    self.pending_locals.remove(&name);
+                }
                 if operation == "close" {
                     self.closed_regions.insert(name.clone());
                 }
@@ -799,7 +902,7 @@ impl Lowerer {
                 .get(name)
                 .is_some_and(|kind| allowed.contains(kind))
             {
-                return Some(name.clone());
+                return Some(self.names.get(name).unwrap_or(name).clone());
             }
         }
         self.argument_error(

@@ -88,6 +88,44 @@ fn scalar_expr(expr: &Expr, parameters: &BTreeMap<&str, usize>) -> Result<String
         )),
     }
 }
+fn guard_expr(expr: &Expr, parameters: &BTreeMap<&str, usize>) -> Result<String, EmitDiagnostic> {
+    if let ExprKind::Boolean(value) = &expr.kind {
+        return Ok(value.to_string());
+    }
+    let ExprKind::Call { callee, arguments } = &expr.kind else {
+        return Err(unsupported("invalid memory guard", expr.span));
+    };
+    let ExprKind::Name(path) = &callee.kind else {
+        return Err(unsupported("invalid memory guard", expr.span));
+    };
+    let op = match path.segments.as_slice() {
+        [name] => match name.as_str() {
+            "$cgx2_cmp_eq" => "==",
+            "$cgx2_cmp_ne" => "!=",
+            "$cgx2_cmp_lt" => "<",
+            "$cgx2_cmp_le" => "<=",
+            "$cgx2_cmp_gt" => ">",
+            "$cgx2_cmp_ge" => ">=",
+            _ => return Err(unsupported("invalid memory comparison", expr.span)),
+        },
+        _ => return Err(unsupported("invalid memory comparison", expr.span)),
+    };
+    let args = positional(arguments, 2, expr.span)?;
+    Ok(format!(
+        "({} {op} {})",
+        scalar_expr(args[0], parameters)?,
+        scalar_expr(args[1], parameters)?
+    ))
+}
+
+fn bound_name<'a>(
+    expr: &'a Expr,
+    names: &'a BTreeMap<String, String>,
+) -> Result<&'a str, EmitDiagnostic> {
+    let source = name(expr)?;
+    Ok(names.get(source).map_or(source, String::as_str))
+}
+
 fn size_expr(expr: &Expr, parameters: &BTreeMap<&str, usize>) -> Result<String, EmitDiagnostic> {
     if matches!(&expr.kind, ExprKind::Name(_)) {
         let scalar = scalar_expr(expr, parameters)?;
@@ -157,22 +195,54 @@ fn emit_block(
     indent: usize,
     functions: &BTreeMap<&str, (usize, usize)>,
     parameters: &BTreeMap<&str, usize>,
+    names: &mut BTreeMap<String, String>,
+    in_branch: bool,
 ) -> Result<(), EmitDiagnostic> {
     let pad = "    ".repeat(indent);
     for stmt in stmts {
         let span = format!("({}, {})", stmt.span.start, stmt.span.end);
         out.push_str(&format!("{pad}if let Err(message) = step(steps, {span}) {{ record_rollback(None, session, &bindings); return Err(message); }}\n"));
         match &stmt.kind {
-            StmtKind::If { .. } => {
-                return Err(unsupported(
-                    "conditional memory programs are unsupported",
-                    stmt.span,
-                ));
+            StmtKind::If {
+                condition,
+                then_body,
+                else_body,
+            } => {
+                let guard = guard_expr(condition, parameters)?;
+                out.push_str(&format!("{pad}{{\n{pad}    let cgx2_condition = {guard};\n{pad}    let cgx2_outer: HashSet<_> = bindings.keys().copied().collect();\n{pad}    let cgx2_branch_result = (|| -> Result<(), String> {{\n{pad}        if cgx2_condition {{\n"));
+                emit_block(
+                    then_body,
+                    out,
+                    indent + 3,
+                    functions,
+                    parameters,
+                    &mut names.clone(),
+                    true,
+                )?;
+                out.push_str(&format!("{pad}        }} else {{\n"));
+                emit_block(
+                    else_body,
+                    out,
+                    indent + 3,
+                    functions,
+                    parameters,
+                    &mut names.clone(),
+                    true,
+                )?;
+                out.push_str(&format!("{pad}        }}\n{pad}        Ok(())\n{pad}    }})();\n{pad}    let cgx2_cleanup_error = cleanup_scope(session, &mut bindings, &cgx2_outer, {span});\n{pad}    cgx2_branch_result?;\n{pad}    if let Some(failure) = cgx2_cleanup_error {{ return Err(failure); }}\n{pad}}}\n"));
             }
             StmtKind::NoGc { budget, body } => {
                 let budget = size(budget)?;
                 out.push_str(&format!("{pad}{{\n{pad}    let mut cgx2_guard = session.no_gc({budget});\n{pad}    let session = &mut *cgx2_guard;\n"));
-                emit_block(body, out, indent + 1, functions, parameters)?;
+                emit_block(
+                    body,
+                    out,
+                    indent + 1,
+                    functions,
+                    parameters,
+                    names,
+                    in_branch,
+                )?;
                 out.push_str(&format!("{pad}}}\n"));
             }
             StmtKind::Let {
@@ -182,7 +252,13 @@ fn emit_block(
                 value,
             } => {
                 let (op, args) = call(value)?;
-                let dest = quote_rust(dest);
+                let internal = if in_branch {
+                    format!("$arm{}:{dest}", stmt.span.start)
+                } else {
+                    dest.clone()
+                };
+                names.insert(dest.clone(), internal.clone());
+                let dest = quote_rust(&internal);
                 let statement = match op {
                     "region" => {
                         let mode = args.iter().find(|arg| arg.name.as_deref() == Some("mode"));
@@ -222,19 +298,19 @@ fn emit_block(
                     }
                     "move" => format!(
                         "move_owned(&mut bindings, {dest}, {}, {span})?;",
-                        quote_rust(name(positional(args, 1, value.span)?[0])?)
+                        quote_rust(bound_name(positional(args, 1, value.span)?[0], names)?)
                     ),
                     "promote_owned" => {
                         let args = positional(args, 2, value.span)?;
                         format!(
                             "promote(session, &mut bindings, {dest}, {}, {}, {span})?;",
-                            quote_rust(name(args[0])?),
-                            quote_rust(name(args[1])?)
+                            quote_rust(bound_name(args[0], names)?),
+                            quote_rust(bound_name(args[1], names)?)
                         )
                     }
                     "copy_to_owned" => format!(
                         "copy_owned(session, &mut bindings, {dest}, {}, {span})?;",
-                        quote_rust(name(positional(args, 1, value.span)?[0])?)
+                        quote_rust(bound_name(positional(args, 1, value.span)?[0], names)?)
                     ),
                     "alloc_bytes" => {
                         let args = positional(args, 2, value.span)?;
@@ -245,7 +321,7 @@ fn emit_block(
                         };
                         format!(
                             "alloc(session, &mut bindings, {dest}, {}, {}, {failure_span})?;",
-                            quote_rust(name(args[0])?),
+                            quote_rust(bound_name(args[0], names)?),
                             size_expr(args[1], parameters)?
                         )
                     }
@@ -253,7 +329,7 @@ fn emit_block(
                         let args = positional(args, 3, value.span)?;
                         format!(
                             "alloc_object(session, &mut bindings, {dest}, {}, {}, {}, {span})?;",
-                            quote_rust(name(args[0])?),
+                            quote_rust(bound_name(args[0], names)?),
                             size(args[1])?,
                             size(args[2])?
                         )
@@ -262,13 +338,13 @@ fn emit_block(
                         let args = positional(args, 2, value.span)?;
                         format!(
                             "reference(session, &mut bindings, {dest}, {}, {}, {span})?;",
-                            quote_rust(name(args[0])?),
+                            quote_rust(bound_name(args[0], names)?),
                             size(args[1])?
                         )
                     }
                     "borrow" | "borrow_mut" => format!(
                         "borrow(&mut bindings, {dest}, {}, {span})?;",
-                        quote_rust(name(positional(args, 1, value.span)?[0])?)
+                        quote_rust(bound_name(positional(args, 1, value.span)?[0], names)?)
                     ),
                     _ => {
                         return Err(unsupported(
@@ -311,17 +387,17 @@ fn emit_block(
                 let statement = if let ExprKind::Name(_) = &expr.kind {
                     format!(
                         "use_value(session, &bindings, {}, {span})?;",
-                        quote_rust(name(expr)?)
+                        quote_rust(bound_name(expr, names)?)
                     )
                 } else {
                     let (op, args) = call(expr)?;
                     if op == "set_reference" || op == "clear_reference" {
                         let args =
                             positional(args, if op == "set_reference" { 3 } else { 2 }, expr.span)?;
-                        let owner = quote_rust(name(args[0])?);
+                        let owner = quote_rust(bound_name(args[0], names)?);
                         let index = size(args[1])?;
                         let target = if op == "set_reference" {
-                            format!("Some({})", quote_rust(name(args[2])?))
+                            format!("Some({})", quote_rust(bound_name(args[2], names)?))
                         } else {
                             "None".to_owned()
                         };
@@ -330,7 +406,7 @@ fn emit_block(
                         )
                     } else {
                         let args = positional(args, 1, expr.span)?;
-                        let operand = quote_rust(name(args[0])?);
+                        let operand = quote_rust(bound_name(args[0], names)?);
                         match op {
                             "use" => format!("use_value(session, &bindings, {operand}, {span})?;"),
                             "drop" => {
@@ -405,8 +481,16 @@ pub(crate) fn emit_memory_rust(
             .enumerate()
             .map(|(index, parameter)| (parameter.name.as_str(), index))
             .collect();
-        emit_block(&function.body, &mut out, 2, &functions, &parameters)
-            .map_err(|error| vec![error])?;
+        emit_block(
+            &function.body,
+            &mut out,
+            2,
+            &functions,
+            &parameters,
+            &mut BTreeMap::new(),
+            false,
+        )
+        .map_err(|error| vec![error])?;
         out.push_str("        Ok(())\n    })();\n    let mut cleanup_error = None;\n    for value in bindings.into_values() {\n        if let Binding::Managed(handle) = value {\n            if let Err(failure) = session.unroot(handle) {\n                CGX2_CLEANUP_ERRORS.with(|value| value.borrow_mut().push(format!(\"{failure:?}\")));\n                cleanup_error.get_or_insert_with(|| runtime(failure, call_span));\n            }\n        }\n    }\n    result?;\n    if let Some(failure) = cleanup_error { return Err(failure); }\n    Ok(())\n}\n");
     }
     out.push_str("\nfn main() {\n    let report_path = match cgx2_report_path() {\n        Ok(path) => path,\n        Err(message) => { eprintln!(\"{message}\"); std::process::exit(1); }\n    };\n    CGX2_OBSERVE.with(|value| value.set(report_path.is_some()));\n    let mut session = Session::new();\n    #[cfg(feature = \"fault-injection\")]\n    session.inject_host_failure_at_reserve(option_env!(\"CGX2_TEST_FAIL_RESERVE\").expect(\"test fault index\").parse().expect(\"valid test fault index\"));\n    let mut bindings: HashMap<&'static str, Binding> = HashMap::new();\n    let mut steps = 0;\n    let result = (|| -> Result<(), String> {\n        let session = &mut session;\n        let steps = &mut steps;\n");
@@ -417,6 +501,8 @@ pub(crate) fn emit_memory_rust(
             2,
             &functions,
             &BTreeMap::new(),
+            &mut BTreeMap::new(),
+            false,
         )
         .map_err(|error| vec![error])?;
     } else {

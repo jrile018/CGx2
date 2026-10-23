@@ -1,0 +1,15 @@
+let r = memory.region(mode: manual, limit: 512)
+let parent = memory.alloc_object(r, 1, 1)
+let child = memory.alloc_object(r, 1, 0)
+if true:
+    memory.set_reference(parent, 0, child)
+    memory.drop(child)
+    let temp = memory.alloc_bytes(r, 1)
+    no_gc(budget: 0):
+        let failure = memory.owned_bytes(1)
+        memory.drop(failure)
+    memory.drop(temp)
+else:
+    memory.drop(child)
+memory.drop(parent)
+memory.close(r)

@@ -1,0 +1,10 @@
+let r = memory.region(mode: auto, limit: 1048641)
+let dead = memory.alloc_bytes(r, 1048512)
+memory.drop(dead)
+if true:
+    let temp = memory.alloc_bytes(r, 1)
+    memory.drop(temp)
+else:
+    let temp = memory.owned_bytes(0)
+    memory.drop(temp)
+memory.close(r)

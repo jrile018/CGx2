@@ -55,3 +55,7 @@ Wave 25 package emission supports explicitly public scalar records with complete
 module-qualified nominal types and collision-safe symbols. Same-shaped records
 from different modules remain distinct. See the
 [public-record profile and evidence](../cgx2-package/docs/wave25-public-record-apis.md).
+
+Conditional memory lowering evaluates one bounded guard and emits one selected
+arm with distinct internal local names and explicit unwind cleanup. See the
+[conditional memory profile](../cgx2-sema/CONDITIONAL-MEMORY.md).

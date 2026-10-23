@@ -1,0 +1,21 @@
+let r = memory.region(mode: manual, limit: 512)
+let parent = memory.alloc_object(r, 1, 1)
+let child = memory.alloc_object(r, 1, 0)
+memory.set_reference(parent, 0, child)
+let saved = memory.reference(parent, 0)
+if true:
+    let temp = memory.alloc_bytes(r, 1)
+    memory.drop(temp)
+    memory.set_reference(parent, 0, child)
+else:
+    memory.clear_reference(parent, 0)
+memory.drop(child)
+memory.collect(r)
+memory.use_reference(saved)
+if 1 == 1:
+    memory.clear_reference(parent, 0)
+else:
+    memory.clear_reference(parent, 0)
+memory.collect(r)
+memory.drop(parent)
+memory.close(r)

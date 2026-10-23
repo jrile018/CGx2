@@ -1,0 +1,24 @@
+fn allocate(size: i64) -> Unit effects(ManagedAlloc, Mutate):
+    let r = memory.region(mode: manual, limit: 1024)
+    if size > 0:
+        let temp = memory.alloc_bytes(r, 8)
+        let token = memory.borrow(temp)
+        no_gc(budget: 40):
+            if false:
+                let failure = memory.owned_bytes(0)
+                memory.drop(failure)
+            else:
+                let failure = memory.owned_bytes(size)
+                memory.drop(failure)
+        memory.end_borrow(token)
+        memory.drop(temp)
+    else:
+        let temp = memory.owned_bytes(0)
+        memory.drop(temp)
+    memory.close(r)
+fn main() -> Unit effects(ManagedAlloc, Mutate):
+    no_gc(budget: 256):
+        if true:
+            allocate(9)
+        else:
+            allocate(0)

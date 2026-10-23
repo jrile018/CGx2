@@ -34,17 +34,3 @@ fn both_branches_are_checked_and_scopes_do_not_escape() {
         assert!(errors.iter().any(|e| e.code == code), "{errors:?}");
     }
 }
-
-#[test]
-fn conditional_memory_is_rejected_even_nested_or_inactive() {
-    for source in [
-        "if false:\n    let r = memory.region(mode: manual, limit: 16)\nelse:\n    0\n",
-        "let r = memory.region(mode: manual, limit: 16)\nno_gc(budget: 8):\n    if true:\n        1\n    else:\n        2\n",
-        "fn f() -> Bool:\n    if false:\n        memory.collect(r)\n    else:\n        return true\n",
-    ] {
-        let error = check(source).unwrap_err().remove(0);
-        assert_eq!(error.code, "CGM001");
-        assert!(error.message.contains("conditional memory"));
-        assert!(source[error.span.start..error.span.end].starts_with("if"));
-    }
-}

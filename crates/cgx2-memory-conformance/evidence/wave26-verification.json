@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "base_commit": "a574cea65d801c284e86c057bbab3fdd7ebb4549",
+  "date": "2026-10-23",
+  "toolchain": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "worktree": "/home/john-riley/.codex/worktrees/bb53/lang",
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/bb53/lang/target/wave26",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/bb53/lang/target/wave26-tmp",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "runs": [
+    {
+      "command": "cargo test --offline -p cgx2-ownership -p cgx2-sema -p cgx2-cli -p cgx2-emit-rust -p cgx2c -p cgx2-memory-conformance -p cgx2-runtime --all-features",
+      "exit_code": 0,
+      "status": "passed",
+      "local_log": "/home/john-riley/.codex/worktrees/bb53/lang/target/wave26/owned-all-features-debug.log",
+      "log_sha256": "842a6d7f8badde4ce117b2dc0f0d8b32ee221b4d97a2c0af0e13b4a81a01f2c3",
+      "test_executions": 87,
+      "passed": 340,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "command": "cargo test --offline --release -p cgx2-ownership -p cgx2-sema -p cgx2-cli -p cgx2-emit-rust -p cgx2c -p cgx2-memory-conformance -p cgx2-runtime --all-features",
+      "exit_code": 0,
+      "status": "passed",
+      "local_log": "/home/john-riley/.codex/worktrees/bb53/lang/target/wave26/owned-all-features-release.log",
+      "log_sha256": "aa0a6e51e860dcfb5d2f05568de2aa70e97a9c4c40f3719b259c4f97dfed8e52",
+      "test_executions": 87,
+      "passed": 340,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "command": "cargo clippy --offline -p cgx2-ownership -p cgx2-sema -p cgx2-cli -p cgx2-emit-rust -p cgx2c -p cgx2-memory-conformance -p cgx2-runtime --all-targets --all-features --no-deps -- -D warnings",
+      "exit_code": 0,
+      "status": "passed",
+      "local_log": "/home/john-riley/.codex/worktrees/bb53/lang/target/wave26/owned-clippy.log",
+      "log_sha256": "85780aab59f21753c3b2a5b35933b913db4e5e6eede97c18f0c4df8d4d43f9c0"
+    },
+    {
+      "command": "cargo test --offline -p cgx2-emit-python -p cgx2-notebook-kernel -p cgx2-verify-core -p cgx2-syntax",
+      "exit_code": 0,
+      "status": "passed",
+      "local_log": "/home/john-riley/.codex/worktrees/bb53/lang/target/wave26/consumer-regressions.log",
+      "log_sha256": "c4c18c247c84f97660928fb0b567c862495918950153c5024e7580a354af2c42",
+      "test_executions": 28,
+      "passed": 172,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "command": "sh crates/cgx2c/scripts/verify_conditional_consumers.sh",
+      "exit_code": 0,
+      "status": "passed",
+      "local_log": "/home/john-riley/.codex/worktrees/bb53/lang/target/wave26/conditional-consumers.log",
+      "log_sha256": "77b18d8c003ce525509818f89a8dc4eb9f67940da1b1dabf9d7a32aaf6e12f34"
+    },
+    {
+      "command": "python3 crates/cgx2c/scripts/verify_conditional_asan.py",
+      "exit_code": 0,
+      "status": "passed",
+      "local_log": "/home/john-riley/.codex/worktrees/bb53/lang/target/wave26/conditional-asan.log",
+      "log_sha256": "842837e323e22429e1a2e789d1b430a4ab0fc2a43baa42f5b805ebe01609547e",
+      "generated_runs": 22,
+      "leak_detection": false,
+      "runtime_and_generated_code_instrumented": true
+    },
+    {
+      "command": "ASAN_OPTIONS=detect_leaks=1 target/wave26/conditional-asan/debug/conditional_memory_success-0",
+      "exit_code": 1,
+      "status": "host-blocked",
+      "local_log": "/home/john-riley/.codex/worktrees/bb53/lang/target/wave26/conditional-lsan.log",
+      "log_sha256": "0a815e3a1ae6ef8d4d0aa7db0fc7908522bab5eac1afbb87d41e7161688f3fd2",
+      "reason": "LeakSanitizer reports ptrace host incompatibility"
+    }
+  ],
+  "other_checks": {
+    "owned_cargo_fmt_check": {
+      "exit_code": 0
+    },
+    "consumer_probe_rustfmt_check": {
+      "exit_code": 0
+    },
+    "git_diff_check": {
+      "exit_code": 0
+    },
+    "independent_source_accounting_runs": 64
+  },
+  "limitations": [
+    "Finite implementation corpus; not a memory-safety proof",
+    "LeakSanitizer host-blocked; leak freedom not established",
+    "ASan excludes standard library, foreign runtimes, system allocator internals and compiler process",
+    "Reserve injection is simulated, not physical heap exhaustion",
+    "Session IDs and pause durations/buckets are not compared across runs",
+    "No live solver, LLM, delegated cgroup or broad release-gate claim"
+  ]
+}

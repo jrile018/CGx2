@@ -60,6 +60,7 @@ fn graph_snapshot(session: &Session, bindings: &HashMap<&'static str, Binding>) 
                 match session.reference(*handle, index) {
                     Ok(reference) if index < 1024 => references.push(reference),
                     Ok(_) => return None,
+                    Err(MemoryError::NotObject) if index == 0 => break,
                     Err(MemoryError::InvalidReferenceSlot) => break,
                     Err(_) => return None,
                 }
@@ -82,6 +83,22 @@ fn record_rollback(before: Option<Vec<(&'static str, Handle, bool, Vec<Option<Ha
             value.set(before.zip(graph_snapshot(session, bindings)).map(|(a, b)| a == b));
         }
     });
+}
+
+// Arm-local roots/owned bytes are removed on both normal and failed exit.
+// The failing statement captured its census before this cleanup begins.
+fn cleanup_scope(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, outer: &HashSet<&'static str>, span: (usize, usize)) -> Option<String> {
+    let locals: Vec<_> = bindings.keys().copied().filter(|name| !outer.contains(name)).collect();
+    let mut error = None;
+    for name in locals {
+        if let Some(Binding::Managed(handle)) = bindings.remove(name) {
+            if let Err(failure) = session.unroot(handle) {
+                CGX2_CLEANUP_ERRORS.with(|value| value.borrow_mut().push(format!("{failure:?}")));
+                error.get_or_insert_with(|| runtime(failure, span));
+            }
+        }
+    }
+    error
 }
 
 fn allocation(error: AllocationError, span: (usize, usize)) -> String {

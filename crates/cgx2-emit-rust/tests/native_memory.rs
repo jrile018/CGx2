@@ -133,3 +133,48 @@ fn invalid_borrow_and_nonliteral_size_are_rejected_before_native_output() {
         assert!(run_checked_source(source, &[]).is_err());
     }
 }
+
+#[test]
+fn conditional_scoped_names_and_nested_parameter_calls_match_cli() {
+    for source in [
+        include_str!("../../cgx2c/tests/fixtures/conditional_memory_success.cg"),
+        include_str!("../../cgx2c/tests/fixtures/conditional_memory_functions.cg"),
+    ] {
+        compare(source, None);
+    }
+}
+
+#[test]
+fn all_parameter_comparisons_select_only_the_budgeted_allocation() {
+    let mut source = String::new();
+    let mut calls = String::new();
+    let mut index = 0;
+    for (op, a, b, truth) in [
+        ("==", 1, 1, true),
+        ("!=", 1, 1, false),
+        ("<", 1, 2, true),
+        ("<=", 2, 1, false),
+        (">", 2, 1, true),
+        (">=", 1, 2, false),
+    ] {
+        for (a, b, truth) in [
+            (a, b, truth),
+            (
+                b,
+                a,
+                if matches!(op, "==" | "!=") {
+                    truth
+                } else {
+                    !truth
+                },
+            ),
+        ] {
+            source.push_str(&format!("fn choose_{index}(a: i64, b: i64) -> Unit effects(ManagedAlloc, Mutate):\n    no_gc(budget: 40):\n        if a {op} b:\n            let temp = memory.owned_bytes({})\n            memory.drop(temp)\n        else:\n            let temp = memory.owned_bytes({})\n            memory.drop(temp)\n", if truth { 8 } else { 9 }, if truth { 9 } else { 8 }));
+            calls.push_str(&format!("    choose_{index}({a}, {b})\n"));
+            index += 1;
+        }
+    }
+    source.push_str("fn main() -> Unit effects(ManagedAlloc, Mutate):\n");
+    source.push_str(&calls);
+    compare(&source, None);
+}

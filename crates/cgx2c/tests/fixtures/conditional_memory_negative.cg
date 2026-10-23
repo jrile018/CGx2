@@ -1,0 +1,13 @@
+fn choose(size: i64) -> Unit effects(ManagedAlloc, Mutate):
+    let r = memory.region(mode: manual, limit: 256)
+    if size < 0:
+        let temp = memory.alloc_bytes(r, 1)
+        let failure = memory.owned_bytes(size)
+        memory.drop(failure)
+        memory.drop(temp)
+    else:
+        let temp = memory.owned_bytes(999999)
+        memory.drop(temp)
+    memory.close(r)
+fn main() -> Unit effects(ManagedAlloc, Mutate):
+    choose(0 - 1)

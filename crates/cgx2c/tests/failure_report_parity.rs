@@ -93,6 +93,14 @@ fn semantic_json(json: &str) -> (Vec<Vec<u64>>, Vec<u64>) {
                 ] {
                     fields.push(number(row, key));
                 }
+                let automatic = row.contains("\"mode\":\"auto\"");
+                fields.push(u64::from(automatic));
+                fields.push(if automatic {
+                    number(row, "trigger_bytes")
+                } else {
+                    u64::MAX
+                });
+                fields.push(number(row, "sample_count"));
                 fields
             })
             .collect()
@@ -169,6 +177,12 @@ fn compare_failure(
         );
         assert!(totals[4] > 0, "prepared region must be collected");
         assert_eq!(operation.runtime_root_registrations, Some(2));
+    }
+    if name == "conditional_memory_auto.cg" {
+        assert_eq!(operation.memory.totals.collection_count, 1);
+        assert_eq!(operation.memory.totals.total_collected_bytes, 1 << 20);
+        assert_eq!(operation.memory.totals.committed_bytes, 0);
+        assert_eq!(operation.memory.totals.allocation_failures, 1);
     }
     let interpreted = failure.report.expect("partial report").to_json();
     for release in [false, true] {
@@ -463,4 +477,124 @@ fn fault_option_is_explicit_and_absent_from_ordinary_release_build() {
         .unwrap();
     assert!(!rejected.status.success());
     assert!(!package_binary.exists());
+}
+
+#[test]
+fn conditional_byte_scope_failures_and_injected_reserves_match_native_profiles() {
+    // A failed selected allocation can follow the automatic safepoint. It
+    // reclaims the old unrooted buffer but commits no new object.
+    compare_failure(
+        "conditional_memory_auto.cg",
+        "CGR013",
+        "HostAllocation",
+        Some(4),
+        0,
+        0,
+    );
+    compare_failure(
+        "conditional_memory_region_failure.cg",
+        "CGR013",
+        "RegionLimit",
+        None,
+        2,
+        0,
+    );
+    compare_failure(
+        "conditional_memory_budget_failure.cg",
+        "CGR013",
+        "BudgetExceeded",
+        None,
+        1,
+        0,
+    );
+    compare_failure(
+        "conditional_memory_negative.cg",
+        "CGR013",
+        "negative",
+        None,
+        1,
+        0,
+    );
+    compare_failure(
+        "conditional_memory_graph_failure.cg",
+        "CGR013",
+        "BudgetExceeded",
+        None,
+        2,
+        1,
+    );
+    // RegionTable, ManagedBytes, SlotTable, then the selected arm's first
+    // ManagedBytes reserve: one outer root must survive until final unwind.
+    compare_failure(
+        "conditional_memory_region_failure.cg",
+        "CGR013",
+        "HostAllocation",
+        Some(4),
+        1,
+        0,
+    );
+    // The owned reserve follows two successfully rooted byte allocations.
+    compare_failure(
+        "conditional_memory_region_failure.cg",
+        "CGR013",
+        "HostAllocation",
+        Some(5),
+        2,
+        0,
+    );
+}
+
+#[test]
+fn conditional_selected_allocation_and_semantic_region_reports_match_native_profiles() {
+    for name in [
+        "conditional_memory_success.cg",
+        "conditional_memory_functions.cg",
+        "conditional_memory_graph.cg",
+        "conditional_memory_auto.cg",
+    ] {
+        let case = Scratch::new();
+        let source = fixture(name);
+        let text = fs::read_to_string(&source).unwrap();
+        let (_, Some(report)) = run_checked_source_with_failure(&text, &[])
+            .unwrap_or_else(|errors| panic!("{}", errors[0].error.message))
+        else {
+            panic!()
+        };
+        assert_eq!(
+            report.totals.collection_count,
+            match name {
+                "conditional_memory_graph.cg" => 2,
+                "conditional_memory_auto.cg" => 1,
+                _ => 0,
+            }
+        );
+        assert_eq!(report.totals.live_bytes, 0);
+        assert_eq!(report.totals.committed_bytes, 0);
+        for release in [false, true] {
+            let binary = case.path(&format!("{name}-{release}"));
+            let built = build(&source, &binary, release, None);
+            assert!(
+                built.status.success(),
+                "{}",
+                String::from_utf8_lossy(&built.stderr)
+            );
+            let report_path = case.path(&format!("{name}-{release}.json"));
+            let output = Command::new(binary)
+                .env("CGX2_MEMORY_REPORT", &report_path)
+                .output()
+                .unwrap();
+            assert!(
+                output.status.success(),
+                "{}",
+                String::from_utf8_lossy(&output.stderr)
+            );
+            assert!(output.stdout.is_empty() && output.stderr.is_empty());
+            let native = fs::read_to_string(report_path).unwrap();
+            assert_eq!(
+                semantic_json(&native),
+                semantic_json(&report.to_json()),
+                "{name} release={release}"
+            );
+        }
+    }
 }

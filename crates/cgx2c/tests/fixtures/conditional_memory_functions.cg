@@ -1,0 +1,39 @@
+fn choose(n: i64, size: i64) -> Unit effects(ManagedAlloc, Mutate):
+    let r = memory.region(mode: manual, limit: 512)
+    let outer = memory.alloc_bytes(r, 1)
+    if n == 0:
+        let temp = memory.owned_bytes(size)
+        let moved = memory.move(temp)
+        let managed = memory.promote_owned(r, moved)
+        let token = memory.borrow(managed)
+        memory.end_borrow(token)
+        memory.drop(managed)
+    else:
+        let copy = memory.copy_to_owned(outer)
+        memory.drop(copy)
+        if n > 1:
+            let temp = memory.borrow_mut(outer)
+            memory.end_borrow(temp)
+        else:
+            let temp = memory.borrow(outer)
+            memory.end_borrow(temp)
+    memory.use(outer)
+    memory.drop(outer)
+    if n != 0:
+        memory.close(r)
+    else:
+        memory.close(r)
+fn forward(n: i64) -> Unit effects(ManagedAlloc, Mutate):
+    if n <= 2:
+        choose(n, 8)
+    else:
+        choose(n, 99999)
+fn main() -> Unit effects(ManagedAlloc, Mutate):
+    no_gc(budget: 1024):
+        if 0 < 1:
+            forward(0)
+            no_gc(budget: 512):
+                forward(1)
+                forward(2)
+        else:
+            forward(3)

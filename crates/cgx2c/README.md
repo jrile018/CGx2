@@ -78,3 +78,11 @@ The opt-in native report retains `native_report_schema_version: 1`, `failure_rep
 **Root observation limit:** Zero final `runtime_root_registrations` is necessary evidence of released registered roots, not a comprehensive memory-safety proof. Legacy source-observed root and edge counts alone cannot establish cleanup.
 
 The `tests/fixtures/reusable_memory_*.cg` files cover zero, negative, `i64::MAX`, region-limit, and `no_gc` budget cases. `tests/native_memory_reports.rs` and `tests/failure_report_parity.rs` compare interpreted and native debug/release memory counters, error codes, spans, and failure snapshots. On a 64-bit target `i64::MAX` fits `usize` and fails the region limit; narrower targets can fail signed-to-`usize` conversion first.
+
+## Bounded conditional memory
+
+The existing mandatory-`else` statements now support bounded memory guards,
+scoped byte temporaries and borrow tokens, conservative ownership joins, and
+selected-path interpreter/native execution. See the
+[conditional memory profile](../cgx2-sema/CONDITIONAL-MEMORY.md) for exact guard,
+lifetime, cleanup and target restrictions.

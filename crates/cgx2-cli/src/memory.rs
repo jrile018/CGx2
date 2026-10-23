@@ -111,6 +111,7 @@ fn graph_snapshot(session: &Session, bindings: &HashMap<String, Binding>) -> Opt
                 match session.reference(*handle, index) {
                     Ok(reference) if index < 1024 => references.push(reference),
                     Ok(_) => return None,
+                    Err(MemoryError::NotObject) if index == 0 => break,
                     Err(MemoryError::InvalidReferenceSlot) => break,
                     Err(_) => return None,
                 }
@@ -126,6 +127,11 @@ const AUTO_TRIGGER_BYTES: usize = 1 << 20;
 const STEP_LIMIT: usize = 1_000_000;
 
 enum Op {
+    If {
+        condition: Expr,
+        then_ops: Vec<SpannedOp>,
+        else_ops: Vec<SpannedOp>,
+    },
     Call {
         name: String,
         arguments: Vec<Expr>,
@@ -263,6 +269,33 @@ fn scalar(expr: &Expr, parameters: &HashMap<String, i64>) -> Result<i64, RunErro
         _ => Err(argument_error(expr.span)),
     }
 }
+fn condition(expr: &Expr, parameters: &HashMap<String, i64>) -> Result<bool, RunError> {
+    if let ExprKind::Boolean(value) = &expr.kind {
+        return Ok(*value);
+    }
+    let ExprKind::Call { callee, arguments } = &expr.kind else {
+        return Err(argument_error(expr.span));
+    };
+    let ExprKind::Name(path) = &callee.kind else {
+        return Err(argument_error(expr.span));
+    };
+    let args = positional(arguments, 2, expr.span)?;
+    let a = scalar(args[0], parameters)?;
+    let b = scalar(args[1], parameters)?;
+    match path.segments.as_slice() {
+        [op] => match op.as_str() {
+            "$cgx2_cmp_eq" => Ok(a == b),
+            "$cgx2_cmp_ne" => Ok(a != b),
+            "$cgx2_cmp_lt" => Ok(a < b),
+            "$cgx2_cmp_le" => Ok(a <= b),
+            "$cgx2_cmp_gt" => Ok(a > b),
+            "$cgx2_cmp_ge" => Ok(a >= b),
+            _ => Err(argument_error(expr.span)),
+        },
+        _ => Err(argument_error(expr.span)),
+    }
+}
+
 fn checked_size(expr: &Expr, parameters: &HashMap<String, i64>) -> Result<usize, RunError> {
     if let ExprKind::Name(path) = &expr.kind {
         if path.segments.len() == 1 {
@@ -294,15 +327,43 @@ fn positional(args: &[CallArg], count: usize, span: Span) -> Result<Vec<&Expr>, 
 }
 
 fn lower(statements: &[Stmt]) -> Result<Vec<SpannedOp>, RunError> {
-    statements.iter().map(lower_stmt).collect()
+    lower_scope(statements, &mut HashMap::new(), false)
 }
 
-fn lower_stmt(stmt: &Stmt) -> Result<SpannedOp, RunError> {
+fn lower_scope(
+    statements: &[Stmt],
+    names: &mut HashMap<String, String>,
+    in_branch: bool,
+) -> Result<Vec<SpannedOp>, RunError> {
+    statements
+        .iter()
+        .map(|stmt| lower_stmt(stmt, names, in_branch))
+        .collect()
+}
+
+fn scoped_name(expr: &Expr, names: &HashMap<String, String>) -> Result<String, RunError> {
+    let source = name(expr)?;
+    Ok(names.get(&source).unwrap_or(&source).clone())
+}
+
+fn lower_stmt(
+    stmt: &Stmt,
+    names: &mut HashMap<String, String>,
+    in_branch: bool,
+) -> Result<SpannedOp, RunError> {
     let op = match &stmt.kind {
-        StmtKind::If { .. } => return Err(unsupported(stmt.span)),
+        StmtKind::If {
+            condition,
+            then_body,
+            else_body,
+        } => Op::If {
+            condition: condition.clone(),
+            then_ops: lower_scope(then_body, &mut names.clone(), true)?,
+            else_ops: lower_scope(else_body, &mut names.clone(), true)?,
+        },
         StmtKind::NoGc { budget, body } => Op::NoGc {
             budget: bytes(budget)?,
-            body: lower(body)?,
+            body: lower_scope(body, names, in_branch)?,
         },
         StmtKind::Let {
             mutable: false,
@@ -310,6 +371,13 @@ fn lower_stmt(stmt: &Stmt) -> Result<SpannedOp, RunError> {
             annotation: None,
             value,
         } => {
+            let internal = if in_branch {
+                format!("$arm{}:{dest}", stmt.span.start)
+            } else {
+                dest.clone()
+            };
+            names.insert(dest.clone(), internal.clone());
+            let dest = &internal;
             let ExprKind::Call { callee, arguments } = &value.kind else {
                 return Err(unsupported(value.span));
             };
@@ -348,7 +416,7 @@ fn lower_stmt(stmt: &Stmt) -> Result<SpannedOp, RunError> {
                         .find(|a| a.name.as_deref() == Some("limit"))
                         .expect("counted limit")
                         .value;
-                    let mode = match name(mode_expr)?.as_str() {
+                    let mode = match scoped_name(mode_expr, names)?.as_str() {
                         "auto" => CollectionMode::Auto {
                             trigger_bytes: AUTO_TRIGGER_BYTES,
                         },
@@ -372,29 +440,29 @@ fn lower_stmt(stmt: &Stmt) -> Result<SpannedOp, RunError> {
                     let args = positional(arguments, 1, value.span)?;
                     Op::Move {
                         name: dest.clone(),
-                        from: name(args[0])?,
+                        from: scoped_name(args[0], names)?,
                     }
                 }
                 "promote_owned" => {
                     let args = positional(arguments, 2, value.span)?;
                     Op::Promote {
                         name: dest.clone(),
-                        region: name(args[0])?,
-                        from: name(args[1])?,
+                        region: scoped_name(args[0], names)?,
+                        from: scoped_name(args[1], names)?,
                     }
                 }
                 "copy_to_owned" => {
                     let args = positional(arguments, 1, value.span)?;
                     Op::CopyToOwned {
                         name: dest.clone(),
-                        from: name(args[0])?,
+                        from: scoped_name(args[0], names)?,
                     }
                 }
                 "alloc_bytes" => {
                     let args = positional(arguments, 2, value.span)?;
                     Op::Alloc {
                         name: dest.clone(),
-                        region: name(args[0])?,
+                        region: scoped_name(args[0], names)?,
                         size: args[1].clone(),
                     }
                 }
@@ -402,7 +470,7 @@ fn lower_stmt(stmt: &Stmt) -> Result<SpannedOp, RunError> {
                     let args = positional(arguments, 3, value.span)?;
                     Op::AllocObject {
                         name: dest.clone(),
-                        region: name(args[0])?,
+                        region: scoped_name(args[0], names)?,
                         payload: bytes(args[1])?,
                         slots: bytes(args[2])?,
                     }
@@ -411,7 +479,7 @@ fn lower_stmt(stmt: &Stmt) -> Result<SpannedOp, RunError> {
                     let args = positional(arguments, 2, value.span)?;
                     Op::Reference {
                         name: dest.clone(),
-                        owner: name(args[0])?,
+                        owner: scoped_name(args[0], names)?,
                         index: bytes(args[1])?,
                     }
                 }
@@ -419,14 +487,16 @@ fn lower_stmt(stmt: &Stmt) -> Result<SpannedOp, RunError> {
                     let args = positional(arguments, 1, value.span)?;
                     Op::Borrow {
                         name: dest.clone(),
-                        target: name(args[0])?,
+                        target: scoped_name(args[0], names)?,
                     }
                 }
                 _ => return Err(unsupported(value.span)),
             }
         }
         StmtKind::Expr(expr) => match &expr.kind {
-            ExprKind::Name(_) => Op::Use { name: name(expr)? },
+            ExprKind::Name(_) => Op::Use {
+                name: scoped_name(expr, names)?,
+            },
             ExprKind::Call { callee, arguments } => {
                 let ExprKind::Name(path) = &callee.kind else {
                     return Err(unsupported(callee.span));
@@ -451,10 +521,10 @@ fn lower_stmt(stmt: &Stmt) -> Result<SpannedOp, RunError> {
                     let args = positional(arguments, count, expr.span)?;
                     return Ok(SpannedOp {
                         op: Op::SetReference {
-                            owner: name(args[0])?,
+                            owner: scoped_name(args[0], names)?,
                             index: bytes(args[1])?,
                             target: if count == 3 {
-                                Some(name(args[2])?)
+                                Some(scoped_name(args[2], names)?)
                             } else {
                                 None
                             },
@@ -463,7 +533,7 @@ fn lower_stmt(stmt: &Stmt) -> Result<SpannedOp, RunError> {
                     });
                 }
                 let args = positional(arguments, 1, expr.span)?;
-                let operand = name(args[0])?;
+                let operand = scoped_name(args[0], names)?;
                 match operation.as_str() {
                     "use" => Op::Use { name: operand },
                     "drop" => Op::Drop { name: operand },
@@ -556,6 +626,47 @@ fn execute_with_functions(
             .flatten();
         let result = (|| -> Result<(), RunError> {
             match op {
+                Op::If {
+                    condition: guard,
+                    then_ops,
+                    else_ops,
+                } => {
+                    let selected = if condition(guard, context.scalars)? {
+                        then_ops
+                    } else {
+                        else_ops
+                    };
+                    let outer: HashSet<_> = bindings.keys().cloned().collect();
+                    let result = execute_with_functions(
+                        selected,
+                        session,
+                        bindings,
+                        steps,
+                        context,
+                        failure_state,
+                        observe_rollback,
+                    );
+                    // Inner execution records the failure census before these roots
+                    // are removed. Always restore the outer environment on unwind.
+                    let locals: Vec<_> = bindings
+                        .keys()
+                        .filter(|name| !outer.contains(*name))
+                        .cloned()
+                        .collect();
+                    let mut cleanup_error = None;
+                    for name in locals {
+                        if let Some(Binding::Managed(handle)) = bindings.remove(&name) {
+                            if let Err(failure) = session.unroot(handle) {
+                                failure_state.cleanup_errors.push(format!("{failure:?}"));
+                                cleanup_error.get_or_insert_with(|| runtime(failure, *span));
+                            }
+                        }
+                    }
+                    result?;
+                    if let Some(failure) = cleanup_error {
+                        return Err(failure);
+                    }
+                }
                 Op::Call { name, arguments } => {
                     let (parameters, body) = context.functions.get(name).ok_or_else(|| {
                         error(

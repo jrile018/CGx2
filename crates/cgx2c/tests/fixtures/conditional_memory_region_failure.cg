@@ -1,0 +1,15 @@
+let r = memory.region(mode: manual, limit: 256)
+let outer = memory.alloc_bytes(r, 1)
+if true:
+    let temp = memory.alloc_bytes(r, 1)
+    let owned = memory.owned_bytes(2)
+    let token = memory.borrow(temp)
+    let failure = memory.alloc_bytes(r, 99999)
+    memory.drop(failure)
+    memory.end_borrow(token)
+    memory.drop(owned)
+    memory.drop(temp)
+else:
+    memory.use(outer)
+memory.drop(outer)
+memory.close(r)

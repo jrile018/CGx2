@@ -1,0 +1,30 @@
+let r = memory.region(mode: manual, limit: 512)
+let x = memory.owned_bytes(2)
+let b = memory.borrow(x)
+if true:
+    let bytes = memory.alloc_bytes(r, 4)
+    let token = memory.borrow(bytes)
+    memory.use(bytes)
+    memory.end_borrow(token)
+    memory.drop(bytes)
+    if false:
+        let temp = memory.owned_bytes(99999)
+        memory.drop(temp)
+    else:
+        let temp = memory.owned_bytes(3)
+        memory.drop(temp)
+else:
+    let temp = memory.alloc_bytes(r, 99999)
+    memory.drop(temp)
+memory.end_borrow(b)
+let temp = memory.owned_bytes(5)
+memory.drop(temp)
+if false:
+    memory.collect(r)
+else:
+    memory.use(x)
+memory.drop(x)
+if 2 >= 1:
+    memory.close(r)
+else:
+    memory.close(r)
