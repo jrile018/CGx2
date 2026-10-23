@@ -48,3 +48,14 @@ fn record_field_count_indent_and_duplicate_are_diagnosed() {
         .iter()
         .any(|d| d.code == "CGS113"));
 }
+
+#[test]
+fn public_unicode_records_format_and_keep_utf8_spans() {
+    let source = "pub record Pöint:\n    self: i64\n    live: Bool\n";
+    let module = parse_module(source).unwrap();
+    assert!(module.records[0].public);
+    let span = module.records[0].span;
+    assert!(source[span.start..span.end].starts_with("pub record Pöint:"));
+    assert_eq!(format_module(&module), source);
+    assert_eq!(parse_module(&format_module(&module)).unwrap(), module);
+}

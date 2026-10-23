@@ -418,3 +418,68 @@ fn imported_list_signature_is_outside_scalar_profile() {
     );
     assert!(codes(&f).contains(&"CGT010"));
 }
+
+#[test]
+fn public_records_keep_defining_identity_and_visibility() {
+    let f = Fixture::new();
+    f.manifest("schema_version = 1\nname = \"demo\"\nentry = \"src/main.cg\"\nsources = [\"src/right.cg\", \"src/main.cg\", \"src/left.cg\"]\n");
+    f.write("src/left.cg", "module demo.left\npub record Point:\n    x: i64\npub fn identity(p: Point) -> Point:\n    p\n");
+    f.write("src/right.cg", "module demo.right\nimport demo.left\npub record Point:\n    x: i64\npub fn pass(p: demo.left.Point) -> demo.left.Point:\n    demo.left.identity(p)\n");
+    let good = "module demo.main\nimport demo.left\nimport demo.right\nfn main() -> i64:\n    let p = demo.right.pass(demo.left.Point(x: 4))\n    p.x\n";
+    f.write("src/main.cg", good);
+    let checked = cgx2_package::load_checked_package(f.root()).unwrap();
+    let right = checked
+        .modules()
+        .iter()
+        .find(|m| m.source() == Path::new("src/right.cg"))
+        .unwrap();
+    assert_eq!(
+        right.typed().functions["pass"].return_type.to_string(),
+        "demo.left.Point"
+    );
+    f.write(
+        "src/main.cg",
+        &good.replace("demo.left.Point(x: 4)", "demo.right.Point(x: 4)"),
+    );
+    assert!(codes(&f).contains(&"CGT003"));
+    f.write("src/main.cg", &good.replace("import demo.left\n", ""));
+    assert!(codes(&f).contains(&"CGT008"));
+    f.write("src/main.cg", good);
+    f.write(
+        "src/left.cg",
+        "module demo.left\nrecord Point:\n    x: i64\npub fn identity(p: Point) -> Point:\n    p\n",
+    );
+    assert!(codes(&f).contains(&"CGT022"));
+    f.write(
+        "src/left.cg",
+        "module demo.left\nrecord Point:\n    x: i64\n",
+    );
+    f.write("src/right.cg", "module demo.right\n");
+    f.write("src/main.cg", "module demo.main\nimport demo.left\nfn main() -> i64:\n    let p = demo.left.Point(x: 4)\n    p.x\n");
+    assert!(codes(&f).contains(&"CGT022"));
+    f.write("src/main.cg", "module demo.main\nimport demo.left\nfn consume(p: demo.left.Point) -> i64:\n    p.x\nfn main() -> i64:\n    0\n");
+    assert!(codes(&f).contains(&"CGT022"));
+}
+
+#[test]
+fn public_imported_record_construction_requires_direct_defining_imports() {
+    let f = Fixture::new();
+    f.manifest("schema_version = 1\nname = \"demo\"\nentry = \"src/main.cg\"\nsources = [\"src/right.cg\", \"src/main.cg\", \"src/left.cg\"]\n");
+    f.write(
+        "src/left.cg",
+        "module demo.left\npub record Point:\n    x: i64\n",
+    );
+    f.write("src/right.cg", "module demo.right\nimport demo.left\npub fn make() -> demo.left.Point effects() caps():\n    demo.left.Point(x: 7)\n");
+    let main = "module demo.main\nimport demo.right\nfn main() -> i64:\n    let p = demo.right.make()\n    p.x\n";
+    f.write("src/main.cg", main);
+    assert!(codes(&f).contains(&"CGT008"));
+    f.write(
+        "src/main.cg",
+        &main.replace("import demo.right", "import demo.left\nimport demo.right"),
+    );
+    cgx2_package::load_checked_package(f.root()).unwrap();
+    f.write("src/right.cg", "module demo.right\nimport demo.left\npub record Point:\n    x: i64\npub fn wrong() -> demo.left.Point:\n    Point(x: 7)\n");
+    assert!(codes(&f).contains(&"CGT003"));
+    f.write("src/right.cg", "module demo.right\nimport demo.left\npub fn bad() -> demo.left.Missing:\n    demo.left.Point(x: 7)\n");
+    assert!(codes(&f).contains(&"CGT002"));
+}

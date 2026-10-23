@@ -1,3 +1,4 @@
+use std::collections::BTreeMap;
 use std::{collections::HashMap, fmt};
 
 use crate::RunError;
@@ -94,6 +95,8 @@ struct Evaluator<'a> {
     args: &'a [String],
     steps: usize,
     depth: usize,
+    origins: BTreeMap<String, std::path::PathBuf>,
+    failure_file: Option<std::path::PathBuf>,
 }
 
 pub(crate) fn run_module(module: &Module, args: &[String]) -> Result<RunResult, RunError> {
@@ -119,6 +122,8 @@ pub(crate) fn run_module(module: &Module, args: &[String]) -> Result<RunResult, 
         args,
         steps: 0,
         depth: 0,
+        origins: BTreeMap::new(),
+        failure_file: None,
     };
     let value = if module.functions.is_empty() {
         let mut scope = Scope::new();
@@ -144,6 +149,34 @@ pub(crate) fn run_module(module: &Module, args: &[String]) -> Result<RunResult, 
         }
     };
     Ok(RunResult { value })
+}
+
+pub(crate) fn run_package_module(
+    module: &Module,
+    args: &[String],
+    origins: &BTreeMap<String, std::path::PathBuf>,
+) -> (Result<RunResult, RunError>, Option<std::path::PathBuf>) {
+    for function in &module.functions {
+        if let Err(error) = reject_unsupported(&function.body) {
+            return (Err(error), origins.get(&function.name).cloned());
+        }
+    }
+    let mut evaluator = Evaluator {
+        module,
+        args,
+        steps: 0,
+        depth: 0,
+        origins: origins.clone(),
+        failure_file: None,
+    };
+    let result = if let Some(main) = module.functions.iter().find(|f| f.name == "main") {
+        evaluator
+            .call_function(main, vec![], main.span)
+            .map(|value| RunResult { value })
+    } else {
+        Err(error("CGR008", "package requires main", module.span))
+    };
+    (result, evaluator.failure_file)
 }
 
 fn error(code: &'static str, message: impl Into<String>, span: Span) -> RunError {
@@ -581,6 +614,9 @@ impl Evaluator<'_> {
             Ok(value)
         })();
         self.depth -= 1;
+        if result.is_err() && self.failure_file.is_none() {
+            self.failure_file = self.origins.get(&function.name).cloned();
+        }
         result
     }
 }

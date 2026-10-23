@@ -21,6 +21,9 @@ pub fn format_module(module: &Module) -> String {
         out.push('\n');
     }
     for (index, record) in module.records.iter().enumerate() {
+        if record.public {
+            out.push_str("pub ");
+        }
         out.push_str("record ");
         out.push_str(&record.name);
         out.push_str(":\n");

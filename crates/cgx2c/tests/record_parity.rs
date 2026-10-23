@@ -99,3 +99,62 @@ fn package_debug_release_matches_source_result_and_error_class() {
         }
     }
 }
+
+#[test]
+fn public_package_records_build_in_both_profiles_and_fail_atomically() {
+    let root =
+        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../cgx2-package/fixtures/public-records");
+    for release in [false, true] {
+        let dir = TempDir::new();
+        let binary = dir.path().join("public-record-program");
+        let mut command = Command::new(env!("CARGO_BIN_EXE_cgx2c"));
+        command
+            .args(["build", "--package"])
+            .arg(&root)
+            .arg("--out")
+            .arg(&binary);
+        if release {
+            command.arg("--release");
+        }
+        let output = command.output().unwrap();
+        assert!(
+            output.status.success(),
+            "{}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+        let output = Command::new(&binary).output().unwrap();
+        assert!(output.status.success());
+        assert_eq!(
+            output.stdout,
+            b"demo.geometry.Point(self: 42, live: true)\n"
+        );
+        let output = Command::new(&binary).arg("fail").output().unwrap();
+        assert!(!output.status.success());
+        assert!(String::from_utf8_lossy(&output.stderr).contains("CGR005"));
+    }
+    let source = TempDir::new();
+    fs::create_dir(source.path().join("src")).unwrap();
+    for file in ["cgx2.toml", "src/main.cg", "src/geometry.cg"] {
+        let text = fs::read_to_string(root.join(file))
+            .unwrap()
+            .replace("pub record Point:", "record Point:");
+        fs::write(source.path().join(file), text).unwrap();
+    }
+    let output = TempDir::new();
+    let destination = output.path().join("previous.rs");
+    fs::write(&destination, "previous output\n").unwrap();
+    let result = Command::new(env!("CARGO_BIN_EXE_cgx2c"))
+        .args(["emit-rust", "--package"])
+        .arg(source.path())
+        .arg("--out")
+        .arg(&destination)
+        .arg("--force")
+        .output()
+        .unwrap();
+    assert!(!result.status.success());
+    assert!(String::from_utf8_lossy(&result.stderr).contains("CGT022"));
+    assert_eq!(
+        fs::read_to_string(destination).unwrap(),
+        "previous output\n"
+    );
+}

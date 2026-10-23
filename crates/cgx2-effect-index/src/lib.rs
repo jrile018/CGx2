@@ -135,11 +135,18 @@ pub fn index_source(source: &str, syntax_only: bool) -> Result<Index, Vec<Diagno
 
 fn build_index(module: &Module, typed: Option<&cgx2_sema::TypedModule>) -> Index {
     let names: BTreeSet<String> = module.functions.iter().map(|f| f.name.clone()).collect();
-    let records: BTreeSet<String> = module
+    let mut records: BTreeSet<String> = module
         .records
         .iter()
         .map(|record| record.name.clone())
         .collect();
+    if let Some(typed) = typed {
+        for (_, ty) in typed.expressions.iter() {
+            if let cgx2_sema::Type::Record(name) = ty {
+                records.insert(name.clone());
+            }
+        }
+    }
     let imported_roots: BTreeSet<String> = module
         .imports
         .iter()
@@ -366,6 +373,9 @@ impl<'a> Visitor<'a> {
 
     fn classify(&mut self, name: &str) -> CallKind {
         let root = name.split('.').next().unwrap_or(name);
+        if !self.is_bound(root) && self.records.contains(name) {
+            return CallKind::Builtin;
+        }
         if self.is_bound(root) || self.imported_roots.contains(root) {
             self.effects.insert(Effect::Unknown);
             return CallKind::Unknown;
@@ -681,5 +691,37 @@ fn effects_text(effects: &BTreeSet<Effect>) -> String {
             .map(|e| e.as_str())
             .collect::<Vec<_>>()
             .join(", ")
+    }
+}
+
+#[cfg(test)]
+mod imported_record_tests {
+    use super::*;
+    #[test]
+    fn imported_constructor_keeps_argument_call_dependencies() {
+        let definitions =
+            parse_module("module demo.types\npub record Point:\n    x: i64\n").unwrap();
+        let mut imported = cgx2_sema::ImportedSignatures::default();
+        imported
+            .modules
+            .extend(["demo.types".into(), "demo.main".into()]);
+        let mut record = definitions.records[0].clone();
+        record.name = "demo.types.Point".into();
+        imported.public_records.insert(record.name.clone(), record);
+        let module = parse_module("module demo.main\nimport demo.types\nfn main() -> demo.types.Point:\n    demo.types.Point(x: arg_count())\n").unwrap();
+        let typed = cgx2_sema::check_module_with_imports(&module, &imported).unwrap();
+        let index = build_index(&module, Some(&typed));
+        let function = &index.functions[0];
+        assert!(function.direct_effects.contains(&Effect::ReadArgs));
+        assert!(!function.direct_effects.contains(&Effect::Unknown));
+        assert!(function
+            .calls
+            .iter()
+            .any(|call| call.target.as_deref() == Some("demo.types.Point")
+                && call.kind == CallKind::Builtin));
+        assert!(function
+            .calls
+            .iter()
+            .any(|call| call.target.as_deref() == Some("arg_count")));
     }
 }

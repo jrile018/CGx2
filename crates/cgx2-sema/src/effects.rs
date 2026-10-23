@@ -14,6 +14,7 @@ pub struct EffectSummary {
 
 #[derive(Clone)]
 struct Site {
+    target: Option<String>,
     callee: Option<String>,
     effect: Option<&'static str>,
     capability: Option<&'static str>,
@@ -55,6 +56,10 @@ fn expr_sites(expr: &Expr, sites: &mut Vec<Site>) {
                 _ => (None, Some("Unknown"), None),
             };
             sites.push(Site {
+                target: match &callee.kind {
+                    ExprKind::Name(path) => Some(path.segments.join(".")),
+                    _ => None,
+                },
                 callee: name,
                 effect,
                 capability,
@@ -82,6 +87,7 @@ fn stmt_sites(stmt: &Stmt, sites: &mut Vec<Site>) {
         }
         StmtKind::Assign { value, .. } => {
             sites.push(Site {
+                target: None,
                 callee: None,
                 effect: Some("Mutate"),
                 capability: None,
@@ -106,6 +112,13 @@ fn stmt_sites(stmt: &Stmt, sites: &mut Vec<Site>) {
 }
 
 pub(crate) fn analyze(module: &Module) -> (BTreeMap<String, EffectSummary>, Vec<TypeDiagnostic>) {
+    analyze_with_records(module, &BTreeSet::new())
+}
+
+pub(crate) fn analyze_with_records(
+    module: &Module,
+    records: &BTreeSet<String>,
+) -> (BTreeMap<String, EffectSummary>, Vec<TypeDiagnostic>) {
     let mut sites = BTreeMap::new();
     let mut summaries = BTreeMap::new();
     for function in &module.functions {
@@ -114,10 +127,9 @@ pub(crate) fn analyze(module: &Module) -> (BTreeMap<String, EffectSummary>, Vec<
             stmt_sites(stmt, &mut observations);
         }
         observations.retain(|site| {
-            !site
-                .callee
-                .as_ref()
-                .is_some_and(|name| module.records.iter().any(|record| record.name == *name))
+            !site.target.as_ref().is_some_and(|name| {
+                records.contains(name) || module.records.iter().any(|record| record.name == *name)
+            })
         });
         sites.insert(function.name.clone(), observations);
         let mut summary = EffectSummary {

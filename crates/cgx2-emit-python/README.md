@@ -44,3 +44,10 @@ branch bindings separate while preserving outer mutable assignments. Branch tail
 are discarded; explicit returns propagate. Both branches undergo target validation
 and package import lowering. Conditional memory and the existing unsupported
 foreign profiles are rejected rather than translated speculatively.
+
+Wave 25 adds explicitly public immutable scalar-record package APIs. The earlier
+package-record exclusion above is superseded by the
+[public-record profile](../cgx2-package/docs/wave25-public-record-apis.md).
+Generated modules share the defining nominal class; public record parameters and
+results check exact class identity. Private entry functions and generated-looking
+source names are supported without alias collisions.

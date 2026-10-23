@@ -44,7 +44,12 @@ pub fn parse_module(source: &str) -> Result<Module, Vec<SyntaxDiagnostic>> {
     let mut statements = Vec::new();
     while !parser.at(&TokenKind::Eof) {
         let before = parser.pos;
-        if parser.at_name("record") {
+        if parser.at_name("record")
+            || (parser.at(&TokenKind::Pub)
+                && parser.tokens.get(parser.pos + 1).is_some_and(
+                    |token| matches!(&token.kind, TokenKind::Name(name) if name == "record"),
+                ))
+        {
             if let Some(record) = parser.parse_record() {
                 records.push(record);
             }
@@ -123,7 +128,9 @@ struct Parser {
 
 impl Parser {
     fn parse_record(&mut self) -> Option<Record> {
-        let start = self.advance().span.start;
+        let start = self.peek().span.start;
+        let public = self.eat(&TokenKind::Pub).is_some();
+        self.advance();
         let (name, _) = self.name()?;
         self.expect(&TokenKind::Colon, "CGS101", "expected : after record name")?;
         self.expect(
@@ -175,6 +182,7 @@ impl Parser {
         }
         let end = fields.last().map_or(start, |field| field.span.end);
         Some(Record {
+            public,
             name,
             fields,
             span: Span { start, end },

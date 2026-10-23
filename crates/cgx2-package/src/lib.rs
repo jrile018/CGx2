@@ -7,7 +7,8 @@ use std::path::{Component, Path, PathBuf};
 
 use cgx2_api_index::{build_index_with_imports, ApiIndex, IndexError};
 use cgx2_sema::{
-    check_module_with_imports, collect_public_signatures, ImportedSignatures, TypedModule,
+    check_module_with_imports, collect_public_signatures_with_imports, ImportedSignatures,
+    TypedModule,
 };
 use cgx2_syntax::{parse_module, Expr, ExprKind, Module, Span, Stmt, StmtKind};
 use sha2::{Digest, Sha256};
@@ -509,7 +510,21 @@ pub fn load_checked_package(root: &Path) -> Result<CheckedPackage, Vec<PackageDi
     imported.modules.extend(named.keys().cloned());
     for source in &parsed_sources {
         if let Some(name) = &source.name {
-            match collect_public_signatures(&source.module) {
+            for record in &source.module.records {
+                let identity = format!("{name}.{}", record.name);
+                if record.public {
+                    let mut record = record.clone();
+                    record.name = identity.clone();
+                    imported.public_records.insert(identity, record);
+                } else {
+                    imported.private_records.insert(identity);
+                }
+            }
+        }
+    }
+    for source in &parsed_sources {
+        if let Some(name) = &source.name {
+            match collect_public_signatures_with_imports(&source.module, &imported) {
                 Ok(signatures) => {
                     for (function, signature) in signatures {
                         imported

@@ -8,8 +8,9 @@ mod tensor;
 mod types;
 
 pub use check::{
-    check_module, check_module_with_imports, collect_public_signatures, FunctionSignature,
-    ImportedSignatures, SpanTypes, TypedModule,
+    check_module, check_module_with_imports, collect_public_signatures,
+    collect_public_signatures_with_imports, FunctionSignature, ImportedSignatures, SpanTypes,
+    TypedModule,
 };
 pub use diagnostic::TypeDiagnostic;
 pub use effects::EffectSummary;

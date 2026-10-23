@@ -273,6 +273,12 @@ fn lower_module(
     hash: &str,
     public: BTreeSet<String>,
 ) -> Result<PureModule, String> {
+    if let Some(record) = module.records.iter().find(|record| record.public) {
+        return Err(format!(
+            "CGNK012: imported records are unsupported in notebooks: {name}.{} at {}..{}",
+            record.name, record.span.start, record.span.end
+        ));
+    }
     let local: BTreeSet<_> = module.functions.iter().map(|f| f.name.clone()).collect();
     let imports: BTreeSet<_> = module
         .imports

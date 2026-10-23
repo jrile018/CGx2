@@ -1,0 +1,19 @@
+module demo.main
+import demo.geometry
+
+fn fail_bool() -> Bool:
+    let failure = 1 / 0
+    true
+
+fn main() -> demo.geometry.Point:
+    if arg_count() == 0:
+        let point: demo.geometry.Point = demo.geometry.choose(true)
+        return demo.geometry.identity(point)
+    else:
+        if arg_count() == 1:
+            return demo.geometry.choose(false)
+        else:
+            if arg_count() == 2:
+                return demo.geometry.Point(live: fail_bool(), self: 9223372036854775807 + 1)
+            else:
+                return demo.geometry.Point(self: 9223372036854775807 + 1, live: fail_bool())

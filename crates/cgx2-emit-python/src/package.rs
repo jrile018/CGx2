@@ -50,47 +50,17 @@ fn python_module_name(name: &str) -> String {
 }
 
 fn imported_alias(name: &str) -> String {
-    let mut result = String::from("cgx2import_");
-    for byte in name.bytes() {
-        result.push_str(&format!("{byte:02x}"));
-    }
-    result
+    format!("$cgx2.import.{name}")
 }
-
 fn private_name(name: &str) -> String {
-    let mut result = String::from("__cgx2_private_");
-    for byte in name.bytes() {
-        result.push_str(&format!("{byte:02x}"));
-    }
-    result
+    format!("$cgx2.private.{name}")
 }
 
 fn scalar(ty: &Type) -> bool {
-    matches!(ty, Type::I64 | Type::Bool | Type::String | Type::Unit)
-}
-
-fn declared_names(block: &[Stmt], names: &mut BTreeSet<String>) {
-    for stmt in block {
-        match &stmt.kind {
-            StmtKind::If {
-                then_body,
-                else_body,
-                ..
-            } => {
-                declared_names(then_body, names);
-                declared_names(else_body, names);
-            }
-            StmtKind::Let { name, .. } => {
-                names.insert(name.clone());
-            }
-            StmtKind::For { binding, body, .. } => {
-                names.insert(binding.clone());
-                declared_names(body, names);
-            }
-            StmtKind::NoGc { body, .. } => declared_names(body, names),
-            _ => {}
-        }
-    }
+    matches!(
+        ty,
+        Type::I64 | Type::Bool | Type::String | Type::Unit | Type::Record(_)
+    )
 }
 
 fn lower_expr(
@@ -102,7 +72,10 @@ fn lower_expr(
     errors: &mut Vec<PackageEmitDiagnostic>,
 ) {
     match &mut expr.kind {
-        ExprKind::Name(path) if path.segments.len() > 1 => {
+        ExprKind::Name(path)
+            if path.segments.len() > 1
+                && imports.contains(&path.segments[..path.segments.len() - 1].join(".")) =>
+        {
             let Some((function, module)) = path.segments.split_last() else {
                 return;
             };
@@ -117,7 +90,10 @@ fn lower_expr(
                 return;
             }
             let full_name = format!("{module}.{function}");
-            let alias = imported_alias(&full_name);
+            let alias = private
+                .get(&full_name)
+                .cloned()
+                .unwrap_or_else(|| imported_alias(&full_name));
             aliases.insert(full_name, alias.clone());
             path.segments = vec![alias];
         }
@@ -191,22 +167,77 @@ fn lower_module(
         .iter()
         .map(|p| p.segments.join("."))
         .collect();
-    let private: BTreeMap<_, _> = module
+    let mut private: BTreeMap<_, _> = module
         .functions
         .iter()
         .filter(|f| !f.public)
         .map(|f| (f.name.clone(), private_name(&f.name)))
         .collect();
+    let own_name = module
+        .name
+        .as_ref()
+        .expect("checked named module")
+        .segments
+        .join(".");
+    let mut record_types = BTreeMap::new();
+    for record in &mut module.records {
+        let local = record.name.clone();
+        let identity = format!("{own_name}.{local}");
+        private.insert(local.clone(), identity.clone());
+        record_types.insert(local, identity.clone());
+        record.name = identity;
+    }
+    for import in &module.imports {
+        let imported = import.segments.join(".");
+        if let Some(target) = names.get(&imported) {
+            for record in target.syntax().records.iter().filter(|r| r.public) {
+                let identity = format!("{imported}.{}", record.name);
+                private.insert(identity.clone(), identity.clone());
+                record_types.insert(identity.clone(), identity);
+            }
+        }
+    }
+    fn lower_type(ty: &mut cgx2_syntax::TypeSyntax, records: &BTreeMap<String, String>) {
+        if let Some(identity) = records.get(&ty.path.segments.join(".")) {
+            ty.path.segments = vec![identity.clone()];
+        }
+    }
+    fn lower_annotations(body: &mut [Stmt], records: &BTreeMap<String, String>) {
+        for stmt in body {
+            match &mut stmt.kind {
+                StmtKind::Let {
+                    annotation: Some(ty),
+                    ..
+                } => lower_type(ty, records),
+                StmtKind::If {
+                    then_body,
+                    else_body,
+                    ..
+                } => {
+                    lower_annotations(then_body, records);
+                    lower_annotations(else_body, records);
+                }
+                StmtKind::For { body, .. } => lower_annotations(body, records),
+                _ => {}
+            }
+        }
+    }
     let mut aliases = BTreeMap::new();
     let mut errors = Vec::new();
-    let mut names_in_source = BTreeSet::new();
-    for function in &module.functions {
-        names_in_source.insert(function.name.clone());
-        names_in_source.extend(function.parameters.iter().map(|p| p.name.clone()));
-        declared_names(&function.body, &mut names_in_source);
+    for identity in record_types
+        .values()
+        .filter(|id| !id.starts_with(&format!("{own_name}.")))
+    {
+        aliases.insert(identity.clone(), identity.clone());
     }
-    declared_names(&module.statements, &mut names_in_source);
     for function in &mut module.functions {
+        for parameter in &mut function.parameters {
+            lower_type(&mut parameter.ty, &record_types);
+        }
+        if let Some(ty) = &mut function.return_type {
+            lower_type(ty, &record_types);
+        }
+        lower_annotations(&mut function.body, &record_types);
         for condition in function.requires.iter_mut().chain(&mut function.ensures) {
             lower_expr(
                 condition,
@@ -237,16 +268,6 @@ fn lower_module(
         file,
         &mut errors,
     );
-    for generated in private.values().chain(aliases.values()) {
-        if names_in_source.contains(generated) {
-            errors.push(PackageEmitDiagnostic::new(
-                "CGE005",
-                format!("generated Python name `{generated}` collides with a source identifier"),
-                file,
-                Some(source.syntax().span),
-            ));
-        }
-    }
     let mut header = String::new();
     for import in &module.imports {
         let name = import.segments.join(".");
@@ -257,17 +278,23 @@ fn lower_module(
                     .strip_prefix(&format!("{name}."))
                     .filter(|f| !f.contains('.'))
                 {
-                    if target
+                    let record = target
                         .syntax()
-                        .functions
+                        .records
                         .iter()
-                        .any(|f| f.public && f.name == function)
+                        .any(|r| r.public && r.name == function);
+                    if record
+                        || target
+                            .syntax()
+                            .functions
+                            .iter()
+                            .any(|f| f.public && f.name == function)
                     {
                         header.push_str(&format!(
                             "from {} import {} as {}\n",
                             python_module_name(&name),
-                            python_name(function),
-                            alias
+                            python_name(if record { full_name } else { function }),
+                            python_name(alias)
                         ));
                     } else {
                         errors.push(PackageEmitDiagnostic::new(
@@ -374,30 +401,35 @@ pub fn emit_package_python(
             }
         }
         match lower_module(source, &names) {
-            Ok((lowered, imports)) => match emit_package_module(&lowered, source.typed(), &imports)
-            {
-                Ok(mut python) => {
-                    let exports: Vec<_> = source
-                        .syntax()
-                        .functions
-                        .iter()
-                        .filter(|f| f.public)
-                        .map(|f| format!("{:?}", python_name(&f.name)))
-                        .collect();
-                    python.push_str(&format!("__all__ = [{}]\n", exports.join(", ")));
-                    if files.insert(PathBuf::from(filename), python).is_some() {
-                        errors.push(PackageEmitDiagnostic::new(
-                            "CGE005",
-                            "generated Python output collision",
-                            source.source(),
-                            source.syntax().name.as_ref().map(|p| p.span),
-                        ));
+            Ok((lowered, imports)) => {
+                match emit_package_module(&lowered, source.typed(), &imports) {
+                    Ok(mut python) => {
+                        let exports: Vec<_> =
+                            source
+                                .syntax()
+                                .functions
+                                .iter()
+                                .filter(|f| f.public)
+                                .map(|f| format!("{:?}", python_name(&f.name)))
+                                .chain(source.syntax().records.iter().filter(|r| r.public).map(
+                                    |r| format!("{:?}", python_name(&format!("{name}.{}", r.name))),
+                                ))
+                                .collect();
+                        python.push_str(&format!("__all__ = [{}]\n", exports.join(", ")));
+                        if files.insert(PathBuf::from(filename), python).is_some() {
+                            errors.push(PackageEmitDiagnostic::new(
+                                "CGE005",
+                                "generated Python output collision",
+                                source.source(),
+                                source.syntax().name.as_ref().map(|p| p.span),
+                            ));
+                        }
                     }
+                    Err(diagnostics) => errors.extend(diagnostics.into_iter().map(|d| {
+                        PackageEmitDiagnostic::new(d.code, d.message, source.source(), Some(d.span))
+                    })),
                 }
-                Err(diagnostics) => errors.extend(diagnostics.into_iter().map(|d| {
-                    PackageEmitDiagnostic::new(d.code, d.message, source.source(), Some(d.span))
-                })),
-            },
+            }
             Err(mut diagnostics) => errors.append(&mut diagnostics),
         }
     }
@@ -413,7 +445,7 @@ pub fn emit_package_python(
                     if signature.parameters.is_empty() && scalar(&signature.return_type) =>
                 {
                     if let Some(name) = entry.syntax().name.as_ref().map(|p| p.segments.join(".")) {
-                        files.insert(PathBuf::from("__main__.py"), format!("# Generated CGx2 package entry.\nimport sys\nimport {} as _cgx2_entry\n\n_result = _cgx2_entry.{}()\nif _result is not None:\n    sys.stdout.write(_cgx2_entry._cgx2_show(_result) + \"\\n\")\n", python_module_name(&name), python_name("main")));
+                        files.insert(PathBuf::from("__main__.py"), format!("# Generated CGx2 package entry.\nimport sys\nimport {} as _cgx2_entry\n\n_result = _cgx2_entry.{}()\nif _result is not None:\n    sys.stdout.write(_cgx2_entry._cgx2_show(_result) + \"\\n\")\n", python_module_name(&name), if entry.syntax().functions.iter().any(|f| f.name == "main" && f.public) { python_name("main") } else { python_name(&private_name("main")) }));
                     } else {
                         errors.push(PackageEmitDiagnostic::new(
                             "CGE005",

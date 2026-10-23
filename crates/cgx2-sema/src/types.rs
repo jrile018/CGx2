@@ -50,8 +50,8 @@ pub(crate) fn resolve(
                 }
             })
         }
-        ([name], []) if records.iter().any(|record| &record.name == name) => {
-            Some(Type::Record(name.clone()))
+        (_, []) if records.iter().any(|record| record.name == name.join(".")) => {
+            Some(Type::Record(name.join(".")))
         }
         _ => None,
     };

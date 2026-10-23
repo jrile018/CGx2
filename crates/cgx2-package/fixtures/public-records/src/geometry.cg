@@ -1,0 +1,14 @@
+module demo.geometry
+
+pub record Point:
+    self: i64
+    live: Bool
+
+pub fn choose(ok: Bool) -> Point:
+    if ok:
+        return Point(live: true, self: 42)
+    else:
+        return Point(self: 9223372036854775807 + 1, live: false)
+
+pub fn identity(point: Point) -> Point:
+    point

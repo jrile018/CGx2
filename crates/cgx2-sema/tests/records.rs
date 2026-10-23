@@ -104,3 +104,28 @@ fn public_record_crossing_is_rejected_for_package_imports() {
     let errors = cgx2_sema::collect_public_signatures(&module).unwrap_err();
     assert!(errors.iter().any(|d| d.code == "CGT022"));
 }
+
+#[test]
+fn imported_record_constructors_retain_argument_effects_and_capabilities() {
+    let definitions = parse_module("module demo.types\npub record Point:\n    x: i64\n").unwrap();
+    let mut imported = cgx2_sema::ImportedSignatures::default();
+    imported.modules.insert("demo.types".into());
+    let mut record = definitions.records[0].clone();
+    record.name = "demo.types.Point".into();
+    imported.public_records.insert(record.name.clone(), record);
+    let source = "module demo.main\nimport demo.types\nfn main() -> demo.types.Point effects(ReadArgs) caps(ArgsRead):\n    demo.types.Point(x: arg_count())\n";
+    let module = parse_module(source).unwrap();
+    let typed = cgx2_sema::check_module_with_imports(&module, &imported).unwrap();
+    assert_eq!(
+        typed.functions["main"].return_type.to_string(),
+        "demo.types.Point"
+    );
+    assert!(typed.effects["main"].effects.contains("ReadArgs"));
+    assert!(typed.effects["main"].capabilities.contains("ArgsRead"));
+    let pure =
+        parse_module(&source.replace("effects(ReadArgs) caps(ArgsRead)", "effects() caps()"))
+            .unwrap();
+    let errors = cgx2_sema::check_module_with_imports(&pure, &imported).unwrap_err();
+    assert!(errors.iter().any(|d| d.code == "CGT012"));
+    assert!(errors.iter().any(|d| d.code == "CGT013"));
+}

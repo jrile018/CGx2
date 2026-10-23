@@ -1,8 +1,5 @@
 //! Native package process: linked without the Python bridge or libpython.
-#[path = "../native.rs"]
-mod native;
-#[path = "../native_eval.rs"]
-mod native_eval;
+use cgx2_cli::{check_native_package, run_native_package, NativeDiagnostic};
 
 use std::path::Path;
 use std::process::ExitCode;
@@ -23,9 +20,9 @@ fn main() -> ExitCode {
     };
     let root = Path::new(&root);
     let result = match mode.as_str() {
-        "check" => native::check_native_package(root).map(|()| None),
-        "run" => native::run_native_package_value(root, &program_args).map(Some),
-        _ => Err(vec![native::NativeDiagnostic {
+        "check" => check_native_package(root).map(|()| None),
+        "run" => run_native_package(root, &program_args).map(|result| Some(result.value)),
+        _ => Err(vec![NativeDiagnostic {
             code: "CGN001".into(),
             message: "native helper requires check|run".into(),
             file: root.into(),
@@ -70,7 +67,7 @@ fn main() -> ExitCode {
     }
 }
 
-fn println_error_json(error: &native::NativeDiagnostic, span: serde_json::Value) {
+fn println_error_json(error: &NativeDiagnostic, span: serde_json::Value) {
     eprintln!(
         "{}",
         serde_json::json!({

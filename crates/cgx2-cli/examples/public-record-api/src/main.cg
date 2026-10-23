@@ -1,0 +1,7 @@
+module sample.main
+import sample.points
+
+fn main() -> i64:
+    let point: sample.points.Point = sample.points.Point(y: 22, x: 20)
+    let kept = sample.points.identity(point)
+    kept.x + kept.y

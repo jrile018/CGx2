@@ -31,27 +31,32 @@ def _cgx2_leave():
     _cgx2_depth -= 1
 
 
-def _cgx2_i64(value):
+def _cgx2_math_error(kind, code, message, start, end):
+    error = kind(f"{code} at {start}..{end}: {message}")
+    error.code = code
+    error.span = (start, end)
+    return error
+def _cgx2_i64(value, start=0, end=0):
     if _cgx2_builtins.type(value) is not _cgx2_builtins.int or not (_cgx2_min <= value <= _cgx2_max):
-        raise _cgx2_builtins.OverflowError("CGR005: i64 arithmetic overflow")
+        raise _cgx2_math_error(_cgx2_builtins.OverflowError, "CGR005", "i64 arithmetic overflow", start, end)
     return value
 
-def _cgx2_add(left, right):
-    return _cgx2_i64(left + right)
+def _cgx2_add(left, right, start=0, end=0):
+    return _cgx2_i64(left + right, start, end)
 
-def _cgx2_sub(left, right):
-    return _cgx2_i64(left - right)
+def _cgx2_sub(left, right, start=0, end=0):
+    return _cgx2_i64(left - right, start, end)
 
-def _cgx2_mul(left, right):
-    return _cgx2_i64(left * right)
+def _cgx2_mul(left, right, start=0, end=0):
+    return _cgx2_i64(left * right, start, end)
 
-def _cgx2_div(left, right):
+def _cgx2_div(left, right, start=0, end=0):
     if right == 0:
-        raise _cgx2_builtins.ZeroDivisionError("CGR006: division by zero")
+        raise _cgx2_math_error(_cgx2_builtins.ZeroDivisionError, "CGR006", "division by zero", start, end)
     quotient = _cgx2_builtins.abs(left) // _cgx2_builtins.abs(right)
     if (left < 0) != (right < 0):
         quotient = -quotient
-    return _cgx2_i64(quotient)
+    return _cgx2_i64(quotient, start, end)
 
 def _cgx2_arg_count():
     return _cgx2_i64(_cgx2_builtins.len(_cgx2_sys.argv) - 1)
@@ -80,7 +85,7 @@ def _cgx2_contract_check(value, code, start, end):
 
 "#;
 
-const PACKAGE_HELPERS: &str = "# Generated from a checked CGx2 module.\nfrom _cgx2_support import _cgx2_add, _cgx2_sub, _cgx2_mul, _cgx2_div\nfrom _cgx2_support import _cgx2_arg, _cgx2_arg_count, _cgx2_show, _cgx2_contract_check\nfrom _cgx2_support import _cgx2_step, _cgx2_enter, _cgx2_leave\n\n";
+const PACKAGE_HELPERS: &str = "# Generated from a checked CGx2 module.\nfrom _cgx2_support import _cgx2_add, _cgx2_sub, _cgx2_mul, _cgx2_div\nfrom _cgx2_support import _cgx2_arg, _cgx2_arg_count, _cgx2_show, _cgx2_contract_check\nfrom _cgx2_support import _cgx2_step, _cgx2_enter, _cgx2_leave\nfrom _cgx2_support import _cgx2_builtins, _cgx2_i64\n\n";
 
 pub(crate) fn package_support() -> &'static str {
     PRELUDE
@@ -105,33 +110,41 @@ fn emit_impl(
     imports: &str,
 ) -> Result<String, Vec<EmitDiagnostic>> {
     let mut errors = Vec::new();
-    let record_names = module
+    let mut record_names = module
         .records
         .iter()
         .map(|record| record.name.clone())
         .collect::<BTreeSet<_>>();
     if package_mode {
-        for record in &module.records {
+        for signature in typed.functions.values() {
+            for ty in signature
+                .parameters
+                .iter()
+                .chain(std::iter::once(&signature.return_type))
+            {
+                if let Type::Record(name) = ty {
+                    record_names.insert(name.clone());
+                }
+            }
+        }
+        for (_, ty) in typed.expressions.iter() {
+            if let Type::Record(name) = ty {
+                record_names.insert(name.clone());
+            }
+        }
+    }
+    for record in &module.records {
+        if !(1..=8).contains(&record.fields.len())
+            || record
+                .fields
+                .iter()
+                .any(|field| !matches!(field.ty.to_string().as_str(), "i64" | "Bool"))
+        {
             errors.push(EmitDiagnostic::new(
                 "CGE001",
-                "record package import/export unsupported by Python emission",
+                "only immutable records with one to eight i64/Bool fields are supported",
                 record.span,
             ));
-        }
-    } else {
-        for record in &module.records {
-            if !(1..=8).contains(&record.fields.len())
-                || record
-                    .fields
-                    .iter()
-                    .any(|field| !matches!(field.ty.to_string().as_str(), "i64" | "Bool"))
-            {
-                errors.push(EmitDiagnostic::new(
-                    "CGE001",
-                    "only immutable records with one to eight i64/Bool fields are supported",
-                    record.span,
-                ));
-            }
         }
     }
     for import in &module.imports {
@@ -239,7 +252,17 @@ fn emit_impl(
             function.span.start, function.span.end
         ));
         output.push_str("    try:\n");
-        if function.requires.is_empty() && function.ensures.is_empty() {
+        for parameter in &function.parameters {
+            if record_names.contains(&parameter.ty.path.segments.join(".")) {
+                output.push_str(&format!("        if _cgx2_builtins.type({}) is not {}: raise _cgx2_builtins.TypeError('CGR004: wrong nominal record input')\n", python_name(&parameter.name), python_name(&parameter.ty.path.segments.join("."))));
+            }
+        }
+        let record_result = function
+            .return_type
+            .as_ref()
+            .filter(|ty| record_names.contains(&ty.path.segments.join(".")));
+
+        if function.requires.is_empty() && function.ensures.is_empty() && record_result.is_none() {
             emit_block(&function.body, 2, true, &mut output);
         } else {
             for condition in &function.requires {
@@ -248,6 +271,10 @@ fn emit_impl(
             output.push_str("        def _cgx2_contract_body():\n");
             emit_block(&function.body, 3, true, &mut output);
             output.push_str("        _cgx2_contract_result = _cgx2_contract_body()\n");
+            if let Some(ty) = record_result {
+                output.push_str(&format!("        if _cgx2_builtins.type(_cgx2_contract_result) is not {}: raise _cgx2_builtins.TypeError('CGR004: wrong nominal record result')\n", python_name(&ty.path.segments.join("."))));
+            }
+
             for condition in &function.ensures {
                 emit_contract_check(condition, "CGR016", 2, true, &mut output);
             }
@@ -1019,9 +1046,11 @@ fn emit_expr_with_result(expr: &Expr, bind_result: bool) -> String {
                 BinaryOp::Divide => "_cgx2_div",
             };
             format!(
-                "{helper}({}, {})",
+                "{helper}({}, {}, {}, {})",
                 emit_expr_with_result(left, bind_result),
-                emit_expr_with_result(right, bind_result)
+                emit_expr_with_result(right, bind_result),
+                expr.span.start,
+                expr.span.end
             )
         }
         ExprKind::Call { callee, arguments } => {
@@ -1118,17 +1147,13 @@ mod record_tests {
     use cgx2_syntax::parse_module;
 
     #[test]
-    fn package_record_is_rejected_before_source_generation() {
+    fn package_record_class_is_emitted_with_checked_metadata() {
         let module = parse_module(
             "record Point:\n    x: i64\nfn main() -> i64:\n    let p = Point(x: 1)\n    p.x\n",
         );
-        // The package emitter must reject record declarations even when a
-        // standalone checked summary is supplied to its internal entry point.
         let module = module.unwrap();
         let typed = check_module(&module).unwrap();
-        let errors = emit_package_module(&module, &typed, "").unwrap_err();
-        assert!(errors
-            .iter()
-            .any(|error| error.message.contains("record package import/export")));
+        let python = emit_package_module(&module, &typed, "").unwrap();
+        assert!(python.contains("class Point:"));
     }
 }

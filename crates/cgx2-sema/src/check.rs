@@ -63,6 +63,69 @@ pub struct ImportedSignatures {
     pub modules: BTreeSet<String>,
     pub public_functions: BTreeMap<String, FunctionSignature>,
     pub private_functions: BTreeSet<String>,
+    /// Keys and record names are defining-module-qualified nominal identities.
+    pub public_records: BTreeMap<String, Record>,
+    pub private_records: BTreeSet<String>,
+}
+
+fn record_identity(module: &Module, name: &str, imported: &ImportedSignatures) -> String {
+    if imported.modules.is_empty() {
+        return name.to_owned();
+    }
+    module.name.as_ref().map_or_else(
+        || name.to_owned(),
+        |path| format!("{}.{name}", path.segments.join(".")),
+    )
+}
+
+fn resolve_in_module(
+    ty: &cgx2_syntax::TypeSyntax,
+    module: &Module,
+    imported: &ImportedSignatures,
+    diagnostics: &mut Vec<TypeDiagnostic>,
+) -> Option<Type> {
+    if ty.path.segments.len() > 1 {
+        let prefix = ty.path.segments[..ty.path.segments.len() - 1].join(".");
+        if !module
+            .imports
+            .iter()
+            .any(|path| path.segments.join(".") == prefix)
+        {
+            diagnostics.push(TypeDiagnostic::new(
+                "CGT008",
+                format!("module `{prefix}` is not imported"),
+                ty.span,
+            ));
+            return None;
+        }
+        if imported
+            .private_records
+            .contains(&ty.path.segments.join("."))
+        {
+            diagnostics.push(TypeDiagnostic::new(
+                "CGT022",
+                format!("record `{}` is private", ty.path.segments.join(".")),
+                ty.span,
+            ));
+            return None;
+        }
+    }
+    let mut records = module.records.clone();
+    for import in &module.imports {
+        let prefix = format!("{}.", import.segments.join("."));
+        records.extend(imported.public_records.iter().filter_map(|(name, record)| {
+            name.strip_prefix(&prefix)
+                .filter(|tail| !tail.contains('.'))
+                .map(|_| record.clone())
+        }));
+    }
+    let mut resolved = resolve(ty, &records, diagnostics)?;
+    if let Type::Record(name) = &mut resolved {
+        if module.records.iter().any(|record| record.name == *name) {
+            *name = record_identity(module, name, imported);
+        }
+    }
+    Some(resolved)
 }
 
 #[derive(Clone)]
@@ -314,7 +377,8 @@ pub fn check_module_with_imports(
         effect_summaries: BTreeMap::new(),
         module: module.clone(),
     };
-    let (effect_summaries, effect_diagnostics) = effects::analyze(module);
+    let (effect_summaries, effect_diagnostics) =
+        effects::analyze_with_records(module, &imported.public_records.keys().cloned().collect());
     checker.effect_summaries = effect_summaries;
     checker.diagnostics.extend(effect_diagnostics);
     checker.insert_builtin("arg_count", vec![], Type::I64);
@@ -367,6 +431,14 @@ pub fn check_module_with_imports(
 pub fn collect_public_signatures(
     module: &Module,
 ) -> Result<BTreeMap<String, FunctionSignature>, Vec<TypeDiagnostic>> {
+    collect_public_signatures_with_imports(module, &ImportedSignatures::default())
+}
+
+/// Collect signatures with the package record environment, before checking bodies.
+pub fn collect_public_signatures_with_imports(
+    module: &Module,
+    imported: &ImportedSignatures,
+) -> Result<BTreeMap<String, FunctionSignature>, Vec<TypeDiagnostic>> {
     let mut signatures = BTreeMap::new();
     let mut seen = BTreeSet::new();
     let mut errors = Vec::new();
@@ -385,10 +457,10 @@ pub fn collect_public_signatures(
         let parameters: Vec<_> = function
             .parameters
             .iter()
-            .map(|p| resolve(&p.ty, &module.records, &mut errors))
+            .map(|p| resolve_in_module(&p.ty, module, imported, &mut errors))
             .collect();
         let result = match &function.return_type {
-            Some(ty) => resolve(ty, &module.records, &mut errors),
+            Some(ty) => resolve_in_module(ty, module, imported, &mut errors),
             None => {
                 errors.push(TypeDiagnostic::new(
                     "CGT006",
@@ -399,20 +471,21 @@ pub fn collect_public_signatures(
             }
         };
         if let (Some(result), true) = (result, parameters.iter().all(Option::is_some)) {
-            if matches!(result, Type::Record(_))
-                || parameters
-                    .iter()
-                    .flatten()
-                    .any(|ty| matches!(ty, Type::Record(_)))
-            {
+            let is_private = |ty: &Type| match ty {
+                Type::Record(name) => module.records.iter().any(|record| {
+                    !record.public && record_identity(module, &record.name, imported) == *name
+                }),
+                _ => false,
+            };
+            if is_private(&result) || parameters.iter().flatten().any(is_private) {
                 errors.push(TypeDiagnostic::new(
                     "CGT022",
-                    "public record values across package modules are unsupported in this profile"
-                        .into(),
+                    "public signature exposes a private record".into(),
                     function.span,
                 ));
                 continue;
             }
+
             signatures.insert(
                 function.name.clone(),
                 FunctionSignature {
@@ -584,15 +657,14 @@ impl Checker {
             );
             return;
         }
-        let parameters = function
+        let parameters: Vec<Option<Type>> = function
             .parameters
             .iter()
-            .map(|p| resolve(&p.ty, &self.module.records, &mut self.diagnostics))
+            .map(|p| resolve_in_module(&p.ty, &self.module, &self.imported, &mut self.diagnostics))
             .collect();
-        let result = function
-            .return_type
-            .as_ref()
-            .and_then(|ty| resolve(ty, &self.module.records, &mut self.diagnostics));
+        let result = function.return_type.as_ref().and_then(|ty| {
+            resolve_in_module(ty, &self.module, &self.imported, &mut self.diagnostics)
+        });
         if function.public && function.return_type.is_none() {
             self.report(
                 "CGT006",
@@ -789,9 +861,9 @@ impl Checker {
                 value,
             } => {
                 let value_ty = self.check_expr(value);
-                let annotated = annotation
-                    .as_ref()
-                    .and_then(|ty| resolve(ty, &self.module.records, &mut self.diagnostics));
+                let annotated = annotation.as_ref().and_then(|ty| {
+                    resolve_in_module(ty, &self.module, &self.imported, &mut self.diagnostics)
+                });
                 if let (Some(actual), Some(expected)) = (&value_ty, &annotated) {
                     self.expect_type(actual, expected, value.span);
                 }
@@ -1050,7 +1122,11 @@ impl Checker {
                 );
             }
         }
-        Type::Record(record.name.clone())
+        Type::Record(if record.name.contains('.') {
+            record.name.clone()
+        } else {
+            record_identity(&self.module, &record.name, &self.imported)
+        })
     }
 
     fn check_expr(&mut self, expr: &Expr) -> Option<Type> {
@@ -1079,7 +1155,11 @@ impl Checker {
                                 .module
                                 .records
                                 .iter()
-                                .find(|record| record.name == record_name)
+                                .find(|record| {
+                                    record_identity(&self.module, &record.name, &self.imported)
+                                        == record_name
+                                })
+                                .or_else(|| self.imported.public_records.get(&record_name))
                                 .and_then(|record| {
                                     record.fields.iter().find(|item| item.name == *field)
                                 });
@@ -1154,18 +1234,39 @@ impl Checker {
                     return None;
                 }
                 if let ExprKind::Name(path) = &callee.kind {
-                    if let [name] = path.segments.as_slice() {
-                        if let Some(record) = self
-                            .module
+                    let name = path.segments.join(".");
+                    let record = if path.segments.len() == 1 {
+                        self.module
                             .records
                             .iter()
-                            .find(|record| &record.name == name)
+                            .find(|record| record.name == name)
                             .cloned()
-                        {
-                            let ty = self.check_record_constructor(&record, arguments, expr.span);
-                            self.expressions.insert(expr.span, ty.clone());
-                            return Some(ty);
+                    } else if self
+                        .imports
+                        .contains(&path.segments[..path.segments.len() - 1].join("."))
+                    {
+                        self.imported.public_records.get(&name).cloned()
+                    } else {
+                        None
+                    };
+                    if let Some(record) = record {
+                        if path.segments.len() > 1 && self.local(&path.segments[0]).is_some() {
+                            self.report(
+                                "CGT020",
+                                "ambiguous local value and imported module",
+                                path.span,
+                            );
+                            return None;
                         }
+                        let ty = self.check_record_constructor(&record, arguments, expr.span);
+                        self.expressions.insert(expr.span, ty.clone());
+                        return Some(ty);
+                    }
+                    if self.imported.private_records.contains(&name) {
+                        self.report("CGT022", format!("record `{name}` is private"), path.span);
+                        return None;
+                    }
+                    if let [name] = path.segments.as_slice() {
                         if !self.functions.contains_key(name)
                             && arguments.iter().any(|arg| arg.name.is_some())
                         {
@@ -1326,6 +1427,27 @@ impl Checker {
         } else if self.imported.private_functions.contains(&name) {
             self.report("CGT009", format!("function `{name}` is private"), path.span);
         } else if let Some(signature) = self.imported.public_functions.get(&name) {
+            for ty in signature
+                .parameters
+                .iter()
+                .chain(std::iter::once(&signature.return_type))
+            {
+                if let Type::Record(identity) = ty {
+                    if let Some((defining, _)) = identity.rsplit_once('.') {
+                        let own = self.module.name.as_ref().map(|p| p.segments.join("."));
+                        if own.as_deref() != Some(defining) && !self.imports.contains(defining) {
+                            self.report(
+                                "CGT008",
+                                format!(
+                                    "record `{identity}` requires a direct import of `{defining}`"
+                                ),
+                                path.span,
+                            );
+                            return None;
+                        }
+                    }
+                }
+            }
             if signature
                 .parameters
                 .iter()

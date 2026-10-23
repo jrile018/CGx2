@@ -1,0 +1,8 @@
+module sample.points
+
+pub record Point:
+    x: i64
+    y: i64
+
+pub fn identity(point: Point) -> Point:
+    point

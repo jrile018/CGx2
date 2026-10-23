@@ -1,0 +1,10 @@
+module demo.main
+import demo.left.common
+import demo.right.common
+
+fn main() -> i64:
+    let _cgx2_contract_result = demo.left.common.Pöint(_cgx2_contract_result: true, self: 20)
+    let cgx2import_64656d6f2e6c6566742e636f6d6d6f6e2e6b656570 = demo.right.common.Pöint(self: 22, _cgx2_contract_result: false)
+    let left = demo.left.common.keep(_cgx2_contract_result)
+    let right = demo.right.common.keep(cgx2import_64656d6f2e6c6566742e636f6d6d6f6e2e6b656570)
+    left.self + right.self

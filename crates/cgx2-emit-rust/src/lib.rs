@@ -28,24 +28,6 @@ pub struct PackageEmitDiagnostic {
 /// Emit one standalone Rust program from a checked, immutable local package snapshot.
 pub fn emit_package_rust(package: &CheckedPackage) -> Result<String, Vec<PackageEmitDiagnostic>> {
     let mut errors = Vec::new();
-    let mut record_names = BTreeSet::new();
-    for source in package.modules() {
-        for record in &source.syntax().records {
-            if !record_names.insert(record.name.as_str()) {
-                errors.push(package_error(
-                    source,
-                    EmitDiagnostic::new(
-                        "CGRS001",
-                        format!(
-                            "record `{}` is declared in multiple package modules",
-                            record.name
-                        ),
-                        record.span,
-                    ),
-                ));
-            }
-        }
-    }
     let by_name: BTreeMap<_, _> = package
         .modules()
         .iter()
@@ -112,7 +94,16 @@ pub fn emit_package_rust(package: &CheckedPackage) -> Result<String, Vec<Package
                     .functions
                     .iter()
                     .filter(|f| f.public)
-                    .map(move |f| format!("{imported}.{}", f.name))
+                    .map(|f| f.name.as_str())
+                    .chain(
+                        target
+                            .syntax()
+                            .records
+                            .iter()
+                            .filter(|r| r.public)
+                            .map(|r| r.name.as_str()),
+                    )
+                    .map(move |name| format!("{imported}.{name}"))
             })
             .collect();
         if !source.syntax().statements.is_empty() {
@@ -145,7 +136,7 @@ pub fn emit_package_rust(package: &CheckedPackage) -> Result<String, Vec<Package
                 false,
                 &local,
                 Some(&allowed),
-                !source.syntax().records.is_empty(),
+                true,
                 &mut local_errors,
             );
             validate_contracts(function, &mut local_errors);
@@ -226,7 +217,24 @@ pub fn emit_package_rust(package: &CheckedPackage) -> Result<String, Vec<Package
     }
     let mut out = String::from(PRELUDE);
     for source in package.modules() {
-        emit_records(&source.syntax().records, &mut out);
+        let module = source
+            .syntax()
+            .name
+            .as_ref()
+            .expect("checked named module")
+            .segments
+            .join(".");
+        let records = source
+            .syntax()
+            .records
+            .iter()
+            .cloned()
+            .map(|mut record| {
+                record.name = format!("{module}.{}", record.name);
+                record
+            })
+            .collect::<Vec<_>>();
+        emit_records(&records, &mut out);
     }
     for name in &package.index().topological_order {
         let source = by_name[name];
@@ -478,7 +486,7 @@ fn cgx2_arg(args: &[String], index: i64) -> Result<String, String> {
 "#;
 
 fn validate_type(ty: &TypeSyntax, errors: &mut Vec<EmitDiagnostic>) {
-    if !ty.arguments.is_empty() || ty.path.segments.len() != 1 {
+    if !ty.arguments.is_empty() {
         errors.push(EmitDiagnostic::new(
             "CGRS001",
             format!("type {ty} is unsupported by Rust scalar emission"),
@@ -1069,7 +1077,13 @@ fn emit_expr_context(expr: &Expr, module: Option<&str>) -> String {
                     .join(", ");
                 format!(
                     "Ok::<_, String>({} {{ {fields} }})",
-                    rust_name(&path.segments[0])
+                    rust_name(&if path.segments.len() > 1 {
+                        path.segments.join(".")
+                    } else if let Some(module) = module {
+                        format!("{module}.{}", path.segments[0])
+                    } else {
+                        path.segments[0].clone()
+                    })
                 )
             } else {
                 match path.segments.as_slice() {

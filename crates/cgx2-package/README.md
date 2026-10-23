@@ -41,3 +41,8 @@ Local acyclic scalar packages may use Boolean conditional statements. Dependency
 call discovery and memory-profile detection inspect guards and both branches.
 Public record import/export signatures and conditional memory programs retain
 explicit unsupported boundaries.
+
+Wave 25 supports `pub record` declarations and explicitly imported public record
+annotations/constructors across local package modules. Private records cannot
+cross public signatures. See the
+[profile, example, and validation evidence](docs/wave25-public-record-apis.md).

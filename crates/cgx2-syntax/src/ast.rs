@@ -43,6 +43,7 @@ pub struct Module {
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Record {
+    pub public: bool,
     pub name: String,
     pub fields: Vec<RecordField>,
     pub span: Span,

@@ -1,0 +1,8 @@
+module demo.right.common
+
+pub record Pöint:
+    self: i64
+    _cgx2_contract_result: Bool
+
+pub fn keep(p: Pöint) -> Pöint effects() caps():
+    p

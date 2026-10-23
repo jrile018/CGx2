@@ -10,13 +10,49 @@ pub use check::{check_source, CheckDiagnostic};
 pub use error::RunError;
 pub use eval::{RunResult, Value};
 pub use memory::FailureSnapshot;
-pub use native::{check_native_package, NativeDiagnostic};
+pub use native::NativeDiagnostic;
+mod package_eval;
+
+fn checked_package(root: &Path) -> Result<cgx2_package::CheckedPackage, Vec<NativeDiagnostic>> {
+    cgx2_package::load_checked_package(root).map_err(|errors| {
+        errors
+            .into_iter()
+            .map(|d| NativeDiagnostic {
+                code: d.code.into(),
+                message: d.message,
+                file: d.file,
+                span: d.span,
+            })
+            .collect()
+    })
+}
+
+pub fn check_native_package(root: &Path) -> Result<(), Vec<NativeDiagnostic>> {
+    let package = checked_package(root)?;
+    if package
+        .modules()
+        .iter()
+        .any(|m| m.syntax().functions.iter().any(|f| f.foreign.is_some()))
+    {
+        native::check_native_package(root)
+    } else {
+        Ok(())
+    }
+}
 use std::path::Path;
 
 pub fn run_native_package(
     root: &Path,
     args: &[String],
 ) -> Result<RunResult, Vec<NativeDiagnostic>> {
+    let package = checked_package(root)?;
+    if !package
+        .modules()
+        .iter()
+        .any(|m| m.syntax().functions.iter().any(|f| f.foreign.is_some()))
+    {
+        return package_eval::run(&package, args);
+    }
     native::run_native_package_value(root, args).map(|value| RunResult {
         value: match value {
             native::NativeValue::I64(value) => Value::I64(value),

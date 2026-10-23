@@ -379,3 +379,32 @@ fn conditional_imports_lower_both_branches_and_track_inactive_module_dependencie
     reopened.rerun_cell("value").unwrap();
     assert_eq!(body(&reopened.notebook().cells[2]), "12");
 }
+
+#[test]
+fn imported_public_records_fail_before_execution_with_cell_and_span() {
+    let project = Project::new();
+    project.write("src/alpha.cg", "module demo.alpha\npub record Point:\n    x: i64\npub fn make() -> Point effects() caps():\n    Point(x: 4)\n");
+    for call in [
+        "alpha.make()\n",
+        "alpha.Point(x: 4)\n",
+        "let p: alpha.Point = alpha.make()\n",
+    ] {
+        let notebook = Notebook {
+            version: 1,
+            cells: vec![
+                code("records_import", "import demo.alpha\n"),
+                code("record_use", call),
+            ],
+        };
+        let error = NotebookKernel::open_with_project(notebook, Some(project.root()))
+            .unwrap_err()
+            .to_string();
+        assert!(
+            error.contains("CGNK012")
+                && error.contains("records_import")
+                && error.contains("7..17")
+                && error.contains("imported records"),
+            "{error}"
+        );
+    }
+}

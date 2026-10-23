@@ -50,3 +50,8 @@ functions work in debug/release native output. Local package imports retain the
 scalar-signature boundary. Conditional memory programs and source Python foreign
 bindings remain explicitly unsupported; neither branch is omitted from static
 validation or call discovery.
+
+Wave 25 package emission supports explicitly public scalar records with complete
+module-qualified nominal types and collision-safe symbols. Same-shaped records
+from different modules remain distinct. See the
+[public-record profile and evidence](../cgx2-package/docs/wave25-public-record-apis.md).
