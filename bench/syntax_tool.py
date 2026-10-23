@@ -10,7 +10,7 @@ import subprocess
 import sys
 import tempfile
 
-from syntax_packet import normalize_brace
+from syntax_normalize import normalize_brace
 
 
 def canonical_source(source, variant):
