@@ -307,6 +307,27 @@ fn matrix_preflight_requires_exact_v2_exports_and_keeps_v1_valid() {
 }
 
 #[test]
+fn float32_matrix_preflight_requires_exact_v3_exports() {
+    let (fixture, mut lock) = libtorch_mock_fixture(&[]);
+    lock.bindings[0].layout = "tensor-f32-cpu-matrix-v3".into();
+    lock.bindings[0].symbols = cgx2_bind::libtorch_f32_matrix_facade_symbols();
+    fixture.write_lock(&lock);
+    assert!(check_package(&fixture.0).passed());
+
+    lock.bindings[0]
+        .symbols
+        .retain(|s| s.name != "cgx2_torch_matrix_f32_info");
+    fixture.write_lock(&lock);
+    assert!(codes(&fixture.0).contains(&"CGB018"));
+
+    let (missing, mut lock) = libtorch_mock_fixture(&["-DMOCK_MISSING_F32_COPY"]);
+    lock.bindings[0].layout = "tensor-f32-cpu-matrix-v3".into();
+    lock.bindings[0].symbols = cgx2_bind::libtorch_f32_matrix_facade_symbols();
+    missing.write_lock(&lock);
+    assert!(codes(&missing.0).contains(&"CGB015"));
+}
+
+#[test]
 fn mock_facade_preflight_pins_exact_bytes_and_c_signatures_without_loading() {
     let (fixture, mut lock) = libtorch_mock_fixture(&[]);
     let report = check_package(&fixture.0);

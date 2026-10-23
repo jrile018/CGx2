@@ -35,6 +35,15 @@ CGX2_EXPORT int32_t cgx2_torch_matrix_f64_cpu(const double *values, uint64_t row
 CGX2_EXPORT int32_t cgx2_torch_matmul(const void *left, const void *right, void **output);
 CGX2_EXPORT int32_t cgx2_torch_matrix_shape(const void *matrix, uint64_t *rows, uint64_t *cols);
 CGX2_EXPORT int32_t cgx2_torch_matrix_copy_f64(const void *matrix, double *output, uint64_t capacity);
+/* Additive matrix API v3. Dtype code 1 is CPU float32. Values are copied in
+ * and out; each successful output is a distinct owned handle. Capacity must
+ * equal rows * cols and handles use the existing release entry point. */
+#define CGX2_TORCH_DTYPE_F32 1u
+CGX2_EXPORT uint32_t cgx2_torch_matrix_f32_api_version(void);
+CGX2_EXPORT int32_t cgx2_torch_matrix_f32_cpu(const float *values, uint64_t rows, uint64_t cols, void **output);
+CGX2_EXPORT int32_t cgx2_torch_matmul_f32(const void *left, const void *right, void **output);
+CGX2_EXPORT int32_t cgx2_torch_matrix_f32_info(const void *matrix, uint64_t *rows, uint64_t *cols, uint32_t *dtype);
+CGX2_EXPORT int32_t cgx2_torch_matrix_copy_f32(const void *matrix, float *output, uint64_t capacity);
 #ifdef __cplusplus
 }
 #endif
