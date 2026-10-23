@@ -71,6 +71,8 @@ name = "cgx2-emit-python"
 version = "0.1.0"
 dependencies = [
  "cgx2-cli",
+ "cgx2-emit-rust",
+ "cgx2-package",
  "cgx2-sema",
  "cgx2-syntax",
 ]

@@ -20,3 +20,11 @@ The proof and LLM lanes pause for this wave: the host has no Z3/CVC5 executable,
 ## Coordinator integration gate
 
 Review exact commits and path ownership before integrating. Run combined offline Rust workspace tests, notebook loopback UI tests, Python benchmark tests/readiness, formatter, Clippy, source/native loop parity, translated package execution, and copied real LibTorch matrix test if the local pinned package can be rebuilt. Fix concrete integration defects on the review branch. Keep `main` unchanged until the user reviews the combined result.
+
+## Review result
+
+All six worker commits were reviewed for exclusive path ownership and integrated on `wave19/integration`: memory `ac64986`, range loops `b4de0d4`, Python package translation `db79b94`, CPU matrix `d38dbac`, notebook sweep `f025072`, and parallel zip map `e1f142e`. The coordinator updated the root `Cargo.lock` for Python-emitter dependencies and the frozen benchmark compiler/Cargo hashes; those changes belong to the integration branch only.
+
+Combined offline workspace Rust tests (excluding the loopback UI), UI loopback tests, 102 Python benchmark tests, readiness checks, `cargo fmt --all --check`, and workspace Clippy with `-D warnings` passed. The ignored real pinned LibTorch CPU matrix test was rerun independently: one test passed in 190.21 seconds. The matrix result is specific to the copied Torch 2.11 CPU package on this host. The source/native range-loop and translated package cases are covered by the workspace integration tests.
+
+Review did not close the memory release gate: the sanitizer run covered the direct runtime with leak detection disabled. Notebook sweeps deliberately discard old rich outputs before each trial; the format tracks assets through those outputs, and markdown file links have no portable-asset contract yet. Symlink component checks are path based and could race a concurrent writer in an untrusted directory. The standalone checked parallel zip map is not compiled from `.cg` and has no GPU path. Proof and LLM evidence remain blocked by absent local solver, genuine paired model trials, and scored candidate isolation.
