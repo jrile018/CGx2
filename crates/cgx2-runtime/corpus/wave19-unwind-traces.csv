@@ -1,0 +1,5 @@
+seed,exit,reserve_index,reserve_site
+0x19a001,early,1,ObjectPayload
+0x19a002,panic,1,ObjectPayload
+0x19a003,early,2,ObjectReferences
+0x19a004,panic,2,ObjectReferences
