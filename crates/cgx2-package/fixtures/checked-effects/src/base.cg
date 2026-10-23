@@ -1,0 +1,10 @@
+module demo.base
+
+pub record Value:
+    value: i64
+
+pub fn value(x: i64) -> i64 effects() caps():
+    x + 1
+
+pub fn pack(x: i64) -> Value effects() caps():
+    Value(value: x)

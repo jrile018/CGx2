@@ -3,6 +3,7 @@
 mod check;
 mod diagnostic;
 mod effects;
+mod imports;
 mod memory;
 mod tensor;
 mod types;
@@ -14,5 +15,6 @@ pub use check::{
 };
 pub use diagnostic::TypeDiagnostic;
 pub use effects::EffectSummary;
+pub use imports::CheckedImportedEffects;
 pub use tensor::{tensor_profile, MatrixLiteral, MatrixLiteralF32, TensorOperation, TensorProfile};
 pub use types::Type;

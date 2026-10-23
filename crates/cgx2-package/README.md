@@ -46,3 +46,11 @@ Wave 25 supports `pub record` declarations and explicitly imported public record
 annotations/constructors across local package modules. Private records cannot
 cross public signatures. See the
 [profile, example, and validation evidence](docs/wave25-public-record-apis.md).
+
+## Checked imported effects (Wave 28)
+
+Package body checks now follow dependency order and pass verified transitive
+function effects/capabilities to explicitly imported public calls. Explicit pure
+wrappers work; missing declarations, stale evidence and dishonest dependencies
+remain rejected. Signatures-only advisory checks stay conservative. See the
+[contract, runnable diamond fixture and validation evidence](docs/wave28-checked-effects.md).

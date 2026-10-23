@@ -62,3 +62,27 @@ fn cli_package_route_executes_pure_records() {
         "{errors}"
     );
 }
+
+#[test]
+fn explicit_pure_import_diamond_runs_through_library_and_cli() {
+    let root = Path::new("../cgx2-package/fixtures/checked-effects");
+    assert_eq!(
+        run_native_package(root, &[]).unwrap().value.to_string(),
+        "42"
+    );
+    for mode in ["check", "run"] {
+        let output = std::process::Command::new(env!("CARGO_BIN_EXE_cgx2"))
+            .arg(mode)
+            .arg(root)
+            .output()
+            .unwrap();
+        assert!(
+            output.status.success(),
+            "{}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+        if mode == "run" {
+            assert_eq!(output.stdout, b"42\n");
+        }
+    }
+}

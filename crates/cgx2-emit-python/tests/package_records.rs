@@ -97,3 +97,49 @@ fn same_basename_unicode_and_generated_looking_names_do_not_collide() {
     assert_eq!(output.stdout, b"42\n");
     fs::remove_dir_all(dir).unwrap();
 }
+
+#[test]
+fn explicit_pure_import_diamond_emits_and_preserves_runtime_errors_and_snapshot() {
+    let root = std::env::temp_dir().join(format!(
+        "cgx2-checked-effects-python-{}",
+        std::process::id()
+    ));
+    fs::create_dir_all(root.join("src")).unwrap();
+    let fixture = Path::new("../cgx2-package/fixtures/checked-effects");
+    fs::copy(fixture.join("cgx2.toml"), root.join("cgx2.toml")).unwrap();
+    for name in ["main", "join", "left", "right", "base"] {
+        fs::copy(
+            fixture.join(format!("src/{name}.cg")),
+            root.join(format!("src/{name}.cg")),
+        )
+        .unwrap();
+    }
+    let base = root.join("src/base.cg");
+    let pure = fs::read_to_string(&base).unwrap();
+    for (source, failure) in [(&pure, false), (&pure.replace("x + 1", "x / 0"), true)] {
+        fs::write(&base, source).unwrap();
+        let package = load_checked_package(&root).unwrap();
+        let files = emit_package_python(&package).unwrap();
+        assert_eq!(files, emit_package_python(&package).unwrap());
+        let output = root.join(format!("python-{failure}"));
+        cgx2_emit_python::write_package_python(&package, &output).unwrap();
+        let result = Command::new("python3").arg(&output).output().unwrap();
+        assert_eq!(result.status.success(), !failure);
+        if failure {
+            assert!(String::from_utf8_lossy(&result.stderr).contains("CGR006"));
+        } else {
+            assert_eq!(result.stdout, b"42\n");
+        }
+    }
+    let package = load_checked_package(&root).unwrap();
+    let output = root.join("python-true");
+    let previous = fs::read(output.join("__main__.py")).unwrap();
+    fs::write(&base, pure.replace("x + 1", "arg_count()")).unwrap();
+    assert!(load_checked_package(&root).is_err());
+    assert_eq!(
+        cgx2_emit_python::write_package_python(&package, &output).unwrap_err()[0].code,
+        "CGP018"
+    );
+    assert_eq!(fs::read(output.join("__main__.py")).unwrap(), previous);
+    fs::remove_dir_all(root).unwrap();
+}

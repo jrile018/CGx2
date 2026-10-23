@@ -483,3 +483,197 @@ fn public_imported_record_construction_requires_direct_defining_imports() {
     f.write("src/right.cg", "module demo.right\nimport demo.left\npub fn bad() -> demo.left.Missing:\n    demo.left.Point(x: 7)\n");
     assert!(codes(&f).contains(&"CGT002"));
 }
+
+#[test]
+fn checked_pure_diamond_keeps_nominal_records_and_explicit_index_statuses() {
+    let package = load_checked_package(Path::new("fixtures/checked-effects")).unwrap();
+    assert_eq!(
+        package.index().topological_order,
+        [
+            "demo.base",
+            "demo.left",
+            "demo.right",
+            "demo.join",
+            "demo.main"
+        ]
+    );
+    for module in &package.index().modules {
+        for function in &module.api.functions {
+            assert!(function.effects.is_empty(), "{function:?}");
+            assert!(function.capabilities.is_empty());
+            assert_eq!(function.effects_status, "explicit");
+            assert_eq!(function.capabilities_status, "explicit");
+        }
+    }
+    assert_eq!(
+        package.index().render_json(),
+        load_package(Path::new("fixtures/checked-effects"))
+            .unwrap()
+            .render_json()
+    );
+}
+
+fn effect_chain(base: &str, middle: &str, caller: &str) -> Fixture {
+    let f = Fixture::new();
+    f.manifest("schema_version = 1\nname = \"effects\"\nentry = \"src/main.cg\"\nsources = [\"src/main.cg\", \"src/middle.cg\", \"src/base.cg\"]\n");
+    f.write("src/base.cg", &format!("module demo.base\n{base}"));
+    f.write(
+        "src/middle.cg",
+        &format!("module demo.middle\nimport demo.base\n{middle}"),
+    );
+    f.write(
+        "src/main.cg",
+        &format!("module demo.main\nimport demo.middle\n{caller}"),
+    );
+    f
+}
+
+#[test]
+fn transitive_argument_effects_capabilities_and_public_upper_bounds_are_truthful() {
+    let f = effect_chain(
+        "pub fn value() -> i64 effects(ReadArgs) caps(ArgsRead):\n    arg_count()\n",
+        "pub fn value() -> i64:\n    demo.base.value()\n",
+        "pub fn main() -> i64 effects(ReadArgs) caps(ArgsRead):\n    demo.middle.value()\n",
+    );
+    let package = load_checked_package(f.root()).unwrap();
+    for module in &package.index().modules {
+        assert_eq!(module.api.functions[0].effects, ["ReadArgs"]);
+        assert_eq!(module.api.functions[0].capabilities, ["ArgsRead"]);
+        assert_eq!(
+            module.api.functions[0].effects_status,
+            if module.name.as_deref() == Some("demo.middle") {
+                "inferred"
+            } else {
+                "explicit"
+            }
+        );
+    }
+    for (decl, code) in [
+        ("effects() caps(ArgsRead)", "CGT012"),
+        ("effects(ReadArgs) caps()", "CGT013"),
+    ] {
+        let source = format!("module demo.main\nimport demo.middle\npub fn main() -> i64 {decl}:\n    demo.middle.value()\n");
+        f.write("src/main.cg", &source);
+        let errors = load_package(f.root()).unwrap_err();
+        let error = errors.iter().find(|e| e.code == code).unwrap();
+        let span = error.span.unwrap();
+        assert_eq!(&source[span.start..span.end], "demo.middle.value()");
+        assert!(error.message.contains("demo.middle.value"));
+        assert!(error.related.as_ref().unwrap().file.ends_with("middle.cg"));
+    }
+    // Declared public upper bounds are retained in the index, while calls use
+    // actual body effects, exactly like local calls.
+    f.write(
+        "src/base.cg",
+        "module demo.base\npub fn value() -> i64 effects(ReadArgs) caps(ArgsRead):\n    7\n",
+    );
+    f.write("src/main.cg", "module demo.main\nimport demo.middle\npub fn main() -> i64 effects() caps():\n    demo.middle.value()\n");
+    let package = load_checked_package(f.root()).unwrap();
+    assert_eq!(
+        package.index().modules[0].api.functions[0].effects,
+        ["ReadArgs"]
+    );
+    assert!(package.index().modules[1].api.functions[0]
+        .effects
+        .is_empty());
+}
+
+#[test]
+fn inactive_branches_empty_loops_and_constructor_arguments_keep_effects() {
+    for body in [
+        "    if false:\n        demo.base.value()\n    else:\n        0\n    0\n",
+        "    for i in range(0, 0):\n        demo.base.value()\n    0\n",
+        "    let record = Value(value: demo.base.value())\n    record.value\n",
+    ] {
+        let f = effect_chain(
+            "pub fn value() -> i64:\n    arg_count()\n",
+            &format!("record Value:\n    value: i64\npub fn value() -> i64:\n{body}"),
+            "pub fn main() -> i64 effects() caps():\n    demo.middle.value()\n",
+        );
+        let errors = load_package(f.root()).unwrap_err();
+        assert!(
+            errors.iter().any(|e| e.code == "CGT012"),
+            "{body}: {errors:?}"
+        );
+    }
+}
+
+#[test]
+fn dishonest_dependencies_never_publish_empty_summaries() {
+    let f = effect_chain(
+        "pub fn value() -> i64 effects() caps():\n    arg_count()\n",
+        "pub fn value() -> i64 effects() caps():\n    demo.base.value()\n",
+        "pub fn main() -> i64 effects() caps():\n    demo.middle.value()\n",
+    );
+    let errors = load_package(f.root()).unwrap_err();
+    for file in ["base.cg", "middle.cg", "main.cg"] {
+        assert!(
+            errors
+                .iter()
+                .any(|e| e.code == "CGT012" && e.file.ends_with(file)),
+            "{errors:?}"
+        );
+    }
+}
+
+#[test]
+fn private_unimported_unknown_and_prefix_matches_cannot_borrow_checked_effects() {
+    for (call, code) in [
+        ("demo.base.hidden()", "CGT009"),
+        ("demo.base.missing()", "CGT001"),
+        ("demo.middle.value()", "CGT008"),
+        ("demo.bas.value()", "CGT008"),
+    ] {
+        let f = effect_chain(
+            "pub fn value() -> i64:\n    1\nfn hidden() -> i64:\n    2\n",
+            &format!("pub fn value() -> i64 effects() caps():\n    {call}\n"),
+            "pub fn main() -> i64:\n    demo.middle.value()\n",
+        );
+        let errors = load_package(f.root()).unwrap_err();
+        assert!(errors.iter().any(|e| e.code == code), "{call}: {errors:?}");
+        assert!(errors.iter().any(|e| e.code == "CGT012"));
+    }
+}
+
+#[test]
+fn transitive_foreign_and_native_capabilities_are_checked_without_execution() {
+    for (declaration, caps) in [
+        ("foreign python pub fn value(x: i64) -> i64 effects(Foreign) caps(ForeignCall) = math.value runtime \"local:cpython\" ownership copied\n", "ForeignCall"),
+        ("unsafe foreign native pub fn value(x: i64) -> i64 effects(Foreign) caps(native) = fixture.value runtime \"fixture@1\" ownership copied\n", "native"),
+    ] {
+        let f = effect_chain(
+            declaration,
+            &format!("pub fn value() -> i64 effects(Foreign) caps({caps}):\n    demo.base.value(1)\n"),
+            &format!("pub fn main() -> i64 effects(Foreign) caps({caps}):\n    demo.middle.value()\n"),
+        );
+        // Check declarations only; no foreign library is opened or called.
+        f.write("src/base.cg", &format!("module demo.base\n{declaration}"));
+        if caps == "native" {
+            let manifest = fs::read_to_string(f.root().join("cgx2.toml")).unwrap();
+            f.manifest(&format!("{}binding_lock = \"cgx2-bind.lock.json\"\n", manifest.replace("schema_version = 1", "schema_version = 2")));
+        }
+        let package = load_checked_package(f.root()).unwrap();
+        let main = &package.index().modules[1].api.functions[0];
+        assert_eq!(main.effects, ["Foreign"]);
+        assert_eq!(main.capabilities, [caps]);
+        f.write("src/main.cg", "module demo.main\nimport demo.middle\npub fn main() -> i64 effects() caps():\n    demo.middle.value()\n");
+        let errors = load_package(f.root()).unwrap_err();
+        assert!(errors.iter().any(|e| e.code == "CGT012"));
+        assert!(errors.iter().any(|e| e.code == "CGT013"));
+    }
+}
+
+#[test]
+fn imported_local_assignment_retains_mutate_classification() {
+    let f = effect_chain(
+        "pub fn value() -> i64:\n    let mut answer = 0\n    answer += 1\n    answer\n",
+        "pub fn value() -> i64:\n    demo.base.value()\n",
+        "pub fn main() -> i64 effects(Mutate) caps():\n    demo.middle.value()\n",
+    );
+    let package = load_checked_package(f.root()).unwrap();
+    for module in &package.index().modules {
+        assert_eq!(module.api.functions[0].effects, ["Mutate"]);
+    }
+    f.write("src/main.cg", "module demo.main\nimport demo.middle\npub fn main() -> i64 effects() caps():\n    demo.middle.value()\n");
+    assert!(codes(&f).contains(&"CGT012"));
+}

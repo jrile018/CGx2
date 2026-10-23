@@ -1,0 +1,7 @@
+module demo.main
+import demo.base
+import demo.join
+
+fn main() -> i64 effects() caps():
+    let answer = demo.join.value(20)
+    answer.value

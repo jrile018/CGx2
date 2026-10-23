@@ -2,7 +2,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use cgx2_syntax::{Expr, ExprKind, Function, Module, Span, Stmt, StmtKind};
 
-use crate::TypeDiagnostic;
+use crate::{ImportedSignatures, TypeDiagnostic};
 
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct EffectSummary {
@@ -112,13 +112,27 @@ fn stmt_sites(stmt: &Stmt, sites: &mut Vec<Site>) {
 }
 
 pub(crate) fn analyze(module: &Module) -> (BTreeMap<String, EffectSummary>, Vec<TypeDiagnostic>) {
-    analyze_with_records(module, &BTreeSet::new())
+    analyze_with_imports(module, &ImportedSignatures::default())
 }
 
-pub(crate) fn analyze_with_records(
+pub(crate) fn analyze_with_imports(
     module: &Module,
-    records: &BTreeSet<String>,
+    imports: &ImportedSignatures,
 ) -> (BTreeMap<String, EffectSummary>, Vec<TypeDiagnostic>) {
+    let imported_effects = imports.verified_effects(module);
+    let records: BTreeSet<_> = imports
+        .public_records
+        .keys()
+        .filter(|name| {
+            name.rsplit_once('.').is_some_and(|(prefix, _)| {
+                module
+                    .imports
+                    .iter()
+                    .any(|import| import.segments.join(".") == prefix)
+            })
+        })
+        .cloned()
+        .collect();
     let mut sites = BTreeMap::new();
     let mut summaries = BTreeMap::new();
     for function in &module.functions {
@@ -131,6 +145,15 @@ pub(crate) fn analyze_with_records(
                 records.contains(name) || module.records.iter().any(|record| record.name == *name)
             })
         });
+        for site in &mut observations {
+            if let Some(target) = &site.target {
+                if imported_effects.contains_key(target) {
+                    site.callee = Some(target.clone());
+                    site.effect = None;
+                    site.capability = None;
+                }
+            }
+        }
         sites.insert(function.name.clone(), observations);
         let mut summary = EffectSummary {
             effects_explicit: function.effects.is_some(),
@@ -168,7 +191,8 @@ pub(crate) fn analyze_with_records(
                     summary.capabilities.insert(capability.into());
                 }
                 if let Some(callee) = &site.callee {
-                    if let Some(called) = prior.get(callee) {
+                    if let Some(called) = prior.get(callee).or_else(|| imported_effects.get(callee))
+                    {
                         summary.effects.extend(called.effects.iter().cloned());
                         summary
                             .capabilities
@@ -211,7 +235,10 @@ pub(crate) fn analyze_with_records(
         }
         for site in &sites[&function.name] {
             let (effects, capabilities) = if let Some(callee) = &site.callee {
-                if let Some(called) = summaries.get(callee) {
+                if let Some(called) = summaries
+                    .get(callee)
+                    .or_else(|| imported_effects.get(callee))
+                {
                     (&called.effects, &called.capabilities)
                 } else {
                     static UNKNOWN: std::sync::LazyLock<BTreeSet<String>> =
@@ -221,7 +248,7 @@ pub(crate) fn analyze_with_records(
             } else {
                 continue;
             };
-            check_site(function, site.span, effects, capabilities, &mut diagnostics);
+            check_site(function, site, effects, capabilities, &mut diagnostics);
         }
         for site in &sites[&function.name] {
             let effects = site
@@ -232,13 +259,7 @@ pub(crate) fn analyze_with_records(
                 .capability
                 .map(|s| BTreeSet::from([s.into()]))
                 .unwrap_or_default();
-            check_site(
-                function,
-                site.span,
-                &effects,
-                &capabilities,
-                &mut diagnostics,
-            );
+            check_site(function, site, &effects, &capabilities, &mut diagnostics);
         }
         if function.effects.is_some()
             && inferred.effects.contains("Unknown")
@@ -256,19 +277,24 @@ pub(crate) fn analyze_with_records(
 
 fn check_site(
     function: &Function,
-    span: Span,
+    site: &Site,
     effects: &BTreeSet<String>,
     capabilities: &BTreeSet<String>,
     diagnostics: &mut Vec<TypeDiagnostic>,
 ) {
+    let context = site
+        .target
+        .as_ref()
+        .map(|target| format!(" by call to `{target}`"))
+        .unwrap_or_default();
     if let Some(declared) = &function.effects {
         let allowed: BTreeSet<_> = declared.names.iter().map(|n| n.name.as_str()).collect();
         for effect in effects {
             if !allowed.contains(effect.as_str()) || effect == "Unknown" {
                 diagnostics.push(TypeDiagnostic::new(
                     "CGT012",
-                    format!("effect `{effect}` is not permitted by explicit declaration"),
-                    span,
+                    format!("effect `{effect}` is not permitted by explicit declaration{context}"),
+                    site.span,
                 ));
             }
         }
@@ -279,8 +305,8 @@ fn check_site(
             if !allowed.contains(capability.as_str()) {
                 diagnostics.push(TypeDiagnostic::new(
                     "CGT013",
-                    format!("capability `{capability}` is required"),
-                    span,
+                    format!("capability `{capability}` is required{context}"),
+                    site.span,
                 ));
             }
         }

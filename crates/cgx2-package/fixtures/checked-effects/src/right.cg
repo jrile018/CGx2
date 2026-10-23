@@ -1,0 +1,5 @@
+module demo.right
+import demo.base
+
+pub fn value(x: i64) -> i64 effects() caps():
+    demo.base.value(x)

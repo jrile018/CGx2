@@ -1,0 +1,8 @@
+module demo.join
+import demo.base
+import demo.left
+import demo.right
+
+pub fn value(x: i64) -> demo.base.Value effects() caps():
+    let left = demo.left.value(x)
+    demo.base.Value(value: left.value + demo.right.value(x))

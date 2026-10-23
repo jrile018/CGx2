@@ -66,6 +66,8 @@ pub struct ImportedSignatures {
     /// Keys and record names are defining-module-qualified nominal identities.
     pub public_records: BTreeMap<String, Record>,
     pub private_records: BTreeSet<String>,
+    /// Opaque body-checked summaries. Defaults to no trusted imported effects.
+    pub checked_effects: crate::CheckedImportedEffects,
 }
 
 fn record_identity(module: &Module, name: &str, imported: &ImportedSignatures) -> String {
@@ -377,8 +379,7 @@ pub fn check_module_with_imports(
         effect_summaries: BTreeMap::new(),
         module: module.clone(),
     };
-    let (effect_summaries, effect_diagnostics) =
-        effects::analyze_with_records(module, &imported.public_records.keys().cloned().collect());
+    let (effect_summaries, effect_diagnostics) = effects::analyze_with_imports(module, imported);
     checker.effect_summaries = effect_summaries;
     checker.diagnostics.extend(effect_diagnostics);
     checker.insert_builtin("arg_count", vec![], Type::I64);

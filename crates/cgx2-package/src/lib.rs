@@ -6,10 +6,7 @@ use std::io::Read;
 use std::path::{Component, Path, PathBuf};
 
 use cgx2_api_index::{build_index_with_imports, ApiIndex, IndexError};
-use cgx2_sema::{
-    check_module_with_imports, collect_public_signatures_with_imports, ImportedSignatures,
-    TypedModule,
-};
+use cgx2_sema::{collect_public_signatures_with_imports, ImportedSignatures, TypedModule};
 use cgx2_syntax::{parse_module, Expr, ExprKind, Module, Span, Stmt, StmtKind};
 use sha2::{Digest, Sha256};
 
@@ -623,6 +620,25 @@ pub fn load_checked_package(root: &Path) -> Result<CheckedPackage, Vec<PackageDi
     let public_names: BTreeSet<String> = declarations.keys().cloned().collect();
     let mut modules = Vec::new();
     let mut checked_modules = Vec::new();
+    // All declarations are known, but effect evidence is published only after a
+    // dependency body passes checking. Keep unnamed single-source packages working.
+    let source_order: BTreeMap<_, _> = parsed_sources
+        .iter()
+        .enumerate()
+        .map(|(index, source)| (source.source.clone(), index))
+        .collect();
+    let ranks: BTreeMap<_, _> = topological_order
+        .iter()
+        .enumerate()
+        .map(|(rank, name)| (name.as_str(), rank))
+        .collect();
+    parsed_sources.sort_by_key(|source| {
+        source
+            .name
+            .as_deref()
+            .and_then(|name| ranks.get(name).copied())
+            .unwrap_or(0)
+    });
     for source in parsed_sources {
         if !source.module.imports.is_empty() && contains_memory_script(&source.module) {
             errors.push(PackageDiagnostic::new(
@@ -633,13 +649,13 @@ pub fn load_checked_package(root: &Path) -> Result<CheckedPackage, Vec<PackageDi
             ));
             continue;
         }
-        let typed = match check_module_with_imports(&source.module, &imported) {
+        let typed = match imported.check_and_record_module(&source.module) {
             Ok(typed) => typed,
             Err(diagnostics) => {
                 errors.extend(diagnostics.into_iter().map(|d| {
                     let mut diagnostic =
                         PackageDiagnostic::new(d.code, d.message, &source.listed, Some(d.span));
-                    if matches!(d.code, "CGT003" | "CGT005" | "CGT010") {
+                    if matches!(d.code, "CGT003" | "CGT005" | "CGT010" | "CGT012" | "CGT013") {
                         let mut calls = Vec::new();
                         collect_calls(&source.module, &public_names, &mut calls);
                         if let Some(call) = calls.iter().find(|call| call.span == d.span) {
@@ -697,6 +713,7 @@ pub fn load_checked_package(root: &Path) -> Result<CheckedPackage, Vec<PackageDi
         return Err(errors);
     }
     modules.sort_by(|a, b| a.name.cmp(&b.name).then(a.source.cmp(&b.source)));
+    checked_modules.sort_by_key(|module| source_order[&module.source]);
     Ok(CheckedPackage {
         root: canonical_root,
         manifest_canonical_path: canonical_manifest,
