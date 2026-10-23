@@ -1,0 +1,41 @@
+   Compiling cgx2-verify-cli v0.1.0 (/home/john-riley/.codex/worktrees/ed20/lang/crates/cgx2-verify-cli)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.22s
+     Running unittests src/main.rs (target/release-verification/debug/deps/cgx2_verify-159b8a938670fc3a)
+
+running 4 tests
+test source::tests::original_source_oracle_detects_deleted_unused_division_failure ... ok
+test source::tests::original_source_oracle_rejects_corrupted_lowering_and_encoding ... ok
+test source::tests::original_source_replay_and_oracle_reject_unconditional_branch_definedness ... ok
+test source::tests::library_only_accumulator_lowering_has_original_ast_parity_without_source_admission ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/command.rs (target/release-verification/debug/deps/command-0a03bd206082be27)
+
+running 8 tests
+test solver_timeout_large_and_stalled_output_are_bounded ... FAILED
+test finite_proof_scope_and_stable_json ... ok
+test json_conditionals_are_typed_and_select_only_one_branch ... ok
+test false_inconsistent_cap_and_foreign_call ... ok
+test malformed_oversized_and_invalid_domains_are_rejected ... ok
+test named_solver_stub_rejects_partial_protocol ... ok
+test fake_solver_is_protocol_evidence_only ... ok
+test solver_statuses_are_untrusted_observations ... ok
+
+failures:
+
+---- solver_timeout_large_and_stalled_output_are_bounded stdout ----
+
+thread 'solver_timeout_large_and_stalled_output_are_bounded' (339) panicked at crates/cgx2-verify-cli/tests/command.rs:361:5:
+assertion `left == right` failed
+  left: String("unavailable")
+ right: "timeout"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    solver_timeout_large_and_stalled_output_are_bounded
+
+test result: FAILED. 7 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+error: test failed, to rerun pass `-p cgx2-verify-cli --test command`

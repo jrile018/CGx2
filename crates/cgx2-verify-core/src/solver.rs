@@ -4,7 +4,7 @@ use std::sync::mpsc;
 use std::thread;
 use std::time::{Duration, Instant};
 
-use crate::UnknownReason;
+use super::UnknownReason;
 
 /// Maximum retained bytes from each child output stream.
 pub const SOLVER_OUTPUT_LIMIT: usize = 16 * 1024;

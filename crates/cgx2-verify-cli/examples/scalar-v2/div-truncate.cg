@@ -1,0 +1,4 @@
+pub fn f(x: i64) -> i64 effects() caps():
+    requires x == 0 - 7
+    ensures result == 0 - 2
+    return x / 3

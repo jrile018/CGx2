@@ -1,0 +1,7 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running tests/command.rs (target/release-verification/debug/deps/command-0a03bd206082be27)
+
+running 1 test
+test solver_timeout_large_and_stalled_output_are_bounded ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.16s

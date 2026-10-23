@@ -1,10 +1,10 @@
 use std::collections::BTreeMap;
 
-use crate::smtlib::symbol;
-use crate::{eval, Contract, Counterexample, EvalError, Failure, Sort, UnknownReason, Value};
+use super::smtlib::symbol;
+use super::{eval, Contract, Counterexample, EvalError, Failure, Sort, UnknownReason, Value};
 
 fn tokens(input: &str) -> Result<Vec<&str>, UnknownReason> {
-    if input.len() > crate::SOLVER_OUTPUT_LIMIT || !input.is_ascii() {
+    if input.len() > super::SOLVER_OUTPUT_LIMIT || !input.is_ascii() {
         return Err(UnknownReason::MalformedResponse);
     }
     let bytes = input.as_bytes();
@@ -91,7 +91,7 @@ pub fn validate_solver_witness(
     output: &str,
     failure: Failure,
 ) -> Result<Counterexample, UnknownReason> {
-    if output.len() > crate::SOLVER_OUTPUT_LIMIT {
+    if output.len() > super::SOLVER_OUTPUT_LIMIT {
         return Err(UnknownReason::MalformedResponse);
     }
     contract

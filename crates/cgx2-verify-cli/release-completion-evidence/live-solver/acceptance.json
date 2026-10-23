@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "profile": "scalar_v2",
+  "state": "blocked/unrun",
+  "timeout_ms_per_solver_process": 2000,
+  "max_cases": 100000,
+  "input_limit_bytes": 65536,
+  "solver": null,
+  "trusted_solver_sha256": null,
+  "trust": "operator must independently trust the supplied executable and pin; probes are not an attestation",
+  "accumulator_source": "blocked by shared CGT012 Mutate effect admission; library-only expansion tests",
+  "cases": [],
+  "reason": "trusted Z3/CVC5 executable unavailable"
+}
