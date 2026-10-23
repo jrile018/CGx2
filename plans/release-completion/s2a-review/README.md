@@ -15,3 +15,5 @@ Worker logs contain 1059 passed/0failed/6ignored across 232 suites; Clippy/fmt/d
 Reproduction inputs and captured outputs are in evidence/. report.json preserves the initial package setup failure before missing declared modules were supplied; package-report.json is the valid final reproduction. inferred-report.json uses the required else clause and demonstrates check 0 / run 1 / build 1. api-report.json includes human and JSON outputs. Binaries came from the delivered worker private debug target; this is functional repro, not performance or solver evidence.
 
 Three disjoint repair plans are ready: [match-flow](match-flow/plan.md), [native-records](native-records/plan.md), [api-text](api-text/plan.md). Public AST/type/value shapes are frozen for these fixes. Repair chats may use the staged baseline to fix these specific defects; dependent S2b/S3 feature work remains blocked until combined repair review and integration gates. No R-row closed. Existing external prerequisites remain unchanged.
+
+All three repair chats are confirmed running from8902cbd; see ../thread-state.json and ../dispatch.md for IDs and cursors.

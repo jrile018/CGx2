@@ -61,3 +61,13 @@ Base: 18b82a381c9f70278fad9373ad3db044b8a57693. One shared language/type chat is
 ## S2a review: three bounded repairs
 
 S2a delivered 16028e7 and is staged as ca46bb3, repair-required. Coordinator reproduced match-flow, native package-record and human API-output defects; see s2a-review/README.md. No dependent feature stage is accepted. Three disjoint repair plans are ready; actual dispatch IDs/status follow.
+
+## S2a repair chats running
+
+Common repair base: `8902cbd92533b81e801bf2c5bea725f5508fe3e2`. All three worktree HEADs match it and all three chats are confirmed active via wait_threads. Saved permanent IDs, queued client IDs and cursors are in thread-state.json. Recent-chat listing omitted these agent-created chats; read-only local metadata and read_thread resolved and confirmed their titles/paths. No duplicates created.
+
+| Lane | Permanent chat ID | Worktree | Status |
+| --- | --- | --- | --- |
+| match-flow | `01a16b31-6c0c-7d23-86e6-39703eb67696` | /home/john-riley/.codex/worktrees/0020/lang | running |
+| native-records | `01a16b31-71b6-71c0-bca5-fac3df7e31c2` | /home/john-riley/.codex/worktrees/7f73/lang | running |
+| api-text | `01a16b31-80af-7cd1-ac39-090aae87c699` | /home/john-riley/.codex/worktrees/8386/lang | running |
