@@ -12,6 +12,8 @@ pub fn parse_module(source: &str) -> Result<Module, Vec<SyntaxDiagnostic>> {
     let mut parser = Parser {
         tokens,
         pos: 0,
+        type_depth: 0,
+        loop_depth: 0,
         errors: Vec::new(),
     };
     let name = if parser.at(&TokenKind::Module) {
@@ -40,11 +42,26 @@ pub fn parse_module(source: &str) -> Result<Module, Vec<SyntaxDiagnostic>> {
         parser.end_statement();
     }
     let mut records = Vec::new();
+    let mut variants = Vec::new();
     let mut functions = Vec::new();
     let mut statements = Vec::new();
     while !parser.at(&TokenKind::Eof) {
         let before = parser.pos;
-        if parser.at_name("record")
+        if (parser.at_name("variant")
+            && parser
+                .tokens
+                .get(parser.pos + 1)
+                .is_some_and(|t| matches!(t.kind, TokenKind::Name(_))))
+            || (parser.at(&TokenKind::Pub)
+                && parser
+                    .tokens
+                    .get(parser.pos + 1)
+                    .is_some_and(|t| matches!(&t.kind, TokenKind::Name(n) if n == "variant")))
+        {
+            if let Some(variant) = parser.parse_variant() {
+                variants.push(variant);
+            }
+        } else if parser.at_name("record")
             || (parser.at(&TokenKind::Pub)
                 && parser.tokens.get(parser.pos + 1).is_some_and(
                     |token| matches!(&token.kind, TokenKind::Name(name) if name == "record"),
@@ -94,6 +111,7 @@ pub fn parse_module(source: &str) -> Result<Module, Vec<SyntaxDiagnostic>> {
         name,
         imports,
         records,
+        variants,
         functions,
         statements,
         span: Span {
@@ -123,15 +141,211 @@ pub fn parse_module(source: &str) -> Result<Module, Vec<SyntaxDiagnostic>> {
 struct Parser {
     tokens: Vec<Token>,
     pos: usize,
+    type_depth: usize,
+    loop_depth: usize,
     errors: Vec<SyntaxDiagnostic>,
 }
 
 impl Parser {
+    fn parse_type_parameters(&mut self) -> Option<Vec<crate::TypeParameter>> {
+        let mut parameters = Vec::new();
+        if self.eat(&TokenKind::LAngle).is_none() {
+            return Some(parameters);
+        }
+        loop {
+            let (name, span) = self.name()?;
+            let mut constraints = Vec::new();
+            if self.eat(&TokenKind::Colon).is_some() {
+                loop {
+                    constraints.push(self.parse_path()?);
+                    if self.eat(&TokenKind::Plus).is_none() {
+                        break;
+                    }
+                }
+            }
+            let end = constraints.last().map_or(span.end, |p| p.span.end);
+            if parameters
+                .iter()
+                .any(|p: &crate::TypeParameter| p.name == name)
+            {
+                self.errors.push(SyntaxDiagnostic {
+                    code: "CGS113",
+                    message: format!("duplicate type parameter `{name}`"),
+                    span,
+                });
+            }
+            parameters.push(crate::TypeParameter {
+                name,
+                constraints,
+                span: Span {
+                    start: span.start,
+                    end,
+                },
+            });
+            if self.eat(&TokenKind::Comma).is_none() {
+                break;
+            }
+        }
+        self.expect(
+            &TokenKind::RAngle,
+            "CGS113",
+            "expected > after type parameters",
+        )?;
+        Some(parameters)
+    }
+
+    fn parse_variant(&mut self) -> Option<crate::Variant> {
+        let start = self.peek().span.start;
+        let public = self.eat(&TokenKind::Pub).is_some();
+        self.advance();
+        let (name, _) = self.name()?;
+        let type_parameters = self.parse_type_parameters()?;
+        self.expect(&TokenKind::Colon, "CGS114", "expected : after variant")?;
+        self.expect(
+            &TokenKind::Newline,
+            "CGS114",
+            "expected newline after variant",
+        )?;
+        self.expect(&TokenKind::Indent, "CGS114", "expected indented cases")?;
+        let mut cases = Vec::new();
+        let mut seen = BTreeSet::new();
+        while !self.at(&TokenKind::Dedent) && !self.at(&TokenKind::Eof) {
+            let (name, span) = self.name()?;
+            if !seen.insert(name.clone()) {
+                self.errors.push(SyntaxDiagnostic {
+                    code: "CGS114",
+                    message: format!("duplicate variant case `{name}`"),
+                    span,
+                });
+            }
+            let mut payloads = Vec::new();
+            if self.eat(&TokenKind::LParen).is_some() {
+                if !self.at(&TokenKind::RParen) {
+                    loop {
+                        payloads.push(self.parse_type()?);
+                        if self.eat(&TokenKind::Comma).is_none() {
+                            break;
+                        }
+                    }
+                }
+                self.expect(
+                    &TokenKind::RParen,
+                    "CGS114",
+                    "expected ) after payload types",
+                )?;
+            }
+            let end = self.end_statement()?;
+            cases.push(crate::VariantCase {
+                name,
+                payloads,
+                span: Span {
+                    start: span.start,
+                    end,
+                },
+            });
+        }
+        let end = self
+            .expect(&TokenKind::Dedent, "CGS114", "expected end of variant")?
+            .span
+            .end;
+        if cases.is_empty() {
+            self.error("CGS114", "variant requires at least one case");
+        }
+        Some(crate::Variant {
+            public,
+            name,
+            type_parameters,
+            cases,
+            span: Span { start, end },
+        })
+    }
+
+    fn parse_match(&mut self) -> Option<Stmt> {
+        let start = self.advance().span.start;
+        let scrutinee = self.parse_expr(0)?;
+        self.expect(
+            &TokenKind::Colon,
+            "CGS116",
+            "expected : after match scrutinee",
+        )?;
+        self.expect(
+            &TokenKind::Newline,
+            "CGS116",
+            "expected newline after match",
+        )?;
+        self.expect(&TokenKind::Indent, "CGS116", "expected indented match arms")?;
+        let mut arms = Vec::new();
+        while !self.at(&TokenKind::Dedent) && !self.at(&TokenKind::Eof) {
+            let arm_start = self.peek().span.start;
+            let pattern = if self.at_name("_") {
+                crate::Pattern::Wildcard(self.advance().span)
+            } else {
+                let mut ty = self.parse_type()?;
+                let case = if self.eat(&TokenKind::Dot).is_some() {
+                    self.name()?.0
+                } else {
+                    if ty.path.segments.len() < 2 {
+                        self.error("CGS116", "pattern requires a qualified variant case");
+                        return None;
+                    }
+                    let case = ty.path.segments.pop()?;
+                    ty.path.span.end -= case.len() + 1;
+                    ty.span.end = ty.path.span.end;
+                    case
+                };
+                let mut bindings = Vec::new();
+                if self.eat(&TokenKind::LParen).is_some() {
+                    if !self.at(&TokenKind::RParen) {
+                        loop {
+                            let (name, span) = self.name()?;
+                            bindings.push(DeclaredName { name, span });
+                            if self.eat(&TokenKind::Comma).is_none() {
+                                break;
+                            }
+                        }
+                    }
+                    self.expect(&TokenKind::RParen, "CGS116", "nested patterns and guards are unsupported; expected ) after binding names")?;
+                }
+                crate::Pattern::Case {
+                    ty,
+                    case,
+                    bindings,
+                    span: Span {
+                        start: arm_start,
+                        end: self.peek().span.start,
+                    },
+                }
+            };
+            if self.at_name("if") || self.at(&TokenKind::If) {
+                self.error("CGS116", "match guards are unsupported");
+                return None;
+            }
+            let (body, end) = self.parse_suite()?;
+            arms.push(crate::MatchArm {
+                pattern,
+                body,
+                span: Span {
+                    start: arm_start,
+                    end,
+                },
+            });
+        }
+        let end = self
+            .expect(&TokenKind::Dedent, "CGS116", "expected end of match")?
+            .span
+            .end;
+        Some(Stmt {
+            kind: StmtKind::Match { scrutinee, arms },
+            span: Span { start, end },
+        })
+    }
+
     fn parse_record(&mut self) -> Option<Record> {
         let start = self.peek().span.start;
         let public = self.eat(&TokenKind::Pub).is_some();
         self.advance();
         let (name, _) = self.name()?;
+        let type_parameters = self.parse_type_parameters()?;
         self.expect(&TokenKind::Colon, "CGS101", "expected : after record name")?;
         self.expect(
             &TokenKind::Newline,
@@ -185,6 +399,7 @@ impl Parser {
             public,
             name,
             fields,
+            type_parameters,
             span: Span { start, end },
         })
     }
@@ -260,6 +475,16 @@ impl Parser {
         })
     }
     fn parse_type(&mut self) -> Option<TypeSyntax> {
+        if self.type_depth >= 64 {
+            self.error("CGS117", "type nesting exceeds 64");
+            return None;
+        }
+        self.type_depth += 1;
+        let result = self.parse_type_inner();
+        self.type_depth -= 1;
+        result
+    }
+    fn parse_type_inner(&mut self) -> Option<TypeSyntax> {
         let path = self.parse_path()?;
         let mut end = path.span.end;
         let mut arguments = Vec::new();
@@ -316,6 +541,7 @@ impl Parser {
         let public = self.eat(&TokenKind::Pub).is_some();
         self.expect(&TokenKind::Fn, "CGS103", "expected fn")?;
         let (name, _) = self.name()?;
+        let type_parameters = self.parse_type_parameters()?;
         self.expect(
             &TokenKind::LParen,
             "CGS103",
@@ -405,6 +631,7 @@ impl Parser {
             }
             let end = self.end_statement()?;
             return Some(Function {
+                type_parameters,
                 public,
                 name,
                 parameters,
@@ -460,6 +687,7 @@ impl Parser {
             .span
             .end;
         Some(Function {
+            type_parameters,
             public,
             name,
             parameters,
@@ -541,7 +769,29 @@ impl Parser {
     }
     fn parse_stmt(&mut self) -> Option<Stmt> {
         let start = self.peek().span.start;
-        let kind = if self.eat(&TokenKind::If).is_some() {
+        let kind = if self.at_name("match")
+            && self.tokens[self.pos..]
+                .iter()
+                .take_while(|token| !matches!(token.kind, TokenKind::Newline | TokenKind::Eof))
+                .last()
+                .is_some_and(|token| matches!(token.kind, TokenKind::Colon))
+        {
+            return self.parse_match();
+        } else if self.loop_depth > 0
+            && (self.at_name("invariant") || self.at_name("decreases"))
+            && self.tokens.get(self.pos + 1).is_some_and(|t| {
+                t.span.start > self.peek().span.end
+                    && !matches!(t.kind, TokenKind::Newline | TokenKind::Eof)
+            })
+        {
+            let decreases = self.at_name("decreases");
+            self.advance();
+            let expression = self.parse_expr(0)?;
+            StmtKind::LoopContract {
+                decreases,
+                expression,
+            }
+        } else if self.eat(&TokenKind::If).is_some() {
             let condition = self.parse_expr(0)?;
             let (then_body, _) = self.parse_suite()?;
             self.expect(
@@ -614,7 +864,10 @@ impl Parser {
             let (binding, _) = self.name()?;
             self.expect(&TokenKind::In, "CGS103", "expected in after loop binding")?;
             let iter = self.parse_expr(0)?;
-            let (body, end) = self.parse_suite()?;
+            self.loop_depth += 1;
+            let suite = self.parse_suite();
+            self.loop_depth -= 1;
+            let (body, end) = suite?;
             return Some(Stmt {
                 kind: StmtKind::For {
                     binding,
@@ -664,6 +917,22 @@ impl Parser {
     fn parse_expr(&mut self, min_bp: u8) -> Option<Expr> {
         let mut left = self.parse_primary()?;
         loop {
+            if self.eat(&TokenKind::LBracket).is_some() {
+                let index = self.parse_expr(0)?;
+                let end = self
+                    .expect(&TokenKind::RBracket, "CGS115", "expected ] after index")?
+                    .span
+                    .end;
+                let start = left.span.start;
+                left = Expr {
+                    kind: ExprKind::Index {
+                        collection: Box::new(left),
+                        index: Box::new(index),
+                    },
+                    span: Span { start, end },
+                };
+                continue;
+            }
             if self.at(&TokenKind::LParen) && 7 >= min_bp {
                 self.advance();
                 let arguments = self.parse_arguments()?;
@@ -806,8 +1075,88 @@ impl Parser {
     fn parse_primary(&mut self) -> Option<Expr> {
         let token = self.peek().clone();
         match token.kind {
+            TokenKind::LBracket => {
+                self.advance();
+                let mut values = Vec::new();
+                if !self.at(&TokenKind::RBracket) {
+                    loop {
+                        values.push(self.parse_expr(0)?);
+                        if self.eat(&TokenKind::Comma).is_none() {
+                            break;
+                        }
+                    }
+                }
+                let end = self
+                    .expect(
+                        &TokenKind::RBracket,
+                        "CGS115",
+                        "expected ] after collection",
+                    )?
+                    .span
+                    .end;
+                Some(Expr {
+                    kind: ExprKind::Collection(values),
+                    span: Span {
+                        start: token.span.start,
+                        end,
+                    },
+                })
+            }
             TokenKind::Name(_) => {
+                let saved = self.pos;
                 let path = self.parse_path()?;
+                if self.at(&TokenKind::LAngle) {
+                    let mut depth = 0usize;
+                    let mut generic_constructor = false;
+                    for (offset, token) in self.tokens[self.pos..].iter().enumerate() {
+                        match token.kind {
+                            TokenKind::LAngle => depth += 1,
+                            TokenKind::RAngle => {
+                                depth = depth.saturating_sub(1);
+                                if depth == 0 {
+                                    generic_constructor = self
+                                        .tokens
+                                        .get(self.pos + offset + 1)
+                                        .is_some_and(|t| matches!(t.kind, TokenKind::Dot));
+                                    break;
+                                }
+                            }
+                            TokenKind::Newline | TokenKind::Eof => break,
+                            _ => {}
+                        }
+                    }
+                    if generic_constructor {
+                        self.pos = saved;
+                        let ty = self.parse_type()?;
+                        self.expect(
+                            &TokenKind::Dot,
+                            "CGS114",
+                            "expected . before constructor case",
+                        )?;
+                        let (case, _) = self.name()?;
+                        self.expect(
+                            &TokenKind::LParen,
+                            "CGS114",
+                            "constructor requires parentheses",
+                        )?;
+                        let arguments = self.parse_arguments()?;
+                        let end = self
+                            .expect(&TokenKind::RParen, "CGS114", "expected ) after payloads")?
+                            .span
+                            .end;
+                        return Some(Expr {
+                            kind: ExprKind::Constructor {
+                                ty,
+                                case,
+                                arguments,
+                            },
+                            span: Span {
+                                start: path.span.start,
+                                end,
+                            },
+                        });
+                    }
+                }
                 Some(Expr {
                     span: path.span,
                     kind: ExprKind::Name(path),

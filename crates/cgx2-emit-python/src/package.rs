@@ -128,6 +128,9 @@ fn lower_block(
 ) {
     for stmt in block {
         match &mut stmt.kind {
+            StmtKind::Match { .. } | StmtKind::LoopContract { .. } => {
+                unreachable!("S2a profile rejected before Python package lowering")
+            }
             StmtKind::If {
                 condition,
                 then_body,
@@ -209,6 +212,9 @@ fn lower_module(
                     annotation: Some(ty),
                     ..
                 } => lower_type(ty, records),
+                StmtKind::Match { .. } | StmtKind::LoopContract { .. } => {
+                    unreachable!("S2a profile rejected before Python package lowering")
+                }
                 StmtKind::If {
                     then_body,
                     else_body,
@@ -321,6 +327,12 @@ fn lower_module(
 pub fn emit_package_python(
     package: &CheckedPackage,
 ) -> Result<BTreeMap<PathBuf, String>, Vec<PackageEmitDiagnostic>> {
+    for source in package.modules() {
+        if let Some(span) = cgx2_syntax::s2a_feature_span(source.syntax()) {
+            return Err(vec![PackageEmitDiagnostic::new("CGE006","Python package target does not yet support the S2a variant/generic/collection/loop-contract profile (S2b)",source.source(),Some(span))]);
+        }
+    }
+
     package.verify_unchanged().map_err(package_errors)?;
     let names: BTreeMap<_, _> = package
         .modules()

@@ -9,20 +9,63 @@ pub struct ApiIndex {
     pub module: Option<String>,
     pub functions: Vec<ApiFunction>,
     pub records: Vec<ApiRecord>,
+    pub variants: Vec<ApiVariant>,
+    pub semantics_status: String,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ApiRecord {
     pub name: String,
+    pub identity: String,
+    pub type_parameters: Vec<ApiTypeParameter>,
     pub fields: Vec<ApiParameter>,
+    pub field_types: Vec<ApiType>,
     pub span: Span,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ApiType {
+    pub identity: String,
+    pub arguments: Vec<ApiType>,
+    pub span: Span,
+}
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ApiTypeParameter {
+    pub name: String,
+    pub constraints: Vec<String>,
+    pub span: Span,
+}
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ApiVariantCase {
+    pub name: String,
+    pub payloads: Vec<ApiType>,
+    pub span: Span,
+}
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ApiVariant {
+    pub name: String,
+    pub identity: String,
+    pub type_parameters: Vec<ApiTypeParameter>,
+    pub cases: Vec<ApiVariantCase>,
+    pub span: Span,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ApiLoopContract {
+    pub kind: String,
+    pub expression: String,
+    pub span: Span,
+    pub status: String,
+}
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ApiFunction {
     pub name: String,
+    pub type_parameters: Vec<ApiTypeParameter>,
+    pub loop_contracts: Vec<ApiLoopContract>,
     pub parameters: Vec<ApiParameter>,
     pub return_type: String,
+    pub parameter_types: Vec<ApiType>,
+    pub result_type: Option<ApiType>,
     pub span: Span,
     pub effects: Vec<String>,
     pub capabilities: Vec<String>,
@@ -93,6 +136,14 @@ fn build_index_checked(
             let signature = &checked.functions[&function.name];
             ApiFunction {
                 name: function.name.clone(),
+                type_parameters: parameters(&function.type_parameters),
+                loop_contracts: loop_contracts(function),
+                parameter_types: function
+                    .parameters
+                    .iter()
+                    .map(|p| api_type(&p.ty, module))
+                    .collect(),
+                result_type: function.return_type.as_ref().map(|ty| api_type(ty, module)),
                 parameters: function
                     .parameters
                     .iter()
@@ -193,7 +244,13 @@ fn build_index_checked(
     });
 
     Ok(ApiIndex {
-        schema_version: if !module.records.is_empty() {
+        semantics_status: "checked".into(),
+        variants: variants(module),
+        schema_version: if cgx2_syntax::s2a_feature_span(module).is_some()
+            || !module.records.is_empty()
+        {
+            6
+        } else if !module.records.is_empty() {
             5
         } else if module.functions.iter().any(|function| {
             function
@@ -220,22 +277,7 @@ fn build_index_checked(
         },
         module: module.name.as_ref().map(|path| path.segments.join(".")),
         functions,
-        records: module
-            .records
-            .iter()
-            .map(|record| ApiRecord {
-                name: record.name.clone(),
-                fields: record
-                    .fields
-                    .iter()
-                    .map(|field| ApiParameter {
-                        name: field.name.clone(),
-                        ty: field.ty.to_string(),
-                    })
-                    .collect(),
-                span: record.span,
-            })
-            .collect(),
+        records: records(module),
     })
 }
 
@@ -244,4 +286,212 @@ impl ApiIndex {
     pub fn find(&self, name: &str) -> Option<&ApiFunction> {
         self.functions.iter().find(|function| function.name == name)
     }
+}
+
+fn identity(module: &Module, name: &str) -> String {
+    module.name.as_ref().map_or_else(
+        || name.to_owned(),
+        |p| format!("{}.{name}", p.segments.join(".")),
+    )
+}
+fn parameters(parameters: &[cgx2_syntax::TypeParameter]) -> Vec<ApiTypeParameter> {
+    parameters
+        .iter()
+        .map(|p| ApiTypeParameter {
+            name: p.name.clone(),
+            constraints: p.constraints.iter().map(|p| p.segments.join(".")).collect(),
+            span: p.span,
+        })
+        .collect()
+}
+fn api_type(ty: &cgx2_syntax::TypeSyntax, module: &Module) -> ApiType {
+    api_type_scoped(ty, module, &[])
+}
+fn api_type_scoped(
+    ty: &cgx2_syntax::TypeSyntax,
+    module: &Module,
+    parameters: &[cgx2_syntax::TypeParameter],
+) -> ApiType {
+    let mut canonical = ty.clone();
+    if !(ty.path.segments.len() == 1 && parameters.iter().any(|p| p.name == ty.path.segments[0])) {
+        cgx2_syntax::qualify_type(&mut canonical, module);
+    }
+    let name = canonical.path.segments.join(".");
+    ApiType {
+        identity: if matches!(name.as_str(), "Option" | "Result") {
+            format!("cgx2.core.{name}")
+        } else {
+            name
+        },
+        arguments: ty
+            .arguments
+            .iter()
+            .map(|t| api_type_scoped(t, module, parameters))
+            .collect(),
+        span: ty.span,
+    }
+}
+fn records(module: &Module) -> Vec<ApiRecord> {
+    let mut records: Vec<_> = module
+        .records
+        .iter()
+        .filter(|r| r.public)
+        .map(|r| ApiRecord {
+            name: r.name.clone(),
+            identity: identity(module, &r.name),
+            type_parameters: parameters(&r.type_parameters),
+            field_types: r
+                .fields
+                .iter()
+                .map(|f| api_type_scoped(&f.ty, module, &r.type_parameters))
+                .collect(),
+            fields: r
+                .fields
+                .iter()
+                .map(|f| {
+                    let mut ty = f.ty.clone();
+                    cgx2_syntax::qualify_type(&mut ty, module);
+                    ApiParameter {
+                        name: f.name.clone(),
+                        ty: ty.to_string(),
+                    }
+                })
+                .collect(),
+            span: r.span,
+        })
+        .collect();
+    records.sort_by(|a, b| a.identity.cmp(&b.identity));
+    records
+}
+fn variants(module: &Module) -> Vec<ApiVariant> {
+    let mut variants: Vec<_> = module
+        .variants
+        .iter()
+        .filter(|v| v.public)
+        .map(|v| ApiVariant {
+            name: v.name.clone(),
+            identity: identity(module, &v.name),
+            type_parameters: parameters(&v.type_parameters),
+            cases: v
+                .cases
+                .iter()
+                .map(|c| ApiVariantCase {
+                    name: c.name.clone(),
+                    payloads: c
+                        .payloads
+                        .iter()
+                        .map(|p| api_type_scoped(p, module, &v.type_parameters))
+                        .collect(),
+                    span: c.span,
+                })
+                .collect(),
+            span: v.span,
+        })
+        .collect();
+    variants.sort_by(|a, b| a.identity.cmp(&b.identity));
+    variants
+}
+
+/// Syntax metadata only: no type/effect/proof claim. Allows next-stage tools to
+/// inspect declarations whose semantics S2a deliberately rejects.
+pub fn build_syntax_index(module: &Module) -> ApiIndex {
+    let mut functions: Vec<_> = module
+        .functions
+        .iter()
+        .filter(|f| f.public)
+        .map(|f| ApiFunction {
+            name: f.name.clone(),
+            type_parameters: parameters(&f.type_parameters),
+            loop_contracts: loop_contracts(f),
+            parameter_types: f
+                .parameters
+                .iter()
+                .map(|p| api_type_scoped(&p.ty, module, &f.type_parameters))
+                .collect(),
+            result_type: f
+                .return_type
+                .as_ref()
+                .map(|ty| api_type_scoped(ty, module, &f.type_parameters)),
+            parameters: f
+                .parameters
+                .iter()
+                .map(|p| ApiParameter {
+                    name: p.name.clone(),
+                    ty: p.ty.to_string(),
+                })
+                .collect(),
+            return_type: f
+                .return_type
+                .as_ref()
+                .map_or("<inferred>".into(), ToString::to_string),
+            span: f.span,
+            effects: f.effects.as_ref().map_or_else(Vec::new, |d| {
+                d.names.iter().map(|n| n.name.clone()).collect()
+            }),
+            capabilities: f.capabilities.as_ref().map_or_else(Vec::new, |d| {
+                d.names.iter().map(|n| n.name.clone()).collect()
+            }),
+            effects_status: "unchecked".into(),
+            capabilities_status: "unchecked".into(),
+            requires: f
+                .requires
+                .iter()
+                .map(|e| ApiContract {
+                    expression: format_expression(e),
+                    status: "unchecked".into(),
+                    span: e.span,
+                })
+                .collect(),
+            ensures: f
+                .ensures
+                .iter()
+                .map(|e| ApiContract {
+                    expression: format_expression(e),
+                    status: "unchecked".into(),
+                    span: e.span,
+                })
+                .collect(),
+            foreign: f.foreign.as_ref().map(|b| ApiForeign {
+                route: b.route.clone(),
+                target: b.target.segments.join("."),
+                ownership: b.ownership.clone(),
+                runtime: b.runtime.clone(),
+                unsafe_call: b.unsafe_call,
+                binding_id: None,
+                profile: None,
+            }),
+        })
+        .collect();
+    functions.sort_by(|a, b| a.name.cmp(&b.name));
+    ApiIndex {
+        schema_version: 6,
+        module: module.name.as_ref().map(|p| p.segments.join(".")),
+        functions,
+        records: records(module),
+        variants: variants(module),
+        semantics_status: "syntax-only".into(),
+    }
+}
+
+fn loop_contracts(function: &cgx2_syntax::Function) -> Vec<ApiLoopContract> {
+    let mut contracts = Vec::new();
+    cgx2_syntax::visit_stmts(
+        &function.body,
+        &mut |stmt| {
+            if let cgx2_syntax::StmtKind::LoopContract {
+                decreases,
+                expression,
+            } = &stmt.kind
+            {
+                contracts.push(ApiLoopContract {
+                    kind: if *decreases { "decreases" } else { "invariant" }.into(),
+                    expression: format_expression(expression),
+                    span: stmt.span,
+                    status: "unchecked".into(),
+                });
+            }
+        },
+        &mut |_| {},
+    );
+    contracts
 }

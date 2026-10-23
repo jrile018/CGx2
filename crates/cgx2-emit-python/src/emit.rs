@@ -109,6 +109,23 @@ fn emit_impl(
     package_mode: bool,
     imports: &str,
 ) -> Result<String, Vec<EmitDiagnostic>> {
+    if let Some(span) = cgx2_syntax::s2a_feature_span(module) {
+        return Err(vec![EmitDiagnostic::new("CGE006","Python target does not yet support S2a variants, generic applications, collections/indexing or annotated loops (S2b)",span)]);
+    }
+    let original_module = module;
+    let mut normalized = if package_mode {
+        module.clone()
+    } else {
+        cgx2_syntax::canonical_module(module, &BTreeSet::new())
+    };
+    if !package_mode {
+        if let Some(name) = &normalized.name {
+            for record in &mut normalized.records {
+                record.name = format!("{}.{}", name.segments.join("."), record.name);
+            }
+        }
+    }
+    let module = &normalized;
     let mut errors = Vec::new();
     let mut record_names = module
         .records
@@ -204,7 +221,7 @@ fn emit_impl(
         return Err(errors);
     }
     if !package_mode {
-        match check_module(module) {
+        match check_module(original_module) {
             Ok(fresh) if fresh == *typed => {}
             _ => {
                 return Err(vec![EmitDiagnostic::new(
@@ -304,10 +321,10 @@ fn emit_impl(
 }
 
 fn record_type(ty: &TypeSyntax, records: &[Record]) -> Option<String> {
-    if ty.arguments.is_empty() && ty.path.segments.len() == 1 {
-        let name = &ty.path.segments[0];
-        if records.iter().any(|record| &record.name == name) {
-            return Some(name.clone());
+    if ty.arguments.is_empty() {
+        let name = ty.path.segments.join(".");
+        if records.iter().any(|record| record.name == name) {
+            return Some(name);
         }
     }
     None
@@ -374,6 +391,9 @@ fn validate_record_block(
 ) {
     for stmt in stmts {
         match &stmt.kind {
+            StmtKind::Match { .. } | StmtKind::LoopContract { .. } => {
+                unreachable!("S2a profile rejected before Python lowering")
+            }
             StmtKind::If {
                 condition,
                 then_body,
@@ -589,12 +609,9 @@ fn emit_contract_check(
 }
 
 fn validate_type(ty: &TypeSyntax, records: &BTreeSet<String>, errors: &mut Vec<EmitDiagnostic>) {
+    let name = ty.path.segments.join(".");
     if !ty.arguments.is_empty()
-        || ty.path.segments.len() != 1
-        || !matches!(
-            ty.path.segments[0].as_str(),
-            "i64" | "Bool" | "String" | "Unit"
-        ) && !records.contains(&ty.path.segments[0])
+        || !(matches!(name.as_str(), "i64" | "Bool" | "String" | "Unit") || records.contains(&name))
     {
         errors.push(EmitDiagnostic::new(
             "CGE001",
@@ -612,6 +629,9 @@ fn validate_block(
 ) {
     for stmt in stmts {
         match &stmt.kind {
+            StmtKind::Match { .. } | StmtKind::LoopContract { .. } => {
+                unreachable!("S2a profile rejected before Python lowering")
+            }
             StmtKind::If {
                 condition,
                 then_body,
@@ -744,6 +764,9 @@ fn validate_expr(expr: &Expr, records: &BTreeSet<String>, errors: &mut Vec<EmitD
 fn collect_bindings(block: &[Stmt], used: &mut BTreeSet<String>) {
     for stmt in block {
         match &stmt.kind {
+            StmtKind::Match { .. } | StmtKind::LoopContract { .. } => {
+                unreachable!("S2a profile rejected before Python lowering")
+            }
             StmtKind::If {
                 then_body,
                 else_body,
@@ -823,6 +846,9 @@ fn scope_block(
 ) {
     for stmt in block {
         match &mut stmt.kind {
+            StmtKind::Match { .. } | StmtKind::LoopContract { .. } => {
+                unreachable!("S2a profile rejected before Python lowering")
+            }
             StmtKind::If {
                 condition,
                 then_body,
@@ -950,6 +976,9 @@ fn emit_block(stmts: &[Stmt], indent: usize, return_tail: bool, output: &mut Str
         output.push_str(&"    ".repeat(indent));
         let last = index + 1 == stmts.len();
         match &stmt.kind {
+            StmtKind::Match { .. } | StmtKind::LoopContract { .. } => {
+                unreachable!("S2a profile rejected before Python lowering")
+            }
             StmtKind::If {
                 condition,
                 then_body,
@@ -1020,6 +1049,9 @@ fn emit_expr(expr: &Expr) -> String {
 
 fn emit_expr_with_result(expr: &Expr, bind_result: bool) -> String {
     let value = match &expr.kind {
+        ExprKind::Constructor { .. } | ExprKind::Collection(_) | ExprKind::Index { .. } => {
+            unreachable!("S2a profile rejected before Python lowering")
+        }
         ExprKind::Name(path) if bind_result && path.segments[0] == "result" => {
             if path.segments.len() == 2 {
                 format!("_cgx2_contract_result.{}", python_name(&path.segments[1]))

@@ -37,6 +37,8 @@ pub enum TokenKind {
     NoGc,
     True,
     False,
+    LBracket,
+    RBracket,
     LParen,
     RParen,
     LAngle,
@@ -253,6 +255,14 @@ pub fn lex(source: &str) -> Result<Vec<Token>, Vec<SyntaxDiagnostic>> {
             } else {
                 (
                     match ch {
+                        '[' => {
+                            parens += 1;
+                            Some(TokenKind::LBracket)
+                        }
+                        ']' => {
+                            parens = parens.saturating_sub(1);
+                            Some(TokenKind::RBracket)
+                        }
                         '(' => {
                             parens += 1;
                             Some(TokenKind::LParen)

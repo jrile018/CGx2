@@ -10,6 +10,9 @@ fn identity(module: &str, name: &str) -> String {
 }
 
 fn ty(ty: &mut TypeSyntax, module: &str, records: &BTreeMap<String, String>) {
+    for arg in &mut ty.arguments {
+        self::ty(arg, module, records);
+    }
     let name = ty.path.segments.join(".");
     let qualified = if ty.path.segments.len() == 1 {
         identity(module, &name)
@@ -22,6 +25,20 @@ fn ty(ty: &mut TypeSyntax, module: &str, records: &BTreeMap<String, String>) {
 }
 fn expr(expr: &mut Expr, module: &str, calls: &BTreeMap<String, String>) {
     match &mut expr.kind {
+        ExprKind::Constructor { arguments, .. } => {
+            for arg in arguments {
+                self::expr(&mut arg.value, module, calls);
+            }
+        }
+        ExprKind::Collection(values) => {
+            for value in values {
+                self::expr(value, module, calls);
+            }
+        }
+        ExprKind::Index { collection, index } => {
+            self::expr(collection, module, calls);
+            self::expr(index, module, calls);
+        }
         ExprKind::Binary { left, right, .. } => {
             self::expr(left, module, calls);
             self::expr(right, module, calls);
@@ -53,6 +70,16 @@ fn block(
 ) {
     for stmt in body {
         match &mut stmt.kind {
+            StmtKind::Match { scrutinee, arms } => {
+                expr(scrutinee, module, calls);
+                for arm in arms {
+                    if let cgx2_syntax::Pattern::Case { ty, .. } = &mut arm.pattern {
+                        self::ty(ty, module, records);
+                    }
+                    block(&mut arm.body, module, calls, records);
+                }
+            }
+            StmtKind::LoopContract { expression, .. } => expr(expression, module, calls),
             StmtKind::Let {
                 annotation, value, ..
             } => {
@@ -119,18 +146,46 @@ pub(crate) fn run(
     module.name = None;
     module.imports.clear();
     module.records.clear();
+    module.variants.clear();
     module.functions.clear();
     let mut calls = BTreeMap::new();
     let mut records = BTreeMap::new();
     let mut origins = BTreeMap::new();
+    let known_variants = package
+        .modules()
+        .iter()
+        .flat_map(|source| {
+            source.syntax().variants.iter().map(move |v| {
+                format!(
+                    "{}.{}",
+                    source
+                        .syntax()
+                        .name
+                        .as_ref()
+                        .expect("named module")
+                        .segments
+                        .join("."),
+                    v.name
+                )
+            })
+        })
+        .collect();
     for source in package.modules() {
+        let canonical = cgx2_syntax::canonical_module(source.syntax(), &known_variants);
         let name = source
             .syntax()
             .name
             .as_ref()
             .map(|p| p.segments.join("."))
             .unwrap_or_default();
-        for record in &source.syntax().records {
+        for variant in &canonical.variants {
+            let full = identity(&name, &variant.name);
+            records.insert(full.clone(), full.clone());
+            let mut variant = variant.clone();
+            variant.name = full;
+            module.variants.push(variant);
+        }
+        for record in &canonical.records {
             let full = identity(&name, &record.name);
             records.insert(full.clone(), full.clone());
             calls.insert(full.clone(), full.clone());
@@ -150,13 +205,14 @@ pub(crate) fn run(
         }
     }
     for source in package.modules() {
+        let canonical = cgx2_syntax::canonical_module(source.syntax(), &known_variants);
         let name = source
             .syntax()
             .name
             .as_ref()
             .map(|p| p.segments.join("."))
             .unwrap_or_default();
-        for function in &source.syntax().functions {
+        for function in &canonical.functions {
             let mut function: Function = function.clone();
             function.name = calls[&identity(&name, &function.name)].clone();
             for parameter in &mut function.parameters {

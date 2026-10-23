@@ -406,6 +406,9 @@ impl Analyzer<'_> {
                 break;
             }
             match &stmt.kind {
+                StmtKind::Match { .. } | StmtKind::LoopContract { .. } => unreachable!(
+                    "S2a profile rejected by effect-index admission before security analysis"
+                ),
                 StmtKind::Let { name, value, .. } => {
                     let flow = self.expr(source, value, env, stack);
                     if scoped {
@@ -516,6 +519,11 @@ impl Analyzer<'_> {
             return Flow::unknown();
         }
         match &expr.kind {
+            ExprKind::Constructor { .. } | ExprKind::Collection(_) | ExprKind::Index { .. } => {
+                unreachable!(
+                    "S2a profile rejected by effect-index admission before security analysis"
+                )
+            }
             ExprKind::Integer(_) | ExprKind::Boolean(_) | ExprKind::StringLiteral(_) => {
                 Flow::default()
             }

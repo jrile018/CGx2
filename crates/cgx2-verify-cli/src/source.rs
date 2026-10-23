@@ -516,6 +516,12 @@ pub fn parse_with_expansion(
             span: error.span,
         }
     })?;
+    if let Some(span) = cgx2_syntax::s2a_feature_span(&module) {
+        return Err(Diagnostic::unsupported(
+            "S2a variant/generic/collection/loop-contract proof semantics are deferred to S3-V",
+            span,
+        ));
+    }
     let function = select(&module.functions, requested, module.span)?;
     if function.foreign.is_some() {
         return Err(Diagnostic::unsupported(

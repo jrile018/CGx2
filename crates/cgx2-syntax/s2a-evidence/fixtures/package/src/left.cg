@@ -1,0 +1,10 @@
+module app.left
+pub record Point:
+    x: i64
+pub variant Reply:
+    Empty
+    Value(Point)
+variant Secret:
+    Hidden
+pub fn make(x: i64) -> Reply effects():
+    Reply.Value(Point(x: x))

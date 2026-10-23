@@ -133,7 +133,13 @@ fn execute_with_failure(
             .functions
             .iter()
             .any(|f| f.body.iter().any(eval::stmt_has_for));
-    if is_memory || check_scalar || requires_static_gate || has_for || !module.records.is_empty() {
+    if is_memory
+        || check_scalar
+        || requires_static_gate
+        || has_for
+        || !module.records.is_empty()
+        || cgx2_syntax::s2a_feature_span(&module).is_some()
+    {
         cgx2_sema::check_module(&module).map_err(|diagnostics| {
             diagnostics
                 .into_iter()

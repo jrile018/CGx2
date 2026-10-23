@@ -61,6 +61,19 @@ pub fn index_checked_package(
     checked: &CheckedPackage,
 ) -> Result<PackageAnalysis, Vec<PackageDiagnostic>> {
     checked.verify_unchanged()?;
+    for module in checked.modules() {
+        if let Some(span) = cgx2_syntax::s2a_feature_span(module.syntax()) {
+            return Err(vec![PackageDiagnostic {
+                code: "CGI006",
+                message:
+                    "S2a variant/generic/collection/loop-contract analysis is deferred to S3-A"
+                        .into(),
+                file: module.source().to_path_buf(),
+                span: Some(span),
+                related: None,
+            }]);
+        }
+    }
     let mut entries = Vec::new();
     for module in checked.modules() {
         let index = build_index(module.syntax(), Some(module.typed()));

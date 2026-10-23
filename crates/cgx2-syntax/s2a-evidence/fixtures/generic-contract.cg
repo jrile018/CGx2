@@ -1,0 +1,9 @@
+module app.generic
+pub variant Box<T: Eq + Show>:
+    Value(T)
+pub fn first<T: Eq>(values: Array<T>) -> T:
+    for i in range(0, 1):
+        invariant i >= 0
+        decreases 1 - i
+        values[i]
+    values[0]

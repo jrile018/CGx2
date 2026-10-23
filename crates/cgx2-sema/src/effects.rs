@@ -23,6 +23,20 @@ struct Site {
 
 fn expr_sites(expr: &Expr, sites: &mut Vec<Site>) {
     match &expr.kind {
+        ExprKind::Constructor { arguments, .. } => {
+            for arg in arguments {
+                expr_sites(&arg.value, sites);
+            }
+        }
+        ExprKind::Collection(values) => {
+            for value in values {
+                expr_sites(value, sites);
+            }
+        }
+        ExprKind::Index { collection, index } => {
+            expr_sites(collection, sites);
+            expr_sites(index, sites);
+        }
         ExprKind::Binary { left, right, .. } => {
             expr_sites(left, sites);
             expr_sites(right, sites);
@@ -72,6 +86,15 @@ fn expr_sites(expr: &Expr, sites: &mut Vec<Site>) {
 
 fn stmt_sites(stmt: &Stmt, sites: &mut Vec<Site>) {
     match &stmt.kind {
+        StmtKind::Match { scrutinee, arms } => {
+            expr_sites(scrutinee, sites);
+            for arm in arms {
+                for stmt in &arm.body {
+                    stmt_sites(stmt, sites);
+                }
+            }
+        }
+        StmtKind::LoopContract { expression, .. } => expr_sites(expression, sites),
         StmtKind::If {
             condition,
             then_body,
@@ -142,7 +165,18 @@ pub(crate) fn analyze_with_imports(
         }
         observations.retain(|site| {
             !site.target.as_ref().is_some_and(|name| {
-                records.contains(name) || module.records.iter().any(|record| record.name == *name)
+                records.contains(name)
+                    || module.records.iter().any(|record| record.name == *name)
+                    || name.rsplit_once('.').is_some_and(|(ty, case)| {
+                        module
+                            .variants
+                            .iter()
+                            .any(|v| v.name == ty && v.cases.iter().any(|c| c.name == case))
+                            || imports
+                                .public_variants
+                                .get(ty)
+                                .is_some_and(|v| v.cases.iter().any(|c| c.name == case))
+                    })
             })
         });
         for site in &mut observations {
@@ -313,6 +347,18 @@ fn check_site(
     }
 }
 
+fn local_constructor(site: &Site, module: &Module) -> bool {
+    site.target.as_deref().is_some_and(|name| {
+        module.records.iter().any(|r| r.name == name)
+            || name.rsplit_once('.').is_some_and(|(ty, case)| {
+                module
+                    .variants
+                    .iter()
+                    .any(|v| v.name == ty && v.cases.iter().any(|c| c.name == case))
+            })
+    })
+}
+
 pub(crate) fn contract_calls_are_safe(
     expr: &Expr,
     summaries: &BTreeMap<String, EffectSummary>,
@@ -350,6 +396,9 @@ pub(crate) fn contract_calls_are_safe(
             stmt_sites(stmt, &mut next);
         }
         for site in next {
+            if local_constructor(&site, module) {
+                continue;
+            }
             if site.effect.is_some()
                 || site.callee.as_deref().is_some_and(|callee| {
                     !visit(callee, summaries, module, active, done, depth + 1)
@@ -366,6 +415,9 @@ pub(crate) fn contract_calls_are_safe(
     expr_sites(expr, &mut sites);
     let mut pending: Vec<String> = Vec::new();
     for site in sites {
+        if local_constructor(&site, module) {
+            continue;
+        }
         if site.effect.is_some() {
             return false;
         }

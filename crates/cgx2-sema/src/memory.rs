@@ -445,6 +445,10 @@ fn check_memory_functions(module: &Module) -> Result<TypedModule, Vec<TypeDiagno
 
 fn has_memory(stmt: &Stmt) -> bool {
     match &stmt.kind {
+        StmtKind::Match { scrutinee, arms } => {
+            expr_has_memory(scrutinee) || arms.iter().any(|arm| arm.body.iter().any(has_memory))
+        }
+        StmtKind::LoopContract { expression, .. } => expr_has_memory(expression),
         StmtKind::If {
             condition,
             then_body,
@@ -462,6 +466,13 @@ fn has_memory(stmt: &Stmt) -> bool {
 
 fn expr_has_memory(expr: &Expr) -> bool {
     match &expr.kind {
+        ExprKind::Constructor { arguments, .. } => {
+            arguments.iter().any(|arg| expr_has_memory(&arg.value))
+        }
+        ExprKind::Collection(values) => values.iter().any(expr_has_memory),
+        ExprKind::Index { collection, index } => {
+            expr_has_memory(collection) || expr_has_memory(index)
+        }
         ExprKind::Name(path) => path.segments.first().is_some_and(|s| s == "memory"),
         ExprKind::Call { callee, arguments } => {
             expr_has_memory(callee) || arguments.iter().any(|a| expr_has_memory(&a.value))
@@ -501,6 +512,10 @@ impl Lowerer {
     fn block(&mut self, statements: &[Stmt]) {
         for stmt in statements {
             match &stmt.kind {
+                StmtKind::Match { .. } | StmtKind::LoopContract { .. } => self.report(
+                    "variants/matching/loop contracts are outside the memory script profile",
+                    stmt.span,
+                ),
                 StmtKind::For {
                     binding,
                     iter,

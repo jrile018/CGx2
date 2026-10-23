@@ -376,6 +376,22 @@ fn erase_type(ty: &mut TypeSyntax) {
 fn erase_expr(expr: &mut Expr) {
     expr.span = Span { start: 0, end: 0 };
     match &mut expr.kind {
+        ExprKind::Constructor { ty, arguments, .. } => {
+            erase_type(ty);
+            for arg in arguments {
+                arg.span = expr.span;
+                erase_expr(&mut arg.value);
+            }
+        }
+        ExprKind::Collection(values) => {
+            for value in values {
+                erase_expr(value);
+            }
+        }
+        ExprKind::Index { collection, index } => {
+            erase_expr(collection);
+            erase_expr(index);
+        }
         ExprKind::Name(path) => path.span = expr.span,
         ExprKind::Binary { left, right, .. } => {
             erase_expr(left);
@@ -396,6 +412,26 @@ fn erase_stmts(stmts: &mut [Stmt]) {
     for stmt in stmts {
         stmt.span = Span { start: 0, end: 0 };
         match &mut stmt.kind {
+            StmtKind::Match { scrutinee, arms } => {
+                erase_expr(scrutinee);
+                for arm in arms {
+                    arm.span = stmt.span;
+                    match &mut arm.pattern {
+                        cgx2_syntax::Pattern::Wildcard(span) => *span = stmt.span,
+                        cgx2_syntax::Pattern::Case {
+                            ty, bindings, span, ..
+                        } => {
+                            erase_type(ty);
+                            *span = stmt.span;
+                            for b in bindings {
+                                b.span = stmt.span;
+                            }
+                        }
+                    }
+                    erase_stmts(&mut arm.body);
+                }
+            }
+            StmtKind::LoopContract { expression, .. } => erase_expr(expression),
             StmtKind::If {
                 condition,
                 then_body,
@@ -443,6 +479,18 @@ fn erase_spans(module: &mut Module) {
     erase_stmts(&mut module.statements);
     for function in &mut module.functions {
         function.span = module.span;
+        for declaration in [&mut function.effects, &mut function.capabilities]
+            .into_iter()
+            .flatten()
+        {
+            declaration.span = module.span;
+            for name in &mut declaration.names {
+                name.span = module.span;
+            }
+        }
+        for expression in function.requires.iter_mut().chain(&mut function.ensures) {
+            erase_expr(expression);
+        }
         for param in &mut function.parameters {
             param.span = module.span;
             erase_type(&mut param.ty);
@@ -452,4 +500,20 @@ fn erase_spans(module: &mut Module) {
         }
         erase_stmts(&mut function.body);
     }
+}
+
+#[test]
+fn s2a_new_shapes_round_trip_without_losing_children() {
+    for source in [include_str!("../s2a-evidence/fixtures/variants.cg"),"module app.generic\npub record Box<T: Eq + Show>:\n    value: Array<T>\npub variant Reply<T>:\n    Value(T)\npub fn sample<T: Eq>(x: T) -> List<T>:\n    let values = [x, x]\n    for i in range(0, 2):\n        invariant i >= 0\n        decreases 2 - i\n        values[i]\n    values\n"] {
+        let mut before=parse_module(source).unwrap();let formatted=format_module(&before);let mut after=parse_module(&formatted).unwrap();assert_eq!(formatted,format_module(&after));erase_spans(&mut before);erase_spans(&mut after);
+        // Include generic/payload/pattern spans in the structural comparison.
+        fn erase_generics(parameters: &mut [cgx2_syntax::TypeParameter]) {for p in parameters {p.span=Span{start:0,end:0};for c in &mut p.constraints {c.span=p.span;}}}
+        for module in [&mut before,&mut after] {for record in &mut module.records {record.span=module.span;erase_generics(&mut record.type_parameters);for field in &mut record.fields {field.span=module.span;erase_type(&mut field.ty);}}for variant in &mut module.variants {variant.span=module.span;erase_generics(&mut variant.type_parameters);for case in &mut variant.cases {case.span=module.span;for payload in &mut case.payloads {erase_type(payload);}}}for function in &mut module.functions {erase_generics(&mut function.type_parameters);}}
+        assert_eq!(before,after);
+    }
+}
+
+#[test]
+fn s2a_invalid_pattern_syntax_and_deep_applications_are_bounded() {
+    for source in ["variant Reply:\n    Same\n    Same\n".to_owned(),"fn main() -> i64:\n    match x:\n        Option<i64>.Some(Other.Value(x)):\n            x\n".into(),"fn main() -> i64:\n    match x:\n        Option<i64>.Some(x) if true:\n            x\n".into(),format!("fn main(x: {}i64{}) -> i64:\n    0\n","Option<".repeat(65),">".repeat(65))] {let errors=parse_module(&source).unwrap_err();assert!(errors.iter().all(|e| source.get(e.span.start..e.span.end).is_some()));}
 }

@@ -103,6 +103,12 @@ impl Model<'_> {
 
     fn expression(&mut self, expression: &Expr) -> Result<Cost, String> {
         let cost = match &expression.kind {
+            ExprKind::Constructor { .. } | ExprKind::Collection(_) | ExprKind::Index { .. } => {
+                return Err(format!(
+                    "CGNK026: S2a expression cost/execution requires S3-N at {}..{}",
+                    expression.span.start, expression.span.end
+                ))
+            }
             ExprKind::Name(_)
             | ExprKind::Integer(_)
             | ExprKind::StringLiteral(_)

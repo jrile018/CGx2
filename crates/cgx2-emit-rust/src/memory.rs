@@ -8,6 +8,9 @@ use crate::{EmitDiagnostic, quote_rust};
 pub fn is_memory_script(module: &Module) -> bool {
     fn expr(e: &Expr) -> bool {
         match &e.kind {
+            ExprKind::Constructor { arguments, .. } => arguments.iter().any(|arg| expr(&arg.value)),
+            ExprKind::Collection(values) => values.iter().any(expr),
+            ExprKind::Index { collection, index } => expr(collection) || expr(index),
             ExprKind::Name(path) => path.segments.first().is_some_and(|n| n == "memory"),
             ExprKind::Call { callee, arguments } => {
                 expr(callee) || arguments.iter().any(|a| expr(&a.value))
@@ -18,6 +21,10 @@ pub fn is_memory_script(module: &Module) -> bool {
     }
     fn has_memory(stmt: &Stmt) -> bool {
         match &stmt.kind {
+            StmtKind::Match { scrutinee, arms } => {
+                expr(scrutinee) || arms.iter().any(|arm| arm.body.iter().any(has_memory))
+            }
+            StmtKind::LoopContract { expression, .. } => expr(expression),
             StmtKind::If {
                 condition,
                 then_body,

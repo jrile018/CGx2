@@ -1,0 +1,23 @@
+variant Flag:
+    Yes
+    No
+fn pick(flag: Flag) -> Result<Option<i64>, Bool>:
+    match flag:
+        Flag.Yes:
+            Result<Option<i64>, Bool>.Ok(Option<i64>.None())
+        Flag.No:
+            Result<Option<i64>, Bool>.Err(true)
+fn main() -> i64:
+    match pick(Flag.Yes()):
+        Result<Option<i64>, Bool>.Ok(option):
+            match option:
+                Option<i64>.Some(_):
+                    1 / 0
+                Option<i64>.None:
+                    match pick(Flag.No()):
+                        Result<Option<i64>, Bool>.Ok(_):
+                            1 / 0
+                        Result<Option<i64>, Bool>.Err(_):
+                            42
+        Result<Option<i64>, Bool>.Err(_):
+            1 / 0

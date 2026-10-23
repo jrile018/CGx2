@@ -107,6 +107,16 @@ impl Project {
                 .collect::<Vec<_>>()
                 .join("\n")
         })?;
+        for module in checked.modules() {
+            if let Some(span) = cgx2_syntax::s2a_feature_span(module.syntax()) {
+                return Err(format!(
+                    "CGNK026: S2a package notebook execution is deferred to S3-N: {} at {}..{}",
+                    module.source().display(),
+                    span.start,
+                    span.end
+                ));
+            }
+        }
         let records: BTreeMap<_, _> = checked
             .modules()
             .iter()

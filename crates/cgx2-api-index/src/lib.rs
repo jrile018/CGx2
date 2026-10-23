@@ -6,6 +6,7 @@ mod render;
 
 pub use error::IndexError;
 pub use index::{
-    build_index, build_index_with_imports, ApiContract, ApiForeign, ApiFunction, ApiIndex,
-    ApiParameter, ApiRecord,
+    build_index, build_index_with_imports, build_syntax_index, ApiContract, ApiForeign,
+    ApiFunction, ApiIndex, ApiLoopContract, ApiParameter, ApiRecord, ApiType, ApiTypeParameter,
+    ApiVariant, ApiVariantCase,
 };
