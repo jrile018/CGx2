@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "kind": "public_syntax_pilot",
+  "status": "candidate_unreviewed",
+  "context_budget_tokens": 8192,
+  "token_budget": 4096,
+  "time_budget_seconds": 120,
+  "common_prompt": "Implement the language-neutral behavior using only the provided scalar API and example invocation.",
+  "allowed_tools": [
+    "cgx2c emit-rust",
+    "cgx2c build"
+  ],
+  "tasks": [
+    {
+      "id": "precedence",
+      "public_api": "fn main() -> i64",
+      "expected_behavior": "Evaluate a fixed arithmetic expression using standard precedence.",
+      "example_args": [],
+      "variants": {
+        "indent": "candidate/indent/precedence.cg",
+        "brace": "candidate/brace/precedence.cg"
+      }
+    },
+    {
+      "id": "calls",
+      "public_api": "fn affine(x: i64, scale: i64, shift: i64) -> i64; fn main() -> i64",
+      "expected_behavior": "Evaluate nested calls to an affine scalar function.",
+      "example_args": [],
+      "variants": {
+        "indent": "candidate/indent/calls.cg",
+        "brace": "candidate/brace/calls.cg"
+      }
+    },
+    {
+      "id": "mutation",
+      "public_api": "top-level scalar statements",
+      "expected_behavior": "Update a scalar accumulator twice and return it.",
+      "example_args": [],
+      "variants": {
+        "indent": "candidate/indent/mutation.cg",
+        "brace": "candidate/brace/mutation.cg"
+      }
+    },
+    {
+      "id": "argument_count",
+      "public_api": "fn adjust(n: i64) -> i64; fn main() -> i64",
+      "expected_behavior": "Read the program argument count and apply an affine adjustment.",
+      "example_args": [
+        "red",
+        "blue",
+        "green"
+      ],
+      "variants": {
+        "indent": "candidate/indent/argument_count.cg",
+        "brace": "candidate/brace/argument_count.cg"
+      }
+    },
+    {
+      "id": "argument_text",
+      "public_api": "top-level arg(0) expression",
+      "expected_behavior": "Return the first program argument as UTF-8 text.",
+      "example_args": [
+        "hello 世界"
+      ],
+      "variants": {
+        "indent": "candidate/indent/argument_text.cg",
+        "brace": "candidate/brace/argument_text.cg"
+      }
+    },
+    {
+      "id": "overflow",
+      "public_api": "top-level checked i64 expression",
+      "expected_behavior": "Report checked i64 overflow with a failing exit status.",
+      "example_args": [],
+      "variants": {
+        "indent": "candidate/indent/overflow.cg",
+        "brace": "candidate/brace/overflow.cg"
+      }
+    }
+  ]
+}

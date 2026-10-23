@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "cases": {
+    "precedence": {
+      "stdout": "93\n",
+      "exit_status": 0
+    },
+    "calls": {
+      "stdout": "101\n",
+      "exit_status": 0
+    },
+    "mutation": {
+      "stdout": "70\n",
+      "exit_status": 0
+    },
+    "argument_count": {
+      "stdout": "22\n",
+      "exit_status": 0
+    },
+    "argument_text": {
+      "stdout": "hello 世界\n",
+      "exit_status": 0
+    },
+    "overflow": {
+      "stdout": "",
+      "exit_status": 1,
+      "stderr_contains": "i64 arithmetic overflow"
+    }
+  }
+}

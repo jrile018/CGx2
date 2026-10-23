@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "sha256": {
+    "candidate/brace/argument_count.cg": "fadc310a01ca98268868e704c8fa6f83a451b4a5b3e82a4f99b4e084108bb4ea",
+    "candidate/brace/argument_text.cg": "91351795002b19a6f31ef80096ac4726fe636ac6b3fb383ed43b8baed90eb179",
+    "candidate/brace/calls.cg": "236e4dedcce2b994b6a76bdd3494fdc8d54435d0e83179b1a322366b2dd2afa5",
+    "candidate/brace/mutation.cg": "c94cb21b84d94fe9f6665a65c44a03cde83e6e9c2872fa148f4386ee8761a130",
+    "candidate/brace/overflow.cg": "e6e893dfc22631d2cbf438f34c3a68a1cd421a35631a13fac594fb96564077cb",
+    "candidate/brace/precedence.cg": "5748a1d8decb6190293c57cc67079ac9d48a475f72867b29a110c235538d4954",
+    "candidate/indent/argument_count.cg": "d786cc14543487e80a19ce90d469c4b68e82f4f6ca00abcf1bbffa9761b7c0a5",
+    "candidate/indent/argument_text.cg": "1164e26719dc1408cbae3c4d43489df199d4d6154b33d9ed9743189467534e27",
+    "candidate/indent/calls.cg": "068eb43242f88d869177398ac667a4c6f8f36cbe3ee1d36d0a29eecec5b60501",
+    "candidate/indent/mutation.cg": "7a7f8630a80092f66be0774bc5b11d473e9917fe73aec3beda322f906f28d5cc",
+    "candidate/indent/overflow.cg": "a1de396186c1a8fb137a975b4e94fd4c2d3e569de8e8ff9d1aa554f1dba58a96",
+    "candidate/indent/precedence.cg": "e1cc858b40036d32bee760ee4b1b3d87e36c8199417dc6fefad9329b0ac1d0b6",
+    "packet.json": "9d71ea3cd84a8e4a3186d6c17dff70343605fcdaef1c09f2fbfa70d9b67d1045",
+    "private/oracle.json": "78aaea5b665ec3e9b58dad1a274185f4a5999de4710edc22359bef02afe84c21"
+  }
+}
