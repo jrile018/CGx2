@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-23",
+  "base": "425cb0a",
+  "integrated_head": "b73b78b",
+  "rust_passed": 753,
+  "rust_ignored": 5,
+  "http_passed": 20,
+  "benchmark_passed": 122,
+  "logs": {
+    "workspace-test.log": {
+      "path": "/home/john-riley/projects/lang/target/wave24-workspace-test.log",
+      "sha256": "bf1777b971be8dc3dc8b3109afc6c90b297f616bc1c445727e540d4b813ef2a2"
+    },
+    "benchmark-test.log": {
+      "path": "/home/john-riley/projects/lang/target/wave24-benchmark-test.log",
+      "sha256": "4fb3b47f11aa681af7b9e46d271ce8ca0c25030b01cb6793b5392bf521585321"
+    },
+    "benchmark-test-final.log": {
+      "path": "/home/john-riley/projects/lang/target/wave24-benchmark-test-final.log",
+      "sha256": "412fdf12a5a1ec7c99a5851ba54e7e17763fab38c947f661f34efabed125ea98"
+    },
+    "clippy.log": {
+      "path": "/home/john-riley/projects/lang/target/wave24-clippy.log",
+      "sha256": "c0bdb6c633da315d6df927d643291885840c2b0a1f617fd5e978b1c8642c9d33"
+    },
+    "readiness.json": {
+      "path": "/home/john-riley/projects/lang/target/wave24-readiness.json",
+      "sha256": "683522bad0cdf37050936d14d3afc1b216c624259abafe21bb5b7217cd279e10"
+    },
+    "release-build.log": {
+      "path": "/home/john-riley/projects/lang/target/wave24-release-build.log",
+      "sha256": "a383863061c16fdc6ee16d4bde334aa04dccf9d1961efbaf0b909a99d26bb043"
+    }
+  }
+}
