@@ -1,0 +1,51 @@
+{
+  "code_commit": "38c82c3e7a8cb39dbcafb6d306420aa03cdeac18",
+  "rust": {
+    "passed": 1032,
+    "failed": 0,
+    "ignored": 6
+  },
+  "bench": {
+    "initial_failed": 1,
+    "final_passed": 166
+  },
+  "docs_unit_passed": 20,
+  "docs_acceptance": {
+    "passed": 39,
+    "failed": 0,
+    "blocked": 6,
+    "future": 7
+  },
+  "live_solver": "unrun",
+  "release_complete": false,
+  "logs": {
+    "workspace": {
+      "path": "/home/john-riley/projects/lang/target/s1-repairs-workspace.log",
+      "sha256": "546c79f97655e0935c90e318e09855cf0c8bfab7b3cfcc07eaf159c4f3d43ead"
+    },
+    "clippy": {
+      "path": "/home/john-riley/projects/lang/target/s1-repairs-clippy.log",
+      "sha256": "6f91cbb2fc3f503d0be15b42d3d7ad8f2d97375e8bdd666771d1f056d2e026f6"
+    },
+    "build": {
+      "path": "/home/john-riley/projects/lang/target/s1-repairs-build.log",
+      "sha256": "565f205ca3b2fc52c9c78fb385f0299fa065d97f4c8a158c39aa9f0b32f8740c"
+    },
+    "bench": {
+      "path": "/home/john-riley/projects/lang/target/s1-repairs-bench.log",
+      "sha256": "7829306725b7ce1c940d79a65dbbf5762b26cecfd96c1b5e730df4e9a3f7aeb7"
+    },
+    "bench-final": {
+      "path": "/home/john-riley/projects/lang/target/s1-repairs-bench-final.log",
+      "sha256": "db987e56f5c3a840529eca78be6774c1137da5aa97b35f0d1c448c67e489a3bd"
+    },
+    "docs-unit": {
+      "path": "/home/john-riley/projects/lang/target/s1-repairs-docs-unit.log",
+      "sha256": "f495d307254cf09c9930c8f658cde13b219fe727eef278fc602145185ca77fc7"
+    },
+    "docs-run": {
+      "path": "/home/john-riley/projects/lang/target/s1-repairs-docs-run.log",
+      "sha256": "dd4fe924a31a88901c9501f3b2ccdaa4e90c32d730c774683a82d7bb13f59f6f"
+    }
+  }
+}

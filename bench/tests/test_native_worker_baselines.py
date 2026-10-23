@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 import sys
 import tempfile
+import time
 import unittest
 from unittest.mock import patch
 
@@ -50,10 +51,21 @@ class NativeWorkerTests(unittest.TestCase):
         self.assertEqual(row['status'], 'timeout')
         self.assertEqual(row['stdout'], 'started\n')
         self.assertFalse(b.assess(row, 'started\n'))
-        # A killed descendant can remain a zombie until the system reaps it.
+        # SIGKILL delivery is asynchronous: communicate() reaps the direct child,
+        # but a descendant can briefly remain running before becoming a zombie.
+        # Require cleanup within a fixed deadline; never accept a surviving child.
         proc = Path('/proc') / pidfile.read_text() / 'stat'
-        if proc.exists():
-            self.assertEqual(proc.read_text().split()[2], 'Z')
+        deadline = time.monotonic() + 2
+        while True:
+            try:
+                state = proc.read_text().split()[2]
+            except FileNotFoundError:
+                break
+            if state == 'Z':
+                break
+            remaining = deadline - time.monotonic()
+            self.assertGreater(remaining, 0, f'descendant survived SIGKILL in state {state}')
+            time.sleep(min(.01, remaining))
 
     def test_nonzero_exit_and_rusage(self):
         row = self.execute('raise SystemExit(7)')

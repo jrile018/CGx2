@@ -35,10 +35,10 @@ All twelve workers completed. IDs were resolved from exact worktree metadata and
 | worker | `01a16989-d9a0-7f11-8a84-71d5ecb302d7` | 055adc6 | reviewed-bounded-delivery |
 | execution | `01a1698a-1ae2-7d70-9870-7575c8b52753` | b597342 | reviewed-bounded-delivery |
 | notebook | `01a1698a-2507-75c3-a3eb-9d8c74ddbd43` | ff3e715 | reviewed-bounded-delivery |
-| verification | `01a1698a-34d3-7f23-9b5b-256b582cedcd` | eab9acd | repair-required |
-| analysis | `01a1698a-44ec-7942-ba44-753f20ea5acd` | 59446db | repair-required |
+| verification | `01a1698a-34d3-7f23-9b5b-256b582cedcd` | eab9acd | reviewed-bounded-delivery (repair below) |
+| analysis | `01a1698a-44ec-7942-ba44-753f20ea5acd` | 59446db | reviewed-bounded-delivery (repair below) |
 | evidence | `01a1698a-4e64-7e00-ab15-a0ae0052bf36` | d224bf1 | reviewed-bounded-delivery |
-| docs | `01a1698a-673a-7593-b8b7-a4c53f09a8d0` | 9e96ac4 | repair-required |
+| docs | `01a1698a-673a-7593-b8b7-a4c53f09a8d0` | 9e96ac4 | reviewed-bounded-delivery (repair below) |
 
 ## Repair wave dispatched
 
@@ -46,6 +46,10 @@ Base: `2b9855c48713794d4cf819bc391813c1260f287b`. All three worktrees and perman
 
 | Repair | Permanent chat ID | Worktree | Status |
 | --- | --- | --- | --- |
-| verifier-size | `01a16aed-eaa7-77f0-94cc-0a40c1daa7b0` | /home/john-riley/.codex/worktrees/18ee/lang | running |
-| analysis-contracts | `01a16aed-f621-7703-962a-c328604fef77` | /home/john-riley/.codex/worktrees/9bbd/lang | running |
-| docs-current | `01a16aee-0c58-7263-9b81-049eb0f96358` | /home/john-riley/.codex/worktrees/b26d/lang | running |
+| verifier-size | `01a16aed-eaa7-77f0-94cc-0a40c1daa7b0` | /home/john-riley/.codex/worktrees/18ee/lang | reviewed-bounded-delivery |
+| analysis-contracts | `01a16aed-f621-7703-962a-c328604fef77` | /home/john-riley/.codex/worktrees/9bbd/lang | reviewed-bounded-delivery |
+| docs-current | `01a16aee-0c58-7263-9b81-049eb0f96358` | /home/john-riley/.codex/worktrees/b26d/lang | reviewed-bounded-delivery |
+
+## S1 repairs reviewed; S2a ready
+
+All three repairs passed review and integrated checks; see s1-review/README.md for counts and the timing-test repair. All twelve original deliveries are reviewed. The sole dependency-ready implementation task is s2a/plan.md, which owns shared AST/type/value changes and mechanical consumer compatibility. Its base and actual dispatch outcome are recorded below after creation. S2b and S3 remain gated on reviewed interfaces.

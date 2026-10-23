@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-23T22:30:30.189Z",
+  "checked_at": "2026-10-23T23:10:30.201Z",
   "original_chats": [
     {
       "lane": "core",
@@ -80,7 +80,7 @@
       "threadId": "01a1698a-34d3-7f23-9b5b-256b582cedcd",
       "hostId": "local",
       "commit": "eab9acd",
-      "status": "repair-required",
+      "status": "reviewed-bounded-delivery",
       "afterCursor": "bce96abd-f78a-4f46-8fa4-2f2b7a2b8cf2:1"
     },
     {
@@ -89,7 +89,7 @@
       "threadId": "01a1698a-44ec-7942-ba44-753f20ea5acd",
       "hostId": "local",
       "commit": "59446db",
-      "status": "repair-required",
+      "status": "reviewed-bounded-delivery",
       "afterCursor": "694ec333-f476-4c69-97ac-93bca37bbc8c:1"
     },
     {
@@ -107,7 +107,7 @@
       "threadId": "01a1698a-673a-7593-b8b7-a4c53f09a8d0",
       "hostId": "local",
       "commit": "9e96ac4",
-      "status": "repair-required",
+      "status": "reviewed-bounded-delivery",
       "afterCursor": "a547530d-eeb9-4027-9a45-ba50f451091f:1"
     }
   ],
@@ -118,10 +118,12 @@
       "threadId": "01a16aed-eaa7-77f0-94cc-0a40c1daa7b0",
       "worktree": "/home/john-riley/.codex/worktrees/18ee/lang",
       "hostId": "local",
-      "status": "running",
+      "status": "reviewed-bounded-delivery",
       "base": "2b9855c48713794d4cf819bc391813c1260f287b",
-      "afterCursor": "db656518-696a-4de1-8b93-8544637fc493:1",
-      "clientThreadId": "client-new-thread:a96aa5f1-0010-4c13-b100-8742ecc5b405"
+      "afterCursor": "db656518-696a-4de1-8b93-8544637fc493:3",
+      "clientThreadId": "client-new-thread:a96aa5f1-0010-4c13-b100-8742ecc5b405",
+      "commit": "0b3d0f8cb91aa3de4f3ce759b9341b4a2631e8e1",
+      "integrated_commit": "d4eac86"
     },
     {
       "lane": "analysis-contracts",
@@ -129,10 +131,12 @@
       "threadId": "01a16aed-f621-7703-962a-c328604fef77",
       "worktree": "/home/john-riley/.codex/worktrees/9bbd/lang",
       "hostId": "local",
-      "status": "running",
+      "status": "reviewed-bounded-delivery",
       "base": "2b9855c48713794d4cf819bc391813c1260f287b",
-      "afterCursor": "464ec763-0e1e-4392-92b1-4217a9de67dd:1",
-      "clientThreadId": "client-new-thread:3b53f70d-2b5f-422e-8a8d-e6b9791b0157"
+      "afterCursor": "464ec763-0e1e-4392-92b1-4217a9de67dd:3",
+      "clientThreadId": "client-new-thread:3b53f70d-2b5f-422e-8a8d-e6b9791b0157",
+      "commit": "987529cd08fd0bc672869ce6b65bb3f2482ec379",
+      "integrated_commit": "725373d"
     },
     {
       "lane": "docs-current",
@@ -140,10 +144,12 @@
       "threadId": "01a16aee-0c58-7263-9b81-049eb0f96358",
       "worktree": "/home/john-riley/.codex/worktrees/b26d/lang",
       "hostId": "local",
-      "status": "running",
+      "status": "reviewed-bounded-delivery",
       "base": "2b9855c48713794d4cf819bc391813c1260f287b",
-      "afterCursor": "3a32e8c3-e84d-438b-8b06-cf5874ff8a32:1",
-      "clientThreadId": "client-new-thread:02781688-c89f-4782-88b2-47dc67b853c7"
+      "afterCursor": "3a32e8c3-e84d-438b-8b06-cf5874ff8a32:3",
+      "clientThreadId": "client-new-thread:02781688-c89f-4782-88b2-47dc67b853c7",
+      "commit": "b080f231f1bd150ee6d202c0aaeaf76c8c6d1f15",
+      "integrated_commit": "38c82c3"
     }
   ]
 }

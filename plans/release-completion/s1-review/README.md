@@ -61,7 +61,7 @@ effect-index indexes function bodies but omits requires/ensures-only helper edge
 
 Two expected-unsupported command cases need positive build/emit coverage and current installation instructions, not weaker output matching.
 
-## Next ready wave
+## Original repair frontier (superseded by closure below)
 
 Three disjoint repair plans: [verifier-size](verifier-size/plan.md), [analysis-contracts](analysis-contracts/plan.md), [docs-current](docs-current/plan.md). Stage S2a remains gated until these AST-consumer changes are reviewed and the combined baseline checks pass. The next heartbeat can then launch the one coordinated language/type owner and any genuinely independent ready work.
 
@@ -70,3 +70,22 @@ Three disjoint repair plans: [verifier-size](verifier-size/plan.md), [analysis-c
 ScopedRoots exposes mutable Session access; replacing the borrowed Session is explicitly excluded by its documented guarantee. S2 lowering must preserve session identity for every live scope. Do not claim arbitrary .cg borrowing from the new library API. Python package calls may perform effects before conversion fails; they have no rollback/confinement guarantee. Worker restricted mode presently denies writes/sockets. Native dependency pins, foreign allocator ownership, GPU/autograd exclusions and actual dateutil availability remain explicit.
 
 Trusted live solver, leak-enabled memory/FFI, delegated-cgroup scoring, quiet-host performance, independent safety review and real paired human/model studies remain open. No main merge or publication occurred.
+
+## Repair closure — 2026-10-23 23:10 UTC heartbeat
+
+All twelve S1 deliveries are now reviewed as bounded deliveries. Three repairs were statically reviewed and integrated:
+- verifier-size: 0b3d0f8 → d4eac86; compact dependency-ordered definitions, checked pre-allocation limits, independent definition audit and fail-closed CLI diagnostics.
+- analysis-contracts: 987529c → 725373d; requires/ensures call edges with parameter/result scopes.
+- docs-current: b080f23 → 38c82c3; exact current command expectations and actual build/emit/API/Python execution.
+
+Integrated verification at 38c82c3:
+- Workspace all-feature offline locked tests: **1032 passed, 0 failed, 6 ignored**.
+- Workspace all-target/all-feature Clippy with warnings denied, formatting and diff checks: pass.
+- Default-feature workspace binaries: pass.
+- Documentation harness: **20 passed**; executable pinned docs: **39 passed, 0 failed, 6 blocked, 7 future**, acceptance_complete=false.
+- SMT reproduction under 512 MiB/15 seconds: depths 1–64 passed finite source/audit parity; depth4 emits8574 bytes, depth64 emits127128 bytes. Depth140 rejects with CGV003 and solver.launched=false. This is not live solver acceptance.
+- Benchmark suite initially had one cleanup-state race: SIGKILL is asynchronous and a descendant briefly remained R before Z. A coordinator test-only fix waits at most2seconds for absent/Z, retaining strict cleanup and partial-output assertions. Focused10 tests and20 repeated cleanup cases passed; final full suite **166 passed**. Production runner unchanged. The intermediate sandbox retry failed because bench/target was read-only; the scoped authorized retry succeeded.
+
+Durable current reports: evidence/repairs-docs.json, evidence/repairs-smt.json and evidence/repairs-checks.json. Raw logs: /home/john-riley/projects/lang/target/s1-repairs-*. Previous installed65/readiness6/native-Python-direct-f32 acceptance remains historical S1 baseline evidence; these repair-only changes did not remeasure release performance or close external gates.
+
+Next dependency frontier: [S2a shared language/type owner](../s2a/plan.md). Only one implementation owner is ready because its AST/type/value migration includes mechanical exhaustive consumer adaptations. S2b follows reviewed S2a; S3 parallel consumers/adapters follow the reviewed S2 interface. No R-row is marked released from these bounded S1 results.

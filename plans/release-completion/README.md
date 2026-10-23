@@ -1,6 +1,6 @@
 # CGx2 finite completion plan
 
-Status: all twelve Stage 1 deliveries integrated for review; nine accepted as bounded deliveries and three repair chats ready. See [current review](s1-review/README.md). Updated 2026-10-23. Coordinator branch: `riley/release-completion-plan`. This replaces open-ended two-lane continuation after Wave 28. It does not change the release contract or claim release readiness.
+Status: all twelve Stage 1 deliveries and three repairs reviewed as bounded deliveries; S2a shared language/type task ready. See [current review](s1-review/README.md). Updated 2026-10-23. Coordinator branch: `riley/release-completion-plan`. This replaces open-ended two-lane continuation after Wave 28. It does not change the release contract or claim release readiness.
 
 ## Answer to “how many more waves?”
 
