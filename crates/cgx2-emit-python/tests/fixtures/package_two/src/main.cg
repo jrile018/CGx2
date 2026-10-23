@@ -1,0 +1,4 @@
+module app.main
+import app.math
+pub fn main() -> i64:
+    app.math.add(arg_count(), 40)

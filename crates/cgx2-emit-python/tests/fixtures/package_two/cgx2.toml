@@ -1,0 +1,4 @@
+schema_version = 1
+name = "package_two"
+entry = "src/main.cg"
+sources = ["src/main.cg", "src/math.cg"]

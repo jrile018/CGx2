@@ -1,0 +1,5 @@
+module app.math
+fn hidden(x: i64) -> i64:
+    x + 1
+pub fn add(x: i64, y: i64) -> i64:
+    hidden(x) + y

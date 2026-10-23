@@ -60,7 +60,30 @@ def _cgx2_contract_check(value, code, start, end):
 
 "#;
 
+const PACKAGE_HELPERS: &str = "# Generated from a checked CGx2 module.\nfrom _cgx2_support import _cgx2_add, _cgx2_sub, _cgx2_mul, _cgx2_div\nfrom _cgx2_support import _cgx2_arg, _cgx2_arg_count, _cgx2_show, _cgx2_contract_check\n\n";
+
+pub(crate) fn package_support() -> &'static str {
+    PRELUDE
+}
+
 pub(crate) fn emit(module: &Module, typed: &TypedModule) -> Result<String, Vec<EmitDiagnostic>> {
+    emit_impl(module, typed, false, "")
+}
+
+pub(crate) fn emit_package_module(
+    module: &Module,
+    typed: &TypedModule,
+    imports: &str,
+) -> Result<String, Vec<EmitDiagnostic>> {
+    emit_impl(module, typed, true, imports)
+}
+
+fn emit_impl(
+    module: &Module,
+    typed: &TypedModule,
+    package_mode: bool,
+    imports: &str,
+) -> Result<String, Vec<EmitDiagnostic>> {
     let mut errors = Vec::new();
     for import in &module.imports {
         errors.push(EmitDiagnostic::new(
@@ -96,7 +119,7 @@ pub(crate) fn emit(module: &Module, typed: &TypedModule) -> Result<String, Vec<E
         validate_block(&function.body, false, &mut errors);
     }
     validate_block(&module.statements, true, &mut errors);
-    if !module.functions.is_empty() {
+    if !package_mode && !module.functions.is_empty() {
         match module
             .functions
             .iter()
@@ -118,24 +141,34 @@ pub(crate) fn emit(module: &Module, typed: &TypedModule) -> Result<String, Vec<E
     if !errors.is_empty() {
         return Err(errors);
     }
-    match check_module(module) {
-        Ok(fresh) if fresh == *typed => {}
-        _ => {
-            return Err(vec![EmitDiagnostic::new(
-                "CGE002",
-                "typed summary does not match the syntax tree",
-                module.span,
-            )]);
+    if !package_mode {
+        match check_module(module) {
+            Ok(fresh) if fresh == *typed => {}
+            _ => {
+                return Err(vec![EmitDiagnostic::new(
+                    "CGE002",
+                    "typed summary does not match the syntax tree",
+                    module.span,
+                )]);
+            }
         }
     }
     for function in &module.functions {
-        validate_metadata(function, typed, &mut errors);
+        validate_metadata(function, typed, package_mode, &mut errors);
     }
     if !errors.is_empty() {
         return Err(errors);
     }
 
-    let mut output = String::from(PRELUDE);
+    let mut output = String::from(if package_mode {
+        PACKAGE_HELPERS
+    } else {
+        PRELUDE
+    });
+    output.push_str(imports);
+    if !imports.is_empty() {
+        output.push('\n');
+    }
     for function in &module.functions {
         let params = function
             .parameters
@@ -165,6 +198,9 @@ pub(crate) fn emit(module: &Module, typed: &TypedModule) -> Result<String, Vec<E
         emit_block(&module.statements, 1, true, &mut output);
         output.push('\n');
     }
+    if package_mode {
+        return Ok(output);
+    }
     let entry = if module.functions.is_empty() {
         "_cgx2_script()".to_owned()
     } else {
@@ -180,6 +216,7 @@ pub(crate) fn emit(module: &Module, typed: &TypedModule) -> Result<String, Vec<E
 fn validate_metadata(
     function: &cgx2_syntax::Function,
     typed: &TypedModule,
+    package_mode: bool,
     errors: &mut Vec<EmitDiagnostic>,
 ) {
     if let Some(declaration) = &function.effects {
@@ -209,7 +246,9 @@ fn validate_metadata(
     }
     if let Some(summary) = typed.effects.get(&function.name) {
         for effect in &summary.effects {
-            if !matches!(effect.as_str(), "Mutate" | "ReadArgs") {
+            if !matches!(effect.as_str(), "Mutate" | "ReadArgs")
+                && !(package_mode && effect == "Unknown")
+            {
                 errors.push(EmitDiagnostic::new(
                     "CGE004",
                     format!("inferred effect `{effect}` is unsupported by Python emission"),

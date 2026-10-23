@@ -236,6 +236,7 @@ impl CheckedModule {
 #[derive(Clone, Debug)]
 pub struct CheckedPackage {
     root: PathBuf,
+    manifest_canonical_path: PathBuf,
     manifest_sha256: String,
     binding_lock: Option<PathBuf>,
     index: PackageIndex,
@@ -263,6 +264,14 @@ impl CheckedPackage {
     pub fn verify_unchanged(&self) -> Result<(), Vec<PackageDiagnostic>> {
         let manifest = self.root.join("cgx2.toml");
         let manifest_path = canonicalize_contained(&manifest, &self.root).map_err(|d| vec![d])?;
+        if manifest_path != self.manifest_canonical_path {
+            return Err(vec![PackageDiagnostic::new(
+                "CGP018",
+                "manifest target changed after package validation",
+                &manifest,
+                None,
+            )]);
+        }
         let bytes = read_limited(&manifest_path, &manifest, MAX_MANIFEST_BYTES)?;
         if digest(&bytes) != self.manifest_sha256 {
             return Err(vec![PackageDiagnostic::new(
@@ -675,6 +684,7 @@ pub fn load_checked_package(root: &Path) -> Result<CheckedPackage, Vec<PackageDi
     modules.sort_by(|a, b| a.name.cmp(&b.name).then(a.source.cmp(&b.source)));
     Ok(CheckedPackage {
         root: canonical_root,
+        manifest_canonical_path: canonical_manifest,
         manifest_sha256,
         binding_lock: manifest.binding_lock,
         index: PackageIndex {
