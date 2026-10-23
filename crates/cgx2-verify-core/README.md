@@ -55,7 +55,7 @@ and `Expr::Let(name, initializer, body)`. Bindings are eager and lexical, includ
 shadowing. Division truncates toward zero; zero and MIN/-1 fail with the existing
 `EvalError::Overflow` definedness outcome. SMT uses QF_UFNIA, guarded mathematical
 integers and sign-adjusted division; the finite audit independently interprets
-SMT `let`, multiplication and nonnegative division. Combining lexical bindings
+shared definitions, SMT `let`, multiplication and nonnegative division. Combining lexical bindings
 and unmodeled calls is explicitly rejected by `SmtError::UnmodeledLocalBinding`.
 
 `LiteralAccumulator { name, initial, index, start, end, increment, result }`
@@ -71,3 +71,44 @@ Protocol handling, finite search and witness validation use one shared source
 compiled for the original and v2 types; the version-specific expression model,
 evaluator, encoding and independent SMT interpreter are separate modules. This
 keeps the old exhaustive enums stable while preserving security checks in both.
+
+## Bounded scalar v2 SMT emission
+
+`scalar_v2::emit_smtlib` and `emit_witness_smtlib` use `SmtLimits::default()`:
+4,096 combined expression nodes and parameters, expression depth 128 (root depth
+one), and 1,048,576 output bytes per complete script. These are hard ceilings;
+`emit_smtlib_with_limits` / `emit_witness_smtlib_with_limits` accept smaller
+positive `nodes`, `depth`, and `output_bytes` budgets. Larger/zero budgets return
+`SmtError::InvalidLimits`. `check_smt_limits` checks shape iteratively before
+recursive validation/sorting; total identifier UTF-8 bytes across parameters and
+expression occurrences must also fit `output_bytes / 2`, before hex encoding.
+The emitter checks each output fragment before copying/reserving it, including
+identifier encoding, declarations, definitions, obligations and witness names.
+It returns `SmtError::LimitExceeded { resource, limit }` without returning a
+partial script. Allocation is bounded during construction, rather than checked
+only after constructing expanded text. Caller-supplied AST allocation/destruction
+and process-wide allocator exhaustion are outside this emission API.
+
+Each value/definedness pair uses fresh, sequential zero-argument `define-fun`
+bindings. Child references have bounded-length internal names (`cgx2_t_N`,
+`cgx2_d_N`); parameters and UF names use separate hex-encoded namespaces.
+Lexical environments resolve each source local to its initializer reference,
+with the initializer evaluated before shadowing. Definitions occur once, in
+dependency order; output grows linearly in nodes with a logarithmic identifier
+length factor. Requires/ensures and witness queries reuse those definitions.
+Branch definedness still selects only the active branch. Arithmetic remains
+eager and checked: invalid children cause a dummy zero parent value while
+propagating false definedness. This bounds inactive integer intermediates in the
+independent interpreter without admitting any failed source operation. Signed
+division truncates toward zero; division by zero and MIN / -1 remain failures.
+Global UF range assumptions and conservative local-plus-UF rejection remain.
+The frozen root API is unchanged.
+
+The scalar v2 audit parses the actual emitted definitions and four assertions,
+evaluates each definition once per tuple, checks its declared sort, and rejects
+unknown/forward/duplicate definitions and definitions after obligations. It does
+not regenerate the script or skip SMT evaluation. Script bytes share the 1 MiB
+ceiling; existing per-term limits remain 256 KiB, 32,768 tokens, depth 256.
+Over-budget input contracts produce `AuditError::InvalidInput`; malformed or
+over-budget scripts produce `MalformedFormula`. Finite/source/SMT parity is
+encoding evidence, never trusted live solver acceptance.

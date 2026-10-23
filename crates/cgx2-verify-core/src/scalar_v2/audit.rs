@@ -3,6 +3,7 @@
 use std::collections::BTreeMap;
 
 use super::smtlib::symbol;
+use super::{check_smt_limits, SmtLimits, SMT_NODE_LIMIT, SMT_OUTPUT_LIMIT};
 use super::{eval, Contract, Domain, EvalError, Expr, Sort, Value};
 
 pub const OBLIGATION_NAMES: [&str; 4] = [
@@ -150,6 +151,60 @@ fn obligations(script: &str) -> Result<[Term; 4], AuditError> {
     terms
         .try_into()
         .map_err(|_| AuditError::MalformedFormula("obligation count".into()))
+}
+
+// Parse actual emitted definitions, independently of the source/core encoder.
+// Definitions are evaluated once, in order, for each finite-domain tuple.
+fn definitions(script: &str) -> Result<Vec<(String, Sort, Term)>, AuditError> {
+    if script.len() > SMT_OUTPUT_LIMIT || !script.is_ascii() {
+        return Err(AuditError::MalformedFormula(
+            "script size or encoding".into(),
+        ));
+    }
+    let mut result = Vec::new();
+    let mut names = std::collections::BTreeSet::new();
+    let mut obligations_started = false;
+    for line in script.lines() {
+        obligations_started |= line.starts_with("; vc:");
+        if !line.starts_with("(define-fun") {
+            continue;
+        }
+        if obligations_started || result.len() >= 4 * SMT_NODE_LIMIT {
+            return Err(AuditError::MalformedFormula(
+                "definition position/count".into(),
+            ));
+        }
+        let tokens = tokenize(line)?;
+        let mut at = 0;
+        let parsed = parse(&tokens, &mut at, 0)?;
+        if at != tokens.len() {
+            return Err(AuditError::MalformedFormula("definition tokens".into()));
+        }
+        let Term::List(items) = parsed else {
+            return Err(AuditError::MalformedFormula("definition shape".into()));
+        };
+        let [Term::Atom(op), Term::Atom(name), Term::List(args), Term::Atom(sort), body] =
+            items.as_slice()
+        else {
+            return Err(AuditError::MalformedFormula("definition shape".into()));
+        };
+        if op != "define-fun"
+            || !name.starts_with("cgx2_")
+            || !args.is_empty()
+            || !names.insert(name.clone())
+        {
+            return Err(AuditError::MalformedFormula(
+                "definition name/arguments".into(),
+            ));
+        }
+        let sort = match sort.as_str() {
+            "Bool" => Sort::Bool,
+            "Int" => Sort::I64,
+            _ => return Err(AuditError::MalformedFormula("definition sort".into())),
+        };
+        result.push((name.clone(), sort, body.clone()));
+    }
+    Ok(result)
 }
 
 fn bool_value(value: SmtValue) -> Result<bool, AuditError> {
@@ -334,6 +389,9 @@ fn audit_inner(
     script: &str,
     source: Option<&SourceEvaluator<'_>>,
 ) -> Result<EncodingAudit, AuditError> {
+    check_smt_limits(contract, SmtLimits::default())
+        .map_err(|e| AuditError::InvalidInput(format!("{e:?}")))?;
+    let definitions = definitions(script)?;
     contract
         .validate()
         .map_err(|error| AuditError::InvalidInput(format!("{error:?}")))?;
@@ -408,7 +466,7 @@ fn audit_inner(
             .enumerate()
             .map(|(i, p)| (p.name.clone(), choices[i][indices[i]].clone()))
             .collect::<BTreeMap<_, _>>();
-        let variables = values
+        let mut variables = values
             .iter()
             .map(|(name, value)| {
                 (
@@ -420,6 +478,16 @@ fn audit_inner(
                 )
             })
             .collect::<BTreeMap<_, _>>();
+        for (name, sort, body) in &definitions {
+            let value = evaluate(body, &variables, 0)?;
+            if !matches!(
+                (sort, value),
+                (Sort::Bool, SmtValue::Bool(_)) | (Sort::I64, SmtValue::Int(_))
+            ) {
+                return Err(AuditError::MalformedFormula("definition value sort".into()));
+            }
+            variables.insert(name.clone(), value);
+        }
         let expected = expectation(&contract.requires, &contract.ensures, &values)?;
         if let Some(source) = source {
             let observed = source(&values)?;

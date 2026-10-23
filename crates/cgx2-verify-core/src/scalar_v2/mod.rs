@@ -19,7 +19,11 @@ pub use bounded::{verify_bounded, Counterexample, Domain, Failure, Scope, Unknow
 pub use eval::{eval, EvalError, Value};
 pub use expr::{Contract, Expr, Parameter, Sort, ValidationError};
 pub use model::validate_solver_witness;
-pub use smtlib::{emit_smtlib, emit_witness_smtlib, SmtError};
+pub use smtlib::{
+    check_smt_limits, emit_smtlib, emit_smtlib_with_limits, emit_witness_smtlib,
+    emit_witness_smtlib_with_limits, SmtError, SmtLimits, SMT_DEPTH_LIMIT, SMT_NODE_LIMIT,
+    SMT_OUTPUT_LIMIT,
+};
 pub use solver::{
     observe_solver, parse_solver_result, run_solver, SolverExit, SolverObservation, SolverResponse,
     SOLVER_MEMORY_LIMIT_BYTES, SOLVER_OUTPUT_LIMIT,

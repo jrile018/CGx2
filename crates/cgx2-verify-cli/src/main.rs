@@ -514,7 +514,10 @@ fn solver_fixture_catalog() -> Json {
         solver_fixtures()
             .into_iter()
             .map(|(name, contract, expected)| {
-                let script = emit_smtlib(&contract).expect("fixture contract is valid");
+                let script = match emit_smtlib(&contract) {
+                    Ok(script) => script,
+                    Err(error) => return json!({"name": name, "emission_error": format!("{error:?}"), "valid": false}),
+                };
                 json!({"name": name, "smtlib": script, "script_sha256": hash(script.as_bytes()),
             "expected": expected.split('\n').collect::<Vec<_>>()})
             })
@@ -526,7 +529,16 @@ fn solver_fixture_probes(executable: &str, args: &[&str], timeout: Duration) -> 
     let mut evidence = Vec::new();
     let mut passed = true;
     for (name, contract, expected) in solver_fixtures() {
-        let script = emit_smtlib(&contract).expect("fixture contract is valid");
+        let script = match emit_smtlib(&contract) {
+            Ok(script) => script,
+            Err(error) => {
+                passed = false;
+                evidence.push(
+                    json!({"name": name, "emission_error": format!("{error:?}"), "valid": false}),
+                );
+                continue;
+            }
+        };
         let observed = observe_solver(executable, args, &script, timeout);
         let valid = observed.exit == SolverExit::Code(0)
             && !observed.output_limit_exceeded
@@ -670,7 +682,15 @@ fn solver_json(
             if statuses.get(index) != Some(&"sat") {
                 continue;
             }
-            let query = emit_witness_smtlib(contract, failure).expect("validated contract");
+            let query = match emit_witness_smtlib(contract, failure) {
+                Ok(query) => query,
+                Err(error) => {
+                    if let Some(attempts) = result["witness_attempts"].as_array_mut() {
+                        attempts.push(json!({"condition": format!("{failure:?}"), "validation": format!("unknown:emission:{error:?}")}));
+                    }
+                    continue;
+                }
+            };
             let witness = observe_solver(executable, args, &query, timeout);
             let checked = if witness.output_limit_exceeded
                 || witness.write_error
@@ -798,6 +818,24 @@ fn run() -> Result<(), String> {
         let (contract, domains) = parse_document(&bytes)?;
         (contract, domains, None, None)
     };
+    let script = match emit_smtlib(&contract) {
+        Ok(script) => script,
+        Err(error) => {
+            let result = json!({"schema_version": if source_input { 3 } else { 2 },
+                "input_sha256": hash(&bytes), "source": source_meta,
+                "verdict": {"kind": "unknown", "reason": format!("SMT emission failed: {error:?}")},
+                "proof": {"kind": "unknown", "state": "unsupported", "reason": "smt_emission_failed"},
+                "diagnostic": {"code": "CGV003", "message": format!("{error:?}")},
+                "bounded_solver_result": {"kind": "unrun", "source_parity": false},
+                "solver": {"bounded_reason": "emission_failed", "launched": false}});
+            if options.format == "json" {
+                println!("{result}");
+            } else {
+                println!("proof: unknown (SMT emission failed: {error:?})");
+            }
+            return Ok(());
+        }
+    };
     let verdict = verify_bounded(&contract, &domains, options.max_cases);
     let mut result = json!({
         "schema_version": if source_input { 3 } else { 2 },
@@ -814,7 +852,6 @@ fn run() -> Result<(), String> {
             });
         }
     }
-    let script = emit_smtlib(&contract).map_err(|e| format!("SMT emission failed: {e:?}"))?;
     let audit = if let Some(selected) = &source_selected {
         audit_encoding_with_source(&contract, &domains, options.max_cases, &script, &|values| {
             selected.source_obligations(values)

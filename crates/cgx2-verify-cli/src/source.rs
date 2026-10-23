@@ -730,7 +730,7 @@ mod tests {
             Err(AuditError::SourceMismatch { .. })
         ));
         // Swapping branches in emitted terms must fail even though each term parses.
-        let corrupted_script = script.replace("(ite v_666c6167 1 2)", "(ite v_666c6167 2 1)");
+        let corrupted_script = script.replace("() Int 1)", "() Int 2)");
         assert_ne!(script, corrupted_script);
         assert!(matches!(
             audit_encoding_with_source(&selected.contract, &[], 2, &corrupted_script, &oracle),
@@ -761,9 +761,18 @@ mod tests {
             [false, true, false, true]
         );
         let script = emit_smtlib(&selected.contract).unwrap();
-        let overflow_defined = "(and true true (>= (+ v_78 1) (- 9223372036854775808)) (<= (+ v_78 1) 9223372036854775807))";
-        let selected_defined = format!("(ite v_666c6167 true {overflow_defined})");
-        let corrupted = script.replace(&selected_defined, overflow_defined);
+        let corrupted = script
+            .lines()
+            .map(|line| {
+                if line.starts_with("(define-fun cgx2_d_") && line.contains("(ite ") {
+                    // Remove branch selection, requiring both branch definitions.
+                    line.replace("(ite ", "(and ")
+                } else {
+                    line.to_owned()
+                }
+            })
+            .collect::<Vec<_>>()
+            .join("\n");
         assert_ne!(script, corrupted);
         assert!(matches!(
             audit_encoding_with_source(

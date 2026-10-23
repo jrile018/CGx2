@@ -1,0 +1,147 @@
+   Compiling cgx2-verify-core v0.1.0 (/home/john-riley/.codex/worktrees/18ee/lang/crates/cgx2-verify-core)
+   Compiling cgx2-verify-cli v0.1.0 (/home/john-riley/.codex/worktrees/18ee/lang/crates/cgx2-verify-cli)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.72s
+     Running unittests src/main.rs (target/repair-verifier-size/debug/deps/cgx2_verify-159b8a938670fc3a)
+
+running 4 tests
+test source::tests::original_source_oracle_detects_deleted_unused_division_failure ... ok
+test source::tests::original_source_replay_and_oracle_reject_unconditional_branch_definedness ... ok
+test source::tests::original_source_oracle_rejects_corrupted_lowering_and_encoding ... ok
+test source::tests::library_only_accumulator_lowering_has_original_ast_parity_without_source_admission ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/command.rs (target/repair-verifier-size/debug/deps/command-0a03bd206082be27)
+
+running 9 tests
+test finite_proof_scope_and_stable_json ... ok
+test json_conditionals_are_typed_and_select_only_one_branch ... ok
+test malformed_oversized_and_invalid_domains_are_rejected ... ok
+test false_inconsistent_cap_and_foreign_call ... ok
+test named_solver_stub_rejects_partial_protocol ... ok
+test fake_solver_is_protocol_evidence_only ... ok
+test solver_statuses_are_untrusted_observations ... ok
+test source_nested_division_is_compact_audited_and_stops_before_solver_at_limit ... ok
+test solver_timeout_large_and_stalled_output_are_bounded ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+
+     Running tests/source_contracts.rs (target/repair-verifier-size/debug/deps/source_contracts-4d0c8155d87d6ca3)
+
+running 23 tests
+test live_solver_boolean_crosscheck_when_configured ... ok
+test inactive_accumulators_share_the_expansion_budget_before_solver_startup ... ok
+test boolean_parameter_is_enumerated_without_domain_flag ... ok
+test conditional_contract_reports_a_replayable_false_branch ... ok
+test checked_body_overflow_is_a_failure_even_without_result_in_ensures ... ok
+test accumulator_source_is_explicitly_blocked_by_shared_effect_contract ... ok
+test source_and_smt_parity_covers_i64_max_body_overflow ... ok
+test selected_finite_result_does_not_cover_unsupported_sibling ... ok
+test incomplete_paths_and_source_logical_syntax_remain_parser_rejections ... ok
+test changed_source_changes_digest ... ok
+test finite_proof_and_re_evaluated_counterexample ... ok
+test source_artifact_names_obligations_and_rejects_unchecked_assert ... ok
+test nested_trees_and_both_result_sorts_have_independent_encoding_parity ... ok
+test unsupported_calls_effects_and_foreign_declarations_have_source_spans ... ok
+test inconsistent_and_undefined_preconditions_remain_unknown ... ok
+test domains_and_function_selection_are_explicit ... ok
+test only_selected_branch_and_guard_overflow_are_violations ... ok
+test out_of_profile_branches_reject_before_solver_even_when_inactive ... ok
+test solver_version_spoof_with_canned_statuses_cannot_prove ... ok
+test useful_scalar_profile_source_core_and_smt_parity ... ok
+test conditional_sat_transport_replays_selected_overflow_against_source ... ok
+test fixture_spoof_without_pin_and_stale_model_remain_untrusted ... ok
+test conditional_depth_and_node_caps_cover_inactive_subtrees ... ok
+
+test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running unittests src/lib.rs (target/repair-verifier-size/debug/deps/cgx2_verify_core-ce620b4bb894bceb)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/conditionals.rs (target/repair-verifier-size/debug/deps/conditionals-85f1ed87da08e281)
+
+running 3 tests
+test evaluation_checks_guard_and_only_selected_branch ... ok
+test sorts_and_uninterpreted_walkers_examine_both_branches ... ok
+test smt_definedness_and_witness_replay_follow_selected_branch ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/contracts.rs (target/repair-verifier-size/debug/deps/contracts-d253661b9b6d62ab)
+
+running 9 tests
+test checked_addition_and_subtraction_reject_overflow ... ok
+test boolean_parameters_are_exhaustively_enumerated ... ok
+test impossible_precondition_is_not_a_proof ... ok
+test returns_smallest_validated_counterexample ... ok
+test empty_domain_and_case_cap_are_unknown ... ok
+test checked_overflow_is_a_failure_with_a_witness ... ok
+test evaluates_boolean_and_checked_integer_expressions ... ok
+test proves_only_the_named_finite_range ... ok
+test rejects_sort_mismatch_and_unknown_variable ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/encoding_audit.rs (target/repair-verifier-size/debug/deps/encoding_audit-a2736e10f90e3fdd)
+
+running 3 tests
+test malformed_and_mismatched_formulas_fail_closed ... ok
+test signed_boundaries_include_requires_and_substituted_body_overflow ... ok
+test every_tuple_and_each_named_obligation_are_checked ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/scalar_v2.rs (target/repair-verifier-size/debug/deps/scalar_v2-eb2fbefd521597e7)
+
+running 5 tests
+test new_arithmetic_witnesses_are_replayed ... ok
+test corruption_of_new_operators_or_binding_is_detected ... ok
+test bindings_are_eager_lexical_and_conditionals_remain_lazy ... ok
+test expansion_has_explicit_preallocation_bound_and_independent_loop_parity ... ok
+test boundary_grid_matches_checked_rust_and_independent_smt_interpreter ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/scalar_v2_size.rs (target/repair-verifier-size/debug/deps/scalar_v2_size-33a1ab77ecc5aa30)
+
+running 8 tests
+test uninterpreted_range_assumptions_and_local_rejection_are_preserved ... ok
+test exact_node_depth_and_output_budgets_apply_to_main_and_witness ... ok
+test fresh_symbols_preserve_shadowing_initializer_scope_and_non_capture ... ok
+test corrupted_definitions_forward_references_sorts_and_obligations_are_rejected ... ok
+test inactive_undefined_chains_and_eager_boolean_and_local_failures_match ... ok
+test nested_division_has_measured_bounded_growth_and_real_term_parity ... ok
+test output_and_identifier_caps_cover_large_names_before_expansion ... ok
+test default_node_and_depth_ceilings_reject_before_recursive_work ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/smtlib.rs (target/repair-verifier-size/debug/deps/smtlib-d57090575980343f)
+
+running 6 tests
+test protocol_rejects_unknown_timeout_missing_and_malformed ... ok
+test emits_i64_bounds_overflow_guards_and_three_checks ... ok
+test protocol_requires_valid_precondition_and_unsat_negation ... ok
+test symbol_encoding_cannot_inject_smtlib ... ok
+test uninterpreted_calls_keep_argument_sorts_and_disclose_i64_bounds ... ok
+test fake_solver_command_covers_success_missing_and_timeout ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/solver_proof.rs (target/repair-verifier-size/debug/deps/solver_proof-c3edc6bfa0cc4c5c)
+
+running 3 tests
+test statuses_reject_contradictions_and_extra_output ... ok
+test model_is_only_a_counterexample_after_checked_reevaluation ... ok
+test verification_conditions_have_fixed_order_and_distinct_safety_query ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_verify_core
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

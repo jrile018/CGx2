@@ -1,0 +1,16 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running tests/scalar_v2_size.rs (target/repair-verifier-size/debug/deps/scalar_v2_size-33a1ab77ecc5aa30)
+
+running 1 test
+divisions=1 smt_bytes=1416 witness_bytes=1109
+divisions=2 smt_bytes=2020 witness_bytes=1713
+divisions=3 smt_bytes=2637 witness_bytes=2328
+divisions=4 smt_bytes=3270 witness_bytes=2961
+divisions=8 smt_bytes=5802 witness_bytes=5493
+divisions=16 smt_bytes=10866 witness_bytes=10557
+divisions=32 smt_bytes=20994 witness_bytes=20685
+divisions=64 smt_bytes=42162 witness_bytes=41851
+divisions=120 smt_bytes=79234 witness_bytes=78923
+test nested_division_has_measured_bounded_growth_and_real_term_parity ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.01s
