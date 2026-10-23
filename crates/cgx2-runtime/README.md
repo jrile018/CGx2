@@ -1,5 +1,92 @@
 # CGx2 runtime kernel
 
+## Fallible entry and lexical roots (S1-02)
+
+Additive APIs for later compiler lowering:
+
+- `Session::try_new() -> Result<Session, SessionEntryError>` reserves the default
+  region table before publishing a session ID. Defaults remain auto trigger
+  `1 << 20` bytes and region limit `64 << 20` bytes. Errors distinguish
+  `HostAllocation { site: ReserveSiteV2::SessionRegions }` and
+  `IdentifierExhausted`; a failed reserve consumes no ID.
+- `Session::try_no_gc(budget_bytes: usize) -> Result<NoGcGuard<'_>, AllocationError>`
+  reserves before pushing a budget. Failed entry leaves all existing guards,
+  their spent counters, regions and roots unchanged. Nested successful entry
+  charges any replacement budget table to every *outer* active budget before
+  entering the new block. Reused capacity costs no new allocation.
+- `Session::scoped_roots() -> ScopedRoots<'_>` borrows the session without
+  allocating. `ScopedRoots::root(handle) -> Result<(), MemoryError>` reserves its
+  tracking table before registering a root. Each successful call owns one
+  protected registration, including duplicate handles and handles in different
+  regions. Manual `Session::unroot` can remove only manual registrations.
+- `ScopedRoots::cleanup() -> CleanupReport` drains registrations in reverse
+  order without allocating or collecting. It continues after an error, reports
+  `released_roots` and `first_error`, and repeated calls release zero roots.
+  Capacity is retained for scope reuse. `finish<T,E>(result: Result<T,E>) ->
+  ScopeOutcome<T,E>` returns the original `result` alongside `cleanup` diagnostics.
+  Cleanup errors never replace the original error or cancellation value.
+
+```rust
+use cgx2_runtime::{MemoryError, Session};
+fn evaluate(session: &mut Session) -> Result<(), MemoryError> {
+    let region = session.default_region();
+    let mut roots = session.scoped_roots();
+    let value = roots.alloc_bytes(region, 8).map_err(MemoryError::Allocation)?;
+    roots.root(value)?; // register immediately, before any allocating safepoint
+    {
+        let mut nested = roots.scoped_roots();
+        nested.root(value)?;
+    } // releases the nested registration; outer registration still protects it
+    let outcome = roots.finish(Ok(()));
+    outcome.result
+} // Drop is also idempotent after finish
+```
+
+Scope Drop performs the same cleanup on ordinary exit, `?`, cooperative
+cancellation by dropping execution state, and Rust panic unwind. This is a
+lexical Rust library API: a compiler must retain scopes in stack order and root
+bindings before other allocating safepoints. It must check `ScopeOutcome.cleanup`
+when reporting explicit completion. Rust `OwnedBytes` already drops its buffer
+deterministically; it can be held in the same lexical scope. This adds no source
+syntax, source ownership checker, ordinary managed/owned function lowering,
+notebook integration, foreign retention, or asynchronous cancellation engine.
+Aborts, killed processes, forgotten guards/scopes and replacing the borrowed
+session via `DerefMut` are outside lexical cleanup guarantees. A scope does not
+close regions or collect unrooted objects; manual regions still require an
+explicit collect/close.
+
+The original `Session::new`, `Default`, `no_gc`, `ReserveSite`, error enums,
+handles, region limits and owned conversion APIs retain their old behavior.
+In particular the legacy constructors still allocate infallibly and retain
+their historical bookkeeping/fault policy. Callers requiring fallible entry
+must opt into **both** `try_new` and `try_no_gc`; source consumers are unchanged.
+
+Reserve audit: `SessionRegions` makes one `try_reserve_exact(1)`; `GuardBudgets`
+and `ScopedRoots` build replacement vectors with checked length/byte arithmetic
+and `try_reserve_exact`, validate actual capacity, then commit without any further
+reserve. Replacement capacity times `size_of::<Budget>()` (two `usize` fields)
+or `size_of::<Handle>()` is the cumulative charge to active no_gc budgets. The
+full replacement allocation is charged, including overlap with the old table;
+it is session bookkeeping, not region live bytes. Root/table failure has no
+region allocation-failure increment. On rejection, temporary storage is dropped
+and no budget is charged. Cleanup, scope entry, root-count increments and reused
+capacity do not reserve. Fixed logical region/object charges remain unchanged.
+
+With `fault-injection`, `try_new_with_host_failure_at_reserve(index)` injects
+before a session exists. A successful construction retains the fault counter
+(one constructor reserve); an untriggered index remains armed for later calls.
+`last_host_failure_site_v2()` reports the additive `ReserveSiteV2`, whose
+`Existing(ReserveSite)` case covers old sites. `last_host_failure_site()` returns
+`None` for a new-site failure. Injection remains one-shot and one-based, at actual
+reserve boundaries only. No new variant is added to the original exhaustive enum.
+
+These fallible reserves cover these CGx2 bookkeeping vectors, not process-wide
+OOM recovery. Global allocator aborts, Rust/std/formatting/panic allocations,
+`memory_report` snapshots, foreign allocators, Python/PyTorch, device storage and
+allocator-internal overhead remain outside this guarantee. Logical byte charges
+are not allocator RSS. See the [S1-02 report](../cgx2-memory-conformance/release-memory.md)
+for checks and the leak-enabled external runner.
+
 ## Wave 13 deterministic host reserve failures
 
 The opt-in Cargo feature `fault-injection` exposes

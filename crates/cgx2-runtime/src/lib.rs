@@ -7,6 +7,7 @@ mod heap;
 mod owned;
 mod region;
 mod report;
+mod scope;
 
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::Instant;
@@ -14,7 +15,7 @@ use std::time::Instant;
 use budget::Budget;
 pub use budget::NoGcGuard;
 use fault::FaultInjection;
-pub use fault::ReserveSite;
+pub use fault::{ReserveSite, ReserveSiteV2};
 use heap::{Object, Region};
 pub use owned::{OwnedBytes, OWNED_METADATA_BYTES};
 pub use region::{
@@ -23,8 +24,22 @@ pub use region::{
     REFERENCE_SLOT_METADATA_BYTES, REGION_METADATA_BYTES, SLOT_METADATA_BYTES,
 };
 pub use report::{MemoryReport, PauseReport, RegionReport, MEMORY_REPORT_SCHEMA_VERSION};
+pub use scope::{CleanupReport, ScopeOutcome, ScopedRoots};
 
 static NEXT_SESSION_ID: AtomicU64 = AtomicU64::new(1);
+
+/// Failure before a usable session has been published.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum SessionEntryError {
+    HostAllocation { site: ReserveSiteV2 },
+    IdentifierExhausted,
+}
+
+fn try_session_id(counter: &AtomicU64) -> Result<u64, SessionEntryError> {
+    counter
+        .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |n| n.checked_add(1))
+        .map_err(|_| SessionEntryError::IdentifierExhausted)
+}
 
 pub struct Session {
     id: u64,
@@ -41,6 +56,7 @@ impl Default for Session {
 
 impl Session {
     pub fn new() -> Self {
+        // Compatibility entry point: retain historical allocation/fault behavior.
         let id = NEXT_SESSION_ID
             .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |n| n.checked_add(1))
             .expect("session identifier space exhausted");
@@ -55,6 +71,43 @@ impl Session {
             budgets: Vec::new(),
             fault: FaultInjection::default(),
         }
+    }
+
+    /// Fallible default session entry: auto trigger 1 MiB, region limit 64 MiB.
+    pub fn try_new() -> Result<Self, SessionEntryError> {
+        Self::try_new_with_fault(FaultInjection::default())
+    }
+
+    /// Conformance-only injection before the session exists. Index is one-based.
+    #[cfg(feature = "fault-injection")]
+    pub fn try_new_with_host_failure_at_reserve(index: usize) -> Result<Self, SessionEntryError> {
+        let mut fault = FaultInjection::default();
+        fault.arm(index);
+        Self::try_new_with_fault(fault)
+    }
+
+    fn try_new_with_fault(mut fault: FaultInjection) -> Result<Self, SessionEntryError> {
+        let site = ReserveSiteV2::SessionRegions;
+        let mut regions = Vec::new();
+        fault
+            .before_reserve_v2(site)
+            .map_err(|_| SessionEntryError::HostAllocation { site })?;
+        regions
+            .try_reserve_exact(1)
+            .map_err(|_| SessionEntryError::HostAllocation { site })?;
+        let id = try_session_id(&NEXT_SESSION_ID)?;
+        regions.push(Region::new(
+            CollectionMode::Auto {
+                trigger_bytes: 1 << 20,
+            },
+            64 << 20,
+        ));
+        Ok(Self {
+            id,
+            regions,
+            budgets: Vec::new(),
+            fault,
+        })
     }
 
     /// Arms a one-shot failure at the one-based index of the next fallible
@@ -77,6 +130,11 @@ impl Session {
     #[cfg(feature = "fault-injection")]
     pub fn last_host_failure_site(&self) -> Option<ReserveSite> {
         self.fault.failed_site
+    }
+
+    #[cfg(feature = "fault-injection")]
+    pub fn last_host_failure_site_v2(&self) -> Option<ReserveSiteV2> {
+        self.fault.failed_site_v2
     }
 
     /// Test-only visibility into slot-table capacity for targeting a real growth reserve.
@@ -102,11 +160,48 @@ impl Session {
     }
 
     pub fn no_gc(&mut self, budget_bytes: usize) -> NoGcGuard<'_> {
+        // Compatibility entry point: bookkeeping retains its historical policy.
         self.budgets.push(Budget {
             limit: budget_bytes,
             spent: 0,
         });
         NoGcGuard { session: self }
+    }
+
+    /// Enters only after any budget-table growth succeeds. Existing guards stay
+    /// active on failure; entry bookkeeping is charged to those outer guards.
+    pub fn try_no_gc(&mut self, budget_bytes: usize) -> Result<NoGcGuard<'_>, AllocationError> {
+        if self.budgets.len() == self.budgets.capacity() {
+            let needed = self
+                .budgets
+                .len()
+                .checked_add(1)
+                .ok_or(AllocationError::HostAllocation)?;
+            let bytes = needed
+                .checked_mul(std::mem::size_of::<Budget>())
+                .ok_or(AllocationError::HostAllocation)?;
+            self.check_budgets(bytes)?;
+            self.fault
+                .before_reserve_v2(ReserveSiteV2::GuardBudgets)
+                .map_err(|_| AllocationError::HostAllocation)?;
+            let mut replacement = Vec::new();
+            replacement
+                .try_reserve_exact(needed)
+                .map_err(|_| AllocationError::HostAllocation)?;
+            let charge = replacement
+                .capacity()
+                .checked_mul(std::mem::size_of::<Budget>())
+                .ok_or(AllocationError::HostAllocation)?;
+            self.check_budgets(charge)?;
+            self.charge_budgets(charge);
+            replacement.extend_from_slice(&self.budgets);
+            self.budgets = replacement;
+        }
+        self.budgets.push(Budget {
+            limit: budget_bytes,
+            spent: 0,
+        });
+        Ok(NoGcGuard { session: self })
     }
 
     pub fn create_region(
@@ -304,6 +399,7 @@ impl Session {
             edges: Vec::new(),
             references: None,
             roots: 0,
+            scoped_roots: 0,
             charge,
         });
         r.stats.committed_bytes += charge;
@@ -415,6 +511,7 @@ impl Session {
             edges: Vec::new(),
             references: Some(references),
             roots: 0,
+            scoped_roots: 0,
             charge,
         });
         let r = self.region_mut(region).expect("validated region");
@@ -489,6 +586,7 @@ impl Session {
             edges: Vec::new(),
             references: None,
             roots: 0,
+            scoped_roots: 0,
             charge,
         });
         r.stats.committed_bytes += charge;
@@ -543,7 +641,7 @@ impl Session {
 
     pub fn unroot(&mut self, handle: Handle) -> Result<(), MemoryError> {
         let object = self.object_mut(handle)?;
-        if object.roots == 0 {
+        if object.roots == object.scoped_roots {
             return Err(MemoryError::NotRooted);
         }
         object.roots -= 1;

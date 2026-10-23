@@ -13,6 +13,16 @@ pub enum ReserveSite {
     Edges,
 }
 
+/// Additive reserve audit for fallible entry and scoped lifetime APIs.
+/// The original `ReserveSite` remains exhaustive and unchanged.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum ReserveSiteV2 {
+    Existing(ReserveSite),
+    SessionRegions,
+    GuardBudgets,
+    ScopedRoots,
+}
+
 #[derive(Default)]
 pub(crate) struct FaultInjection {
     #[cfg(feature = "fault-injection")]
@@ -21,16 +31,26 @@ pub(crate) struct FaultInjection {
     fail_at: Option<usize>,
     #[cfg(feature = "fault-injection")]
     pub(crate) failed_site: Option<ReserveSite>,
+    #[cfg(feature = "fault-injection")]
+    pub(crate) failed_site_v2: Option<ReserveSiteV2>,
 }
 
 impl FaultInjection {
     pub(crate) fn before_reserve(&mut self, site: ReserveSite) -> Result<(), ()> {
+        self.before_reserve_v2(ReserveSiteV2::Existing(site))
+    }
+
+    pub(crate) fn before_reserve_v2(&mut self, site: ReserveSiteV2) -> Result<(), ()> {
         #[cfg(feature = "fault-injection")]
         {
             self.attempts += 1;
             if self.fail_at == Some(self.attempts) {
                 self.fail_at = None;
-                self.failed_site = Some(site);
+                self.failed_site = match site {
+                    ReserveSiteV2::Existing(legacy) => Some(legacy),
+                    _ => None,
+                };
+                self.failed_site_v2 = Some(site);
                 return Err(());
             }
         }
@@ -45,6 +65,7 @@ impl FaultInjection {
         self.attempts = 0;
         self.fail_at = Some(index);
         self.failed_site = None;
+        self.failed_site_v2 = None;
     }
 
     #[cfg(feature = "fault-injection")]
