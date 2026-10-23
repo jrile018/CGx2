@@ -18,7 +18,7 @@ pub use fault::ReserveSite;
 use heap::{Object, Region};
 pub use owned::{OwnedBytes, OWNED_METADATA_BYTES};
 pub use region::{
-    AllocationError, CollectionMode, Handle, MemoryError, RegionId, RegionStats,
+    AllocationError, CollectionMode, Handle, MemoryError, RegionId, RegionStats, RootCensus,
     EDGE_METADATA_BYTES, MAX_OBJECT_PAYLOAD_BYTES, MAX_OBJECT_REFERENCE_SLOTS,
     REFERENCE_SLOT_METADATA_BYTES, REGION_METADATA_BYTES, SLOT_METADATA_BYTES,
 };
@@ -549,6 +549,39 @@ impl Session {
         object.roots -= 1;
         Ok(())
     }
+    /// Counts registrations held by live runtime objects without allocating or changing session state.
+    pub fn root_census(&self) -> Result<RootCensus, MemoryError> {
+        let mut census = RootCensus::default();
+        for region in self.regions.iter().filter(|region| !region.closed) {
+            Self::accumulate_roots(region, &mut census)?;
+        }
+        Ok(census)
+    }
+
+    /// Counts registrations in an open region's live slot table.
+    pub fn root_census_region(&self, region: RegionId) -> Result<RootCensus, MemoryError> {
+        let mut census = RootCensus::default();
+        Self::accumulate_roots(self.region(region)?, &mut census)?;
+        Ok(census)
+    }
+
+    fn accumulate_roots(region: &Region, census: &mut RootCensus) -> Result<(), MemoryError> {
+        for slot in &region.slots {
+            if let Some(object) = &slot.object {
+                if object.roots > 0 {
+                    census.rooted_handles = census
+                        .rooted_handles
+                        .checked_add(1)
+                        .ok_or(MemoryError::RootCensusOverflow)?;
+                    census.root_registrations = census
+                        .root_registrations
+                        .checked_add(object.roots)
+                        .ok_or(MemoryError::RootCensusOverflow)?;
+                }
+            }
+        }
+        Ok(())
+    }
 
     /// Reads one checked reference slot of a live managed object.
     pub fn reference(&self, owner: Handle, index: usize) -> Result<Option<Handle>, MemoryError> {
@@ -764,5 +797,29 @@ impl Session {
         r.stats.collection_count += 1;
         r.pause.record(started.elapsed().as_nanos());
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod root_census_tests {
+    use super::*;
+
+    #[test]
+    fn registration_sum_overflow_is_reported() {
+        let mut session = Session::new();
+        let region = session.default_region();
+        let first = session.alloc_bytes(region, 1).unwrap();
+        let second = session.alloc_bytes(region, 1).unwrap();
+        session.regions[region.index].slots[first.slot]
+            .object
+            .as_mut()
+            .unwrap()
+            .roots = usize::MAX;
+        session.root(second).unwrap();
+        assert_eq!(
+            session.root_census_region(region),
+            Err(MemoryError::RootCensusOverflow)
+        );
+        assert_eq!(session.root_census(), Err(MemoryError::RootCensusOverflow));
     }
 }

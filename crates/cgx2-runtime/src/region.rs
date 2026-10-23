@@ -39,6 +39,14 @@ pub struct RegionStats {
     pub collection_count: u64,
     pub total_collected_bytes: usize,
 }
+/// Direct count of live runtime root registrations.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub struct RootCensus {
+    /// Number of live objects with at least one root registration.
+    pub rooted_handles: usize,
+    /// Total registrations, including repeated roots of the same handle.
+    pub root_registrations: usize,
+}
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum AllocationError {
@@ -59,5 +67,6 @@ pub enum MemoryError {
     RegionHasRoots,
     CollectionForbidden,
     NotRooted,
+    RootCensusOverflow,
     Allocation(AllocationError),
 }
