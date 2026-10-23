@@ -1,4 +1,4 @@
-//! Versioned, local-only timing profiles for the reviewed checked `i64` map.
+//! Versioned, local-only timing profiles for the reviewed checked `i64` CPU maps.
 //! The sample hash is an integrity checksum, not authentication of a profile.
 
 use crate::{
@@ -9,6 +9,8 @@ use std::time::{Duration, SystemTime};
 
 pub const SCHEMA_VERSION: u32 = 1;
 pub const WORKLOAD_ID: &str = "checked-i64-map-v1";
+pub const ZIP_SCHEMA_VERSION: u32 = 2;
+pub const ZIP_WORKLOAD_ID: &str = "checked-i64-zip-map-v1";
 const HEADER: &str =
     "schema,phase,kind,elements,workers,sample,elapsed_ns,os,arch,cpu,available_threads,rustc";
 const MAX_RAW_BYTES: usize = 4 * 1024 * 1024;
@@ -133,6 +135,7 @@ impl Profile {
 
     pub fn measurements(&self) -> Measurements {
         Measurements {
+            workload_id: self.workload_id.clone(),
             valid_until: SystemTime::UNIX_EPOCH + Duration::from_secs(self.expires_epoch_secs),
             minimum_elements: self.minimum_elements,
             maximum_elements: self.maximum_elements,
@@ -171,6 +174,7 @@ fn parse_raw(
     csv: &str,
     machine: &MachineFingerprint,
     workers: usize,
+    schema_version: u32,
 ) -> Result<BTreeMap<Key, u128>, ProfileError> {
     if csv.len() > MAX_RAW_BYTES || !machine.valid() || !(2..=MAX_WORKERS).contains(&workers) {
         return Err(ProfileError::InvalidSamples);
@@ -185,7 +189,7 @@ fn parse_raw(
             return Err(ProfileError::InvalidSamples);
         }
         let fields: Vec<_> = line.split(',').collect();
-        if fields.len() != 12 || fields[0] != "1" {
+        if fields.len() != 12 || fields[0] != schema_version.to_string() {
             return Err(ProfileError::InvalidSamples);
         }
         let phase = match fields[1] {
@@ -274,7 +278,15 @@ pub fn build_profile(
     now: SystemTime,
     ttl: Duration,
 ) -> Result<Profile, ProfileError> {
-    build_profile_inner(csv, machine, workers, now, ttl, None)
+    build_profile_inner(
+        csv,
+        machine,
+        workers,
+        now,
+        ttl,
+        None,
+        (SCHEMA_VERSION, WORKLOAD_ID),
+    )
 }
 
 /// Produce an exact-size profile from a multi-size raw CSV. This avoids a wide
@@ -287,7 +299,54 @@ pub fn build_profile_for_size(
     now: SystemTime,
     ttl: Duration,
 ) -> Result<Profile, ProfileError> {
-    build_profile_inner(csv, machine, workers, now, ttl, Some(elements))
+    build_profile_inner(
+        csv,
+        machine,
+        workers,
+        now,
+        ttl,
+        Some(elements),
+        (SCHEMA_VERSION, WORKLOAD_ID),
+    )
+}
+
+/// Build a profile from checked two-input zip-map samples only.
+pub fn build_zip_profile(
+    csv: &str,
+    machine: &MachineFingerprint,
+    workers: usize,
+    now: SystemTime,
+    ttl: Duration,
+) -> Result<Profile, ProfileError> {
+    build_profile_inner(
+        csv,
+        machine,
+        workers,
+        now,
+        ttl,
+        None,
+        (ZIP_SCHEMA_VERSION, ZIP_WORKLOAD_ID),
+    )
+}
+
+/// Restrict a zip-map profile to one calibrated input length.
+pub fn build_zip_profile_for_size(
+    csv: &str,
+    machine: &MachineFingerprint,
+    workers: usize,
+    elements: usize,
+    now: SystemTime,
+    ttl: Duration,
+) -> Result<Profile, ProfileError> {
+    build_profile_inner(
+        csv,
+        machine,
+        workers,
+        now,
+        ttl,
+        Some(elements),
+        (ZIP_SCHEMA_VERSION, ZIP_WORKLOAD_ID),
+    )
 }
 
 fn build_profile_inner(
@@ -297,7 +356,9 @@ fn build_profile_inner(
     now: SystemTime,
     ttl: Duration,
     size_filter: Option<usize>,
+    identity: (u32, &str),
 ) -> Result<Profile, ProfileError> {
+    let (schema_version, workload_id) = identity;
     let created = epoch_secs(now)?;
     if ttl.is_zero() || ttl.as_secs() == 0 || ttl.as_secs() > MAX_TTL_SECS {
         return Err(ProfileError::InvalidProfile);
@@ -305,7 +366,7 @@ fn build_profile_inner(
     let expires = created
         .checked_add(ttl.as_secs())
         .ok_or(ProfileError::InvalidProfile)?;
-    let samples = parse_raw(csv, machine, workers)?;
+    let samples = parse_raw(csv, machine, workers, schema_version)?;
     let sizes: BTreeSet<_> = samples
         .keys()
         .map(|key| key.2)
@@ -379,8 +440,8 @@ fn build_profile_inner(
         .unwrap_or(0)
         .min(u64::MAX as u128) as u64;
     Ok(Profile {
-        schema_version: SCHEMA_VERSION,
-        workload_id: WORKLOAD_ID.into(),
+        schema_version,
+        workload_id: workload_id.into(),
         machine: machine.clone(),
         worker_count: workers,
         minimum_elements: *sizes.first().unwrap(),
@@ -452,8 +513,47 @@ pub fn load_profile(
     workers: usize,
     now: SystemTime,
 ) -> Result<Measurements, ProfileError> {
+    load_profile_inner(
+        text,
+        csv,
+        machine,
+        workers,
+        now,
+        SCHEMA_VERSION,
+        WORKLOAD_ID,
+    )
+}
+
+/// Validate exact zip-map profile and raw sample identity before enabling Auto.
+pub fn load_zip_profile(
+    text: &str,
+    csv: &str,
+    machine: &MachineFingerprint,
+    workers: usize,
+    now: SystemTime,
+) -> Result<Measurements, ProfileError> {
+    load_profile_inner(
+        text,
+        csv,
+        machine,
+        workers,
+        now,
+        ZIP_SCHEMA_VERSION,
+        ZIP_WORKLOAD_ID,
+    )
+}
+
+fn load_profile_inner(
+    text: &str,
+    csv: &str,
+    machine: &MachineFingerprint,
+    workers: usize,
+    now: SystemTime,
+    schema_version: u32,
+    workload_id: &str,
+) -> Result<Measurements, ProfileError> {
     let saved = parse_profile(text)?;
-    if saved.schema_version != SCHEMA_VERSION || saved.workload_id != WORKLOAD_ID {
+    if saved.schema_version != schema_version || saved.workload_id != workload_id {
         return Err(ProfileError::InvalidProfile);
     }
     if saved.machine != *machine {
@@ -480,6 +580,7 @@ pub fn load_profile(
         SystemTime::UNIX_EPOCH + Duration::from_secs(saved.created_epoch_secs),
         Duration::from_secs(ttl),
         (saved.minimum_elements == saved.maximum_elements).then_some(saved.minimum_elements),
+        (schema_version, workload_id),
     )?;
     if rebuilt != saved {
         return Err(ProfileError::InvalidProfile);

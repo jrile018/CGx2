@@ -1,4 +1,4 @@
-//! Source-independent execution policy for one reviewed, pure `i64` elementwise primitive.
+//! Source-independent execution policy for two reviewed, pure checked `i64` CPU maps.
 //!
 //! A decision is a safe choice under supplied capabilities and measurements, not a
 //! claim that the chosen backend is globally optimal. No GPU backend exists here.
@@ -59,6 +59,7 @@ pub enum PlanError {
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum OperationKind {
     CheckedI64Elementwise,
+    CheckedI64ZipMap,
     Reduction,
     Other,
 }
@@ -87,7 +88,7 @@ impl Effects {
 }
 
 /// Typed assertions supplied by a future checked IR or a reviewed library call.
-/// The current planner trusts these fields only for `CheckedI64Elementwise`.
+/// The current planner trusts these fields only for the two checked CPU maps.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Workload {
     pub elements: usize,
@@ -120,9 +121,26 @@ impl Workload {
         }
     }
 
+    pub fn checked_i64_zip_map(elements: usize) -> Self {
+        Self {
+            operation: OperationKind::CheckedI64ZipMap,
+            bytes: elements as u128 * 3 * size_of::<i64>() as u128,
+            ..Self::checked_i64_map(elements)
+        }
+    }
+
     fn safe_for_parallel(&self) -> bool {
-        self.operation == OperationKind::CheckedI64Elementwise
-            && self.bytes == self.elements as u128 * 2 * size_of::<i64>() as u128
+        matches!(
+            self.operation,
+            OperationKind::CheckedI64Elementwise | OperationKind::CheckedI64ZipMap
+        ) && self.bytes
+            == self.elements as u128
+                * if self.operation == OperationKind::CheckedI64ZipMap {
+                    3
+                } else {
+                    2
+                }
+                * size_of::<i64>() as u128
             && self.independent
             && !self.order_sensitive
             && !self.shared_mutable_alias
@@ -195,6 +213,8 @@ impl CostProfile {
 /// At least three samples and a future `valid_until` are required for `Auto`.
 #[derive(Clone, Debug)]
 pub struct Measurements {
+    /// Exact reviewed primitive whose end-to-end timings were sampled.
+    pub workload_id: String,
     pub valid_until: SystemTime,
     pub minimum_elements: usize,
     pub maximum_elements: usize,
@@ -280,6 +300,14 @@ fn measured_costs(
     let Some(m) = &caps.measurements else {
         return Err(ReasonCode::MissingMeasurements);
     };
+    let expected_id = match workload.operation {
+        OperationKind::CheckedI64Elementwise => profile::WORKLOAD_ID,
+        OperationKind::CheckedI64ZipMap => profile::ZIP_WORKLOAD_ID,
+        _ => return Err(ReasonCode::MissingMeasurements),
+    };
+    if m.workload_id != expected_id {
+        return Err(ReasonCode::MissingMeasurements);
+    }
     if now >= m.valid_until {
         return Err(ReasonCode::StaleMeasurements);
     }
@@ -409,6 +437,8 @@ pub fn choose_at(
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum MapError {
     Overflow { index: usize },
+    LengthMismatch { left: usize, right: usize },
+    InvalidWorkers { requested: usize },
 }
 
 fn checked_value(value: i64, multiplier: i64, addend: i64, index: usize) -> Result<i64, MapError> {
@@ -475,6 +505,78 @@ pub fn map_i64_checked_parallel(
     })
 }
 
+/// Checked `left[i] * right[i] + addend` in input order.
+pub fn zip_map_i64_checked_sequential(
+    left: &[i64],
+    right: &[i64],
+    addend: i64,
+) -> Result<Vec<i64>, MapError> {
+    if left.len() != right.len() {
+        return Err(MapError::LengthMismatch {
+            left: left.len(),
+            right: right.len(),
+        });
+    }
+    left.iter()
+        .zip(right)
+        .enumerate()
+        .map(|(index, (&l, &r))| checked_value(l, r, addend, index))
+        .collect()
+}
+
+/// Scoped pure workers; chunk joins preserve the lowest overflow index.
+/// An infeasible request is rejected before a worker is launched.
+pub fn zip_map_i64_checked_parallel(
+    left: &[i64],
+    right: &[i64],
+    addend: i64,
+    requested_workers: usize,
+) -> Result<Vec<i64>, MapError> {
+    if left.len() != right.len() {
+        return Err(MapError::LengthMismatch {
+            left: left.len(),
+            right: right.len(),
+        });
+    }
+    if !(2..=MAX_WORKERS).contains(&requested_workers)
+        || left.len() < MIN_PARALLEL_ELEMENTS
+        || requested_workers > left.len() / MIN_CHUNK_ELEMENTS
+    {
+        return Err(MapError::InvalidWorkers {
+            requested: requested_workers,
+        });
+    }
+    let chunk_size = left.len().div_ceil(requested_workers);
+    std::thread::scope(|scope| {
+        let handles: Vec<_> = left
+            .chunks(chunk_size)
+            .zip(right.chunks(chunk_size))
+            .enumerate()
+            .map(|(chunk, (l, r))| {
+                scope.spawn(move || {
+                    l.iter()
+                        .zip(r)
+                        .enumerate()
+                        .map(|(offset, (&a, &b))| {
+                            checked_value(a, b, addend, chunk * chunk_size + offset)
+                        })
+                        .collect::<Result<Vec<_>, _>>()
+                })
+            })
+            .collect();
+        let mut output = Vec::with_capacity(left.len());
+        let mut first_error = None;
+        for handle in handles {
+            match handle.join().expect("pure zip map worker panicked") {
+                Ok(chunk) => output.extend(chunk),
+                Err(error) if first_error.is_none() => first_error = Some(error),
+                Err(_) => {}
+            }
+        }
+        first_error.map_or(Ok(output), Err)
+    })
+}
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum ExecuteError {
     Plan(PlanError),
@@ -504,6 +606,40 @@ pub fn execute_map(
             map_i64_checked_parallel(input, multiplier, addend, decision.workers)
         }
         Backend::Gpu => unreachable!("GPU has no executable backend"),
+    }
+    .map_err(ExecuteError::Map)?;
+    Ok(Execution { decision, values })
+}
+
+/// Plan and execute the standalone two-input checked CPU primitive.
+pub fn execute_zip_map(
+    left: &[i64],
+    right: &[i64],
+    addend: i64,
+    policy: Policy,
+    caps: &Capabilities,
+) -> Result<Execution, ExecuteError> {
+    if left.len() != right.len() {
+        return Err(ExecuteError::Map(MapError::LengthMismatch {
+            left: left.len(),
+            right: right.len(),
+        }));
+    }
+    if policy == Policy::ParallelCpu
+        && (!(2..=MAX_WORKERS).contains(&caps.parallel_workers)
+            || left.len() < MIN_PARALLEL_ELEMENTS
+            || caps.parallel_workers > left.len() / MIN_CHUNK_ELEMENTS)
+    {
+        return Err(ExecuteError::Map(MapError::InvalidWorkers {
+            requested: caps.parallel_workers,
+        }));
+    }
+    let workload = Workload::checked_i64_zip_map(left.len());
+    let decision = choose(policy, &workload, caps).map_err(ExecuteError::Plan)?;
+    let values = match decision.selected {
+        Backend::SequentialCpu => zip_map_i64_checked_sequential(left, right, addend),
+        Backend::ParallelCpu => zip_map_i64_checked_parallel(left, right, addend, decision.workers),
+        Backend::Gpu => unreachable!("GPU backend cannot be selected"),
     }
     .map_err(ExecuteError::Map)?;
     Ok(Execution { decision, values })

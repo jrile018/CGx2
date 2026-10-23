@@ -28,6 +28,7 @@ fn measured() -> Capabilities {
     Capabilities {
         parallel_workers: 4,
         measurements: Some(Measurements {
+            workload_id: cgx2_execution_policy::profile::WORKLOAD_ID.into(),
             valid_until: SystemTime::now() + Duration::from_secs(3600),
             minimum_elements: 1,
             maximum_elements: 100_000,
