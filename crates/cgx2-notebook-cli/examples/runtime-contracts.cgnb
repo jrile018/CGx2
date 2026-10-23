@@ -1,0 +1,25 @@
+#!cgnb 1
+%% markdown id=about
+# Retained runtime contracts
+The local accumulator checks its arguments before running and its result before publication.
+Try sweeping `x` over -1, 0, and 5. Each trial starts clean; -1 records a requires failure.
+These are runtime checks, not formal proofs. Only local accumulator mutation is admitted.
+%% code id=guards
+fn allowed(x: i64) -> Bool effects():
+    x >= 0
+fn agrees(actual: i64, expected: i64) -> Bool effects():
+    actual == expected
+%% code id=definition
+fn sum(x: i64) -> i64 effects(Mutate):
+    requires allowed(x)
+    ensures agrees(result, x + 6)
+    let mut total = x
+    for i in range(0, 4):
+        total += i
+    total
+%% code id=parameter
+let x = 2
+%% code id=value
+sum(x)
+%% code id=independent
+40 + 2

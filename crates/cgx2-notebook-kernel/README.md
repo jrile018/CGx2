@@ -1,5 +1,44 @@
 # CGx2 bounded notebook kernel
 
+## Retained runtime contracts (S1-08)
+
+Notebook-defined `i64`/`Bool` functions support ordinary `requires` and `ensures`
+lines before the body, including functions with verified local `i64` accumulators
+and literal-bound range loops. The existing checker validates Boolean conditions,
+reserves `result`, and enforces pure predicates; the existing interpreter checks
+preconditions before the body and postconditions against the returned value.
+`result` is visible only in postconditions. Body locals and captured cell bindings
+are unavailable to contracts. String/record contract signatures remain outside the
+checker profile. These are runtime checks, not formal proofs.
+
+Calls and arguments used only in contracts contribute to dependency invalidation,
+forward-reference rejection and source diagnostics, including inactive conditions.
+Pure imported predicates are lowered in both pre/postconditions and carry manifest
+and transitive module hashes into saved provenance. Imported function bodies keep
+their existing profile: contracts, mutation, loops and external effects are still
+rejected there. Contract helpers cannot introduce hidden mutation or capabilities.
+
+Static cost includes every condition and its transitive calls on every generated
+invocation, plus retained/pending value replay. The limits remain 100,000 steps,
+32 functions/static call levels, eight parameters, 1 MiB evaluation/retained state,
+and the default two-second worker deadline. Recursion, unresolved calls and depth
+are checked even after a constant-false condition. False pre/postconditions report
+`CGR015`/`CGR016`; overflow/division errors preserve interpreter diagnostics.
+Static errors map to the contract's cell source span; runtime errors identify the
+calling statement's cell source span in both direct and worker modes.
+
+Failed, timed-out or interrupted cells publish no pending bindings. Existing
+displayed output remains a failed/stale observation. Selected/affected rerun,
+restart/run-all, save/reopen, CLI sweeps/exports and HTTP actions use this same
+admission path. See the [standalone example](../cgx2-notebook-cli/examples/runtime-contracts.cgnb),
+[imported-predicate example](../cgx2-notebook-cli/examples/contract-imports/contracts.cgnb)
+and [delivery evidence](S1-08-EVIDENCE.md).
+
+Persistent external-effect notebooks remain blocked on reviewed compiler and
+persistent-worker integration (S2/S3). This deliverable does not admit Python,
+foreign handles, memory/collection, file/network effects or execution-once effect
+cells, and does not integrate the concurrent worker crate.
+
 ## Function-local computation (Wave 28)
 
 [The local-sums notebook](../cgx2-notebook-cli/examples/local-loops/local-loops.cgnb)
@@ -13,7 +52,7 @@ be mutated. Top-level cells still use immutable bindings and expressions.
 
 The shared checker retains inferred or explicit `effects(Mutate)`. Admission
 independently proves the complete local computation body before publication;
-extra effects, capabilities, contracts, foreign/memory operations and recursion
+extra effects, capabilities, foreign/memory operations and recursion
 remain rejected. A dishonest `effects()` annotation still fails. Calls outside
 loops may reach other verified local computational functions. Inside loops the
 frozen checker requires pure helpers, including through wrappers and empty
@@ -53,7 +92,7 @@ function reports `CGNK011` with a definition or replay hint.
 
 `NotebookKernel` executes code cells in a process-local scalar session. Cells may declare local records and pure functions alongside immutable `let` bindings and pure expressions. Functions use ordinary `.cg` syntax: `fn name(x: i64) -> i64:` with optional empty `effects()` and `caps()`. Parameters and explicit return types accept `i64`, `Bool`, `String`, and visible local nominal records with one to eight `i64`/`Bool` fields. A record must have been declared in an earlier current cell or in the function's own cell. Identity, field projection, and constructing/returning records preserve exact scalar values, declaration-order display, source-order argument evaluation, and checked arithmetic.
 
-Bodies admit immutable `let`, expressions, and `return` with a value, plus the local computation profile above. Calls to earlier or same-cell verified functions are allowed; cross-cell `let` capture, named function arguments, recursion, `main`, argument builtins, module declarations, external mutable state, dynamic loops, contracts, foreign/unsafe declarations, additional effects/capabilities, and unknown calls are rejected before execution. An unknown call gets `CGNK011`. Nested, generic, managed, and foreign-layout record signatures remain unsupported. Imported public scalar records are supported within the checked local package profile below.
+Bodies admit immutable `let`, expressions, and `return` with a value, plus the local computation profile above. Calls to earlier or same-cell verified functions are allowed; cross-cell `let` capture, named function arguments, recursion, `main`, argument builtins, module declarations, external mutable state, dynamic loops, foreign/unsafe declarations, additional effects/capabilities, and unknown calls are rejected before execution. An unknown call gets `CGNK011`. Nested, generic, managed, and foreign-layout record signatures remain unsupported. Imported public scalar records are supported within the checked local package profile below.
 
 Record annotations are static dependencies even when a parameter is unused. The dependency facts use `type:RecordName` keys for annotations and record declarations so value bindings with the same name cannot hide the schema producer. Editing, replacing, or deleting a record invalidates its functions and transitive callers; same-cell type dependencies do not create a self-edge. Definitions and pending values are committed only after the whole cell succeeds. Record results reuse the bounded tagged worker protocol and retained-schema validation. See [the record-function example](../cgx2-notebook-cli/examples/record-functions.cgnb).
 
@@ -76,7 +115,7 @@ Changing a function used only in an inactive branch stales users. Replay admissi
 counts both branches conservatively; runtime limits, transactional publication,
 worker timeout/cancellation, save/reopen and Restart and Run All remain in place.
 Top-level conditionals, captured cell values in function bodies, externally effectful
-functions, foreign calls and contract-bearing profiles retain their rejection
+functions, foreign calls and contract-bearing imported profiles retain their rejection
 boundaries. Cell values may be passed as ordinary arguments. See
 [the notebook example](../cgx2-notebook-cli/examples/conditionals.cgnb).
 

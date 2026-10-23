@@ -128,7 +128,6 @@ fn forbidden_mutation_types_effects_iterators_and_operations_fail_closed() {
         "fn f() -> i64 effects():\n    let mut n = 0\n    n += 1\n    n\n",
         "fn f() -> i64 effects(Mutate, IO):\n    0\n",
         "fn f() -> i64 caps(ReadFile):\n    0\n",
-        "fn f() -> i64 requires true:\n    0\n",
         "fn f() -> i64:\n    no_gc(budget: 1):\n        0\n    0\n",
         "fn f() -> i64:\n    for i in range(0, 0):\n        return 1\n    0\n",
         "fn f() -> i64:\n    for i in range(0, 0):\n        memory.collect(1)\n    0\n",

@@ -1,0 +1,36 @@
+Exit code: 0
+    Checking typenum v1.20.1
+    Checking cfg-if v1.0.5
+    Checking cpufeatures v0.2.17
+    Checking base64 v0.22.1
+    Checking cgx2-syntax v0.1.0 (/home/john-riley/.codex/worktrees/3fca/lang/crates/cgx2-syntax)
+    Checking cgx2-ownership v0.1.0 (/home/john-riley/.codex/worktrees/3fca/lang/crates/cgx2-ownership)
+    Checking generic-array v0.14.7
+    Checking serde_core v1.0.229
+    Checking block-buffer v0.10.4
+    Checking crypto-common v0.1.7
+    Checking digest v0.10.7
+    Checking sha2 v0.10.9
+    Checking cgx2-notebook-format v0.1.0 (/home/john-riley/.codex/worktrees/3fca/lang/crates/cgx2-notebook-format)
+    Checking zmij v1.0.23
+    Checking cgx2-sema v0.1.0 (/home/john-riley/.codex/worktrees/3fca/lang/crates/cgx2-sema)
+    Checking memchr v2.8.3
+    Checking itoa v1.0.18
+    Checking cgx2-api-index v0.1.0 (/home/john-riley/.codex/worktrees/3fca/lang/crates/cgx2-api-index)
+    Checking serde v1.0.229
+    Checking serde_json v1.0.149
+    Checking cgx2-package v0.1.0 (/home/john-riley/.codex/worktrees/3fca/lang/crates/cgx2-package)
+    Checking cgx2-python-bridge v0.1.0 (/home/john-riley/.codex/worktrees/3fca/lang/crates/cgx2-python-bridge)
+    Checking cgx2-bind v0.1.0 (/home/john-riley/.codex/worktrees/3fca/lang/crates/cgx2-bind)
+    Checking cgx2-ffi-native v0.1.0 (/home/john-riley/.codex/worktrees/3fca/lang/crates/cgx2-ffi-native)
+    Checking cgx2-foreign v0.1.0 (/home/john-riley/.codex/worktrees/3fca/lang/crates/cgx2-foreign)
+    Checking cgx2-notebook-session v0.1.0 (/home/john-riley/.codex/worktrees/3fca/lang/crates/cgx2-notebook-session)
+    Checking cgx2-libtorch v0.1.0 (/home/john-riley/.codex/worktrees/3fca/lang/crates/cgx2-libtorch)
+    Checking cgx2-runtime v0.1.0 (/home/john-riley/.codex/worktrees/3fca/lang/crates/cgx2-runtime)
+    Checking libc v0.2.189
+    Checking cgx2-cli v0.1.0 (/home/john-riley/.codex/worktrees/3fca/lang/crates/cgx2-cli)
+    Checking cgx2-notebook-kernel v0.1.0 (/home/john-riley/.codex/worktrees/3fca/lang/crates/cgx2-notebook-kernel)
+    Checking getrandom v0.2.17
+    Checking cgx2-notebook-ui v0.1.0 (/home/john-riley/.codex/worktrees/3fca/lang/crates/cgx2-notebook-ui)
+    Checking cgx2-notebook-cli v0.1.0 (/home/john-riley/.codex/worktrees/3fca/lang/crates/cgx2-notebook-cli)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.51s

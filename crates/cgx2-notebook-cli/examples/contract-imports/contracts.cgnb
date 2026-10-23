@@ -1,0 +1,20 @@
+#!cgnb 1
+%% markdown id=about
+# Checked package predicates in local contracts
+Only the local retained function has contracts. Imported predicates keep the frozen pure package profile.
+%% code id=imports
+import demo.guards
+%% code id=definition
+fn sum(x: i64) -> i64 effects(Mutate):
+    requires guards.allowed(x)
+    ensures guards.agrees(result, x + 6)
+    let mut total = x
+    for i in range(0, 4):
+        total += i
+    total
+%% code id=parameter
+let x = 2
+%% code id=value
+sum(x)
+%% code id=independent
+42
