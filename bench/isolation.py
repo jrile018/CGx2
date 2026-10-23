@@ -388,7 +388,7 @@ def _capture_in_scope(argv, seccomp_fd, scope):
     deadline = time.monotonic() + LIMITS["wall_seconds"]
     reason = None
     try:
-        while selector.get_map():
+        while True:
             if scope.cpu_usage_us() >= LIMITS["aggregate_cpu_seconds"] * 1_000_000:
                 reason = "aggregate_cpu_limit"
                 break
@@ -396,6 +396,11 @@ def _capture_in_scope(argv, seccomp_fd, scope):
             if remaining <= 0:
                 reason = "wall_timeout"
                 break
+            if not selector.get_map() and child.poll() is not None:
+                break
+            if not selector.get_map():
+                time.sleep(min(remaining, 0.05))
+                continue
             for key, _ in selector.select(min(remaining, 0.5)):
                 chunk = os.read(key.fileobj.fileno(), 65536)
                 if not chunk:
@@ -409,7 +414,10 @@ def _capture_in_scope(argv, seccomp_fd, scope):
             if reason:
                 break
         if reason:
-            os.killpg(child.pid, signal.SIGKILL)
+            try:
+                os.killpg(child.pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
         child.wait(timeout=5)
     finally:
         if child.poll() is None:

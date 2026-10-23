@@ -185,6 +185,20 @@ class IsolationTests(unittest.TestCase):
         self.assertEqual(observed["reason"], "wall_timeout")
         self.assertTrue(scope.exited)
 
+    def test_closed_output_pipes_do_not_bypass_wall_timeout(self):
+        scope = self.TrustedScope()
+        fd = os.memfd_create("test-filter")
+        try:
+            with mock.patch.object(isolation, "CgroupScope", return_value=scope), \
+                 mock.patch.dict(isolation.LIMITS, {"wall_seconds": 0.05}):
+                observed = isolation.capture(
+                    [sys.executable, "-c",
+                     "import os,time; os.close(1); os.close(2); time.sleep(5)"], fd)
+        finally:
+            os.close(fd)
+        self.assertEqual(observed["reason"], "wall_timeout")
+        self.assertTrue(scope.exited)
+
     def test_aggregate_cpu_budget_reaps_scope(self):
         scope = self.TrustedScope()
         scope.cpu_usage_us = lambda: isolation.LIMITS["aggregate_cpu_seconds"] * 1_000_000
