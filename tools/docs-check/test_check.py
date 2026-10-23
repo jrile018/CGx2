@@ -53,6 +53,23 @@ class CheckerTests(unittest.TestCase):
         self.assertFalse(one['acceptance_complete'])
         self.assertEqual(one['results'][0]['steps'][0]['command'],['$TOOL:compiler','demo.cg'])
 
+    def test_candidate_is_separate_from_historical_baseline(self):
+        self.suite['candidate'] = '2' * 40
+        status, report = self.invoke()
+        self.assertEqual(status, 0)
+        self.assertEqual(report['baseline'], '0' * 40)
+        self.assertEqual(report['candidate'], '2' * 40)
+        self.suite['candidate'] = 'short'
+        self.assertEqual(self.invoke()[0], 2)
+
+    def test_caller_private_cargo_target_is_preserved(self):
+        from unittest.mock import patch
+        private = str(self.root / 'private-target')
+        self.tool.write_text('#!/usr/bin/env python3\nimport os,sys\nprint("help" if "--help" in sys.argv else os.environ["CARGO_TARGET_DIR"])\n')
+        self.case['steps'][0]['stdout'] = {'equals': private + '\n'}
+        with patch.dict(os.environ, CARGO_TARGET_DIR=private):
+            self.assertEqual(self.invoke()[0], 0)
+
     def test_negative_diagnostics_and_utf8_span(self):
         self.tool.write_text('#!/usr/bin/env python3\nimport sys,json\nif "--help" in sys.argv: print("help"); sys.exit(0)\nprint(json.dumps(dict(code="CGT001",file="demo.cg",span=dict(start=2,end=4))),file=sys.stderr)\nsys.exit(1)\n')
         step = self.case['steps'][0]

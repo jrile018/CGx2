@@ -105,11 +105,13 @@ def validate_match(value):
 
 def load_suite(path):
     suite = load_json(path)
-    fields(suite, {"schema_version", "baseline", "fixture_root", "cases"})
+    fields(suite, {"schema_version", "baseline", "fixture_root", "cases"}, {"candidate"})
     if type(suite["schema_version"]) is not int or suite["schema_version"] != 1:
         fail("unsupported suite schema")
     if not isinstance(suite["baseline"], str) or not re.fullmatch(r"[0-9a-f]{40}", suite["baseline"]):
         fail("baseline must be a full Git commit")
+    if "candidate" in suite and (not isinstance(suite["candidate"], str) or not re.fullmatch(r"[0-9a-f]{40}", suite["candidate"])):
+        fail("candidate must be a full Git commit")
     fixtures = no_symlinks(path.parent / relative(suite["fixture_root"]))
     if not fixtures.is_dir():
         fail("fixture root is missing")
@@ -274,7 +276,7 @@ def run(args):
     for key in list(env):
         if key.startswith("CGX2") or key == "CGX2C_RUSTC":
             del env[key]
-    env.update({"LC_ALL": "C", "CARGO_BUILD_JOBS": "2", "CARGO_TARGET_DIR": str(ROOT / "target/release-docs"),
+    env.update({"LC_ALL": "C", "CARGO_BUILD_JOBS": "2", "CARGO_TARGET_DIR": env.get("CARGO_TARGET_DIR", str(ROOT / "target/release-docs")),
                 "TMPDIR": str(work_root), "RUSTUP_TOOLCHAIN": "1.98.1"})
     tools_info = {}
     for name in sorted(paths):
@@ -384,6 +386,8 @@ def run(args):
               "fixture_sha256": {p.relative_to(fixtures).as_posix(): digest(p) for p in sorted(fixtures.rglob("*")) if p.is_file()},
               "tools": tools_info, "results": results, "counts": counts,
               "acceptance_complete": False, "scope": "documentation fixtures; no global release gate is closed"}
+    if "candidate" in suite:
+        report["candidate"] = suite["candidate"]
     # Exclusive publication: no overwrite, including a destination created during execution.
     with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=output.parent, delete=False) as stream:
         staging = Path(stream.name)

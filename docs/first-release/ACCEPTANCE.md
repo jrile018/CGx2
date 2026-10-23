@@ -37,7 +37,8 @@ Zero final roots is necessary evidence, not comprehensive memory safety.
 ## R04
 
 Modules, public effects/capabilities and checked runtime contracts.
-`package-effects`, `hidden-effect`, `runtime-requires` and `public-api` exercise
+`package-effects`, `hidden-effect`, `runtime-requires`, `public-api` and
+`package-public-api` exercise
 body-derived transitive purity, declared-boundary rejection and dynamic contracts.
 `enforced-capabilities` reserves resource authorization and package contract
 parity. Unknown/honesty failures and source provenance need the full package
@@ -47,9 +48,16 @@ corpus. Security advice cannot replace runtime capability enforcement.
 
 Installed CLI, stable structured diagnostics and API tooling.
 The scalar cases cover check/run/script/fmt/API, arguments, type errors,
-UTF-8 package-relative locations and checked overflow. Native build fixtures use
-the current companion. The `unified-*-unsupported` cases assert current command
-rejections. S2b must integrate all commands, test/property discovery, runtime
+UTF-8 package-relative locations and checked overflow. `unified-build` and
+`unified-package-build` compile and execute installed scalar/package commands.
+`unified-rust-emission` and `unified-package-rust-emission` compile emitted Rust
+and execute it. Missing destinations assert `CGXC001`; input/occupied destinations
+assert `CGXC004`, including unchanged output behavior and explicit force replacement.
+An unknown target asserts `CGC001`; package Python requires `.pyz` (`CGXC001`).
+`public-api` checks documented and legacy spelling; `package-public-api` checks
+the integrated checked-package JSON index. The remaining `unified-*-unsupported`
+cases retain test/verify/notebook rejection; unified bind is also not integrated.
+S2b must complete command integration, test/property discovery, runtime
 arguments/uncaught exits, dependency-versus-symbol errors and structured results.
 See [the complete command map](COMMANDS.md).
 
@@ -93,8 +101,11 @@ Never silently retry an invocation after a possible external effect.
 
 Rust output and stated portable Python profile. `native-build`, `native-package`,
 `native-memory` and `rust-emission` compile and execute admitted examples.
-`python-source-cli` reserves integrated Python emission; its Rust library is
-currently outside this checker. S3-C must compare outputs/errors, checked numeric
+`unified-build`, `unified-package-build`, `unified-rust-emission` and
+`unified-package-rust-emission` exercise the installed surface. `python-source-cli`
+and `python-package-source-cli` emit and execute `.py` and `.pyz` with caller-pinned
+Python; absent runtime pins block those cases. Target and destination negatives
+remain required. S3-C must extend outputs/errors, checked numeric
 boundaries and contracts in every admitted target; unsupported targets must fail.
 S4 supplies independent blinded generated-source readability/edit tasks.
 

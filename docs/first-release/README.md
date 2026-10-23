@@ -1,12 +1,13 @@
 # CGx2 executable first-release guide
 
-This guide describes the reviewed **0f0b0b9** preview and maps the complete
+This guide describes the integrated **Stage 1 candidate (2b9855c)** and maps the complete
 first-release contract. It does not declare CGx2 release-ready. Start with the
 [command inventory](COMMANDS.md), [acceptance map](ACCEPTANCE.md),
 [installation smoke](INSTALL.md), and [foreign routes](FOREIGN.md).
 [inventory.json](inventory.json) maps every R01–R15 requirement and command to
 [machine-readable examples](expectations.json). The [evidence](EVIDENCE.md)
-states exactly what was run.
+preserves the original Wave 28 run; [current evidence](CURRENT-EVIDENCE.md) records
+the separate Stage 1 candidate, suite hashes and tool pins.
 
 ## First program and package
 
@@ -24,7 +25,8 @@ cgx2 scalar/arguments.cg -- "hello docs"         # same script shorthand
 cgx2 run scalar/loops.cg                        # 42
 cgx2 run scalar/record.cg                       # 42
 cgx2 fmt scalar/arguments.cg                    # formatted text on stdout
-cgx2 api scalar/answer.cg --json
+cgx2 api --json scalar/answer.cg
+cgx2 api --json package
 cgx2 check package
 cgx2 run package                               # 42; needs sibling cgx2-native
 ```
@@ -117,23 +119,36 @@ contract pass does not establish a formal proof.
 
 ## Native output, proofs and notebooks
 
-The current native compiler is a companion executable:
+The installed CLI supports native build and Rust/Python source emission for
+single files and checked local packages, with an explicit output destination:
 
 ```sh
-cgx2c build scalar/loops.cg --out /absolute/new/program
+cgx2 build scalar/loops.cg --out /absolute/new/program --rustc /absolute/rustc
 /absolute/new/program
-cgx2c emit-rust scalar/answer.cg --out /absolute/new/answer.rs
+cgx2 build package --out /absolute/new/package-program --rustc /absolute/rustc
+cgx2 emit scalar/answer.cg --target rust --out /absolute/new/answer.rs
+cgx2 emit scalar/answer.cg --target python --out /absolute/new/answer.py
+/absolute/python3 -I /absolute/new/answer.py             # 42
+cgx2 emit package --target python --out /absolute/new/package.pyz
+/absolute/python3 -I /absolute/new/package.pyz           # 42
 cgx2-verify scalar/proof.cg --domain x:0:2 --format json
 cgx2-notebook run notebook/local.cgnb --out /absolute/new/executed.cgnb
 cgx2-notebook show /absolute/new/executed.cgnb result
 ```
 
-Use new outputs; compiler outputs do not overwrite inputs. Native builds require
-compatible Rust 1.98.1, including for a copied installed `cgx2c`. Memory builds
+Use new outputs, or explicit `--force` to replace an existing ordinary output.
+Compiler outputs cannot overwrite inputs, even with `--force`. Packages require
+`.pyz` for Python: a standard source zipapp containing the generated modules and
+entry point. It needs an existing compatible Python interpreter at execution;
+emission does not install a Python package or use the foreign Python bridge.
+
+Native builds require compatible Rust 1.98.1, including for a copied installed `cgx2c`. Memory builds
 embed the runtime sources from the compiler build. Rust and Python target
-profiles are described in [COMMANDS.md](COMMANDS.md); Python emission currently
-has a Rust library API, with no installed CLI target. Unsupported memory/foreign
-features must reject translation rather than change semantics.
+profiles are described in [COMMANDS.md](COMMANDS.md). The companion `cgx2c`
+remains available, including `emit-rust`/`emit-python` spellings. Unsupported
+memory/foreign features must reject Python translation rather than change semantics.
+Unified `test`, `verify`, `notebook` and `bind` integration remains reserved; the
+verifier and notebook commands shown here are separate installed companions.
 
 The proof example performs a finite source/core/SMT-term audit. With no trusted
 live solver its `proof.kind` remains `unknown`, even when the finite verdict says
