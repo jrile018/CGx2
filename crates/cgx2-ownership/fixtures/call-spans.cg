@@ -1,0 +1,12 @@
+// UTF-8 λ: source locations for a hand-authored typed ownership fixture.
+// This fixture does not establish compiler support for owned application values.
+record Buffer:
+    size: i64
+
+fn transfer(owner: Buffer) -> Buffer:
+    let moved = owner
+    moved
+
+fn invalid_transfer(owner: Buffer) -> Buffer:
+    let moved = owner
+    owner
