@@ -1,5 +1,17 @@
 # CGx2 loopback notebook UI
 
+Open [the local-sums example](../cgx2-notebook-cli/examples/local-loops/local-loops.cgnb)
+with `--project crates/cgx2-notebook-cli/examples/local-loops`. Notebook-defined
+functions can use mutable i64 accumulators, signed literal-bound ranges and
+nested conditionals/loops. The compiler retains `Mutate`; the kernel proves
+function-local computation before admitting replay. Imported helpers inside
+loops must remain pure; captured, parameter/index/record and external mutation
+remain rejected. The 100,000 static-step bound includes nested calls and value
+replay before worker execution. Run cell, Restart and run all, Save as and
+Export portable retain their existing behavior; locals initialize per call,
+and saved displays never restore live accumulators. Matching package inputs
+remain required after export/reopen. See the kernel's [profile and limits](../cgx2-notebook-kernel/README.md).
+
 Open a notebook with checked local scalar imports using
 `cgx2-notebook-ui open FILE.cgnb --project ROOT [--port PORT]`. The project
 must contain `cgx2.toml`; only listed, checked pure scalar modules are

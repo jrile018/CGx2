@@ -1,0 +1,34 @@
+#!cgnb 1
+%% markdown id=guide
+# Local sums
+
+Each call initializes its own i64 accumulator. Nested literal-bound half-open
+ranges and conditionals use checked arithmetic. The imported helper is pure.
+The compiler retains the Mutate effect: this notebook admits structurally
+verified local computation for replay. External effects, captured writes,
+record mutation and mutating helpers inside loops remain unsupported.
+Work is statically bounded to 100,000 steps including calls and generated
+value replay. Run this example with --project pointing to this directory.
+Package sources remain external when saving or exporting the notebook.
+%% code id=import
+import compute.math
+%% code id=parameter
+let seed = 2
+%% code id=functions
+fn sum(x: i64) -> i64 effects(Mutate) caps():
+    let mut total: i64 = x
+    for i in range(-2, 3):
+        if i < 0:
+            total = total - i
+        else:
+            for j in range(0, 2):
+                total += math.bump(i + j)
+    total
+
+fn calculate(x: i64) -> i64:
+    sum(x)
+%% code id=value
+let answer = calculate(seed)
+answer
+%% code id=independent
+42

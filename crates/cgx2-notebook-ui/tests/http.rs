@@ -1177,3 +1177,63 @@ fn transitive_import_closure_http_rerun_save_export_reopen() {
             .contains("--project"));
     }
 }
+
+#[test]
+fn local_loop_http_rerun_save_export_and_restart_recompute_locals() {
+    let fixture = Fixture::new(include_str!(
+        "../../cgx2-notebook-cli/examples/local-loops/local-loops.cgnb"
+    ));
+    let project =
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("../cgx2-notebook-cli/examples/local-loops");
+    let mut session = UiSession::open_with_project(fixture.input.clone(), Some(&project)).unwrap();
+    session.configure_worker(env!("CARGO_BIN_EXE_cgx2-notebook-ui").into());
+    let listener = TcpListener::bind("127.0.0.1:0").unwrap();
+    let port = listener.local_addr().unwrap().port();
+    let handle = thread::spawn(move || serve_n(listener, session, 7).unwrap());
+    let secret = token(port);
+    let cell = |state: &Value, id: &str| {
+        state["cells"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|cell| cell["id"] == id)
+            .unwrap()
+            .clone()
+    };
+    let (status, state) = post(port, "/api/restart", json!({}), &secret);
+    assert_eq!(status, 200, "{state}");
+    assert_eq!(cell(&state, "value")["outputs"][0]["body"], "20");
+    let independent = cell(&state, "independent")["provenance"].clone();
+    let (status, state) = post(
+        port,
+        "/api/edit",
+        json!({"id":"parameter", "source":"let seed = 10"}),
+        &secret,
+    );
+    assert_eq!(status, 200, "{state}");
+    assert_eq!(cell(&state, "value")["status"], "stale");
+    let (status, state) = post(port, "/api/run-cell", json!({"id":"parameter"}), &secret);
+    assert_eq!(status, 200, "{state}");
+    assert_eq!(cell(&state, "value")["outputs"][0]["body"], "28");
+    assert_eq!(cell(&state, "independent")["provenance"], independent);
+    for (route, name) in [
+        ("/api/save", "loops-saved.cgnb"),
+        ("/api/export", "loops-export.cgnb"),
+    ] {
+        let (status, state) = post(port, route, json!({"name":name,"overwrite":false}), &secret);
+        assert_eq!(status, 200, "{state}");
+    }
+    let (status, state) = post(port, "/api/restart", json!({}), &secret);
+    assert_eq!(status, 200, "{state}");
+    assert_eq!(cell(&state, "value")["outputs"][0]["body"], "28");
+    handle.join().unwrap();
+    for name in ["loops-saved.cgnb", "loops-export.cgnb"] {
+        let saved = parse_notebook_bytes(&fs::read(fixture.dir.join(name)).unwrap()).unwrap();
+        let mut k =
+            cgx2_notebook_kernel::NotebookKernel::open_with_project(saved, Some(&project)).unwrap();
+        k.restart_and_run_all().unwrap();
+        assert!(
+            matches!(&k.notebook().cells[4].outputs[0], Output::Text { body, .. } if body == "28")
+        );
+    }
+}

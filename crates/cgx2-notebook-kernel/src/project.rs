@@ -500,7 +500,14 @@ fn lower_statement(
             }
             lower_expression(project, value, imported, edits)
         }
-        StmtKind::Expr(value) | StmtKind::Return(Some(value)) => {
+        StmtKind::For { binding, body, .. } => {
+            check_local_root(binding, imported, statement.span)?;
+            for stmt in body {
+                lower_statement(project, stmt, imported, edits)?;
+            }
+            Ok(())
+        }
+        StmtKind::Assign { value, .. } | StmtKind::Expr(value) | StmtKind::Return(Some(value)) => {
             lower_expression(project, value, imported, edits)
         }
         _ => Ok(()),

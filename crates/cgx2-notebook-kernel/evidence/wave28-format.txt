@@ -1,0 +1,2 @@
+Rust 1.98.1: owned cargo fmt --check: PASS (exit 0, no output)
+git diff --check: PASS (exit 0, no output)
