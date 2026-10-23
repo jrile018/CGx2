@@ -35,6 +35,7 @@ dependencies = [
 name = "cgx2-bind"
 version = "0.1.0"
 dependencies = [
+ "cgx2-ffi-core",
  "cgx2-package",
  "serde",
  "serde_json",
@@ -54,6 +55,7 @@ dependencies = [
  "cgx2-runtime",
  "cgx2-sema",
  "cgx2-syntax",
+ "cgx2c",
  "serde_json",
  "sha2",
 ]
@@ -62,8 +64,10 @@ dependencies = [
 name = "cgx2-effect-index"
 version = "0.1.0"
 dependencies = [
+ "cgx2-package",
  "cgx2-sema",
  "cgx2-syntax",
+ "serde_json",
 ]
 
 [[package]]
@@ -92,8 +96,18 @@ name = "cgx2-execution-policy"
 version = "0.1.0"
 
 [[package]]
+name = "cgx2-ffi-core"
+version = "0.1.0"
+
+[[package]]
 name = "cgx2-ffi-native"
 version = "0.1.0"
+dependencies = [
+ "cgx2-bind",
+ "cgx2-ffi-core",
+ "serde_json",
+ "sha2",
+]
 
 [[package]]
 name = "cgx2-foreign"
@@ -102,6 +116,17 @@ dependencies = [
  "cgx2-python-bridge",
  "serde",
  "serde_json",
+ "sha2",
+]
+
+[[package]]
+name = "cgx2-interop-worker"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "serde",
+ "serde_json",
+ "sha2",
 ]
 
 [[package]]
@@ -201,6 +226,7 @@ name = "cgx2-security"
 version = "0.1.0"
 dependencies = [
  "cgx2-effect-index",
+ "cgx2-package",
  "cgx2-syntax",
  "serde_json",
 ]
@@ -237,7 +263,9 @@ name = "cgx2c"
 version = "0.1.0"
 dependencies = [
  "cgx2-cli",
+ "cgx2-emit-python",
  "cgx2-emit-rust",
+ "cgx2-execution-policy",
  "cgx2-package",
  "cgx2-sema",
  "cgx2-syntax",
