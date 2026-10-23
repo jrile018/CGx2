@@ -1,5 +1,24 @@
 # CGx2 notebook command
 
+## Retained runtime contracts
+
+```sh
+cgx2-notebook run crates/cgx2-notebook-cli/examples/runtime-contracts.cgnb --out /tmp/contracts.cgnb
+cgx2-notebook sweep crates/cgx2-notebook-cli/examples/runtime-contracts.cgnb parameter \
+  --value -1 --value 0 --value 5 --out-dir /tmp/contracts-sweep
+cgx2-notebook run crates/cgx2-notebook-cli/examples/contract-imports/contracts.cgnb \
+  --project crates/cgx2-notebook-cli/examples/contract-imports --out /tmp/imported-contracts.cgnb
+```
+
+Retained scalar functions, including permitted local accumulators, support checked
+`requires`/`ensures` and postcondition `result`. False pre/postconditions and checked
+arithmetic failures save failed trial provenance without publishing partial values;
+the sweep continues with clean trials. Contract-only helper changes invalidate
+definitions and callers. Pure imported predicates carry their transitive package
+provenance. Imported functions themselves keep the existing no-contract/no-effect
+profile. The [kernel contract profile](../cgx2-notebook-kernel/README.md) describes
+the unchanged step/depth/byte/deadline limits and unsupported types/effects.
+
 ## Local accumulator and range functions
 
 ```sh

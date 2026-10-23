@@ -1,5 +1,13 @@
 # CGx2 loopback notebook UI
 
+Retained scalar `requires`/`ensures`, including checked local accumulators, use the
+same [kernel contract profile](../cgx2-notebook-kernel/README.md) as the CLI.
+Open [runtime-contracts.cgnb](../cgx2-notebook-cli/examples/runtime-contracts.cgnb),
+then Restart and Run All. Editing a contract-only helper stales its definitions
+and callers. Failed checks retain prior displayed observations with failed
+provenance; no pending bindings are published. Save/reopen and the normal worker
+deadline apply. These runtime checks do not enable external-effect cells.
+
 Open [the local-sums example](../cgx2-notebook-cli/examples/local-loops/local-loops.cgnb)
 with `--project crates/cgx2-notebook-cli/examples/local-loops`. Notebook-defined
 functions can use mutable i64 accumulators, signed literal-bound ranges and

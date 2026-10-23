@@ -10,6 +10,135 @@ use cgx2_notebook_format::{
 static NEXT: AtomicU64 = AtomicU64::new(0);
 
 #[test]
+fn runtime_contract_cli_run_sweep_failure_save_reopen_and_export() {
+    let fixture = Fixture::new();
+    let input = fixture.write(
+        "contracts.cgnb",
+        include_str!("../examples/runtime-contracts.cgnb"),
+    );
+    let executed = fixture.path("executed.cgnb");
+    let result = run(&[Path::new("run"), &input, Path::new("--out"), &executed]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let book = parse_notebook_bytes(&fs::read(&executed).unwrap()).unwrap();
+    assert!(matches!(&book.cells[4].outputs[0], CellOutput::Text { body, .. } if body == "8"));
+    let inspected = run(&[Path::new("inspect"), &executed]);
+    assert!(inspected.status.success(), "{}", stderr(&inspected));
+    assert!(String::from_utf8_lossy(&inspected.stdout).contains("value\tcode\tcached"));
+    let portable = fixture.path("portable.cgnb");
+    let result = run(&[
+        Path::new("export"),
+        &executed,
+        Path::new("--out"),
+        &portable,
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let restored = fixture.path("restored.cgnb");
+    let result = run(&[
+        Path::new("import"),
+        &portable,
+        Path::new("--out"),
+        &restored,
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let rerun = fixture.path("rerun.cgnb");
+    let result = run_str(&[
+        "run",
+        restored.to_str().unwrap(),
+        "--edit-cell",
+        "parameter",
+        "--source",
+        "let x = 5",
+        "--out",
+        rerun.to_str().unwrap(),
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let book = parse_notebook_bytes(&fs::read(&rerun).unwrap()).unwrap();
+    assert!(matches!(&book.cells[4].outputs[0], CellOutput::Text { body, .. } if body == "11"));
+    let sweep = fixture.path("sweep");
+    let result = run_str(&[
+        "sweep",
+        input.to_str().unwrap(),
+        "parameter",
+        "--value",
+        "-1",
+        "--value",
+        "0",
+        "--value",
+        "5",
+        "--out-dir",
+        sweep.to_str().unwrap(),
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let summary = fs::read_to_string(sweep.join("summary.json")).unwrap();
+    assert!(summary.contains("CGR015"), "{summary}");
+    for (index, expected) in [(2, "6"), (3, "11")] {
+        let trial =
+            parse_notebook_bytes(&fs::read(sweep.join(format!("trial-{index:02}.cgnb"))).unwrap())
+                .unwrap();
+        assert!(
+            matches!(&trial.cells[4].outputs[0], CellOutput::Text { body, .. } if body == expected)
+        );
+    }
+    let failed_path = sweep.join("trial-01.cgnb");
+    let failed = parse_notebook_bytes(&fs::read(&failed_path).unwrap()).unwrap();
+    assert_eq!(
+        failed.cells[4].provenance.as_ref().unwrap().result,
+        cgx2_notebook_format::ProvenanceResult::Failed
+    );
+    assert!(failed.cells[5].outputs.is_empty());
+    let inspect = run(&[Path::new("inspect"), &failed_path]);
+    assert!(String::from_utf8_lossy(&inspect.stdout).contains("value\tcode\tfailed"));
+}
+
+#[test]
+fn imported_contract_cli_uses_checked_predicates_and_sweep_provenance() {
+    let fixture = Fixture::new();
+    let project = Path::new(env!("CARGO_MANIFEST_DIR")).join("examples/contract-imports");
+    let input = project.join("contracts.cgnb");
+    let executed = fixture.path("executed.cgnb");
+    let result = run(&[
+        Path::new("run"),
+        &input,
+        Path::new("--project"),
+        &project,
+        Path::new("--out"),
+        &executed,
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let book = parse_notebook_bytes(&fs::read(&executed).unwrap()).unwrap();
+    assert!(matches!(&book.cells[4].outputs[0], CellOutput::Text { body, .. } if body == "8"));
+    assert_eq!(
+        book.cells[4]
+            .provenance
+            .as_ref()
+            .unwrap()
+            .package
+            .as_ref()
+            .unwrap()
+            .modules
+            .len(),
+        2
+    );
+    let sweep = fixture.path("sweep");
+    let result = run_str(&[
+        "sweep",
+        input.to_str().unwrap(),
+        "parameter",
+        "--value",
+        "-1",
+        "--value",
+        "2",
+        "--project",
+        project.to_str().unwrap(),
+        "--out-dir",
+        sweep.to_str().unwrap(),
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let summary = fs::read_to_string(sweep.join("summary.json")).unwrap();
+    assert!(summary.contains("CGR015"), "{summary}");
+}
+
+#[test]
 fn local_loop_cli_edit_save_reopen_sweep_and_export_recompute_locals() {
     let fixture = Fixture::new();
     let project = Path::new(env!("CARGO_MANIFEST_DIR")).join("examples/local-loops");

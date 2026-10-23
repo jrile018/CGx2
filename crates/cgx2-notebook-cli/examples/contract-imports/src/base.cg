@@ -1,0 +1,3 @@
+module demo.base
+pub fn allowed(x: i64) -> Bool effects() caps():
+    x >= 0

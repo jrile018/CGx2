@@ -46,6 +46,12 @@ impl Model<'_> {
         }
         let function = *self.functions.get(name).ok_or_else(|| format!("CGNK011: unresolved call {name}; define or rerun a pure function before this cell; file, network, and foreign effects cannot run"))?;
         let mut cost = self.block(&function.body)?;
+        // The interpreter evaluates each contract once per call, including calls
+        // reached only from contracts. Traverse all of them for recursion/depth
+        // and unresolved/effectful calls even when a previous condition is false.
+        for contract in function.requires.iter().chain(&function.ensures) {
+            cost = cost.plus(self.expression(contract)?);
+        }
         cost.depth = cost.depth.saturating_add(1);
         if cost.depth > 32 {
             return Err("CGNK006: pure function call depth exceeded".into());
@@ -239,6 +245,54 @@ mod tests {
         // inner = 4+3*(1+8) = 31; outer = 4+2*(1+31) = 68; tail = 2.
         assert_eq!(model.function("f").unwrap().steps, 70);
         assert_eq!(model.function("f").unwrap().depth, 2);
+    }
+
+    #[test]
+    fn contracts_charge_each_invocation_and_replayed_binding_at_exact_boundary() {
+        let f = "fn f() -> i64:\n    requires true\n    ensures true\n    let mut n = 0\n    for i in range(0, 33329):\n        n += 1\n    n\n";
+        // Body 99,995 + two conditions = 99,997. Call/statement = two.
+        assert!(check(f, "f()", "").is_ok()); // 99,999
+        let exact = f.replace("requires true", "requires true\n    requires true");
+        assert!(check(&exact, "f()", "").is_ok()); // 100,000
+        let over = exact.replace("ensures true", "ensures true\n    ensures true");
+        assert!(check(&over, "f()", "").unwrap_err().starts_with("CGNK006"));
+        for (cell, prefix) in [("f()\n0", ""), ("let n = f()", ""), ("f()", "let n = 0\n")] {
+            assert!(check(f, cell, prefix).unwrap_err().starts_with("CGNK006"));
+        }
+        // A helper used exclusively by a condition contributes its full loop cost.
+        let helper = "fn guard() -> Bool:\n    for i in range(0, 33333):\n        0\n    true\nfn f() -> i64:\n    requires guard()\n    0\n";
+        assert!(check(helper, "", "").unwrap_err().starts_with("CGNK006"));
+    }
+
+    #[test]
+    fn contract_calls_resolve_even_when_unreached_and_include_cached_depth() {
+        for conditions in ["requires f() == 0", "requires false\n    ensures unknown()"] {
+            let f = format!("fn f() -> i64:\n    {conditions}\n    0\n");
+            assert!(check(&f, "", "").unwrap_err().starts_with("CGNK011"));
+        }
+        let mut source = "fn f0() -> Bool:\n    true\n".to_owned();
+        for i in 1..32 {
+            source.push_str(&format!(
+                "fn f{i}() -> Bool:\n    requires f{}()\n    true\n",
+                i - 1
+            ));
+        }
+        assert!(check(&source, "", "").is_ok());
+        source.push_str("fn f32() -> Bool:\n    ensures f31()\n    true\n");
+        // This tests cost/depth alone, not the independently enforced 32-function count.
+        let syntax = parse_module(&source).unwrap();
+        let mut model = Model {
+            functions: syntax
+                .functions
+                .iter()
+                .map(|f| (f.name.as_str(), f))
+                .collect(),
+            records: BTreeSet::new(),
+            completed: BTreeMap::new(),
+            stack: BTreeSet::new(),
+        };
+        assert!(model.function("f31").is_ok());
+        assert!(model.function("f32").err().unwrap().starts_with("CGNK006"));
     }
 
     #[test]

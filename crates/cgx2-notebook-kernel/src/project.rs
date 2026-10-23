@@ -432,6 +432,9 @@ impl Project {
             for statement in &function.body {
                 lower_statement(self, statement, imported, &mut edits)?;
             }
+            for contract in function.requires.iter().chain(&function.ensures) {
+                lower_expression(self, contract, imported, &mut edits)?;
+            }
         }
         for statement in &module.statements {
             lower_statement(self, statement, imported, &mut edits)?;

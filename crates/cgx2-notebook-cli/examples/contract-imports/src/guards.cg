@@ -1,0 +1,6 @@
+module demo.guards
+import demo.base
+pub fn allowed(x: i64) -> Bool effects() caps():
+    demo.base.allowed(x)
+pub fn agrees(actual: i64, expected: i64) -> Bool effects() caps():
+    actual == expected

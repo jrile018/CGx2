@@ -1,0 +1,4 @@
+schema_version = 1
+name = "demo"
+entry = "src/guards.cg"
+sources = ["src/guards.cg", "src/base.cg"]

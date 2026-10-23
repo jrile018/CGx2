@@ -834,6 +834,9 @@ fn facts_or_opaque(
     if let Ok(module) = parse_module(source) {
         let mut calls = BTreeSet::new();
         for function in &module.functions {
+            for contract in function.requires.iter().chain(&function.ensures) {
+                collect_call_names(contract, &mut calls);
+            }
             for statement in &function.body {
                 collect_call_names_statement(statement, &mut calls);
             }
@@ -1050,10 +1053,8 @@ fn validate_function(function: &Function, facts: &mut CellFacts) -> Result<(), K
             .capabilities
             .as_ref()
             .is_some_and(|decl| !decl.names.is_empty())
-        || !function.requires.is_empty()
-        || !function.ensures.is_empty()
     {
-        return Err(error("CGNK011", format!("notebook functions allow only verified local Mutate and no capabilities, foreign bindings or contracts at {}..{}", function.span.start, function.span.end)));
+        return Err(error("CGNK011", format!("notebook functions allow only verified local Mutate and no capabilities or foreign bindings at {}..{}", function.span.start, function.span.end)));
     }
     if function.parameters.len() > MAX_FUNCTION_PARAMETERS {
         return Err(error("CGNK006", "too many pure function parameters"));
@@ -1074,6 +1075,16 @@ fn validate_function(function: &Function, facts: &mut CellFacts) -> Result<(), K
     function_type(return_type, facts)?;
     if !facts.defines.insert(function.name.clone()) {
         return Err(error("CGNK001", "duplicate pure function name in cell"));
+    }
+    // Contracts see parameters, and only postconditions see the checked return value.
+    // Body locals and captured cell values are outside the checker contract profile.
+    let mut contract_locals = locals.keys().cloned().collect();
+    for contract in &function.requires {
+        collect_expression(contract, &contract_locals, facts, true)?;
+    }
+    contract_locals.insert("result".to_owned());
+    for contract in &function.ensures {
+        collect_expression(contract, &contract_locals, facts, true)?;
     }
     collect_function_block(&function.body, &mut locals, facts, false)?;
     Ok(())

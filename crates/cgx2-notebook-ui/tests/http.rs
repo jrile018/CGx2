@@ -14,6 +14,127 @@ use serde_json::{json, Value};
 static NEXT: AtomicU64 = AtomicU64::new(0);
 
 #[test]
+fn runtime_contract_http_failures_dependencies_and_persistence_match_worker() {
+    const EXAMPLE: &str = include_str!("../../cgx2-notebook-cli/examples/runtime-contracts.cgnb");
+    for worker in [false, true] {
+        let fixture = Fixture::new(EXAMPLE);
+        let mut session = UiSession::open(fixture.input.clone()).unwrap();
+        if worker {
+            session.configure_worker(env!("CARGO_BIN_EXE_cgx2-notebook-ui").into());
+        }
+        let listener = TcpListener::bind("127.0.0.1:0").unwrap();
+        let port = listener.local_addr().unwrap().port();
+        let handle = thread::spawn(move || serve_n(listener, session, 14).unwrap());
+        let secret = token(port);
+        let (status, state) = post(port, "/api/restart", json!({}), &secret);
+        assert_eq!(status, 200, "{state}");
+        assert_eq!(state["cells"][4]["outputs"][0]["body"], "8");
+        let independent = state["cells"][5].clone();
+        let (_, state) = post(
+            port,
+            "/api/edit",
+            json!({"id":"guards", "source":"fn allowed(x: i64) -> Bool effects():\n    x >= 0\nfn agrees(actual: i64, expected: i64) -> Bool effects():\n    actual == expected + 1\n"}),
+            &secret,
+        );
+        assert_eq!(state["cells"][2]["status"], "stale");
+        assert_eq!(state["cells"][4]["status"], "stale");
+        assert_eq!(state["cells"][5], independent);
+        let (status, state) = post(port, "/api/run-cell", json!({"id":"guards"}), &secret);
+        assert_eq!(status, 409, "{state}");
+        assert!(state["error"].as_str().unwrap().contains("CGR016"));
+        let (_, body) = request(port, "GET", "/api/state", None, None, None, None);
+        let state: Value = serde_json::from_str(&body).unwrap();
+        assert_eq!(state["cells"][4]["status"], "failed");
+        assert_eq!(state["cells"][4]["outputs"][0]["body"], "8");
+        assert_eq!(state["cells"][5], independent);
+        assert_eq!(
+            post(
+                port,
+                "/api/save",
+                json!({"name":"postfailed.cgnb", "overwrite":false}),
+                &secret
+            )
+            .0,
+            200
+        );
+        let original = parse_notebook_bytes(EXAMPLE.as_bytes()).unwrap();
+        post(
+            port,
+            "/api/edit",
+            json!({"id":"guards", "source":original.cells[1].source}),
+            &secret,
+        );
+        let (status, state) = post(port, "/api/run-cell", json!({"id":"guards"}), &secret);
+        assert_eq!(status, 200, "{state}");
+        assert_eq!(state["cells"][4]["status"], "current");
+        post(
+            port,
+            "/api/edit",
+            json!({"id":"parameter", "source":"let x = -1"}),
+            &secret,
+        );
+        let (status, state) = post(port, "/api/run-cell", json!({"id":"parameter"}), &secret);
+        assert_eq!(status, 409, "{state}");
+        assert!(state["error"].as_str().unwrap().contains("CGR015"));
+        let (_, body) = request(port, "GET", "/api/state", None, None, None, None);
+        let state: Value = serde_json::from_str(&body).unwrap();
+        assert_eq!(state["cells"][5], independent);
+        assert_eq!(
+            post(
+                port,
+                "/api/save",
+                json!({"name":"prefailed.cgnb", "overwrite":false}),
+                &secret
+            )
+            .0,
+            200
+        );
+        let (status, state) = post(port, "/api/delete", json!({"id":"guards"}), &secret);
+        assert_eq!(status, 200, "{state}");
+        assert_eq!(state["cells"][1]["status"], "stale");
+        assert_eq!(state["cells"][3]["status"], "stale");
+        assert_eq!(
+            post(
+                port,
+                "/api/save",
+                json!({"name":"deleted.cgnb", "overwrite":false}),
+                &secret
+            )
+            .0,
+            200
+        );
+        handle.join().unwrap();
+        for name in ["postfailed.cgnb", "prefailed.cgnb"] {
+            let book = parse_notebook_bytes(&fs::read(fixture.dir.join(name)).unwrap()).unwrap();
+            assert_eq!(
+                book.cells[4].provenance.as_ref().unwrap().result,
+                ProvenanceResult::Failed
+            );
+            let reopened = cgx2_notebook_kernel::NotebookKernel::open(book).unwrap();
+            assert_eq!(
+                reopened.status("value").unwrap(),
+                cgx2_notebook_session::CellStatus::Failed
+            );
+            assert_eq!(
+                reopened.status("independent").unwrap(),
+                cgx2_notebook_session::CellStatus::Cached
+            );
+        }
+        let deleted =
+            parse_notebook_bytes(&fs::read(fixture.dir.join("deleted.cgnb")).unwrap()).unwrap();
+        let reopened = cgx2_notebook_kernel::NotebookKernel::open(deleted).unwrap();
+        assert_eq!(
+            reopened.status("value").unwrap(),
+            cgx2_notebook_session::CellStatus::Stale
+        );
+        assert_eq!(
+            reopened.status("independent").unwrap(),
+            cgx2_notebook_session::CellStatus::Cached
+        );
+    }
+}
+
+#[test]
 fn record_function_annotations_drive_http_rerun_and_saved_provenance() {
     let fixture = Fixture::new(include_str!(
         "../../cgx2-notebook-cli/examples/record-functions.cgnb"

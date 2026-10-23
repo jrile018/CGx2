@@ -1,0 +1,381 @@
+Exit code: 0
+   Compiling cgx2-notebook-kernel v0.1.0 (/home/john-riley/.codex/worktrees/3fca/lang/crates/cgx2-notebook-kernel)
+   Compiling cgx2-notebook-ui v0.1.0 (/home/john-riley/.codex/worktrees/3fca/lang/crates/cgx2-notebook-ui)
+   Compiling cgx2-notebook-cli v0.1.0 (/home/john-riley/.codex/worktrees/3fca/lang/crates/cgx2-notebook-cli)
+   Compiling cgx2-notebook-session v0.1.0 (/home/john-riley/.codex/worktrees/3fca/lang/crates/cgx2-notebook-session)
+   Compiling cgx2-notebook-format v0.1.0 (/home/john-riley/.codex/worktrees/3fca/lang/crates/cgx2-notebook-format)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.74s
+     Running unittests src/main.rs (target/release-notebook/debug/deps/cgx2_notebook-692a16509313239c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/command.rs (target/release-notebook/debug/deps/command-dab9a5c8567fe15c)
+
+running 30 tests
+test inspect_is_read_only_and_does_not_execute ... ok
+test failed_cells_and_io_errors_leave_no_successful_output ... ok
+test invalid_inputs_and_unknown_commands_fail ... ok
+test collisions_require_force_and_failure_preserves_prior_output ... ok
+test run_saves_fresh_reopenable_output_without_touching_input ... ok
+test pure_function_fixture_runs_and_inspects_cached_status ... ok
+test project_option_runs_checked_two_module_example ... ok
+test delete_function_cell_keeps_unrelated_cached_output ... ok
+test pure_record_fixture_runs_and_reopens_with_cached_provenance ... ok
+test sweep_rejects_symlink_input_and_destination ... ok
+test sweep_rejects_invalid_values_effects_and_output_paths_before_publication ... ok
+test edited_run_saves_output_and_preserves_independent_execution_revision ... ok
+test restart_roundtrip_preserves_saved_revision_as_stale_without_running ... ok
+test unsupported_cell_and_missing_asset_fail_without_replacing_output ... ok
+test portable_file_inspects_and_runs_without_sidecars_or_source_mutation ... ok
+test portable_export_import_preserves_provenance_and_rejects_corrupt_record ... ok
+test same_path_needs_force_and_can_be_replaced_after_success ... ok
+test edited_function_reruns_only_its_cli_readers ... ok
+test rejected_import_preserves_existing_notebook_and_sidecars ... ok
+test valid_stale_asset_is_checked_then_dropped_from_clean_code_output ... ok
+test imported_contract_cli_uses_checked_predicates_and_sweep_provenance ... ok
+test sweep_accepts_bool_and_string_literals_and_rejects_collisions ... ok
+test two_cell_fixture_runs_edits_saves_exports_and_reopens_without_execution ... ok
+test sweep_saves_independent_trials_and_reopens_failure_provenance ... ok
+test sweep_embeds_two_markdown_images_in_success_and_failed_trials ... ok
+test runtime_contract_cli_run_sweep_failure_save_reopen_and_export ... ok
+test record_functions_run_inspect_and_clean_sweep_agree ... ok
+test local_loop_cli_edit_save_reopen_sweep_and_export_recompute_locals ... ok
+test public_record_package_cli_run_rerun_inspect_restart_export_and_clean_sweep ... ok
+test transitive_import_closure_cli_restart_edit_sweep_and_external_export ... ok
+
+test result: ok. 30 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.35s
+
+     Running unittests src/lib.rs (target/release-notebook/debug/deps/cgx2_notebook_format-1e8e8ecd0bc8c183)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/assets.rs (target/release-notebook/debug/deps/assets-4e4f89ac1d939582)
+
+running 5 tests
+test notebook_bytes_and_asset_size_limits_are_enforced ... ok
+test invalid_and_corrupt_digests_are_rejected ... ok
+test png_asset_is_content_addressed_and_deduplicated ... ok
+test missing_assets_and_mismatched_embedded_data_fail ... ok
+test export_import_reopens_without_original_sidecar ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/markdown_images.rs (target/release-notebook/debug/deps/markdown_images-3de984c2bc104996)
+
+running 4 tests
+test symlinked_sidecar_and_asset_are_rejected ... ok
+test only_image_signatures_are_accepted_and_limits_apply ... ok
+test malformed_missing_extra_and_corrupt_images_fail ... ok
+test two_markdown_images_roundtrip_without_original_sidecar ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests/portable.rs (target/release-notebook/debug/deps/portable-a8461d185a378825)
+
+running 4 tests
+test active_asset_mime_and_symlink_escapes_are_rejected ... ok
+test corrupt_portable_assets_fail_before_creating_destination ... ok
+test portable_document_reopens_without_sidecar_and_keeps_exact_observations ... ok
+test total_and_single_asset_limits_apply_before_encoding ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.50s
+
+     Running tests/roundtrip.rs (target/release-notebook/debug/deps/roundtrip-1c930f24e3a7c36b)
+
+running 9 tests
+test bad_fixtures_have_typed_errors ... ok
+test fixture_round_trips_cells_and_text_output ... ok
+test malformed_mime_is_rejected ... ok
+test unfinished_header_at_eof_is_rejected ... ok
+test no_final_newline_and_leading_markers_survive_multiple_cells ... ok
+test provenance_roundtrips_exact_unicode_and_escaped_marker_bytes ... ok
+test captured_text_is_plain_utf8_and_bounded_on_read_and_write ... ok
+test writer_rejects_duplicate_ids_and_markdown_outputs ... ok
+test provenance_rejects_duplicate_bad_digest_and_output_ordinal ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/release-notebook/debug/deps/cgx2_notebook_kernel-1723c3ee39e548d4)
+
+running 13 tests
+test cost::tests::nested_costs_count_setup_iteration_branches_and_callees ... ok
+test cost::tests::exact_step_boundary_includes_invocation_and_generated_result ... ok
+test cost::tests::contracts_charge_each_invocation_and_replayed_binding_at_exact_boundary ... ok
+test project::closure_tests::deterministic_diamond_discovery_uses_topology_and_deduplicates_roots ... ok
+test record_protocol_tests::record_roundtrip_and_malformed_payloads ... ok
+test cost::tests::empty_bodies_still_resolve_calls_and_check_recursion_and_depth ... ok
+test record_protocol_tests::record_protocol_preserves_source_unicode_identifiers ... ok
+test qualified_record_protocol_tests::qualified_identity_preserves_unicode_and_exact_scalar_values ... ok
+test cost::tests::contract_calls_resolve_even_when_unreached_and_include_cached_depth ... ok
+test project::closure_tests::metadata_validation_and_exact_graph_bound ... ok
+test cost::tests::pending_and_retained_record_replay_are_charged_for_every_invocation ... ok
+test project::closure_tests::source_growth_is_checked_before_editing_or_appending ... ok
+test worker_io_tests::full_stdin_pipe_does_not_block_worker_timeout ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running unittests src/bin/cgx2-notebook-scalar-worker.rs (target/release-notebook/debug/deps/cgx2_notebook_scalar_worker-dc27382d7e66090b)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/contracts.rs (target/release-notebook/debug/deps/contracts-54952111e3b01101)
+
+running 12 tests
+test contract_cost_overrun_rejects_before_worker_and_before_definition_publication ... ok
+test contract_forward_references_and_hidden_unknown_effects_fail_closed ... ok
+test imported_functions_keep_their_frozen_contract_and_effect_rejection_profile ... ok
+test checker_rejects_non_boolean_contracts_result_misuse_and_effectful_helpers ... ok
+test contracts_precede_body_and_postconditions_check_explicit_return ... ok
+test contract_diagnostics_use_source_spans_and_match_direct_and_worker ... ok
+test parameter_result_and_multiple_conditions_use_checked_scalar_semantics ... ok
+test contracts_obey_deadlines_and_recover_without_partial_bindings ... ok
+test contract_only_dependencies_drive_edits_deletion_and_saved_staleness ... ok
+test contracted_accumulators_run_rerun_restart_and_reopen_in_both_modes ... ok
+test imported_contract_predicates_lower_and_carry_transitive_provenance ... ok
+test failed_false_or_overflowing_contracts_publish_no_partial_values ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/import_closure.rs (target/release-notebook/debug/deps/import_closure-804024aef138fb59)
+
+running 13 tests
+test unnamed_single_source_package_remains_valid_project_context ... ok
+test annotation_only_and_unused_import_edges_have_complete_provenance ... ok
+test transitive_missing_unlisted_private_cycle_and_reserved_names_fail_closed ... ok
+test combined_function_budget_counts_shared_descendants_once ... ok
+test unused_declared_and_inactive_dependencies_are_checked_and_tracked ... ok
+test canonical_module_provenance_roundtrips_and_legacy_captures_stale ... ok
+test unicode_transitive_nominal_names_and_parameter_evaluation_order ... ok
+test internal_modules_are_not_source_imports_but_inferred_records_are_retained ... ok
+test transitive_worker_record_identity_field_validation_is_transactional ... ok
+test failure_cancel_timeout_and_import_removal_preserve_valid_observations ... ok
+test transitive_snapshot_edits_selectively_discard_live_and_saved_state ... ok
+test chain_diamond_shared_roots_records_and_persistence ... ok
+test closure_module_and_depth_boundary_and_combined_source_bound ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.23s
+
+     Running tests/kernel.rs (target/release-notebook/debug/deps/kernel-6f75596a6c6de7cd)
+
+running 41 tests
+test forward_dependency_cycle_is_reported_before_execution ... ok
+test facts_ignore_escaped_string_contents_and_collect_expression_reads ... ok
+test calls_with_file_network_or_foreign_names_fail_before_execution ... ok
+test escaped_string_is_evaluated_by_cgx2 ... ok
+test failed_rerun_never_leaves_old_result_current ... ok
+test edited_prerequisite_requires_explicit_rerun_and_preserves_old_cache ... ok
+test duplicate_definition_and_unsupported_forms_are_rejected ... ok
+test failed_cell_does_not_enter_replay_prefix ... ok
+test deleting_a_function_cell_preserves_independent_output_across_reopen ... ok
+test notebook_limits_are_checked_before_execution ... ok
+test edit_stales_transitive_readers_and_restart_recomputes ... ok
+test record_definition_and_value_in_one_cell_are_atomic ... ok
+test deleting_record_definition_stales_only_dependent_cells_after_reopen ... ok
+test failing_cell_does_not_commit_partially_checked_bindings ... ok
+test pure_bool_and_string_signatures_use_cli_scalar_semantics ... ok
+test pure_functions_reject_effects_capture_recursion_and_main ... ok
+test record_boundary_diagnostics_have_cell_context ... ok
+test changed_function_stales_transitive_function_callers ... ok
+test rerun_and_out_of_order_are_explicit_errors ... ok
+test repeated_runs_advance_execution_and_legacy_output_ordinals ... ok
+test reopen_preserves_observation_and_prefix_edit_is_stale ... ok
+test record_fields_display_in_declaration_order_and_arguments_run_in_source_order ... ok
+test saved_unsupported_effect_and_later_output_reopen_stale_without_execution ... ok
+test sequential_cells_share_scalar_binding_and_roundtrip ... ok
+test restart_failure_retains_stale_old_outputs ... ok
+test retained_scalars_keep_cli_arithmetic_and_string_behavior ... ok
+test pure_functions_keep_live_definitions_and_selective_revisions ... ok
+test rerun_affected_leaves_an_independent_edited_branch_stale ... ok
+test restart_marks_saved_observations_stale_and_reopen_never_executes ... ok
+test selective_edit_reruns_only_transitive_reader_and_reopens_with_dependency_digest ... ok
+test selected_rerun_uses_retained_prefix_and_stales_transitive_readers ... ok
+test record_definition_edit_stales_dependents_and_reruns_selected_cells ... ok
+test unicode_record_names_survive_worker_and_retained_replay ... ok
+test retained_records_cross_cells_and_reopen_cleanly ... ok
+test interrupted_or_invalid_definition_never_publishes_a_function ... ok
+test effect_boundary_fixture_tracks_edit_interrupt_restart_and_passive_reopen ... ok
+test interrupt_during_pure_call_leaves_failed_observation ... ok
+test record_worker_and_failure_preserve_valid_earlier_cells ... ok
+test stalled_worker_is_killed_and_later_rerun_has_clean_bindings ... ok
+test rerun_evaluation_budget_is_cumulative_and_failure_is_noncurrent ... ok
+test evaluation_budget_stops_a_long_sequence ... ok
+
+test result: ok. 41 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests/local_loops.rs (target/release-notebook/debug/deps/local_loops-85c77b30165a560a)
+
+running 16 tests
+test annotations_inside_empty_loops_remain_schema_dependencies ... ok
+test imported_functions_keep_the_wave27_profile ... ok
+test empty_loops_inactive_branches_and_assignment_rhs_remain_dependencies ... ok
+test static_loop_call_and_replay_bounds_reject_before_worker_or_definitions ... ok
+test forbidden_mutation_types_effects_iterators_and_operations_fail_closed ... ok
+test lexical_shadowing_preserves_nearest_mutability_and_scope ... ok
+test mutation_propagates_through_calls_but_cannot_enter_a_range_body ... ok
+test interrupt_during_loop_worker_keeps_prior_cells_and_recovers ... ok
+test checked_set_arithmetic_overflow_does_not_publish_a_definition_or_value ... ok
+test interrupted_deadline_and_bad_worker_leave_no_partial_bindings ... ok
+test overflow_failure_is_transactional_and_locals_recover_cleanly ... ok
+test nested_local_computation_runs_direct_and_worker_and_reinitializes ... ok
+test malformed_and_wrong_type_loop_worker_frames_never_publish ... ok
+test literal_ranges_cover_empty_negative_and_integer_boundaries ... ok
+test imported_pure_helpers_inside_loops_keep_dependency_and_nominal_rules ... ok
+test exact_static_boundary_executes_in_both_paths ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/public_records.rs (target/release-notebook/debug/deps/public_records-0e3594fc504a1c36)
+
+running 13 tests
+test same_bytes_at_a_changed_canonical_module_target_invalidate_before_replay ... ok
+test qualified_annotations_constructors_unknown_private_and_ambiguous_roots ... ok
+test annotation_and_inactive_branch_edges_preserve_independent_outputs ... ok
+test removing_imports_and_effect_failures_do_not_replay_hidden_work ... ok
+test diagnostics_refer_to_original_cell_bytes_after_qualified_names_expand ... ok
+test older_package_capture_without_root_is_readable_but_stale_and_duplicate_roots_reject ... ok
+test changed_package_root_manifest_visibility_delete_and_stale_live_metadata_fail_closed ... ok
+test imported_constructor_order_checked_arithmetic_and_failure_recovery ... ok
+test unicode_module_record_fields_and_generated_name_collisions ... ok
+test wrong_nominal_arguments_fail_atomically_and_can_recover ... ok
+test live_module_changes_discard_only_affected_definitions_before_replay ... ok
+test worker_tampering_cannot_publish_a_different_valid_nominal_record ... ok
+test imported_local_and_same_named_module_records_survive_workers_replay_and_export ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+
+     Running tests/pure_imports.rs (target/release-notebook/debug/deps/pure_imports-ca6f3fe9f50ac1fa)
+
+running 10 tests
+test imported_record_function_is_rejected_at_cell_boundary ... ok
+test local_function_cannot_use_a_private_imported_record_annotation ... ok
+test bool_parameter_and_return_execute_through_scalar_interpreter ... ok
+test malformed_manifest_cycle_and_mutation_after_open_fail_closed ... ok
+test notebook_pure_function_can_call_directly_imported_module ... ok
+test imported_public_records_execute_at_the_cell_boundary ... ok
+test changed_source_stales_only_dependents_and_missing_project_fails ... ok
+test conditional_imports_lower_both_branches_and_track_inactive_module_dependencies ... ok
+test rejects_nonpublic_effectful_duplicate_calls_and_accepts_checked_transitive_calls ... ok
+test two_modules_selective_rerun_and_saved_provenance ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/record_functions.rs (target/release-notebook/debug/deps/record_functions-68087f40e77eae6d)
+
+running 13 tests
+test conditional_dependencies_keep_sibling_and_nested_scopes_separate ... ok
+test unknown_future_qualified_and_generic_annotations_fail_with_cell_spans ... ok
+test value_shadowing_cannot_hide_a_record_annotation_dependency ... ok
+test unsupported_record_shapes_effects_contracts_and_captures_stay_rejected ... ok
+test unused_annotations_are_dependencies_even_when_a_parameter_shadows_the_type ... ok
+test nominal_mismatch_and_failed_cells_never_publish_pending_values_or_definitions ... ok
+test selected_record_function_execution_never_replays_an_effect_cell ... ok
+test cancellation_and_static_function_and_step_limits_still_apply ... ok
+test unicode_same_cell_records_and_exact_scalar_fields_survive_replay ... ok
+test record_functions_keep_source_argument_order_and_checked_arithmetic ... ok
+test record_functions_have_worker_selected_rerun_and_reopen_parity ... ok
+test conditional_inactive_dependencies_worker_reopen_and_failure_recovery ... ok
+test cumulative_replay_budget_and_zero_deadline_fail_without_publishing ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running unittests src/lib.rs (target/release-notebook/debug/deps/cgx2_notebook_session-664ac6dfaaa9e0e1)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/session.rs (target/release-notebook/debug/deps/session-9c94a370e6d17d94)
+
+running 16 tests
+test constructs_cached_code_and_never_run_markdown ... ok
+test executor_output_over_byte_limit_fails_without_committing_display ... ok
+test later_cell_and_selected_rerun_execute_only_the_requested_cell ... ok
+test failure_keeps_cached_output_visible_but_not_current ... ok
+test changed_definition_stales_transitive_dependents_and_preserves_cache ... ok
+test rerunning_definition_stales_later_reader_without_replaying_it ... ok
+test later_shadowed_definition_blocks_invalidation_and_dependency_digest_change ... ok
+test rejects_inconsistent_ids_and_facts ... ok
+test restart_stops_on_failure_and_leaves_later_cached_outputs_stale ... ok
+test restart_runs_code_in_order_with_fresh_executor_and_new_ordinals ... ok
+test replacement_uses_old_and_new_definitions_for_invalidation ... ok
+test runs_one_cell_persistently_and_replaces_only_its_output ... ok
+test reset_failure_reports_error_and_does_not_replay_cells ... ok
+test opaque_edit_stales_all_later_code_without_a_symbol_edge ... ok
+test silent_success_clears_old_output_and_ordinal_overflow_is_checked ... ok
+test reopening_opaque_effect_never_presents_its_or_later_output_as_current_cache ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/release-notebook/debug/deps/cgx2_notebook_ui-bac04c163b94b407)
+
+running 1 test
+test project_tests::project_startup_runs_and_reopens_two_module_notebook ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests src/main.rs (target/release-notebook/debug/deps/cgx2_notebook_ui-2752f8c6ac5df45f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/http.rs (target/release-notebook/debug/deps/http-a369fbbac05212ad)
+
+running 24 tests
+test code_result_with_html_is_json_escaped_and_page_uses_local_scripts ... ok
+test pure_function_status_tracks_selective_ui_rerun ... ok
+test cached_and_current_provenance_are_exposed_after_save_and_reopen ... ok
+test edit_run_restart_save_reopen_and_input_is_unchanged ... ok
+test failed_cell_is_reported_and_saved_text_is_not_current ... ok
+test deleting_pure_function_exposes_stale_output_and_missing_definition ... ok
+test conditional_inactive_dependency_stales_http_users_and_survives_save_restart ... ok
+test rejects_cross_origin_token_size_method_json_cell_and_paths_without_mutation ... ok
+test selected_rerun_route_rejects_bad_ids_and_missing_guards ... ok
+test overwrite_save_after_deleting_image_replaces_stale_sidecar ... ok
+test selective_ui_rerun_preserves_independent_revision_and_exposes_output_digest ... ok
+test record_definition_edit_marks_saved_values_stale_and_reruns_in_ui ... ok
+test selected_rerun_edit_save_reopen_and_clean_restart ... ok
+test cached_asset_reference_is_valid_after_save_as ... ok
+test portable_open_serves_bounded_image_and_exports_without_sidecars ... ok
+test record_function_annotations_drive_http_rerun_and_saved_provenance ... ok
+test markdown_image_route_save_and_export_use_verified_asset ... ok
+test overwrite_save_keeps_only_still_referenced_images ... ok
+test slow_client_does_not_hold_up_interrupt_request ... ok
+test interrupt_stops_active_worker_and_saved_output_is_not_current ... ok
+test local_loop_http_rerun_save_export_and_restart_recompute_locals ... ok
+test public_imported_records_cross_http_rerun_save_export_and_reopen ... ok
+test transitive_import_closure_http_rerun_save_export_reopen ... ok
+test runtime_contract_http_failures_dependencies_and_persistence_match_worker ... ok
+
+test result: ok. 24 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+   Doc-tests cgx2_notebook_format
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_notebook_kernel
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_notebook_session
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_notebook_ui
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
