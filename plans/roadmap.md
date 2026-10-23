@@ -1,6 +1,6 @@
 # CGx2 parallel delivery roadmap
 
-Current plan: [finite completion backlog and 12 ready chats](release-completion/README.md). This supersedes open-ended two-lane continuation after reviewed Wave 28; historical wave records below remain evidence.
+Current plan: [finite completion backlog and reviewed Stage 1 deliveries](release-completion/README.md). This supersedes open-ended two-lane continuation after reviewed Wave 28; historical wave records below remain evidence.
 
 ## Goal and completion standard
 
@@ -55,3 +55,5 @@ Stages are dependency gates, not an automatic schedule. The coordinator may spli
 ## Current gap ledger
 
 Wave 27 is reviewed on `riley/wave27-review`. Notebooks resolve declared dependency closures with complete source/canonical-path provenance and direct-source visibility; valid unnamed single-source project contexts were restored during review. Source/native memory loops check outer-state invariants and cumulative limits across nested loops/calls. Wave 28 targets resolved package effect/capability summaries and replay-safe notebook-local integer accumulators with statically bounded loops. Variants, Option/Result, generics, richer libraries, externally effectful notebooks, broad memory assurance, live proof, scored isolation and paired human/model trials remain open. See [progress](progress.md), [Wave 27 review](wave27/README.md), and [Wave 28 plans](wave28/README.md).
+
+Current dependency gate: [three Stage 1 review repairs](release-completion/s1-review/README.md) before S2a shared syntax/type changes. The user authorizes automatic dependency-ready dispatch through the 20-minute heartbeat.

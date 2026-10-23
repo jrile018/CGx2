@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-10-23T22:30:30.189Z",
+  "original_chats": [
+    {
+      "lane": "core",
+      "worktree": "/home/john-riley/.codex/worktrees/18b8/lang",
+      "threadId": "01a16989-657f-7e42-8467-7d3821f0005a",
+      "hostId": "local",
+      "commit": "8fdbd78",
+      "status": "reviewed-bounded-delivery",
+      "afterCursor": "020d30a0-b320-4a3f-b84b-50ce0949f601:1"
+    },
+    {
+      "lane": "memory",
+      "worktree": "/home/john-riley/.codex/worktrees/c6cd/lang",
+      "threadId": "01a16989-9e7d-7670-a1d6-d54eaa476fad",
+      "hostId": "local",
+      "commit": "26f654b",
+      "status": "reviewed-bounded-delivery",
+      "afterCursor": "64d69ab6-8ce0-4908-8e06-b8b36c787b0e:1"
+    },
+    {
+      "lane": "ownership",
+      "worktree": "/home/john-riley/.codex/worktrees/730e/lang",
+      "threadId": "01a16989-b394-78a3-9c83-f29ab5232dd8",
+      "hostId": "local",
+      "commit": "f6fd925",
+      "status": "reviewed-bounded-delivery",
+      "afterCursor": "480eec03-9f04-4253-986b-6054d136bd61:1"
+    },
+    {
+      "lane": "native",
+      "worktree": "/home/john-riley/.codex/worktrees/93bf/lang",
+      "threadId": "01a16989-bdfd-7393-9c50-d6205bec1e5a",
+      "hostId": "local",
+      "commit": "4bc27a9",
+      "status": "reviewed-bounded-delivery",
+      "afterCursor": "50fd7ba8-827b-47f2-892b-cd1425fb54e0:1"
+    },
+    {
+      "lane": "python",
+      "worktree": "/home/john-riley/.codex/worktrees/2ee1/lang",
+      "threadId": "01a16989-cd7d-7413-8cbf-c5ffd421c23d",
+      "hostId": "local",
+      "commit": "1d81231",
+      "status": "reviewed-bounded-delivery",
+      "afterCursor": "660bcc65-65c6-4476-b46d-75961c4d8469:1"
+    },
+    {
+      "lane": "worker",
+      "worktree": "/home/john-riley/.codex/worktrees/95ea/lang",
+      "threadId": "01a16989-d9a0-7f11-8a84-71d5ecb302d7",
+      "hostId": "local",
+      "commit": "055adc6",
+      "status": "reviewed-bounded-delivery",
+      "afterCursor": "e2827cd7-0145-45e9-8570-5f021eb5c9ba:1"
+    },
+    {
+      "lane": "execution",
+      "worktree": "/home/john-riley/.codex/worktrees/217b/lang",
+      "threadId": "01a1698a-1ae2-7d70-9870-7575c8b52753",
+      "hostId": "local",
+      "commit": "b597342",
+      "status": "reviewed-bounded-delivery",
+      "afterCursor": "bd4064b1-b10c-4818-a810-73dd15674b38:1"
+    },
+    {
+      "lane": "notebook",
+      "worktree": "/home/john-riley/.codex/worktrees/3fca/lang",
+      "threadId": "01a1698a-2507-75c3-a3eb-9d8c74ddbd43",
+      "hostId": "local",
+      "commit": "ff3e715",
+      "status": "reviewed-bounded-delivery",
+      "afterCursor": "4dca450e-9733-45ad-9dcb-caaba03d2bb9:1"
+    },
+    {
+      "lane": "verification",
+      "worktree": "/home/john-riley/.codex/worktrees/ed20/lang",
+      "threadId": "01a1698a-34d3-7f23-9b5b-256b582cedcd",
+      "hostId": "local",
+      "commit": "eab9acd",
+      "status": "repair-required",
+      "afterCursor": "bce96abd-f78a-4f46-8fa4-2f2b7a2b8cf2:1"
+    },
+    {
+      "lane": "analysis",
+      "worktree": "/home/john-riley/.codex/worktrees/1675/lang",
+      "threadId": "01a1698a-44ec-7942-ba44-753f20ea5acd",
+      "hostId": "local",
+      "commit": "59446db",
+      "status": "repair-required",
+      "afterCursor": "694ec333-f476-4c69-97ac-93bca37bbc8c:1"
+    },
+    {
+      "lane": "evidence",
+      "worktree": "/home/john-riley/.codex/worktrees/5b29/lang",
+      "threadId": "01a1698a-4e64-7e00-ab15-a0ae0052bf36",
+      "hostId": "local",
+      "commit": "d224bf1",
+      "status": "reviewed-bounded-delivery",
+      "afterCursor": "2498c129-64a0-4da4-8032-359fe03c1044:1"
+    },
+    {
+      "lane": "docs",
+      "worktree": "/home/john-riley/.codex/worktrees/fd32/lang",
+      "threadId": "01a1698a-673a-7593-b8b7-a4c53f09a8d0",
+      "hostId": "local",
+      "commit": "9e96ac4",
+      "status": "repair-required",
+      "afterCursor": "a547530d-eeb9-4027-9a45-ba50f451091f:1"
+    }
+  ],
+  "repairs": []
+}

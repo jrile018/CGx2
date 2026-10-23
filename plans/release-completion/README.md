@@ -1,6 +1,6 @@
 # CGx2 finite completion plan
 
-Status: implementation backlog and parallel dispatch plan, 2026-10-23. Coordinator branch: `riley/release-completion-plan`. This replaces open-ended two-lane continuation after Wave 28. It does not change the release contract or claim release readiness.
+Status: all twelve Stage 1 deliveries integrated for review; nine accepted as bounded deliveries and three repair chats ready. See [current review](s1-review/README.md). Updated 2026-10-23. Coordinator branch: `riley/release-completion-plan`. This replaces open-ended two-lane continuation after Wave 28. It does not change the release contract or claim release readiness.
 
 ## Answer to “how many more waves?”
 
@@ -112,4 +112,4 @@ External capacity/runtime/package availability, independent review and human/mod
 
 See [dispatch.md](dispatch.md) for actual chat creation outcomes. Stage 1 is “planned/queued/running/delivered/reviewed”, distinct from R-row closure. The coordinator records each delivered commit, checks ownership, integrates on a review branch and updates the gate ledger. Workers stop after their bounded delivery. Starting a new dependency stage requires its reviewed contract/base, not merely a “done” message.
 
-The user authorized this plan and creation of the ready chats. No recurring automation, worker-to-worker messaging, merge to main or follow-on chat dispatch is implied.
+The user subsequently authorized a 20-minute heartbeat to review completed work and launch dependency-ready follow-on chats. Coordinator dispatch may proceed after review gates; workers still commit one bounded task and stop. No merge to main, publication, external paid studies or worker-to-worker messaging is authorized.

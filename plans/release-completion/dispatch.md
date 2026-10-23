@@ -20,3 +20,22 @@ All **12 create_thread requests succeeded** and returned client IDs. After a bou
 | [docs](docs/plan.md) | CGx2 executable release guide and acceptance map | `client-new-thread:d5c9f198-1028-494d-8f35-7df88ae3ae1e` | queued |
 
 Every prompt assigns the committed detailed plan, exclusive paths, frozen interfaces, private targets/TMPDIR and CARGO_BUILD_JOBS=2, offline checks, evidence, commit and stop. No automatic follow-on dispatch or merge is configured. Future stages and ecosystem adapters remain dependency-gated as specified in README.md.
+
+## Stage 1 resolution and review — 2026-10-23 22:30 UTC
+
+All twelve workers completed. IDs were resolved from exact worktree metadata and completion confirmed with wait_threads. The original queued table is historical. Nine bounded deliveries are reviewed; three need the repairs in [s1-review](s1-review/README.md). Full cursor state is in thread-state.json.
+
+| Lane | Permanent chat ID | Original commit | Current status |
+| --- | --- | --- | --- |
+| core | `01a16989-657f-7e42-8467-7d3821f0005a` | 8fdbd78 | reviewed-bounded-delivery |
+| memory | `01a16989-9e7d-7670-a1d6-d54eaa476fad` | 26f654b | reviewed-bounded-delivery |
+| ownership | `01a16989-b394-78a3-9c83-f29ab5232dd8` | f6fd925 | reviewed-bounded-delivery |
+| native | `01a16989-bdfd-7393-9c50-d6205bec1e5a` | 4bc27a9 | reviewed-bounded-delivery |
+| python | `01a16989-cd7d-7413-8cbf-c5ffd421c23d` | 1d81231 | reviewed-bounded-delivery |
+| worker | `01a16989-d9a0-7f11-8a84-71d5ecb302d7` | 055adc6 | reviewed-bounded-delivery |
+| execution | `01a1698a-1ae2-7d70-9870-7575c8b52753` | b597342 | reviewed-bounded-delivery |
+| notebook | `01a1698a-2507-75c3-a3eb-9d8c74ddbd43` | ff3e715 | reviewed-bounded-delivery |
+| verification | `01a1698a-34d3-7f23-9b5b-256b582cedcd` | eab9acd | repair-required |
+| analysis | `01a1698a-44ec-7942-ba44-753f20ea5acd` | 59446db | repair-required |
+| evidence | `01a1698a-4e64-7e00-ab15-a0ae0052bf36` | d224bf1 | reviewed-bounded-delivery |
+| docs | `01a1698a-673a-7593-b8b7-a4c53f09a8d0` | 9e96ac4 | repair-required |

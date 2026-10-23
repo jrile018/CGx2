@@ -39,3 +39,7 @@ Passing tests on the implemented subset does not close the other cells. External
 ## Current completion plan
 
 Wave 28 integration passes 878 Rust tests (including 23 HTTP), 122 Python tests, Clippy, formatting, 6 readiness checks and fresh release native/Python/direct-f32 boundary acceptance. Five ignored tests remain ignored. There are 20 reviewed bounded deliveries across Waves 22–28, not 20 closed release gates. The [finite release backlog](release-completion/README.md) defines 12 ready chats, four dependency stages, 15 release requirement rows and explicit external evidence gates. No completion percentage is asserted.
+
+## Stage 1 parallel completion review
+
+All twelve implementation chats delivered commits. Nine bounded deliveries are reviewed; verifier emission size, contract call-graph completeness and integrated documentation each have a disjoint repair plan. The combined suite passes 1013 Rust tests (six ignored), 166 benchmark tests, 18 docs harness tests, Clippy, formatting, six readiness checks and 65 installed-command checks. Executable docs currently have 26 passes, two stale-command failures, six blocked and eight future cases. No release percentage or gate closure is inferred. See [review and next repair frontier](release-completion/s1-review/README.md).

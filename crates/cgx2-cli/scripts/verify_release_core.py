@@ -19,6 +19,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--binary", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--work-root", type=Path, default=Path("/tmp"),
+                        help="Existing scratch directory outside the checkout")
     args = parser.parse_args()
     binary = args.binary.resolve(strict=True)
     fixtures = Path(__file__).resolve().parents[1] / "tests/fixtures/release-core"
@@ -28,7 +30,7 @@ def main():
     failed = False
 
     # Intentionally outside the checkout even if the worker's TMPDIR is inside it.
-    with tempfile.TemporaryDirectory(prefix="cgx2-installed-core-", dir="/tmp") as temporary:
+    with tempfile.TemporaryDirectory(prefix="cgx2-installed-core-", dir=args.work_root) as temporary:
         root = Path(temporary)
         report["working_directory"] = str(root)
         install = root / "bin"
