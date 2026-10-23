@@ -22,12 +22,27 @@ pub struct RegionId {
     pub(crate) session: u64,
     pub(crate) index: usize,
 }
+impl RegionId {
+    /// Stable index within the creating session. Closed indices are never reused.
+    pub fn index(self) -> usize {
+        self.index
+    }
+}
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub struct Handle {
     pub(crate) region: RegionId,
     pub(crate) slot: usize,
     pub(crate) generation: u64,
+}
+impl Handle {
+    pub fn region(self) -> RegionId {
+        self.region
+    }
+
+    pub fn generation(self) -> u64 {
+        self.generation
+    }
 }
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
