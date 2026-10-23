@@ -1,5 +1,6 @@
 //! File command for clean, pure-scalar CGx2 notebook execution.
 
+use std::collections::BTreeSet;
 use std::env;
 use std::ffi::{OsStr, OsString};
 use std::fmt;
@@ -15,7 +16,8 @@ use cgx2_notebook_format::{
     CellKind, Notebook, NotebookDocument, MAX_NOTEBOOK_BYTES,
 };
 use cgx2_notebook_kernel::{
-    is_worker_argument, scalar_worker_main, ExecutionControl, NotebookKernel, DEFAULT_CELL_TIMEOUT,
+    is_worker_argument, scalar_worker_main, validate_pure_sweep_notebook, ExecutionControl,
+    NotebookKernel, SweepParameter, DEFAULT_CELL_TIMEOUT, MAX_SWEEP_VALUES,
 };
 use std::time::Duration;
 
@@ -29,7 +31,8 @@ Usage:\n\
   cgx2-notebook inspect INPUT.cgnb\n\
   cgx2-notebook show INPUT.cgnb CELL_ID\n\
   cgx2-notebook export INPUT.cgnb --out PORTABLE.cgnb [--force]\n\
-  cgx2-notebook import PORTABLE.cgnb --out OUTPUT.cgnb [--force]\n\
+cgx2-notebook import PORTABLE.cgnb --out OUTPUT.cgnb [--force]\n\
+cgx2-notebook sweep INPUT.cgnb CELL_ID --value LITERAL [--value LITERAL ...] --out-dir DIRECTORY [--timeout-ms N]\n\
 \n\
 Run starts a clean session, replaces saved code outputs, executes code cells in file order,\n\
 and saves fresh text/plain outputs. Inspect reads cell IDs, kinds, saved provenance and status\n\
@@ -40,6 +43,13 @@ provenance without executing. There is no side-effecting rerun or implicit overw
 
 enum Command {
     Help,
+    Sweep {
+        input: PathBuf,
+        id: String,
+        values: Vec<String>,
+        output_dir: PathBuf,
+        timeout: Duration,
+    },
     Inspect(PathBuf),
     Show(PathBuf, String),
     Export {
@@ -190,6 +200,72 @@ fn parse_command(mut args: impl Iterator<Item = OsString>) -> Result<Command, Co
             force,
         });
     }
+    if command == "sweep" {
+        let input = PathBuf::from(
+            args.next()
+                .ok_or_else(|| CommandError::Usage("sweep requires INPUT.cgnb".into()))?,
+        );
+        require_extension(&input)?;
+        let id = args
+            .next()
+            .ok_or_else(|| CommandError::Usage("sweep requires CELL_ID".into()))?
+            .into_string()
+            .map_err(|_| CommandError::Usage("cell ID must be UTF-8".into()))?;
+        let mut values = Vec::new();
+        let mut output_dir = None;
+        let mut timeout = DEFAULT_CELL_TIMEOUT;
+        let mut timeout_seen = false;
+        while let Some(arg) = args.next() {
+            if arg == "--value" {
+                let value = args
+                    .next()
+                    .ok_or_else(|| CommandError::Usage("--value requires LITERAL".into()))?
+                    .into_string()
+                    .map_err(|_| CommandError::Usage("sweep value must be UTF-8".into()))?;
+                values.push(value);
+                if values.len() > MAX_SWEEP_VALUES {
+                    return Err(CommandError::Usage(format!(
+                        "at most {MAX_SWEEP_VALUES} sweep values allowed"
+                    )));
+                }
+            } else if arg == "--out-dir" && output_dir.is_none() {
+                output_dir = Some(PathBuf::from(args.next().ok_or_else(|| {
+                    CommandError::Usage("--out-dir requires DIRECTORY".into())
+                })?));
+            } else if arg == "--timeout-ms" && !timeout_seen {
+                timeout_seen = true;
+                let millis = args
+                    .next()
+                    .ok_or_else(|| CommandError::Usage("--timeout-ms requires N".into()))?
+                    .into_string()
+                    .map_err(|_| CommandError::Usage("timeout must be UTF-8".into()))?
+                    .parse::<u64>()
+                    .map_err(|_| CommandError::Usage("timeout must be an integer".into()))?;
+                if !(1..=60_000).contains(&millis) {
+                    return Err(CommandError::Usage("timeout must be 1..=60000 ms".into()));
+                }
+                timeout = Duration::from_millis(millis);
+            } else {
+                return Err(CommandError::Usage(format!(
+                    "unexpected sweep argument: {}",
+                    arg.to_string_lossy()
+                )));
+            }
+        }
+        if values.is_empty() {
+            return Err(CommandError::Usage(
+                "sweep requires at least one --value".into(),
+            ));
+        }
+        return Ok(Command::Sweep {
+            input,
+            id,
+            values,
+            output_dir: output_dir
+                .ok_or_else(|| CommandError::Usage("sweep requires --out-dir".into()))?,
+            timeout,
+        });
+    }
     if command == "run" || command == "restart" || command == "export" || command == "import" {
         let input = PathBuf::from(args.next().ok_or_else(|| {
             CommandError::Usage(format!("{} requires INPUT.cgnb", command.to_string_lossy()))
@@ -324,6 +400,13 @@ fn execute(command: Command) -> Result<(), CommandError> {
             print!("{HELP}");
             Ok(())
         }
+        Command::Sweep {
+            input,
+            id,
+            values,
+            output_dir,
+            timeout,
+        } => execute_sweep(&input, &id, &values, &output_dir, timeout),
         Command::Inspect(input) => {
             let notebook = read_notebook(&input)?;
             let kernel = NotebookKernel::open(notebook)
@@ -468,6 +551,232 @@ fn execute(command: Command) -> Result<(), CommandError> {
             import_document(&output, &document, native.as_bytes(), force)
         }
     }
+}
+
+fn reject_symlink_components(path: &Path) -> Result<(), CommandError> {
+    use std::path::Component;
+    if path
+        .components()
+        .any(|component| matches!(component, Component::ParentDir))
+    {
+        return Err(CommandError::Input(format!(
+            "path traversal is not allowed: {}",
+            path.display()
+        )));
+    }
+    let mut current = PathBuf::new();
+    for component in path.components() {
+        current.push(component.as_os_str());
+        match fs::symlink_metadata(&current) {
+            Ok(metadata) if metadata.file_type().is_symlink() => {
+                return Err(CommandError::Input(format!(
+                    "symlink is not allowed: {}",
+                    current.display()
+                )))
+            }
+            Ok(_) => {}
+            Err(error) if error.kind() == io::ErrorKind::NotFound => {}
+            Err(error) => return Err(input_io(&current, error)),
+        }
+    }
+    Ok(())
+}
+
+fn json_string(value: &str) -> String {
+    let mut result = String::from("\"");
+    for ch in value.chars() {
+        match ch {
+            '"' => result.push_str("\\\""),
+            '\\' => result.push_str("\\\\"),
+            '\n' => result.push_str("\\n"),
+            '\r' => result.push_str("\\r"),
+            '\t' => result.push_str("\\t"),
+            ch if ch <= '\u{1f}' => result.push_str(&format!("\\u{:04x}", ch as u32)),
+            ch => result.push(ch),
+        }
+    }
+    result.push('"');
+    result
+}
+
+fn execute_sweep(
+    input: &Path,
+    id: &str,
+    values: &[String],
+    output_dir: &Path,
+    timeout: Duration,
+) -> Result<(), CommandError> {
+    reject_symlink_components(input)?;
+    reject_symlink_components(&sidecar(input))?;
+    reject_symlink_components(output_dir)?;
+    let parent = output_dir
+        .parent()
+        .filter(|path| !path.as_os_str().is_empty())
+        .unwrap_or(Path::new("."));
+    let parent = parent
+        .canonicalize()
+        .map_err(|error| output_io(parent, error))?;
+    let name = output_dir
+        .file_name()
+        .ok_or_else(|| CommandError::Output("output directory needs a name".into()))?;
+    let destination = parent.join(name);
+    if fs::symlink_metadata(&destination).is_ok() {
+        return Err(CommandError::Output(format!(
+            "{} already exists",
+            destination.display()
+        )));
+    }
+    let mut notebook = read_notebook(input)?;
+    validate_pure_sweep_notebook(&notebook)
+        .map_err(|error| CommandError::Input(error.to_string()))?;
+    let parameter_cell = notebook
+        .cells
+        .iter()
+        .find(|cell| cell.id == id && cell.kind == CellKind::Code)
+        .ok_or_else(|| CommandError::Input(format!("unknown code cell ID: {id}")))?;
+    let parameter = SweepParameter::parse(&parameter_cell.source)
+        .map_err(|error| CommandError::Input(error.to_string()))?;
+    let mut replacements = Vec::new();
+    let mut seen = BTreeSet::new();
+    for value in values {
+        let (source, key) = parameter
+            .replacement(value)
+            .map_err(|error| CommandError::Input(error.to_string()))?;
+        if !seen.insert(key) {
+            return Err(CommandError::Input(format!(
+                "duplicate sweep value: {value}"
+            )));
+        }
+        let mut candidate = notebook.clone();
+        candidate
+            .cells
+            .iter_mut()
+            .find(|cell| cell.id == id)
+            .expect("validated cell")
+            .source = source.clone();
+        validate_pure_sweep_notebook(&candidate)
+            .map_err(|error| CommandError::Input(error.to_string()))?;
+        NotebookKernel::open(candidate).map_err(|error| CommandError::Input(error.to_string()))?;
+        replacements.push(source);
+    }
+    for cell in &mut notebook.cells {
+        cell.outputs.clear();
+        cell.provenance = None;
+    }
+    let stage = (0..16)
+        .find_map(|_| {
+            let sequence = TEMP_SEQUENCE.fetch_add(1, Ordering::Relaxed);
+            let path = parent.join(format!(".cgx2-sweep-{}-{sequence}.tmp", std::process::id()));
+            match fs::create_dir(&path) {
+                Ok(()) => Some(Ok(TemporaryDirectory(path))),
+                Err(error) if error.kind() == io::ErrorKind::AlreadyExists => None,
+                Err(error) => Some(Err(output_io(&destination, error))),
+            }
+        })
+        .ok_or_else(|| {
+            CommandError::Output("could not allocate sweep staging directory".into())
+        })??;
+    let worker = env::current_exe().map_err(|error| CommandError::Cell(error.to_string()))?;
+    let mut summary = format!(
+        "{{\"schema_version\":1,\"input\":{},\"parameter_cell\":{},\"timeout_ms\":{},\"trials\":[",
+        json_string(&input.display().to_string()),
+        json_string(id),
+        timeout.as_millis()
+    );
+    for (index, (value, source)) in values.iter().zip(replacements).enumerate() {
+        let mut trial = notebook.clone();
+        trial
+            .cells
+            .iter_mut()
+            .find(|cell| cell.id == id)
+            .expect("validated cell")
+            .source = source;
+        let mut kernel =
+            NotebookKernel::open(trial).map_err(|error| CommandError::Cell(error.to_string()))?;
+        kernel.set_execution_control(ExecutionControl::new(worker.clone(), timeout));
+        let result = kernel.restart_and_run_all();
+        let filename = format!("trial-{:02}.cgnb", index + 1);
+        let text = write_notebook(kernel.notebook())
+            .map_err(|error| CommandError::Output(error.to_string()))?;
+        fs::write(stage.0.join(&filename), text).map_err(|error| output_io(&destination, error))?;
+        if index != 0 {
+            summary.push(',');
+        }
+        summary.push_str(&format!(
+            "{{\"index\":{},\"value\":{},\"file\":{},\"error\":{},\"cells\":[",
+            index + 1,
+            json_string(value),
+            json_string(&filename),
+            result
+                .as_ref()
+                .err()
+                .map_or_else(|| "null".into(), |error| json_string(&error.to_string()))
+        ));
+        for (cell_index, cell) in kernel
+            .notebook()
+            .cells
+            .iter()
+            .filter(|cell| cell.kind == CellKind::Code)
+            .enumerate()
+        {
+            if cell_index != 0 {
+                summary.push(',');
+            }
+            let status = kernel
+                .status(&cell.id)
+                .map_err(|error| CommandError::Cell(error.to_string()))?;
+            summary.push_str(&format!(
+                "{{\"id\":{},\"status\":{}}}",
+                json_string(&cell.id),
+                json_string(status_name(status))
+            ));
+        }
+        summary.push_str("]}");
+    }
+    summary.push_str("]}\n");
+    fs::write(stage.0.join("summary.json"), summary)
+        .map_err(|error| output_io(&destination, error))?;
+    if fs::symlink_metadata(&destination).is_ok() {
+        return Err(CommandError::Output(format!(
+            "{} already exists",
+            destination.display()
+        )));
+    }
+    publish_directory(&stage.0, &destination).map_err(|error| output_io(&destination, error))?;
+    println!("{}", destination.display());
+    Ok(())
+}
+
+#[cfg(target_os = "linux")]
+fn publish_directory(source: &Path, destination: &Path) -> io::Result<()> {
+    use std::ffi::CString;
+    use std::os::unix::ffi::OsStrExt;
+    unsafe extern "C" {
+        fn renameat2(
+            old_dirfd: i32,
+            old_path: *const i8,
+            new_dirfd: i32,
+            new_path: *const i8,
+            flags: u32,
+        ) -> i32;
+    }
+    let old = CString::new(source.as_os_str().as_bytes())
+        .map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "NUL in staging path"))?;
+    let new = CString::new(destination.as_os_str().as_bytes())
+        .map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "NUL in output path"))?;
+    // RENAME_NOREPLACE avoids replacing a destination created after validation.
+    let result = unsafe { renameat2(-100, old.as_ptr(), -100, new.as_ptr(), 1) };
+    if result == 0 {
+        Ok(())
+    } else {
+        Err(io::Error::last_os_error())
+    }
+}
+
+#[cfg(not(target_os = "linux"))]
+fn publish_directory(source: &Path, destination: &Path) -> io::Result<()> {
+    // Other platforms retain the explicit collision check immediately before rename.
+    fs::rename(source, destination)
 }
 
 fn status_name(status: cgx2_notebook_session::CellStatus) -> &'static str {

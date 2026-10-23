@@ -1,0 +1,10 @@
+#!cgnb 1
+%% markdown id=about
+# Pure scalar sweep
+Try factors 2, 0, and 5. Zero records a failed division while each trial starts clean.
+%% code id=factor
+let factor = 2
+%% code id=quotient
+10 / factor
+%% code id=independent
+40 + 2

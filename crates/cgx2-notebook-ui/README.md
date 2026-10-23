@@ -1,5 +1,12 @@
 # CGx2 loopback notebook UI
 
+For a parameter sweep, use `cgx2-notebook sweep INPUT.cgnb CELL_ID --value
+LITERAL --out-dir DIRECTORY` from a terminal. Open an individual result with
+`cgx2-notebook-ui open DIRECTORY/trial-01.cgnb`; repeat for other trials.
+`summary.json` lists saved successes and failures. Opening a result only reads
+its saved output and provenance; use **Restart and run all** to execute it
+again. The UI does not launch sweeps or expose a new execution endpoint.
+
 **Delete cell** removes the selected cell in memory. Outputs that called a
 removed pure function remain visible with a stale indicator; unrelated
 successful outputs keep their run revision. Save as persists that state, and

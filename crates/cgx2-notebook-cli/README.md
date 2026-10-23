@@ -1,5 +1,29 @@
 # CGx2 notebook command
 
+## Bounded pure scalar sweeps
+
+```sh
+cgx2-notebook sweep crates/cgx2-notebook-cli/examples/sweep-factor.cgnb factor \
+  --value 2 --value 0 --value 5 --out-dir /tmp/factor-sweep
+cgx2-notebook inspect /tmp/factor-sweep/trial-01.cgnb
+cgx2-notebook inspect /tmp/factor-sweep/trial-02.cgnb
+```
+
+`sweep` requires a code cell containing exactly one immutable `i64`, `Bool`, or
+`String` literal binding. Each `--value` is a CGx2 literal of that same checked
+type. The command accepts 1–32 distinct values, each at most 4,096 UTF-8 bytes.
+It validates every cell against the pure scalar profile, then starts a fresh
+kernel for each value. `summary.json` records each trial's value, file, error,
+and code cell statuses. Files are `trial-01.cgnb`, etc., in input order. A
+runtime failure, including the per-cell worker timeout, saves that trial's
+failed provenance and leaves later cells unrun; the remaining trials continue.
+The default timeout is 2,000 ms, adjustable with `--timeout-ms N` from 1 to
+60,000. Validation or serialization failure removes the staging directory and
+publishes no output directory. The destination must not already exist; paths
+with `..` or symlink components are rejected. Existing notebook size limits
+still apply. Sweeps explore pure scalar variations; they are not a Jupyter
+kernel or a general side-effect replay system.
+
 The [function lifecycle example](examples/function-lifecycle.cgnb) defines `inc`
 in one cell, calls it through `twice` in another, and keeps an independent
 result. Run and reopen it with:

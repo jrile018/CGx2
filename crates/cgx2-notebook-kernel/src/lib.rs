@@ -27,6 +27,8 @@ pub const MAX_STATIC_STEPS: usize = 100_000;
 /// Compatibility alias for the cumulative evaluation budget.
 pub const MAX_REPLAY_BYTES: usize = MAX_EVALUATION_BYTES;
 pub const DEFAULT_CELL_TIMEOUT: Duration = Duration::from_secs(2);
+pub const MAX_SWEEP_VALUES: usize = 32;
+pub const MAX_SWEEP_VALUE_BYTES: usize = 4096;
 const WORKER_ARGUMENT: &str = "--cgx2-notebook-scalar-worker";
 
 /// Execute one scalar script in the calling notebook binary's private worker mode.
@@ -110,6 +112,143 @@ impl fmt::Display for KernelError {
 }
 
 impl std::error::Error for KernelError {}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum SweepScalarKind {
+    I64,
+    Bool,
+    String,
+}
+
+#[derive(Clone, Debug)]
+pub struct SweepParameter {
+    source: String,
+    literal_start: usize,
+    literal_end: usize,
+    kind: SweepScalarKind,
+}
+
+impl SweepParameter {
+    pub fn parse(source: &str) -> Result<Self, KernelError> {
+        let module = parse_module(source).map_err(|diagnostics| {
+            let first = &diagnostics[0];
+            error("CGNK011", format!("{}: {}", first.code, first.message))
+        })?;
+        if module.name.is_some()
+            || !module.imports.is_empty()
+            || !module.functions.is_empty()
+            || module.statements.len() != 1
+        {
+            return Err(error(
+                "CGNK011",
+                "parameter cell must contain one immutable scalar literal binding",
+            ));
+        }
+        let StmtKind::Let {
+            mutable: false,
+            value,
+            ..
+        } = &module.statements[0].kind
+        else {
+            return Err(error(
+                "CGNK011",
+                "parameter cell must contain one immutable scalar literal binding",
+            ));
+        };
+        let kind = scalar_kind(&value.kind)?;
+        check_source(source).map_err(|diagnostics| {
+            let first = &diagnostics[0];
+            error("CGNK011", format!("{}: {}", first.code, first.message))
+        })?;
+        Ok(Self {
+            source: source.to_owned(),
+            literal_start: value.span.start,
+            literal_end: value.span.end,
+            kind,
+        })
+    }
+
+    pub fn replacement(&self, literal: &str) -> Result<(String, String), KernelError> {
+        if literal.len() > MAX_SWEEP_VALUE_BYTES {
+            return Err(error("CGNK011", "sweep value exceeds 4096 bytes"));
+        }
+        let parsed = Self::parse(&format!("let sweep_value = {literal}\n"))?;
+        if parsed.kind != self.kind {
+            return Err(error(
+                "CGNK011",
+                "sweep value changes the parameter scalar type",
+            ));
+        }
+        let value_module =
+            parse_module(literal).map_err(|_| error("CGNK011", "invalid sweep literal"))?;
+        let StmtKind::Expr(value) = &value_module.statements[0].kind else {
+            return Err(error("CGNK011", "sweep value must be one scalar literal"));
+        };
+        let key = match &value.kind {
+            ExprKind::Integer(raw) => raw
+                .replace('_', "")
+                .parse::<i64>()
+                .map(|number| format!("i:{number}"))
+                .map_err(|_| error("CGNK011", "sweep integer must fit i64"))?,
+            ExprKind::Boolean(boolean) => format!("b:{boolean}"),
+            ExprKind::StringLiteral(value) => format!("s:{value}"),
+            _ => return Err(error("CGNK011", "sweep value must be one scalar literal")),
+        };
+        let mut source = self.source.clone();
+        source.replace_range(self.literal_start..self.literal_end, literal);
+        if source.len() > MAX_SOURCE_BYTES {
+            return Err(error(
+                "CGNK011",
+                "sweep source exceeds notebook source limit",
+            ));
+        }
+        check_source(&source).map_err(|diagnostics| {
+            let first = &diagnostics[0];
+            error("CGNK011", format!("{}: {}", first.code, first.message))
+        })?;
+        Ok((source, key))
+    }
+}
+
+fn scalar_kind(expr: &ExprKind) -> Result<SweepScalarKind, KernelError> {
+    match expr {
+        ExprKind::Integer(_) => Ok(SweepScalarKind::I64),
+        ExprKind::Boolean(_) => Ok(SweepScalarKind::Bool),
+        ExprKind::StringLiteral(_) => Ok(SweepScalarKind::String),
+        _ => Err(error(
+            "CGNK011",
+            "parameter value must be an i64, Bool, or String literal",
+        )),
+    }
+}
+
+/// Reject opaque or effectful source before any sweep files are published.
+pub fn validate_pure_sweep_notebook(notebook: &Notebook) -> Result<(), KernelError> {
+    validate_limits(notebook)?;
+    let mut known_functions = BTreeSet::new();
+    for cell in notebook
+        .cells
+        .iter()
+        .filter(|cell| cell.kind == CellKind::Code)
+    {
+        facts_for_source(&cell.source)?;
+        if facts_or_opaque(&cell.source, &known_functions, false).opaque_effects {
+            return Err(error(
+                "CGNK001",
+                format!("cell {} has an unknown or effectful call", cell.id),
+            ));
+        }
+        let module =
+            parse_module(&cell.source).map_err(|_| error("CGNK001", "invalid cell source"))?;
+        known_functions.extend(
+            module
+                .functions
+                .iter()
+                .map(|function| function.name.clone()),
+        );
+    }
+    Ok(())
+}
 
 fn error(code: &'static str, message: impl Into<String>) -> KernelError {
     KernelError {

@@ -148,6 +148,187 @@ fn stderr(output: &Output) -> String {
 const INPUT: &str = "#!cgnb 1\n%% markdown id=notes\n# Reference: figure.png\n%% code id=seed\nlet x = 3\n%% output id=seed mime=text/plain ordinal=9\nstale\n%% code id=result\nx + 4\n%% output id=result mime=text/plain ordinal=10\nstale\n";
 
 #[test]
+fn sweep_saves_independent_trials_and_reopens_failure_provenance() {
+    let fixture = Fixture::new();
+    let input = fixture.write("input.cgnb", include_str!("../examples/sweep-factor.cgnb"));
+    let output = fixture.path("sweep");
+    let result = run_str(&[
+        "sweep",
+        input.to_str().unwrap(),
+        "factor",
+        "--value",
+        "2",
+        "--value",
+        "0",
+        "--value",
+        "5",
+        "--out-dir",
+        output.to_str().unwrap(),
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let summary = fs::read_to_string(output.join("summary.json")).unwrap();
+    assert!(summary.contains("\"status\":\"failed\""));
+    assert!(summary.contains("division by zero"));
+    let first = output.join("trial-01.cgnb");
+    let second = output.join("trial-02.cgnb");
+    let third = output.join("trial-03.cgnb");
+    let one = parse_notebook_bytes(&fs::read(&first).unwrap()).unwrap();
+    let two = parse_notebook_bytes(&fs::read(&second).unwrap()).unwrap();
+    let three = parse_notebook_bytes(&fs::read(&third).unwrap()).unwrap();
+    assert_eq!(one.version, 1);
+    assert!(matches!(&one.cells[2].outputs[0], CellOutput::Text { body, .. } if body == "5"));
+    assert!(matches!(&three.cells[2].outputs[0], CellOutput::Text { body, .. } if body == "2"));
+    assert!(
+        two.cells[2].provenance.as_ref().unwrap().result
+            == cgx2_notebook_format::ProvenanceResult::Failed
+    );
+    assert!(two.cells[3].outputs.is_empty());
+    let inspect_one = run(&[Path::new("inspect"), &first]);
+    let inspect_two = run(&[Path::new("inspect"), &second]);
+    assert!(String::from_utf8_lossy(&inspect_one.stdout).contains("quotient\tcode\tcached"));
+    assert!(String::from_utf8_lossy(&inspect_two.stdout).contains("quotient\tcode\tfailed"));
+    let restarted = fixture.path("restarted.cgnb");
+    assert!(
+        run(&[Path::new("restart"), &first, Path::new("--out"), &restarted])
+            .status
+            .success()
+    );
+    let reopened = run(&[Path::new("inspect"), &restarted]);
+    assert!(String::from_utf8_lossy(&reopened.stdout).contains("quotient\tcode\tstale"));
+}
+
+#[test]
+fn sweep_rejects_invalid_values_effects_and_output_paths_before_publication() {
+    let fixture = Fixture::new();
+    let input = fixture.write("input.cgnb", include_str!("../examples/sweep-factor.cgnb"));
+    let oversized = "x".repeat(4097);
+    for (name, values) in [
+        ("type", vec!["2", "true"]),
+        ("duplicate", vec!["2", "2"]),
+        ("oversized", vec!["2", oversized.as_str()]),
+    ] {
+        let output = fixture.path(name);
+        let mut args = vec!["sweep", input.to_str().unwrap(), "factor"];
+        for value in values {
+            args.extend(["--value", value]);
+        }
+        args.extend(["--out-dir", output.to_str().unwrap()]);
+        assert!(!run_str(&args).status.success(), "{name}");
+        assert!(!output.exists(), "{name} published files");
+    }
+    let effect = fixture.write(
+        "effect.cgnb",
+        "#!cgnb 1\n%% code id=factor\nlet factor = 2\n%% code id=effect\nprint(\"side effect\")\n",
+    );
+    let output = fixture.path("effect-output");
+    let result = run_str(&[
+        "sweep",
+        effect.to_str().unwrap(),
+        "factor",
+        "--value",
+        "3",
+        "--out-dir",
+        output.to_str().unwrap(),
+    ]);
+    assert!(!result.status.success());
+    assert!(!output.exists());
+    let bad_id = fixture.path("bad-id");
+    assert!(!run_str(&[
+        "sweep",
+        input.to_str().unwrap(),
+        "missing",
+        "--value",
+        "3",
+        "--out-dir",
+        bad_id.to_str().unwrap(),
+    ])
+    .status
+    .success());
+    assert!(!bad_id.exists());
+    let traversal = fixture.path("../outside");
+    assert!(!run_str(&[
+        "sweep",
+        input.to_str().unwrap(),
+        "factor",
+        "--value",
+        "3",
+        "--out-dir",
+        traversal.to_str().unwrap()
+    ])
+    .status
+    .success());
+    assert!(!fixture.path("outside").exists());
+}
+
+#[test]
+fn sweep_accepts_bool_and_string_literals_and_rejects_collisions() {
+    let fixture = Fixture::new();
+    for (name, original, values) in [
+        ("bool", "true", ["true", "false"]),
+        ("string", "\"a\"", ["\"a\"", "\"b\""]),
+    ] {
+        let input = fixture.write(&format!("{name}.cgnb"), &format!("#!cgnb 1\n%% code id=parameter\nlet parameter = {original}\n%% code id=result\nparameter\n"));
+        let output = fixture.path(&format!("{name}-sweep"));
+        let args = [
+            "sweep",
+            input.to_str().unwrap(),
+            "parameter",
+            "--value",
+            values[0],
+            "--value",
+            values[1],
+            "--out-dir",
+            output.to_str().unwrap(),
+        ];
+        let result = run_str(&args);
+        assert!(result.status.success(), "{}", stderr(&result));
+        let first = parse_notebook_bytes(&fs::read(output.join("trial-01.cgnb")).unwrap()).unwrap();
+        let second =
+            parse_notebook_bytes(&fs::read(output.join("trial-02.cgnb")).unwrap()).unwrap();
+        assert_ne!(first.cells[1].outputs, second.cells[1].outputs);
+        assert!(
+            !run_str(&args).status.success(),
+            "existing destination must be rejected"
+        );
+    }
+}
+
+#[cfg(unix)]
+#[test]
+fn sweep_rejects_symlink_input_and_destination() {
+    use std::os::unix::fs::symlink;
+    let fixture = Fixture::new();
+    let input = fixture.write("input.cgnb", include_str!("../examples/sweep-factor.cgnb"));
+    let linked_input = fixture.path("linked.cgnb");
+    symlink(&input, &linked_input).unwrap();
+    let output = fixture.path("sweep");
+    let result = run_str(&[
+        "sweep",
+        linked_input.to_str().unwrap(),
+        "factor",
+        "--value",
+        "2",
+        "--out-dir",
+        output.to_str().unwrap(),
+    ]);
+    assert!(!result.status.success());
+    assert!(!output.exists());
+    let other = fixture.path("other");
+    fs::create_dir(&other).unwrap();
+    symlink(&other, &output).unwrap();
+    let result = run_str(&[
+        "sweep",
+        input.to_str().unwrap(),
+        "factor",
+        "--value",
+        "2",
+        "--out-dir",
+        output.to_str().unwrap(),
+    ]);
+    assert!(!result.status.success());
+}
+
+#[test]
 fn run_saves_fresh_reopenable_output_without_touching_input() {
     let fixture = Fixture::new();
     let input = fixture.write("source.cgnb", INPUT);
