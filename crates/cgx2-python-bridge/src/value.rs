@@ -18,6 +18,8 @@ pub enum BridgeValue {
     Bool(bool),
     I64(i64),
     F64(f64),
+    /// CGx2-owned contiguous finite float64 payload for the declared copied-array route.
+    F64Array1DCopyV1(Vec<f64>),
     String(String),
     Bytes(Vec<u8>),
     List(Vec<BridgeValue>),
