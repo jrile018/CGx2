@@ -233,4 +233,31 @@ int32_t cgx2_torch_matrix_copy_f32(const void *raw, float *output, uint64_t capa
         std::memcpy(output, matrix.data_ptr<float>(), static_cast<size_t>(count) * sizeof(float));
     });
 }
+uint32_t cgx2_torch_inference_api_version(void) { return 4; }
+int32_t cgx2_torch_matrix_add_f32(const void *left, const void *right, void **output) {
+    if (output) *output = nullptr;
+    return translate([&] {
+        c10::InferenceMode guard;
+        if (!output) throw std::invalid_argument("null output");
+        const auto &a = checked_matrix_f32(left);
+        const auto &b = checked_matrix_f32(right);
+        if (a.sizes() != b.sizes()) throw std::invalid_argument("add shape mismatch");
+        auto result = (a + b).contiguous();
+        finite_f32(result.data_ptr<float>(), static_cast<uint64_t>(result.numel()));
+        *output = new torch::Tensor(std::move(result));
+    });
+}
+int32_t cgx2_torch_matrix_relu_f32(const void *input, void **output) {
+    if (output) *output = nullptr;
+    return translate([&] {
+        c10::InferenceMode guard;
+        if (!output) throw std::invalid_argument("null output");
+        const auto &a = checked_matrix_f32(input);
+        // Check before ReLU too: it must not conceal a nonfinite input.
+        finite_f32(a.data_ptr<float>(), static_cast<uint64_t>(a.numel()));
+        auto result = torch::relu(a).contiguous();
+        *output = new torch::Tensor(std::move(result));
+    });
+}
+
 }

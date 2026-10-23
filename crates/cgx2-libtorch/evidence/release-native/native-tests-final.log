@@ -1,0 +1,156 @@
+   Compiling cgx2-bind v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-bind)
+   Compiling cgx2-ffi-native v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-ffi-native)
+   Compiling cgx2-libtorch v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-libtorch)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.72s
+     Running unittests src/lib.rs (target/release-native/debug/deps/cgx2_bind-323907632d0d7c83)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin/cgx2-bind.rs (target/release-native/debug/deps/cgx2_bind-6c998a54e0703d2e)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/preflight.rs (target/release-native/debug/deps/preflight-c523e43ad0657aa2)
+
+running 13 tests
+test unavailable_libtorch_is_reported_without_fallback ... ok
+test rejects_contract_platform_and_unknown_fields ... ok
+test rejects_lock_schema_and_lock_symlink_escape ... ok
+test rejects_traversal_and_symlink_escape ... ok
+test rejects_hash_identity_symbol_and_missing_artifact ... ok
+test rejects_excessive_binding_and_symbol_counts_before_inspection ... ok
+test c_fixture_passes_and_cli_outputs_stable_json ... ok
+test opt_in_trace_preserves_success_and_first_failure_report ... ok
+test mock_facade_preflight_rejects_missing_export ... ok
+test mock_facade_preflight_pins_exact_bytes_and_c_signatures_without_loading ... ok
+test float32_matrix_preflight_requires_exact_v3_exports ... ok
+test matrix_preflight_requires_exact_v2_exports_and_keeps_v1_valid ... ok
+test inference_v4_requires_schema3_exact_exports_and_a_closure ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running unittests src/lib.rs (target/release-native/debug/deps/cgx2_ffi_core-a6739251d2d734b6)
+
+running 3 tests
+test tests::declaration_and_session_reference_fail_closed ... ok
+test tests::rust_facade_catches_before_returning_across_c_and_cleans_up ... ok
+test tests::portable_values_and_global_limits ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/release-native/debug/deps/cgx2_ffi_native-11624ce7d49fc002)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/native.rs (target/release-native/debug/deps/native-483459b08fc83803)
+
+running 3 tests
+test checked_scalar_bytes_and_errors ... ok
+test handle_release_and_failure_cleanup ... ok
+test invalid_declarations_fail_before_call ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/sdk_v2.rs (target/release-native/debug/deps/sdk_v2-2200f7cd2052f029)
+
+running 4 tests
+test changed_inode_is_rejected_even_when_hash_still_matches ... ok
+test copied_outputs_bounds_utf8_and_exception ... ok
+test unique_shared_error_cleanup_and_unwind ... ok
+test preflight_and_runtime_identity_reject_before_calls ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.83s
+
+     Running unittests src/lib.rs (target/release-native/debug/deps/cgx2_libtorch-a5b6de72815d25d8)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/closure.rs (target/release-native/debug/deps/closure-b1f5b24aa7f3fd0c)
+
+running 6 tests
+test real_pinned_libtorch_when_installed ... ignored, requires a reviewed schema-2 package and exact compatible LibTorch installation
+test real_pinned_matrix_when_installed ... ignored, requires a reviewed schema-2 matrix package and exact compatible LibTorch installation
+test changed_dependency_after_preflight_is_rejected_before_loading ... ok
+test mock_package_preparation_is_repeatable_and_rejects_ambiguous_needed ... ok
+test closure_accepts_and_rejects_changed_version_and_loader_substitution ... ok
+test same_inode_same_size_restored_mtime_is_rehashed_and_retry_succeeds ... ok
+
+test result: ok. 4 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 0.66s
+
+     Running tests/inference.rs (target/release-native/debug/deps/inference-4b7ba2f93dea3679)
+
+running 3 tests
+test real_pinned_two_layer_inference_no_python ... ignored, requires a prepared real v4 CPU package; set CGX2_LIBTORCH_REAL_PACKAGE
+test mock_two_layer_inference_and_lifetimes ... ok
+test rejects_inference_version_and_missing_export ... ok
+
+test result: ok. 2 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/matrix_f32.rs (target/release-native/debug/deps/matrix_f32-683ebb0fcaf6320d)
+
+running 4 tests
+test real_pinned_float32_reference_and_cycles ... ignored, requires CGX2_LIBTORCH_REAL_PACKAGE with a pinned CPU float32 v3 facade
+test mock_float32_rejects_invalid_inputs_and_facade_faults ... ok
+test mock_float32_math_and_repeated_lifecycle ... ok
+test mock_float32_rejects_wrong_version_and_missing_symbol ... ok
+
+test result: ok. 3 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/matrix_lifetime.rs (target/release-native/debug/deps/matrix_lifetime-b9e1b7e262555cda)
+
+running 3 tests
+test real_pinned_matrix_element_boundaries ... ignored, requires a reviewed schema-2 pinned real LibTorch matrix package
+test mock_matrix_repeated_lifecycle_and_exact_fault_classes ... ok
+test mock_matrix_version_and_export_rejection ... ok
+
+test result: ok. 2 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/route.rs (target/release-native/debug/deps/route-62e621d37b2f3e0f)
+
+running 11 tests
+test real_libtorch_cpu_when_installed ... ignored, requires CGX2_LIBTORCH_FACADE and CGX2_LIBTORCH_VERSION for a real LibTorch artifact
+test static_route_contains_no_python_link ... ok
+test mock_facade_c_copy_checks_capacity_before_writing ... ok
+test aliased_output_never_releases_an_existing_handle ... ok
+test mock_facade_rejects_bad_shape_profile_and_cross_adapter_handle ... ok
+test aliased_add_and_release_error_keep_single_owner ... ok
+test mock_facade_cpu_contract_and_raii ... ok
+test mock_matrix_non_square_math_copy_and_lifetimes ... ok
+test mock_facade_failed_create_cleans_handle_and_never_publishes_values ... ok
+test mock_matrix_rejects_invalid_shapes_aliases_partial_errors_and_bad_exports ... ok
+test mock_facade_rejects_wrong_metadata_and_missing_export ... ok
+
+test result: ok. 10 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+   Doc-tests cgx2_bind
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_ffi_core
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_ffi_native
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_libtorch
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

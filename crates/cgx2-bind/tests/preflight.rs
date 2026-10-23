@@ -231,7 +231,7 @@ fn rejects_traversal_and_symlink_escape() {
 #[test]
 fn rejects_lock_schema_and_lock_symlink_escape() {
     let (fixture, mut lock) = Fixture::c_fixture();
-    lock.schema_version = 3;
+    lock.schema_version = 99;
     fixture.write_lock(&lock);
     assert!(codes(&fixture.0).contains(&"CGB004"));
     #[cfg(unix)]
@@ -385,4 +385,33 @@ fn mock_facade_preflight_pins_exact_bytes_and_c_signatures_without_loading() {
 fn mock_facade_preflight_rejects_missing_export() {
     let (fixture, _) = libtorch_mock_fixture(&["-DMOCK_MISSING_COPY"]);
     assert!(codes(&fixture.0).contains(&"CGB015"));
+}
+
+#[test]
+fn inference_v4_requires_schema3_exact_exports_and_a_closure() {
+    let (fixture, mut lock) = libtorch_mock_fixture(&[]);
+    lock.bindings[0].layout = "tensor-f32-cpu-inference-v4".into();
+    lock.bindings[0].symbols = cgx2_bind::sdk_v2::libtorch_inference_facade_symbols();
+    fixture.write_lock(&lock);
+    assert!(codes(&fixture.0).contains(&"CGB004"));
+    lock.schema_version = 3;
+    fixture.write_lock(&lock);
+    let errors = codes(&fixture.0);
+    assert!(!errors.contains(&"CGB004"));
+    assert!(!errors.contains(&"CGB018"));
+    assert!(errors.contains(&"CGB019")); // no closure: never an executable pass
+    lock.bindings[0]
+        .symbols
+        .iter_mut()
+        .find(|s| s.name == "cgx2_torch_matrix_relu_f32")
+        .unwrap()
+        .parameters = vec!["i64".into()];
+    fixture.write_lock(&lock);
+    assert!(codes(&fixture.0).contains(&"CGB018"));
+    let (missing, mut lock) = libtorch_mock_fixture(&["-DMOCK_MISSING_RELU"]);
+    lock.schema_version = 3;
+    lock.bindings[0].layout = "tensor-f32-cpu-inference-v4".into();
+    lock.bindings[0].symbols = cgx2_bind::sdk_v2::libtorch_inference_facade_symbols();
+    missing.write_lock(&lock);
+    assert!(codes(&missing.0).contains(&"CGB015"));
 }

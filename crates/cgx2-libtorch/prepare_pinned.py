@@ -142,7 +142,7 @@ def symbol(name, parameters, result, ownership="none", release=None, error="none
     }
 
 
-def facade_symbols(matrix=False, matrix_f32=False):
+def facade_symbols(matrix=False, matrix_f32=False, inference=False):
     symbols = [
         symbol("cgx2_library_identity", [], "cstr_ptr"),
         symbol("cgx2_library_version", [], "cstr_ptr"),
@@ -190,6 +190,14 @@ def facade_symbols(matrix=False, matrix_f32=False):
             symbol("cgx2_torch_matrix_copy_f32",
                    ["handle_const_ptr", "f32_mut_ptr", "u64"],
                    "i32", error="status"),
+        ])
+    if inference:
+        symbols.extend([
+            symbol("cgx2_torch_inference_api_version", [], "u32"),
+            symbol("cgx2_torch_matrix_add_f32", ["handle_const_ptr", "handle_const_ptr", "handle_out_ptr"],
+                   "i32", "owned", "cgx2_torch_release", "status"),
+            symbol("cgx2_torch_matrix_relu_f32", ["handle_const_ptr", "handle_out_ptr"],
+                   "i32", "owned", "cgx2_torch_release", "status"),
         ])
     return sorted(symbols, key=lambda item: item["name"])
 
@@ -345,9 +353,10 @@ def prepare(args):
         "version": args.version, "artifact": facade.name,
         "sha256": facade_entry["sha256"], "os": "linux",
         "arch": platform.machine(), "abi": ABI, "calling_convention": "c",
-        "layout": "tensor-f32-cpu-matrix-v3" if args.matrix_f32 else
+        "layout": "tensor-f32-cpu-inference-v4" if args.inference else
+                  "tensor-f32-cpu-matrix-v3" if args.matrix_f32 else
                   "tensor-f64-cpu-matrix-v2" if args.matrix else "tensor-f64-cpu-v1",
-        "symbols": facade_symbols(args.matrix or args.matrix_f32, args.matrix_f32),
+        "symbols": facade_symbols(args.matrix or args.matrix_f32 or args.inference, args.matrix_f32 or args.inference, args.inference),
     }
     (package / "src").mkdir(exist_ok=True)
     canonical_dir(package / "src")
@@ -362,7 +371,7 @@ def prepare(args):
         encoding="utf-8",
     )
     write_json(package / "cgx2-bind.lock.json", {
-        "schema_version": 2, "package": "libtorch_pinned", "bindings": [binding],
+        "schema_version": 3 if args.inference else 2, "package": "libtorch_pinned", "bindings": [binding],
     })
     write_json(package / "cgx2-libtorch-closure.lock.json", {
         "schema_version": 1, "libraries": closure,
@@ -396,6 +405,8 @@ def main():
                         help="pin additive two-dimensional float64 matrix API v2 exports")
     parser.add_argument("--matrix-f32", action="store_true",
                         help="pin additive CPU float32 matrix API v3 plus v1/v2 exports")
+    parser.add_argument("--inference", action="store_true",
+                        help="pin CPU f32 inference API v4 and lock schema 3")
     args = parser.parse_args()
     try:
         prepare(args)

@@ -5,6 +5,7 @@ use std::ffi::{CStr, CString, c_char, c_void};
 use std::path::Path;
 use std::ptr::NonNull;
 use std::rc::Rc;
+pub mod sdk_v2;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Error {

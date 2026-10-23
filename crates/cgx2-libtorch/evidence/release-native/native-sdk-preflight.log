@@ -1,0 +1,7 @@
+   Compiling cgx2-ffi-core v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-ffi-core)
+   Compiling cgx2-bind v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-bind)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.17s
+     Running `target/release-native/debug/cgx2-bind check /home/john-riley/.codex/worktrees/93bf/lang/target/release-native/sdk-package`
+package native_sdk_example
+status ok
+bindings_checked 1

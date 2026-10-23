@@ -1,0 +1,4 @@
+    Checking cgx2-bind v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-bind)
+    Checking cgx2-ffi-native v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-ffi-native)
+    Checking cgx2-libtorch v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-libtorch)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.30s

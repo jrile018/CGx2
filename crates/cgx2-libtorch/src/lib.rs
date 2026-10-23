@@ -23,6 +23,10 @@ type MatrixCopy = unsafe extern "C" fn(*const c_void, *mut f64, u64) -> i32;
 type MatrixCreateF32 = unsafe extern "C" fn(*const f32, u64, u64, *mut *mut c_void) -> i32;
 type MatrixInfoF32 = unsafe extern "C" fn(*const c_void, *mut u64, *mut u64, *mut u32) -> i32;
 type MatrixCopyF32 = unsafe extern "C" fn(*const c_void, *mut f32, u64) -> i32;
+struct InferenceFunctions {
+    add: Matmul,
+    relu: unsafe extern "C" fn(*const c_void, *mut *mut c_void) -> i32,
+}
 struct MatrixFunctions {
     create: MatrixCreate,
     matmul: Matmul,
@@ -104,6 +108,7 @@ struct Inner {
     create: Create,
     matrix: Option<MatrixFunctions>,
     matrix_f32: Option<MatrixFunctionsF32>,
+    inference: Option<InferenceFunctions>,
     add: Add,
     length: Length,
     copy: Copy,
@@ -252,7 +257,7 @@ pub struct Torch {
 }
 
 impl Torch {
-    /// Open only after schema-2 package preflight and complete ELF closure checks.
+    /// Open only after schema-2/3 package preflight and complete ELF closure checks.
     /// The loader's mapped paths and inodes are checked before any tensor operation.
     ///
     /// # Safety
@@ -260,9 +265,9 @@ impl Torch {
     /// foreign handle lifetimes. The caller must validate those contracts separately.
     pub unsafe fn open_pinned(root: &Path, binding_id: &str) -> Result<Self, PinnedError> {
         let lock = checked_lock(root).map_err(PinnedError::Preflight)?;
-        if lock.schema_version != 2 {
+        if !matches!(lock.schema_version, 2 | 3) {
             return Err(PinnedError::Closure(ClosureError::Invalid(
-                "schema-2 closure lock required".into(),
+                "schema-2/3 closure lock required".into(),
             )));
         }
         let binding = lock
@@ -284,11 +289,18 @@ impl Torch {
             .pinned = Some(verified);
         if binding.layout == "tensor-f64-cpu-matrix-v2"
             || binding.layout == "tensor-f32-cpu-matrix-v3"
+            || binding.layout == "tensor-f32-cpu-inference-v4"
         {
             torch.enable_matrix().map_err(PinnedError::Adapter)?;
         }
-        if binding.layout == "tensor-f32-cpu-matrix-v3" {
+        if matches!(
+            binding.layout.as_str(),
+            "tensor-f32-cpu-matrix-v3" | "tensor-f32-cpu-inference-v4"
+        ) {
             torch.enable_matrix_f32().map_err(PinnedError::Adapter)?;
+        }
+        if binding.layout == "tensor-f32-cpu-inference-v4" {
+            torch.enable_inference().map_err(PinnedError::Adapter)?;
         }
         Ok(torch)
     }
@@ -313,6 +325,7 @@ impl Torch {
                 create: library.symbol("cgx2_torch_f64_cpu")?,
                 matrix: None,
                 matrix_f32: None,
+                inference: None,
                 add: library.symbol("cgx2_torch_add")?,
                 length: library.symbol("cgx2_torch_length")?,
                 copy: library.symbol("cgx2_torch_copy_f64")?,
@@ -355,6 +368,36 @@ impl Torch {
         let mut torch = unsafe { Self::open_matrix(path, exact_version) }?;
         torch.enable_matrix_f32()?;
         Ok(torch)
+    }
+
+    /// Open reviewed additive inference API v4 without package pinning.
+    ///
+    /// # Safety
+    /// All v1-v4 exports must obey facade.h, including exception containment.
+    pub unsafe fn open_inference(path: &Path, exact_version: &str) -> Result<Self, Error> {
+        let mut torch = unsafe { Self::open_matrix_f32(path, exact_version) }?;
+        torch.enable_inference()?;
+        Ok(torch)
+    }
+
+    fn enable_inference(&mut self) -> Result<(), Error> {
+        self.inner.check_pinned()?;
+        let inner = Rc::get_mut(&mut self.inner).expect("new adapter has one owner");
+        let version: MatrixVersion =
+            unsafe { inner._library.symbol("cgx2_torch_inference_api_version")? };
+        let functions = unsafe {
+            InferenceFunctions {
+                add: inner._library.symbol("cgx2_torch_matrix_add_f32")?,
+                relu: inner._library.symbol("cgx2_torch_matrix_relu_f32")?,
+            }
+        };
+        let reported = unsafe { version() };
+        inner.check_pinned()?;
+        if reported != 4 {
+            return Err(Error::MatrixApiVersion { reported });
+        }
+        inner.inference = Some(functions);
+        Ok(())
     }
 
     fn enable_matrix(&mut self) -> Result<(), Error> {
@@ -778,6 +821,50 @@ impl MatrixF32 {
         let mut raw = std::ptr::null_mut();
         let status = unsafe { (functions.matmul)(self.ptr()?, other.ptr()?, &mut raw) };
         self.inner.matrix_f32(status, raw, [left[0], right[1]])
+    }
+
+    /// Exact-shape addition, without broadcasting. Distinct owned output.
+    pub fn add(&self, other: &Self) -> Result<Self, Error> {
+        if !Rc::ptr_eq(&self.inner, &other.inner) {
+            return Err(Error::DifferentRuntime);
+        }
+        let shape = self.checked_shape()?;
+        let other_shape = other.checked_shape()?;
+        if shape != other_shape {
+            return Err(Error::MatrixShapeMismatch {
+                expected: shape,
+                reported: other_shape,
+            });
+        }
+        self.inner.check_pinned()?;
+        let functions = self
+            .inner
+            .inference
+            .as_ref()
+            .ok_or(Error::MatrixApiUnavailable)?;
+        let mut raw = std::ptr::null_mut();
+        let status = unsafe { (functions.add)(self.ptr()?, other.ptr()?, &mut raw) };
+        self.inner.matrix_f32(status, raw, shape)
+    }
+
+    /// CPU float32 ReLU under inference mode, with finite output and no autograd.
+    pub fn relu(&self) -> Result<Self, Error> {
+        let shape = self.checked_shape()?;
+        self.inner.check_pinned()?;
+        let functions = self
+            .inner
+            .inference
+            .as_ref()
+            .ok_or(Error::MatrixApiUnavailable)?;
+        let mut raw = std::ptr::null_mut();
+        let status = unsafe { (functions.relu)(self.ptr()?, &mut raw) };
+        self.inner.matrix_f32(status, raw, shape)
+    }
+
+    /// The reviewed f32 CPU profile checks device during every info call.
+    pub fn device(&self) -> Result<&'static str, Error> {
+        self.checked_shape()?;
+        Ok("cpu")
     }
 
     /// Copy into an exactly sized caller buffer after checking all values are finite.

@@ -1,3 +1,5 @@
+Additive bounded SDK v2 and unique/shared handles: [SDK-V2.md](SDK-V2.md). Legacy native v1 below retains its original release-on-error contract.
+
 # cgx2-ffi-native
 
 Wave 10 host-side C ABI prototype. Supported host: **Linux x86-64**, Rust 1.98.1, a C11 compiler, and a shared library loaded with `dlopen`/`dlsym`. No Cargo dependencies or Python runtime are required. The crate does not expose `.cg` syntax or package binding commands.

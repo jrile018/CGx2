@@ -1,0 +1,24 @@
+   Compiling cgx2-ffi-core v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-ffi-core)
+   Compiling cgx2-bind v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-bind)
+   Compiling cgx2-ffi-native v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-ffi-native)
+   Compiling cgx2-libtorch v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-libtorch)
+    Finished `release` profile [optimized] target(s) in 2.39s
+     Running tests/matrix_f32.rs (target/release-native/release/deps/matrix_f32-debf7a538f9afa97)
+
+running 1 test
+opening pinned float32 package
+pinned float32 package open
+starting pinned float32 cycle 1
+left created
+right created
+product created
+pinned float32 cycle 1 passed
+starting pinned float32 cycle 2
+left created
+right created
+product created
+pinned float32 cycle 2 passed
+test real_pinned_float32_reference_and_cycles ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 12.28s
+

@@ -1,0 +1,20 @@
+-- The CXX compiler identification is GNU 15.2.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/x86_64-linux-gnu-g++-15 - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+CMake Warning at /home/john-riley/Desktop/Projects/Optiver/.venv/lib/python3.12/site-packages/torch/share/cmake/Torch/TorchConfig.cmake:22 (message):
+  library kineto not found.
+Call Stack (most recent call first):
+  /home/john-riley/Desktop/Projects/Optiver/.venv/lib/python3.12/site-packages/torch/share/cmake/Torch/TorchConfig.cmake:119 (append_torchlib_if_found)
+  CMakeLists.txt:7 (find_package)
+
+
+-- Found Torch: /home/john-riley/Desktop/Projects/Optiver/.venv/lib/python3.12/site-packages/torch/lib/libtorch.so
+-- Configuring done (0.2s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/john-riley/.codex/worktrees/93bf/lang/target/native-facade-build
+[ 50%] Building CXX object CMakeFiles/cgx2_libtorch_facade.dir/facade.cpp.o
+[100%] Linking CXX shared library libcgx2_libtorch_facade.so
+[100%] Built target cgx2_libtorch_facade

@@ -1,0 +1,6 @@
+   Compiling cgx2-bind v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-bind)
+    Finished `release` profile [optimized] target(s) in 0.08s
+     Running `target/release-native/release/cgx2-bind check /home/john-riley/.codex/worktrees/93bf/lang/target/native-real-package`
+package libtorch_pinned
+status ok
+bindings_checked 1

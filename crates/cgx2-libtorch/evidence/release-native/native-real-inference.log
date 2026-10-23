@@ -1,0 +1,23 @@
+   Compiling cgx2-ffi-core v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-ffi-core)
+   Compiling cgx2-bind v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-bind)
+   Compiling cgx2-ffi-native v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-ffi-native)
+   Compiling cgx2-libtorch v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-libtorch)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.41s
+     Running tests/inference.rs (target/release-native/debug/deps/inference-4b7ba2f93dea3679)
+
+running 1 test
+test real_pinned_two_layer_inference_no_python has been running for over 60 seconds
+
+thread 'real_pinned_two_layer_inference_no_python' (375) panicked at crates/cgx2-libtorch/tests/inference.rs:56:30:
+called `Result::unwrap()` on an `Err` value: UnverifiedLoader(UnverifiedLoader("executable mapping was deleted: /home/john-riley/.codex/worktrees/93bf/lang/target/release-native/debug/deps/inference-4b7ba2f93dea3679"))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test real_pinned_two_layer_inference_no_python ... FAILED
+
+failures:
+
+failures:
+    real_pinned_two_layer_inference_no_python
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 2 filtered out; finished in 263.26s
+
+error: test failed, to rerun pass `-p cgx2-libtorch --test inference`
