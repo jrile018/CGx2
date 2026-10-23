@@ -346,7 +346,7 @@ fn forbidden_dynamic_target(module: &str, attribute: &[String]) -> bool {
 
 /// `serde_json::Value` normally keeps the final occurrence of a repeated object
 /// field. Reject duplicates at every nesting level before interpreting the schema.
-struct StrictValue(Value);
+pub(crate) struct StrictValue(pub(crate) Value);
 
 impl<'de> Deserialize<'de> for StrictValue {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {

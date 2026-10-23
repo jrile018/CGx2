@@ -6,9 +6,14 @@ rust-version = "1.98"
 
 [features]
 default = []
-in-process = ["cgx2-python-bridge/in-process"]
+in-process = ["cgx2-python-bridge/in-process", "dep:sha2"]
 
 [dependencies]
 cgx2-python-bridge = { path = "../cgx2-python-bridge" }
-serde = "=1.0.229"
+serde = { version = "=1.0.229", features = ["derive"] }
 serde_json = "=1.0.149"
+sha2 = { version = "=0.10.9", optional = true }
+
+[[example]]
+name = "pinned_dateutil"
+required-features = ["in-process"]

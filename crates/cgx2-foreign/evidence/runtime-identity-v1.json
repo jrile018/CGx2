@@ -1,0 +1,14 @@
+{
+  "interpreter": {
+    "path": "/usr/bin/python3.14",
+    "sha256": "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41"
+  },
+  "library": {
+    "path": "/usr/lib/x86_64-linux-gnu/libpython3.14.so.1.0",
+    "sha256": "982cb3768d1d8b00126255ee2785bccf8360c68b197fb3dec95858ab56195f87"
+  },
+  "version": "3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]",
+  "prefix": "/usr",
+  "base_prefix": "/usr",
+  "stdlib": []
+}

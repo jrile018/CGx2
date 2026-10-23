@@ -5,6 +5,8 @@ mod metadata;
 #[cfg(feature = "in-process")]
 mod numeric_array;
 #[cfg(feature = "in-process")]
+mod package_host_v1;
+#[cfg(feature = "in-process")]
 mod tensor;
 #[cfg(feature = "in-process")]
 mod value;
@@ -16,6 +18,8 @@ pub use metadata::*;
 pub use numeric_array::{
     MAX_F64_ARRAY_BYTES, MAX_F64_ARRAY_ELEMENTS, MAX_LIVE_ARRAY_BYTES, checked_f64_array_bytes,
 };
+#[cfg(feature = "in-process")]
+pub use package_host_v1::{EmbeddedIdentityV1, PinnedInvocationV1, PythonSourceV1};
 #[cfg(feature = "in-process")]
 pub use tensor::TensorHandle;
 #[cfg(feature = "in-process")]

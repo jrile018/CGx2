@@ -4,6 +4,8 @@
 mod call;
 mod declaration;
 mod error;
+#[cfg(feature = "in-process")]
+pub mod package_v1;
 mod worker;
 
 #[cfg(feature = "in-process")]

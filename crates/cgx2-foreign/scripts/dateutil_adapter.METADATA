@@ -1,0 +1,4 @@
+Metadata-Version: 2.1
+Name: cgx2-dateutil-adapter
+Version: 1
+Requires-Dist: python-dateutil

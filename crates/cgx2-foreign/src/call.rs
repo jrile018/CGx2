@@ -135,14 +135,14 @@ fn contains_handle(value: &BridgeValue) -> bool {
 }
 
 #[derive(Default)]
-struct InputBudget {
+pub(crate) struct InputBudget {
     elements: usize,
-    bytes: usize,
-    array_bytes: usize,
+    pub(crate) bytes: usize,
+    pub(crate) array_bytes: usize,
 }
 
 impl InputBudget {
-    fn add_bytes(&mut self, n: usize) -> Result<(), ForeignError> {
+    pub(crate) fn add_bytes(&mut self, n: usize) -> Result<(), ForeignError> {
         self.bytes = self
             .bytes
             .checked_add(n)
@@ -168,7 +168,7 @@ impl InputBudget {
         Ok(())
     }
 
-    fn check(&mut self, value: &BridgeValue, depth: usize) -> Result<(), ForeignError> {
+    pub(crate) fn check(&mut self, value: &BridgeValue, depth: usize) -> Result<(), ForeignError> {
         if depth > MAX_VALUE_DEPTH {
             return Err(ForeignError::Argument(format!(
                 "value depth exceeds {MAX_VALUE_DEPTH}"
