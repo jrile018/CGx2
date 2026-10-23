@@ -1,0 +1,15 @@
+#!cgnb 1
+%% code id=point
+record Point:
+    x: i64
+    active: Bool
+%% code id=flag
+record Flag:
+    ok: Bool
+%% code id=values
+let p = Point(active: true, x: -9223372036854775807 - 1)
+let f = Flag(ok: p.active)
+%% code id=read
+p.x
+%% code id=bool
+f.ok

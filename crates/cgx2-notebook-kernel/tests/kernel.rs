@@ -938,3 +938,191 @@ fn rerun_affected_leaves_an_independent_edited_branch_stale() {
         b_revision
     );
 }
+
+#[test]
+fn retained_records_cross_cells_and_reopen_cleanly() {
+    let mut kernel = NotebookKernel::open(notebook(vec![
+        code("point", "record Point:\n    x: i64\n    active: Bool\n"),
+        code("flag", "record Flag:\n    ok: Bool\n"),
+        code(
+            "value",
+            "let p = Point(active: true, x: -9223372036854775807 - 1)\nlet f = Flag(ok: p.active)",
+        ),
+        code("read", "p.x"),
+        code("bool", "f.ok"),
+    ]))
+    .unwrap();
+    kernel.restart_and_run_all().unwrap();
+    assert_eq!(
+        output_body(&kernel.notebook().cells[3].outputs[0]),
+        "-9223372036854775808"
+    );
+    assert_eq!(output_body(&kernel.notebook().cells[4].outputs[0]), "true");
+    let saved = write_notebook(kernel.notebook()).unwrap();
+    let mut reopened = NotebookKernel::open(parse_notebook(&saved).unwrap()).unwrap();
+    assert_eq!(reopened.status("read").unwrap(), CellStatus::Cached);
+    reopened.restart_and_run_all().unwrap();
+    assert_eq!(
+        output_body(&reopened.notebook().cells[3].outputs[0]),
+        "-9223372036854775808"
+    );
+    assert_eq!(
+        output_body(&reopened.notebook().cells[4].outputs[0]),
+        "true"
+    );
+}
+
+#[test]
+fn record_definition_edit_stales_dependents_and_reruns_selected_cells() {
+    let mut kernel =
+        NotebookKernel::open(parse_notebook(include_str!("fixtures/pure-records.cgnb")).unwrap())
+            .unwrap();
+    kernel.restart_and_run_all().unwrap();
+    kernel
+        .replace_cell(
+            "point",
+            "record Point:\n    x: i64\n    active: Bool\n    extra: i64\n".into(),
+        )
+        .unwrap();
+    assert_eq!(kernel.status("values").unwrap(), CellStatus::Stale);
+    assert_eq!(kernel.status("read").unwrap(), CellStatus::Stale);
+    assert_eq!(kernel.status("bool").unwrap(), CellStatus::Stale);
+    assert!(
+        kernel.notebook().cells[3]
+            .provenance
+            .as_ref()
+            .unwrap()
+            .stale
+    );
+    kernel.rerun_cell("point").unwrap();
+    let failure = kernel.rerun_cell("values").unwrap_err();
+    assert_eq!(failure.cell_id.as_deref(), Some("values"));
+    assert_eq!(kernel.status("values").unwrap(), CellStatus::Failed);
+    kernel
+        .replace_cell(
+            "point",
+            "record Point:\n    x: i64\n    active: Bool\n".into(),
+        )
+        .unwrap();
+    kernel.rerun_cell("point").unwrap();
+    kernel.rerun_cell("values").unwrap();
+    kernel.rerun_cell("read").unwrap();
+    kernel.rerun_cell("bool").unwrap();
+    assert_eq!(kernel.status("read").unwrap(), CellStatus::Current);
+    assert_eq!(
+        output_body(&kernel.notebook().cells[3].outputs[0]),
+        "-9223372036854775808"
+    );
+}
+
+#[test]
+fn record_worker_and_failure_preserve_valid_earlier_cells() {
+    let mut document = parse_notebook(include_str!("fixtures/pure-records.cgnb")).unwrap();
+    document
+        .cells
+        .push(code("bad", "Point(x: 1, active: true, missing: 2)"));
+    let mut kernel = NotebookKernel::open(document).unwrap();
+    kernel.set_execution_control(ExecutionControl::new(
+        std::path::PathBuf::from(env!("CARGO_BIN_EXE_cgx2-notebook-scalar-worker")),
+        Duration::from_secs(2),
+    ));
+    for id in ["point", "flag", "values", "read", "bool"] {
+        kernel.run_cell(id).unwrap();
+    }
+    assert_eq!(output_body(&kernel.notebook().cells[4].outputs[0]), "true");
+    let failure = kernel.rerun_cell("bad").unwrap_err();
+    assert_eq!(failure.cell_id.as_deref(), Some("bad"));
+    assert_eq!(kernel.status("read").unwrap(), CellStatus::Current);
+    assert_eq!(
+        output_body(&kernel.notebook().cells[3].outputs[0]),
+        "-9223372036854775808"
+    );
+}
+
+#[test]
+fn record_boundary_diagnostics_have_cell_context() {
+    for source in [
+        "Point(unknown: 1, active: true)",
+        "Point(x: 1, x: 2, active: true)",
+        "Point(x: 1)",
+        "Point(x: true, active: true)",
+        "let mut p = Point(x: 1, active: true)",
+    ] {
+        let mut kernel = NotebookKernel::open(notebook(vec![
+            code("def", "record Point:\n    x: i64\n    active: Bool\n"),
+            code("bad", source),
+        ]))
+        .unwrap();
+        kernel.run_cell("def").unwrap();
+        let error = kernel.run_cell("bad").unwrap_err();
+        assert_eq!(error.cell_id.as_deref(), Some("bad"), "{source}");
+        assert!(error.message.contains(" at "), "{source}: {error}");
+    }
+    let error = NotebookKernel::open(notebook(vec![
+        code("before", "Point(x: 1, active: true)"),
+        code("after", "record Point:\n    x: i64\n    active: Bool\n"),
+    ]))
+    .err()
+    .unwrap();
+    assert_eq!(error.code, "CGNK009");
+    assert!(error.message.contains("before"));
+}
+
+#[test]
+fn record_definition_and_value_in_one_cell_are_atomic() {
+    let mut kernel = NotebookKernel::open(notebook(vec![
+        code(
+            "both",
+            "record Point:\n    x: i64\n    yes: Bool\nlet p = Point(yes: true, x: 7)\np.x",
+        ),
+        code("later", "p.yes"),
+    ]))
+    .unwrap();
+    kernel.restart_and_run_all().unwrap();
+    assert_eq!(output_body(&kernel.notebook().cells[0].outputs[0]), "7");
+    assert_eq!(output_body(&kernel.notebook().cells[1].outputs[0]), "true");
+}
+
+#[test]
+fn deleting_record_definition_stales_only_dependent_cells_after_reopen() {
+    let mut kernel =
+        NotebookKernel::open(parse_notebook(include_str!("fixtures/pure-records.cgnb")).unwrap())
+            .unwrap();
+    kernel.restart_and_run_all().unwrap();
+    kernel.remove_cell("point").unwrap();
+    assert_eq!(kernel.status("flag").unwrap(), CellStatus::Current);
+    assert_eq!(kernel.status("values").unwrap(), CellStatus::Stale);
+    assert_eq!(kernel.status("read").unwrap(), CellStatus::Stale);
+    let saved = write_notebook(kernel.notebook()).unwrap();
+    let reopened = NotebookKernel::open(parse_notebook(&saved).unwrap()).unwrap();
+    assert_eq!(reopened.status("flag").unwrap(), CellStatus::Cached);
+    assert_eq!(reopened.status("read").unwrap(), CellStatus::Stale);
+}
+
+#[test]
+fn record_fields_display_in_declaration_order_and_arguments_run_in_source_order() {
+    let mut kernel = NotebookKernel::open(notebook(vec![
+        code("record", "record Pair:\n    left: i64\n    right: i64\n"),
+        code(
+            "functions",
+            "fn overflow() -> i64:\n    9223372036854775807 + 1\nfn divide() -> i64:\n    1 / 0\n",
+        ),
+        code("value", "Pair(right: 2, left: 1)"),
+        code("first", "Pair(right: divide(), left: overflow())"),
+    ]))
+    .unwrap();
+    for id in ["record", "functions", "value"] {
+        kernel.run_cell(id).unwrap();
+    }
+    assert_eq!(
+        output_body(&kernel.notebook().cells[2].outputs[0]),
+        "Pair(left: 1, right: 2)"
+    );
+    let first = kernel.run_cell("first").unwrap_err();
+    assert!(first.message.contains("zero"), "{first}");
+    kernel
+        .replace_cell("first", "Pair(left: overflow(), right: divide())".into())
+        .unwrap();
+    let second = kernel.rerun_cell("first").unwrap_err();
+    assert!(second.message.contains("overflow"), "{second}");
+}

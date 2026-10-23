@@ -294,3 +294,24 @@ fn malformed_manifest_cycle_and_mutation_after_open_fail_closed() {
         .to_string()
         .contains("CGP018"));
 }
+
+#[test]
+fn imported_record_function_is_rejected_at_cell_boundary() {
+    let project = Project::new();
+    project.write(
+        "src/alpha.cg",
+        "module demo.alpha\nrecord Point:\n    x: i64\npub fn make() -> Point effects() caps():\n    Point(x: 1)\n",
+    );
+    let document = Notebook {
+        version: 1,
+        cells: vec![
+            code("import", "import demo.alpha\n"),
+            code("call", "alpha.make()\n"),
+        ],
+    };
+    let error = NotebookKernel::open_with_project(document, Some(project.root()))
+        .err()
+        .unwrap();
+    assert_eq!(error.cell_id.as_deref(), Some("import"));
+    assert!(error.message.contains("at 7.."), "{error}");
+}

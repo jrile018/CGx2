@@ -879,3 +879,52 @@ fn slow_client_does_not_hold_up_interrupt_request() {
     drop(slow);
     handle.join().unwrap();
 }
+
+#[test]
+fn record_definition_edit_marks_saved_values_stale_and_reruns_in_ui() {
+    let fixture = Fixture::new(include_str!(
+        "../../cgx2-notebook-kernel/tests/fixtures/pure-records.cgnb"
+    ));
+    let (port, handle) = server(&fixture.input, 6);
+    let secret = token(port);
+    let (status, state) = post(port, "/api/restart", json!({}), &secret);
+    assert_eq!(status, 200);
+    assert_eq!(state["cells"][4]["outputs"][0]["body"], "true");
+    let (status, state) = post(
+        port,
+        "/api/edit",
+        json!({
+            "id":"point",
+            "source":"record Point:\n    x: i64\n    active: Bool\n    extra: i64\n"
+        }),
+        &secret,
+    );
+    assert_eq!(status, 200);
+    assert_eq!(state["cells"][3]["status"], "stale");
+    assert_eq!(
+        post(
+            port,
+            "/api/save",
+            json!({"name":"stale.cgnb","overwrite":false}),
+            &secret
+        )
+        .0,
+        200
+    );
+    let stale = parse_notebook_bytes(&fs::read(fixture.dir.join("stale.cgnb")).unwrap()).unwrap();
+    assert!(stale.cells[3].provenance.as_ref().unwrap().stale);
+    let (status, diagnostic) = post(port, "/api/run-cell", json!({"id":"point"}), &secret);
+    assert_eq!(status, 409);
+    assert!(diagnostic.to_string().contains("values"));
+    assert_eq!(
+        post(
+            port,
+            "/api/save",
+            json!({"name":"failed.cgnb","overwrite":false}),
+            &secret
+        )
+        .0,
+        200
+    );
+    handle.join().unwrap();
+}

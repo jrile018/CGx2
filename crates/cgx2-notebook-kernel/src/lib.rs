@@ -62,9 +62,8 @@ pub fn scalar_worker_main() -> i32 {
                 bytes
             }
             Value::Unit => vec![b'U'],
-            Value::Record { .. } => {
-                b"ECGNK001: record values are unsupported in notebooks".to_vec()
-            }
+            Value::Record { name, fields } => encode_worker_record(&name, &fields)
+                .unwrap_or_else(|message| format!("E{message}").into_bytes()),
         },
         Err(error) => format!("E{}: {}", error.code, error.message).into_bytes(),
     };
@@ -251,6 +250,7 @@ pub fn validate_pure_sweep_notebook(notebook: &Notebook) -> Result<(), KernelErr
                 .iter()
                 .map(|function| function.name.clone()),
         );
+        known_functions.extend(module.records.iter().map(|record| record.name.clone()));
     }
     Ok(())
 }
@@ -313,10 +313,29 @@ impl NotebookKernel {
         root: Option<&FsPath>,
     ) -> Result<Self, KernelError> {
         validate_limits(&notebook)?;
-        let project = root
-            .map(Project::load)
-            .transpose()
-            .map_err(|message| error("CGNK012", message))?;
+        let project = root.map(Project::load).transpose().map_err(|message| {
+            if message.contains("CGT022") {
+                for cell in &notebook.cells {
+                    if let Ok(module) = parse_module(&cell.source) {
+                        if let Some(path) = module.imports.iter().find(|path| {
+                            path.segments
+                                .last()
+                                .is_some_and(|name| message.contains(&format!("/{name}.cg")))
+                        }) {
+                            return KernelError {
+                                code: "CGNK012",
+                                message: format!(
+                                    "imported record boundary at {}..{}: {message}",
+                                    path.span.start, path.span.end
+                                ),
+                                cell_id: Some(cell.id.clone()),
+                            };
+                        }
+                    }
+                }
+            }
+            error("CGNK012", message)
+        })?;
         let code_order = notebook
             .cells
             .iter()
@@ -604,6 +623,7 @@ fn new_session(
                         .iter()
                         .map(|function| function.name.clone()),
                 );
+                known_functions.extend(module.records.iter().map(|record| record.name.clone()));
                 known_functions.extend(
                     module
                         .imports
@@ -665,6 +685,7 @@ fn known_functions_before(notebook: &Notebook, id: &str) -> BTreeSet<String> {
                     .iter()
                     .map(|function| function.name.clone()),
             );
+            known.extend(module.records.iter().map(|record| record.name.clone()));
             known.extend(
                 module
                     .imports
@@ -743,18 +764,27 @@ fn collect_call_names(expression: &Expr, names: &mut BTreeSet<String>) {
 pub fn facts_for_source(source: &str) -> Result<CellFacts, KernelError> {
     let module = parse_module(source).map_err(|diagnostics| {
         let first = &diagnostics[0];
-        error("CGNK008", format!("{}: {}", first.code, first.message))
+        error(
+            "CGNK008",
+            format!(
+                "{}: {} at {}..{}",
+                first.code, first.message, first.span.start, first.span.end
+            ),
+        )
     })?;
     if module.name.is_some() {
         return Err(error(
             "CGNK001",
-            "module declarations are unsupported in notebook execution",
+            "module declarations unsupported in notebook execution",
         ));
     }
     let mut facts = CellFacts::default();
     if !module.imports.is_empty() {
-        if !module.functions.is_empty() || !module.statements.is_empty() {
-            return Err(error("CGNK012", "imports must occupy their own code cell"));
+        if !module.functions.is_empty()
+            || !module.records.is_empty()
+            || !module.statements.is_empty()
+        {
+            return Err(error("CGNK012", "imports must occupy own code cell"));
         }
         for path in &module.imports {
             let short = path
@@ -770,15 +800,42 @@ pub fn facts_for_source(source: &str) -> Result<CellFacts, KernelError> {
         }
         return Ok(facts);
     }
-    if !module.functions.is_empty() {
-        if module.functions.len() > MAX_PURE_FUNCTIONS {
-            return Err(error("CGNK006", "too many pure functions in one cell"));
+    for record in &module.records {
+        if record.fields.is_empty() || record.fields.len() > 8 {
+            return Err(error(
+                "CGNK001",
+                format!(
+                    "record {} requires one to eight fields at {}..{}",
+                    record.name, record.span.start, record.span.end
+                ),
+            ));
         }
-        for function in &module.functions {
-            validate_function(function, &mut facts)?;
+        for field in &record.fields {
+            if !matches!(field.ty.to_string().as_str(), "i64" | "Bool") {
+                return Err(error(
+                    "CGNK001",
+                    format!(
+                        "record field {} must be i64 or Bool at {}..{}",
+                        field.name, field.span.start, field.span.end
+                    ),
+                ));
+            }
         }
-        facts.reads.retain(|name| !facts.defines.contains(name));
-        return Ok(facts);
+        if !facts.defines.insert(record.name.clone()) {
+            return Err(error(
+                "CGNK001",
+                format!(
+                    "duplicate definition {} at {}..{}",
+                    record.name, record.span.start, record.span.end
+                ),
+            ));
+        }
+    }
+    if module.functions.len() > MAX_PURE_FUNCTIONS {
+        return Err(error("CGNK006", "too many pure functions in one cell"));
+    }
+    for function in &module.functions {
+        validate_function(function, &mut facts)?;
     }
     let mut locals = BTreeSet::new();
     for statement in &module.statements {
@@ -797,11 +854,21 @@ pub fn facts_for_source(source: &str) -> Result<CellFacts, KernelError> {
             _ => {
                 return Err(error(
                     "CGNK001",
-                    "only immutable let bindings and pure scalar expressions are supported",
+                    format!(
+                        "only immutable let bindings and pure expressions supported at {}..{}",
+                        statement.span.start, statement.span.end
+                    ),
                 ))
             }
         }
     }
+    facts.reads.retain(|name| {
+        !module.records.iter().any(|record| &record.name == name)
+            && !module
+                .functions
+                .iter()
+                .any(|function| &function.name == name)
+    });
     Ok(facts)
 }
 
@@ -928,12 +995,6 @@ fn collect_expression(
                 facts.reads.insert(name.to_owned());
             }
             for argument in arguments {
-                if argument.name.is_some() {
-                    return Err(error(
-                        "CGNK011",
-                        "named calls are unsupported in pure notebook cells",
-                    ));
-                }
                 collect_expression(&argument.value, locals, facts, function_body)?;
             }
         }
@@ -943,7 +1004,7 @@ fn collect_expression(
 
 fn simple_name(path: &Path) -> Result<&str, KernelError> {
     match path.segments.as_slice() {
-        [name] => Ok(name),
+        [name] | [name, _] => Ok(name),
         _ => Err(error(
             "CGNK001",
             "qualified names are unsupported in notebook scalar execution",
@@ -963,6 +1024,11 @@ fn validate_static_bounds(
     if functions.functions.len() > MAX_PURE_FUNCTIONS {
         return Err("CGNK006: too many retained pure functions".into());
     }
+    let records = functions
+        .records
+        .iter()
+        .map(|record| record.name.as_str())
+        .collect::<BTreeSet<_>>();
     let mut by_name = BTreeMap::new();
     for function in &functions.functions {
         if by_name.insert(function.name.as_str(), function).is_some() {
@@ -973,7 +1039,7 @@ fn validate_static_bounds(
         }
     }
     for name in by_name.keys() {
-        let cost = function_cost(name, &by_name, &mut Vec::new())?;
+        let cost = function_cost(name, &by_name, &records, &mut Vec::new())?;
         if cost > MAX_STATIC_STEPS {
             return Err("CGNK006: pure function step budget exceeded".into());
         }
@@ -983,7 +1049,12 @@ fn validate_static_bounds(
         .saturating_mul(retained_bindings.saturating_add(statement_count))
         .saturating_mul(3);
     for statement in &module.statements {
-        cell_cost = cell_cost.saturating_add(statement_cost(statement, &by_name, &mut Vec::new())?);
+        cell_cost = cell_cost.saturating_add(statement_cost(
+            statement,
+            &by_name,
+            &records,
+            &mut Vec::new(),
+        )?);
     }
     if cell_cost > MAX_STATIC_STEPS {
         return Err("CGNK006: cell step budget exceeded".into());
@@ -994,6 +1065,7 @@ fn validate_static_bounds(
 fn function_cost(
     name: &str,
     functions: &BTreeMap<&str, &Function>,
+    records: &BTreeSet<&str>,
     stack: &mut Vec<String>,
 ) -> Result<usize, String> {
     if stack.iter().any(|item| item == name) {
@@ -1010,7 +1082,7 @@ fn function_cost(
     stack.push(name.to_owned());
     let mut cost = 0usize;
     for statement in &function.body {
-        cost = cost.saturating_add(statement_cost(statement, functions, stack)?);
+        cost = cost.saturating_add(statement_cost(statement, functions, records, stack)?);
         if cost > MAX_STATIC_STEPS {
             break;
         }
@@ -1022,6 +1094,7 @@ fn function_cost(
 fn statement_cost(
     statement: &cgx2_syntax::Stmt,
     functions: &BTreeMap<&str, &Function>,
+    records: &BTreeSet<&str>,
     stack: &mut Vec<String>,
 ) -> Result<usize, String> {
     let expression = match &statement.kind {
@@ -1030,12 +1103,13 @@ fn statement_cost(
         }
         _ => return Err("CGNK011: unsupported statement in pure notebook cell".into()),
     };
-    Ok(1usize.saturating_add(expression_cost(expression, functions, stack)?))
+    Ok(1usize.saturating_add(expression_cost(expression, functions, records, stack)?))
 }
 
 fn expression_cost(
     expression: &Expr,
     functions: &BTreeMap<&str, &Function>,
+    records: &BTreeSet<&str>,
     stack: &mut Vec<String>,
 ) -> Result<usize, String> {
     match &expression.kind {
@@ -1044,8 +1118,8 @@ fn expression_cost(
         | ExprKind::StringLiteral(_)
         | ExprKind::Boolean(_) => Ok(1),
         ExprKind::Binary { left, right, .. } => Ok(1usize
-            .saturating_add(expression_cost(left, functions, stack)?)
-            .saturating_add(expression_cost(right, functions, stack)?)),
+            .saturating_add(expression_cost(left, functions, records, stack)?)
+            .saturating_add(expression_cost(right, functions, records, stack)?)),
         ExprKind::Call { callee, arguments } => {
             let ExprKind::Name(path) = &callee.kind else {
                 return Err("CGNK011: computed calls are unsupported".into());
@@ -1053,7 +1127,12 @@ fn expression_cost(
             let name = simple_name(path).map_err(|error| error.to_string())?;
             let mut cost = 1usize;
             for argument in arguments {
-                cost = cost.saturating_add(expression_cost(&argument.value, functions, stack)?);
+                cost = cost.saturating_add(expression_cost(
+                    &argument.value,
+                    functions,
+                    records,
+                    stack,
+                )?);
             }
             if !matches!(
                 name,
@@ -1063,8 +1142,9 @@ fn expression_cost(
                     | "$cgx2_cmp_le"
                     | "$cgx2_cmp_gt"
                     | "$cgx2_cmp_ge"
-            ) {
-                cost = cost.saturating_add(function_cost(name, functions, stack)?);
+            ) && !records.contains(name)
+            {
+                cost = cost.saturating_add(function_cost(name, functions, records, stack)?);
             }
             Ok(cost)
         }
@@ -1103,6 +1183,11 @@ struct RetainedFunction {
     source: String,
     cell_id: String,
 }
+#[derive(Debug, Clone)]
+struct RetainedRecord {
+    source: String,
+    cell_id: String,
+}
 
 #[derive(Debug, Clone)]
 struct RetainedImport {
@@ -1114,6 +1199,7 @@ struct RetainedImport {
 struct RetainedExecutor {
     bindings: BTreeMap<String, Vec<RetainedBinding>>,
     functions: BTreeMap<String, RetainedFunction>,
+    records: BTreeMap<String, RetainedRecord>,
     imports: BTreeMap<String, RetainedImport>,
     project: Option<Project>,
     order: BTreeMap<String, usize>,
@@ -1161,6 +1247,28 @@ impl RetainedExecutor {
             result.push_str(&source[function.span.start..function.span.end]);
             result.push('\n');
         }
+        let mut prior_records: Vec<_> = self
+            .records
+            .values()
+            .filter(|record| self.order[&record.cell_id] < selected_index)
+            .collect();
+        prior_records.sort_by_key(|record| self.order[&record.cell_id]);
+        let mut record_source = String::new();
+        for record in prior_records {
+            record_source.push_str(&record.source);
+            record_source.push('\n');
+        }
+        for record in &module.records {
+            if self.records.contains_key(&record.name) {
+                return Err(format!(
+                    "CGNK001: duplicate retained record {} at {}..{}",
+                    record.name, record.span.start, record.span.end
+                ));
+            }
+            record_source.push_str(&source[record.span.start..record.span.end]);
+            record_source.push('\n');
+        }
+        result.insert_str(0, &record_source);
         if result.len() > MAX_REPLAY_BYTES {
             return Err(limit_error());
         }
@@ -1257,7 +1365,13 @@ impl RetainedExecutor {
         let functions = self.function_sources(id, &module, source)?;
         validate_static_bounds(&functions, &module, self.bindings.len())?;
 
-        if !module.functions.is_empty() {
+        let body_source = module
+            .statements
+            .iter()
+            .map(|statement| &source[statement.span.start..statement.span.end])
+            .collect::<Vec<_>>()
+            .join("\n");
+        if body_source.is_empty() && (!module.functions.is_empty() || !module.records.is_empty()) {
             let checked = format!("{functions}fn main() -> i64:\n    0\n");
             if checked.len() > MAX_REPLAY_BYTES {
                 return Err(limit_error());
@@ -1265,39 +1379,27 @@ impl RetainedExecutor {
             self.charge(checked.len())?;
             check_source(&checked).map_err(|diagnostics| {
                 let first = &diagnostics[0];
-                format!("{}: {}", first.code, first.message)
+                cell_diagnostic(
+                    &first.code,
+                    &first.message,
+                    first.span,
+                    &checked,
+                    source,
+                    &module,
+                )
             })?;
             self.check_deadline(deadline)?;
-            let retained = self
-                .functions
-                .values()
-                .map(|item| item.source.len() + item.cell_id.len())
-                .sum::<usize>()
-                + module
-                    .functions
-                    .iter()
-                    .map(|item| item.span.end - item.span.start + id.len())
-                    .sum::<usize>();
-            if retained > MAX_REPLAY_BYTES {
+            if self.binding_bytes() + self.definition_bytes(id, &module) > MAX_REPLAY_BYTES {
                 return Err(limit_error());
             }
-            for function in &module.functions {
-                self.functions.insert(
-                    function.name.clone(),
-                    RetainedFunction {
-                        source: source[function.span.start..function.span.end].to_owned(),
-                        cell_id: id.to_owned(),
-                    },
-                );
-            }
+            self.commit_definitions(id, source, &module);
             return Ok(CellResult { text: None });
         }
-
         let prefix = self.prefix(id, &BTreeMap::new())?;
         let checked = if functions.is_empty() {
-            format!("{prefix}{source}")
+            format!("{prefix}{body_source}")
         } else {
-            wrapped_script(&functions, &prefix, source, None)
+            wrapped_script(&functions, &prefix, &body_source, None)
         };
         if checked.len() > MAX_REPLAY_BYTES {
             return Err(limit_error());
@@ -1305,7 +1407,14 @@ impl RetainedExecutor {
         self.charge(checked.len())?;
         check_source(&checked).map_err(|diagnostics| {
             let first = &diagnostics[0];
-            format!("{}: {}", first.code, first.message)
+            cell_diagnostic(
+                &first.code,
+                &first.message,
+                first.span,
+                &checked,
+                source,
+                &module,
+            )
         })?;
         let mut pending = BTreeMap::new();
         let mut tail = Value::Unit;
@@ -1331,14 +1440,27 @@ impl RetainedExecutor {
             self.charge(script.len())?;
             let value = match &self.control {
                 Some(control) => {
-                    run_worker(&script, control, deadline.expect("controlled deadline"))?
+                    run_worker(&script, control, deadline.expect("controlled deadline")).map_err(
+                        |message| {
+                            format!(
+                                "{message} at {}..{}",
+                                statement.span.start, statement.span.end
+                            )
+                        },
+                    )?
                 }
                 None => {
                     run_source(&script, &[])
-                        .map_err(|error| format!("{}: {}", error.code, error.message))?
+                        .map_err(|error| {
+                            format!(
+                                "{}: {} at {}..{}",
+                                error.code, error.message, statement.span.start, statement.span.end
+                            )
+                        })?
                         .value
                 }
             };
+            self.validate_record_value(&value, &module)?;
             if let Some(name) = defined {
                 if value == Value::Unit {
                     return Err("CGNK001: Unit bindings are unsupported".into());
@@ -1349,28 +1471,17 @@ impl RetainedExecutor {
                 tail = value;
             }
         }
-        let retained_bytes = self
-            .bindings
-            .iter()
-            .flat_map(|(name, bindings)| {
-                bindings.iter().map(move |binding| {
-                    name.len() + binding.cell_id.len() + value_size(&binding.value)
-                })
-            })
-            .sum::<usize>()
+        let retained_bytes = self.binding_bytes()
             + pending
                 .iter()
                 .map(|(name, value)| name.len() + id.len() + value_size(value))
                 .sum::<usize>()
-            + self
-                .functions
-                .values()
-                .map(|item| item.source.len() + item.cell_id.len())
-                .sum::<usize>();
+            + self.definition_bytes(id, &module);
         if retained_bytes > MAX_REPLAY_BYTES {
             return Err(limit_error());
         }
         self.check_deadline(deadline)?;
+        self.commit_definitions(id, source, &module);
         for (name, value) in pending {
             self.bindings
                 .entry(name)
@@ -1385,6 +1496,94 @@ impl RetainedExecutor {
         })
     }
 
+    fn validate_record_value(
+        &self,
+        value: &Value,
+        module: &cgx2_syntax::Module,
+    ) -> Result<(), String> {
+        let Value::Record { name, fields } = value else {
+            return Ok(());
+        };
+        let local = module.records.iter().find(|record| &record.name == name);
+        let retained = self
+            .records
+            .get(name)
+            .and_then(|item| parse_module(&item.source).ok());
+        let schema = local
+            .or_else(|| retained.as_ref().and_then(|parsed| parsed.records.first()))
+            .ok_or_else(|| format!("CGNK010: record {name} has no retained definition"))?;
+        if schema.fields.len() != fields.len() {
+            return Err(format!("CGNK010: record {name} field count mismatch"));
+        }
+        for (expected, (actual_name, actual_value)) in schema.fields.iter().zip(fields) {
+            let correct_type = matches!(
+                (expected.ty.to_string().as_str(), actual_value),
+                ("i64", Value::I64(_)) | ("Bool", Value::Bool(_))
+            );
+            if expected.name != *actual_name || !correct_type {
+                return Err(format!(
+                    "CGNK010: record {name} field {} mismatch",
+                    expected.name
+                ));
+            }
+        }
+        Ok(())
+    }
+
+    fn binding_bytes(&self) -> usize {
+        self.bindings
+            .iter()
+            .flat_map(|(name, bindings)| {
+                bindings.iter().map(move |binding| {
+                    name.len() + binding.cell_id.len() + value_size(&binding.value)
+                })
+            })
+            .sum()
+    }
+
+    fn definition_bytes(&self, id: &str, module: &cgx2_syntax::Module) -> usize {
+        self.functions
+            .values()
+            .map(|item| item.source.len() + item.cell_id.len())
+            .sum::<usize>()
+            + self
+                .records
+                .values()
+                .map(|item| item.source.len() + item.cell_id.len())
+                .sum::<usize>()
+            + module
+                .functions
+                .iter()
+                .map(|item| item.span.end - item.span.start + id.len())
+                .sum::<usize>()
+            + module
+                .records
+                .iter()
+                .map(|item| item.span.end - item.span.start + id.len())
+                .sum::<usize>()
+    }
+
+    fn commit_definitions(&mut self, id: &str, source: &str, module: &cgx2_syntax::Module) {
+        for function in &module.functions {
+            self.functions.insert(
+                function.name.clone(),
+                RetainedFunction {
+                    source: source[function.span.start..function.span.end].to_owned(),
+                    cell_id: id.to_owned(),
+                },
+            );
+        }
+        for record in &module.records {
+            self.records.insert(
+                record.name.clone(),
+                RetainedRecord {
+                    source: source[record.span.start..record.span.end].to_owned(),
+                    cell_id: id.to_owned(),
+                },
+            );
+        }
+    }
+
     fn check_deadline(&self, deadline: Option<Instant>) -> Result<(), String> {
         if self
             .control
@@ -1396,6 +1595,142 @@ impl RetainedExecutor {
         }
         Ok(())
     }
+}
+
+fn cell_diagnostic(
+    code: &str,
+    message: &str,
+    span: cgx2_syntax::Span,
+    checked: &str,
+    source: &str,
+    module: &cgx2_syntax::Module,
+) -> String {
+    let spans = module
+        .records
+        .iter()
+        .map(|item| item.span)
+        .chain(module.functions.iter().map(|item| item.span))
+        .chain(module.statements.iter().map(|item| item.span));
+    for cell_span in spans {
+        let Some(fragment) = source.get(cell_span.start..cell_span.end) else {
+            continue;
+        };
+        if fragment.is_empty() {
+            continue;
+        }
+        for (offset, _) in checked.match_indices(fragment) {
+            if (offset..=offset + fragment.len()).contains(&span.start) {
+                let start = cell_span.start + (span.start - offset);
+                let end = cell_span.start + span.end.saturating_sub(offset).min(fragment.len());
+                return format!("{code}: {message} at {start}..{end}");
+            }
+        }
+    }
+    format!("{code}: {message} at 0..{}", source.len())
+}
+
+const MAX_RECORD_IDENTIFIER_BYTES: usize = u16::MAX as usize;
+
+fn valid_record_identifier(name: &str) -> bool {
+    let mut bytes = name.bytes();
+    matches!(bytes.next(), Some(b'a'..=b'z' | b'A'..=b'Z' | b'_'))
+        && bytes.all(|byte| byte.is_ascii_alphanumeric() || byte == b'_')
+        && name.len() <= MAX_RECORD_IDENTIFIER_BYTES
+}
+
+fn encode_worker_record(name: &str, fields: &[(String, Value)]) -> Result<Vec<u8>, String> {
+    if !valid_record_identifier(name) || fields.is_empty() || fields.len() > 8 {
+        return Err("CGNK010: invalid record result".into());
+    }
+    let mut bytes = Vec::with_capacity(1 + 2 + name.len() + 1 + fields.len() * 140);
+    bytes.push(b'R');
+    bytes.extend_from_slice(&(name.len() as u16).to_be_bytes());
+    bytes.extend_from_slice(name.as_bytes());
+    bytes.push(fields.len() as u8);
+    let mut seen = BTreeSet::new();
+    for (field, value) in fields {
+        if !valid_record_identifier(field) || !seen.insert(field) {
+            return Err("CGNK010: invalid record field".into());
+        }
+        bytes.extend_from_slice(&(field.len() as u16).to_be_bytes());
+        bytes.extend_from_slice(field.as_bytes());
+        match value {
+            Value::I64(number) => {
+                bytes.push(b'I');
+                bytes.extend_from_slice(&number.to_be_bytes());
+            }
+            Value::Bool(boolean) => {
+                bytes.push(b'B');
+                bytes.push(u8::from(*boolean));
+            }
+            _ => return Err("CGNK010: non-scalar record field".into()),
+        }
+    }
+    if bytes.len() > MAX_EVALUATION_BYTES {
+        return Err("CGNK010: oversized record result".into());
+    }
+    Ok(bytes)
+}
+
+fn decode_worker_record(bytes: &[u8]) -> Result<Value, String> {
+    fn take<'a>(bytes: &'a [u8], offset: &mut usize, len: usize) -> Result<&'a [u8], String> {
+        let end = offset
+            .checked_add(len)
+            .ok_or("CGNK010: invalid record length")?;
+        let slice = bytes
+            .get(*offset..end)
+            .ok_or("CGNK010: invalid record length")?;
+        *offset = end;
+        Ok(slice)
+    }
+    fn identifier(bytes: &[u8], offset: &mut usize) -> Result<String, String> {
+        let size =
+            u16::from_be_bytes(take(bytes, offset, 2)?.try_into().expect("two bytes")) as usize;
+        if size == 0 || size > MAX_RECORD_IDENTIFIER_BYTES {
+            return Err("CGNK010: invalid record identifier length".into());
+        }
+        let name = std::str::from_utf8(take(bytes, offset, size)?)
+            .map_err(|_| "CGNK010: invalid record UTF-8")?;
+        if !valid_record_identifier(name) {
+            return Err("CGNK010: invalid record identifier".into());
+        }
+        Ok(name.to_owned())
+    }
+    if bytes.len() > MAX_EVALUATION_BYTES || bytes.first() != Some(&b'R') {
+        return Err("CGNK010: invalid record result".into());
+    }
+    let mut offset = 1;
+    let name = identifier(bytes, &mut offset)?;
+    let count = take(bytes, &mut offset, 1)?[0] as usize;
+    if !(1..=8).contains(&count) {
+        return Err("CGNK010: invalid record field count".into());
+    }
+    let mut fields = Vec::with_capacity(count);
+    let mut seen = BTreeSet::new();
+    for _ in 0..count {
+        let field = identifier(bytes, &mut offset)?;
+        if !seen.insert(field.clone()) {
+            return Err("CGNK010: duplicate record field".into());
+        }
+        let value = match take(bytes, &mut offset, 1)?[0] {
+            b'I' => Value::I64(i64::from_be_bytes(
+                take(bytes, &mut offset, 8)?
+                    .try_into()
+                    .expect("eight bytes"),
+            )),
+            b'B' => match take(bytes, &mut offset, 1)?[0] {
+                0 => Value::Bool(false),
+                1 => Value::Bool(true),
+                _ => return Err("CGNK010: invalid Boolean field".into()),
+            },
+            _ => return Err("CGNK010: invalid record field type".into()),
+        };
+        fields.push((field, value));
+    }
+    if offset != bytes.len() {
+        return Err("CGNK010: trailing record bytes".into());
+    }
+    Ok(Value::Record { name, fields })
 }
 
 fn run_worker(
@@ -1455,6 +1790,9 @@ fn run_worker(
     if !status.success() || bytes.is_empty() || bytes.len() > MAX_EVALUATION_BYTES {
         return Err("CGNK010: scalar worker returned an invalid result".into());
     }
+    if bytes[0] == b'R' {
+        return decode_worker_record(&bytes);
+    }
     let text = std::str::from_utf8(&bytes[1..])
         .map_err(|_| "CGNK010: scalar worker returned invalid UTF-8".to_owned())?;
     match bytes[0] {
@@ -1508,18 +1846,17 @@ fn limit_error() -> String {
 fn value_size(value: &Value) -> usize {
     match value {
         Value::String(text) => text.len(),
+        Value::Record { name, fields } => fields.iter().fold(name.len(), |size, (field, value)| {
+            size.saturating_add(field.len())
+                .saturating_add(value_size(value))
+        }),
         _ => 8,
     }
 }
 
-fn append_binding(script: &mut String, name: &str, value: &Value) -> Result<(), String> {
-    script.push_str("let ");
-    script.push_str(name);
-    script.push_str(" = ");
+fn append_value(script: &mut String, value: &Value) -> Result<(), String> {
     match value {
-        Value::I64(number) if *number == i64::MIN => {
-            script.push_str("0 - 9223372036854775807 - 1");
-        }
+        Value::I64(number) if *number == i64::MIN => script.push_str("0 - 9223372036854775807 - 1"),
         Value::I64(number) if *number < 0 => {
             script.push_str("0 - ");
             script.push_str(&(-number).to_string());
@@ -1540,11 +1877,35 @@ fn append_binding(script: &mut String, name: &str, value: &Value) -> Result<(), 
             }
             script.push('"');
         }
-        Value::Unit => return Err("CGNK001: Unit bindings are unsupported".into()),
-        Value::Record { .. } => {
-            return Err("CGNK001: record bindings are unsupported in notebooks".into())
+        Value::Unit => return Err("CGNK001: Unit bindings unsupported".into()),
+        Value::Record { name, fields } => {
+            if fields.is_empty() || fields.len() > 8 {
+                return Err("CGNK001: malformed record binding".into());
+            }
+            script.push_str(name);
+            script.push('(');
+            for (index, (field, value)) in fields.iter().enumerate() {
+                if index > 0 {
+                    script.push_str(", ");
+                }
+                if !matches!(value, Value::I64(_) | Value::Bool(_)) {
+                    return Err("CGNK001: non-scalar record field unsupported".into());
+                }
+                script.push_str(field);
+                script.push_str(": ");
+                append_value(script, value)?;
+            }
+            script.push(')');
         }
     }
+    Ok(())
+}
+
+fn append_binding(script: &mut String, name: &str, value: &Value) -> Result<(), String> {
+    script.push_str("let ");
+    script.push_str(name);
+    script.push_str(" = ");
+    append_value(script, value)?;
     script.push('\n');
     Ok(())
 }
@@ -1566,6 +1927,8 @@ impl CellExecutor for RetainedExecutor {
         });
         self.functions
             .retain(|_, function| !invalidated.contains(&function.cell_id));
+        self.records
+            .retain(|_, record| !invalidated.contains(&record.cell_id));
         self.imports
             .retain(|_, binding| !invalidated.contains(&binding.cell_id));
     }
@@ -1573,8 +1936,54 @@ impl CellExecutor for RetainedExecutor {
     fn reset(&mut self) -> Result<(), String> {
         self.bindings.clear();
         self.functions.clear();
+        self.records.clear();
         self.imports.clear();
         self.evaluation_bytes = 0;
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod record_protocol_tests {
+    use super::{decode_worker_record, encode_worker_record, Value, MAX_EVALUATION_BYTES};
+
+    #[test]
+    fn record_roundtrip_and_malformed_payloads() {
+        let fields = vec![
+            ("x".to_owned(), Value::I64(i64::MIN)),
+            ("active".to_owned(), Value::Bool(true)),
+        ];
+        let encoded = encode_worker_record("Point", &fields).unwrap();
+        assert_eq!(
+            decode_worker_record(&encoded).unwrap(),
+            Value::Record {
+                name: "Point".into(),
+                fields
+            }
+        );
+        let mut extra = encoded.clone();
+        extra.push(0);
+        assert!(decode_worker_record(&extra).is_err());
+        let mut short = encoded.clone();
+        short.pop();
+        assert!(decode_worker_record(&short).is_err());
+        let mut huge_name = encoded.clone();
+        huge_name[1..3].copy_from_slice(&u16::MAX.to_be_bytes());
+        assert!(decode_worker_record(&huge_name).is_err());
+        let mut invalid_utf8 = encoded.clone();
+        invalid_utf8[3] = 0xff;
+        assert!(decode_worker_record(&invalid_utf8).is_err());
+        let mut invalid_count = encoded.clone();
+        invalid_count[3 + "Point".len()] = 9;
+        assert!(decode_worker_record(&invalid_count).is_err());
+        let duplicate = encode_worker_record(
+            "Point",
+            &[("x".into(), Value::I64(1)), ("x".into(), Value::I64(2))],
+        );
+        assert!(duplicate.is_err());
+        assert!(decode_worker_record(&vec![b'R'; MAX_EVALUATION_BYTES + 1]).is_err());
+        assert!(
+            encode_worker_record("Point", &[("x".into(), Value::String("bad".into()))]).is_err()
+        );
     }
 }

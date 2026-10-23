@@ -855,3 +855,25 @@ fn two_cell_fixture_runs_edits_saves_exports_and_reopens_without_execution() {
     assert!(reopened.status.success(), "{}", stderr(&reopened));
     assert_eq!(reopened.stdout, display.as_bytes());
 }
+
+#[test]
+fn pure_record_fixture_runs_and_reopens_with_cached_provenance() {
+    let fixture = Fixture::new();
+    let input = fixture.write(
+        "records.cgnb",
+        include_str!("../../cgx2-notebook-kernel/tests/fixtures/pure-records.cgnb"),
+    );
+    let output = fixture.path("records-out.cgnb");
+    let result = run(&[Path::new("run"), &input, Path::new("--out"), &output]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let saved = parse_notebook_bytes(&fs::read(&output).unwrap()).unwrap();
+    assert!(
+        matches!(&saved.cells[3].outputs[0], CellOutput::Text { body, .. } if body == "-9223372036854775808")
+    );
+    assert!(matches!(&saved.cells[4].outputs[0], CellOutput::Text { body, .. } if body == "true"));
+    let inspected = run(&[Path::new("inspect"), &output]);
+    assert!(inspected.status.success(), "{}", stderr(&inspected));
+    let listing = String::from_utf8(inspected.stdout).unwrap();
+    assert!(listing.contains("point\tcode\tcached"));
+    assert!(listing.contains("read\tcode\tcached"));
+}
