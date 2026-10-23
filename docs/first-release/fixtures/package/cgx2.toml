@@ -1,0 +1,4 @@
+schema_version = 1
+name = "release_docs"
+entry = "src/main.cg"
+sources = ["src/main.cg", "src/math.cg", "src/base.cg"]

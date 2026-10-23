@@ -1,0 +1,1156 @@
+{
+  "schema_version": 1,
+  "baseline": "0f0b0b9c87d817f39830f3e2b311dbae2ae3e0f3",
+  "fixture_root": "fixtures",
+  "cases": [
+    {
+      "id": "scalar-check",
+      "requirements": [
+        "R01",
+        "R04",
+        "R05"
+      ],
+      "scope": "source",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "check",
+            "scalar/answer.cg"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "equals": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "scalar-run",
+      "requirements": [
+        "R01",
+        "R04",
+        "R05"
+      ],
+      "scope": "source",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "run",
+            "scalar/answer.cg"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": "42\n"
+          },
+          "stderr": {
+            "equals": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "script-arguments",
+      "requirements": [
+        "R05"
+      ],
+      "scope": "source",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "run",
+            "scalar/arguments.cg",
+            "--",
+            "hello docs"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": "hello docs\n"
+          },
+          "stderr": {
+            "equals": ""
+          }
+        },
+        {
+          "tool": "compiler",
+          "args": [
+            "scalar/arguments.cg",
+            "--",
+            "--diagnostic-format=json"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": "--diagnostic-format=json\n"
+          },
+          "stderr": {
+            "equals": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "bounded-loops",
+      "requirements": [
+        "R01",
+        "R05"
+      ],
+      "scope": "source",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "run",
+            "scalar/loops.cg"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": "42\n"
+          },
+          "stderr": {
+            "equals": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "scalar-record",
+      "requirements": [
+        "R01"
+      ],
+      "scope": "source",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "run",
+            "scalar/record.cg"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": "42\n"
+          },
+          "stderr": {
+            "equals": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "canonical-format",
+      "requirements": [
+        "R01",
+        "R05"
+      ],
+      "scope": "source",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "fmt",
+            "scalar/arguments.cg"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": "arg(0)\n"
+          },
+          "stderr": {
+            "equals": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "public-api",
+      "requirements": [
+        "R04",
+        "R05"
+      ],
+      "scope": "source",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "api",
+            "scalar/answer.cg",
+            "--json"
+          ],
+          "exit": 0,
+          "stdout": {
+            "contains": [
+              "double",
+              "i64",
+              "requires"
+            ]
+          },
+          "stderr": {
+            "equals": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "utf8-missing-symbol",
+      "requirements": [
+        "R05"
+      ],
+      "scope": "source",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "--diagnostic-format=json",
+            "run",
+            "negative/unknown.cg"
+          ],
+          "exit": 1,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "contains": [
+              "CGT001"
+            ]
+          },
+          "diagnostics": [
+            {
+              "code": "CGT001",
+              "file": "negative/unknown.cg",
+              "span": {
+                "start": 26,
+                "end": 33
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "type-mismatch",
+      "requirements": [
+        "R05"
+      ],
+      "scope": "source",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "--diagnostic-format=json",
+            "run",
+            "negative/type.cg"
+          ],
+          "exit": 1,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "contains": [
+              "CGT003"
+            ]
+          },
+          "diagnostics": [
+            {
+              "code": "CGT003",
+              "file": "negative/type.cg",
+              "span": {
+                "start": 17,
+                "end": 24
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "checked-overflow",
+      "requirements": [
+        "R05"
+      ],
+      "scope": "source",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "--diagnostic-format=json",
+            "run",
+            "negative/overflow.cg"
+          ],
+          "exit": 1,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "contains": [
+              "CGR005"
+            ]
+          },
+          "diagnostics": [
+            {
+              "code": "CGR005",
+              "file": "negative/overflow.cg",
+              "span": {
+                "start": 0,
+                "end": 23
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "runtime-requires",
+      "requirements": [
+        "R04"
+      ],
+      "scope": "source",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "--diagnostic-format=json",
+            "run",
+            "negative/contract.cg"
+          ],
+          "exit": 1,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "contains": [
+              "CGR015"
+            ]
+          },
+          "diagnostics": [
+            {
+              "code": "CGR015",
+              "file": "negative/contract.cg",
+              "span": {
+                "start": 41,
+                "end": 46
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hidden-effect",
+      "requirements": [
+        "R04"
+      ],
+      "scope": "source",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "--diagnostic-format=json",
+            "run",
+            "negative/hidden-effect.cg"
+          ],
+          "exit": 1,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "contains": [
+              "CGT012",
+              "CGT013"
+            ]
+          },
+          "diagnostics": [
+            {
+              "code": "CGT012",
+              "file": "negative/hidden-effect.cg",
+              "span": {
+                "start": 46,
+                "end": 52
+              }
+            },
+            {
+              "code": "CGT013",
+              "file": "negative/hidden-effect.cg",
+              "span": {
+                "start": 46,
+                "end": 52
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "no-gc-collect-rejected",
+      "requirements": [
+        "R03"
+      ],
+      "scope": "source",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "--diagnostic-format=json",
+            "run",
+            "negative/no-gc-collect.cg"
+          ],
+          "exit": 1,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "contains": [
+              "CGO004"
+            ]
+          },
+          "diagnostics": [
+            {
+              "code": "CGO004",
+              "file": "negative/no-gc-collect.cg",
+              "span": {
+                "start": 72,
+                "end": 89
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "manual-memory",
+      "requirements": [
+        "R03"
+      ],
+      "scope": "source",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "check",
+            "memory/manual.cg"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "equals": ""
+          }
+        },
+        {
+          "tool": "compiler",
+          "args": [
+            "run",
+            "memory/manual.cg"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "equals": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "no-gc-memory",
+      "requirements": [
+        "R03"
+      ],
+      "scope": "source",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "run",
+            "memory/no-gc.cg"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "equals": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "package-effects",
+      "requirements": [
+        "R04",
+        "R06"
+      ],
+      "scope": "source",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "package-runner",
+          "args": [
+            "check",
+            "package"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "equals": ""
+          }
+        },
+        {
+          "tool": "package-runner",
+          "args": [
+            "run",
+            "package"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": "42\n"
+          },
+          "stderr": {
+            "equals": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "native-build",
+      "requirements": [
+        "R05",
+        "R10"
+      ],
+      "scope": "source",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "native",
+          "args": [
+            "build",
+            "scalar/loops.cg",
+            "--out",
+            "{work}/program",
+            "--rustc",
+            "{tool:rustc}"
+          ],
+          "exit": 0,
+          "stdout": {
+            "contains": [
+              "source_sha256=",
+              "toolchain=rustc 1.98.1",
+              "runtime_sha256=none"
+            ]
+          },
+          "stderr": {
+            "equals": ""
+          }
+        },
+        {
+          "tool": "artifact",
+          "args": [],
+          "exit": 0,
+          "stdout": {
+            "equals": "42\n"
+          },
+          "stderr": {
+            "equals": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "native-package",
+      "requirements": [
+        "R04",
+        "R06",
+        "R10"
+      ],
+      "scope": "source",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "native",
+          "args": [
+            "build",
+            "--package",
+            "package",
+            "--out",
+            "{work}/program",
+            "--rustc",
+            "{tool:rustc}"
+          ],
+          "exit": 0,
+          "stdout": {
+            "contains": [
+              "manifest_sha256=",
+              "profile=debug"
+            ]
+          },
+          "stderr": {
+            "equals": ""
+          }
+        },
+        {
+          "tool": "artifact",
+          "args": [],
+          "exit": 0,
+          "stdout": {
+            "equals": "42\n"
+          },
+          "stderr": {
+            "equals": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "rust-emission",
+      "requirements": [
+        "R10"
+      ],
+      "scope": "source",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "native",
+          "args": [
+            "emit-rust",
+            "scalar/answer.cg",
+            "--out",
+            "{work}/answer.rs"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "equals": ""
+          }
+        },
+        {
+          "tool": "rustc",
+          "args": [
+            "--edition=2024",
+            "--crate-name",
+            "cgx2_doc_generated",
+            "{work}/answer.rs",
+            "-o",
+            "{work}/program"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "contains": [
+              "warning: unused variable: `args`",
+              "warnings emitted"
+            ]
+          }
+        },
+        {
+          "tool": "artifact",
+          "args": [],
+          "exit": 0,
+          "stdout": {
+            "equals": "42\n"
+          },
+          "stderr": {
+            "equals": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "native-memory",
+      "requirements": [
+        "R03",
+        "R10"
+      ],
+      "scope": "source",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "native",
+          "args": [
+            "build",
+            "memory/manual.cg",
+            "--out",
+            "{work}/program",
+            "--rustc",
+            "{tool:rustc}"
+          ],
+          "exit": 0,
+          "stdout": {
+            "contains": [
+              "runtime_sha256=",
+              "profile=debug"
+            ]
+          },
+          "stderr": {
+            "equals": ""
+          }
+        },
+        {
+          "tool": "artifact",
+          "args": [],
+          "exit": 0,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "equals": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "notebook-local",
+      "requirements": [
+        "R09"
+      ],
+      "scope": "source",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "notebook",
+          "args": [
+            "run",
+            "notebook/local.cgnb",
+            "--out",
+            "{work}/executed.cgnb"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "equals": ""
+          }
+        },
+        {
+          "tool": "notebook",
+          "args": [
+            "show",
+            "{work}/executed.cgnb",
+            "result"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": "cell=result schema=2 execution_revision=2 source_sha256=0ac4be7a433812199219a74d8e1d7618029955b44a006630847ef504d24aa5ec dependency_sha256=d68e50c73dbf927fb99d224cf16076ab6ab1f43f98467bf5c0083811db0bd7c3 result=success\nmime=text/plain output_ordinal=1 text=\"42\"\n"
+          },
+          "stderr": {
+            "equals": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "notebook-effects-rejected",
+      "requirements": [
+        "R09"
+      ],
+      "scope": "source",
+      "disposition": "expected-unsupported",
+      "steps": [
+        {
+          "tool": "notebook",
+          "args": [
+            "run",
+            "notebook/effect.cgnb",
+            "--out",
+            "{work}/rejected.cgnb"
+          ],
+          "exit": 1,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "equals": "cell execution error: CGNK011 in cell args: argument and host calls are unsupported in pure notebook cells\n"
+          }
+        }
+      ]
+    },
+    {
+      "id": "finite-audit-not-proof",
+      "requirements": [
+        "R11"
+      ],
+      "scope": "source",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "verify",
+          "args": [
+            "scalar/proof.cg",
+            "--domain",
+            "x:0:2",
+            "--format",
+            "json"
+          ],
+          "exit": 0,
+          "stdout": {
+            "json": {
+              "bounded_solver_result": {
+                "checked_cases": 3,
+                "kind": "cross_checked",
+                "source_parity": true
+              },
+              "proof": {
+                "kind": "unknown"
+              }
+            }
+          },
+          "stderr": {
+            "equals": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "unified-build-unsupported",
+      "requirements": [
+        "R05"
+      ],
+      "scope": "cli",
+      "disposition": "expected-unsupported",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "--diagnostic-format=json",
+            "build",
+            "scalar/answer.cg"
+          ],
+          "exit": 1,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "contains": [
+              "CGC001"
+            ]
+          },
+          "diagnostics": [
+            {
+              "code": "CGC001",
+              "file": "<command>",
+              "span": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unified-test-unsupported",
+      "requirements": [
+        "R05"
+      ],
+      "scope": "cli",
+      "disposition": "expected-unsupported",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "--diagnostic-format=json",
+            "test",
+            "scalar/answer.cg"
+          ],
+          "exit": 1,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "contains": [
+              "CGC001"
+            ]
+          },
+          "diagnostics": [
+            {
+              "code": "CGC001",
+              "file": "<command>",
+              "span": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unified-verify-unsupported",
+      "requirements": [
+        "R05"
+      ],
+      "scope": "cli",
+      "disposition": "expected-unsupported",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "--diagnostic-format=json",
+            "verify",
+            "scalar/proof.cg"
+          ],
+          "exit": 1,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "contains": [
+              "CGC001"
+            ]
+          },
+          "diagnostics": [
+            {
+              "code": "CGC001",
+              "file": "<command>",
+              "span": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unified-emit-unsupported",
+      "requirements": [
+        "R05"
+      ],
+      "scope": "cli",
+      "disposition": "expected-unsupported",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "--diagnostic-format=json",
+            "emit",
+            "scalar/answer.cg",
+            "--target",
+            "python"
+          ],
+          "exit": 1,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "contains": [
+              "CGC001"
+            ]
+          },
+          "diagnostics": [
+            {
+              "code": "CGC001",
+              "file": "<command>",
+              "span": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unified-notebook-unsupported",
+      "requirements": [
+        "R05"
+      ],
+      "scope": "cli",
+      "disposition": "expected-unsupported",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "--diagnostic-format=json",
+            "notebook",
+            "run",
+            "notebook/local.cgnb"
+          ],
+          "exit": 1,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "contains": [
+              "CGC001"
+            ]
+          },
+          "diagnostics": [
+            {
+              "code": "CGC001",
+              "file": "<command>",
+              "span": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nominal-variants-match",
+      "requirements": [
+        "R01"
+      ],
+      "disposition": "future",
+      "scope": "source",
+      "steps": [],
+      "reason": "S2a must supply reviewed constructors, variants, exhaustive matching and Option/Result syntax.",
+      "handoff": "S2a owner: replace this reservation with .cg positive/negative fixtures and interpreter/native parity steps."
+    },
+    {
+      "id": "generics-standard-data",
+      "requirements": [
+        "R02"
+      ],
+      "disposition": "future",
+      "scope": "source",
+      "steps": [],
+      "reason": "Named constraints, generic applications and usable collections await S2b.",
+      "handoff": "S2b owner: add cross-package inference/constraint/arity, checked indexing, string and Result application fixtures."
+    },
+    {
+      "id": "ordinary-memory-ownership",
+      "requirements": [
+        "R03"
+      ],
+      "disposition": "future",
+      "scope": "source",
+      "steps": [],
+      "reason": "Bounded explicit memory scripts do not provide ordinary managed/owned aggregates or general borrowing.",
+      "handoff": "S2b/S3-M: add application-lifetime and error/cancel/unwind source corpus through the reviewed ownership API."
+    },
+    {
+      "id": "enforced-capabilities",
+      "requirements": [
+        "R04"
+      ],
+      "disposition": "future",
+      "scope": "source",
+      "steps": [],
+      "reason": "Declared scalar effects are checked; general resource capabilities and package runtime contracts need S2b.",
+      "handoff": "S2b: add admitted/denied resources, transitive contract and dishonest import fixtures."
+    },
+    {
+      "id": "pinned-packages-foreign",
+      "requirements": [
+        "R06"
+      ],
+      "disposition": "future",
+      "scope": "source",
+      "steps": [],
+      "reason": "Schema-1 local packages do not establish reproducible foreign environments.",
+      "handoff": "S2b/S3-F: add artifact, compiler/runtime, environment/target drift and offline bind/rebuild source fixtures."
+    },
+    {
+      "id": "python-only-package",
+      "requirements": [
+        "R07"
+      ],
+      "disposition": "external",
+      "scope": "external",
+      "steps": [],
+      "reason": "No supplied reviewed pinned Python-only package/environment for the full source acceptance.",
+      "handoff": "Follow FOREIGN.md with S1 Python owner pins, then S2b/S3-F source fixture; explicit Python route only."
+    },
+    {
+      "id": "direct-libtorch-inference",
+      "requirements": [
+        "R08"
+      ],
+      "disposition": "external",
+      "scope": "external",
+      "steps": [],
+      "reason": "No pinned full typed inference application supplied; bounded literal matmul evidence is a separate preview.",
+      "handoff": "Follow FOREIGN.md: S3-F real CPU application versus native reference, no-libpython check; GPU only on actual device."
+    },
+    {
+      "id": "persistent-notebook-effects",
+      "requirements": [
+        "R09"
+      ],
+      "disposition": "future",
+      "scope": "source",
+      "steps": [],
+      "reason": "Pure bounded local replay is supported; external-effect cells and general contract parity await S3-N.",
+      "handoff": "S3-N: one selected effect once, explicit rerun, crash/timeout outcome_unknown, stale/restart/cleanup fixtures."
+    },
+    {
+      "id": "python-source-cli",
+      "requirements": [
+        "R10"
+      ],
+      "disposition": "future",
+      "scope": "source",
+      "steps": [],
+      "reason": "Python emission currently has a Rust library API, no installed CLI target.",
+      "handoff": "S2b/S3-C: add pinned emitted-Python execution parity after reviewed CLI integration; preserve target rejections."
+    },
+    {
+      "id": "live-solver",
+      "requirements": [
+        "R11"
+      ],
+      "disposition": "external",
+      "scope": "external",
+      "steps": [],
+      "reason": "Finite audit without a trusted live solver is not proof.",
+      "handoff": "Follow ACCEPTANCE.md live solver command with independently trusted Z3/CVC5 digest; attach genuine transcript."
+    },
+    {
+      "id": "security-performance",
+      "requirements": [
+        "R12"
+      ],
+      "disposition": "future",
+      "scope": "source",
+      "steps": [],
+      "reason": "Advisory tools and CPU policy libraries are not general source enforcement/parallel execution.",
+      "handoff": "S2b/S3-A: add positive/negative package security corpus and owned-input map/zip source decisions with full costs."
+    },
+    {
+      "id": "memory-audit-resource-gates",
+      "requirements": [
+        "R13"
+      ],
+      "disposition": "external",
+      "scope": "external",
+      "steps": [],
+      "reason": "Leak-enabled host, independent safety audit and quiet calibrated reference workloads are not supplied.",
+      "handoff": "S4 evidence owner: run docs/validation-plan.md memory and resource corpus on suitable host; retain all failures and provenance."
+    },
+    {
+      "id": "human-model-grammar-study",
+      "requirements": [
+        "R14"
+      ],
+      "disposition": "external",
+      "scope": "external",
+      "steps": [],
+      "reason": "No independently reviewed holdout, authorized model runs or human study observations supplied.",
+      "handoff": "S4 evidence owner: execute preregistered 60\u2013100 task/two-family paired and blinded human protocol; no synthetic substitution."
+    },
+    {
+      "id": "release-install-review",
+      "requirements": [
+        "R15"
+      ],
+      "disposition": "external",
+      "scope": "external",
+      "steps": [],
+      "reason": "Documentation fixtures cannot close all release gates or certify distribution packaging.",
+      "handoff": "Run outside-checkout smoke in INSTALL.md, then integrate every R01\u2013R14 evidence row and independent final review."
+    }
+  ]
+}

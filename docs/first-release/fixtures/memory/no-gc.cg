@@ -1,0 +1,7 @@
+let r = memory.region(mode: manual, limit: 512)
+no_gc(budget: 256):
+    let data = memory.alloc_bytes(r, 8)
+    memory.use(data)
+    memory.drop(data)
+memory.collect(r)
+memory.close(r)

@@ -1,0 +1,388 @@
+{
+  "schema_version": 1,
+  "baseline": "0f0b0b9c87d817f39830f3e2b311dbae2ae3e0f3",
+  "release_ready": false,
+  "requirements": [
+    {
+      "id": "R01",
+      "name": "Canonical language and nominal types",
+      "release_gate": "open",
+      "owner": "S2a",
+      "baseline_scope": "Scalar records/loops run; variants, exhaustive matching, Option/Result remain reserved.",
+      "cases": [
+        "scalar-check",
+        "scalar-run",
+        "bounded-loops",
+        "scalar-record",
+        "canonical-format",
+        "nominal-variants-match"
+      ],
+      "handoff": "ACCEPTANCE.md#r01"
+    },
+    {
+      "id": "R02",
+      "name": "Generics and standard data",
+      "release_gate": "open",
+      "owner": "S2b",
+      "baseline_scope": "Named constraints, usable generic collections, strings/errors and checked indexing await source integration.",
+      "cases": [
+        "generics-standard-data"
+      ],
+      "handoff": "ACCEPTANCE.md#r02"
+    },
+    {
+      "id": "R03",
+      "name": "Memory and ownership",
+      "release_gate": "open",
+      "owner": "S1 memory/ownership \u2192 S2b \u2192 S3-M",
+      "baseline_scope": "Explicit bounded scripts run; ordinary aggregates/lifetimes, fault/cancel/leak corpus and audit remain open.",
+      "cases": [
+        "no-gc-collect-rejected",
+        "manual-memory",
+        "no-gc-memory",
+        "native-memory",
+        "ordinary-memory-ownership"
+      ],
+      "handoff": "ACCEPTANCE.md#r03"
+    },
+    {
+      "id": "R04",
+      "name": "Modules, effects, capabilities, contracts",
+      "release_gate": "open",
+      "owner": "S1 analysis/notebook \u2192 S2b",
+      "baseline_scope": "Checked three-module explicit pure wrappers and runtime requires run; general capability enforcement and package contract parity remain open.",
+      "cases": [
+        "scalar-check",
+        "scalar-run",
+        "public-api",
+        "runtime-requires",
+        "hidden-effect",
+        "package-effects",
+        "native-package",
+        "enforced-capabilities"
+      ],
+      "handoff": "ACCEPTANCE.md#r04"
+    },
+    {
+      "id": "R05",
+      "name": "Installed CLI and structured API",
+      "release_gate": "open",
+      "owner": "S1 core \u2192 S2b",
+      "baseline_scope": "Scalar commands/byte diagnostics run; unified build/test/verify/emit/notebook commands reject on baseline.",
+      "cases": [
+        "scalar-check",
+        "scalar-run",
+        "script-arguments",
+        "bounded-loops",
+        "canonical-format",
+        "public-api",
+        "utf8-missing-symbol",
+        "type-mismatch",
+        "checked-overflow",
+        "native-build",
+        "unified-build-unsupported",
+        "unified-test-unsupported",
+        "unified-verify-unsupported",
+        "unified-emit-unsupported",
+        "unified-notebook-unsupported"
+      ],
+      "handoff": "ACCEPTANCE.md#r05"
+    },
+    {
+      "id": "R06",
+      "name": "Reproducible packages and foreign declarations",
+      "release_gate": "open",
+      "owner": "S1 native/Python/worker \u2192 S2b",
+      "baseline_scope": "Manifest-listed schema-1 local source packages run; full compiler/runtime/environment/foreign artifact lock workflow remains open.",
+      "cases": [
+        "package-effects",
+        "native-package",
+        "pinned-packages-foreign"
+      ],
+      "handoff": "ACCEPTANCE.md#r06"
+    },
+    {
+      "id": "R07",
+      "name": "Explicit Python-only access",
+      "release_gate": "open",
+      "owner": "S1 Python \u2192 S2b \u2192 S3-F",
+      "baseline_scope": "Bounded one-shot scalar worker preview is distinct from full pinned package acceptance; no foreign runtime evidence created here.",
+      "cases": [
+        "python-only-package"
+      ],
+      "handoff": "ACCEPTANCE.md#r07"
+    },
+    {
+      "id": "R08",
+      "name": "Direct typed LibTorch",
+      "release_gate": "open",
+      "owner": "S1 native \u2192 S2b \u2192 S3-F",
+      "baseline_scope": "Bounded literal vector/matmul source preview exists; general typed tensors/inference/application/GPU acceptance remains open.",
+      "cases": [
+        "direct-libtorch-inference"
+      ],
+      "handoff": "ACCEPTANCE.md#r08"
+    },
+    {
+      "id": "R09",
+      "name": "Persistent native notebooks",
+      "release_gate": "open",
+      "owner": "S1 notebook/worker \u2192 S3-N",
+      "baseline_scope": "Pure bounded local accumulator notebook runs; effect cells explicitly reject, external persistent effects await integration.",
+      "cases": [
+        "notebook-local",
+        "notebook-effects-rejected",
+        "persistent-notebook-effects"
+      ],
+      "handoff": "ACCEPTANCE.md#r09"
+    },
+    {
+      "id": "R10",
+      "name": "Rust and portable Python source",
+      "release_gate": "open",
+      "owner": "S1 core \u2192 S2a/b \u2192 S3-C",
+      "baseline_scope": "Native scalar/package build and Rust emission run; Python emitter is library-only and not executed by this checker.",
+      "cases": [
+        "native-build",
+        "native-package",
+        "rust-emission",
+        "native-memory",
+        "python-source-cli"
+      ],
+      "handoff": "ACCEPTANCE.md#r10"
+    },
+    {
+      "id": "R11",
+      "name": "Bounded proofs",
+      "release_gate": "open",
+      "owner": "S1 verification \u2192 S2 \u2192 S3-V",
+      "baseline_scope": "Finite source/core/SMT-term audit returns live proof unknown; trusted real solver/loop/bounds profile remains open.",
+      "cases": [
+        "finite-audit-not-proof",
+        "live-solver"
+      ],
+      "handoff": "ACCEPTANCE.md#r11"
+    },
+    {
+      "id": "R12",
+      "name": "Security and performance analysis",
+      "release_gate": "open",
+      "owner": "S1 analysis/execution \u2192 S2b \u2192 S3-A",
+      "baseline_scope": "Advisory scalar tools and CPU policy libraries do not establish enforceable capabilities or general source parallelism.",
+      "cases": [
+        "security-performance"
+      ],
+      "handoff": "ACCEPTANCE.md#r12"
+    },
+    {
+      "id": "R13",
+      "name": "Memory, correctness, resource acceptance",
+      "release_gate": "open",
+      "owner": "S1 evidence/owner runners \u2192 S4",
+      "baseline_scope": "Requires leak-enabled host, independent audit and real calibrated quiet-host benchmarks with provenance.",
+      "cases": [
+        "memory-audit-resource-gates"
+      ],
+      "handoff": "ACCEPTANCE.md#r13"
+    },
+    {
+      "id": "R14",
+      "name": "Human/model value and grammar decision",
+      "release_gate": "open",
+      "owner": "S1 evidence/docs \u2192 S4",
+      "baseline_scope": "Requires genuine independently reviewed 60\u2013100 task holdout, two model families, paired runs and blinded human studies.",
+      "cases": [
+        "human-model-grammar-study"
+      ],
+      "handoff": "ACCEPTANCE.md#r14"
+    },
+    {
+      "id": "R15",
+      "name": "Packaging, support matrix and final review",
+      "release_gate": "open",
+      "owner": "All rows \u2192 S4",
+      "baseline_scope": "Detached smoke and documentation cover a preview; global release waits for every requirement and independent review.",
+      "cases": [
+        "release-install-review"
+      ],
+      "handoff": "ACCEPTANCE.md#r15"
+    }
+  ],
+  "commands": [
+    {
+      "id": "check",
+      "contract": "cgx2 check PATH",
+      "route": "cgx2 check FILE.cg|PACKAGE",
+      "status": "implemented-preview",
+      "cases": [
+        "scalar-check",
+        "package-effects"
+      ],
+      "limitation": "Package fixture invokes the pinned cgx2-native companion directly; wrapper delegation requires colocated cgx2-native."
+    },
+    {
+      "id": "build",
+      "contract": "cgx2 build PATH",
+      "route": "cgx2c build FILE.cg|--package ROOT --out OUTPUT",
+      "status": "companion",
+      "cases": [
+        "native-build",
+        "native-package",
+        "unified-build-unsupported",
+        "native-memory"
+      ],
+      "limitation": "Unified command absent; scalar and bounded memory/native package target profiles differ."
+    },
+    {
+      "id": "run",
+      "contract": "cgx2 run FILE.cg -- ARGS",
+      "route": "cgx2 run FILE.cg -- ARGS",
+      "status": "implemented-preview",
+      "cases": [
+        "scalar-run",
+        "script-arguments",
+        "package-effects"
+      ],
+      "limitation": "Package execution needs colocated pinned cgx2-native; foreign routes need separate locks/runtime artifacts."
+    },
+    {
+      "id": "script",
+      "contract": "cgx2 FILE.cg -- ARGS",
+      "route": "cgx2 FILE.cg -- ARGS",
+      "status": "implemented-preview",
+      "cases": [
+        "script-arguments"
+      ],
+      "limitation": "Only the admitted interpreter/native package profiles execute."
+    },
+    {
+      "id": "test",
+      "contract": "cgx2 test PATH",
+      "route": "No installed test command; Rust crate test suites are development checks",
+      "status": "future",
+      "cases": [
+        "unified-test-unsupported"
+      ],
+      "limitation": "No invented test discovery/property syntax; S2b owns integration."
+    },
+    {
+      "id": "verify",
+      "contract": "cgx2 verify PATH",
+      "route": "cgx2-verify FILE.cg --domain x:MIN:MAX --format json",
+      "status": "companion",
+      "cases": [
+        "finite-audit-not-proof",
+        "unified-verify-unsupported",
+        "live-solver"
+      ],
+      "limitation": "Exit zero can still mean unknown; finite verdict is not live SMT proof."
+    },
+    {
+      "id": "emit-rust",
+      "contract": "cgx2 emit PATH --target rust",
+      "route": "cgx2c emit-rust FILE.cg|--package ROOT --out FILE.rs",
+      "status": "companion",
+      "cases": [
+        "rust-emission",
+        "unified-emit-unsupported"
+      ],
+      "limitation": "Rust target has its own checked profile; memory emission requires embedded-runtime build/link support."
+    },
+    {
+      "id": "emit-python",
+      "contract": "cgx2 emit PATH --target python",
+      "route": "cgx2_emit_python::{emit_python,emit_package_python,write_package_python} Rust library APIs",
+      "status": "library-only",
+      "cases": [
+        "python-source-cli",
+        "unified-emit-unsupported"
+      ],
+      "limitation": "No installed emitter CLI; regions/no_gc/owned borrows/foreign effects explicitly unsupported."
+    },
+    {
+      "id": "fmt",
+      "contract": "cgx2 fmt PATH",
+      "route": "cgx2 fmt FILE.cg",
+      "status": "implemented-preview",
+      "cases": [
+        "canonical-format"
+      ],
+      "limitation": "Writes canonical source to stdout; package directory formatting not supported."
+    },
+    {
+      "id": "api",
+      "contract": "cgx2 api --json PATH",
+      "route": "cgx2 api FILE.cg --json",
+      "status": "implemented-preview",
+      "cases": [
+        "public-api"
+      ],
+      "limitation": "Argument order differs from design table; package public index is cgx2-package, not this single-file CLI."
+    },
+    {
+      "id": "notebook-open",
+      "contract": "cgx2 notebook open FILE.cgnb",
+      "route": "cgx2-notebook-ui open FILE.cgnb [--project ROOT] [--port PORT]",
+      "status": "companion",
+      "cases": [],
+      "limitation": "Interactive loopback UI unrun by checker; use supplied worker/loopback-enabled host and owned output paths."
+    },
+    {
+      "id": "notebook-run",
+      "contract": "cgx2 notebook run FILE.cgnb",
+      "route": "cgx2-notebook run FILE.cgnb --out OUTPUT.cgnb",
+      "status": "companion",
+      "cases": [
+        "notebook-local",
+        "notebook-effects-rejected",
+        "unified-notebook-unsupported"
+      ],
+      "limitation": "Pure/local replay-safe subset; external effects, live handles and contract parity await S3-N."
+    },
+    {
+      "id": "bind",
+      "contract": "cgx2 bind check PACKAGE",
+      "route": "cgx2-bind check PACKAGE --format json",
+      "status": "companion",
+      "cases": [],
+      "limitation": "Full lock/environment/runtime external prerequisites unrun here; import never authorizes installation."
+    },
+    {
+      "id": "memory-report",
+      "contract": "cgx2 memory report FILE.cg",
+      "route": "cgx2 memory report FILE.cg --format=json",
+      "status": "implemented-preview",
+      "cases": [
+        "manual-memory",
+        "no-gc-memory"
+      ],
+      "limitation": "Fixtures execute memory operations, not report-counter assertions; counters/timings cover CGx2 allocations only."
+    },
+    {
+      "id": "memory-failure-report",
+      "contract": "cgx2 memory failure-report FILE.cg",
+      "route": "cgx2 memory failure-report FILE.cg",
+      "status": "implemented-preview",
+      "cases": [],
+      "limitation": "Unrun by docs checker; partial operation/unwind snapshots do not prove complete safety or leak freedom."
+    },
+    {
+      "id": "security",
+      "contract": "Security analysis",
+      "route": "cgx2-security audit FILE.cg --policy POLICY.json --format json; cgx2-effect-index FILE.cg --format json",
+      "status": "companion",
+      "cases": [],
+      "limitation": "Unrun here; advisory bounded scalar analysis is not a general vulnerability proof or resource capability grant."
+    },
+    {
+      "id": "performance",
+      "contract": "Performance analysis and execution plan",
+      "route": "cgx2-execution Rust library; owned-input map/zip source integration reserved",
+      "status": "library-only",
+      "cases": [
+        "security-performance"
+      ],
+      "limitation": "No installed general performance command or arbitrary source parallel/GPU implementation; no timing during busy host work."
+    }
+  ]
+}

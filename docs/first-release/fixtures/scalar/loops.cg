@@ -1,0 +1,8 @@
+fn main() -> i64:
+    let mut total = 0
+    for i in range(0, 7):
+        total += i
+    if total == 21:
+        return total * 2
+    else:
+        return 0

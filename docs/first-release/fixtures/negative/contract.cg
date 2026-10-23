@@ -1,0 +1,6 @@
+fn positive(x: i64) -> i64:
+    requires x > 0
+    x
+
+fn main() -> i64:
+    positive(0)
