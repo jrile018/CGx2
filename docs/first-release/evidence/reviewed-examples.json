@@ -1,0 +1,1255 @@
+{
+  "acceptance_complete": false,
+  "baseline": "0f0b0b9c87d817f39830f3e2b311dbae2ae3e0f3",
+  "counts": {
+    "blocked": 6,
+    "failed": 0,
+    "future": 8,
+    "passed": 28
+  },
+  "fixture_sha256": {
+    "memory/manual.cg": "7dd479e9ff626defd68a35218e4cba9103895268590b6ae425152e25160fcd8f",
+    "memory/no-gc.cg": "19685400365ef66a46e46ed64e53de81d70dacb5afc0d6c85877d06ffc9519e0",
+    "negative/contract.cg": "702f6d6e4071133644e8b9e1df568cdb70c5a880de884f413086187dd9898952",
+    "negative/hidden-effect.cg": "02b988c54ed7c5889253b095a1743c2a50ea21bd8d2db037e21cc8a8e3c1efb3",
+    "negative/no-gc-collect.cg": "2c5cb44516877f009b9868b0b39983ed35da8551cf864f58ead0217a27d28e74",
+    "negative/overflow.cg": "a1de396186c1a8fb137a975b4e94fd4c2d3e569de8e8ff9d1aa554f1dba58a96",
+    "negative/type.cg": "c65f33d83edc620eba25b090fe0ff18341f8dc34a47fe73d7b812cd9a28c5fb8",
+    "negative/unknown.cg": "5b30a113f8b110b6870e13b18b9d523968442681a6d7f286135191d8b67c94f9",
+    "notebook/effect.cgnb": "fad0019bbde28cbae528a926bded03ba410fa96887ad5c32d2f0816f49ca17ac",
+    "notebook/local.cgnb": "a1dbd0dc21a18f87b7da36873694cb4456550451097a3445bcaac7c2b299a3e8",
+    "package/cgx2.toml": "5ce597b68533142a7e331586fbaf27a25279822b2607f08966a5e1c0bb8556f3",
+    "package/src/base.cg": "c133947e77333919c16551c06bfa486d81f9e266eb05de6b5cf15e32eabd0787",
+    "package/src/main.cg": "e84edb3b0c501b5efd62a601b5c443256f2f9ccb2dea2b0afdad4dde2bfb84fa",
+    "package/src/math.cg": "4610e9224ab4df215632ce0f8bad114f5f42efb69d18976eceba4ad7f3579e0c",
+    "scalar/answer.cg": "9355a9430ffcda080d7a956dc230c2625c53b86566f679c2be3a0418ee360d4d",
+    "scalar/arguments.cg": "1164e26719dc1408cbae3c4d43489df199d4d6154b33d9ed9743189467534e27",
+    "scalar/loops.cg": "1a11b8193fe081b35979fd99369b3f9dd1321409b8070bd1cb32a5ad0d952166",
+    "scalar/proof.cg": "e14f0177c8060b2a5b973db6534fd3b07941d91dd9dfd1ab251287dc5efebfe4",
+    "scalar/record.cg": "f4f1520176f2941c435de13447b19209098cabe26fcd494b1eafefe4e946a25b"
+  },
+  "results": [
+    {
+      "disposition": "implemented",
+      "id": "scalar-check",
+      "requirements": [
+        "R01",
+        "R04",
+        "R05"
+      ],
+      "scope": "source",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:compiler",
+            "check",
+            "scalar/answer.cg"
+          ],
+          "executable_sha256": "bb4b72d58f0c440d04035f41db526c7bdaaca23d312ad89d60b45132251ad9c3",
+          "exit": 0,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "",
+          "stdout": ""
+        }
+      ]
+    },
+    {
+      "disposition": "implemented",
+      "id": "scalar-run",
+      "requirements": [
+        "R01",
+        "R04",
+        "R05"
+      ],
+      "scope": "source",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:compiler",
+            "run",
+            "scalar/answer.cg"
+          ],
+          "executable_sha256": "bb4b72d58f0c440d04035f41db526c7bdaaca23d312ad89d60b45132251ad9c3",
+          "exit": 0,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "",
+          "stdout": "42\n"
+        }
+      ]
+    },
+    {
+      "disposition": "implemented",
+      "id": "script-arguments",
+      "requirements": [
+        "R05"
+      ],
+      "scope": "source",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:compiler",
+            "run",
+            "scalar/arguments.cg",
+            "--",
+            "hello docs"
+          ],
+          "executable_sha256": "bb4b72d58f0c440d04035f41db526c7bdaaca23d312ad89d60b45132251ad9c3",
+          "exit": 0,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "",
+          "stdout": "hello docs\n"
+        },
+        {
+          "command": [
+            "$TOOL:compiler",
+            "scalar/arguments.cg",
+            "--",
+            "--diagnostic-format=json"
+          ],
+          "executable_sha256": "bb4b72d58f0c440d04035f41db526c7bdaaca23d312ad89d60b45132251ad9c3",
+          "exit": 0,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "",
+          "stdout": "--diagnostic-format=json\n"
+        }
+      ]
+    },
+    {
+      "disposition": "implemented",
+      "id": "bounded-loops",
+      "requirements": [
+        "R01",
+        "R05"
+      ],
+      "scope": "source",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:compiler",
+            "run",
+            "scalar/loops.cg"
+          ],
+          "executable_sha256": "bb4b72d58f0c440d04035f41db526c7bdaaca23d312ad89d60b45132251ad9c3",
+          "exit": 0,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "",
+          "stdout": "42\n"
+        }
+      ]
+    },
+    {
+      "disposition": "implemented",
+      "id": "scalar-record",
+      "requirements": [
+        "R01"
+      ],
+      "scope": "source",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:compiler",
+            "run",
+            "scalar/record.cg"
+          ],
+          "executable_sha256": "bb4b72d58f0c440d04035f41db526c7bdaaca23d312ad89d60b45132251ad9c3",
+          "exit": 0,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "",
+          "stdout": "42\n"
+        }
+      ]
+    },
+    {
+      "disposition": "implemented",
+      "id": "canonical-format",
+      "requirements": [
+        "R01",
+        "R05"
+      ],
+      "scope": "source",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:compiler",
+            "fmt",
+            "scalar/arguments.cg"
+          ],
+          "executable_sha256": "bb4b72d58f0c440d04035f41db526c7bdaaca23d312ad89d60b45132251ad9c3",
+          "exit": 0,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "",
+          "stdout": "arg(0)\n"
+        }
+      ]
+    },
+    {
+      "disposition": "implemented",
+      "id": "public-api",
+      "requirements": [
+        "R04",
+        "R05"
+      ],
+      "scope": "source",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:compiler",
+            "api",
+            "scalar/answer.cg",
+            "--json"
+          ],
+          "executable_sha256": "bb4b72d58f0c440d04035f41db526c7bdaaca23d312ad89d60b45132251ad9c3",
+          "exit": 0,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "",
+          "stdout": "{\"schema_version\":2,\"module\":null,\"functions\":[{\"name\":\"double\",\"parameters\":[{\"name\":\"x\",\"ty\":\"i64\"}],\"return_type\":\"i64\",\"span\":{\"start\":0,\"end\":106},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[{\"expression\":\"x >= 0\",\"status\":\"runtime-checked\",\"span\":{\"start\":60,\"end\":66}}],\"ensures\":[{\"expression\":\"result == x * 2\",\"status\":\"runtime-checked\",\"span\":{\"start\":79,\"end\":94}}]}]}\n"
+        }
+      ]
+    },
+    {
+      "disposition": "implemented",
+      "id": "utf8-missing-symbol",
+      "requirements": [
+        "R05"
+      ],
+      "scope": "source",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:compiler",
+            "--diagnostic-format=json",
+            "run",
+            "negative/unknown.cg"
+          ],
+          "diagnostics": [
+            {
+              "code": "CGT001",
+              "file": "negative/unknown.cg",
+              "message": "unknown name `missing`",
+              "severity": "error",
+              "span": {
+                "end": 33,
+                "start": 26
+              }
+            }
+          ],
+          "executable_sha256": "bb4b72d58f0c440d04035f41db526c7bdaaca23d312ad89d60b45132251ad9c3",
+          "exit": 1,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "{\"code\":\"CGT001\",\"severity\":\"error\",\"message\":\"unknown name `missing`\",\"file\":\"negative/unknown.cg\",\"span\":{\"start\":26,\"end\":33}}\n",
+          "stdout": ""
+        }
+      ]
+    },
+    {
+      "disposition": "implemented",
+      "id": "type-mismatch",
+      "requirements": [
+        "R05"
+      ],
+      "scope": "source",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:compiler",
+            "--diagnostic-format=json",
+            "run",
+            "negative/type.cg"
+          ],
+          "diagnostics": [
+            {
+              "code": "CGT003",
+              "file": "negative/type.cg",
+              "message": "expected i64, found String",
+              "severity": "error",
+              "span": {
+                "end": 24,
+                "start": 17
+              }
+            }
+          ],
+          "executable_sha256": "bb4b72d58f0c440d04035f41db526c7bdaaca23d312ad89d60b45132251ad9c3",
+          "exit": 1,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "{\"code\":\"CGT003\",\"severity\":\"error\",\"message\":\"expected i64, found String\",\"file\":\"negative/type.cg\",\"span\":{\"start\":17,\"end\":24}}\n",
+          "stdout": ""
+        }
+      ]
+    },
+    {
+      "disposition": "implemented",
+      "id": "checked-overflow",
+      "requirements": [
+        "R05"
+      ],
+      "scope": "source",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:compiler",
+            "--diagnostic-format=json",
+            "run",
+            "negative/overflow.cg"
+          ],
+          "diagnostics": [
+            {
+              "code": "CGR005",
+              "file": "negative/overflow.cg",
+              "message": "i64 arithmetic overflow",
+              "severity": "error",
+              "span": {
+                "end": 23,
+                "start": 0
+              }
+            }
+          ],
+          "executable_sha256": "bb4b72d58f0c440d04035f41db526c7bdaaca23d312ad89d60b45132251ad9c3",
+          "exit": 1,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "{\"code\":\"CGR005\",\"severity\":\"error\",\"message\":\"i64 arithmetic overflow\",\"file\":\"negative/overflow.cg\",\"span\":{\"start\":0,\"end\":23}}\n",
+          "stdout": ""
+        }
+      ]
+    },
+    {
+      "disposition": "implemented",
+      "id": "runtime-requires",
+      "requirements": [
+        "R04"
+      ],
+      "scope": "source",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:compiler",
+            "--diagnostic-format=json",
+            "run",
+            "negative/contract.cg"
+          ],
+          "diagnostics": [
+            {
+              "code": "CGR015",
+              "file": "negative/contract.cg",
+              "message": "requires condition failed",
+              "severity": "error",
+              "span": {
+                "end": 46,
+                "start": 41
+              }
+            }
+          ],
+          "executable_sha256": "bb4b72d58f0c440d04035f41db526c7bdaaca23d312ad89d60b45132251ad9c3",
+          "exit": 1,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "{\"code\":\"CGR015\",\"severity\":\"error\",\"message\":\"requires condition failed\",\"file\":\"negative/contract.cg\",\"span\":{\"start\":41,\"end\":46}}\n",
+          "stdout": ""
+        }
+      ]
+    },
+    {
+      "disposition": "implemented",
+      "id": "hidden-effect",
+      "requirements": [
+        "R04"
+      ],
+      "scope": "source",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:compiler",
+            "--diagnostic-format=json",
+            "run",
+            "negative/hidden-effect.cg"
+          ],
+          "diagnostics": [
+            {
+              "code": "CGT012",
+              "file": "negative/hidden-effect.cg",
+              "message": "effect `ReadArgs` is not permitted by explicit declaration by call to `arg`",
+              "severity": "error",
+              "span": {
+                "end": 52,
+                "start": 46
+              }
+            },
+            {
+              "code": "CGT013",
+              "file": "negative/hidden-effect.cg",
+              "message": "capability `ArgsRead` is required by call to `arg`",
+              "severity": "error",
+              "span": {
+                "end": 52,
+                "start": 46
+              }
+            }
+          ],
+          "executable_sha256": "bb4b72d58f0c440d04035f41db526c7bdaaca23d312ad89d60b45132251ad9c3",
+          "exit": 1,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "{\"code\":\"CGT012\",\"severity\":\"error\",\"message\":\"effect `ReadArgs` is not permitted by explicit declaration by call to `arg`\",\"file\":\"negative/hidden-effect.cg\",\"span\":{\"start\":46,\"end\":52}}\n{\"code\":\"CGT013\",\"severity\":\"error\",\"message\":\"capability `ArgsRead` is required by call to `arg`\",\"file\":\"negative/hidden-effect.cg\",\"span\":{\"start\":46,\"end\":52}}\n",
+          "stdout": ""
+        }
+      ]
+    },
+    {
+      "disposition": "implemented",
+      "id": "no-gc-collect-rejected",
+      "requirements": [
+        "R03"
+      ],
+      "scope": "source",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:compiler",
+            "--diagnostic-format=json",
+            "run",
+            "negative/no-gc-collect.cg"
+          ],
+          "diagnostics": [
+            {
+              "code": "CGO004",
+              "file": "negative/no-gc-collect.cg",
+              "message": "collection is forbidden inside no_gc",
+              "severity": "error",
+              "span": {
+                "end": 89,
+                "start": 72
+              }
+            }
+          ],
+          "executable_sha256": "bb4b72d58f0c440d04035f41db526c7bdaaca23d312ad89d60b45132251ad9c3",
+          "exit": 1,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "{\"code\":\"CGO004\",\"severity\":\"error\",\"message\":\"collection is forbidden inside no_gc\",\"file\":\"negative/no-gc-collect.cg\",\"span\":{\"start\":72,\"end\":89}}\n",
+          "stdout": ""
+        }
+      ]
+    },
+    {
+      "disposition": "implemented",
+      "id": "manual-memory",
+      "requirements": [
+        "R03"
+      ],
+      "scope": "source",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:compiler",
+            "check",
+            "memory/manual.cg"
+          ],
+          "executable_sha256": "bb4b72d58f0c440d04035f41db526c7bdaaca23d312ad89d60b45132251ad9c3",
+          "exit": 0,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "",
+          "stdout": ""
+        },
+        {
+          "command": [
+            "$TOOL:compiler",
+            "run",
+            "memory/manual.cg"
+          ],
+          "executable_sha256": "bb4b72d58f0c440d04035f41db526c7bdaaca23d312ad89d60b45132251ad9c3",
+          "exit": 0,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "",
+          "stdout": ""
+        }
+      ]
+    },
+    {
+      "disposition": "implemented",
+      "id": "no-gc-memory",
+      "requirements": [
+        "R03"
+      ],
+      "scope": "source",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:compiler",
+            "run",
+            "memory/no-gc.cg"
+          ],
+          "executable_sha256": "bb4b72d58f0c440d04035f41db526c7bdaaca23d312ad89d60b45132251ad9c3",
+          "exit": 0,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "",
+          "stdout": ""
+        }
+      ]
+    },
+    {
+      "disposition": "implemented",
+      "id": "package-effects",
+      "requirements": [
+        "R04",
+        "R06"
+      ],
+      "scope": "source",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:compiler-native",
+            "check",
+            "package"
+          ],
+          "executable_sha256": "bac1883043671d7f795fa44ed3c6fffb4412b05c9e396ed3d5d73473772277b4",
+          "exit": 0,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "",
+          "stdout": ""
+        },
+        {
+          "command": [
+            "$TOOL:compiler-native",
+            "run",
+            "package"
+          ],
+          "executable_sha256": "bac1883043671d7f795fa44ed3c6fffb4412b05c9e396ed3d5d73473772277b4",
+          "exit": 0,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "",
+          "stdout": "42\n"
+        }
+      ]
+    },
+    {
+      "disposition": "implemented",
+      "id": "native-build",
+      "requirements": [
+        "R05",
+        "R10"
+      ],
+      "scope": "source",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:native",
+            "build",
+            "scalar/loops.cg",
+            "--out",
+            "$WORK/program",
+            "--rustc",
+            "$TOOL:rustc"
+          ],
+          "executable_sha256": "71df213ecb5d75693a7142fc0be7dae7ff1d29f4d4b03f155e46a467edef9211",
+          "exit": 0,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "",
+          "stdout": "cgx2c build metadata: source_sha256=1a11b8193fe081b35979fd99369b3f9dd1321409b8070bd1cb32a5ad0d952166 rustc=$TOOL:rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=none output=$WORK/program\n"
+        },
+        {
+          "command": [
+            "$WORK/program"
+          ],
+          "executable_origin": "generated by earlier step in this case; output binary identity not attested",
+          "exit": 0,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "",
+          "stdout": "42\n"
+        }
+      ]
+    },
+    {
+      "disposition": "implemented",
+      "id": "native-package",
+      "requirements": [
+        "R04",
+        "R06",
+        "R10"
+      ],
+      "scope": "source",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:native",
+            "build",
+            "--package",
+            "package",
+            "--out",
+            "$WORK/program",
+            "--rustc",
+            "$TOOL:rustc"
+          ],
+          "executable_sha256": "71df213ecb5d75693a7142fc0be7dae7ff1d29f4d4b03f155e46a467edef9211",
+          "exit": 0,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "",
+          "stdout": "cgx2c build metadata: package_manifest_sha256=5ce597b68533142a7e331586fbaf27a25279822b2607f08966a5e1c0bb8556f3 package_sources_sha256=[\"src/main.cg:e84edb3b0c501b5efd62a601b5c443256f2f9ccb2dea2b0afdad4dde2bfb84fa\", \"src/math.cg:4610e9224ab4df215632ce0f8bad114f5f42efb69d18976eceba4ad7f3579e0c\", \"src/base.cg:c133947e77333919c16551c06bfa486d81f9e266eb05de6b5cf15e32eabd0787\"] rustc=$TOOL:rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug output=$WORK/program\n"
+        },
+        {
+          "command": [
+            "$WORK/program"
+          ],
+          "executable_origin": "generated by earlier step in this case; output binary identity not attested",
+          "exit": 0,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "",
+          "stdout": "42\n"
+        }
+      ]
+    },
+    {
+      "disposition": "implemented",
+      "id": "rust-emission",
+      "requirements": [
+        "R10"
+      ],
+      "scope": "source",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:native",
+            "emit-rust",
+            "scalar/answer.cg",
+            "--out",
+            "$WORK/answer.rs"
+          ],
+          "executable_sha256": "71df213ecb5d75693a7142fc0be7dae7ff1d29f4d4b03f155e46a467edef9211",
+          "exit": 0,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "",
+          "stdout": ""
+        },
+        {
+          "command": [
+            "$TOOL:rustc",
+            "--edition=2024",
+            "--crate-name",
+            "cgx2_doc_generated",
+            "$WORK/answer.rs",
+            "-o",
+            "$WORK/program"
+          ],
+          "executable_sha256": "859254978c0a0402c32f949f6de0d99aee73be8d15f45aac00ae1448aac51e74",
+          "exit": 0,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "warning: unused variable: `args`\n  --> $WORK/answer.rs:45:46\n   |\n45 | fn cgx2_user_6_double(ctx: &mut Cgx2Context, args: &[String], cgx2_user_1_x: i64) -> Result<i64, String> {\n   |                                              ^^^^ help: if this is intentional, prefix it with an underscore: `_args`\n   |\n   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default\n\nwarning: function `cgx2_add` is never used\n  --> $WORK/answer.rs:24:4\n   |\n24 | fn cgx2_add(left: i64, right: i64) -> Result<i64, String> {\n   |    ^^^^^^^^\n   |\n   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default\n\nwarning: function `cgx2_sub` is never used\n  --> $WORK/answer.rs:27:4\n   |\n27 | fn cgx2_sub(left: i64, right: i64) -> Result<i64, String> {\n   |    ^^^^^^^^\n\nwarning: function `cgx2_div` is never used\n  --> $WORK/answer.rs:33:4\n   |\n33 | fn cgx2_div(left: i64, right: i64) -> Result<i64, String> {\n   |    ^^^^^^^^\n\nwarning: function `cgx2_arg_count` is never used\n  --> $WORK/answer.rs:37:4\n   |\n37 | fn cgx2_arg_count(args: &[String]) -> Result<i64, String> {\n   |    ^^^^^^^^^^^^^^\n\nwarning: function `cgx2_arg` is never used\n  --> $WORK/answer.rs:40:4\n   |\n40 | fn cgx2_arg(args: &[String], index: i64) -> Result<String, String> {\n   |    ^^^^^^^^\n\nwarning: 6 warnings emitted\n\n",
+          "stdout": ""
+        },
+        {
+          "command": [
+            "$WORK/program"
+          ],
+          "executable_origin": "generated by earlier step in this case; output binary identity not attested",
+          "exit": 0,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "",
+          "stdout": "42\n"
+        }
+      ]
+    },
+    {
+      "disposition": "implemented",
+      "id": "native-memory",
+      "requirements": [
+        "R03",
+        "R10"
+      ],
+      "scope": "source",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:native",
+            "build",
+            "memory/manual.cg",
+            "--out",
+            "$WORK/program",
+            "--rustc",
+            "$TOOL:rustc"
+          ],
+          "executable_sha256": "71df213ecb5d75693a7142fc0be7dae7ff1d29f4d4b03f155e46a467edef9211",
+          "exit": 0,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "",
+          "stdout": "cgx2c build metadata: source_sha256=7dd479e9ff626defd68a35218e4cba9103895268590b6ae425152e25160fcd8f rustc=$TOOL:rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=106b933aacf2e507ed5fa53f04fcacca6ec2270277f24ad9f471de56f89a6c7e output=$WORK/program\n"
+        },
+        {
+          "command": [
+            "$WORK/program"
+          ],
+          "executable_origin": "generated by earlier step in this case; output binary identity not attested",
+          "exit": 0,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "",
+          "stdout": ""
+        }
+      ]
+    },
+    {
+      "disposition": "implemented",
+      "id": "notebook-local",
+      "requirements": [
+        "R09"
+      ],
+      "scope": "source",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:notebook",
+            "run",
+            "notebook/local.cgnb",
+            "--out",
+            "$WORK/executed.cgnb"
+          ],
+          "executable_sha256": "c5d821d9acfdb3bb78b22d4197d1707b6f75bdf4c043cc89c02aa3ab636b46da",
+          "exit": 0,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "",
+          "stdout": ""
+        },
+        {
+          "command": [
+            "$TOOL:notebook",
+            "show",
+            "$WORK/executed.cgnb",
+            "result"
+          ],
+          "executable_sha256": "c5d821d9acfdb3bb78b22d4197d1707b6f75bdf4c043cc89c02aa3ab636b46da",
+          "exit": 0,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "",
+          "stdout": "cell=result schema=2 execution_revision=2 source_sha256=0ac4be7a433812199219a74d8e1d7618029955b44a006630847ef504d24aa5ec dependency_sha256=d68e50c73dbf927fb99d224cf16076ab6ab1f43f98467bf5c0083811db0bd7c3 result=success\nmime=text/plain output_ordinal=1 text=\"42\"\n"
+        }
+      ]
+    },
+    {
+      "disposition": "expected-unsupported",
+      "id": "notebook-effects-rejected",
+      "requirements": [
+        "R09"
+      ],
+      "scope": "source",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:notebook",
+            "run",
+            "notebook/effect.cgnb",
+            "--out",
+            "$WORK/rejected.cgnb"
+          ],
+          "executable_sha256": "c5d821d9acfdb3bb78b22d4197d1707b6f75bdf4c043cc89c02aa3ab636b46da",
+          "exit": 1,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "cell execution error: CGNK011 in cell args: argument and host calls are unsupported in pure notebook cells\n",
+          "stdout": ""
+        }
+      ]
+    },
+    {
+      "disposition": "implemented",
+      "id": "finite-audit-not-proof",
+      "requirements": [
+        "R11"
+      ],
+      "scope": "source",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:verify",
+            "scalar/proof.cg",
+            "--domain",
+            "x:0:2",
+            "--format",
+            "json"
+          ],
+          "executable_sha256": "6d48b74e9e8e78487b6a51b9acfda649d704058c997bef32a100433e4501843e",
+          "exit": 0,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "",
+          "stdout": "{\"bounded_solver_result\":{\"checked_cases\":3,\"evaluator\":\"independent_smt_term_interpreter\",\"kind\":\"cross_checked\",\"obligations\":{\"ensures_false\":0,\"ensures_overflow\":0,\"requires_defined\":0,\"requires_satisfiable\":3},\"source_parity\":true},\"input_sha256\":\"e14f0177c8060b2a5b973db6534fd3b07941d91dd9dfd1ab251287dc5efebfe4\",\"proof\":{\"kind\":\"unknown\",\"meaning\":\"no_trusted_solver_proof\",\"reason\":\"live_solver_unrun\",\"scope\":{\"finite_domains\":[{\"max\":2,\"min\":0,\"name\":\"x\"}],\"function\":\"next\",\"input_sha256\":\"e14f0177c8060b2a5b973db6534fd3b07941d91dd9dfd1ab251287dc5efebfe4\",\"kind\":\"selected_source_function_contract\",\"max_cases\":100000,\"obligation_sha256\":\"b61ecf0f035391154e40fafd09fdcfd24ce07d84cba56fc61e882f481cf94814\",\"source_span\":{\"end\":103,\"start\":0}},\"state\":\"unknown\"},\"schema_version\":3,\"smtlib\":\"(set-option :produce-models true)\\n(set-logic QF_UFLIA)\\n; i64 values are mathematical Ints constrained to the signed 64-bit range.\\n; Uninterpreted functions, if declared, represent pure total external results.\\n(declare-const v_78 Int)\\n(assert (>= v_78 (- 9223372036854775808)))\\n(assert (<= v_78 9223372036854775807))\\n; vc:requires_defined\\n(push 1)\\n(assert (not (and true true)))\\n(check-sat)\\n(pop 1)\\n; vc:requires_satisfiable\\n(push 1)\\n(assert (and (and true true) (>= v_78 0)))\\n(check-sat)\\n(pop 1)\\n; vc:ensures_false\\n(push 1)\\n(assert (and (and true true) (>= v_78 0) (and (and (and true true (>= (+ v_78 1) (- 9223372036854775808)) (<= (+ v_78 1) 9223372036854775807)) (and true true (>= (+ v_78 1) (- 9223372036854775808)) (<= (+ v_78 1) 9223372036854775807))) (and (and true true (>= (+ v_78 1) (- 9223372036854775808)) (<= (+ v_78 1) 9223372036854775807)) (and true true (>= (+ v_78 1) (- 9223372036854775808)) (<= (+ v_78 1) 9223372036854775807)))) (not (and (= (+ v_78 1) (+ v_78 1)) (= (+ v_78 1) (+ v_78 1))))))\\n(check-sat)\\n(pop 1)\\n; vc:ensures_overflow\\n(push 1)\\n(assert (and (and true true) (>= v_78 0) (not (and (and (and true true (>= (+ v_78 1) (- 9223372036854775808)) (<= (+ v_78 1) 9223372036854775807)) (and true true (>= (+ v_78 1) (- 9223372036854775808)) (<= (+ v_78 1) 9223372036854775807))) (and (and true true (>= (+ v_78 1) (- 9223372036854775808)) (<= (+ v_78 1) 9223372036854775807)) (and true true (>= (+ v_78 1) (- 9223372036854775808)) (<= (+ v_78 1) 9223372036854775807)))))))\\n(check-sat)\\n(pop 1)\\n\",\"solver_fixture_catalog\":[{\"expected\":[\"unsat\",\"sat\",\"unsat\",\"unsat\"],\"name\":\"true\",\"script_sha256\":\"49afa387c8c48c5cf1878e40dd67d109de38681f66b57d4caa36e7f0009868cf\",\"smtlib\":\"(set-option :produce-models true)\\n(set-logic QF_UFLIA)\\n; i64 values are mathematical Ints constrained to the signed 64-bit range.\\n; Uninterpreted functions, if declared, represent pure total external results.\\n; vc:requires_defined\\n(push 1)\\n(assert (not true))\\n(check-sat)\\n(pop 1)\\n; vc:requires_satisfiable\\n(push 1)\\n(assert (and true true))\\n(check-sat)\\n(pop 1)\\n; vc:ensures_false\\n(push 1)\\n(assert (and true true true (not true)))\\n(check-sat)\\n(pop 1)\\n; vc:ensures_overflow\\n(push 1)\\n(assert (and true true (not true)))\\n(check-sat)\\n(pop 1)\\n\"},{\"expected\":[\"unsat\",\"sat\",\"sat\",\"unsat\"],\"name\":\"false\",\"script_sha256\":\"0e08a9a815e517a3cc1d2ff588bb1bb546c7f0339de380aef5cf2b310eda82a2\",\"smtlib\":\"(set-option :produce-models true)\\n(set-logic QF_UFLIA)\\n; i64 values are mathematical Ints constrained to the signed 64-bit range.\\n; Uninterpreted functions, if declared, represent pure total external results.\\n; vc:requires_defined\\n(push 1)\\n(assert (not true))\\n(check-sat)\\n(pop 1)\\n; vc:requires_satisfiable\\n(push 1)\\n(assert (and true true))\\n(check-sat)\\n(pop 1)\\n; vc:ensures_false\\n(push 1)\\n(assert (and true true true (not false)))\\n(check-sat)\\n(pop 1)\\n; vc:ensures_overflow\\n(push 1)\\n(assert (and true true (not true)))\\n(check-sat)\\n(pop 1)\\n\"},{\"expected\":[\"unsat\",\"sat\",\"unsat\",\"sat\"],\"name\":\"overflow\",\"script_sha256\":\"bb644cb85edb56abad9cddd38ee8a85b785f3a4c286affa0e7689acb08edbd0b\",\"smtlib\":\"(set-option :produce-models true)\\n(set-logic QF_UFLIA)\\n; i64 values are mathematical Ints constrained to the signed 64-bit range.\\n; Uninterpreted functions, if declared, represent pure total external results.\\n(declare-const v_78 Int)\\n(assert (>= v_78 (- 9223372036854775808)))\\n(assert (<= v_78 9223372036854775807))\\n; vc:requires_defined\\n(push 1)\\n(assert (not true))\\n(check-sat)\\n(pop 1)\\n; vc:requires_satisfiable\\n(push 1)\\n(assert (and true true))\\n(check-sat)\\n(pop 1)\\n; vc:ensures_false\\n(push 1)\\n(assert (and true true (and (and true true (>= (+ v_78 1) (- 9223372036854775808)) (<= (+ v_78 1) 9223372036854775807)) (and true true (>= (+ v_78 1) (- 9223372036854775808)) (<= (+ v_78 1) 9223372036854775807))) (not (= (+ v_78 1) (+ v_78 1)))))\\n(check-sat)\\n(pop 1)\\n; vc:ensures_overflow\\n(push 1)\\n(assert (and true true (not (and (and true true (>= (+ v_78 1) (- 9223372036854775808)) (<= (+ v_78 1) 9223372036854775807)) (and true true (>= (+ v_78 1) (- 9223372036854775808)) (<= (+ v_78 1) 9223372036854775807))))))\\n(check-sat)\\n(pop 1)\\n\"}],\"source\":{\"function\":\"next\",\"obligations\":[{\"kind\":\"requires_defined_and_satisfiable\",\"span\":{\"end\":64,\"start\":58}},{\"kind\":\"body_defined\",\"span\":{\"end\":103,\"start\":97}},{\"kind\":\"ensures\",\"span\":{\"end\":92,\"start\":77}}],\"path\":\"scalar/proof.cg\",\"span\":{\"end\":103,\"start\":0},\"unsupported_obligations\":[]},\"verdict\":{\"assumptions\":[\"all listed finite inputs enumerated\",\"checked i64 addition/subtraction; overflow is a contract failure\"],\"checked_cases\":3,\"kind\":\"proved\",\"meaning\":\"finite_domain_only\",\"scope\":{\"arithmetic\":\"checked_i64_add_sub\",\"boolean_parameters\":[],\"domains\":[{\"max\":2,\"min\":0,\"name\":\"x\"}],\"max_cases\":100000}}}\n"
+        }
+      ]
+    },
+    {
+      "disposition": "expected-unsupported",
+      "id": "unified-build-unsupported",
+      "requirements": [
+        "R05"
+      ],
+      "scope": "cli",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:compiler",
+            "--diagnostic-format=json",
+            "build",
+            "scalar/answer.cg"
+          ],
+          "diagnostics": [
+            {
+              "code": "CGC001",
+              "file": "<command>",
+              "message": "usage: cgx2 [--diagnostic-format=json] check FILE.cg|PACKAGE | cgx2 [--diagnostic-format=json] run FILE.cg|PACKAGE [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 api FILE.cg --json | cgx2 memory report FILE.cg [--format=json] | cgx2 memory failure-report FILE.cg | cgx2 fmt FILE.cg\ncheck validates syntax, scalar types, and a bounded memory/ownership script subset; a PACKAGE directory can run checked pure scalar/record functions through cgx2-native; schema 2 also supports bounded pinned native C calls; memory report shows CGx2 allocations only",
+              "severity": "error",
+              "span": null
+            }
+          ],
+          "executable_sha256": "bb4b72d58f0c440d04035f41db526c7bdaaca23d312ad89d60b45132251ad9c3",
+          "exit": 1,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "{\"code\":\"CGC001\",\"severity\":\"error\",\"message\":\"usage: cgx2 [--diagnostic-format=json] check FILE.cg|PACKAGE | cgx2 [--diagnostic-format=json] run FILE.cg|PACKAGE [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 api FILE.cg --json | cgx2 memory report FILE.cg [--format=json] | cgx2 memory failure-report FILE.cg | cgx2 fmt FILE.cg\\ncheck validates syntax, scalar types, and a bounded memory/ownership script subset; a PACKAGE directory can run checked pure scalar/record functions through cgx2-native; schema 2 also supports bounded pinned native C calls; memory report shows CGx2 allocations only\",\"file\":\"<command>\",\"span\":null}\n",
+          "stdout": ""
+        }
+      ]
+    },
+    {
+      "disposition": "expected-unsupported",
+      "id": "unified-test-unsupported",
+      "requirements": [
+        "R05"
+      ],
+      "scope": "cli",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:compiler",
+            "--diagnostic-format=json",
+            "test",
+            "scalar/answer.cg"
+          ],
+          "diagnostics": [
+            {
+              "code": "CGC001",
+              "file": "<command>",
+              "message": "usage: cgx2 [--diagnostic-format=json] check FILE.cg|PACKAGE | cgx2 [--diagnostic-format=json] run FILE.cg|PACKAGE [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 api FILE.cg --json | cgx2 memory report FILE.cg [--format=json] | cgx2 memory failure-report FILE.cg | cgx2 fmt FILE.cg\ncheck validates syntax, scalar types, and a bounded memory/ownership script subset; a PACKAGE directory can run checked pure scalar/record functions through cgx2-native; schema 2 also supports bounded pinned native C calls; memory report shows CGx2 allocations only",
+              "severity": "error",
+              "span": null
+            }
+          ],
+          "executable_sha256": "bb4b72d58f0c440d04035f41db526c7bdaaca23d312ad89d60b45132251ad9c3",
+          "exit": 1,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "{\"code\":\"CGC001\",\"severity\":\"error\",\"message\":\"usage: cgx2 [--diagnostic-format=json] check FILE.cg|PACKAGE | cgx2 [--diagnostic-format=json] run FILE.cg|PACKAGE [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 api FILE.cg --json | cgx2 memory report FILE.cg [--format=json] | cgx2 memory failure-report FILE.cg | cgx2 fmt FILE.cg\\ncheck validates syntax, scalar types, and a bounded memory/ownership script subset; a PACKAGE directory can run checked pure scalar/record functions through cgx2-native; schema 2 also supports bounded pinned native C calls; memory report shows CGx2 allocations only\",\"file\":\"<command>\",\"span\":null}\n",
+          "stdout": ""
+        }
+      ]
+    },
+    {
+      "disposition": "expected-unsupported",
+      "id": "unified-verify-unsupported",
+      "requirements": [
+        "R05"
+      ],
+      "scope": "cli",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:compiler",
+            "--diagnostic-format=json",
+            "verify",
+            "scalar/proof.cg"
+          ],
+          "diagnostics": [
+            {
+              "code": "CGC001",
+              "file": "<command>",
+              "message": "usage: cgx2 [--diagnostic-format=json] check FILE.cg|PACKAGE | cgx2 [--diagnostic-format=json] run FILE.cg|PACKAGE [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 api FILE.cg --json | cgx2 memory report FILE.cg [--format=json] | cgx2 memory failure-report FILE.cg | cgx2 fmt FILE.cg\ncheck validates syntax, scalar types, and a bounded memory/ownership script subset; a PACKAGE directory can run checked pure scalar/record functions through cgx2-native; schema 2 also supports bounded pinned native C calls; memory report shows CGx2 allocations only",
+              "severity": "error",
+              "span": null
+            }
+          ],
+          "executable_sha256": "bb4b72d58f0c440d04035f41db526c7bdaaca23d312ad89d60b45132251ad9c3",
+          "exit": 1,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "{\"code\":\"CGC001\",\"severity\":\"error\",\"message\":\"usage: cgx2 [--diagnostic-format=json] check FILE.cg|PACKAGE | cgx2 [--diagnostic-format=json] run FILE.cg|PACKAGE [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 api FILE.cg --json | cgx2 memory report FILE.cg [--format=json] | cgx2 memory failure-report FILE.cg | cgx2 fmt FILE.cg\\ncheck validates syntax, scalar types, and a bounded memory/ownership script subset; a PACKAGE directory can run checked pure scalar/record functions through cgx2-native; schema 2 also supports bounded pinned native C calls; memory report shows CGx2 allocations only\",\"file\":\"<command>\",\"span\":null}\n",
+          "stdout": ""
+        }
+      ]
+    },
+    {
+      "disposition": "expected-unsupported",
+      "id": "unified-emit-unsupported",
+      "requirements": [
+        "R05"
+      ],
+      "scope": "cli",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:compiler",
+            "--diagnostic-format=json",
+            "emit",
+            "scalar/answer.cg",
+            "--target",
+            "python"
+          ],
+          "diagnostics": [
+            {
+              "code": "CGC001",
+              "file": "<command>",
+              "message": "usage: cgx2 [--diagnostic-format=json] check FILE.cg|PACKAGE | cgx2 [--diagnostic-format=json] run FILE.cg|PACKAGE [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 api FILE.cg --json | cgx2 memory report FILE.cg [--format=json] | cgx2 memory failure-report FILE.cg | cgx2 fmt FILE.cg\ncheck validates syntax, scalar types, and a bounded memory/ownership script subset; a PACKAGE directory can run checked pure scalar/record functions through cgx2-native; schema 2 also supports bounded pinned native C calls; memory report shows CGx2 allocations only",
+              "severity": "error",
+              "span": null
+            }
+          ],
+          "executable_sha256": "bb4b72d58f0c440d04035f41db526c7bdaaca23d312ad89d60b45132251ad9c3",
+          "exit": 1,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "{\"code\":\"CGC001\",\"severity\":\"error\",\"message\":\"usage: cgx2 [--diagnostic-format=json] check FILE.cg|PACKAGE | cgx2 [--diagnostic-format=json] run FILE.cg|PACKAGE [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 api FILE.cg --json | cgx2 memory report FILE.cg [--format=json] | cgx2 memory failure-report FILE.cg | cgx2 fmt FILE.cg\\ncheck validates syntax, scalar types, and a bounded memory/ownership script subset; a PACKAGE directory can run checked pure scalar/record functions through cgx2-native; schema 2 also supports bounded pinned native C calls; memory report shows CGx2 allocations only\",\"file\":\"<command>\",\"span\":null}\n",
+          "stdout": ""
+        }
+      ]
+    },
+    {
+      "disposition": "expected-unsupported",
+      "id": "unified-notebook-unsupported",
+      "requirements": [
+        "R05"
+      ],
+      "scope": "cli",
+      "status": "passed",
+      "steps": [
+        {
+          "command": [
+            "$TOOL:compiler",
+            "--diagnostic-format=json",
+            "notebook",
+            "run",
+            "notebook/local.cgnb"
+          ],
+          "diagnostics": [
+            {
+              "code": "CGC001",
+              "file": "<command>",
+              "message": "usage: cgx2 [--diagnostic-format=json] check FILE.cg|PACKAGE | cgx2 [--diagnostic-format=json] run FILE.cg|PACKAGE [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 api FILE.cg --json | cgx2 memory report FILE.cg [--format=json] | cgx2 memory failure-report FILE.cg | cgx2 fmt FILE.cg\ncheck validates syntax, scalar types, and a bounded memory/ownership script subset; a PACKAGE directory can run checked pure scalar/record functions through cgx2-native; schema 2 also supports bounded pinned native C calls; memory report shows CGx2 allocations only",
+              "severity": "error",
+              "span": null
+            }
+          ],
+          "executable_sha256": "bb4b72d58f0c440d04035f41db526c7bdaaca23d312ad89d60b45132251ad9c3",
+          "exit": 1,
+          "mismatches": [],
+          "problem": null,
+          "stderr": "{\"code\":\"CGC001\",\"severity\":\"error\",\"message\":\"usage: cgx2 [--diagnostic-format=json] check FILE.cg|PACKAGE | cgx2 [--diagnostic-format=json] run FILE.cg|PACKAGE [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 api FILE.cg --json | cgx2 memory report FILE.cg [--format=json] | cgx2 memory failure-report FILE.cg | cgx2 fmt FILE.cg\\ncheck validates syntax, scalar types, and a bounded memory/ownership script subset; a PACKAGE directory can run checked pure scalar/record functions through cgx2-native; schema 2 also supports bounded pinned native C calls; memory report shows CGx2 allocations only\",\"file\":\"<command>\",\"span\":null}\n",
+          "stdout": ""
+        }
+      ]
+    },
+    {
+      "disposition": "future",
+      "handoff": "S2a owner: replace this reservation with .cg positive/negative fixtures and interpreter/native parity steps.",
+      "id": "nominal-variants-match",
+      "reason": "S2a must supply reviewed constructors, variants, exhaustive matching and Option/Result syntax.",
+      "requirements": [
+        "R01"
+      ],
+      "scope": "source",
+      "status": "future",
+      "steps": []
+    },
+    {
+      "disposition": "future",
+      "handoff": "S2b owner: add cross-package inference/constraint/arity, checked indexing, string and Result application fixtures.",
+      "id": "generics-standard-data",
+      "reason": "Named constraints, generic applications and usable collections await S2b.",
+      "requirements": [
+        "R02"
+      ],
+      "scope": "source",
+      "status": "future",
+      "steps": []
+    },
+    {
+      "disposition": "future",
+      "handoff": "S2b/S3-M: add application-lifetime and error/cancel/unwind source corpus through the reviewed ownership API.",
+      "id": "ordinary-memory-ownership",
+      "reason": "Bounded explicit memory scripts do not provide ordinary managed/owned aggregates or general borrowing.",
+      "requirements": [
+        "R03"
+      ],
+      "scope": "source",
+      "status": "future",
+      "steps": []
+    },
+    {
+      "disposition": "future",
+      "handoff": "S2b: add admitted/denied resources, transitive contract and dishonest import fixtures.",
+      "id": "enforced-capabilities",
+      "reason": "Declared scalar effects are checked; general resource capabilities and package runtime contracts need S2b.",
+      "requirements": [
+        "R04"
+      ],
+      "scope": "source",
+      "status": "future",
+      "steps": []
+    },
+    {
+      "disposition": "future",
+      "handoff": "S2b/S3-F: add artifact, compiler/runtime, environment/target drift and offline bind/rebuild source fixtures.",
+      "id": "pinned-packages-foreign",
+      "reason": "Schema-1 local packages do not establish reproducible foreign environments.",
+      "requirements": [
+        "R06"
+      ],
+      "scope": "source",
+      "status": "future",
+      "steps": []
+    },
+    {
+      "disposition": "external",
+      "handoff": "Follow FOREIGN.md with S1 Python owner pins, then S2b/S3-F source fixture; explicit Python route only.",
+      "id": "python-only-package",
+      "reason": "No supplied reviewed pinned Python-only package/environment for the full source acceptance.",
+      "requirements": [
+        "R07"
+      ],
+      "scope": "external",
+      "status": "blocked",
+      "steps": []
+    },
+    {
+      "disposition": "external",
+      "handoff": "Follow FOREIGN.md: S3-F real CPU application versus native reference, no-libpython check; GPU only on actual device.",
+      "id": "direct-libtorch-inference",
+      "reason": "No pinned full typed inference application supplied; bounded literal matmul evidence is a separate preview.",
+      "requirements": [
+        "R08"
+      ],
+      "scope": "external",
+      "status": "blocked",
+      "steps": []
+    },
+    {
+      "disposition": "future",
+      "handoff": "S3-N: one selected effect once, explicit rerun, crash/timeout outcome_unknown, stale/restart/cleanup fixtures.",
+      "id": "persistent-notebook-effects",
+      "reason": "Pure bounded local replay is supported; external-effect cells and general contract parity await S3-N.",
+      "requirements": [
+        "R09"
+      ],
+      "scope": "source",
+      "status": "future",
+      "steps": []
+    },
+    {
+      "disposition": "future",
+      "handoff": "S2b/S3-C: add pinned emitted-Python execution parity after reviewed CLI integration; preserve target rejections.",
+      "id": "python-source-cli",
+      "reason": "Python emission currently has a Rust library API, no installed CLI target.",
+      "requirements": [
+        "R10"
+      ],
+      "scope": "source",
+      "status": "future",
+      "steps": []
+    },
+    {
+      "disposition": "external",
+      "handoff": "Follow ACCEPTANCE.md live solver command with independently trusted Z3/CVC5 digest; attach genuine transcript.",
+      "id": "live-solver",
+      "reason": "Finite audit without a trusted live solver is not proof.",
+      "requirements": [
+        "R11"
+      ],
+      "scope": "external",
+      "status": "blocked",
+      "steps": []
+    },
+    {
+      "disposition": "future",
+      "handoff": "S2b/S3-A: add positive/negative package security corpus and owned-input map/zip source decisions with full costs.",
+      "id": "security-performance",
+      "reason": "Advisory tools and CPU policy libraries are not general source enforcement/parallel execution.",
+      "requirements": [
+        "R12"
+      ],
+      "scope": "source",
+      "status": "future",
+      "steps": []
+    },
+    {
+      "disposition": "external",
+      "handoff": "S4 evidence owner: run docs/validation-plan.md memory and resource corpus on suitable host; retain all failures and provenance.",
+      "id": "memory-audit-resource-gates",
+      "reason": "Leak-enabled host, independent safety audit and quiet calibrated reference workloads are not supplied.",
+      "requirements": [
+        "R13"
+      ],
+      "scope": "external",
+      "status": "blocked",
+      "steps": []
+    },
+    {
+      "disposition": "external",
+      "handoff": "S4 evidence owner: execute preregistered 60–100 task/two-family paired and blinded human protocol; no synthetic substitution.",
+      "id": "human-model-grammar-study",
+      "reason": "No independently reviewed holdout, authorized model runs or human study observations supplied.",
+      "requirements": [
+        "R14"
+      ],
+      "scope": "external",
+      "status": "blocked",
+      "steps": []
+    },
+    {
+      "disposition": "external",
+      "handoff": "Run outside-checkout smoke in INSTALL.md, then integrate every R01–R14 evidence row and independent final review.",
+      "id": "release-install-review",
+      "reason": "Documentation fixtures cannot close all release gates or certify distribution packaging.",
+      "requirements": [
+        "R15"
+      ],
+      "scope": "external",
+      "status": "blocked",
+      "steps": []
+    }
+  ],
+  "schema_version": 1,
+  "scope": "documentation fixtures; no global release gate is closed",
+  "suite_sha256": "f5d5892870b52e52a63aa04472aa4754225667e85166196170b0a2bc7ffa626b",
+  "tools": {
+    "compiler": {
+      "banner": {
+        "exit": 0,
+        "problem": null,
+        "stderr": "",
+        "stdout": "usage: cgx2 [--diagnostic-format=json] check FILE.cg|PACKAGE | cgx2 [--diagnostic-format=json] run FILE.cg|PACKAGE [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 api FILE.cg --json | cgx2 memory report FILE.cg [--format=json] | cgx2 memory failure-report FILE.cg | cgx2 fmt FILE.cg\ncheck validates syntax, scalar types, and a bounded memory/ownership script subset; a PACKAGE directory can run checked pure scalar/record functions through cgx2-native; schema 2 also supports bounded pinned native C calls; memory report shows CGx2 allocations only\n"
+      },
+      "expected_sha256": "bb4b72d58f0c440d04035f41db526c7bdaaca23d312ad89d60b45132251ad9c3",
+      "path": "/home/john-riley/projects/lang/target/release-plan-review/release/cgx2",
+      "sha256": "bb4b72d58f0c440d04035f41db526c7bdaaca23d312ad89d60b45132251ad9c3",
+      "status": "ready",
+      "version": null,
+      "version_note": "No common version interface in baseline preview; help banner and executable digest recorded."
+    },
+    "native": {
+      "banner": {
+        "exit": 0,
+        "problem": null,
+        "stderr": "",
+        "stdout": "usage: cgx2c build FILE.cg --out BINARY [--release] [--force] [--rustc PATH] [--test-fail-reserve N]\n       cgx2c emit-rust FILE.cg --out FILE.rs [--force]\n       cgx2c build --package ROOT --out BINARY [--release] [--force] [--rustc PATH]\n       cgx2c emit-rust --package ROOT --out FILE.rs [--force]\n--test-fail-reserve is an explicit test-only host allocation fault for memory scripts\n"
+      },
+      "expected_sha256": "71df213ecb5d75693a7142fc0be7dae7ff1d29f4d4b03f155e46a467edef9211",
+      "path": "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2c",
+      "sha256": "71df213ecb5d75693a7142fc0be7dae7ff1d29f4d4b03f155e46a467edef9211",
+      "status": "ready",
+      "version": null,
+      "version_note": "No common version interface in baseline preview; help banner and executable digest recorded."
+    },
+    "notebook": {
+      "banner": {
+        "exit": 0,
+        "problem": null,
+        "stderr": "",
+        "stdout": "cgx2-notebook: clean, pure scalar notebook file runner\nUsage:\ncgx2-notebook run INPUT.cgnb --out OUTPUT.cgnb [--project ROOT] [--edit-cell ID --source CG_CODE] [--timeout-ms N] [--force]\ncgx2-notebook restart INPUT.cgnb --out OUTPUT.cgnb [--force]\ncgx2-notebook delete INPUT.cgnb CELL_ID --out OUTPUT.cgnb [--project ROOT] [--force]\ncgx2-notebook inspect INPUT.cgnb [--project ROOT]\ncgx2-notebook show INPUT.cgnb CELL_ID\ncgx2-notebook export INPUT.cgnb --out PORTABLE.cgnb [--force]\ncgx2-notebook import PORTABLE.cgnb --out OUTPUT.cgnb [--force]\ncgx2-notebook sweep INPUT.cgnb CELL_ID --value LITERAL [--value LITERAL ...] --out-dir DIRECTORY [--project ROOT] [--timeout-ms N]\n\nRun starts a clean session, replaces saved code outputs, executes code cells in file order,\nand saves fresh text/plain outputs. Inspect reads cell IDs, kinds, saved provenance and status\nwithout executing. Only immutable bindings and pure scalar expressions are supported.\nWith --edit-cell, run first establishes clean scalar state, then recomputes the edit and its\ntransitive readers without rerunning independent cells. Show prints saved captured text and\nprovenance without executing. There is no side-effecting rerun or implicit overwrite.\n"
+      },
+      "expected_sha256": "c5d821d9acfdb3bb78b22d4197d1707b6f75bdf4c043cc89c02aa3ab636b46da",
+      "path": "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2-notebook",
+      "sha256": "c5d821d9acfdb3bb78b22d4197d1707b6f75bdf4c043cc89c02aa3ab636b46da",
+      "status": "ready",
+      "version": null,
+      "version_note": "No common version interface in baseline preview; help banner and executable digest recorded."
+    },
+    "package-runner": {
+      "banner": {
+        "exit": 1,
+        "problem": null,
+        "stderr": "CGN001: native helper requires check|run PACKAGE\n",
+        "stdout": ""
+      },
+      "expected_sha256": "bac1883043671d7f795fa44ed3c6fffb4412b05c9e396ed3d5d73473772277b4",
+      "path": "/home/john-riley/projects/lang/target/release-plan-review/release/cgx2-native",
+      "sha256": "bac1883043671d7f795fa44ed3c6fffb4412b05c9e396ed3d5d73473772277b4",
+      "status": "ready",
+      "version": null,
+      "version_note": "No common version interface in baseline preview; help banner and executable digest recorded."
+    },
+    "rustc": {
+      "banner": {
+        "exit": 0,
+        "problem": null,
+        "stderr": "",
+        "stdout": "Usage: rustc [OPTIONS] INPUT\n\nOptions:\n    -h, --help          Display this message\n        --cfg <SPEC>    Configure the compilation environment.\n                        SPEC supports the syntax `<NAME>[=\"<VALUE>\"]`.\n        --check-cfg <SPEC>\n                        Provide list of expected cfgs for checking\n    -L [<KIND>=]<PATH>  Add a directory to the library search path. The\n                        optional KIND can be one of\n                        <dependency|crate|native|framework|all> (default:\n                        all).\n    -l [<KIND>[:<MODIFIERS>]=]<NAME>[:<RENAME>]\n                        Link the generated crate(s) to the specified native\n                        library NAME. The optional KIND can be one of\n                        <static|framework|dylib> (default: dylib).\n                        Optional comma separated MODIFIERS\n                        <bundle|verbatim|whole-archive|as-needed>\n                        may be specified each with a prefix of either '+' to\n                        enable or '-' to disable.\n        --crate-type <bin|lib|rlib|dylib|cdylib|staticlib|proc-macro>\n                        Comma separated list of types of crates\n                        for the compiler to emit\n        --crate-name <NAME>\n                        Specify the name of the crate being built\n        --edition <2015|2018|2021|2024|future>\n                        Specify which edition of the compiler to use when\n                        compiling code. The default is 2015 and the latest\n                        stable edition is 2024.\n        --emit <TYPE>[=<FILE>]\n                        Comma separated list of types of output for the\n                        compiler to emit.\n                        Each TYPE has the default FILE name:\n                        * asm - CRATE_NAME.s\n                        * llvm-bc - CRATE_NAME.bc\n                        * dep-info - CRATE_NAME.d\n                        * link - (platform and crate-type dependent)\n                        * llvm-ir - CRATE_NAME.ll\n                        * metadata - libCRATE_NAME.rmeta\n                        * mir - CRATE_NAME.mir\n                        * obj - CRATE_NAME.o\n                        * thin-link-bitcode - CRATE_NAME.indexing.o\n        --print <INFO>[=<FILE>]\n                        Compiler information to print on stdout (or to a file)\n                        INFO may be one of\n                        <all-target-specs-json|backend-has-mnemonic|backend-has-zstd|calling-conventions|cfg|check-cfg|code-models|crate-name|crate-root-lint-levels|deployment-target|file-names|host-tuple|link-args|native-static-libs|relocation-models|split-debuginfo|stack-protector-strategies|supported-crate-types|sysroot|target-cpus|target-features|target-libdir|target-list|target-spec-json|target-spec-json-schema|tls-models>.\n    -g                  Equivalent to -C debuginfo=2\n    -O                  Equivalent to -C opt-level=3\n    -o <FILENAME>       Write output to FILENAME\n        --out-dir <DIR> Write output to compiler-chosen filename in DIR\n        --explain <OPT> Provide a detailed explanation of an error message\n        --test          Build a test harness\n        --target <TARGET>\n                        Target tuple for which the code is compiled\n    -A, --allow <LINT>  Set lint allowed\n    -W, --warn <LINT>   Set lint warnings\n        --force-warn <LINT>\n                        Set lint force-warn\n    -D, --deny <LINT>   Set lint denied\n    -F, --forbid <LINT> Set lint forbidden\n        --cap-lints <LEVEL>\n                        Set the most restrictive lint level. More restrictive\n                        lints are capped at this level\n    -C, --codegen <OPT>[=<VALUE>]\n                        Set a codegen option\n    -V, --version       Print version info and exit\n    -v, --verbose       Use verbose output\n\nAdditional help:\n    -C help             Print codegen options\n    -W help             Print 'lint' options and default settings\n    --help -v           Print the full set of options rustc accepts\n\n"
+      },
+      "expected_sha256": "859254978c0a0402c32f949f6de0d99aee73be8d15f45aac00ae1448aac51e74",
+      "path": "/home/john-riley/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/bin/rustc",
+      "sha256": "859254978c0a0402c32f949f6de0d99aee73be8d15f45aac00ae1448aac51e74",
+      "status": "ready",
+      "version": null,
+      "version_note": "No common version interface in baseline preview; help banner and executable digest recorded."
+    },
+    "verify": {
+      "banner": {
+        "exit": 2,
+        "problem": null,
+        "stderr": "cgx2-verify: unknown option: --help\n",
+        "stdout": ""
+      },
+      "expected_sha256": "6d48b74e9e8e78487b6a51b9acfda649d704058c997bef32a100433e4501843e",
+      "path": "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2-verify",
+      "sha256": "6d48b74e9e8e78487b6a51b9acfda649d704058c997bef32a100433e4501843e",
+      "status": "ready",
+      "version": null,
+      "version_note": "No common version interface in baseline preview; help banner and executable digest recorded."
+    }
+  }
+}

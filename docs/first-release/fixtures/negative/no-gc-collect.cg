@@ -1,0 +1,4 @@
+let r = memory.region(mode: manual, limit: 512)
+no_gc(budget: 512):
+    memory.collect(r)
+memory.close(r)

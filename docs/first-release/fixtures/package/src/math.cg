@@ -1,0 +1,5 @@
+module guide.math
+import guide.base
+
+pub fn twice(x: i64) -> i64 effects() caps():
+    guide.base.add(x, x)

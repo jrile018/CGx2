@@ -1,0 +1,5 @@
+module guide.main
+import guide.math
+
+fn main() -> i64 effects() caps():
+    guide.math.twice(21)

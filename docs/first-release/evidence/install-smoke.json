@@ -1,0 +1,109 @@
+{
+  "checks": [
+    {
+      "command": [
+        "$INSTALL/bin/cgx2",
+        "check",
+        "scalar/answer.cg"
+      ],
+      "exit": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "command": [
+        "$INSTALL/bin/cgx2",
+        "run",
+        "scalar/answer.cg"
+      ],
+      "exit": 0,
+      "stderr": "",
+      "stdout": "42\n"
+    },
+    {
+      "command": [
+        "$INSTALL/bin/cgx2",
+        "scalar/arguments.cg",
+        "--",
+        "detached"
+      ],
+      "exit": 0,
+      "stderr": "",
+      "stdout": "detached\n"
+    },
+    {
+      "command": [
+        "$INSTALL/bin/cgx2",
+        "run",
+        "package"
+      ],
+      "exit": 0,
+      "stderr": "",
+      "stdout": "42\n"
+    },
+    {
+      "command": [
+        "$INSTALL/bin/cgx2",
+        "--diagnostic-format=json",
+        "run",
+        "negative/unknown.cg"
+      ],
+      "exit": 1,
+      "stderr": "{\"code\":\"CGT001\",\"severity\":\"error\",\"message\":\"unknown name `missing`\",\"file\":\"negative/unknown.cg\",\"span\":{\"start\":26,\"end\":33}}\n",
+      "stdout": ""
+    },
+    {
+      "command": [
+        "$INSTALL/bin/cgx2c",
+        "build",
+        "scalar/loops.cg",
+        "--out",
+        "$INSTALL/program",
+        "--rustc",
+        "/home/john-riley/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/bin/rustc"
+      ],
+      "exit": 0,
+      "stderr": "",
+      "stdout": "cgx2c build metadata: source_sha256=1a11b8193fe081b35979fd99369b3f9dd1321409b8070bd1cb32a5ad0d952166 rustc=/home/john-riley/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/bin/rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=none output=$INSTALL/program\n"
+    },
+    {
+      "command": [
+        "$INSTALL/program"
+      ],
+      "exit": 0,
+      "stderr": "",
+      "stdout": "42\n"
+    },
+    {
+      "command": [
+        "$INSTALL/bin/cgx2c",
+        "build",
+        "memory/manual.cg",
+        "--out",
+        "$INSTALL/memory",
+        "--rustc",
+        "/home/john-riley/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/bin/rustc"
+      ],
+      "exit": 0,
+      "stderr": "",
+      "stdout": "cgx2c build metadata: source_sha256=7dd479e9ff626defd68a35218e4cba9103895268590b6ae425152e25160fcd8f rustc=/home/john-riley/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/bin/rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=106b933aacf2e507ed5fa53f04fcacca6ec2270277f24ad9f471de56f89a6c7e output=$INSTALL/memory\n"
+    },
+    {
+      "command": [
+        "$INSTALL/memory"
+      ],
+      "exit": 0,
+      "stderr": "",
+      "stdout": ""
+    }
+  ],
+  "hashes": {
+    "cgx2": "bb4b72d58f0c440d04035f41db526c7bdaaca23d312ad89d60b45132251ad9c3",
+    "cgx2-native": "bac1883043671d7f795fa44ed3c6fffb4412b05c9e396ed3d5d73473772277b4",
+    "cgx2c": "71df213ecb5d75693a7142fc0be7dae7ff1d29f4d4b03f155e46a467edef9211"
+  },
+  "passed": 9,
+  "rustc": "/home/john-riley/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/bin/rustc",
+  "schema_version": 1,
+  "scope": "outside-checkout copied preview; no distribution certification"
+}
