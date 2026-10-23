@@ -221,14 +221,12 @@ impl UiSession {
             .map_err(|error| format!("cannot serialize notebook: {error}"))?;
         parse_notebook_bytes(text.as_bytes())
             .map_err(|error| format!("serialized notebook invalid: {error}"))?;
-        let target_assets = sidecar(&destination);
-        for bytes in self.referenced_assets()?.values() {
-            save_asset(&target_assets, bytes)
-                .map_err(|error| format!("cannot save asset: {error}"))?;
-        }
-        open_notebook_bytes(text.as_bytes(), &target_assets)
-            .map_err(|error| format!("cannot validate saved assets: {error}"))?;
-        atomic_write(&destination, text.as_bytes(), overwrite)
+        atomic_write_with_assets(
+            &destination,
+            text.as_bytes(),
+            &self.referenced_assets()?,
+            overwrite,
+        )
     }
 
     fn export(&self, name: &str, overwrite: bool) -> Result<(), String> {
@@ -278,6 +276,88 @@ impl Drop for TempPath {
     fn drop(&mut self) {
         let _ = fs::remove_file(&self.0);
     }
+}
+
+struct TempDirectory(PathBuf);
+impl Drop for TempDirectory {
+    fn drop(&mut self) {
+        let _ = fs::remove_dir_all(&self.0);
+    }
+}
+
+fn atomic_write_with_assets(
+    path: &Path,
+    bytes: &[u8],
+    assets: &BTreeMap<String, Vec<u8>>,
+    overwrite: bool,
+) -> Result<(), String> {
+    let target = sidecar(path);
+    let existing = match fs::symlink_metadata(&target) {
+        Ok(meta) if meta.file_type().is_symlink() || !meta.is_dir() => {
+            return Err("save asset destination must be a regular directory".into());
+        }
+        Ok(_) if !overwrite => {
+            return Err("asset directory exists; check Overwrite to replace it".into());
+        }
+        Ok(_) => true,
+        Err(error) if error.kind() == io::ErrorKind::NotFound => false,
+        Err(error) => return Err(format!("cannot inspect asset destination: {error}")),
+    };
+    if assets.is_empty() && !existing {
+        return atomic_write(path, bytes, overwrite);
+    }
+    let parent = path.parent().unwrap_or(Path::new("."));
+    let transaction = (0..16)
+        .find_map(|_| {
+            let seq = TEMP_SEQUENCE.fetch_add(1, Ordering::Relaxed);
+            let temp = parent.join(format!(".cgx2-ui-assets-{}-{seq}.tmp", std::process::id()));
+            match fs::create_dir(&temp) {
+                Ok(()) => Some(Ok(TempDirectory(temp))),
+                Err(error) if error.kind() == io::ErrorKind::AlreadyExists => None,
+                Err(error) => Some(Err(format!("cannot stage asset directory: {error}"))),
+            }
+        })
+        .ok_or_else(|| "could not reserve temporary asset directory".to_owned())??;
+    let staged = transaction.0.join("new");
+    let backup = transaction.0.join("old");
+    if !assets.is_empty() {
+        fs::create_dir(&staged).map_err(|error| format!("cannot stage assets: {error}"))?;
+        for (digest, data) in assets {
+            let actual =
+                save_asset(&staged, data).map_err(|error| format!("cannot save asset: {error}"))?;
+            if &actual != digest {
+                return Err(format!("asset digest changed while saving: {digest}"));
+            }
+        }
+    }
+    open_notebook_bytes(bytes, &staged)
+        .map_err(|error| format!("cannot validate saved assets: {error}"))?;
+    if existing {
+        fs::rename(&target, &backup)
+            .map_err(|error| format!("cannot stage prior assets: {error}"))?;
+    }
+    if !assets.is_empty() {
+        if let Err(error) = fs::rename(&staged, &target) {
+            if existing {
+                fs::rename(&backup, &target).map_err(|rollback| {
+                    format!("cannot install assets: {error}; rollback failed: {rollback}")
+                })?;
+            }
+            return Err(format!("cannot install assets: {error}"));
+        }
+    }
+    if let Err(error) = atomic_write(path, bytes, overwrite) {
+        if !assets.is_empty() {
+            fs::rename(&target, &staged)
+                .map_err(|rollback| format!("{error}; cannot roll back new assets: {rollback}"))?;
+        }
+        if existing {
+            fs::rename(&backup, &target)
+                .map_err(|rollback| format!("{error}; cannot restore prior assets: {rollback}"))?;
+        }
+        return Err(error);
+    }
+    Ok(())
 }
 
 fn atomic_write(path: &Path, bytes: &[u8], overwrite: bool) -> Result<(), String> {

@@ -506,6 +506,76 @@ fn markdown_image_route_save_and_export_use_verified_asset() {
 }
 
 #[test]
+fn overwrite_save_after_deleting_image_replaces_stale_sidecar() {
+    let fixture = Fixture::new("#!cgnb 1\n%% markdown id=notes\n# Figure\n");
+    let digest = save_asset(&fixture.dir.join("source.cgnb.assets"), b"GIF89afigure").unwrap();
+    fs::write(
+        &fixture.input,
+        format!("#!cgnb 1\n%% markdown id=notes\n![Figure](asset:sha256:{digest})\n"),
+    )
+    .unwrap();
+    let (port, handle) = server(&fixture.input, 3);
+    let secret = token(port);
+    assert_eq!(
+        post(port, "/api/delete", json!({"id":"notes"}), &secret).0,
+        200
+    );
+    assert_eq!(
+        post(
+            port,
+            "/api/save",
+            json!({"name":"source.cgnb","overwrite":true}),
+            &secret,
+        )
+        .0,
+        200
+    );
+    handle.join().unwrap();
+    let saved = fs::read(&fixture.input).unwrap();
+    let document =
+        cgx2_notebook_format::open_notebook_bytes(&saved, &fixture.dir.join("source.cgnb.assets"))
+            .unwrap();
+    assert!(document.notebook.cells.is_empty());
+    assert!(document.assets.is_empty());
+    assert!(!fixture.dir.join("source.cgnb.assets").exists());
+}
+
+#[test]
+fn overwrite_save_keeps_only_still_referenced_images() {
+    let fixture = Fixture::new("#!cgnb 1\n%% markdown id=keep\n# Keep\n");
+    let sidecar = fixture.dir.join("source.cgnb.assets");
+    let keep = save_asset(&sidecar, b"GIF89akeep").unwrap();
+    let discard = save_asset(&sidecar, b"GIF89adiscard").unwrap();
+    fs::write(
+        &fixture.input,
+        format!("#!cgnb 1\n%% markdown id=keep\n![Keep](asset:sha256:{keep})\n%% markdown id=discard\n![Discard](asset:sha256:{discard})\n"),
+    )
+    .unwrap();
+    let (port, handle) = server(&fixture.input, 3);
+    let secret = token(port);
+    assert_eq!(
+        post(port, "/api/delete", json!({"id":"discard"}), &secret).0,
+        200
+    );
+    assert_eq!(
+        post(
+            port,
+            "/api/save",
+            json!({"name":"source.cgnb","overwrite":true}),
+            &secret,
+        )
+        .0,
+        200
+    );
+    handle.join().unwrap();
+    let saved = fs::read(&fixture.input).unwrap();
+    let document = cgx2_notebook_format::open_notebook_bytes(&saved, &sidecar).unwrap();
+    assert_eq!(document.assets.len(), 1);
+    assert_eq!(document.assets[&keep], b"GIF89akeep");
+    assert!(!sidecar.join(discard).exists());
+}
+
+#[test]
 fn portable_open_serves_bounded_image_and_exports_without_sidecars() {
     let f = Fixture::new("#!cgnb 1\n%% markdown id=notes\n# Portable\n%% code id=seed\nlet x = 3\n%% code id=result\nx + 4\n");
     let digest = save_asset(&f.dir.join("source.cgnb.assets"), b"image bytes").unwrap();
