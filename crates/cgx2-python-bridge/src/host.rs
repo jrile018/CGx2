@@ -4,6 +4,7 @@ use pyo3::exceptions::{PyAttributeError, PyModuleNotFoundError};
 use pyo3::prelude::*;
 use pyo3::types::{PyBool, PyBytes, PyDict, PyFloat, PyInt, PyList, PyString, PyTuple};
 
+use crate::numeric_array::{MAX_LIVE_ARRAY_BYTES, checked_f64_array_bytes, to_python_array};
 use crate::tensor::validate_torch_capability;
 use crate::value::{BridgeValue, PyHandle};
 
@@ -331,7 +332,7 @@ fn valid_keyword_name(name: &str) -> Result<bool, BridgeError> {
     })
 }
 
-fn conversion_error(expected: &'static str, actual: String) -> BridgeError {
+pub(crate) fn conversion_error(expected: &'static str, actual: String) -> BridgeError {
     BridgeError::TypeConversion {
         expected,
         actual,
@@ -343,6 +344,7 @@ fn conversion_error(expected: &'static str, actual: String) -> BridgeError {
 struct ValueBudget {
     elements: usize,
     bytes: usize,
+    array_bytes: usize,
 }
 
 impl ValueBudget {
@@ -371,12 +373,40 @@ impl ValueBudget {
                 self.bytes.to_string(),
             ));
         }
+        self.check_aggregate()?;
+        Ok(())
+    }
+    fn check_aggregate(&self) -> Result<(), BridgeError> {
+        if self
+            .bytes
+            .checked_add(self.array_bytes)
+            .is_none_or(|total| total > MAX_LIVE_ARRAY_BYTES)
+        {
+            return Err(conversion_error(
+                "at most 16777216 aggregate copied payload bytes",
+                "exceeded".into(),
+            ));
+        }
         Ok(())
     }
 
     fn check_rust(&mut self, value: &BridgeValue, depth: usize) -> Result<(), BridgeError> {
         self.add_element(depth)?;
         match value {
+            BridgeValue::F64Array1DCopyV1(values) => {
+                if depth != 0 {
+                    return Err(conversion_error(
+                        "top-level f64_array_1d_copy_v1",
+                        "nested array".into(),
+                    ));
+                }
+                let bytes = checked_f64_array_bytes(values)?;
+                self.array_bytes = self.array_bytes.checked_add(bytes).ok_or_else(|| {
+                    conversion_error("aggregate copied array bytes", "overflow".into())
+                })?;
+                self.check_aggregate()?;
+                Ok(())
+            }
             BridgeValue::String(value) => self.add_bytes(value.len()),
             BridgeValue::Bytes(value) => self.add_bytes(value.len()),
             BridgeValue::List(values) | BridgeValue::Tuple(values) => {
@@ -594,6 +624,7 @@ fn bridge_to_python(py: Python<'_>, arg: &BridgeValue) -> Result<Py<PyAny>, Brid
             .map_err(|error| python_exception(py, error.into()))?
             .into_any()
             .unbind()),
+        BridgeValue::F64Array1DCopyV1(values) => to_python_array(py, values),
         BridgeValue::String(value) => Ok(value
             .as_str()
             .into_pyobject(py)

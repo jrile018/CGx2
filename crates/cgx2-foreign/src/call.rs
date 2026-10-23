@@ -1,6 +1,7 @@
 use crate::{ForeignError, Registry, ValueShape};
 use cgx2_python_bridge::{
-    BridgeValue, MAX_KEYWORDS, MAX_VALUE_BYTES, MAX_VALUE_DEPTH, MAX_VALUE_ELEMENTS, PythonBridge,
+    BridgeValue, MAX_KEYWORDS, MAX_LIVE_ARRAY_BYTES, MAX_VALUE_BYTES, MAX_VALUE_DEPTH,
+    MAX_VALUE_ELEMENTS, PythonBridge, checked_f64_array_bytes,
 };
 use std::collections::BTreeMap;
 
@@ -65,6 +66,12 @@ impl Registry {
         if declared.returns == ValueShape::PythonHandle {
             return Ok(BridgeValue::Handle(result));
         }
+        if declared.returns == ValueShape::F64Array1DCopyV1 {
+            return bridge
+                .to_f64_array_1d_copy_v1(&result, budget.bytes + budget.array_bytes)
+                .map(BridgeValue::F64Array1DCopyV1)
+                .map_err(|error| ForeignError::from_bridge(error, true));
+        }
         let copied = bridge
             .to_value(&result)
             .map_err(|error| ForeignError::from_bridge(error, true))?;
@@ -108,6 +115,7 @@ fn shape_of(value: &BridgeValue) -> ValueShape {
         BridgeValue::Bool(_) => ValueShape::Bool,
         BridgeValue::I64(_) => ValueShape::I64,
         BridgeValue::F64(_) => ValueShape::F64,
+        BridgeValue::F64Array1DCopyV1(_) => ValueShape::F64Array1DCopyV1,
         BridgeValue::String(_) => ValueShape::String,
         BridgeValue::Bytes(_) => ValueShape::Bytes,
         BridgeValue::List(_) => ValueShape::List,
@@ -130,6 +138,7 @@ fn contains_handle(value: &BridgeValue) -> bool {
 struct InputBudget {
     elements: usize,
     bytes: usize,
+    array_bytes: usize,
 }
 
 impl InputBudget {
@@ -142,6 +151,19 @@ impl InputBudget {
             return Err(ForeignError::Argument(format!(
                 "copied payload exceeds {MAX_VALUE_BYTES} bytes"
             )));
+        }
+        self.check_aggregate()?;
+        Ok(())
+    }
+    fn check_aggregate(&self) -> Result<(), ForeignError> {
+        if self
+            .bytes
+            .checked_add(self.array_bytes)
+            .is_none_or(|total| total > MAX_LIVE_ARRAY_BYTES)
+        {
+            return Err(ForeignError::Argument(
+                "aggregate copied payload exceeds 16777216 bytes".into(),
+            ));
         }
         Ok(())
     }
@@ -162,6 +184,20 @@ impl InputBudget {
             )));
         }
         match value {
+            BridgeValue::F64Array1DCopyV1(values) => {
+                if depth != 0 {
+                    return Err(ForeignError::Argument(
+                        "declared array must be top-level".into(),
+                    ));
+                }
+                let bytes = checked_f64_array_bytes(values)
+                    .map_err(|error| ForeignError::Argument(error.to_string()))?;
+                self.array_bytes = self.array_bytes.checked_add(bytes).ok_or_else(|| {
+                    ForeignError::Argument("aggregate array byte count overflow".into())
+                })?;
+                self.check_aggregate()?;
+                Ok(())
+            }
             BridgeValue::String(value) => self.add_bytes(value.len()),
             BridgeValue::Bytes(value) => self.add_bytes(value.len()),
             BridgeValue::List(values) | BridgeValue::Tuple(values) => {
