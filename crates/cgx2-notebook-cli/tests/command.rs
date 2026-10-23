@@ -7,6 +7,26 @@ use cgx2_notebook_format::{parse_notebook_bytes, save_asset, Output as CellOutpu
 
 static NEXT: AtomicU64 = AtomicU64::new(0);
 
+#[test]
+fn pure_function_fixture_runs_and_inspects_cached_status() {
+    let fixture = Fixture::new();
+    let input = fixture.write(
+        "functions.cgnb",
+        include_str!("../../cgx2-notebook-kernel/tests/fixtures/pure-functions.cgnb"),
+    );
+    let output = fixture.path("result.cgnb");
+    let result = run(&[Path::new("run"), &input, Path::new("--out"), &output]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let saved = parse_notebook_bytes(&fs::read(&output).unwrap()).unwrap();
+    assert!(matches!(&saved.cells[1].outputs[0], CellOutput::Text { body, .. } if body == "5"));
+    let inspected = run(&[Path::new("inspect"), &output]);
+    assert!(inspected.status.success(), "{}", stderr(&inspected));
+    let listing = String::from_utf8(inspected.stdout).unwrap();
+    assert!(listing.contains("defs\tcode\tcached"));
+    assert!(listing.contains("value\tcode\tcached"));
+    assert!(listing.contains("independent\tcode\tcached"));
+}
+
 struct Fixture(PathBuf);
 
 impl Fixture {
@@ -213,7 +233,7 @@ fn unsupported_cell_and_missing_asset_fail_without_replacing_output() {
     let output = fixture.write("prior.cgnb", "prior");
     let unsupported = fixture.write(
         "unsupported.cgnb",
-        "#!cgnb 1\n%% code id=unsupported\nfn double(x: i64) -> i64:\n    x * 2\n",
+        "#!cgnb 1\n%% code id=unsupported\nfn main() -> i64:\n    2\n",
     );
     let failed = run(&[
         Path::new("run"),
@@ -224,7 +244,7 @@ fn unsupported_cell_and_missing_asset_fail_without_replacing_output() {
     ]);
     assert!(!failed.status.success());
     assert!(stderr(&failed).contains("unsupported"));
-    assert!(stderr(&failed).contains("CGNK001"));
+    assert!(stderr(&failed).contains("CGNK011"));
     assert_eq!(fs::read_to_string(&output).unwrap(), "prior");
 
     let digest = "0".repeat(64);

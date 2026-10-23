@@ -1,0 +1,11 @@
+#!cgnb 1
+%% code id=defs
+fn inc(x: i64) -> i64 effects() caps():
+    x + 1
+
+fn twice(x: i64) -> i64 effects() caps():
+    inc(inc(x))
+%% code id=value
+twice(3)
+%% code id=independent
+40 + 2

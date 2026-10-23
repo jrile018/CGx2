@@ -319,7 +319,6 @@ fn duplicate_definition_and_unsupported_forms_are_rejected() {
     duplicate.run_cell("a").unwrap();
     assert_eq!(duplicate.run_cell("b").unwrap_err().code, "CGNK008");
     for source in [
-        "fn f() -> i64:\n    1",
         "for x in xs:\n    x",
         "arg_count()",
         "let mut x = 3",
@@ -333,6 +332,159 @@ fn duplicate_definition_and_unsupported_forms_are_rejected() {
         };
         assert_eq!(kernel.run_cell("a").unwrap_err().code, expected, "{source}");
     }
+}
+
+#[test]
+fn pure_functions_keep_live_definitions_and_selective_revisions() {
+    let source = include_str!("fixtures/pure-functions.cgnb");
+    let mut kernel = NotebookKernel::open(parse_notebook(source).unwrap()).unwrap();
+    kernel.restart_and_run_all().unwrap();
+    assert_eq!(output_body(&kernel.notebook().cells[1].outputs[0]), "5");
+    let independent = kernel.notebook().cells[2]
+        .provenance
+        .as_ref()
+        .unwrap()
+        .ordinal;
+    let saved = write_notebook(kernel.notebook()).unwrap();
+    let reopened = NotebookKernel::open(parse_notebook(&saved).unwrap()).unwrap();
+    assert_eq!(reopened.status("defs").unwrap(), CellStatus::Cached);
+    assert_eq!(reopened.status("value").unwrap(), CellStatus::Cached);
+
+    kernel
+        .replace_cell(
+            "defs",
+            "fn inc(x: i64) -> i64:\n    x + 2\n\nfn twice(x: i64) -> i64:\n    inc(inc(x))\n"
+                .into(),
+        )
+        .unwrap();
+    assert_eq!(kernel.status("value").unwrap(), CellStatus::Stale);
+    assert_eq!(kernel.status("independent").unwrap(), CellStatus::Current);
+    kernel.rerun_affected("defs").unwrap();
+    assert_eq!(output_body(&kernel.notebook().cells[1].outputs[0]), "7");
+    assert_eq!(
+        kernel.notebook().cells[2]
+            .provenance
+            .as_ref()
+            .unwrap()
+            .ordinal,
+        independent
+    );
+
+    kernel
+        .replace_cell("defs", "fn inc(x: i64) -> i64:\n    x + 2\n".into())
+        .unwrap();
+    assert_eq!(kernel.status("value").unwrap(), CellStatus::Stale);
+    let error = kernel.rerun_affected("defs").unwrap_err();
+    assert_eq!(error.code, "CGNK011");
+    assert_eq!(kernel.status("independent").unwrap(), CellStatus::Current);
+    let saved = write_notebook(kernel.notebook()).unwrap();
+    let reopened = NotebookKernel::open(parse_notebook(&saved).unwrap()).unwrap();
+    assert_eq!(reopened.status("value").unwrap(), CellStatus::Stale);
+}
+
+#[test]
+fn changed_function_stales_transitive_function_callers() {
+    let mut kernel = NotebookKernel::open(notebook(vec![
+        code("base", "fn inc(x: i64) -> i64:\n    x + 1\n"),
+        code("derived", "fn twice(x: i64) -> i64:\n    inc(inc(x))\n"),
+        code("value", "twice(3)"),
+        code("independent", "40 + 2"),
+    ]))
+    .unwrap();
+    kernel.restart_and_run_all().unwrap();
+    assert_eq!(output_body(&kernel.notebook().cells[2].outputs[0]), "5");
+    let independent = kernel.notebook().cells[3]
+        .provenance
+        .as_ref()
+        .unwrap()
+        .ordinal;
+    kernel
+        .replace_cell("base", "fn inc(x: i64) -> i64:\n    x + 2\n".into())
+        .unwrap();
+    assert_eq!(kernel.status("derived").unwrap(), CellStatus::Stale);
+    assert_eq!(kernel.status("value").unwrap(), CellStatus::Stale);
+    kernel.rerun_affected("base").unwrap();
+    assert_eq!(output_body(&kernel.notebook().cells[2].outputs[0]), "7");
+    assert_eq!(
+        kernel.notebook().cells[3]
+            .provenance
+            .as_ref()
+            .unwrap()
+            .ordinal,
+        independent
+    );
+}
+
+#[test]
+fn pure_bool_and_string_signatures_use_cli_scalar_semantics() {
+    let mut kernel = NotebookKernel::open(notebook(vec![
+        code(
+            "defs",
+            "fn echo_flag(x: Bool) -> Bool:\n    x\n\nfn greet(x: String) -> String:\n    x\n",
+        ),
+        code("bool", "echo_flag(true)"),
+        code("string", "greet(\"hello\")"),
+    ]))
+    .unwrap();
+    kernel.restart_and_run_all().unwrap();
+    assert_eq!(output_body(&kernel.notebook().cells[1].outputs[0]), "true");
+    assert_eq!(output_body(&kernel.notebook().cells[2].outputs[0]), "hello");
+}
+
+#[test]
+fn pure_functions_reject_effects_capture_recursion_and_main() {
+    for source in [
+        "fn main() -> i64:\n    1\n",
+        "fn f() -> i64 effects(Foreign):\n    1\n",
+        "foreign python fn f() -> i64 effects(Foreign) caps(ForeignCall) = math.isqrt runtime \"local:cpython\" ownership copied\n",
+        "fn f() -> i64:\n    f()\n",
+        "fn f() -> i64:\n    x\n",
+    ] {
+        let mut kernel = NotebookKernel::open(notebook(vec![code("a", "let x = 2"), code("b", source)])).unwrap();
+        kernel.run_cell("a").unwrap();
+        let error = kernel.run_cell("b").unwrap_err();
+        assert!(matches!(error.code, "CGNK011" | "CGNK001"), "{source}: {error}");
+    }
+}
+
+#[cfg(unix)]
+#[test]
+fn interrupt_during_pure_call_leaves_failed_observation() {
+    use std::os::unix::fs::PermissionsExt;
+    let source = include_str!("fixtures/pure-functions.cgnb");
+    let mut kernel = NotebookKernel::open(parse_notebook(source).unwrap()).unwrap();
+    kernel.run_cell("defs").unwrap();
+    let worker = std::env::temp_dir().join(format!("cgx2-pure-call-worker-{}", std::process::id()));
+    let marker = std::env::temp_dir().join(format!("cgx2-pure-call-marker-{}", std::process::id()));
+    std::fs::write(
+        &worker,
+        format!("#!/bin/sh\ntouch {}\nexec sleep 2\n", marker.display()),
+    )
+    .unwrap();
+    std::fs::set_permissions(&worker, std::fs::Permissions::from_mode(0o700)).unwrap();
+    let control = ExecutionControl::new(worker.clone(), Duration::from_secs(2));
+    kernel.set_execution_control(control.clone());
+    let running = std::thread::spawn(move || {
+        let result = kernel.run_cell("value");
+        (kernel, result)
+    });
+    let started = Instant::now();
+    while !marker.exists() && started.elapsed() < Duration::from_secs(1) {
+        std::thread::sleep(Duration::from_millis(5));
+    }
+    assert!(marker.exists(), "pure call did not reach the worker");
+    control.interrupt();
+    let (mut kernel, result) = running.join().unwrap();
+    let _ = std::fs::remove_file(worker);
+    let _ = std::fs::remove_file(marker);
+    assert_eq!(result.unwrap_err().code, "CGNK010");
+    assert_eq!(kernel.status("value").unwrap(), CellStatus::Failed);
+    kernel.set_execution_control(ExecutionControl::new(
+        std::path::PathBuf::from(env!("CARGO_BIN_EXE_cgx2-notebook-scalar-worker")),
+        Duration::from_secs(2),
+    ));
+    kernel.restart_and_run_all().unwrap();
+    assert_eq!(output_body(&kernel.notebook().cells[1].outputs[0]), "5");
 }
 
 #[test]

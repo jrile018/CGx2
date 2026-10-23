@@ -14,11 +14,14 @@ use cgx2_notebook_format::{CellKind, Notebook};
 use cgx2_notebook_session::{
     CellExecutor, CellFacts, CellResult, CellStatus, NotebookSession, SessionError,
 };
-use cgx2_syntax::{parse_module, Expr, ExprKind, Path, StmtKind};
+use cgx2_syntax::{parse_module, Expr, ExprKind, Function, Path, StmtKind};
 
 pub const MAX_CODE_CELLS: usize = 128;
 pub const MAX_SOURCE_BYTES: usize = 64 * 1024;
 pub const MAX_EVALUATION_BYTES: usize = 1024 * 1024;
+pub const MAX_PURE_FUNCTIONS: usize = 32;
+pub const MAX_FUNCTION_PARAMETERS: usize = 8;
+pub const MAX_STATIC_STEPS: usize = 100_000;
 /// Compatibility alias for the cumulative evaluation budget.
 pub const MAX_REPLAY_BYTES: usize = MAX_EVALUATION_BYTES;
 pub const DEFAULT_CELL_TIMEOUT: Duration = Duration::from_secs(2);
@@ -280,9 +283,14 @@ impl NotebookKernel {
         }
         cell.source = source.clone();
         validate_limits(&proposed)?;
+        let known_functions = known_functions_before(&proposed, id);
         let _ = new_session(proposed)?;
         self.session
-            .replace_cell(id, source.clone(), facts_or_opaque(&source))
+            .replace_cell(
+                id,
+                source.clone(),
+                facts_or_opaque(&source, &known_functions),
+            )
             .map_err(session_error)?;
         self.requires_restart = true;
         Ok(())
@@ -327,12 +335,26 @@ fn validate_limits(notebook: &Notebook) -> Result<(), KernelError> {
 }
 
 fn new_session(notebook: Notebook) -> Result<NotebookSession<RetainedExecutor>, KernelError> {
-    let facts = notebook
+    let mut facts = BTreeMap::new();
+    let mut known_functions = BTreeSet::new();
+    for cell in notebook
         .cells
         .iter()
         .filter(|cell| cell.kind == CellKind::Code)
-        .map(|cell| (cell.id.clone(), facts_or_opaque(&cell.source)))
-        .collect::<BTreeMap<_, _>>();
+    {
+        let cell_facts = facts_or_opaque(&cell.source, &known_functions);
+        if let Ok(module) = parse_module(&cell.source) {
+            if !cell_facts.opaque_effects {
+                known_functions.extend(
+                    module
+                        .functions
+                        .iter()
+                        .map(|function| function.name.clone()),
+                );
+            }
+        }
+        facts.insert(cell.id.clone(), cell_facts);
+    }
     for (index, cell) in notebook.cells.iter().enumerate() {
         if cell.kind != CellKind::Code {
             continue;
@@ -367,11 +389,80 @@ fn new_session(notebook: Notebook) -> Result<NotebookSession<RetainedExecutor>, 
     NotebookSession::new(notebook, facts, executor).map_err(session_error)
 }
 
-fn facts_or_opaque(source: &str) -> CellFacts {
-    facts_for_source(source).unwrap_or(CellFacts {
-        opaque_effects: true,
-        ..CellFacts::default()
-    })
+fn known_functions_before(notebook: &Notebook, id: &str) -> BTreeSet<String> {
+    let mut known = BTreeSet::new();
+    for cell in notebook.cells.iter().take_while(|cell| cell.id != id) {
+        if cell.kind != CellKind::Code || facts_or_opaque(&cell.source, &known).opaque_effects {
+            continue;
+        }
+        if let Ok(module) = parse_module(&cell.source) {
+            known.extend(
+                module
+                    .functions
+                    .iter()
+                    .map(|function| function.name.clone()),
+            );
+        }
+    }
+    known
+}
+
+fn facts_or_opaque(source: &str, known_functions: &BTreeSet<String>) -> CellFacts {
+    let Ok(mut facts) = facts_for_source(source) else {
+        return CellFacts {
+            opaque_effects: true,
+            ..CellFacts::default()
+        };
+    };
+    if let Ok(module) = parse_module(source) {
+        let mut calls = BTreeSet::new();
+        for function in &module.functions {
+            for statement in &function.body {
+                collect_call_names_statement(statement, &mut calls);
+            }
+        }
+        for statement in &module.statements {
+            collect_call_names_statement(statement, &mut calls);
+        }
+        if calls
+            .iter()
+            .any(|call| !known_functions.contains(call) && !facts.defines.contains(call))
+        {
+            facts.opaque_effects = true;
+        }
+    }
+    facts
+}
+
+fn collect_call_names_statement(statement: &cgx2_syntax::Stmt, names: &mut BTreeSet<String>) {
+    match &statement.kind {
+        StmtKind::Let { value, .. } | StmtKind::Expr(value) | StmtKind::Return(Some(value)) => {
+            collect_call_names(value, names)
+        }
+        _ => {}
+    }
+}
+
+fn collect_call_names(expression: &Expr, names: &mut BTreeSet<String>) {
+    match &expression.kind {
+        ExprKind::Binary { left, right, .. } => {
+            collect_call_names(left, names);
+            collect_call_names(right, names);
+        }
+        ExprKind::Call { callee, arguments } => {
+            if let ExprKind::Name(path) = &callee.kind {
+                if let Ok(name) = simple_name(path) {
+                    if !name.starts_with("$cgx2_cmp_") {
+                        names.insert(name.to_owned());
+                    }
+                }
+            }
+            for argument in arguments {
+                collect_call_names(&argument.value, names);
+            }
+        }
+        _ => {}
+    }
 }
 
 /// Extracts simple definitions and reads from the syntax tree; unsupported forms fail closed.
@@ -380,13 +471,23 @@ pub fn facts_for_source(source: &str) -> Result<CellFacts, KernelError> {
         let first = &diagnostics[0];
         error("CGNK008", format!("{}: {}", first.code, first.message))
     })?;
-    if module.name.is_some() || !module.functions.is_empty() {
+    if module.name.is_some() || !module.imports.is_empty() {
         return Err(error(
             "CGNK001",
-            "module declarations and functions are unsupported in notebook scalar execution",
+            "module declarations and imports are unsupported in notebook execution",
         ));
     }
     let mut facts = CellFacts::default();
+    if !module.functions.is_empty() {
+        if module.functions.len() > MAX_PURE_FUNCTIONS {
+            return Err(error("CGNK006", "too many pure functions in one cell"));
+        }
+        for function in &module.functions {
+            validate_function(function, &mut facts)?;
+        }
+        facts.reads.retain(|name| !facts.defines.contains(name));
+        return Ok(facts);
+    }
     let mut locals = BTreeSet::new();
     for statement in &module.statements {
         match &statement.kind {
@@ -412,32 +513,134 @@ pub fn facts_for_source(source: &str) -> Result<CellFacts, KernelError> {
     Ok(facts)
 }
 
+fn validate_function(function: &Function, facts: &mut CellFacts) -> Result<(), KernelError> {
+    if function.name == "main" || matches!(function.name.as_str(), "arg" | "arg_count") {
+        return Err(error(
+            "CGNK011",
+            "main and runner builtins are reserved in notebooks",
+        ));
+    }
+    if function.foreign.is_some()
+        || function
+            .effects
+            .as_ref()
+            .is_some_and(|decl| !decl.names.is_empty())
+        || function
+            .capabilities
+            .as_ref()
+            .is_some_and(|decl| !decl.names.is_empty())
+        || !function.requires.is_empty()
+        || !function.ensures.is_empty()
+    {
+        return Err(error("CGNK011", "effect, capability, foreign, and contract declarations are unsupported in pure notebook functions"));
+    }
+    if function.parameters.len() > MAX_FUNCTION_PARAMETERS {
+        return Err(error("CGNK006", "too many pure function parameters"));
+    }
+    let mut locals = BTreeSet::new();
+    for parameter in &function.parameters {
+        scalar_type(&parameter.ty.to_string())?;
+        if !locals.insert(parameter.name.clone()) {
+            return Err(error("CGNK001", "duplicate pure function parameter"));
+        }
+    }
+    let Some(return_type) = &function.return_type else {
+        return Err(error(
+            "CGNK001",
+            "pure notebook functions require a scalar return type",
+        ));
+    };
+    scalar_type(&return_type.to_string())?;
+    if !facts.defines.insert(function.name.clone()) {
+        return Err(error("CGNK001", "duplicate pure function name in cell"));
+    }
+    for statement in &function.body {
+        match &statement.kind {
+            StmtKind::Let { mutable: false, name, value, .. } => {
+                collect_expression(value, &locals, facts, true)?;
+                locals.insert(name.clone());
+            }
+            StmtKind::Expr(value) | StmtKind::Return(Some(value)) => {
+                collect_expression(value, &locals, facts, true)?;
+            }
+            _ => return Err(error("CGNK011", "pure notebook functions allow only immutable let, expression, and return statements")),
+        }
+    }
+    Ok(())
+}
+
+fn scalar_type(name: &str) -> Result<(), KernelError> {
+    if matches!(name, "i64" | "Bool" | "String") {
+        Ok(())
+    } else {
+        Err(error(
+            "CGNK011",
+            format!("unsupported pure notebook scalar type {name}"),
+        ))
+    }
+}
+
 fn collect_external_reads(
     expression: &Expr,
     locals: &BTreeSet<String>,
     facts: &mut CellFacts,
 ) -> Result<(), KernelError> {
     let mut reads = CellFacts::default();
-    collect_reads(expression, &mut reads)?;
+    collect_expression(expression, locals, &mut reads, false)?;
     facts.reads.extend(reads.reads.difference(locals).cloned());
     Ok(())
 }
 
-fn collect_reads(expression: &Expr, facts: &mut CellFacts) -> Result<(), KernelError> {
+fn collect_expression(
+    expression: &Expr,
+    locals: &BTreeSet<String>,
+    facts: &mut CellFacts,
+    function_body: bool,
+) -> Result<(), KernelError> {
     match &expression.kind {
         ExprKind::Name(path) => {
-            facts.reads.insert(simple_name(path)?.to_owned());
+            let name = simple_name(path)?;
+            if !locals.contains(name) {
+                if function_body {
+                    return Err(error(
+                        "CGNK011",
+                        format!("pure notebook functions cannot capture binding {name}"),
+                    ));
+                }
+                facts.reads.insert(name.to_owned());
+            }
         }
         ExprKind::Binary { left, right, .. } => {
-            collect_reads(left, facts)?;
-            collect_reads(right, facts)?;
+            collect_expression(left, locals, facts, function_body)?;
+            collect_expression(right, locals, facts, function_body)?;
         }
         ExprKind::Integer(_) | ExprKind::StringLiteral(_) | ExprKind::Boolean(_) => {}
-        ExprKind::Call { .. } => {
-            return Err(error(
-                "CGNK011",
-                "calls are unsupported in notebook scalar execution; file, network, and foreign effects cannot run in this worker",
-            ))
+        ExprKind::Call { callee, arguments } => {
+            let ExprKind::Name(path) = &callee.kind else {
+                return Err(error(
+                    "CGNK011",
+                    "computed calls are unsupported in pure notebook cells",
+                ));
+            };
+            let name = simple_name(path)?;
+            if matches!(name, "arg" | "arg_count") {
+                return Err(error(
+                    "CGNK011",
+                    "argument and host calls are unsupported in pure notebook cells",
+                ));
+            }
+            if !name.starts_with("$cgx2_cmp_") {
+                facts.reads.insert(name.to_owned());
+            }
+            for argument in arguments {
+                if argument.name.is_some() {
+                    return Err(error(
+                        "CGNK011",
+                        "named calls are unsupported in pure notebook cells",
+                    ));
+                }
+                collect_expression(&argument.value, locals, facts, function_body)?;
+            }
         }
     }
     Ok(())
@@ -453,21 +656,203 @@ fn simple_name(path: &Path) -> Result<&str, KernelError> {
     }
 }
 
+fn validate_static_bounds(
+    function_source: &str,
+    module: &cgx2_syntax::Module,
+    retained_bindings: usize,
+) -> Result<(), String> {
+    let functions = parse_module(function_source).map_err(|diagnostics| {
+        let first = &diagnostics[0];
+        format!("{}: {}", first.code, first.message)
+    })?;
+    if functions.functions.len() > MAX_PURE_FUNCTIONS {
+        return Err("CGNK006: too many retained pure functions".into());
+    }
+    let mut by_name = BTreeMap::new();
+    for function in &functions.functions {
+        if by_name.insert(function.name.as_str(), function).is_some() {
+            return Err(format!(
+                "CGNK011: duplicate pure function {}",
+                function.name
+            ));
+        }
+    }
+    for name in by_name.keys() {
+        let cost = function_cost(name, &by_name, &mut Vec::new())?;
+        if cost > MAX_STATIC_STEPS {
+            return Err("CGNK006: pure function step budget exceeded".into());
+        }
+    }
+    let statement_count = module.statements.len();
+    let mut cell_cost = statement_count
+        .saturating_mul(retained_bindings.saturating_add(statement_count))
+        .saturating_mul(3);
+    for statement in &module.statements {
+        cell_cost = cell_cost.saturating_add(statement_cost(statement, &by_name, &mut Vec::new())?);
+    }
+    if cell_cost > MAX_STATIC_STEPS {
+        return Err("CGNK006: cell step budget exceeded".into());
+    }
+    Ok(())
+}
+
+fn function_cost(
+    name: &str,
+    functions: &BTreeMap<&str, &Function>,
+    stack: &mut Vec<String>,
+) -> Result<usize, String> {
+    if stack.iter().any(|item| item == name) {
+        return Err(format!(
+            "CGNK011: recursive pure function {name} is unsupported"
+        ));
+    }
+    if stack.len() >= 32 {
+        return Err("CGNK006: pure function call depth exceeded".into());
+    }
+    let function = functions.get(name).ok_or_else(|| {
+        format!("CGNK011: unsupported call {name}; file, network, and foreign effects cannot run")
+    })?;
+    stack.push(name.to_owned());
+    let mut cost = 0usize;
+    for statement in &function.body {
+        cost = cost.saturating_add(statement_cost(statement, functions, stack)?);
+        if cost > MAX_STATIC_STEPS {
+            break;
+        }
+    }
+    stack.pop();
+    Ok(cost)
+}
+
+fn statement_cost(
+    statement: &cgx2_syntax::Stmt,
+    functions: &BTreeMap<&str, &Function>,
+    stack: &mut Vec<String>,
+) -> Result<usize, String> {
+    let expression = match &statement.kind {
+        StmtKind::Let { value, .. } | StmtKind::Expr(value) | StmtKind::Return(Some(value)) => {
+            value
+        }
+        _ => return Err("CGNK011: unsupported statement in pure notebook cell".into()),
+    };
+    Ok(1usize.saturating_add(expression_cost(expression, functions, stack)?))
+}
+
+fn expression_cost(
+    expression: &Expr,
+    functions: &BTreeMap<&str, &Function>,
+    stack: &mut Vec<String>,
+) -> Result<usize, String> {
+    match &expression.kind {
+        ExprKind::Name(_)
+        | ExprKind::Integer(_)
+        | ExprKind::StringLiteral(_)
+        | ExprKind::Boolean(_) => Ok(1),
+        ExprKind::Binary { left, right, .. } => Ok(1usize
+            .saturating_add(expression_cost(left, functions, stack)?)
+            .saturating_add(expression_cost(right, functions, stack)?)),
+        ExprKind::Call { callee, arguments } => {
+            let ExprKind::Name(path) = &callee.kind else {
+                return Err("CGNK011: computed calls are unsupported".into());
+            };
+            let name = simple_name(path).map_err(|error| error.to_string())?;
+            let mut cost = 1usize;
+            for argument in arguments {
+                cost = cost.saturating_add(expression_cost(&argument.value, functions, stack)?);
+            }
+            if !matches!(
+                name,
+                "$cgx2_cmp_eq"
+                    | "$cgx2_cmp_ne"
+                    | "$cgx2_cmp_lt"
+                    | "$cgx2_cmp_le"
+                    | "$cgx2_cmp_gt"
+                    | "$cgx2_cmp_ge"
+            ) {
+                cost = cost.saturating_add(function_cost(name, functions, stack)?);
+            }
+            Ok(cost)
+        }
+    }
+}
+
+fn wrapped_script(functions: &str, prefix: &str, body: &str, result: Option<&str>) -> String {
+    let mut script = format!("{functions}fn main():\n");
+    let mut has_statement = false;
+    for line in prefix.lines().chain(body.lines()) {
+        has_statement |= !line.trim().is_empty();
+        script.push_str("    ");
+        script.push_str(line);
+        script.push('\n');
+    }
+    if let Some(result) = result {
+        has_statement = true;
+        script.push_str("    ");
+        script.push_str(result);
+        script.push('\n');
+    }
+    if !has_statement {
+        script.push_str("    0\n");
+    }
+    script
+}
+
 #[derive(Debug, Clone)]
 struct RetainedBinding {
     value: Value,
     cell_id: String,
 }
 
+#[derive(Debug, Clone)]
+struct RetainedFunction {
+    source: String,
+    cell_id: String,
+}
+
 #[derive(Debug, Default)]
 struct RetainedExecutor {
     bindings: BTreeMap<String, Vec<RetainedBinding>>,
+    functions: BTreeMap<String, RetainedFunction>,
     order: BTreeMap<String, usize>,
     evaluation_bytes: usize,
     control: Option<ExecutionControl>,
 }
 
 impl RetainedExecutor {
+    fn function_sources(
+        &self,
+        id: &str,
+        module: &cgx2_syntax::Module,
+        source: &str,
+    ) -> Result<String, String> {
+        let selected_index = self.order.get(id).copied().unwrap_or(usize::MAX);
+        let mut retained: Vec<_> = self
+            .functions
+            .values()
+            .filter(|function| self.order[&function.cell_id] < selected_index)
+            .collect();
+        retained.sort_by_key(|function| self.order[&function.cell_id]);
+        let mut result = String::new();
+        for function in retained {
+            result.push_str(&function.source);
+            result.push('\n');
+        }
+        for function in &module.functions {
+            if self.functions.contains_key(&function.name) {
+                return Err(format!(
+                    "CGNK011: duplicate retained function {}",
+                    function.name
+                ));
+            }
+            result.push_str(&source[function.span.start..function.span.end]);
+            result.push('\n');
+        }
+        if result.len() > MAX_REPLAY_BYTES {
+            return Err(limit_error());
+        }
+        Ok(result)
+    }
+
     fn prefix(&self, id: &str, pending: &BTreeMap<String, Value>) -> Result<String, String> {
         let mut script = String::new();
         let selected_index = self.order.get(id).copied().unwrap_or(usize::MAX);
@@ -508,8 +893,51 @@ impl RetainedExecutor {
             let first = &diagnostics[0];
             format!("{}: {}", first.code, first.message)
         })?;
+        let functions = self.function_sources(id, &module, source)?;
+        validate_static_bounds(&functions, &module, self.bindings.len())?;
+
+        if !module.functions.is_empty() {
+            let checked = format!("{functions}fn main() -> i64:\n    0\n");
+            if checked.len() > MAX_REPLAY_BYTES {
+                return Err(limit_error());
+            }
+            self.charge(checked.len())?;
+            check_source(&checked).map_err(|diagnostics| {
+                let first = &diagnostics[0];
+                format!("{}: {}", first.code, first.message)
+            })?;
+            self.check_deadline(deadline)?;
+            let retained = self
+                .functions
+                .values()
+                .map(|item| item.source.len() + item.cell_id.len())
+                .sum::<usize>()
+                + module
+                    .functions
+                    .iter()
+                    .map(|item| item.span.end - item.span.start + id.len())
+                    .sum::<usize>();
+            if retained > MAX_REPLAY_BYTES {
+                return Err(limit_error());
+            }
+            for function in &module.functions {
+                self.functions.insert(
+                    function.name.clone(),
+                    RetainedFunction {
+                        source: source[function.span.start..function.span.end].to_owned(),
+                        cell_id: id.to_owned(),
+                    },
+                );
+            }
+            return Ok(CellResult { text: None });
+        }
+
         let prefix = self.prefix(id, &BTreeMap::new())?;
-        let checked = format!("{prefix}{source}");
+        let checked = if functions.is_empty() {
+            format!("{prefix}{source}")
+        } else {
+            wrapped_script(&functions, &prefix, source, None)
+        };
         if checked.len() > MAX_REPLAY_BYTES {
             return Err(limit_error());
         }
@@ -518,19 +946,27 @@ impl RetainedExecutor {
             let first = &diagnostics[0];
             format!("{}: {}", first.code, first.message)
         })?;
-
         let mut pending = BTreeMap::new();
         let mut tail = Value::Unit;
         for statement in &module.statements {
             let statement_source = &source[statement.span.start..statement.span.end];
             let prefix = self.prefix(id, &pending)?;
-            let (script, defined) = match &statement.kind {
-                StmtKind::Let { name, .. } => {
-                    (format!("{prefix}{statement_source}\n{name}"), Some(name))
-                }
-                StmtKind::Expr(_) => (format!("{prefix}{statement_source}"), None),
+            let defined = match &statement.kind {
+                StmtKind::Let { name, .. } => Some(name.as_str()),
+                StmtKind::Expr(_) => None,
                 _ => unreachable!("facts_for_source rejects unsupported statements"),
             };
+            let script = if functions.is_empty() {
+                match defined {
+                    Some(name) => format!("{prefix}{statement_source}\n{name}"),
+                    None => format!("{prefix}{statement_source}"),
+                }
+            } else {
+                wrapped_script(&functions, &prefix, statement_source, defined)
+            };
+            if script.len() > MAX_REPLAY_BYTES {
+                return Err(limit_error());
+            }
             self.charge(script.len())?;
             let value = match &self.control {
                 Some(control) => {
@@ -546,13 +982,12 @@ impl RetainedExecutor {
                 if value == Value::Unit {
                     return Err("CGNK001: Unit bindings are unsupported".into());
                 }
-                pending.insert(name.clone(), value);
+                pending.insert(name.to_owned(), value);
                 tail = Value::Unit;
             } else {
                 tail = value;
             }
         }
-
         let retained_bytes = self
             .bindings
             .iter()
@@ -565,18 +1000,16 @@ impl RetainedExecutor {
             + pending
                 .iter()
                 .map(|(name, value)| name.len() + id.len() + value_size(value))
+                .sum::<usize>()
+            + self
+                .functions
+                .values()
+                .map(|item| item.source.len() + item.cell_id.len())
                 .sum::<usize>();
         if retained_bytes > MAX_REPLAY_BYTES {
             return Err(limit_error());
         }
-        if self
-            .control
-            .as_ref()
-            .is_some_and(|control| control.interrupted.load(Ordering::Acquire))
-            || deadline.is_some_and(|deadline| Instant::now() >= deadline)
-        {
-            return Err("CGNK010: cell interrupted or timed out".into());
-        }
+        self.check_deadline(deadline)?;
         for (name, value) in pending {
             self.bindings
                 .entry(name)
@@ -589,6 +1022,18 @@ impl RetainedExecutor {
         Ok(CellResult {
             text: (tail != Value::Unit).then(|| tail.to_string()),
         })
+    }
+
+    fn check_deadline(&self, deadline: Option<Instant>) -> Result<(), String> {
+        if self
+            .control
+            .as_ref()
+            .is_some_and(|control| control.interrupted.load(Ordering::Acquire))
+            || deadline.is_some_and(|deadline| Instant::now() >= deadline)
+        {
+            return Err("CGNK010: cell interrupted or timed out".into());
+        }
+        Ok(())
     }
 }
 
@@ -755,10 +1200,13 @@ impl CellExecutor for RetainedExecutor {
             bindings.retain(|binding| !invalidated.contains(&binding.cell_id));
             !bindings.is_empty()
         });
+        self.functions
+            .retain(|_, function| !invalidated.contains(&function.cell_id));
     }
 
     fn reset(&mut self) -> Result<(), String> {
         self.bindings.clear();
+        self.functions.clear();
         self.evaluation_bytes = 0;
         Ok(())
     }

@@ -13,6 +13,43 @@ use serde_json::{json, Value};
 
 static NEXT: AtomicU64 = AtomicU64::new(0);
 
+#[test]
+fn pure_function_status_tracks_selective_ui_rerun() {
+    let fixture = Fixture::new(include_str!(
+        "../../cgx2-notebook-kernel/tests/fixtures/pure-functions.cgnb"
+    ));
+    let (port, handle) = server(&fixture.input, 5);
+    let secret = token(port);
+    let (_, state) = post(port, "/api/restart", json!({}), &secret);
+    assert_eq!(state["cells"][1]["outputs"][0]["body"], "5");
+    let independent = state["cells"][2]["provenance"]["ordinal"].clone();
+    let (_, state) = post(
+        port,
+        "/api/edit",
+        json!({"id":"defs","source":"fn inc(x: i64) -> i64:\n    x + 2\n\nfn twice(x: i64) -> i64:\n    inc(inc(x))\n"}),
+        &secret,
+    );
+    assert_eq!(state["cells"][1]["status"], "stale");
+    assert_eq!(state["cells"][2]["status"], "current");
+    let (_, state) = post(port, "/api/run-cell", json!({"id":"defs"}), &secret);
+    assert_eq!(state["cells"][1]["outputs"][0]["body"], "7");
+    assert_eq!(state["cells"][2]["provenance"]["ordinal"], independent);
+    assert_eq!(
+        post(
+            port,
+            "/api/save",
+            json!({"name":"functions.cgnb","overwrite":false}),
+            &secret
+        )
+        .0,
+        200
+    );
+    let saved =
+        parse_notebook_bytes(&fs::read(fixture.dir.join("functions.cgnb")).unwrap()).unwrap();
+    assert!(matches!(&saved.cells[1].outputs[0], Output::Text { body, .. } if body == "7"));
+    handle.join().unwrap();
+}
+
 struct Fixture {
     dir: PathBuf,
     input: PathBuf,
