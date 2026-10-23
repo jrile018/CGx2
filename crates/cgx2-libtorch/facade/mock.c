@@ -24,6 +24,7 @@ static uint64_t next_slot;
 static uint64_t live_count;
 static uint64_t releases;
 static const char *error_message;
+static char long_error[8193];
 
 const char *cgx2_library_identity(void) { return MOCK_IDENTITY; }
 const char *cgx2_library_version(void) { return MOCK_VERSION; }
@@ -55,6 +56,11 @@ int32_t cgx2_torch_f64_cpu(const double *values, uint64_t length, void **output)
     if (!output || (length && !values) || length > 8) {
         error_message = "invalid tensor input";
         return 1;
+    }
+    if (length && values[0] == -113) {
+        memset(long_error, 'x', sizeof(long_error) - 1);
+        error_message = long_error;
+        return 7;
     }
     if (length && (values[0] == -109 || values[0] == -110) && next_slot) {
         *output = &slots[0]; /* deliberately violate distinct-handle ABI */

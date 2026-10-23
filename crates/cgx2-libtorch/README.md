@@ -1,6 +1,17 @@
 # cgx2-libtorch
 
-Wave 17's deterministic schema-2 package command and evidence rules are in
+Wave 18's copied package path is documented in [PREPARE.md](PREPARE.md), with
+the verified local CPU run in [REAL-CPU-EVIDENCE.md](REAL-CPU-EVIDENCE.md).
+`prepare_pinned.py` copies the facade and non-system `DT_NEEDED` libraries
+into the destination and pins already mapped host libraries at their canonical
+paths. Run `Torch::open_pinned(package_root, "torch_cpu")` with the package
+first in `LD_LIBRARY_PATH`. The adapter calls LibTorch C++ directly through
+the reviewed C facade. A local installation may have come from a PyTorch
+distribution, but this route neither loads its Python API nor establishes
+Python-library compatibility. It does not wire tensor operations into `.cg`
+source calls.
+
+The deterministic schema-2 package command and evidence rules are in
 [PREPARE.md](PREPARE.md).
 
 This crate is a direct native **CPU, one-dimensional `float64`** adapter. It opens a reviewed C++ facade compiled with `torch/torch.h` against an exact LibTorch `Torch_VERSION`. The facade exports the C signatures in `facade/facade.h` under ABI version 1. This is a version-pinned CGx2 C boundary, **not** LibTorch's stable C ABI. `Torch::open(path, exact_version)` checks identity `cgx2.libtorch.cpu`, exact version and ABI before resolving tensor exports; the caller must supply a reviewed, hash-pinned facade artifact. A missing export rejects opening. No Python bridge or fallback is used.

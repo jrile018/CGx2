@@ -1,5 +1,5 @@
 use cgx2_ffi_native::{Library, LibraryDeclaration};
-use cgx2_libtorch::{Error, Torch};
+use cgx2_libtorch::{Error, MAX_ERROR_BYTES, Torch};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::sync::atomic::{AtomicU64, Ordering};
@@ -173,6 +173,14 @@ fn mock_facade_failed_create_cleans_handle_and_never_publishes_values() {
     assert_eq!(mock.counter("cgx2_mock_live_count"), 0);
     assert_eq!(mock.counter("cgx2_mock_release_count"), 1);
     assert!(matches!(torch.from_f64(&[-102.0]), Err(Error::NullHandle)));
+    match torch.from_f64(&[-113.0]) {
+        Err(Error::Foreign { status: 7, message }) => {
+            assert_eq!(message.len(), MAX_ERROR_BYTES + " [truncated]".len());
+            assert!(message.starts_with('x'));
+            assert!(message.ends_with(" [truncated]"));
+        }
+        _ => panic!("expected bounded foreign error"),
+    }
 }
 
 #[test]

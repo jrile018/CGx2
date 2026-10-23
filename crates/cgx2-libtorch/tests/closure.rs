@@ -8,11 +8,14 @@ use cgx2_libtorch::{Error, PinnedError, Torch};
 use sha2::{Digest, Sha256};
 use std::ffi::{CString, c_char, c_int, c_void};
 use std::fs;
+use std::os::unix::fs::MetadataExt;
 use std::path::{Path, PathBuf};
 use std::process::Command;
+use std::sync::Mutex;
 use std::sync::atomic::{AtomicU64, Ordering};
 
 static NEXT: AtomicU64 = AtomicU64::new(0);
+static LOADER_TEST_LOCK: Mutex<()> = Mutex::new(());
 const DEP: &str = "libcgx2_closure_dep.so";
 const FACADE: &str = "libcgx2_libtorch_facade.so";
 
@@ -151,6 +154,7 @@ unsafe extern "C" {
 
 #[test]
 fn closure_accepts_and_rejects_changed_version_and_loader_substitution() {
+    let _loader_guard = LOADER_TEST_LOCK.lock().unwrap();
     let good = Fixture::new("2.6.0");
     assert!(check_package(&good.root).passed());
     let torch = unsafe { Torch::open_pinned(&good.root, "torch_cpu") }.unwrap();
@@ -395,7 +399,9 @@ fn changed_dependency_after_preflight_is_rejected_before_loading() {
 
 #[test]
 fn mock_package_preparation_is_repeatable_and_rejects_ambiguous_needed() {
+    let _loader_guard = LOADER_TEST_LOCK.lock().unwrap();
     let fixture = Fixture::new("2.6.0");
+    let package = fixture.root.join("copied-package");
     fs::create_dir(fixture.root.join("lib")).unwrap();
     let compiler = fs::canonicalize("/usr/bin/cc").unwrap();
     fs::write(
@@ -440,7 +446,7 @@ fn mock_package_preparation_is_repeatable_and_rejects_ambiguous_needed() {
             .output()
             .unwrap()
     };
-    let first = run(&fixture.root);
+    let first = run(&package);
     assert!(
         first.status.success(),
         "{}",
@@ -451,8 +457,8 @@ fn mock_package_preparation_is_repeatable_and_rejects_ambiguous_needed() {
         "cgx2-libtorch-closure.lock.json",
         "cgx2-libtorch-evidence.json",
     ]
-    .map(|name| fs::read(fixture.root.join(name)).unwrap());
-    let second = run(&fixture.root);
+    .map(|name| fs::read(package.join(name)).unwrap());
+    let second = run(&package);
     assert!(
         second.status.success(),
         "{}",
@@ -466,18 +472,111 @@ fn mock_package_preparation_is_repeatable_and_rejects_ambiguous_needed() {
     .into_iter()
     .zip(locks)
     {
-        assert_eq!(fs::read(fixture.root.join(name)).unwrap(), bytes);
+        assert_eq!(fs::read(package.join(name)).unwrap(), bytes);
     }
-    assert!(check_package(&fixture.root).passed());
-    let torch = unsafe { Torch::open_pinned(&fixture.root, "torch_cpu") }.unwrap();
+    let closure: ClosureLock =
+        serde_json::from_slice(&fs::read(package.join("cgx2-libtorch-closure.lock.json")).unwrap())
+            .unwrap();
+    assert_eq!(closure.libraries.len(), 2);
+    for pin in &closure.libraries {
+        assert_eq!(pin.path.parent(), Some(package.as_path()));
+        assert_eq!(pin.sha256, hash(&pin.path));
+        assert!(!pin.path.is_symlink());
+        assert_eq!(pin.soname.as_deref(), Some(pin.name.as_str()));
+        assert_ne!(
+            fs::metadata(&pin.path).unwrap().ino(),
+            fs::metadata(fixture.root.join(&pin.name)).unwrap().ino()
+        );
+    }
+    let binding: BindingLock =
+        serde_json::from_slice(&fs::read(package.join("cgx2-bind.lock.json")).unwrap()).unwrap();
+    assert_eq!(binding.schema_version, 2);
+    assert_eq!(binding.bindings[0].version, "2.6.0");
+    assert_eq!(binding.bindings[0].abi, "cgx2-libtorch-facade-v1");
+    let evidence: serde_json::Value =
+        serde_json::from_slice(&fs::read(package.join("cgx2-libtorch-evidence.json")).unwrap())
+            .unwrap();
+    assert_eq!(evidence["torch_version"], "2.6.0");
+    assert_eq!(evidence["cxx11_abi"], 0);
+    assert_eq!(evidence["torch_cxx_flags"], "-D_GLIBCXX_USE_CXX11_ABI=0");
+    for library in evidence["libraries"].as_array().unwrap() {
+        assert_eq!(library["packaged"], true);
+        assert!(
+            library["source_path"]
+                .as_str()
+                .unwrap()
+                .starts_with(fixture.root.to_str().unwrap())
+        );
+        assert!(
+            library["path"]
+                .as_str()
+                .unwrap()
+                .starts_with(package.to_str().unwrap())
+        );
+    }
+    assert!(check_package(&package).passed());
+    let torch = unsafe { Torch::open_pinned(&package, "torch_cpu") }.unwrap();
+    let mut tensor = torch.from_f64(&[3.0]).unwrap();
+    assert_eq!(tensor.shape().unwrap(), [1]);
+    assert_eq!(tensor.to_vec_bounded(1).unwrap(), [3.0]);
+    tensor.release().unwrap();
+    assert_eq!(tensor.release(), Err(Error::AlreadyReleased));
     assert!(matches!(
         torch.from_f64(&[1.0, 2.0]),
         Err(Error::Foreign { status: 1, .. })
     ));
     drop(torch);
 
+    let verified = verify_libtorch_closure(&package, &fixture.binding).unwrap();
+    let replacement = package.join("replacement-dependency.so");
+    fs::copy(package.join(DEP), &replacement).unwrap();
+    fs::rename(&replacement, package.join(DEP)).unwrap();
+    assert!(
+        verified.verify_preloaded().is_err(),
+        "changed inode must fail closed"
+    );
+    assert!(
+        check_package(&package).passed(),
+        "same bytes still match the lock"
+    );
+    fs::write(package.join(DEP), b"changed copied dependency bytes").unwrap();
+    assert!(
+        !check_package(&package).passed(),
+        "changed bytes must fail preflight"
+    );
+    assert!(
+        run(&package).status.success(),
+        "preparation restores pinned bytes"
+    );
+    let source_dep = fixture.root.join(DEP);
+    let hidden_dep = fixture.root.join("hidden-dependency.so");
+    fs::rename(&source_dep, &hidden_dep).unwrap();
+    let missing = run(&package);
+    assert!(!missing.status.success());
+    assert!(String::from_utf8_lossy(&missing.stderr).contains("missing or ambiguous DT_NEEDED"));
+    fs::rename(&hidden_dep, &source_dep).unwrap();
+    let cache = fixture.root.join("CMakeCache.txt");
+    let valid_cache = fs::read(&cache).unwrap();
+    fs::write(
+        &cache,
+        String::from_utf8(valid_cache.clone())
+            .unwrap()
+            .replace("2.6.0", "2.7.0"),
+    )
+    .unwrap();
+    let version = run(&package);
+    assert!(!version.status.success());
+    assert!(String::from_utf8_lossy(&version.stderr).contains("version"));
+    fs::write(&cache, valid_cache).unwrap();
+    let flags = fixture.root.join("cgx2-torch-cxx-flags.txt");
+    fs::write(&flags, "-D_GLIBCXX_USE_CXX11_ABI=1").unwrap();
+    let abi = run(&package);
+    assert!(!abi.status.success());
+    assert!(String::from_utf8_lossy(&abi.stderr).contains("TORCH_CXX_FLAGS"));
+    fs::write(&flags, "-D_GLIBCXX_USE_CXX11_ABI=0").unwrap();
+
     fs::copy(fixture.root.join(DEP), fixture.root.join("lib").join(DEP)).unwrap();
-    let ambiguous = run(&fixture.root);
+    let ambiguous = run(&package);
     assert!(!ambiguous.status.success());
     assert!(String::from_utf8_lossy(&ambiguous.stderr).contains("ambiguous DT_NEEDED"));
 
@@ -487,7 +586,29 @@ fn mock_package_preparation_is_repeatable_and_rejects_ambiguous_needed() {
     std::os::unix::fs::symlink(fixture.root.join(FACADE), substituted.join(FACADE)).unwrap();
     let symlink = run(&substituted);
     assert!(!symlink.status.success());
-    assert!(String::from_utf8_lossy(&symlink.stderr).contains("symlink-substituted"));
+    assert!(String::from_utf8_lossy(&symlink.stderr).contains("unsafe package library target"));
+
+    let source = Path::new(env!("CARGO_MANIFEST_DIR")).join("fixtures/closure/facade.c");
+    let unsafe_facade = fixture.root.join("unsafe-facade.so");
+    compile(
+        &[
+            "-shared",
+            "-fPIC",
+            "-nostdlib",
+            "-Wl,-soname,libcgx2_libtorch_facade.so",
+            "-Wl,-rpath,/tmp",
+            "-L",
+            fixture.root.to_str().unwrap(),
+            "-Wl,--no-as-needed",
+            "-lcgx2_closure_dep",
+        ],
+        &source,
+        &unsafe_facade,
+    );
+    fs::rename(&unsafe_facade, fixture.root.join(FACADE)).unwrap();
+    let unsafe_search = run(&package);
+    assert!(!unsafe_search.status.success());
+    assert!(String::from_utf8_lossy(&unsafe_search.stderr).contains("RUNPATH"));
 }
 
 #[test]

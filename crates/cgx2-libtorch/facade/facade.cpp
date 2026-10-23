@@ -5,22 +5,33 @@
 #include <limits>
 #include <new>
 #include <stdexcept>
-#include <string>
 #include <utility>
 
 namespace {
-thread_local std::string last_error;
+constexpr size_t MAX_ERROR_BYTES = 4096;
+thread_local char last_error[MAX_ERROR_BYTES + 1] = {};
+
+void set_error(const char *message) noexcept {
+    size_t length = 0;
+    if (message) {
+        while (length < MAX_ERROR_BYTES && message[length] != '\0') {
+            last_error[length] = message[length];
+            ++length;
+        }
+    }
+    last_error[length] = '\0';
+}
 
 template <typename F> int32_t translate(F &&body) noexcept {
     try {
-        last_error.clear();
+        last_error[0] = '\0';
         body();
         return 0;
     } catch (const std::exception &error) {
-        last_error = error.what();
+        set_error(error.what());
         return 1;
     } catch (...) {
-        last_error = "unknown native LibTorch exception";
+        set_error("unknown native LibTorch exception");
         return 2;
     }
 }
@@ -38,7 +49,7 @@ extern "C" {
 const char *cgx2_library_identity(void) { return "cgx2.libtorch.cpu"; }
 const char *cgx2_library_version(void) { return CGX2_TORCH_VERSION; }
 uint32_t cgx2_abi_version(void) { return 1; }
-const char *cgx2_torch_last_error(void) { return last_error.c_str(); }
+const char *cgx2_torch_last_error(void) { return last_error; }
 
 int32_t cgx2_torch_f64_cpu(const double *values, uint64_t length, void **output) {
     if (output) *output = nullptr;

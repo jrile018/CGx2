@@ -1,5 +1,13 @@
 # CGx2 pinned native binding preflight
 
+For a prepared LibTorch deployment, `cgx2-bind check PACKAGE` validates the
+schema-2 lock against the **copied facade** in `PACKAGE` and the closure lock
+against its copied non-system dependencies plus pinned host libraries. Run it
+again after any package move or library change; see
+[`cgx2-libtorch/PREPARE.md`](../cgx2-libtorch/PREPARE.md) for the exact build,
+preparation, loader path, and real CPU test commands. This static check cannot
+prove the facade's C ABI, foreign handle lifetime, or a later `dlopen`.
+
 `cgx2-bind check PACKAGE [--format text|json]` checks an explicit local binding package offline. Exit 0 means the declaration, target, artifact SHA-256 and exported symbol names passed; exit 1 reports diagnostics, and exit 2 is a usage error. It never calls `dlopen`, executes metadata exports, installs packages, resolves `.cg` imports, or falls back to Python. A matching symbol name cannot prove its physical C signature or the library's claimed version; the reviewed adapter checks runtime metadata before tensor calls.
 
 The package uses `cgx2.toml` schema 2 with `binding_lock = "cgx2-bind.lock.json"`. The strict JSON lock has `schema_version: 1`, the package name, and nonempty bindings. Each binding pins `id`, `route`, `library`, exact numeric `version` (`major.minor.patch`), package-relative `artifact`, its exact 64-hex-digit `sha256`, host `os` and `arch`, `abi`, `calling_convention`, `layout`, and `symbols`. `render_lock` sorts bindings, symbols, effects and capabilities. The checker caps the lock at 1 MiB, an artifact at 256 MiB, all artifacts at 512 MiB, bindings at 32, symbols per binding at 128, and symbol inspection output at 8 MiB. Linux uses `nm -D --defined-only` without loading the artifact.
