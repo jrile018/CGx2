@@ -403,3 +403,46 @@ fn solver_timeout_large_and_stalled_output_are_bounded() {
     assert_eq!(result["solver"]["exit"]["kind"], "timeout");
     assert_eq!(result["solver"]["stderr"], "warning");
 }
+
+#[test]
+fn source_nested_division_is_compact_audited_and_stops_before_solver_at_limit() {
+    let mut previous = 0;
+    for depth in [1, 2, 3, 4, 16, 32, 64] {
+        let source = format!("pub fn f(x: i64) -> i64 effects() caps():\n    requires true\n    ensures result == x\n    return x{}\n", " / 1".repeat(depth));
+        let input = Temp::new(source.as_bytes(), "division.cg");
+        let report = parsed(&input, &["--format", "json", "--domain", "x:-1:1"]);
+        let bytes = report["smtlib"].as_str().unwrap().len();
+        println!(
+            "divisions={depth} source_bytes={} smt_bytes={bytes}",
+            source.len()
+        );
+        assert!(bytes < depth * 3000 + 4000);
+        if previous != 0 {
+            assert!(bytes > previous);
+        }
+        previous = bytes;
+        assert_eq!(report["bounded_solver_result"]["kind"], "cross_checked");
+        assert_eq!(report["bounded_solver_result"]["source_parity"], true);
+        assert_eq!(report["bounded_solver_result"]["checked_cases"], 3);
+        assert_eq!(report["proof"]["kind"], "unknown");
+    }
+    let source = format!("pub fn f(x: i64) -> i64 effects() caps():\n    requires true\n    ensures result == x\n    return x{}\n", " / 1".repeat(140));
+    let input = Temp::new(source.as_bytes(), "over-depth.cg");
+    let report = parsed(
+        &input,
+        &[
+            "--format",
+            "json",
+            "--domain",
+            "x:0:0",
+            "--solver",
+            "/definitely/missing/solver",
+        ],
+    );
+    assert_eq!(report["diagnostic"]["code"], "CGV003");
+    assert_eq!(report["proof"]["kind"], "unknown");
+    assert_eq!(report["proof"]["state"], "unsupported");
+    assert_eq!(report["solver"]["launched"], false);
+    assert_eq!(report["bounded_solver_result"]["kind"], "unrun");
+    assert!(report["smtlib"].is_null());
+}

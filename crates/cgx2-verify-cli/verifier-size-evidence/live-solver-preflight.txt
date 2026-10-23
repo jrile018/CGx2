@@ -1,0 +1,1 @@
+{"state": "blocked/unrun", "reason": "trusted Z3/CVC5 executable unavailable", "report": "crates/cgx2-verify-cli/verifier-size-evidence/live-solver/acceptance.json"}

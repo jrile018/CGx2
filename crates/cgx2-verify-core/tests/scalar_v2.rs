@@ -109,12 +109,17 @@ fn corruption_of_new_operators_or_binding_is_detected() {
             ),
         };
         let script = emit_smtlib(&contract).unwrap();
-        let corrupted = script
-            .replace("(* 2 3)", "(+ 2 3)")
-            .replace("(div ", "(+ ")
-            .replace("((v_78 6))", "((v_78 5))");
+        let corrupted = match expression {
+            Expr::Mul(..) => script.replace("(* ", "(+ "),
+            Expr::Div(..) => script.replace("(div ", "(+ "),
+            Expr::Let(..) => script.replacen("() Int 6)", "() Int 5)", 1),
+            _ => unreachable!(),
+        };
         assert_ne!(script, corrupted);
-        assert!(audit_encoding(&contract, &[], 1, &corrupted).is_err());
+        assert!(
+            audit_encoding(&contract, &[], 1, &corrupted).is_err(),
+            "expression: {expression:?}, corrupted: {corrupted}"
+        );
     }
 }
 

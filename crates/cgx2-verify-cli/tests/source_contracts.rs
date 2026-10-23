@@ -578,7 +578,7 @@ fn conditional_sat_transport_replays_selected_overflow_against_source() {
     ] {
         // This fixture emulator tests SAT transport/replay only.
         // It has no trusted digest and must never supply proof.
-        fs::write(&solver, format!("#!/bin/sh\nif [ \"$1\" = \"--version\" ]; then echo 'Z3 version 4.12.2'; exit 0; fi\ninput=$(cat)\ncase \"$input\" in\n  *get-value*) printf 'sat\\n((v_666c6167 {flag}) (v_78 9223372036854775807))\\n' ;;\n  *v_666c6167*) printf 'unsat\\nsat\\nunsat\\nsat\\n' ;;\n  *'(not false)'*) printf 'unsat\\nsat\\nsat\\nunsat\\n' ;;\n  *'(+ v_78 1)'*) printf 'unsat\\nsat\\nunsat\\nsat\\n' ;;\n  *) printf 'unsat\\nsat\\nunsat\\nunsat\\n' ;;\nesac\n")).unwrap();
+        fs::write(&solver, format!("#!/bin/sh\nif [ \"$1\" = \"--version\" ]; then echo 'Z3 version 4.12.2'; exit 0; fi\ninput=$(cat)\ncase \"$input\" in\n  *get-value*) printf 'sat\\n((v_666c6167 {flag}) (v_78 9223372036854775807))\\n' ;;\n  *v_666c6167*) printf 'unsat\\nsat\\nunsat\\nsat\\n' ;;\n  *'() Bool false)'*) printf 'unsat\\nsat\\nsat\\nunsat\\n' ;;\n  *'(+ '*) printf 'unsat\\nsat\\nunsat\\nsat\\n' ;;\n  *) printf 'unsat\\nsat\\nunsat\\nunsat\\n' ;;\nesac\n")).unwrap();
         fs::set_permissions(&solver, fs::Permissions::from_mode(0o700)).unwrap();
         let text = include_str!("../examples/conditional-overflow.cg")
             .replace("ensures result == x", "ensures true");

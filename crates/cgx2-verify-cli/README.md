@@ -147,7 +147,7 @@ zero divisors and `MIN / -1` are undefined arithmetic. For compatibility, report
 use the existing `Overflow` failure and `ensures_overflow` obligation for these
 invalid divisions. The SMT model uses mathematical integer multiplication,
 explicit range/nonzero guards, and sign-adjusted `div` over absolute values.
-The independent SMT interpreter supports the emitted lexical `let`, `*` and `div`.
+The independent SMT interpreter supports shared definitions, SMT `let`, `*` and `div`.
 JSON adds `mul`/`div` with `left`/`right` operands; lexical binding is a v2 library
 API and source feature, without a new JSON binding syntax.
 
@@ -194,3 +194,18 @@ substitute for live witnesses. An unavailable solver/pin exits 3 and writes
 `blocked/unrun`; failures exit 1; acceptance exits 0 only for the supplied trusted
 executable. Accumulator source admission stays a separate blocker even when this
 scalar gate succeeds. See [release evidence](release-completion-evidence/report.md).
+
+### SMT construction budgets
+
+Scalar v2 SMT scripts use shared value/definedness definitions rather than
+expanding child strings. The fixed CLI budgets are 4,096 combined core expression
+nodes and parameters, depth 128, and 1 MiB per complete SMT script; total
+identifier bytes must fit half that byte budget before hex encoding. Existing
+65,536-byte input, 1,024-source-node and 32-conditional-depth limits also apply.
+The core library offers smaller explicit `SmtLimits` budgets. Main emission
+runs before finite verification or any solver process. An emission error reports
+`CGV003`, `proof.kind=unknown`, `proof.state=unsupported`, an unrun encoding audit,
+and `solver.launched=false`; no partial SMT is sent. Fixture-probe or witness
+emission errors are recorded as invalid/unknown and never panic or launch that
+query. The independent SMT interpreter evaluates the emitted definitions and
+assertions on every finite tuple, including original-source parity for `.cg`.
