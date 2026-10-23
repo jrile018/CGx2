@@ -38,6 +38,155 @@ impl Drop for Fixture {
         let _ = fs::remove_dir_all(&self.0);
     }
 }
+
+#[test]
+fn public_contract_graph_resolves_same_named_local_helpers_and_preserves_sites() {
+    let fixture = Fixture::new(
+        "pub fn helper(x: Bool) -> Bool:\n    x\n",
+        "fn helper(x: Bool) -> Bool:\n    x\npub fn value(x: Bool) -> Bool effects() caps():\n    requires helper(x)\n    ensures helper(result)\n    x\n",
+        "# café 🦀\nfn helper(x: Bool) -> Bool:\n    x\npub fn value(x: Bool) -> Bool effects() caps():\n    requires helper(helper(x))\n    ensures helper(result)\n    ensures helper(result)\n    let helper = false\n    x\npub fn caller(x: Bool) -> Bool effects() caps():\n    demo.middle.value(value(x))\n",
+    );
+    let checked = load_checked_package(&fixture.0).unwrap();
+    let index = index_checked_package(&checked).unwrap();
+    for (source, count) in [("src/main.cg", 4), ("src/middle.cg", 2)] {
+        let identity = Identity {
+            source: source.into(),
+            name: "value".into(),
+        };
+        let value = index.entry(&identity).unwrap();
+        let helper = index
+            .entry(&Identity {
+                source: source.into(),
+                name: "helper".into(),
+            })
+            .unwrap();
+        assert!(value.public);
+        assert!(value.effects.is_empty());
+        assert!(value.capabilities.is_empty());
+        assert_eq!(value.calls.len(), count);
+        let text = fs::read_to_string(fixture.0.join(source)).unwrap();
+        for call in &value.calls {
+            assert_eq!(
+                call.resolution,
+                Resolution::Function(helper.identity.clone())
+            );
+            assert_eq!(call.declaration.as_ref(), Some(&helper.declaration));
+            assert_eq!(call.location.source, PathBuf::from(source));
+            assert!(text[call.location.span.start..call.location.span.end].starts_with("helper("));
+            assert_eq!(
+                index.call(&call.location.source, call.location.span),
+                Some(call)
+            );
+        }
+        assert!(value
+            .calls
+            .windows(2)
+            .all(|c| c[0].location.span.start < c[1].location.span.start));
+    }
+    let caller = index
+        .entry(&Identity {
+            source: "src/main.cg".into(),
+            name: "caller".into(),
+        })
+        .unwrap();
+    assert_eq!(caller.calls.len(), 2);
+    assert!(caller.effects.is_empty());
+    assert!(caller.capabilities.is_empty());
+    assert_eq!(
+        caller
+            .calls
+            .iter()
+            .map(|c| &c.resolution)
+            .collect::<Vec<_>>(),
+        vec![
+            &Resolution::Function(Identity {
+                source: "src/middle.cg".into(),
+                name: "value".into()
+            }),
+            &Resolution::Function(Identity {
+                source: "src/main.cg".into(),
+                name: "value".into()
+            }),
+        ]
+    );
+    let json = index.to_json().unwrap();
+    assert_eq!(json, index_package(&fixture.0).unwrap().to_json().unwrap());
+    let json: serde_json::Value = serde_json::from_str(&json).unwrap();
+    assert_eq!(json["schema_version"], 1);
+    assert_eq!(json["analysis"], "checked_package_effects_v1");
+    assert_eq!(json["provenance"].as_array().unwrap().len(), 3);
+    let value = json["entries"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|e| e["identity"]["source"] == "src/main.cg" && e["identity"]["name"] == "value")
+        .unwrap();
+    assert_eq!(value["calls"].as_array().unwrap().len(), 4);
+    assert!(value["calls"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .all(|c| c["resolution"] == "function" && c["identity"]["source"] == "src/main.cg"));
+}
+
+#[test]
+fn contract_graph_does_not_admit_effectful_recursive_or_imported_contract_calls() {
+    for main in [
+        "fn helper() -> Bool:\n    arg_count() == 0\npub fn value() -> Bool:\n    requires helper()\n    true\n",
+        "fn helper() -> Bool:\n    helper()\npub fn value() -> Bool:\n    ensures helper()\n    true\n",
+        "pub fn value() -> Bool:\n    requires demo.middle.helper()\n    true\n",
+        "pub fn value() -> Bool:\n    requires hidden\n    let hidden = true\n    true\n",
+    ] {
+        let fixture = Fixture::new("pub fn helper() -> Bool:\n    true\n", "pub fn helper() -> Bool:\n    true\n", main);
+        assert!(index_package(&fixture.0).is_err(), "{main}");
+    }
+}
+
+#[test]
+fn checked_contract_scalar_bindings_remain_unknown_without_foreign_capabilities() {
+    let fixture = Fixture::new(
+        "pub fn helper() -> Bool:\n    true\n",
+        "pub fn helper() -> Bool:\n    true\n",
+        "fn helper() -> Bool:\n    true\nfn result() -> Bool:\n    true\npub fn parameter(helper: Bool) -> Bool:\n    requires helper()\n    true\npub fn post() -> Bool:\n    requires result()\n    ensures result()\n    true\n",
+    );
+    // The frozen checker admits these scalar-shadowed calls. The advisory graph
+    // must not turn them into resolved helper calls or invent capabilities.
+    let index = index_package(&fixture.0).unwrap();
+    let parameter = index
+        .entry(&Identity {
+            source: "src/main.cg".into(),
+            name: "parameter".into(),
+        })
+        .unwrap();
+    assert_eq!(parameter.calls.len(), 1);
+    assert_eq!(parameter.calls[0].resolution, Resolution::Unknown);
+    assert_eq!(
+        parameter.effects,
+        std::collections::BTreeSet::from(["Unknown".into()])
+    );
+    assert!(parameter.capabilities.is_empty());
+    let post = index
+        .entry(&Identity {
+            source: "src/main.cg".into(),
+            name: "post".into(),
+        })
+        .unwrap();
+    assert_eq!(post.calls.len(), 2);
+    assert_eq!(
+        post.calls[0].resolution,
+        Resolution::Function(Identity {
+            source: "src/main.cg".into(),
+            name: "result".into()
+        })
+    );
+    assert_eq!(post.calls[1].resolution, Resolution::Unknown);
+    assert_eq!(
+        post.effects,
+        std::collections::BTreeSet::from(["Unknown".into()])
+    );
+    assert!(post.capabilities.is_empty());
+}
+
 #[test]
 fn pure_wrappers_use_checked_public_edges_and_body_derived_effects() {
     let f = Fixture::new(

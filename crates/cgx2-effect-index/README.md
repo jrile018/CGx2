@@ -53,6 +53,15 @@ a literal guard does not remove an inactive branch from the static index.
 
 ## Checked package API and command (release S1-10)
 
+Function call lists include `requires` and `ensures`, including nested arguments
+and repeated calls at distinct source spans. Preconditions see parameters;
+postconditions additionally bind `result`. Body locals do not shadow contract
+helpers, and the postcondition binding does not escape into the body. Calls
+shadowed by scalar bindings remain `Unknown`. Contract edges participate in the
+standalone transitive effect and recursion analysis and in checked package call
+lists. The checked loader retains its contract purity and import restrictions.
+See [contract graph repair evidence](../cgx2-security/CONTRACT-GRAPH-REPAIR.md).
+
 ```sh
 cargo run --offline -p cgx2-effect-index -- --package crates/cgx2-security/examples/package-audit --format json
 ```
