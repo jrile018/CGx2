@@ -134,10 +134,15 @@ pub fn parse_notebook(text: &str) -> Result<Notebook, NotebookError> {
                 {
                     let mut stale = false;
                     let mut manifest = None;
+                    let mut root = None;
                     let mut modules = None;
                     for field in state {
                         if *field == "state=stale" && !stale {
                             stale = true;
+                        } else if let Some(hash) = field.strip_prefix("root_sha256=") {
+                            if root.replace(hash.to_owned()).is_some() {
+                                return Err(malformed(zero_line + 1, line));
+                            }
                         } else if let Some(hash) = field.strip_prefix("manifest_sha256=") {
                             if manifest.replace(hash.to_owned()).is_some() {
                                 return Err(malformed(zero_line + 1, line));
@@ -161,9 +166,10 @@ pub fn parse_notebook(text: &str) -> Result<Notebook, NotebookError> {
                         }
                     }
                     let package = match (manifest, modules) {
-                        (None, None) => None,
+                        (None, None) if root.is_none() => None,
                         (Some(manifest_sha256), Some(modules)) => Some(PackageProvenance {
                             manifest_sha256,
+                            root_sha256: root,
                             modules,
                         }),
                         _ => return Err(malformed(zero_line + 1, line)),

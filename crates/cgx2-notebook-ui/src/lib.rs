@@ -132,6 +132,7 @@ impl UiSession {
             }, "stale": p.stale,
             "package": p.package.as_ref().map(|package| json!({
                 "manifestSha256":package.manifest_sha256,
+                "rootSha256":package.root_sha256,
                 "modules":package.modules
             }))}));
                 json!({"id":cell.id, "kind":if cell.kind == CellKind::Code {"code"} else {"markdown"},

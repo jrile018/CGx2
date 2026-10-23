@@ -7,3 +7,10 @@
 New provenance uses schema 2: `source_sha256` is the source digest, while the serialized `prefix_sha256` field is a dependency digest over direct producers and their transitive sources. Schema 1 whole-prefix records remain readable. On reopen, matching output is `Cached`, changed source or dependencies are `Stale`, and no saved record restores live executor state. `restart_and_run_all()` resets the executor and runs code cells in file order. The pure scalar kernel permits no external file, network, host-command, or arbitrary side effects.
 
 `restart()` resets live bindings without executing a cell. It marks code outputs stale, retaining captured text and provenance digests/ordinals; the format writes `state=stale` so reopen remains stale. `restart_and_run_all()` invokes restart and then runs code cells in file order. A failed or interrupted cell is noncurrent, retains its prior captured observation, and invalidates its transitive readers. Earlier successful cells keep their outputs and revisions.
+
+
+`invalidate_package_modules(modules)` discards retained definitions for cells whose
+checked package provenance names a changed module and for their transitive readers.
+Their saved outputs become stale without executing source. Independent cells retain
+outputs, status and provenance. The kernel invokes this after a frozen package
+snapshot check fails; a manifest failure supplies all package modules.

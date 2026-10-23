@@ -933,3 +933,117 @@ fn pure_record_fixture_runs_and_reopens_with_cached_provenance() {
     assert!(listing.contains("point\tcode\tcached"));
     assert!(listing.contains("read\tcode\tcached"));
 }
+
+#[test]
+fn public_record_package_cli_run_rerun_inspect_restart_export_and_clean_sweep() {
+    let fixture = Fixture::new();
+    let project = Path::new(env!("CARGO_MANIFEST_DIR")).join("examples/public-records");
+    let input = project.join("public-records.cgnb");
+    let executed = fixture.path("executed.cgnb");
+    let result = run(&[
+        Path::new("run"),
+        &input,
+        Path::new("--project"),
+        &project,
+        Path::new("--out"),
+        &executed,
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let result = run(&[
+        Path::new("inspect"),
+        &executed,
+        Path::new("--project"),
+        &project,
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    assert!(String::from_utf8_lossy(&result.stdout).contains("read\tcode\tcached"));
+    let edited = fixture.path("edited.cgnb");
+    let result = run_str(&[
+        "run",
+        executed.to_str().unwrap(),
+        "--project",
+        project.to_str().unwrap(),
+        "--edit-cell",
+        "parameter",
+        "--source",
+        "let delta = 2",
+        "--out",
+        edited.to_str().unwrap(),
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let book = parse_notebook_bytes(&fs::read(&edited).unwrap()).unwrap();
+    let read = book.cells.iter().find(|cell| cell.id == "read").unwrap();
+    assert!(matches!(&read.outputs[0], CellOutput::Text { body, .. } if body == "43"));
+    let portable = fixture.path("portable.cgnb");
+    let result = run(&[Path::new("export"), &edited, Path::new("--out"), &portable]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let absent = fixture.path("absent.cgnb");
+    let result = run(&[Path::new("run"), &portable, Path::new("--out"), &absent]);
+    assert!(!result.status.success());
+    assert!(stderr(&result).contains("--project"));
+    let result = run(&[
+        Path::new("run"),
+        &portable,
+        Path::new("--project"),
+        &project,
+        Path::new("--out"),
+        &absent,
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let deleted = fixture.path("deleted.cgnb");
+    let result = run(&[
+        Path::new("delete"),
+        &edited,
+        Path::new("alpha_import"),
+        Path::new("--project"),
+        &project,
+        Path::new("--out"),
+        &deleted,
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let deleted_book = parse_notebook_bytes(&fs::read(&deleted).unwrap()).unwrap();
+    assert!(
+        deleted_book
+            .cells
+            .iter()
+            .find(|cell| cell.id == "read")
+            .unwrap()
+            .provenance
+            .as_ref()
+            .unwrap()
+            .stale
+    );
+    let discarded = fixture.path("discarded.cgnb");
+    let result = run(&[
+        Path::new("restart"),
+        &edited,
+        Path::new("--project"),
+        &project,
+        Path::new("--out"),
+        &discarded,
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let sweep = fixture.path("records-sweep");
+    let result = run_str(&[
+        "sweep",
+        input.to_str().unwrap(),
+        "parameter",
+        "--value",
+        "1",
+        "--value",
+        "2",
+        "--project",
+        project.to_str().unwrap(),
+        "--out-dir",
+        sweep.to_str().unwrap(),
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    for (index, expected) in ["42", "43"].iter().enumerate() {
+        let book = parse_notebook_bytes(
+            &fs::read(sweep.join(format!("trial-{:02}.cgnb", index + 1))).unwrap(),
+        )
+        .unwrap();
+        let read = book.cells.iter().find(|cell| cell.id == "read").unwrap();
+        assert!(matches!(&read.outputs[0], CellOutput::Text { body, .. } if body == expected));
+    }
+}

@@ -61,6 +61,8 @@ pub struct Provenance {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PackageProvenance {
     pub manifest_sha256: String,
+    /// Canonical package root digest; absent in older notebook captures.
+    pub root_sha256: Option<String>,
     /// Full module name to checked source SHA-256.
     pub modules: BTreeMap<String, String>,
 }

@@ -37,3 +37,15 @@ The kernel accepts immutable scalar bindings and pure expressions only. Captured
 The server binds only `127.0.0.1`, checks loopback Host and Origin, requires a random process token for changes, enforces a 128 KiB HTTP body limit and five-second I/O deadline, and serves crate-local JavaScript and CSS under a restrictive Content Security Policy. Saved image bytes are verified by digest and served through a token-protected local route; HTML and SVG assets are rejected.
 
 **Restart** discards live bindings and displays saved outputs as stale; **Restart and run all** immediately executes file order. **Interrupt** sends the token-protected `/api/interrupt` request while a cell is running. The 2-second per-cell scalar worker deadline also stops stalled evaluation. The server handles that signal while execution holds the session lock; the server polls worker completion and interruption every 5 ms; OS scheduling and process termination can add latency. A stopped cell is failed, dependent outputs are stale, and previously completed revisions remain available. Save persists output/provenance status, not live bindings. The in-process parse/check phase is source-size bounded but cannot be preempted by this interrupt. External side-effecting cells are unsupported, so this mechanism does not promise rollback of files or network actions.
+
+
+The checked `--project ROOT` profile also supports public immutable scalar records
+from explicitly/directly imported local modules. The loopback UI preserves full
+module identities through selected rerun, affected rerun, saved output, Restart and
+Run All, and portable export. Its state includes `package.rootSha256` alongside
+manifest/module hashes. Detected stale package inputs discard affected live values;
+independent cell outputs retain their revisions. Reopen the checked project before
+executing after a package edit. Portable export embeds notebook assets, not the
+imported `.cg` source/manifest: reopen with the same required project. See the
+[public-record example](../cgx2-notebook-cli/examples/public-records/public-records.cgnb)
+and [kernel boundaries](../cgx2-notebook-kernel/README.md).

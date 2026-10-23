@@ -17,8 +17,8 @@ use cgx2_notebook_format::{
     MAX_NOTEBOOK_BYTES,
 };
 use cgx2_notebook_kernel::{
-    is_worker_argument, scalar_worker_main, validate_pure_sweep_notebook, ExecutionControl,
-    NotebookKernel, SweepParameter, DEFAULT_CELL_TIMEOUT, MAX_SWEEP_VALUES,
+    is_worker_argument, scalar_worker_main, validate_pure_sweep_notebook_with_project,
+    ExecutionControl, NotebookKernel, SweepParameter, DEFAULT_CELL_TIMEOUT, MAX_SWEEP_VALUES,
 };
 use std::time::Duration;
 
@@ -28,12 +28,12 @@ const HELP: &str = "cgx2-notebook: clean, pure scalar notebook file runner\n\
 Usage:\n\
 cgx2-notebook run INPUT.cgnb --out OUTPUT.cgnb [--project ROOT] [--edit-cell ID --source CG_CODE] [--timeout-ms N] [--force]\n\
   cgx2-notebook restart INPUT.cgnb --out OUTPUT.cgnb [--force]\n\
-  cgx2-notebook delete INPUT.cgnb CELL_ID --out OUTPUT.cgnb [--force]\n\
-  cgx2-notebook inspect INPUT.cgnb\n\
+  cgx2-notebook delete INPUT.cgnb CELL_ID --out OUTPUT.cgnb [--project ROOT] [--force]\n\
+  cgx2-notebook inspect INPUT.cgnb [--project ROOT]\n\
   cgx2-notebook show INPUT.cgnb CELL_ID\n\
   cgx2-notebook export INPUT.cgnb --out PORTABLE.cgnb [--force]\n\
 cgx2-notebook import PORTABLE.cgnb --out OUTPUT.cgnb [--force]\n\
-cgx2-notebook sweep INPUT.cgnb CELL_ID --value LITERAL [--value LITERAL ...] --out-dir DIRECTORY [--timeout-ms N]\n\
+cgx2-notebook sweep INPUT.cgnb CELL_ID --value LITERAL [--value LITERAL ...] --out-dir DIRECTORY [--project ROOT] [--timeout-ms N]\n\
 \n\
 Run starts a clean session, replaces saved code outputs, executes code cells in file order,\n\
 and saves fresh text/plain outputs. Inspect reads cell IDs, kinds, saved provenance and status\n\
@@ -50,8 +50,9 @@ enum Command {
         values: Vec<String>,
         output_dir: PathBuf,
         timeout: Duration,
+        project: Option<PathBuf>,
     },
-    Inspect(PathBuf),
+    Inspect(PathBuf, Option<PathBuf>),
     Show(PathBuf, String),
     Export {
         input: PathBuf,
@@ -83,6 +84,7 @@ enum Command {
         id: String,
         output: PathBuf,
         force: bool,
+        project: Option<PathBuf>,
     },
 }
 
@@ -141,14 +143,25 @@ fn parse_command(mut args: impl Iterator<Item = OsString>) -> Result<Command, Co
         let input = args
             .next()
             .ok_or_else(|| CommandError::Usage("inspect requires INPUT.cgnb".into()))?;
+        let project = match args.next() {
+            None => None,
+            Some(flag) if flag == "--project" => {
+                Some(PathBuf::from(args.next().ok_or_else(|| {
+                    CommandError::Usage("--project requires ROOT".into())
+                })?))
+            }
+            _ => {
+                return Err(CommandError::Usage(
+                    "inspect accepts INPUT.cgnb [--project ROOT]".into(),
+                ))
+            }
+        };
         if args.next().is_some() {
-            return Err(CommandError::Usage(
-                "inspect accepts exactly one input path".into(),
-            ));
+            return Err(CommandError::Usage("unexpected inspect argument".into()));
         }
         let input = PathBuf::from(input);
         require_extension(&input)?;
-        return Ok(Command::Inspect(input));
+        return Ok(Command::Inspect(input, project));
     }
     if command == "show" {
         let input =
@@ -179,6 +192,7 @@ fn parse_command(mut args: impl Iterator<Item = OsString>) -> Result<Command, Co
             .map_err(|_| CommandError::Usage("CELL_ID must be UTF-8".into()))?;
         let mut output = None;
         let mut force = false;
+        let mut project = None;
         while let Some(arg) = args.next() {
             if arg == "--out" && output.is_none() {
                 let path = PathBuf::from(
@@ -187,6 +201,10 @@ fn parse_command(mut args: impl Iterator<Item = OsString>) -> Result<Command, Co
                 );
                 require_extension(&path)?;
                 output = Some(path);
+            } else if arg == "--project" && project.is_none() {
+                project = Some(PathBuf::from(args.next().ok_or_else(|| {
+                    CommandError::Usage("--project requires ROOT".into())
+                })?));
             } else if arg == "--force" && !force {
                 force = true;
             } else {
@@ -201,6 +219,7 @@ fn parse_command(mut args: impl Iterator<Item = OsString>) -> Result<Command, Co
             id,
             output: output.ok_or_else(|| CommandError::Usage("delete requires --out".into()))?,
             force,
+            project,
         });
     }
     if command == "sweep" {
@@ -218,6 +237,7 @@ fn parse_command(mut args: impl Iterator<Item = OsString>) -> Result<Command, Co
         let mut output_dir = None;
         let mut timeout = DEFAULT_CELL_TIMEOUT;
         let mut timeout_seen = false;
+        let mut project = None;
         while let Some(arg) = args.next() {
             if arg == "--value" {
                 let value = args
@@ -234,6 +254,10 @@ fn parse_command(mut args: impl Iterator<Item = OsString>) -> Result<Command, Co
             } else if arg == "--out-dir" && output_dir.is_none() {
                 output_dir = Some(PathBuf::from(args.next().ok_or_else(|| {
                     CommandError::Usage("--out-dir requires DIRECTORY".into())
+                })?));
+            } else if arg == "--project" && project.is_none() {
+                project = Some(PathBuf::from(args.next().ok_or_else(|| {
+                    CommandError::Usage("--project requires ROOT".into())
                 })?));
             } else if arg == "--timeout-ms" && !timeout_seen {
                 timeout_seen = true;
@@ -267,6 +291,7 @@ fn parse_command(mut args: impl Iterator<Item = OsString>) -> Result<Command, Co
             output_dir: output_dir
                 .ok_or_else(|| CommandError::Usage("sweep requires --out-dir".into()))?,
             timeout,
+            project,
         });
     }
     if command == "run" || command == "restart" || command == "export" || command == "import" {
@@ -419,10 +444,18 @@ fn execute(command: Command) -> Result<(), CommandError> {
             values,
             output_dir,
             timeout,
-        } => execute_sweep(&input, &id, &values, &output_dir, timeout),
-        Command::Inspect(input) => {
+            project,
+        } => execute_sweep(
+            &input,
+            &id,
+            &values,
+            &output_dir,
+            timeout,
+            project.as_deref(),
+        ),
+        Command::Inspect(input, project) => {
             let notebook = read_notebook(&input)?;
-            let kernel = NotebookKernel::open(notebook)
+            let kernel = NotebookKernel::open_with_project(notebook, project.as_deref())
                 .map_err(|error| CommandError::Input(error.to_string()))?;
             for cell in &kernel.notebook().cells {
                 match cell.kind {
@@ -513,11 +546,13 @@ fn execute(command: Command) -> Result<(), CommandError> {
             id,
             output,
             force,
+            project,
         } => {
             check_output_collision(&output, force)?;
             let document = read_document(&input)?;
-            let mut kernel = NotebookKernel::open(document.notebook)
-                .map_err(|error| CommandError::Input(error.to_string()))?;
+            let mut kernel =
+                NotebookKernel::open_with_project(document.notebook, project.as_deref())
+                    .map_err(|error| CommandError::Input(error.to_string()))?;
             kernel
                 .remove_cell(&id)
                 .map_err(|error| CommandError::Cell(error.to_string()))?;
@@ -624,6 +659,7 @@ fn execute_sweep(
     values: &[String],
     output_dir: &Path,
     timeout: Duration,
+    project: Option<&Path>,
 ) -> Result<(), CommandError> {
     reject_symlink_components(input)?;
     reject_symlink_components(&sidecar(input))?;
@@ -663,7 +699,7 @@ fn execute_sweep(
         .into_iter()
         .filter(|(digest, _)| markdown_digests.contains(digest))
         .collect();
-    validate_pure_sweep_notebook(&notebook)
+    validate_pure_sweep_notebook_with_project(&notebook, project)
         .map_err(|error| CommandError::Input(error.to_string()))?;
     let parameter_cell = notebook
         .cells
@@ -690,9 +726,10 @@ fn execute_sweep(
             .find(|cell| cell.id == id)
             .expect("validated cell")
             .source = source.clone();
-        validate_pure_sweep_notebook(&candidate)
+        validate_pure_sweep_notebook_with_project(&candidate, project)
             .map_err(|error| CommandError::Input(error.to_string()))?;
-        NotebookKernel::open(candidate).map_err(|error| CommandError::Input(error.to_string()))?;
+        NotebookKernel::open_with_project(candidate, project)
+            .map_err(|error| CommandError::Input(error.to_string()))?;
         replacements.push(source);
     }
     for cell in &mut notebook.cells {
@@ -727,8 +764,8 @@ fn execute_sweep(
             .find(|cell| cell.id == id)
             .expect("validated cell")
             .source = source;
-        let mut kernel =
-            NotebookKernel::open(trial).map_err(|error| CommandError::Cell(error.to_string()))?;
+        let mut kernel = NotebookKernel::open_with_project(trial, project)
+            .map_err(|error| CommandError::Cell(error.to_string()))?;
         kernel.set_execution_control(ExecutionControl::new(worker.clone(), timeout));
         let result = kernel.restart_and_run_all();
         let filename = format!("trial-{:02}.cgnb", index + 1);

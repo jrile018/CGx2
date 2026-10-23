@@ -58,3 +58,13 @@ An older version 1 reader can safely treat the new Markdown image target as iner
 There is no live kernel, cell rerun, stale-dependency tracking, output rendering, HTML sanitization, or `.ipynb` conversion in this crate. The future notebook interface must provide those behaviors and use the same CGx2 parser/checker/runtime as the CLI.
 
 The provenance `state=stale` suffix records a restart without changing a cell's stable ID, source/dependency digests, evaluator, or execution/output ordinals. It is saved cache status, not evidence that the cell ran again. A later successful execution writes `result=success` with a new revision.
+
+
+Package-backed provenance may also contain optional `root_sha256=<64 hex>` beside
+`manifest_sha256` and `module_sha256`. It binds a capture to the kernel's canonical
+package root. Readers accept older captures with no root field; the checked kernel
+marks those package observations stale. Duplicate, malformed or orphan root fields
+are rejected. Module identities accept Unicode CGx2 identifier characters. Local
+record-only notebooks and provenance schemas 1/2 remain readable. A portable asset
+bundle is not a package-source bundle: `.cg` imports and `cgx2.toml` remain external,
+so exported imported-record notebooks require their checked project to execute.
