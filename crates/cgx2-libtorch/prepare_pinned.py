@@ -17,6 +17,7 @@ import shlex
 import shutil
 import subprocess
 import sys
+import tempfile
 
 MAX_LIBRARY = 2 * 1024**3
 MAX_TOTAL = 8 * 1024**3
@@ -66,6 +67,38 @@ def digest(path):
     if identity(before) != identity(held) or identity(before) != identity(after):
         fail(f"library changed during hashing: {path}")
     return sha.hexdigest(), after.st_size
+
+
+def copy_pinned(source, target, expected_sha, expected_size):
+    """Copy a verified ELF without following a destination symlink."""
+    if target.is_symlink() or (target.exists() and not target.is_file()):
+        fail(f"unsafe package library target: {target}")
+    source_stat = source.stat()
+    if source != target:
+        if (target.exists() and not os.path.samefile(source, target)
+                and digest(target) == (expected_sha, expected_size)):
+            pass
+        else:
+            descriptor, temporary = tempfile.mkstemp(prefix=".cgx2-copy-", dir=target.parent)
+            try:
+                with os.fdopen(descriptor, "wb") as output:
+                    input_descriptor = os.open(source, os.O_RDONLY | os.O_NOFOLLOW)
+                    with os.fdopen(input_descriptor, "rb") as input_file:
+                        opened = os.fstat(input_file.fileno())
+                        if (opened.st_dev, opened.st_ino) != (source_stat.st_dev, source_stat.st_ino):
+                            fail(f"source changed before package copy: {source}")
+                        shutil.copyfileobj(input_file, output, 1024 * 1024)
+                if digest(Path(temporary)) != (expected_sha, expected_size):
+                    fail(f"source changed during package copy: {source}")
+                os.replace(temporary, target)
+            finally:
+                if os.path.exists(temporary):
+                    os.unlink(temporary)
+    after = source.stat()
+    if (source_stat.st_dev, source_stat.st_ino) != (after.st_dev, after.st_ino) or digest(source) != (expected_sha, expected_size):
+        fail(f"source changed during package copy: {source}")
+    if digest(canonical_file(target)) != (expected_sha, expected_size):
+        fail(f"copied library differs from pinned source: {target}")
 
 
 def elf_dynamic(path):
@@ -247,16 +280,26 @@ def prepare(args):
 
     package = Path(args.package).absolute()
     package.mkdir(parents=True, exist_ok=True)
-    package = package.resolve(strict=True)
-    target = package / facade.name
-    if target.is_symlink():
-        fail(f"symlink-substituted facade target: {target}")
-    if target.resolve() != facade:
-        shutil.copyfile(facade, target)
-    target = canonical_file(target)
-    facade_entry = discovered.pop(facade.name)
-    facade_entry["path"] = str(target)
-    discovered[facade.name] = facade_entry
+    package = canonical_dir(package)
+    torch_lib = canonical_dir(root / "lib")
+    system_roots = (Path("/usr/lib"), Path("/lib"), Path("/lib64"))
+    for entry in discovered.values():
+        if (not entry["name"] or entry["name"] in (".", "..")
+                or "/" in entry["name"] or "\\" in entry["name"]):
+            fail(f"unsafe ELF library name: {entry['name']}")
+        source = canonical_file(entry["path"])
+        entry["source_path"] = str(source)
+        # The ELF interpreter and glibc libraries are normally mapped before
+        # dlopen. Pin their actual host paths instead of copying a library the
+        # loader cannot select. Copy the facade and every non-system library.
+        packaged = (source == facade or source.is_relative_to(torch_lib)
+                    or not any(source.is_relative_to(directory) for directory in system_roots))
+        entry["packaged"] = packaged
+        if packaged:
+            target = package / entry["name"]
+            copy_pinned(source, target, entry["sha256"], entry["size"])
+            entry["path"] = str(target)
+    facade_entry = discovered[facade.name]
     closure = []
     for entry in sorted(discovered.values(), key=lambda item: item["name"]):
         closure.append({
@@ -272,6 +315,11 @@ def prepare(args):
         "layout": "tensor-f64-cpu-v1", "symbols": facade_symbols(),
     }
     (package / "src").mkdir(exist_ok=True)
+    canonical_dir(package / "src")
+    for name in ("src/main.cg", "cgx2.toml", "cgx2-bind.lock.json",
+                 "cgx2-libtorch-closure.lock.json", "cgx2-libtorch-evidence.json"):
+        if (package / name).is_symlink():
+            fail(f"symlink-substituted package file: {package / name}")
     (package / "src/main.cg").write_text("module libtorch_pinned\n", encoding="utf-8")
     (package / "cgx2.toml").write_text(
         'schema_version = 2\nname = "libtorch_pinned"\nentry = "src/main.cg"\n'

@@ -1,7 +1,8 @@
 # Reproducible local LibTorch package
 
 `prepare_pinned.py` takes an **already built**, exact LibTorch installation and
-facade; it never downloads anything. The facade CMake target uses `$ORIGIN`
+facade; it never downloads anything. Preparation uses Python 3, while the
+CGx2 adapter and C++ facade use no Python interpreter or `libpython`. The facade CMake target uses `$ORIGIN`
 RUNPATH and writes its configured `TORCH_CXX_FLAGS` into the build directory.
 Use canonical absolute paths for all arguments. List every dependency search
 directory explicitly with `--lib-dir`; `LIBTORCH_ROOT/lib` is included
@@ -29,11 +30,11 @@ python3 crates/cgx2-libtorch/prepare_pinned.py \
   --build-command="cmake --build $BUILD_DIR --config Release" \
   --lib-dir /absolute/canonical/system/elf-directory
 RUSTUP_TOOLCHAIN=1.98.1 cargo run -p cgx2-bind --offline --bin cgx2-bind -- check "$PACKAGE"
-LD_LIBRARY_PATH="$LIBTORCH_ROOT/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" \
+LD_LIBRARY_PATH="$PACKAGE${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" \
   CGX2_LIBTORCH_PACKAGE="$PACKAGE" RUSTUP_TOOLCHAIN=1.98.1 \
   cargo test -p cgx2-libtorch --offline real_pinned_libtorch_when_installed \
   -- --ignored --nocapture
-sha256sum "$PACKAGE"/cgx2-*.json "$PACKAGE"/libcgx2_libtorch_facade.so
+find "$PACKAGE" -type f -print0 | sort -z | xargs -0 sha256sum
 ```
 
 Set `--cxx11-abi` to the value in the configured flags (0 or 1), or to the
@@ -43,6 +44,14 @@ version, compiler, prefix, and flags evidence; hashes every file while checking
 size and inode stability; records canonical paths, SONAMEs, DT_NEEDED,
 RUNPATH, sizes, hashes, platform, compiler, ABI, configured flags, and the
 declared build and preparation commands in `cgx2-libtorch-evidence.json`.
+The destination contains regular, nonsymlink copies of the facade and every
+non-system dependency, named by ELF `DT_NEEDED`. The closure lock points to
+the copied paths. The ELF interpreter and host libraries under `/usr/lib` or
+`/lib` remain pinned at their canonical host paths because they may already
+be mapped before the facade loads. Evidence records `source_path`, deployed
+`path`, and `packaged` for each library. Moving the package or changing a
+host library requires regenerating and reviewing the absolute lock paths.
+Destination library and metadata symlinks are rejected.
 If two directories contain the same DT_NEEDED name, the script rejects the
 ambiguous closure. Resolve an intentional duplicate with
 `--select-dependency=NAME=/canonical/path/to/chosen/library`; the selected
@@ -64,4 +73,7 @@ between checks. A malicious facade can violate the declared C ABI or forge
 handles; a rejected nonnull output can be released only when it is distinct
 from live handles and the closure remains verified. Foreign allocations and
 device storage remain outside CGx2 memory accounting; host copies remain
-bounded by `MAX_COPY_ELEMENTS` and the caller's maximum.
+bounded by `MAX_COPY_ELEMENTS` and the caller's maximum. The C++ facade uses a
+fixed 4096 byte thread local error buffer, and Rust scans at most
+`MAX_ERROR_BYTES` (4096) before converting it to a string;
+an ABI-violating pointer can still cause undefined behavior.

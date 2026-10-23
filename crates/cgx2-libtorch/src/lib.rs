@@ -4,7 +4,7 @@ use cgx2_bind::{ClosureError, Report, VerifiedClosure, checked_lock, verify_libt
 use cgx2_ffi_native::{Error as NativeError, Library, LibraryDeclaration};
 use std::cell::RefCell;
 use std::collections::HashSet;
-use std::ffi::{CStr, c_char, c_void};
+use std::ffi::{c_char, c_void};
 use std::path::Path;
 use std::ptr::NonNull;
 use std::rc::Rc;
@@ -15,6 +15,8 @@ type Length = unsafe extern "C" fn(*const c_void, *mut u64) -> i32;
 type Copy = unsafe extern "C" fn(*const c_void, *mut f64, u64) -> i32;
 type Release = unsafe extern "C" fn(*mut c_void) -> i32;
 type LastError = unsafe extern "C" fn() -> *const c_char;
+/// Maximum bytes read from a foreign error string before truncation.
+pub const MAX_ERROR_BYTES: usize = 4096;
 
 /// Maximum host copy: 1,048,576 float64 values (8 MiB).
 pub const MAX_COPY_ELEMENTS: usize = 1_048_576;
@@ -76,9 +78,18 @@ impl Inner {
         let message = if ptr.is_null() {
             "native error without message".into()
         } else {
-            unsafe { CStr::from_ptr(ptr) }
-                .to_string_lossy()
-                .into_owned()
+            // The facade promises a readable NUL-terminated string. Bound
+            // the scan and allocation even if that promise is broken.
+            let mut length = 0;
+            while length < MAX_ERROR_BYTES && unsafe { *ptr.add(length) } != 0 {
+                length += 1;
+            }
+            let bytes = unsafe { std::slice::from_raw_parts(ptr.cast::<u8>(), length) };
+            let mut message = String::from_utf8_lossy(bytes).into_owned();
+            if length == MAX_ERROR_BYTES {
+                message.push_str(" [truncated]");
+            }
+            message
         };
         self.check_pinned()?;
         Err(Error::Foreign { status, message })
