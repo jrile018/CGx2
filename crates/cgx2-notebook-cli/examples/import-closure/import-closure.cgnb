@@ -1,0 +1,32 @@
+#!cgnb 1
+%% markdown id=guide
+A three-level chain (api -> left -> base) and diamond (api -> left/right -> base).
+The API declares base as well because its public signature names base.Point.
+Only api and other are visible notebook modules. Shared base definitions lower once.
+An inferred demo.base.Point can be retained and projected. Calling base.make,
+constructing base.Point, or annotating base.Point requires import demo.base first.
+Point in demo.other has a distinct nominal identity. Wrappers omit effects annotations because the frozen package checker conservatively
+marks qualified calls Unknown; notebook lowering checks the complete pure closure.
+All modules must be pure,
+including unused declared imports. Package inputs remain external: reopen/run/export
+needs --project pointing to this package; export does not embed the package sources.
+%% code id=api_import
+import demo.api
+%% code id=other_import
+import demo.other
+%% code id=parameter
+let input = 40
+%% code id=function
+fn calculate(x: i64) -> i64 effects() caps():
+    api.value(api.make(x))
+%% code id=value
+let p = api.make(input)
+p
+%% code id=read
+p.x
+%% code id=call
+calculate(input)
+%% code id=other
+other.make(7)
+%% code id=independent
+42

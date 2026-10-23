@@ -77,6 +77,12 @@ pub(crate) fn validate_provenance(cell: &Cell) -> Result<(), NotebookError> {
                     .root_sha256
                     .as_ref()
                     .is_some_and(|hash| !crate::assets::valid_digest(hash))
+                || package.module_paths_sha256.as_ref().is_some_and(|paths| {
+                    paths.keys().ne(package.modules.keys())
+                        || paths
+                            .values()
+                            .any(|hash| !crate::assets::valid_digest(hash))
+                })
                 || package.modules.is_empty()
                 || package.modules.iter().any(|(name, hash)| {
                     name.split('.').any(|segment| {

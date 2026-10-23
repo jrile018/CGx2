@@ -1,0 +1,6 @@
+module demo.other
+pub record Point:
+    x: i64
+    active: Bool
+pub fn make(x: i64) -> Point effects() caps():
+    Point(x: x, active: false)

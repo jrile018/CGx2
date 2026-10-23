@@ -1,0 +1,4 @@
+module demo.left
+import demo.base
+pub fn make(x: i64) -> demo.base.Point caps():
+    demo.base.make(x)

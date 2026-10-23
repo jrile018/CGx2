@@ -1,0 +1,8 @@
+module demo.api
+import demo.left
+import demo.right
+import demo.base
+pub fn make(x: i64) -> demo.base.Point caps():
+    demo.left.make(x)
+pub fn value(p: demo.base.Point) -> i64 caps():
+    demo.right.value(p)

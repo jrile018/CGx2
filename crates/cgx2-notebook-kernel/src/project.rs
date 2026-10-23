@@ -2,6 +2,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::io::Read;
 use std::path::Path;
+use std::sync::OnceLock;
 
 use cgx2_notebook_format::PackageProvenance;
 use cgx2_package::{load_checked_package, CheckedPackage};
@@ -12,14 +13,21 @@ use cgx2_syntax::{
 #[derive(Clone, Debug)]
 pub(crate) struct Project {
     checked: CheckedPackage,
-    modules: BTreeMap<String, Result<PureModule, String>>,
+    modules: BTreeMap<String, ProjectModule>,
+    dependencies: BTreeMap<String, BTreeSet<String>>,
     records: BTreeMap<String, Record>,
+}
+
+#[derive(Clone, Debug)]
+struct ProjectModule {
+    index: usize,
+    lowered: OnceLock<Result<PureModule, String>>,
 }
 
 #[derive(Clone, Debug)]
 pub(crate) struct PureModule {
     pub source: String,
-    pub dependencies: BTreeSet<String>,
+    pub function_count: usize,
     pub hash: String,
     pub public: BTreeSet<String>,
 }
@@ -118,39 +126,47 @@ impl Project {
             })
             .collect();
         let mut modules = BTreeMap::new();
-        for module in checked.modules() {
-            let Some(name) = module.syntax().name.as_ref().map(|p| p.segments.join(".")) else {
-                continue;
-            };
-            let public = checked
-                .index()
-                .modules
-                .iter()
-                .find(|record| record.name.as_deref() == Some(&name))
-                .map(|record| {
-                    record
-                        .api
-                        .functions
-                        .iter()
-                        .map(|f| f.name.clone())
-                        .collect()
-                })
-                .unwrap_or_default();
-            modules.insert(
-                name.clone(),
-                lower_module(
-                    &name,
-                    module.syntax(),
-                    module.text(),
-                    module.source_sha256(),
-                    public,
-                    &records,
-                ),
+        let mut dependencies = BTreeMap::new();
+        for (index, module) in checked.modules().iter().enumerate() {
+            let name = module
+                .syntax()
+                .name
+                .as_ref()
+                .ok_or("CGNK012: checked module has no name")?
+                .segments
+                .join(".");
+            if modules
+                .insert(
+                    name.clone(),
+                    ProjectModule {
+                        index,
+                        lowered: OnceLock::new(),
+                    },
+                )
+                .is_some()
+            {
+                return Err("CGNK012: duplicate checked module identity".into());
+            }
+            dependencies.insert(
+                name,
+                module
+                    .syntax()
+                    .imports
+                    .iter()
+                    .map(|path| path.segments.join("."))
+                    .collect(),
             );
         }
+        // Validate the frozen graph before lowering or expanding any source.
+        closure_order(
+            &dependencies,
+            &checked.index().topological_order,
+            &BTreeSet::new(),
+        )?;
         Ok(Self {
             checked,
             modules,
+            dependencies,
             records,
         })
     }
@@ -229,24 +245,67 @@ impl Project {
         Ok((path.segments.last().cloned().unwrap_or_default(), name))
     }
 
-    pub fn module(&self, name: &str) -> Result<&PureModule, String> {
-        match self.modules.get(name) {
-            Some(Ok(module)) => Ok(module),
-            Some(Err(reason)) => Err(reason.clone()),
-            None => Err(format!("module {name} is not listed in cgx2.toml")),
-        }
+    fn module(&self, name: &str) -> Result<&PureModule, String> {
+        let cached = self
+            .modules
+            .get(name)
+            .ok_or_else(|| format!("module {name} is not listed in cgx2.toml"))?;
+        cached
+            .lowered
+            .get_or_init(|| {
+                let module = &self.checked.modules()[cached.index];
+                let public = self
+                    .checked
+                    .index()
+                    .modules
+                    .iter()
+                    .find(|record| record.name.as_deref() == Some(name))
+                    .ok_or("CGNK012: inconsistent checked module index")?
+                    .api
+                    .functions
+                    .iter()
+                    .map(|function| function.name.clone())
+                    .collect();
+                lower_module(
+                    name,
+                    module.syntax(),
+                    module.text(),
+                    module.source_sha256(),
+                    public,
+                    &self.records,
+                )
+            })
+            .as_ref()
+            .map_err(Clone::clone)
+    }
+
+    fn closure(&self, names: &BTreeSet<String>) -> Result<Vec<String>, String> {
+        closure_order(
+            &self.dependencies,
+            &self.checked.index().topological_order,
+            names,
+        )
     }
 
     pub fn functions_for(&self, imported: &BTreeMap<String, String>) -> Result<String, String> {
-        let mut source = String::new();
-        for name in imported.values() {
+        let order = self.closure(&imported.values().cloned().collect())?;
+        let mut bytes = 0usize;
+        let mut functions = 0usize;
+        for name in &order {
             let module = self.module(name)?;
-            for dependency in &module.dependencies {
-                if !imported.values().any(|candidate| candidate == dependency) {
-                    return Err(format!("CGNK012: module {name} calls {dependency}; import {dependency} directly before use"));
-                }
+            bytes = bytes
+                .checked_add(module.source.len())
+                .ok_or_else(super::limit_error)?;
+            functions = functions
+                .checked_add(module.function_count)
+                .ok_or_else(super::limit_error)?;
+            if bytes > super::MAX_REPLAY_BYTES || functions > super::MAX_PURE_FUNCTIONS {
+                return Err(format!("CGNK006: combined package closure has {functions} functions and {bytes} lowered bytes; limits are {} functions and {} bytes", super::MAX_PURE_FUNCTIONS, super::MAX_REPLAY_BYTES));
             }
-            source.push_str(&module.source);
+        }
+        let mut source = String::with_capacity(bytes);
+        for name in order {
+            source.push_str(&self.module(&name)?.source);
         }
         Ok(source)
     }
@@ -259,25 +318,25 @@ impl Project {
             return Ok(None);
         }
         let mut modules = BTreeMap::new();
-        for name in names {
-            let module = self.module(name)?;
-            modules.insert(name.clone(), module.hash.clone());
-            for dependency in &module.dependencies {
-                modules.insert(dependency.clone(), self.module(dependency)?.hash.clone());
-            }
+        let mut paths = BTreeMap::new();
+        for name in self.closure(names)? {
+            modules.insert(name.clone(), self.module(&name)?.hash.clone());
+            let cached = &self.modules[&name];
+            paths.insert(
+                name,
+                canonical_path_hash(
+                    "CGX2-PACKAGE-MODULE-PATH-v1:",
+                    self.checked.modules()[cached.index].canonical_path(),
+                ),
+            );
         }
         Ok(Some(PackageProvenance {
             manifest_sha256: self.manifest_hash().to_owned(),
-            root_sha256: Some(cgx2_notebook_format::source_hash(&format!(
-                "CGX2-PACKAGE-ROOT-v1:{}",
-                self.checked
-                    .root()
-                    .as_os_str()
-                    .as_encoded_bytes()
-                    .iter()
-                    .map(|byte| format!("{byte:02x}"))
-                    .collect::<String>()
-            ))),
+            root_sha256: Some(canonical_path_hash(
+                "CGX2-PACKAGE-ROOT-v1:",
+                self.checked.root(),
+            )),
+            module_paths_sha256: Some(paths),
             modules,
         }))
     }
@@ -546,9 +605,21 @@ fn lower_module(
     public: BTreeSet<String>,
     records: &BTreeMap<String, Record>,
 ) -> Result<PureModule, String> {
+    if !module.statements.is_empty() {
+        return Err(format!(
+            "CGNK012: module {name} has unsupported top-level statements"
+        ));
+    }
     if text.contains("__cgx2_pkg") {
         return Err(format!(
             "CGNK012: module {name} uses reserved package symbol prefix"
+        ));
+    }
+    if module.functions.len() > super::MAX_PURE_FUNCTIONS {
+        return Err(format!(
+            "CGNK006: module {name} has {} functions; combined limit is {}",
+            module.functions.len(),
+            super::MAX_PURE_FUNCTIONS
         ));
     }
     let local: BTreeSet<_> = module
@@ -585,12 +656,12 @@ fn lower_module(
         let snippet = &text[record.span.start..record.span.end];
         let start =
             record.span.start + snippet.find("record ").ok_or("CGNK012: record header")? + 7;
-        source.push_str(&apply_edits(
+        let lowered = apply_edits(
             text,
             record.span,
             vec![(start, start + record.name.len(), mangle(name, &record.name))],
-        )?);
-        source.push('\n');
+        )?;
+        append_definition(&mut source, &lowered)?;
     }
     for function in &module.functions {
         validate_signature(name, function)?;
@@ -624,12 +695,11 @@ fn lower_module(
             &mut dependencies,
             &mut edits,
         )?;
-        source.push_str(&apply_edits(text, function.span, edits)?);
-        source.push('\n');
+        append_definition(&mut source, &apply_edits(text, function.span, edits)?)?;
     }
     Ok(PureModule {
         source,
-        dependencies,
+        function_count: module.functions.len(),
         hash: hash.to_owned(),
         public,
     })
@@ -765,6 +835,10 @@ fn validate_block(
 }
 
 fn validate_signature(module: &str, function: &Function) -> Result<(), String> {
+    // Frozen package effect inference conservatively marks qualified calls Unknown.
+    // An absent annotation is safe here only because every reached function body is
+    // structurally checked, then the complete lowered closure is checked again.
+
     let label = format!(
         "{module}.{} at {}..{}",
         function.name, function.span.start, function.span.end
@@ -773,7 +847,7 @@ fn validate_signature(module: &str, function: &Function) -> Result<(), String> {
         || function
             .effects
             .as_ref()
-            .is_none_or(|d| !d.names.is_empty())
+            .is_some_and(|d| !d.names.is_empty())
         || function
             .capabilities
             .as_ref()
@@ -914,8 +988,24 @@ pub(crate) fn apply_edits(
     span: Span,
     mut edits: Vec<(usize, usize, String)>,
 ) -> Result<String, String> {
-    let mut output = text[span.start..span.end].to_owned();
     edits.sort_by_key(|edit| std::cmp::Reverse(edit.0));
+    let mut previous = span.end;
+    let mut bytes = span.end - span.start;
+    for (start, end, replacement) in &edits {
+        if *start < span.start || *end > previous || start > end {
+            return Err("CGNK012: overlapping lowered source spans".into());
+        }
+        bytes = bytes
+            .checked_sub(end - start)
+            .and_then(|n| n.checked_add(replacement.len()))
+            .filter(|n| *n <= super::MAX_REPLAY_BYTES)
+            .ok_or_else(super::limit_error)?;
+        previous = *start;
+    }
+    if bytes > super::MAX_REPLAY_BYTES {
+        return Err(super::limit_error());
+    }
+    let mut output = text[span.start..span.end].to_owned();
     let mut previous = span.end;
     for (start, end, replacement) in edits {
         if start < span.start || end > previous || start > end {
@@ -925,4 +1015,185 @@ pub(crate) fn apply_edits(
         previous = start;
     }
     Ok(output)
+}
+
+/// Resolve declared edges using the checker's deterministic dependency-first topology.
+/// Iterative discovery deduplicates diamonds; topology validation rejects corrupt metadata
+/// before any source expansion, even when a malformed edge is outside the selected roots.
+fn closure_order(
+    graph: &BTreeMap<String, BTreeSet<String>>,
+    topology: &[String],
+    roots: &BTreeSet<String>,
+) -> Result<Vec<String>, String> {
+    let bound = cgx2_package::MAX_SOURCES;
+    if graph.len() > bound || topology.len() > bound {
+        return Err(format!("CGNK006: package closure exceeds {bound} modules"));
+    }
+    let positions: BTreeMap<_, _> = topology
+        .iter()
+        .enumerate()
+        .map(|(index, name)| (name.as_str(), index))
+        .collect();
+    if positions.len() != topology.len()
+        || positions.len() != graph.len()
+        || graph
+            .keys()
+            .any(|name| !positions.contains_key(name.as_str()))
+    {
+        return Err("CGNK012: inconsistent checked package topology".into());
+    }
+    let mut depths = BTreeMap::new();
+    for name in topology {
+        let mut depth = 1usize;
+        for dependency in &graph[name] {
+            let dependency_depth = depths.get(dependency).ok_or_else(||
+                format!("CGNK012: missing, cyclic or inconsistent checked import {name} -> {dependency}"))?;
+            depth = depth.max(dependency_depth + 1);
+        }
+        if depth > bound {
+            return Err(format!("CGNK006: package import depth exceeds {bound}"));
+        }
+        depths.insert(name.clone(), depth);
+    }
+    let mut reached = BTreeSet::new();
+    let mut pending: Vec<_> = roots.iter().cloned().collect();
+    while let Some(name) = pending.pop() {
+        let dependencies = graph
+            .get(&name)
+            .ok_or_else(|| format!("CGNK012: module {name} is not listed in cgx2.toml"))?;
+        if reached.insert(name) {
+            if reached.len() > bound {
+                return Err(format!("CGNK006: package closure exceeds {bound} modules"));
+            }
+            pending.extend(
+                dependencies
+                    .iter()
+                    .filter(|name| !reached.contains(*name))
+                    .cloned(),
+            );
+        }
+    }
+    Ok(topology
+        .iter()
+        .filter(|name| reached.contains(*name))
+        .cloned()
+        .collect())
+}
+
+pub(super) fn append_definition(source: &mut String, definition: &str) -> Result<(), String> {
+    source
+        .len()
+        .checked_add(definition.len())
+        .and_then(|n| n.checked_add(1))
+        .filter(|n| *n <= super::MAX_REPLAY_BYTES)
+        .ok_or_else(super::limit_error)?;
+    source.push_str(definition);
+    source.push('\n');
+    Ok(())
+}
+
+fn canonical_path_hash(domain: &str, path: &Path) -> String {
+    cgx2_notebook_format::source_hash(&format!(
+        "{domain}{}",
+        path.as_os_str()
+            .as_encoded_bytes()
+            .iter()
+            .map(|byte| format!("{byte:02x}"))
+            .collect::<String>()
+    ))
+}
+
+#[cfg(test)]
+mod closure_tests {
+    use super::*;
+
+    fn chain(count: usize) -> (BTreeMap<String, BTreeSet<String>>, Vec<String>) {
+        let topology: Vec<_> = (0..count).map(|index| format!("m{index}")).collect();
+        let graph = topology
+            .iter()
+            .enumerate()
+            .map(|(index, name)| {
+                let dependencies = if index == 0 {
+                    BTreeSet::new()
+                } else {
+                    BTreeSet::from([topology[index - 1].clone()])
+                };
+                (name.clone(), dependencies)
+            })
+            .collect();
+        (graph, topology)
+    }
+
+    #[test]
+    fn metadata_validation_and_exact_graph_bound() {
+        let (graph, topology) = chain(cgx2_package::MAX_SOURCES);
+        assert_eq!(
+            closure_order(
+                &graph,
+                &topology,
+                &BTreeSet::from([topology.last().unwrap().clone()])
+            )
+            .unwrap(),
+            topology
+        );
+        let (too_large, order) = chain(cgx2_package::MAX_SOURCES + 1);
+        assert!(closure_order(&too_large, &order, &BTreeSet::new())
+            .unwrap_err()
+            .contains("CGNK006"));
+        let (mut graph, mut order) = chain(3);
+        assert!(closure_order(&graph, &order, &BTreeSet::from(["unlisted".into()])).is_err());
+        graph.get_mut("m0").unwrap().insert("m2".into());
+        assert!(closure_order(&graph, &order, &BTreeSet::new()).is_err());
+        graph.get_mut("m0").unwrap().clear();
+        graph.get_mut("m1").unwrap().insert("missing".into());
+        assert!(closure_order(&graph, &order, &BTreeSet::new()).is_err());
+        graph.get_mut("m1").unwrap().remove("missing");
+        order.swap(0, 1);
+        assert!(closure_order(&graph, &order, &BTreeSet::new()).is_err());
+        order[0] = "m0".into();
+        assert!(closure_order(&graph, &order, &BTreeSet::new()).is_err());
+        order.pop();
+        assert!(closure_order(&graph, &order, &BTreeSet::new()).is_err());
+    }
+
+    #[test]
+    fn deterministic_diamond_discovery_uses_topology_and_deduplicates_roots() {
+        let graph = BTreeMap::from([
+            ("base".into(), BTreeSet::new()),
+            ("left".into(), BTreeSet::from(["base".into()])),
+            ("right".into(), BTreeSet::from(["base".into()])),
+            (
+                "api".into(),
+                BTreeSet::from(["left".into(), "right".into()]),
+            ),
+            ("unrelated".into(), BTreeSet::new()),
+        ]);
+        let topology = ["base", "left", "right", "api", "unrelated"].map(String::from);
+        let order = closure_order(
+            &graph,
+            &topology,
+            &BTreeSet::from(["right".into(), "api".into(), "base".into()]),
+        )
+        .unwrap();
+        assert_eq!(order, ["base", "left", "right", "api"]);
+    }
+
+    #[test]
+    fn source_growth_is_checked_before_editing_or_appending() {
+        let bound = super::super::MAX_REPLAY_BYTES;
+        let span = Span { start: 0, end: 1 };
+        assert_eq!(
+            apply_edits("x", span, vec![(0, 1, "a".repeat(bound))])
+                .unwrap()
+                .len(),
+            bound
+        );
+        assert!(apply_edits("x", span, vec![(0, 1, "a".repeat(bound + 1))]).is_err());
+        let mut source = "a".repeat(bound - 2);
+        append_definition(&mut source, "x").unwrap();
+        assert_eq!(source.len(), bound);
+        let before = source.clone();
+        assert!(append_definition(&mut source, "x").is_err());
+        assert_eq!(source, before);
+    }
 }

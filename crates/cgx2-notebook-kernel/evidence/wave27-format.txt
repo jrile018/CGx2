@@ -1,0 +1,7 @@
+CARGO_TARGET_DIR=$PWD/.wave27/target TMPDIR=$PWD/.wave27/tmp cargo +1.98.1 fmt -p cgx2-notebook-format -p cgx2-notebook-session -p cgx2-notebook-kernel -p cgx2-notebook-cli -p cgx2-notebook-ui -- --check
+Exit status: 0
+Output: empty (success)
+
+git diff --check
+Exit status: 0
+Output: empty (success)

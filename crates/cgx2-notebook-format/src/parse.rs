@@ -136,6 +136,7 @@ pub fn parse_notebook(text: &str) -> Result<Notebook, NotebookError> {
                     let mut manifest = None;
                     let mut root = None;
                     let mut modules = None;
+                    let mut module_paths = None;
                     for field in state {
                         if *field == "state=stale" && !stale {
                             stale = true;
@@ -147,8 +148,16 @@ pub fn parse_notebook(text: &str) -> Result<Notebook, NotebookError> {
                             if manifest.replace(hash.to_owned()).is_some() {
                                 return Err(malformed(zero_line + 1, line));
                             }
-                        } else if let Some(list) = field.strip_prefix("module_sha256=") {
-                            if modules.is_some() {
+                        } else if let Some(list) = field
+                            .strip_prefix("module_sha256=")
+                            .or_else(|| field.strip_prefix("module_path_sha256="))
+                        {
+                            let target = if field.starts_with("module_path_sha256=") {
+                                &mut module_paths
+                            } else {
+                                &mut modules
+                            };
+                            if target.is_some() {
                                 return Err(malformed(zero_line + 1, line));
                             }
                             let mut parsed = BTreeMap::new();
@@ -160,16 +169,17 @@ pub fn parse_notebook(text: &str) -> Result<Notebook, NotebookError> {
                                     return Err(malformed(zero_line + 1, line));
                                 }
                             }
-                            modules = Some(parsed);
+                            *target = Some(parsed);
                         } else {
                             return Err(malformed(zero_line + 1, line));
                         }
                     }
                     let package = match (manifest, modules) {
-                        (None, None) if root.is_none() => None,
+                        (None, None) if root.is_none() && module_paths.is_none() => None,
                         (Some(manifest_sha256), Some(modules)) => Some(PackageProvenance {
                             manifest_sha256,
                             root_sha256: root,
+                            module_paths_sha256: module_paths,
                             modules,
                         }),
                         _ => return Err(malformed(zero_line + 1, line)),

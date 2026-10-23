@@ -1047,3 +1047,92 @@ fn public_record_package_cli_run_rerun_inspect_restart_export_and_clean_sweep() 
         assert!(matches!(&read.outputs[0], CellOutput::Text { body, .. } if body == expected));
     }
 }
+
+#[test]
+fn transitive_import_closure_cli_restart_edit_sweep_and_external_export() {
+    let fixture = Fixture::new();
+    let project = Path::new(env!("CARGO_MANIFEST_DIR")).join("examples/import-closure");
+    let input = project.join("import-closure.cgnb");
+    let executed = fixture.path("closure-executed.cgnb");
+    let result = run(&[
+        Path::new("run"),
+        &input,
+        Path::new("--project"),
+        &project,
+        Path::new("--out"),
+        &executed,
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let result = run(&[
+        Path::new("inspect"),
+        &executed,
+        Path::new("--project"),
+        &project,
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    assert!(String::from_utf8_lossy(&result.stdout).contains("read\tcode\tcached"));
+    let edited = fixture.path("closure-edited.cgnb");
+    let result = run_str(&[
+        "run",
+        executed.to_str().unwrap(),
+        "--project",
+        project.to_str().unwrap(),
+        "--edit-cell",
+        "parameter",
+        "--source",
+        "let input = 41",
+        "--out",
+        edited.to_str().unwrap(),
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let notebook = parse_notebook_bytes(&fs::read(&edited).unwrap()).unwrap();
+    let read = notebook
+        .cells
+        .iter()
+        .find(|cell| cell.id == "read")
+        .unwrap();
+    assert!(matches!(&read.outputs[0], CellOutput::Text { body, .. } if body == "42"));
+    let portable = fixture.path("closure-export.cgnb");
+    let result = run(&[Path::new("export"), &edited, Path::new("--out"), &portable]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let restored = fixture.path("closure-restored.cgnb");
+    let result = run(&[Path::new("run"), &portable, Path::new("--out"), &restored]);
+    assert!(!result.status.success());
+    assert!(stderr(&result).contains("--project"));
+    let result = run(&[
+        Path::new("run"),
+        &portable,
+        Path::new("--project"),
+        &project,
+        Path::new("--out"),
+        &restored,
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let sweep = fixture.path("closure-sweep");
+    let result = run_str(&[
+        "sweep",
+        input.to_str().unwrap(),
+        "parameter",
+        "--value",
+        "40",
+        "--value",
+        "41",
+        "--project",
+        project.to_str().unwrap(),
+        "--out-dir",
+        sweep.to_str().unwrap(),
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    for (index, expected) in ["41", "42"].iter().enumerate() {
+        let notebook = parse_notebook_bytes(
+            &fs::read(sweep.join(format!("trial-{:02}.cgnb", index + 1))).unwrap(),
+        )
+        .unwrap();
+        let read = notebook
+            .cells
+            .iter()
+            .find(|cell| cell.id == "read")
+            .unwrap();
+        assert!(matches!(&read.outputs[0], CellOutput::Text { body, .. } if body == expected));
+    }
+}

@@ -1,0 +1,4 @@
+module demo.right
+import demo.base
+pub fn value(p: demo.base.Point) -> i64 caps():
+    demo.base.value(p)

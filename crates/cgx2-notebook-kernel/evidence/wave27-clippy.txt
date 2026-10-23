@@ -1,0 +1,4 @@
+    Checking cgx2-notebook-kernel v0.1.0 (/home/john-riley/.codex/worktrees/6df7/lang/crates/cgx2-notebook-kernel)
+    Checking cgx2-notebook-ui v0.1.0 (/home/john-riley/.codex/worktrees/6df7/lang/crates/cgx2-notebook-ui)
+    Checking cgx2-notebook-cli v0.1.0 (/home/john-riley/.codex/worktrees/6df7/lang/crates/cgx2-notebook-cli)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.33s

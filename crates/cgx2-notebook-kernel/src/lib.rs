@@ -608,6 +608,9 @@ fn new_session(
     let mut imported = BTreeMap::<String, String>::new();
     let mut package_provenance = BTreeMap::new();
     let mut local_roots = BTreeSet::new();
+    // Track file-order producers so projections, local calls and retained values
+    // carry package provenance without making unrelated imports dependencies.
+    let mut symbol_packages = BTreeMap::<String, BTreeSet<String>>::new();
     for cell in notebook
         .cells
         .iter()
@@ -664,6 +667,9 @@ fn new_session(
                 }
                 let mut used = BTreeSet::new();
                 for read in &cell_facts.reads {
+                    if let Some(packages) = symbol_packages.get(read) {
+                        used.extend(packages.iter().cloned());
+                    }
                     for (short, name) in &imported {
                         if read == short || read == name {
                             used.insert(name.clone());
@@ -719,6 +725,9 @@ fn new_session(
                     .map_err(|message| error("CGNK012", message))?
                 {
                     package_provenance.insert(cell.id.clone(), provenance);
+                }
+                for define in &cell_facts.defines {
+                    symbol_packages.insert(define.clone(), used.clone());
                 }
             }
             if !cell_facts.opaque_effects {
@@ -1196,7 +1205,7 @@ fn validate_static_bounds(
         format!("{}: {}", first.code, first.message)
     })?;
     if functions.functions.len() > MAX_PURE_FUNCTIONS {
-        return Err("CGNK006: too many retained pure functions".into());
+        return Err(format!("CGNK006: combined retained source has {} pure functions and {} bytes; limits are {MAX_PURE_FUNCTIONS} functions and {MAX_REPLAY_BYTES} bytes", functions.functions.len(), function_source.len()));
     }
     let records = functions
         .records
@@ -1453,8 +1462,7 @@ impl RetainedExecutor {
             String::new()
         };
         for function in retained {
-            result.push_str(&function.source);
-            result.push('\n');
+            project::append_definition(&mut result, &function.source)?;
         }
         for function in &module.functions {
             if self.functions.contains_key(&function.name) {
@@ -1463,8 +1471,10 @@ impl RetainedExecutor {
                     function.name
                 ));
             }
-            result.push_str(&source[function.span.start..function.span.end]);
-            result.push('\n');
+            project::append_definition(
+                &mut result,
+                &source[function.span.start..function.span.end],
+            )?;
         }
         let mut prior_records: Vec<_> = self
             .records
@@ -1474,8 +1484,7 @@ impl RetainedExecutor {
         prior_records.sort_by_key(|record| self.order[&record.cell_id]);
         let mut record_source = String::new();
         for record in prior_records {
-            record_source.push_str(&record.source);
-            record_source.push('\n');
+            project::append_definition(&mut record_source, &record.source)?;
         }
         for record in &module.records {
             if self.records.contains_key(&record.name) {
@@ -1484,13 +1493,17 @@ impl RetainedExecutor {
                     record.name, record.span.start, record.span.end
                 ));
             }
-            record_source.push_str(&source[record.span.start..record.span.end]);
-            record_source.push('\n');
+            project::append_definition(
+                &mut record_source,
+                &source[record.span.start..record.span.end],
+            )?;
         }
+        result
+            .len()
+            .checked_add(record_source.len())
+            .filter(|bytes| *bytes <= MAX_REPLAY_BYTES)
+            .ok_or_else(limit_error)?;
         result.insert_str(0, &record_source);
-        if result.len() > MAX_REPLAY_BYTES {
-            return Err(limit_error());
-        }
         Ok(result)
     }
 

@@ -63,6 +63,8 @@ pub struct PackageProvenance {
     pub manifest_sha256: String,
     /// Canonical package root digest; absent in older notebook captures.
     pub root_sha256: Option<String>,
+    /// Module canonical-target digests; absent in captures before Wave 27.
+    pub module_paths_sha256: Option<BTreeMap<String, String>>,
     /// Full module name to checked source SHA-256.
     pub modules: BTreeMap<String, String>,
 }

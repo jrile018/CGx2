@@ -1,0 +1,10 @@
+module demo.base
+pub record Point:
+    x: i64
+    active: Bool
+fn bump(x: i64) -> i64 effects() caps():
+    x + 1
+pub fn make(x: i64) -> Point effects() caps():
+    Point(active: true, x: bump(x))
+pub fn value(p: Point) -> i64 effects() caps():
+    p.x

@@ -1,0 +1,3 @@
+module demo.unrelated
+pub fn answer() -> i64 effects() caps():
+    42
