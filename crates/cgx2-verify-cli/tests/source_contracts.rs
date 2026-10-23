@@ -92,6 +92,54 @@ fn solver_version_spoof_with_canned_statuses_cannot_prove() {
     fs::remove_dir(directory).unwrap();
 }
 
+#[cfg(unix)]
+#[test]
+fn fixture_spoof_without_pin_and_stale_model_remain_untrusted() {
+    use std::os::unix::fs::PermissionsExt;
+    let directory = std::env::temp_dir().join(format!(
+        "cgx2-solver-stale-{}-{}",
+        std::process::id(),
+        NEXT.fetch_add(1, Ordering::Relaxed)
+    ));
+    fs::create_dir_all(&directory).unwrap();
+    let solver = directory.join("z3");
+    let calls = directory.join("calls");
+    let _ = fs::remove_file(&calls);
+    let script = format!(
+        "#!/bin/sh\nif [ \"$1\" = --version ]; then echo 'Z3 version 4.13.0'; exit 0; fi\ncat >/dev/null\nn=0\nif [ -r '{calls}' ]; then n=$(cat '{calls}'); fi\nn=$((n+1))\nprintf '%s' \"$n\" > '{calls}'\ncase \"$n\" in\n1) printf 'unsat\\nsat\\nsat\\nunsat\\n';;\n2) printf 'unsat\\nsat\\nunsat\\nunsat\\n';;\n3) printf 'unsat\\nsat\\nsat\\nunsat\\n';;\n4) printf 'unsat\\nsat\\nunsat\\nsat\\n';;\n5) printf 'sat\\n((v_78 0))\\n';;\nesac\n",
+        calls = calls.display()
+    );
+    fs::write(&solver, script).unwrap();
+    fs::set_permissions(&solver, fs::Permissions::from_mode(0o700)).unwrap();
+    let result =
+        Source::new(TRUE).run(&["--domain", "x:0:2", "--solver", solver.to_str().unwrap()]);
+    assert_eq!(result["solver"]["fixtures_valid"], true, "{result}");
+    assert_eq!(result["solver"]["bounded_reason"], "solver_digest_unpinned");
+    assert_eq!(result["solver"]["response"], "sat_candidate_unvalidated");
+    assert!(result["solver"]["witness_attempts"][0]["validation"]
+        .as_str()
+        .unwrap()
+        .contains("candidate does not violate ensures"));
+    assert_eq!(result["proof"]["kind"], "unknown");
+    assert_eq!(result["proof"]["state"], "unknown");
+    fs::remove_file(&calls).unwrap();
+    let wrong_pin = "0".repeat(64);
+    let mismatch = Source::new(TRUE).run(&[
+        "--domain",
+        "x:0:2",
+        "--solver",
+        solver.to_str().unwrap(),
+        "--trusted-solver-sha256",
+        &wrong_pin,
+    ]);
+    assert_eq!(
+        mismatch["solver"]["bounded_reason"],
+        "solver_digest_mismatch"
+    );
+    assert_eq!(mismatch["proof"]["state"], "solver_failure");
+    fs::remove_dir_all(directory).unwrap();
+}
+
 #[test]
 fn finite_proof_and_re_evaluated_counterexample() {
     let valid = Source::new(TRUE).run(&["--domain", "x:0:2"]);
@@ -161,6 +209,32 @@ fn domains_and_function_selection_are_explicit() {
     let selected = two.run(&["--function", "other", "--domain", "x:0:2"]);
     assert_eq!(selected["source"]["function"], "other");
     assert_eq!(selected["verdict"]["kind"], "proved");
+    assert_eq!(selected["proof"]["kind"], "unknown");
+    assert_eq!(selected["proof"]["state"], "unknown");
+    assert_eq!(
+        selected["proof"]["scope"]["kind"],
+        "selected_source_function_contract"
+    );
+    assert_eq!(selected["proof"]["scope"]["function"], "other");
+    assert_eq!(
+        selected["proof"]["scope"]["input_sha256"],
+        selected["input_sha256"]
+    );
+}
+
+#[test]
+fn selected_finite_result_does_not_cover_unsupported_sibling() {
+    let source = format!(
+        "{TRUE}\npub fn effectful(x: i64) -> i64 effects(ReadArgs) caps(ArgsRead):\n    requires true\n    ensures result == x\n    x\n"
+    );
+    let result = Source::new(&source).run(&["--function", "next", "--domain", "x:0:2"]);
+    assert_eq!(result["verdict"]["kind"], "proved", "{result}");
+    assert_eq!(result["proof"]["state"], "unknown");
+    assert_eq!(
+        result["proof"]["scope"]["kind"],
+        "selected_source_function_contract"
+    );
+    assert_eq!(result["proof"]["scope"]["function"], "next");
 }
 
 #[test]
@@ -179,6 +253,7 @@ fn unsupported_calls_effects_and_foreign_declarations_have_source_spans() {
         assert_eq!(result["verdict"]["scope"]["max_cases"], 100_000);
         assert_eq!(result["verdict"]["scope"]["requested_domains"][0]["name"], "x");
         assert_eq!(result["proof"]["kind"], "unknown");
+        assert_eq!(result["proof"]["state"], "unsupported");
     }
 }
 

@@ -28,6 +28,7 @@ struct Options {
     format: String,
     max_cases: usize,
     solver: Option<String>,
+    trusted_solver_sha256: Option<String>,
     timeout_ms: u64,
     function: Option<String>,
     domains: Vec<Domain>,
@@ -53,6 +54,7 @@ fn options() -> Result<Options, String> {
     let mut format = "text".to_owned();
     let mut max_cases = DEFAULT_CASES;
     let mut solver = None;
+    let mut trusted_solver_sha256 = None;
     let mut timeout_ms = DEFAULT_TIMEOUT_MS;
     let mut function = None;
     let mut domains = Vec::new();
@@ -67,6 +69,13 @@ fn options() -> Result<Options, String> {
                     .map_err(|_| "--max-cases must be a positive integer")?;
             }
             "--solver" => solver = Some(args.next().ok_or("--solver requires a path")?),
+            "--trusted-solver-sha256" => {
+                trusted_solver_sha256 = Some(
+                    args.next()
+                        .ok_or("--trusted-solver-sha256 requires a digest")?
+                        .to_ascii_lowercase(),
+                );
+            }
             "--function" => function = Some(args.next().ok_or("--function requires a name")?),
             "--domain" => domains.push(parse_domain(
                 &args.next().ok_or("--domain requires NAME:MIN:MAX")?,
@@ -83,7 +92,7 @@ fn options() -> Result<Options, String> {
             _ => return Err("expected one contract path".into()),
         }
     }
-    let input = input.ok_or("usage: cgx2-verify CONTRACT.json|FILE.cg [--function NAME] [--domain NAME:MIN:MAX] [--format text|json] [--max-cases N] [--solver PATH] [--timeout-ms N]")?;
+    let input = input.ok_or("usage: cgx2-verify CONTRACT.json|FILE.cg [--function NAME] [--domain NAME:MIN:MAX] [--format text|json] [--max-cases N] [--solver PATH] [--trusted-solver-sha256 HEX] [--timeout-ms N]")?;
     if format != "text" && format != "json" {
         return Err("--format must be text or json".into());
     }
@@ -96,11 +105,22 @@ fn options() -> Result<Options, String> {
     if solver.as_deref() == Some("") {
         return Err("--solver path must not be empty".into());
     }
+    if let Some(digest) = &trusted_solver_sha256 {
+        if solver.is_none()
+            || digest.len() != 64
+            || !digest.bytes().all(|byte| byte.is_ascii_hexdigit())
+        {
+            return Err(
+                "--trusted-solver-sha256 requires --solver and a 64-digit SHA-256 digest".into(),
+            );
+        }
+    }
     Ok(Options {
         input,
         format,
         max_cases,
         solver,
+        trusted_solver_sha256,
         timeout_ms,
         function,
         domains,
@@ -483,7 +503,7 @@ fn solver_fixture_probes(executable: &str, args: &[&str], timeout: Duration) -> 
             && !observed.output_limit_exceeded
             && !observed.write_error
             && observed.stderr.is_empty()
-            && observed.stdout.trim_end_matches('\n') == expected;
+            && (observed.stdout == expected || observed.stdout == format!("{expected}\n"));
         passed &= valid;
         evidence.push(
             json!({"name": name, "script_sha256": hash(script.as_bytes()),
@@ -500,12 +520,15 @@ fn solver_json(
     contract: &Contract,
     timeout_ms: u64,
     selected: Option<&source::Selected>,
+    trusted_solver_sha256: Option<&str>,
 ) -> Json {
     let timeout = Duration::from_millis(timeout_ms);
     let (family, args) = solver_protocol(path);
     let canonical = fs::canonicalize(path).ok();
     let executable = canonical.as_ref().and_then(|p| p.to_str()).unwrap_or(path);
     let executable_sha256 = executable_hash(executable);
+    let pin_valid =
+        trusted_solver_sha256.is_some_and(|pin| executable_sha256.as_deref() == Some(pin));
     let version = observe_solver(executable, &["--version"], "", timeout);
     let version_text = version.stdout.trim();
     let version_valid = version.exit == SolverExit::Code(0)
@@ -537,14 +560,16 @@ fn solver_json(
         .map(str::trim)
         .filter(|line| matches!(*line, "sat" | "unsat" | "unknown"))
         .collect::<Vec<_>>();
-    let executable_stable =
+    let executable_stable_before_probes =
         executable_sha256.is_some() && executable_sha256 == executable_hash(executable);
     let response = response_json(&observation);
-    let (fixtures_valid, fixture_evidence) = if version_valid && executable_stable {
+    let (fixtures_valid, fixture_evidence) = if version_valid && executable_stable_before_probes {
         solver_fixture_probes(executable, args, timeout)
     } else {
         (false, Vec::new())
     };
+    let executable_stable =
+        executable_stable_before_probes && executable_sha256 == executable_hash(executable);
     let bounded_reason = if family == "unrecognized" {
         "unrecognized_solver"
     } else if executable_sha256.is_none() {
@@ -555,6 +580,10 @@ fn solver_json(
         "executable_changed"
     } else if !fixtures_valid {
         "solver_fixture_failed"
+    } else if trusted_solver_sha256.is_none() {
+        "solver_digest_unpinned"
+    } else if !pin_valid {
+        "solver_digest_mismatch"
     } else if contract.requires.contains_uninterpreted()
         || contract.ensures.contains_uninterpreted()
     {
@@ -571,6 +600,8 @@ fn solver_json(
         "family": family,
         "arguments": args,
         "executable_sha256": executable_sha256,
+        "trusted_solver_sha256": trusted_solver_sha256,
+        "pin_valid": pin_valid,
         "identity_valid": version_valid,
     "executable_stable": executable_stable,
     "fixtures_valid": fixtures_valid,
@@ -653,6 +684,11 @@ fn solver_json(
             }
         }
     }
+    if executable_sha256 != executable_hash(executable) {
+        result["executable_stable"] = json!(false);
+        result["bounded_reason"] = json!("executable_changed");
+        result["bounded_result"] = json!("unknown");
+    }
     result
 }
 
@@ -669,11 +705,20 @@ fn source_unknown(options: &Options, bytes: &[u8], diagnostic: &source::Diagnost
     "bounded_solver_result": {"kind": "unrun", "reason": "source_subset_unsupported", "source_parity": false},
     "proof": {"kind": "unknown", "meaning": "no_trusted_solver_proof", "reason": "source_subset_unsupported"},
     });
+    let mut result = result;
+    result["proof"]["state"] = json!("unsupported");
+    result["proof"]["scope"] = json!({
+        "kind": "requested_source_function",
+        "function": options.function,
+        "input_sha256": hash(bytes),
+        "unsupported_span": {"start": diagnostic.span.start, "end": diagnostic.span.end},
+    });
     if options.format == "json" {
         println!("{}", result);
     } else {
         println!("input_sha256: {}", result["input_sha256"]);
         println!("verdict: unknown");
+        println!("proof_state: unsupported");
         println!(
             "{}: {} at byte {}..{}",
             diagnostic.code, diagnostic.message, diagnostic.span.start, diagnostic.span.end
@@ -772,6 +817,7 @@ fn run() -> Result<(), String> {
             &contract,
             options.timeout_ms,
             source_selected.as_ref(),
+            options.trusted_solver_sha256.as_deref(),
         );
     }
     let source_parity = source_selected.is_some() && audit.is_ok();
@@ -780,6 +826,7 @@ fn run() -> Result<(), String> {
         && result["solver"]["statuses"] == json!(["unsat", "sat", "unsat", "unsat"])
         && result["solver"]["fixtures_valid"] == true
         && result["solver"]["identity_valid"] == true
+        && result["solver"]["pin_valid"] == true
         && result["solver"]["executable_stable"] == true;
     result["proof"] = match &verdict {
         Verdict::Disproved { counterexample } if audit.is_ok() => {
@@ -796,9 +843,10 @@ fn run() -> Result<(), String> {
         }
         _ if trusted_solver => {
             result["solver"]["trust"] = json!("recognized_live_solver_with_fixture_probes");
-            json!({"kind": "proved", "meaning": "global_checked_pure_fragment",
+            json!({"kind": "proved", "meaning": "selected_pure_function_contract_under_solver_assumptions",
                 "trust_conditions": ["four_complete_obligations", "source_and_smt_term_parity",
-                    "recognized_solver_version_and_sha256", "true_false_overflow_fixture_probes"]})
+                    "recognized_solver_version_and_sha256", "true_false_overflow_fixture_probes",
+                    "caller_trusts_solver_executable"]})
         }
         _ => json!({
             "kind": "unknown",
@@ -809,6 +857,77 @@ fn run() -> Result<(), String> {
                 else { result["solver"]["bounded_reason"].as_str().unwrap_or("incomplete_solver_obligation") },
         }),
     };
+    let proof_state = match result["proof"]["kind"].as_str() {
+        Some("proved") => "proven",
+        Some("disproved") => "counterexample",
+        _ if matches!(
+            &verdict,
+            Verdict::Unknown {
+                reason: cgx2_verify_core::UnknownReason::Unsupported(_)
+            }
+        ) || result["solver"]["bounded_reason"] == "unsupported_uninterpreted_call" =>
+        {
+            "unsupported"
+        }
+        _ if result["solver"]["output_limit_exceeded"] != true
+            && (result["solver"]["exit"]["kind"] == "timeout"
+                || result["solver"]["version_exit"]["kind"] == "timeout"
+                || result["solver"]["fixture_probes"]
+                    .as_array()
+                    .is_some_and(|probes| {
+                        probes
+                            .iter()
+                            .any(|probe| probe["exit"]["kind"] == "timeout")
+                    })
+                || result["solver"]["witness_attempts"]
+                    .as_array()
+                    .is_some_and(|attempts| {
+                        attempts
+                            .iter()
+                            .any(|attempt| attempt["exit"]["kind"] == "timeout")
+                    })) =>
+        {
+            "unknown"
+        }
+        _ if options.solver.is_some()
+            && (result["solver"]["exit"]["kind"] == "unavailable"
+                || (result["solver"]["exit"]["kind"] == "code"
+                    && result["solver"]["exit"]["code"] != 0)
+                || result["solver"]["response"] == "unknown:MalformedResponse"
+                || result["solver"]["output_limit_exceeded"] == true
+                || result["solver"]["write_error"] == true
+                || result["solver"]["bounded_reason"] == "invalid_version_response"
+                || result["solver"]["bounded_reason"] == "unreadable_executable"
+                || result["solver"]["bounded_reason"] == "executable_changed"
+                || result["solver"]["bounded_reason"] == "solver_fixture_failed"
+                || result["solver"]["bounded_reason"] == "solver_digest_mismatch"
+                || result["solver"]["bounded_reason"] == "unrecognized_solver") =>
+        {
+            "solver_failure"
+        }
+        _ => "unknown",
+    };
+    result["proof"]["state"] = json!(proof_state);
+    result["proof"]["scope"] = json!({
+        "kind": if source_input { "selected_source_function_contract" } else { "json_contract" },
+        "function": source_selected.as_ref().map(|selected| selected.name.as_str()),
+        "source_span": result["source"]["span"],
+        "input_sha256": result["input_sha256"],
+        "obligation_sha256": hash(script.as_bytes()),
+        "finite_domains": domain_json(&domains),
+        "max_cases": options.max_cases,
+    });
+    if options.solver.is_some() {
+        result["proof"]["solver_provenance"] = json!({
+            "command": result["solver"]["canonical_executable"],
+            "arguments": result["solver"]["arguments"],
+            "version": result["solver"]["version"],
+            "executable_sha256": result["solver"]["executable_sha256"],
+            "trusted_solver_sha256": options.trusted_solver_sha256,
+            "timeout_ms_per_process": options.timeout_ms,
+            "output_limit_bytes_per_stream": cgx2_verify_core::SOLVER_OUTPUT_LIMIT,
+        });
+    }
     if options.format == "json" {
         println!(
             "{}",
@@ -822,6 +941,8 @@ fn run() -> Result<(), String> {
             result["proof"]["kind"].as_str().unwrap(),
             result["proof"]["meaning"].as_str().unwrap()
         );
+        println!("proof_state: {}", result["proof"]["state"]);
+        println!("proof_scope: {}", result["proof"]["scope"]);
         println!(
             "encoding_audit: {} (source_parity: {})",
             result["bounded_solver_result"]["kind"].as_str().unwrap(),

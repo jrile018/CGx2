@@ -124,6 +124,13 @@ fn malformed_oversized_and_invalid_domains_are_rejected() {
     assert_eq!(run(&fixture(&doc.to_string()), &[]).status.code(), Some(2));
     doc["domains"] = json!([{"name":"y","min":0,"max":1}]);
     assert_eq!(run(&fixture(&doc.to_string()), &[]).status.code(), Some(2));
+    let valid = fixture(include_str!("../examples/valid.json"));
+    assert_eq!(
+        run(&valid, &["--trusted-solver-sha256", "bad"])
+            .status
+            .code(),
+        Some(2)
+    );
 }
 
 #[cfg(unix)]
@@ -206,6 +213,11 @@ fn solver_statuses_are_untrusted_observations() {
         ),
         ("printf 'junk\\n'", "unknown:MalformedResponse"),
         (
+            "printf 'unsat\\nsat\\nunsat\\nunsat\\nsat\\n'",
+            "unknown:MalformedResponse",
+        ),
+        ("printf 'unsat\\nsat\\nunsat'", "unknown:MalformedResponse"),
+        (
             "printf 'unsat\\nsat\\nunsat\\nunsat\\n'; exit 3",
             "unknown:MalformedResponse",
         ),
@@ -234,6 +246,20 @@ fn solver_statuses_are_untrusted_observations() {
             64
         );
         assert_eq!(result["solver"]["response"], expected);
+        assert_eq!(result["proof"]["scope"]["kind"], "json_contract");
+        assert_eq!(
+            result["proof"]["scope"]["obligation_sha256"],
+            result["solver"]["script_sha256"]
+        );
+        assert_eq!(
+            result["proof"]["solver_provenance"]["timeout_ms_per_process"],
+            2_000
+        );
+        assert_eq!(
+            result["proof"]["solver_provenance"]["output_limit_bytes_per_stream"],
+            16 * 1024
+        );
+        assert_eq!(result["proof"]["state"], "solver_failure");
     }
     let result = parsed(
         &input,
@@ -294,6 +320,7 @@ fn solver_timeout_large_and_stalled_output_are_bounded() {
         ],
     );
     assert_eq!(result["solver"]["exit"]["kind"], "timeout");
+    assert_eq!(result["proof"]["state"], "unknown");
     let large = fake_solver("head -c 200000 /dev/zero");
     let result = parsed(
         &input,

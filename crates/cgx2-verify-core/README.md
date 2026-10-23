@@ -29,8 +29,9 @@ evaluator callback. Missing, malformed, or disagreeing formulas fail closed;
 finite parity is encoding evidence, not a proof for all `i64` inputs.
 
 `parse_solver_result` accepts exactly four status lines, zero exit, and empty
-stderr. `Unsat` is only a protocol observation until the CLI establishes
-source, encoding, fixture, and solver identity conditions.
+stderr. `Unsat` is only a protocol observation. The CLI additionally checks
+source and encoding parity, fixture responses, and a caller supplied solver
+digest pin before it can report a conditional proof for the selected function.
 `validate_solver_witness` parses a complete `get-value` response and checks
 names, sorts, ranges, and the claimed violation. `observe_solver` limits each
 output stream to 16 KiB and includes stdin, exit, and pipe closure in its
