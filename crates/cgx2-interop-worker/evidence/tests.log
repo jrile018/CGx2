@@ -1,0 +1,47 @@
+   Compiling cgx2-interop-worker v0.1.0 (/home/john-riley/.codex/worktrees/95ea/lang/crates/cgx2-interop-worker)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.57s
+     Running unittests src/lib.rs (target/release-worker/debug/deps/cgx2_interop_worker-95a2117ec0fdc901)
+
+running 2 tests
+test v1::tests::nested_empty_lists_do_not_hide_type_conflicts ... ok
+test v1::tests::value_budget_types_and_session_handles ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin/cgx2-worker-fixture.rs (target/release-worker/debug/deps/cgx2_worker_fixture-f897c2f793837800)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/protocol.rs (target/release-worker/debug/deps/protocol-4cb4ad4bf14c40c8)
+
+running 3 tests
+test copied_types_round_trip_without_nan_json_or_raw_addresses ... ok
+test unknown_fields_kinds_versions_duplicate_keys_utf8_and_nesting_reject ... ok
+test golden_big_endian_json_vector_and_all_truncations ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/transport.rs (target/release-worker/debug/deps/transport-d8df768087d15679)
+
+running 11 tests
+test events_foreign_failure_and_predispatch_validation ... ok
+test restricted_host_enforces_real_readonly_filesystem_and_network_or_reports_unavailable ... ok
+test duplicated_terminal_frame_is_never_accepted_for_next_request ... ok
+test inherited_descriptors_and_oversized_requests_do_not_cross_boundary ... ok
+test retained_state_and_no_replay_of_write_effect ... ok
+test a_child_that_stops_reading_cannot_block_dispatch_past_deadline ... ok
+test limits_and_handshake_deadline_are_checked ... ok
+test uncertain_effects_are_never_retried_after_crash_timeout_or_cancel ... ok
+test pins_authentication_and_actual_confinement_fail_closed ... ok
+test shutdown_drop_and_timeout_kill_child_process_group ... ok
+test malformed_oversized_truncated_unsolicited_and_state_frames_poison ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.23s
+
+   Doc-tests cgx2_interop_worker
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

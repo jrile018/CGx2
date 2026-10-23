@@ -1,0 +1,26 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running unittests src/lib.rs (target/release-worker/debug/deps/cgx2_interop_worker-95a2117ec0fdc901)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running unittests src/bin/cgx2-worker-fixture.rs (target/release-worker/debug/deps/cgx2_worker_fixture-f897c2f793837800)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/protocol.rs (target/release-worker/debug/deps/protocol-4cb4ad4bf14c40c8)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+     Running tests/transport.rs (target/release-worker/debug/deps/transport-d8df768087d15679)
+
+running 1 test
+real confinement active: LinuxReadOnlyNoNetwork { landlock_abi: 8 }
+test restricted_host_enforces_real_readonly_filesystem_and_network_or_reports_unavailable ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.28s
