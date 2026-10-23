@@ -2,8 +2,8 @@ use std::{collections::BTreeSet, mem::discriminant};
 
 use crate::{
     lex, AssignOp, BinaryOp, CallArg, Declaration, DeclaredName, Expr, ExprKind, ForeignBinding,
-    Function, Module, Parameter, Path, Span, Stmt, StmtKind, SyntaxDiagnostic, Token, TokenKind,
-    TypeSyntax,
+    Function, Module, Parameter, Path, Record, RecordField, Span, Stmt, StmtKind, SyntaxDiagnostic,
+    Token, TokenKind, TypeSyntax,
 };
 
 /// Parse a candidate CGx2 module or standalone script.
@@ -39,11 +39,16 @@ pub fn parse_module(source: &str) -> Result<Module, Vec<SyntaxDiagnostic>> {
         }
         parser.end_statement();
     }
+    let mut records = Vec::new();
     let mut functions = Vec::new();
     let mut statements = Vec::new();
     while !parser.at(&TokenKind::Eof) {
         let before = parser.pos;
-        if parser.at_name("unsafe")
+        if parser.at_name("record") {
+            if let Some(record) = parser.parse_record() {
+                records.push(record);
+            }
+        } else if parser.at_name("unsafe")
             || parser.at_name("foreign")
             || parser.at(&TokenKind::Pub)
             || parser.at(&TokenKind::Fn)
@@ -83,6 +88,7 @@ pub fn parse_module(source: &str) -> Result<Module, Vec<SyntaxDiagnostic>> {
     let module = Module {
         name,
         imports,
+        records,
         functions,
         statements,
         span: Span {
@@ -116,6 +122,64 @@ struct Parser {
 }
 
 impl Parser {
+    fn parse_record(&mut self) -> Option<Record> {
+        let start = self.advance().span.start;
+        let (name, _) = self.name()?;
+        self.expect(&TokenKind::Colon, "CGS101", "expected : after record name")?;
+        self.expect(
+            &TokenKind::Newline,
+            "CGS103",
+            "expected newline after record header",
+        )?;
+        let indent = self.expect(&TokenKind::Indent, "CGS104", "expected record fields")?;
+        if indent.span.end - indent.span.start != 4 {
+            self.errors.push(SyntaxDiagnostic {
+                code: "CGS104",
+                message: "record fields require four-space indentation".into(),
+                span: indent.span,
+            });
+        }
+        let mut fields = Vec::new();
+        let mut seen = BTreeSet::new();
+        while !self.at(&TokenKind::Dedent) && !self.at(&TokenKind::Eof) {
+            let (field_name, name_span) = self.name()?;
+            if !seen.insert(field_name.clone()) {
+                self.errors.push(SyntaxDiagnostic {
+                    code: "CGS112",
+                    message: format!("duplicate record field `{field_name}`"),
+                    span: name_span,
+                });
+            }
+            self.expect(&TokenKind::Colon, "CGS103", "expected : after field name")?;
+            let ty = self.parse_type()?;
+            let end = self.end_statement()?;
+            fields.push(RecordField {
+                name: field_name,
+                ty,
+                span: Span {
+                    start: name_span.start,
+                    end,
+                },
+            });
+        }
+        self.expect(&TokenKind::Dedent, "CGS102", "expected end of record")?;
+        if !(1..=8).contains(&fields.len()) {
+            self.errors.push(SyntaxDiagnostic {
+                code: "CGS113",
+                message: "record requires one to eight fields".into(),
+                span: Span {
+                    start,
+                    end: self.peek().span.start,
+                },
+            });
+        }
+        let end = fields.last().map_or(start, |field| field.span.end);
+        Some(Record {
+            name,
+            fields,
+            span: Span { start, end },
+        })
+    }
     fn at_name(&self, name: &str) -> bool {
         matches!(&self.peek().kind, TokenKind::Name(value) if value == name)
     }

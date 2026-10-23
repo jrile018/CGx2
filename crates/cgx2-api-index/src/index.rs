@@ -8,6 +8,14 @@ pub struct ApiIndex {
     pub schema_version: u32,
     pub module: Option<String>,
     pub functions: Vec<ApiFunction>,
+    pub records: Vec<ApiRecord>,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ApiRecord {
+    pub name: String,
+    pub fields: Vec<ApiParameter>,
+    pub span: Span,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -185,7 +193,9 @@ fn build_index_checked(
     });
 
     Ok(ApiIndex {
-        schema_version: if module.functions.iter().any(|function| {
+        schema_version: if !module.records.is_empty() {
+            5
+        } else if module.functions.iter().any(|function| {
             function
                 .foreign
                 .as_ref()
@@ -210,6 +220,22 @@ fn build_index_checked(
         },
         module: module.name.as_ref().map(|path| path.segments.join(".")),
         functions,
+        records: module
+            .records
+            .iter()
+            .map(|record| ApiRecord {
+                name: record.name.clone(),
+                fields: record
+                    .fields
+                    .iter()
+                    .map(|field| ApiParameter {
+                        name: field.name.clone(),
+                        ty: field.ty.to_string(),
+                    })
+                    .collect(),
+                span: record.span,
+            })
+            .collect(),
     })
 }
 

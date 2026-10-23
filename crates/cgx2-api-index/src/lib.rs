@@ -7,5 +7,5 @@ mod render;
 pub use error::IndexError;
 pub use index::{
     build_index, build_index_with_imports, ApiContract, ApiForeign, ApiFunction, ApiIndex,
-    ApiParameter,
+    ApiParameter, ApiRecord,
 };

@@ -103,6 +103,12 @@ pub(crate) fn analyze(module: &Module) -> (BTreeMap<String, EffectSummary>, Vec<
         for stmt in &function.body {
             stmt_sites(stmt, &mut observations);
         }
+        observations.retain(|site| {
+            !site
+                .callee
+                .as_ref()
+                .is_some_and(|name| module.records.iter().any(|record| record.name == *name))
+        });
         sites.insert(function.name.clone(), observations);
         let mut summary = EffectSummary {
             effects_explicit: function.effects.is_some(),

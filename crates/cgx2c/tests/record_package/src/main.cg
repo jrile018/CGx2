@@ -1,0 +1,19 @@
+module records.main
+
+record Point:
+    x: i64
+    y: i64
+    active: Bool
+
+fn move(p: Point) -> Point:
+    Point(active: p.active, y: p.x, x: p.y)
+
+fn relay(p: Point) -> Point:
+    move(p)
+
+fn main() -> i64:
+    let p = Point(y: -9223372036854775808, active: true, x: 9223372036854775807)
+    let moved = relay(p)
+    for moved in range(0, 1):
+        moved
+    moved.x

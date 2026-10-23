@@ -135,6 +135,11 @@ pub fn index_source(source: &str, syntax_only: bool) -> Result<Index, Vec<Diagno
 
 fn build_index(module: &Module, typed: Option<&cgx2_sema::TypedModule>) -> Index {
     let names: BTreeSet<String> = module.functions.iter().map(|f| f.name.clone()).collect();
+    let records: BTreeSet<String> = module
+        .records
+        .iter()
+        .map(|record| record.name.clone())
+        .collect();
     let imported_roots: BTreeSet<String> = module
         .imports
         .iter()
@@ -144,7 +149,8 @@ fn build_index(module: &Module, typed: Option<&cgx2_sema::TypedModule>) -> Index
         .functions
         .iter()
         .map(|function| {
-            let mut visitor = Visitor::new(&names, &imported_roots, typed.is_none(), true);
+            let mut visitor =
+                Visitor::new(&names, &records, &imported_roots, typed.is_none(), true);
             visitor
                 .bindings
                 .push(function.parameters.iter().map(|p| p.name.clone()).collect());
@@ -186,7 +192,7 @@ fn build_index(module: &Module, typed: Option<&cgx2_sema::TypedModule>) -> Index
         })
         .collect::<Vec<_>>();
     functions.sort_by(|a, b| a.name.cmp(&b.name).then(a.span.start.cmp(&b.span.start)));
-    let mut visitor = Visitor::new(&names, &imported_roots, typed.is_none(), false);
+    let mut visitor = Visitor::new(&names, &records, &imported_roots, typed.is_none(), false);
     visitor.bindings.push(BTreeSet::new());
     visitor.statements(&module.statements);
     visitor.calls.sort_by(|a, b| {
@@ -233,6 +239,7 @@ fn build_index(module: &Module, typed: Option<&cgx2_sema::TypedModule>) -> Index
 
 struct Visitor<'a> {
     names: &'a BTreeSet<String>,
+    records: &'a BTreeSet<String>,
     imported_roots: &'a BTreeSet<String>,
     syntax_only: bool,
     function_body: bool,
@@ -244,12 +251,14 @@ struct Visitor<'a> {
 impl<'a> Visitor<'a> {
     fn new(
         names: &'a BTreeSet<String>,
+        records: &'a BTreeSet<String>,
         imported_roots: &'a BTreeSet<String>,
         syntax_only: bool,
         function_body: bool,
     ) -> Self {
         Self {
             names,
+            records,
             imported_roots,
             syntax_only,
             function_body,
@@ -351,6 +360,9 @@ impl<'a> Visitor<'a> {
         }
         if !name.contains('.') && self.names.contains(name) {
             return CallKind::Local;
+        }
+        if !name.contains('.') && self.records.contains(name) {
+            return CallKind::Builtin;
         }
         if self.syntax_only && self.function_body && name.starts_with("memory.") {
             // The frozen checker models memory operations in scripts only.

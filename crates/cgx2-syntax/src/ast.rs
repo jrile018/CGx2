@@ -35,8 +35,23 @@ impl fmt::Display for TypeSyntax {
 pub struct Module {
     pub name: Option<Path>,
     pub imports: Vec<Path>,
+    pub records: Vec<Record>,
     pub functions: Vec<Function>,
     pub statements: Vec<Stmt>,
+    pub span: Span,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Record {
+    pub name: String,
+    pub fields: Vec<RecordField>,
+    pub span: Span,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct RecordField {
+    pub name: String,
+    pub ty: TypeSyntax,
     pub span: Span,
 }
 

@@ -13,8 +13,30 @@ pub fn format_module(module: &Module) -> String {
         out.push_str(&import.segments.join("."));
         out.push('\n');
     }
-    if !out.is_empty() && (!module.functions.is_empty() || !module.statements.is_empty()) {
+    if !out.is_empty()
+        && (!module.records.is_empty()
+            || !module.functions.is_empty()
+            || !module.statements.is_empty())
+    {
         out.push('\n');
+    }
+    for (index, record) in module.records.iter().enumerate() {
+        out.push_str("record ");
+        out.push_str(&record.name);
+        out.push_str(":\n");
+        for field in &record.fields {
+            out.push_str("    ");
+            out.push_str(&field.name);
+            out.push_str(": ");
+            out.push_str(&field.ty.to_string());
+            out.push('\n');
+        }
+        if index + 1 < module.records.len()
+            || !module.functions.is_empty()
+            || !module.statements.is_empty()
+        {
+            out.push('\n');
+        }
     }
     for (index, function) in module.functions.iter().enumerate() {
         if index > 0 {

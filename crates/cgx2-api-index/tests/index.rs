@@ -230,6 +230,7 @@ fn json_round_trips_escapes_controls_and_unicode() {
             ensures: vec![],
             foreign: None,
         }],
+        records: vec![],
     };
     python_json_assert(
         &index.render_json(),
