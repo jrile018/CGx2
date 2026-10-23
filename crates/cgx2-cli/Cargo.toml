@@ -14,6 +14,7 @@ name = "cgx2"
 path = "src/main.rs"
 
 [dependencies]
+cgx2c = { path = "../cgx2c" }
 cgx2-syntax = { path = "../cgx2-syntax" }
 cgx2-api-index = { path = "../cgx2-api-index" }
 cgx2-sema = { path = "../cgx2-sema" }

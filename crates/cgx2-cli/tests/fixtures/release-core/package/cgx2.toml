@@ -1,0 +1,4 @@
+schema_version = 1
+name = "release_core"
+entry = "main.cg"
+sources = ["main.cg", "math.cg"]

@@ -1,0 +1,667 @@
+{
+  "schema_version": 1,
+  "binary": "/home/john-riley/.codex/worktrees/18b8/lang/target/tmp-core/install/bin/cgx2",
+  "binary_sha256": "db9198cb110a43c1319c202a8e4dfe8bf6926457943c987be9180ddbbb2e8036",
+  "checks": [
+    {
+      "name": "single check",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "check",
+        "/tmp/cgx2-installed-core-wfqm4h_v/scalar.cg"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "single interpreter",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "run",
+        "/tmp/cgx2-installed-core-wfqm4h_v/scalar.cg"
+      ],
+      "exit_code": 0,
+      "stdout": "25\n",
+      "stderr": ""
+    },
+    {
+      "name": "single build single-debug",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "build",
+        "/tmp/cgx2-installed-core-wfqm4h_v/scalar.cg",
+        "--out",
+        "/tmp/cgx2-installed-core-wfqm4h_v/single-debug"
+      ],
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: source_sha256=f8cc7a6d37dfefe15d11c3d3f1a24130f7d2c5121faf601379656e103189704c rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=none output=/tmp/cgx2-installed-core-wfqm4h_v/single-debug\n",
+      "stderr": ""
+    },
+    {
+      "name": "single native single-debug",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/single-debug"
+      ],
+      "exit_code": 0,
+      "stdout": "25\n",
+      "stderr": ""
+    },
+    {
+      "name": "single build single-release",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "build",
+        "/tmp/cgx2-installed-core-wfqm4h_v/scalar.cg",
+        "--out",
+        "/tmp/cgx2-installed-core-wfqm4h_v/single-release",
+        "--release"
+      ],
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: source_sha256=f8cc7a6d37dfefe15d11c3d3f1a24130f7d2c5121faf601379656e103189704c rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=none output=/tmp/cgx2-installed-core-wfqm4h_v/single-release\n",
+      "stderr": ""
+    },
+    {
+      "name": "single native single-release",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/single-release"
+      ],
+      "exit_code": 0,
+      "stdout": "25\n",
+      "stderr": ""
+    },
+    {
+      "name": "single emit rust",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "emit",
+        "/tmp/cgx2-installed-core-wfqm4h_v/scalar.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/tmp/cgx2-installed-core-wfqm4h_v/single.rs"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "single force emit rust",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "emit",
+        "/tmp/cgx2-installed-core-wfqm4h_v/scalar.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/tmp/cgx2-installed-core-wfqm4h_v/single.rs",
+        "--force"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "single deterministic rust",
+      "status": "passed"
+    },
+    {
+      "name": "single emitted Rust compilation",
+      "status": "passed",
+      "argv": [
+        "rustc",
+        "--edition=2024",
+        "/tmp/cgx2-installed-core-wfqm4h_v/single.rs",
+        "-o",
+        "/tmp/cgx2-installed-core-wfqm4h_v/single-emitted"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "warning: unused variable: `args`\n  --> /tmp/cgx2-installed-core-wfqm4h_v/single.rs:45:47\n   |\n45 | fn cgx2_user_7_map_one(ctx: &mut Cgx2Context, args: &[String], cgx2_user_1_x: i64) -> Result<i64, String> {\n   |                                               ^^^^ help: if this is intentional, prefix it with an underscore: `_args`\n   |\n   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default\n\nwarning: unused variable: `args`\n  --> /tmp/cgx2-installed-core-wfqm4h_v/single.rs:55:47\n   |\n55 | fn cgx2_user_7_zip_one(ctx: &mut Cgx2Context, args: &[String], cgx2_user_4_left: i64, cgx2_user_5_right: i64) -> Result<i64, String> {\n   |                                               ^^^^ help: if this is intentional, prefix it with an underscore: `_args`\n\nwarning: function `cgx2_sub` is never used\n  --> /tmp/cgx2-installed-core-wfqm4h_v/single.rs:27:4\n   |\n27 | fn cgx2_sub(left: i64, right: i64) -> Result<i64, String> {\n   |    ^^^^^^^^\n   |\n   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default\n\nwarning: function `cgx2_div` is never used\n  --> /tmp/cgx2-installed-core-wfqm4h_v/single.rs:33:4\n   |\n33 | fn cgx2_div(left: i64, right: i64) -> Result<i64, String> {\n   |    ^^^^^^^^\n\nwarning: function `cgx2_arg_count` is never used\n  --> /tmp/cgx2-installed-core-wfqm4h_v/single.rs:37:4\n   |\n37 | fn cgx2_arg_count(args: &[String]) -> Result<i64, String> {\n   |    ^^^^^^^^^^^^^^\n\nwarning: function `cgx2_arg` is never used\n  --> /tmp/cgx2-installed-core-wfqm4h_v/single.rs:40:4\n   |\n40 | fn cgx2_arg(args: &[String], index: i64) -> Result<String, String> {\n   |    ^^^^^^^^\n\nwarning: 6 warnings emitted\n\n"
+    },
+    {
+      "name": "single emitted Rust",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/single-emitted"
+      ],
+      "exit_code": 0,
+      "stdout": "25\n",
+      "stderr": ""
+    },
+    {
+      "name": "single emit python",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "emit",
+        "/tmp/cgx2-installed-core-wfqm4h_v/scalar.cg",
+        "--target",
+        "python",
+        "--out",
+        "/tmp/cgx2-installed-core-wfqm4h_v/single.py"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "single force emit python",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "emit",
+        "/tmp/cgx2-installed-core-wfqm4h_v/scalar.cg",
+        "--target",
+        "python",
+        "--out",
+        "/tmp/cgx2-installed-core-wfqm4h_v/single.py",
+        "--force"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "single deterministic python",
+      "status": "passed"
+    },
+    {
+      "name": "single emitted Python",
+      "status": "passed",
+      "argv": [
+        "/usr/bin/python3",
+        "/tmp/cgx2-installed-core-wfqm4h_v/single.py"
+      ],
+      "exit_code": 0,
+      "stdout": "25\n",
+      "stderr": ""
+    },
+    {
+      "name": "single API documented spelling",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "api",
+        "--json",
+        "/tmp/cgx2-installed-core-wfqm4h_v/scalar.cg"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"schema_version\":2,\"module\":null,\"functions\":[{\"name\":\"map_one\",\"parameters\":[{\"name\":\"x\",\"ty\":\"i64\"}],\"return_type\":\"i64\",\"span\":{\"start\":0,\"end\":56},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[]},{\"name\":\"zip_one\",\"parameters\":[{\"name\":\"left\",\"ty\":\"i64\"},{\"name\":\"right\",\"ty\":\"i64\"}],\"return_type\":\"i64\",\"span\":{\"start\":56,\"end\":134},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[]}]}\n",
+      "stderr": ""
+    },
+    {
+      "name": "single API legacy spelling",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "api",
+        "/tmp/cgx2-installed-core-wfqm4h_v/scalar.cg",
+        "--json"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"schema_version\":2,\"module\":null,\"functions\":[{\"name\":\"map_one\",\"parameters\":[{\"name\":\"x\",\"ty\":\"i64\"}],\"return_type\":\"i64\",\"span\":{\"start\":0,\"end\":56},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[]},{\"name\":\"zip_one\",\"parameters\":[{\"name\":\"left\",\"ty\":\"i64\"},{\"name\":\"right\",\"ty\":\"i64\"}],\"return_type\":\"i64\",\"span\":{\"start\":56,\"end\":134},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[]}]}\n",
+      "stderr": ""
+    },
+    {
+      "name": "single API stable JSON",
+      "status": "passed"
+    },
+    {
+      "name": "package check",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "check",
+        "/tmp/cgx2-installed-core-wfqm4h_v/package"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "package interpreter",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "run",
+        "/tmp/cgx2-installed-core-wfqm4h_v/package"
+      ],
+      "exit_code": 0,
+      "stdout": "25\n",
+      "stderr": ""
+    },
+    {
+      "name": "package build package-debug",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "build",
+        "/tmp/cgx2-installed-core-wfqm4h_v/package",
+        "--out",
+        "/tmp/cgx2-installed-core-wfqm4h_v/package-debug"
+      ],
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: package_manifest_sha256=fe4a6f205cb5ab426214d047e46d76bb64545df68ed52358969ca3f2d7b4afae package_sources_sha256=[\"main.cg:dca0a6bddd3daec55ae9a38a11bbe3c944f17229f42c35decfc4f9bb80a4f97d\", \"math.cg:9e60a74734061586b5657b954ecfa42b89d6af7e2f61d65b2055b40966c2e876\"] rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug output=/tmp/cgx2-installed-core-wfqm4h_v/package-debug\n",
+      "stderr": ""
+    },
+    {
+      "name": "package native package-debug",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/package-debug"
+      ],
+      "exit_code": 0,
+      "stdout": "25\n",
+      "stderr": ""
+    },
+    {
+      "name": "package build package-release",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "build",
+        "/tmp/cgx2-installed-core-wfqm4h_v/package",
+        "--out",
+        "/tmp/cgx2-installed-core-wfqm4h_v/package-release",
+        "--release"
+      ],
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: package_manifest_sha256=fe4a6f205cb5ab426214d047e46d76bb64545df68ed52358969ca3f2d7b4afae package_sources_sha256=[\"main.cg:dca0a6bddd3daec55ae9a38a11bbe3c944f17229f42c35decfc4f9bb80a4f97d\", \"math.cg:9e60a74734061586b5657b954ecfa42b89d6af7e2f61d65b2055b40966c2e876\"] rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release output=/tmp/cgx2-installed-core-wfqm4h_v/package-release\n",
+      "stderr": ""
+    },
+    {
+      "name": "package native package-release",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/package-release"
+      ],
+      "exit_code": 0,
+      "stdout": "25\n",
+      "stderr": ""
+    },
+    {
+      "name": "package emit rust",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "emit",
+        "/tmp/cgx2-installed-core-wfqm4h_v/package",
+        "--target",
+        "rust",
+        "--out",
+        "/tmp/cgx2-installed-core-wfqm4h_v/package.rs"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "package force emit rust",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "emit",
+        "/tmp/cgx2-installed-core-wfqm4h_v/package",
+        "--target",
+        "rust",
+        "--out",
+        "/tmp/cgx2-installed-core-wfqm4h_v/package.rs",
+        "--force"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "package deterministic rust",
+      "status": "passed"
+    },
+    {
+      "name": "package emitted Rust compilation",
+      "status": "passed",
+      "argv": [
+        "rustc",
+        "--edition=2024",
+        "/tmp/cgx2-installed-core-wfqm4h_v/package.rs",
+        "-o",
+        "/tmp/cgx2-installed-core-wfqm4h_v/package-emitted"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "warning: unused variable: `args`\n  --> /tmp/cgx2-installed-core-wfqm4h_v/package.rs:45:82\n   |\n45 | ...6e65(ctx: &mut Cgx2Context, args: &[String], cgx2_user_1_x: i64) -> Result<i64, String> {\n   |                                ^^^^ help: if this is intentional, prefix it with an underscore: `_args`\n   |\n   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default\n\nwarning: unused variable: `args`\n  --> /tmp/cgx2-installed-core-wfqm4h_v/package.rs:55:82\n   |\n55 | ...6e65(ctx: &mut Cgx2Context, args: &[String], cgx2_user_4_left: i64, cgx2_user_5_right: i64) -> Result<i64, String> {\n   |                                ^^^^ help: if this is intentional, prefix it with an underscore: `_args`\n\nwarning: function `cgx2_sub` is never used\n  --> /tmp/cgx2-installed-core-wfqm4h_v/package.rs:27:4\n   |\n27 | fn cgx2_sub(left: i64, right: i64) -> Result<i64, String> {\n   |    ^^^^^^^^\n   |\n   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default\n\nwarning: function `cgx2_div` is never used\n  --> /tmp/cgx2-installed-core-wfqm4h_v/package.rs:33:4\n   |\n33 | fn cgx2_div(left: i64, right: i64) -> Result<i64, String> {\n   |    ^^^^^^^^\n\nwarning: function `cgx2_arg_count` is never used\n  --> /tmp/cgx2-installed-core-wfqm4h_v/package.rs:37:4\n   |\n37 | fn cgx2_arg_count(args: &[String]) -> Result<i64, String> {\n   |    ^^^^^^^^^^^^^^\n\nwarning: function `cgx2_arg` is never used\n  --> /tmp/cgx2-installed-core-wfqm4h_v/package.rs:40:4\n   |\n40 | fn cgx2_arg(args: &[String], index: i64) -> Result<String, String> {\n   |    ^^^^^^^^\n\nwarning: 6 warnings emitted\n\n"
+    },
+    {
+      "name": "package emitted Rust",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/package-emitted"
+      ],
+      "exit_code": 0,
+      "stdout": "25\n",
+      "stderr": ""
+    },
+    {
+      "name": "package emit python",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "emit",
+        "/tmp/cgx2-installed-core-wfqm4h_v/package",
+        "--target",
+        "python",
+        "--out",
+        "/tmp/cgx2-installed-core-wfqm4h_v/package.pyz"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "package force emit python",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "emit",
+        "/tmp/cgx2-installed-core-wfqm4h_v/package",
+        "--target",
+        "python",
+        "--out",
+        "/tmp/cgx2-installed-core-wfqm4h_v/package.pyz",
+        "--force"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "package deterministic python",
+      "status": "passed"
+    },
+    {
+      "name": "Python archive CRC/source members",
+      "status": "passed"
+    },
+    {
+      "name": "package emitted Python",
+      "status": "passed",
+      "argv": [
+        "/usr/bin/python3",
+        "/tmp/cgx2-installed-core-wfqm4h_v/package.pyz"
+      ],
+      "exit_code": 0,
+      "stdout": "25\n",
+      "stderr": ""
+    },
+    {
+      "name": "package API documented spelling",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "api",
+        "--json",
+        "/tmp/cgx2-installed-core-wfqm4h_v/package"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"schema_version\":2,\"name\":\"release_core\",\"entry\":\"main.cg\",\"imports_supported\":true,\"modules\":[{\"source\":\"main.cg\",\"api\":{\"schema_version\":2,\"module\":\"release.main\",\"functions\":[]},\"imports\":[\"release.math\"],\"resolved_public_calls\":[{\"name\":\"release.math.zip_one\",\"span\":{\"start\":73,\"end\":122}},{\"name\":\"release.math.map_one\",\"span\":{\"start\":94,\"end\":117}}]},{\"source\":\"math.cg\",\"api\":{\"schema_version\":2,\"module\":\"release.math\",\"functions\":[{\"name\":\"map_one\",\"parameters\":[{\"name\":\"x\",\"ty\":\"i64\"}],\"return_type\":\"i64\",\"span\":{\"start\":21,\"end\":77},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[]},{\"name\":\"zip_one\",\"parameters\":[{\"name\":\"left\",\"ty\":\"i64\"},{\"name\":\"right\",\"ty\":\"i64\"}],\"return_type\":\"i64\",\"span\":{\"start\":77,\"end\":154},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[]}]},\"imports\":[],\"resolved_public_calls\":[]}],\"topological_order\":[\"release.math\",\"release.main\"]}\n",
+      "stderr": ""
+    },
+    {
+      "name": "package API legacy spelling",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "api",
+        "/tmp/cgx2-installed-core-wfqm4h_v/package",
+        "--json"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"schema_version\":2,\"name\":\"release_core\",\"entry\":\"main.cg\",\"imports_supported\":true,\"modules\":[{\"source\":\"main.cg\",\"api\":{\"schema_version\":2,\"module\":\"release.main\",\"functions\":[]},\"imports\":[\"release.math\"],\"resolved_public_calls\":[{\"name\":\"release.math.zip_one\",\"span\":{\"start\":73,\"end\":122}},{\"name\":\"release.math.map_one\",\"span\":{\"start\":94,\"end\":117}}]},{\"source\":\"math.cg\",\"api\":{\"schema_version\":2,\"module\":\"release.math\",\"functions\":[{\"name\":\"map_one\",\"parameters\":[{\"name\":\"x\",\"ty\":\"i64\"}],\"return_type\":\"i64\",\"span\":{\"start\":21,\"end\":77},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[]},{\"name\":\"zip_one\",\"parameters\":[{\"name\":\"left\",\"ty\":\"i64\"},{\"name\":\"right\",\"ty\":\"i64\"}],\"return_type\":\"i64\",\"span\":{\"start\":77,\"end\":154},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[]}]},\"imports\":[],\"resolved_public_calls\":[]}],\"topological_order\":[\"release.math\",\"release.main\"]}\n",
+      "stderr": ""
+    },
+    {
+      "name": "package API stable JSON",
+      "status": "passed"
+    },
+    {
+      "name": "parse rejection",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "--diagnostic-format=json",
+        "build",
+        "/tmp/cgx2-installed-core-wfqm4h_v/bad.cg",
+        "--out",
+        "/tmp/cgx2-installed-core-wfqm4h_v/preserved",
+        "--force"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "{\"code\":\"CGS103\",\"severity\":\"error\",\"message\":\"expected name\",\"file\":\"/tmp/cgx2-installed-core-wfqm4h_v/bad.cg\",\"span\":{\"start\":4,\"end\":5}}\n"
+    },
+    {
+      "name": "parse output preserved",
+      "status": "passed"
+    },
+    {
+      "name": "parse structured diagnostic",
+      "status": "passed"
+    },
+    {
+      "name": "type rejection",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "--diagnostic-format=json",
+        "build",
+        "/tmp/cgx2-installed-core-wfqm4h_v/bad.cg",
+        "--out",
+        "/tmp/cgx2-installed-core-wfqm4h_v/preserved",
+        "--force"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "{\"code\":\"CGT001\",\"severity\":\"error\",\"message\":\"unknown name `missing`\",\"file\":\"/tmp/cgx2-installed-core-wfqm4h_v/bad.cg\",\"span\":{\"start\":0,\"end\":7}}\n"
+    },
+    {
+      "name": "type output preserved",
+      "status": "passed"
+    },
+    {
+      "name": "type structured diagnostic",
+      "status": "passed"
+    },
+    {
+      "name": "target rejection",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "--diagnostic-format=json",
+        "emit",
+        "/tmp/cgx2-installed-core-wfqm4h_v/bad.cg",
+        "--target",
+        "gpu",
+        "--out",
+        "/tmp/cgx2-installed-core-wfqm4h_v/preserved",
+        "--force"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "{\"code\":\"CGC001\",\"severity\":\"error\",\"message\":\"unsupported emission target `gpu`; expected rust or python\",\"file\":\"<command>\",\"span\":null}\n"
+    },
+    {
+      "name": "target output preserved",
+      "status": "passed"
+    },
+    {
+      "name": "target structured diagnostic",
+      "status": "passed"
+    },
+    {
+      "name": "rustc rejection",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "--diagnostic-format=json",
+        "build",
+        "/tmp/cgx2-installed-core-wfqm4h_v/bad.cg",
+        "--out",
+        "/tmp/cgx2-installed-core-wfqm4h_v/preserved",
+        "--force",
+        "--rustc",
+        "/missing/rustc"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "{\"code\":\"CGXC005\",\"severity\":\"error\",\"message\":\"cannot start rustc: No such file or directory (os error 2)\",\"file\":\"/tmp/cgx2-installed-core-wfqm4h_v/bad.cg\",\"span\":null}\n"
+    },
+    {
+      "name": "rustc output preserved",
+      "status": "passed"
+    },
+    {
+      "name": "rustc structured diagnostic",
+      "status": "passed"
+    },
+    {
+      "name": "Python profile rejection",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "--diagnostic-format=json",
+        "emit",
+        "/tmp/cgx2-installed-core-wfqm4h_v/bad.cg",
+        "--target",
+        "python",
+        "--out",
+        "/tmp/cgx2-installed-core-wfqm4h_v/preserved",
+        "--force"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "{\"code\":\"CGE001\",\"severity\":\"error\",\"message\":\"memory operations are unsupported by Python emission\",\"file\":\"/tmp/cgx2-installed-core-wfqm4h_v/bad.cg\",\"span\":{\"start\":8,\"end\":47}}\n"
+    },
+    {
+      "name": "Python profile output preserved",
+      "status": "passed"
+    },
+    {
+      "name": "Python profile structured diagnostic",
+      "status": "passed"
+    },
+    {
+      "name": "api package negative",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "--diagnostic-format=json",
+        "api",
+        "/tmp/cgx2-installed-core-wfqm4h_v/package",
+        "--json"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "{\"code\":\"CGT001\",\"severity\":\"error\",\"message\":\"unknown name `missing`\",\"file\":\"main.cg\",\"span\":{\"start\":57,\"end\":64}}\n"
+    },
+    {
+      "name": "api relative Unicode span",
+      "status": "passed"
+    },
+    {
+      "name": "api package output preserved",
+      "status": "passed"
+    },
+    {
+      "name": "build package negative",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "--diagnostic-format=json",
+        "build",
+        "/tmp/cgx2-installed-core-wfqm4h_v/package",
+        "--out",
+        "/tmp/cgx2-installed-core-wfqm4h_v/preserved",
+        "--force"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "{\"code\":\"CGT001\",\"severity\":\"error\",\"message\":\"unknown name `missing`\",\"file\":\"main.cg\",\"span\":{\"start\":57,\"end\":64}}\n"
+    },
+    {
+      "name": "build relative Unicode span",
+      "status": "passed"
+    },
+    {
+      "name": "build package output preserved",
+      "status": "passed"
+    },
+    {
+      "name": "emit package negative",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "--diagnostic-format=json",
+        "emit",
+        "/tmp/cgx2-installed-core-wfqm4h_v/package",
+        "--out",
+        "/tmp/cgx2-installed-core-wfqm4h_v/preserved",
+        "--force",
+        "--target",
+        "rust"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "{\"code\":\"CGT001\",\"severity\":\"error\",\"message\":\"unknown name `missing`\",\"file\":\"main.cg\",\"span\":{\"start\":57,\"end\":64}}\n"
+    },
+    {
+      "name": "emit relative Unicode span",
+      "status": "passed"
+    },
+    {
+      "name": "emit package output preserved",
+      "status": "passed"
+    },
+    {
+      "name": "explicit Python worker",
+      "status": "passed",
+      "argv": [
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2",
+        "run",
+        "/tmp/cgx2-installed-core-wfqm4h_v/explicit.cg"
+      ],
+      "exit_code": 0,
+      "stdout": "9\n",
+      "stderr": "Python worker executable=\"/usr/bin/python3\" version=\"3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]\" prefix=\"/usr\"\n"
+    },
+    {
+      "name": "explicit worker reported",
+      "status": "passed"
+    },
+    {
+      "name": "native ELF dependencies",
+      "status": "passed",
+      "argv": [
+        "ldd",
+        "/tmp/cgx2-installed-core-wfqm4h_v/bin/cgx2"
+      ],
+      "exit_code": 0,
+      "stdout": "\tlinux-vdso.so.1 (0x0000776077b97000)\n\tlibgcc_s.so.1 => /usr/lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007760778c3000)\n\tlibc.so.6 => /usr/lib/x86_64-linux-gnu/libc.so.6 (0x0000776077600000)\n\t/lib64/ld-linux-x86-64.so.2 (0x0000776077b99000)\n",
+      "stderr": ""
+    },
+    {
+      "name": "native ELF has no libpython",
+      "status": "passed"
+    }
+  ],
+  "scope": "installed core command conformance; no timing claims",
+  "working_directory": "/tmp/cgx2-installed-core-wfqm4h_v",
+  "status": "passed"
+}
