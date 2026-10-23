@@ -267,3 +267,10 @@ The completion noninferiority gate is `met` only when its lower 95% bound is str
 ## Wave 17 public syntax pilot readiness
 
 The six-case paired syntax packet, exact-token trace contract, and one-command readiness report are documented in [fixtures/syntax-pilot/v1/README.md](fixtures/syntax-pilot/v1/README.md). Public candidate files are incomplete `TODO()` starters; complete compiler-checked examples and acceptance outputs remain under `private/` and must stay outside model workspaces. Independent human review and model trials are still unrun. The experimental brace form is normalized to canonical `.cg` by the same operator-provided compiler wrapper for both variants.
+
+## Wave 21 real matrix runtime baselines
+
+The offline Torch 2.11.0 CPU float64 source, direct facade, hand-written
+LibTorch C++, and optional matching Python procedure is in
+[MATRIX-RUNTIME.md](MATRIX-RUNTIME.md). It emits raw process and warm-call
+samples with package/tool hashes and marks small-sample or unavailable claims.
