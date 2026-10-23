@@ -62,6 +62,9 @@ pub fn scalar_worker_main() -> i32 {
                 bytes
             }
             Value::Unit => vec![b'U'],
+            Value::Record { .. } => {
+                b"ECGNK001: record values are unsupported in notebooks".to_vec()
+            }
         },
         Err(error) => format!("E{}: {}", error.code, error.message).into_bytes(),
     };
@@ -1538,6 +1541,9 @@ fn append_binding(script: &mut String, name: &str, value: &Value) -> Result<(), 
             script.push('"');
         }
         Value::Unit => return Err("CGNK001: Unit bindings are unsupported".into()),
+        Value::Record { .. } => {
+            return Err("CGNK001: record bindings are unsupported in notebooks".into())
+        }
     }
     script.push('\n');
     Ok(())

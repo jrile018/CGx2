@@ -1,7 +1,7 @@
 //! Bounded source/native memory unwind evidence. See the owned Wave 20 gate.
 use cgx2_cli::{
-    run_checked_source, run_checked_source_with_failure,
-    run_checked_source_with_failure_at_reserve, MemoryReport, Value,
+    MemoryReport, Value, run_checked_source, run_checked_source_with_failure,
+    run_checked_source_with_failure_at_reserve,
 };
 use std::{
     fs,

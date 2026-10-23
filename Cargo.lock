@@ -146,6 +146,7 @@ dependencies = [
  "cgx2-cli",
  "cgx2-notebook-format",
  "cgx2-notebook-session",
+ "cgx2-package",
  "cgx2-syntax",
 ]
 
