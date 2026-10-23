@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "status": "model_unregistered",
+  "packet_sha256": "af194f0c68ca67ceb0d0ddf0065e6046681928a764f76886251a048d2f79735f",
+  "design": "One paired seed for each of six public scalar tasks; three indent-first and three brace-first pairs. Freeze model identity, settings, seed, and protocol hash before any model call.",
+  "order": [
+    {"task_id": "precedence", "first": "indent", "second": "brace"},
+    {"task_id": "calls", "first": "brace", "second": "indent"},
+    {"task_id": "mutation", "first": "indent", "second": "brace"},
+    {"task_id": "argument_count", "first": "brace", "second": "indent"},
+    {"task_id": "argument_text", "first": "indent", "second": "brace"},
+    {"task_id": "overflow", "first": "brace", "second": "indent"}
+  ],
+  "shared_limits": {"context_budget_tokens": 8192, "token_budget": 4096, "time_budget_seconds": 120},
+  "required_measurements": ["provider_input_tokens", "provider_output_tokens", "repair_iterations", "elapsed_wall_seconds", "compiler_success", "test_success", "final_source_sha256"],
+  "analysis": {"unit": "task pair", "completion": "indent pass minus brace pass", "tokens": "indent/brace ratio only when both pass", "failures": "full token and wall budgets in all-task cost", "uncertainty": "deterministic task bootstrap, 4096 resamples, seed 18, percentile 2.5/97.5"},
+  "scope": "six public scalar tasks only; no whole-language or release claim"
+}

@@ -1,5 +1,47 @@
 # Public scalar syntax pilot packet
 
+## Wave 18 public export and trial boundary
+
+From the repository root, export exactly one assigned condition into a new directory:
+
+```sh
+python3 bench/syntax_export.py --task precedence --variant indent --out /tmp/cgx2-precedence-indent
+```
+
+The directory contains `prompt.json`, `starter.cg`, `syntax_tool.py`,
+`syntax_normalize.py`, `acceptance-interface.json`, and `export-manifest.json`.
+The exporter checks frozen packet and starter hashes, rejects source path
+traversal and symlinks, and verifies every exported byte after writing. Never
+mount this source packet or the repository in a model workspace. Give the model
+only the exported directory and a pinned `cgx2c` through the exported wrapper.
+The same wrapper normalizes both variants to the narrow canonical `.cg` form.
+The operator copies final `solution.cg` and exact transcript out of that
+workspace, then runs private acceptance in a separate isolated grading process.
+No private oracle, complete reference, validation internals, or alternative
+variant answer is exported. The public acceptance interface names the final
+submission and grading boundary without exposing expected outputs.
+
+`trial-protocol.json` freezes six task pairs in a three/three first-condition
+balance, shared 8,192 context, 4,096 token, and 120 second budgets, and a
+task-bootstrap uncertainty method. Its model registration remains empty. Before
+any model call, an operator must freeze one model family/version, identical
+temperature, top-p, max-output setting and seed for all twelve runs, and the
+protocol hash. Record actual provider usage for every call, elapsed wall time,
+repair iterations, exact model-visible files and transcript, final source,
+compiler and hidden-test outcomes, and external verification references. The
+v2 schema and `bench/syntax_trial.py` reject missing or inconsistent provider
+usage, leaked private input, changed visible files, over-budget runs, and
+failed isolation. An operator must independently authenticate provider and
+isolation receipts; JSON booleans alone are not proof. A complete authenticated
+six-pair grid is required before descriptive ratios or uncertainty are reported.
+Each failure incurs the full token and wall budget in all-task cost. This small
+public scalar slice cannot establish whole-language improvement.
+
+`evidence-unrun.json` records the current zero-trial outcome. The local scored
+candidate isolation probe reports undelegated `cpu`, `memory`, and `pids`
+cgroup controllers. No provider trial or independent model receipt is available
+in this lane, so there is no productivity claim.
+
 This is a six-case **candidate packet**, not a release holdout or a model result. `candidate/indent` and `candidate/brace` contain incomplete `TODO()` starters and are the only model-visible source trees. `private/reference` contains complete paired solutions and `private/oracle.json` contains acceptance outputs; neither may enter a model workspace. `packet.json` gives both variants the same API descriptions, example arguments, behavior descriptions, prompt, allowed tools, 8,192-token context budget, 4,096-token run budget, and 120-second time budget. An operator must keep traces, hidden checks, reference solutions, and answer changes outside the model workspace. Copy only the chosen starter and a public task description into each isolated workspace; do not mount this packet directory wholesale.
 
 Braces are experimental. `bench/syntax_packet.py` accepts only one-level function braces and semicolon-terminated scalar statements. It checks that the public starters normalize to identical canonical bytes, contain only API headers and unresolved placeholders, and differ from the private complete references. It separately normalizes the private references, compares their emitted Rust hashes, and checks native acceptance outputs for each variant. Equal canonical bytes imply equal parsed operations for this narrow packet; starter source byte counts remain separate observations, not model token estimates. The private oracle comes from the existing native scalar pilot and is still awaiting independent human task review.

@@ -1,0 +1,25 @@
+{
+  "candidate_isolation": {
+    "reason": "cgroup_controllers_not_delegated:cpu,memory,pids",
+    "status": "unsupported_isolation"
+  },
+  "compiler_parity": "pass",
+  "compiler_sha256": "20ad36371813d3fc6d66e9aa471038ba549bd78cf3d7443e2f9fed1f26e37d95",
+  "genuine_paired_traces": 0,
+  "improvement_claim": "none",
+  "independent_human_review": "unrun",
+  "limitations": [
+    "No configured genuine model interface and provider usage receipts were supplied to this lane.",
+    "Scored candidate isolation is unsupported while cgroup cpu, memory, and pids controllers are undelegated.",
+    "The public six-task scalar packet cannot establish a whole-language or release claim."
+  ],
+  "model_registration": "unrun",
+  "packet_sha256": "af194f0c68ca67ceb0d0ddf0065e6046681928a764f76886251a048d2f79735f",
+  "provider_usage_receipts": 0,
+  "public_export": "implemented_and_tested_all_12_conditions",
+  "schema_version": 1,
+  "scope": "six_public_scalar_task_pairs",
+  "status": "unrun",
+  "task_pairs_planned": 6,
+  "trial_protocol_sha256": "b0d2908e1ace029f0e8c352d670ea3c68fcd35dafc86dbc2651d3c21fd271a27"
+}
