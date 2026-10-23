@@ -383,6 +383,49 @@ impl<E: CellExecutor> NotebookSession<E> {
         Ok(())
     }
 
+    /// Remove a cell while retaining unaffected captured observations. Readers
+    /// of its former definitions keep their old output, marked stale.
+    pub fn remove_cell(&mut self, id: &str) -> Result<(), SessionError> {
+        let index = self.cell_index(id)?;
+        if self.notebook.cells[index].kind == CellKind::Code {
+            let old = &self.facts[id];
+            let mut affected: BTreeSet<usize> = affected_after(
+                &self.notebook.cells,
+                &self.facts,
+                index,
+                &old.defines,
+                old.opaque_effects,
+            )
+            .into_iter()
+            .collect();
+            if let Some(pending) = self.pending_affected.get(id) {
+                affected.extend(
+                    (index + 1..self.notebook.cells.len())
+                        .filter(|later| pending.contains(&self.notebook.cells[*later].id)),
+                );
+            }
+            let invalidated: Vec<String> = std::iter::once(id.to_owned())
+                .chain(
+                    affected
+                        .iter()
+                        .map(|index| self.notebook.cells[*index].id.clone()),
+                )
+                .collect();
+            self.executor.invalidate_cells(&invalidated);
+            for affected in affected {
+                self.mark_stale(affected);
+            }
+        }
+        self.notebook.cells.remove(index);
+        self.facts.remove(id);
+        self.statuses.remove(id);
+        self.pending_affected.remove(id);
+        for pending in self.pending_affected.values_mut() {
+            pending.remove(id);
+        }
+        Ok(())
+    }
+
     pub fn restart_and_run_all(&mut self) -> Result<(), SessionError> {
         self.restart()?;
         let code_ids: Vec<String> = self

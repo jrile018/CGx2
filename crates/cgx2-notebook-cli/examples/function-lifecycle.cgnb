@@ -1,0 +1,11 @@
+#!cgnb 1
+%% code id=base
+fn inc(x: i64) -> i64:
+    x + 1
+%% code id=derived
+fn twice(x: i64) -> i64:
+    inc(inc(x))
+%% code id=value
+twice(3)
+%% code id=independent
+40 + 2

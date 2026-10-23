@@ -29,6 +29,91 @@ fn output_body(output: &Output) -> &str {
 }
 
 #[test]
+fn deleting_a_function_cell_preserves_independent_output_across_reopen() {
+    let mut kernel = NotebookKernel::open(notebook(vec![
+        code("base", "fn inc(x: i64) -> i64:\n    x + 1\n"),
+        code("derived", "fn twice(x: i64) -> i64:\n    inc(inc(x))\n"),
+        code("value", "twice(3)"),
+        code("independent", "40 + 2"),
+    ]))
+    .unwrap();
+    kernel.restart_and_run_all().unwrap();
+    let independent_revision = kernel.notebook().cells[3]
+        .provenance
+        .as_ref()
+        .unwrap()
+        .ordinal;
+    let old_value = kernel.notebook().cells[2].outputs.clone();
+
+    kernel.remove_cell("base").unwrap();
+    assert_eq!(kernel.status("derived").unwrap(), CellStatus::Stale);
+    assert_eq!(kernel.status("value").unwrap(), CellStatus::Stale);
+    assert_eq!(kernel.status("independent").unwrap(), CellStatus::Current);
+    assert_eq!(kernel.notebook().cells[1].outputs, old_value);
+    assert_eq!(
+        kernel.notebook().cells[2]
+            .provenance
+            .as_ref()
+            .unwrap()
+            .ordinal,
+        independent_revision
+    );
+
+    let saved = write_notebook(kernel.notebook()).unwrap();
+    let mut reopened = NotebookKernel::open(parse_notebook(&saved).unwrap()).unwrap();
+    assert_eq!(reopened.status("value").unwrap(), CellStatus::Stale);
+    assert_eq!(reopened.status("independent").unwrap(), CellStatus::Cached);
+    assert_eq!(reopened.rerun_cell("derived").unwrap_err().code, "CGNK011");
+    let failed_saved = write_notebook(reopened.notebook()).unwrap();
+    let failed_reopen = NotebookKernel::open(parse_notebook(&failed_saved).unwrap()).unwrap();
+    assert_eq!(failed_reopen.status("derived").unwrap(), CellStatus::Failed);
+    assert_eq!(failed_reopen.status("value").unwrap(), CellStatus::Stale);
+    assert_eq!(
+        failed_reopen.status("independent").unwrap(),
+        CellStatus::Cached
+    );
+    reopened.restart().unwrap();
+    assert_eq!(reopened.status("independent").unwrap(), CellStatus::Stale);
+    assert_eq!(reopened.rerun_cell("derived").unwrap_err().code, "CGNK011");
+    assert_eq!(reopened.status("value").unwrap(), CellStatus::Stale);
+}
+
+#[test]
+fn interrupted_or_invalid_definition_never_publishes_a_function() {
+    let mut kernel = NotebookKernel::open(notebook(vec![
+        code("defs", "fn inc(x: i64) -> i64:\n    x + 1\n"),
+        code("value", "inc(2)"),
+    ]))
+    .unwrap();
+    let control = ExecutionControl::new(
+        std::path::PathBuf::from(env!("CARGO_BIN_EXE_cgx2-notebook-scalar-worker")),
+        Duration::from_secs(2),
+    );
+    kernel.set_execution_control(control.clone());
+    control.interrupt();
+    assert_eq!(kernel.run_cell("defs").unwrap_err().code, "CGNK010");
+    assert_eq!(kernel.status("defs").unwrap(), CellStatus::Failed);
+    assert_eq!(kernel.rerun_cell("value").unwrap_err().code, "CGNK004");
+    kernel.restart_and_run_all().unwrap();
+    assert_eq!(output_body(&kernel.notebook().cells[1].outputs[0]), "3");
+
+    kernel
+        .replace_cell(
+            "defs",
+            "fn inc(x: i64) -> i64:\n    x + 2\n\nfn inc(y: i64) -> i64:\n    y + 3\n".into(),
+        )
+        .unwrap();
+    assert_eq!(kernel.rerun_affected("defs").unwrap_err().code, "CGNK001");
+    assert_eq!(kernel.status("value").unwrap(), CellStatus::Stale);
+    assert_eq!(output_body(&kernel.notebook().cells[1].outputs[0]), "3");
+    kernel
+        .replace_cell("defs", "fn inc(x: i64) -> i64:\n    x + 2\n".into())
+        .unwrap();
+    kernel.rerun_affected("defs").unwrap();
+    assert_eq!(output_body(&kernel.notebook().cells[1].outputs[0]), "4");
+}
+
+#[test]
 fn reopen_preserves_observation_and_prefix_edit_is_stale() {
     let mut kernel = NotebookKernel::open(notebook(vec![
         code("seed", "let x = 3"),
@@ -379,7 +464,7 @@ fn pure_functions_keep_live_definitions_and_selective_revisions() {
     assert_eq!(kernel.status("independent").unwrap(), CellStatus::Current);
     let saved = write_notebook(kernel.notebook()).unwrap();
     let reopened = NotebookKernel::open(parse_notebook(&saved).unwrap()).unwrap();
-    assert_eq!(reopened.status("value").unwrap(), CellStatus::Stale);
+    assert_eq!(reopened.status("value").unwrap(), CellStatus::Failed);
 }
 
 #[test]

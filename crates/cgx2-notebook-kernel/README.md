@@ -1,5 +1,11 @@
 # CGx2 pure notebook kernel
 
+`remove_cell(id)` removes a code or Markdown cell without replaying other
+cells. It invalidates retained definitions from that cell and marks transitive
+readers' saved outputs stale. Independent outputs retain their provenance,
+including after `.cgnb` save and reopen. Rerunning a reader of a removed
+function reports `CGNK011` with a definition or replay hint.
+
 `NotebookKernel` executes code cells in a process-local scalar session. A cell may contain immutable `let` bindings and pure scalar expressions, or only function definitions. The parser does not permit function items mixed with top-level statements. Functions use ordinary `.cg` syntax: `fn name(x: i64) -> i64:` with optional empty `effects()` and `caps()`. Parameters and explicit return types are limited to `i64`, `Bool`, and `String`. Bodies admit immutable `let`, expressions, and `return` with a value. Calls to earlier or same-cell pure functions are allowed; cross-cell `let` capture, named calls, recursion, `main`, argument builtins, imports, modules, mutable state, loops, contracts, foreign/unsafe declarations, nonempty effect/capability declarations, and unknown calls are rejected before execution. An unknown call gets `CGNK011`.
 
 Definitions remain in the live session and are passed to the frozen `check_source` and `run_source` APIs in a function-only module with a generated `main` wrapper. Earlier cells are never rerun to rebuild definitions. `replace_cell` and failed, timed-out, or interrupted runs invalidate a function definition and its transitive callers through function-name dependencies. `rerun_affected` recomputes only affected cells; independent outputs keep their revisions. A removed definition makes a dependent call fail until the call is changed. `restart` discards all live definitions; reopening a saved `.cgnb` restores cached observations only and never executes source. Opaque effects still make their own and later saved outputs stale.

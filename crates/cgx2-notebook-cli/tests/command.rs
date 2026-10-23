@@ -27,6 +27,76 @@ fn pure_function_fixture_runs_and_inspects_cached_status() {
     assert!(listing.contains("independent\tcode\tcached"));
 }
 
+#[test]
+fn delete_function_cell_keeps_unrelated_cached_output() {
+    let fixture = Fixture::new();
+    let input = fixture.write(
+        "functions.cgnb",
+        include_str!("../../cgx2-notebook-kernel/tests/fixtures/pure-functions.cgnb"),
+    );
+    let executed = fixture.path("executed.cgnb");
+    let deleted = fixture.path("deleted.cgnb");
+    assert!(
+        run(&[Path::new("run"), &input, Path::new("--out"), &executed])
+            .status
+            .success()
+    );
+    let result = run(&[
+        Path::new("delete"),
+        &executed,
+        Path::new("defs"),
+        Path::new("--out"),
+        &deleted,
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let notebook = parse_notebook_bytes(&fs::read(&deleted).unwrap()).unwrap();
+    assert_eq!(notebook.cells.len(), 2);
+    assert_eq!(notebook.cells[0].id, "value");
+    assert!(notebook.cells[0].provenance.as_ref().unwrap().stale);
+    assert!(!notebook.cells[1].provenance.as_ref().unwrap().stale);
+    let inspected = run(&[Path::new("inspect"), &deleted]);
+    assert!(inspected.status.success(), "{}", stderr(&inspected));
+    let listing = String::from_utf8(inspected.stdout).unwrap();
+    assert!(listing.contains("value\tcode\tstale"));
+    assert!(listing.contains("independent\tcode\tcached"));
+}
+
+#[test]
+fn edited_function_reruns_only_its_cli_readers() {
+    let fixture = Fixture::new();
+    let input = fixture.write(
+        "functions.cgnb",
+        include_str!("../../cgx2-notebook-kernel/tests/fixtures/pure-functions.cgnb"),
+    );
+    let baseline = fixture.path("baseline.cgnb");
+    let revised = fixture.path("revised.cgnb");
+    assert!(
+        run(&[Path::new("run"), &input, Path::new("--out"), &baseline])
+            .status
+            .success()
+    );
+    let source = "fn inc(x: i64) -> i64:\n    x + 2\n\nfn twice(x: i64) -> i64:\n    inc(inc(x))\n";
+    let result = run(&[
+        Path::new("run"),
+        &input,
+        Path::new("--out"),
+        &revised,
+        Path::new("--edit-cell"),
+        Path::new("defs"),
+        Path::new("--source"),
+        Path::new(source),
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let before = parse_notebook_bytes(&fs::read(&baseline).unwrap()).unwrap();
+    let after = parse_notebook_bytes(&fs::read(&revised).unwrap()).unwrap();
+    assert!(matches!(&after.cells[1].outputs[0], CellOutput::Text { body, .. } if body == "7"));
+    assert_eq!(before.cells[2].provenance, after.cells[2].provenance);
+    assert_ne!(
+        before.cells[1].provenance.as_ref().unwrap().prefix_sha256,
+        after.cells[1].provenance.as_ref().unwrap().prefix_sha256
+    );
+}
+
 struct Fixture(PathBuf);
 
 impl Fixture {

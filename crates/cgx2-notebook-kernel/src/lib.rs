@@ -10,7 +10,9 @@ use std::sync::Arc;
 use std::time::{Duration, Instant};
 
 use cgx2_cli::{check_source, run_source, Value};
-use cgx2_notebook_format::{CellKind, Notebook};
+use cgx2_notebook_format::{
+    source_hash, CellKind, Notebook, ProvenanceResult, CAPTURE_SCHEMA_VERSION,
+};
 use cgx2_notebook_session::{
     CellExecutor, CellFacts, CellResult, CellStatus, NotebookSession, SessionError,
 };
@@ -289,10 +291,26 @@ impl NotebookKernel {
             .replace_cell(
                 id,
                 source.clone(),
-                facts_or_opaque(&source, &known_functions),
+                facts_or_opaque(&source, &known_functions, false),
             )
             .map_err(session_error)?;
         self.requires_restart = true;
+        Ok(())
+    }
+
+    /// Delete a cell without replaying other cells. Outputs that used its
+    /// definitions remain visible as stale saved observations.
+    pub fn remove_cell(&mut self, id: &str) -> Result<(), KernelError> {
+        let code_index = self.code_order.iter().position(|candidate| candidate == id);
+        self.session.remove_cell(id).map_err(session_error)?;
+        if let Some(index) = code_index {
+            self.code_order.remove(index);
+            self.session.executor_mut().order.remove(id);
+            if index < self.next_code {
+                self.next_code -= 1;
+            }
+            self.requires_restart = true;
+        }
         Ok(())
     }
 
@@ -342,7 +360,15 @@ fn new_session(notebook: Notebook) -> Result<NotebookSession<RetainedExecutor>, 
         .iter()
         .filter(|cell| cell.kind == CellKind::Code)
     {
-        let cell_facts = facts_or_opaque(&cell.source, &known_functions);
+        // A schema-2 call invalidated or failed with unchanged source cannot
+        // have executed an unknown effect through this kernel. A removed pure
+        // definition makes its result stale without tainting unrelated cells.
+        let safe_unresolved_call = cell.provenance.as_ref().is_some_and(|provenance| {
+            provenance.schema_version == CAPTURE_SCHEMA_VERSION
+                && provenance.source_sha256 == source_hash(&cell.source)
+                && (provenance.result == ProvenanceResult::Failed || provenance.stale)
+        });
+        let cell_facts = facts_or_opaque(&cell.source, &known_functions, safe_unresolved_call);
         if let Ok(module) = parse_module(&cell.source) {
             if !cell_facts.opaque_effects {
                 known_functions.extend(
@@ -392,7 +418,9 @@ fn new_session(notebook: Notebook) -> Result<NotebookSession<RetainedExecutor>, 
 fn known_functions_before(notebook: &Notebook, id: &str) -> BTreeSet<String> {
     let mut known = BTreeSet::new();
     for cell in notebook.cells.iter().take_while(|cell| cell.id != id) {
-        if cell.kind != CellKind::Code || facts_or_opaque(&cell.source, &known).opaque_effects {
+        if cell.kind != CellKind::Code
+            || facts_or_opaque(&cell.source, &known, false).opaque_effects
+        {
             continue;
         }
         if let Ok(module) = parse_module(&cell.source) {
@@ -407,7 +435,11 @@ fn known_functions_before(notebook: &Notebook, id: &str) -> BTreeSet<String> {
     known
 }
 
-fn facts_or_opaque(source: &str, known_functions: &BTreeSet<String>) -> CellFacts {
+fn facts_or_opaque(
+    source: &str,
+    known_functions: &BTreeSet<String>,
+    safe_unresolved_call: bool,
+) -> CellFacts {
     let Ok(mut facts) = facts_for_source(source) else {
         return CellFacts {
             opaque_effects: true,
@@ -424,9 +456,10 @@ fn facts_or_opaque(source: &str, known_functions: &BTreeSet<String>) -> CellFact
         for statement in &module.statements {
             collect_call_names_statement(statement, &mut calls);
         }
-        if calls
-            .iter()
-            .any(|call| !known_functions.contains(call) && !facts.defines.contains(call))
+        if !safe_unresolved_call
+            && calls
+                .iter()
+                .any(|call| !known_functions.contains(call) && !facts.defines.contains(call))
         {
             facts.opaque_effects = true;
         }
@@ -710,7 +743,7 @@ fn function_cost(
         return Err("CGNK006: pure function call depth exceeded".into());
     }
     let function = functions.get(name).ok_or_else(|| {
-        format!("CGNK011: unsupported call {name}; file, network, and foreign effects cannot run")
+        format!("CGNK011: unresolved call {name}; define or rerun a pure function before this cell; file, network, and foreign effects cannot run")
     })?;
     stack.push(name.to_owned());
     let mut cost = 0usize;

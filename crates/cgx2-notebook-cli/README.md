@@ -1,5 +1,24 @@
 # CGx2 notebook command
 
+The [function lifecycle example](examples/function-lifecycle.cgnb) defines `inc`
+in one cell, calls it through `twice` in another, and keeps an independent
+result. Run and reopen it with:
+
+```sh
+cgx2-notebook run crates/cgx2-notebook-cli/examples/function-lifecycle.cgnb --out /tmp/functions-run.cgnb
+cgx2-notebook inspect /tmp/functions-run.cgnb
+cgx2-notebook delete /tmp/functions-run.cgnb base --out /tmp/functions-deleted.cgnb
+cgx2-notebook inspect /tmp/functions-deleted.cgnb
+```
+
+After deletion, `derived` and `value` are stale saved observations; the
+independent result stays cached across reopen. `delete` writes a new notebook
+and does not execute cells. A missing call reports which pure function must be
+defined or rerun. Current persistent notebook support is limited to pure
+scalar functions (`i64`, `Bool`, `String`), immutable scalar bindings, and
+bounded calls. Effectful persistent state, arbitrary imported libraries, and
+Python/Jupyter execution are not supported.
+
 `cgx2-notebook` reads native `.cgnb` files and executes only pure scalar CGx2 cells. A final expression produces captured `text/plain` display; immutable `let` bindings may feed later cells. HTML and scripts in saved text remain inert. The notebook format limits one captured text output to 65,536 UTF-8 bytes, a document to 16 MiB, and the kernel to 128 code cells, 64 KiB of cumulative source, and 1 MiB of scalar evaluation state.
 
 ```sh

@@ -25,6 +25,7 @@ const HELP: &str = "cgx2-notebook: clean, pure scalar notebook file runner\n\
 Usage:\n\
   cgx2-notebook run INPUT.cgnb --out OUTPUT.cgnb [--edit-cell ID --source CG_CODE] [--timeout-ms N] [--force]\n\
   cgx2-notebook restart INPUT.cgnb --out OUTPUT.cgnb [--force]\n\
+  cgx2-notebook delete INPUT.cgnb CELL_ID --out OUTPUT.cgnb [--force]\n\
   cgx2-notebook inspect INPUT.cgnb\n\
   cgx2-notebook show INPUT.cgnb CELL_ID\n\
   cgx2-notebook export INPUT.cgnb --out PORTABLE.cgnb [--force]\n\
@@ -61,6 +62,12 @@ enum Command {
     },
     Restart {
         input: PathBuf,
+        output: PathBuf,
+        force: bool,
+    },
+    Delete {
+        input: PathBuf,
+        id: String,
         output: PathBuf,
         force: bool,
     },
@@ -145,6 +152,43 @@ fn parse_command(mut args: impl Iterator<Item = OsString>) -> Result<Command, Co
             return Err(CommandError::Usage("show accepts one CELL_ID".into()));
         }
         return Ok(Command::Show(input, id));
+    }
+    if command == "delete" {
+        let input =
+            PathBuf::from(args.next().ok_or_else(|| {
+                CommandError::Usage("delete requires INPUT.cgnb and CELL_ID".into())
+            })?);
+        require_extension(&input)?;
+        let id = args
+            .next()
+            .ok_or_else(|| CommandError::Usage("delete requires CELL_ID".into()))?
+            .into_string()
+            .map_err(|_| CommandError::Usage("CELL_ID must be UTF-8".into()))?;
+        let mut output = None;
+        let mut force = false;
+        while let Some(arg) = args.next() {
+            if arg == "--out" && output.is_none() {
+                let path = PathBuf::from(
+                    args.next()
+                        .ok_or_else(|| CommandError::Usage("--out requires OUTPUT.cgnb".into()))?,
+                );
+                require_extension(&path)?;
+                output = Some(path);
+            } else if arg == "--force" && !force {
+                force = true;
+            } else {
+                return Err(CommandError::Usage(format!(
+                    "unexpected delete argument: {}",
+                    arg.to_string_lossy()
+                )));
+            }
+        }
+        return Ok(Command::Delete {
+            input,
+            id,
+            output: output.ok_or_else(|| CommandError::Usage("delete requires --out".into()))?,
+            force,
+        });
     }
     if command == "run" || command == "restart" || command == "export" || command == "import" {
         let input = PathBuf::from(args.next().ok_or_else(|| {
@@ -362,6 +406,22 @@ fn execute(command: Command) -> Result<(), CommandError> {
                     .rerun_affected(&id)
                     .map_err(|error| CommandError::Cell(error.to_string()))?;
             }
+            let text = write_notebook(kernel.notebook())
+                .map_err(|error| CommandError::Output(error.to_string()))?;
+            atomic_write(&output, text.as_bytes(), force)
+        }
+        Command::Delete {
+            input,
+            id,
+            output,
+            force,
+        } => {
+            check_output_collision(&output, force)?;
+            let mut kernel = NotebookKernel::open(read_notebook(&input)?)
+                .map_err(|error| CommandError::Input(error.to_string()))?;
+            kernel
+                .remove_cell(&id)
+                .map_err(|error| CommandError::Cell(error.to_string()))?;
             let text = write_notebook(kernel.notebook())
                 .map_err(|error| CommandError::Output(error.to_string()))?;
             atomic_write(&output, text.as_bytes(), force)
