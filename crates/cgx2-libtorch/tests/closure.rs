@@ -633,3 +633,33 @@ fn real_pinned_libtorch_when_installed() {
             .contains("libpython")
     );
 }
+
+#[test]
+#[ignore = "requires a reviewed schema-2 matrix package and exact compatible LibTorch installation"]
+fn real_pinned_matrix_when_installed() {
+    let root =
+        PathBuf::from(std::env::var("CGX2_LIBTORCH_PACKAGE").expect("set CGX2_LIBTORCH_PACKAGE"));
+    assert!(check_package(&root).passed());
+    let torch = unsafe { Torch::open_pinned(&root, "torch_cpu") }.unwrap();
+    let mut left = torch
+        .from_f64_matrix(2, 3, &[1., 2., 3., 4., 5., 6.])
+        .unwrap();
+    let mut right = torch
+        .from_f64_matrix(3, 2, &[7., 8., 9., 10., 11., 12.])
+        .unwrap();
+    let mut product = left.matmul(&right).unwrap();
+    assert_eq!(product.shape().unwrap(), [2, 2]);
+    assert_eq!(product.to_vec_bounded(4).unwrap(), [58., 64., 139., 154.]);
+    let mut copied = [0.; 4];
+    product.copy_into(&mut copied).unwrap();
+    assert_eq!(copied, [58., 64., 139., 154.]);
+    product.release().unwrap();
+    left.release().unwrap();
+    right.release().unwrap();
+    assert_eq!(product.release(), Err(Error::AlreadyReleased));
+    assert!(
+        !fs::read_to_string("/proc/self/maps")
+            .unwrap()
+            .contains("libpython")
+    );
+}

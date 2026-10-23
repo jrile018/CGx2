@@ -1,4 +1,13 @@
 # Reproducible local LibTorch package
+For the additive matrix route, compile the current facade and append
+`--matrix` to `prepare_pinned.py`. This pins layout
+`tensor-f64-cpu-matrix-v2`, its five additional exports, and all v1 exports.
+Without `--matrix`, preparation keeps the v1 vector lock. The matrix API
+version is 2 while the facade C ABI remains 1. Run the real matrix test with
+`CGX2_LIBTORCH_PACKAGE=PACKAGE` and
+`cargo test -p cgx2-libtorch --offline --test closure real_pinned_matrix_when_installed -- --ignored --nocapture`
+under `LD_LIBRARY_PATH=PACKAGE`. The test checks non-square multiplication,
+exact-capacity copy, release, and no mapped `libpython`.
 
 `prepare_pinned.py` takes an **already built**, exact LibTorch installation and
 facade; it never downloads anything. Preparation uses Python 3, while the

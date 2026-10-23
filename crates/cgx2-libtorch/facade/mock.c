@@ -12,11 +12,16 @@
 #ifndef MOCK_IDENTITY
 #define MOCK_IDENTITY "cgx2.libtorch.cpu"
 #endif
+#ifndef MOCK_MATRIX_API_VERSION
+#define MOCK_MATRIX_API_VERSION 2
+#endif
 
 typedef struct {
     int alive;
     int profile;
     uint64_t length;
+    uint64_t rows;
+    uint64_t cols;
     double values[8];
 } MockTensor;
 static MockTensor slots[64];
@@ -141,3 +146,86 @@ int32_t cgx2_torch_release(void *raw) {
     }
     return 0;
 }
+
+uint32_t cgx2_torch_matrix_api_version(void) { return MOCK_MATRIX_API_VERSION; }
+
+int32_t cgx2_torch_matrix_f64_cpu(const double *values, uint64_t rows, uint64_t cols, void **output) {
+    if (output) *output = NULL;
+    if (!output || !values || !rows || !cols || rows > 8 / cols) {
+        error_message = "invalid matrix input";
+        return 1;
+    }
+    if (values[0] == -203 && next_slot) {
+        *output = &slots[0];
+        return 0;
+    }
+    MockTensor *matrix = allocate();
+    if (!matrix) return 1;
+    matrix->rows = rows;
+    matrix->cols = cols;
+    matrix->length = rows * cols;
+    matrix->profile = values[0] <= -201 && values[0] >= -206 ? (int)-values[0] : 0;
+    memcpy(matrix->values, values, (size_t)matrix->length * sizeof(double));
+    *output = matrix;
+    if (matrix->profile == 204) {
+        error_message = "injected matrix create failure with handle";
+        return 7;
+    }
+    return 0;
+}
+
+int32_t cgx2_torch_matmul(const void *left, const void *right, void **output) {
+    if (output) *output = NULL;
+    MockTensor *a = checked(left);
+    MockTensor *b = checked(right);
+    if (!output || !a || !b || !a->rows || !b->rows || a->cols != b->rows || a->rows > 8 / b->cols) {
+        error_message = "matrix shape mismatch";
+        return 2;
+    }
+    if (a->profile == 205) {
+        *output = a; /* deliberately violate distinct-handle ABI */
+        return 0;
+    }
+    MockTensor *product = allocate();
+    if (!product) return 2;
+    product->rows = a->rows;
+    product->cols = b->cols;
+    product->length = product->rows * product->cols;
+    for (uint64_t r = 0; r < product->rows; ++r)
+        for (uint64_t c = 0; c < product->cols; ++c) {
+            double sum = 0;
+            for (uint64_t k = 0; k < a->cols; ++k)
+                sum += a->values[r * a->cols + k] * b->values[k * b->cols + c];
+            product->values[r * product->cols + c] = sum;
+        }
+    *output = product;
+    if (a->profile == 206) {
+        error_message = "injected matmul failure with handle";
+        return 7;
+    }
+    return 0;
+}
+
+int32_t cgx2_torch_matrix_shape(const void *raw, uint64_t *rows, uint64_t *cols) {
+    MockTensor *matrix = checked(raw);
+    if (!matrix || !rows || !cols || !matrix->rows) return 3;
+    *rows = matrix->rows + (matrix->profile == 202);
+    *cols = matrix->cols;
+    return 0;
+}
+
+#ifndef MOCK_MISSING_MATRIX_COPY
+int32_t cgx2_torch_matrix_copy_f64(const void *raw, double *output, uint64_t capacity) {
+    MockTensor *matrix = checked(raw);
+    if (!matrix || !matrix->rows || !output || capacity != matrix->length) {
+        error_message = "matrix capacity mismatch";
+        return 4;
+    }
+    if (matrix->profile == 201) {
+        error_message = "injected matrix copy failure";
+        return 5;
+    }
+    memcpy(output, matrix->values, (size_t)capacity * sizeof(double));
+    return 0;
+}
+#endif

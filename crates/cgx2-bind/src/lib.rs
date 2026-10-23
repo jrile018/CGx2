@@ -153,6 +153,70 @@ pub fn libtorch_facade_symbols() -> Vec<Symbol> {
     ]
 }
 
+/// Complete additive matrix API v2 contract, including all v1 vector exports.
+pub fn libtorch_matrix_facade_symbols() -> Vec<Symbol> {
+    let mut symbols = libtorch_facade_symbols();
+    let mut push = |name: &str,
+                    parameters: &[&str],
+                    result: &str,
+                    ownership: &str,
+                    release: Option<&str>,
+                    error: &str| {
+        symbols.push(Symbol {
+            name: name.into(),
+            parameters: parameters.iter().map(|value| (*value).into()).collect(),
+            result: result.into(),
+            ownership: ownership.into(),
+            owner: None,
+            release: release.map(str::to_owned),
+            error: error.into(),
+            effects: vec!["foreign".into()],
+            capabilities: vec!["native".into()],
+        });
+    };
+    push(
+        "cgx2_torch_matrix_api_version",
+        &[],
+        "u32",
+        "none",
+        None,
+        "none",
+    );
+    push(
+        "cgx2_torch_matrix_f64_cpu",
+        &["f64_const_ptr", "u64", "u64", "handle_out_ptr"],
+        "i32",
+        "owned",
+        Some("cgx2_torch_release"),
+        "status",
+    );
+    push(
+        "cgx2_torch_matmul",
+        &["handle_const_ptr", "handle_const_ptr", "handle_out_ptr"],
+        "i32",
+        "owned",
+        Some("cgx2_torch_release"),
+        "status",
+    );
+    push(
+        "cgx2_torch_matrix_shape",
+        &["handle_const_ptr", "u64_out_ptr", "u64_out_ptr"],
+        "i32",
+        "none",
+        None,
+        "status",
+    );
+    push(
+        "cgx2_torch_matrix_copy_f64",
+        &["handle_const_ptr", "f64_mut_ptr", "u64"],
+        "i32",
+        "none",
+        None,
+        "status",
+    );
+    symbols
+}
+
 /// Stable serialization: bindings, symbols, effects and capabilities are sorted.
 pub fn render_lock(lock: &BindingLock) -> Result<Vec<u8>, serde_json::Error> {
     let mut lock = lock.clone();
@@ -371,10 +435,18 @@ fn check_binding(
         || binding.calling_convention != "c"
         || !matches!(
             binding.layout.as_str(),
-            "scalar-v1" | "status-i64-out-v1" | "tensor-f64-cpu-v1"
+            "scalar-v1" | "status-i64-out-v1" | "tensor-f64-cpu-v1" | "tensor-f64-cpu-matrix-v2"
         )
-        || (binding.route == "libtorch" && binding.layout != "tensor-f64-cpu-v1")
-        || (binding.route == "native-c" && binding.layout == "tensor-f64-cpu-v1")
+        || (binding.route == "libtorch"
+            && !matches!(
+                binding.layout.as_str(),
+                "tensor-f64-cpu-v1" | "tensor-f64-cpu-matrix-v2"
+            ))
+        || (binding.route == "native-c"
+            && matches!(
+                binding.layout.as_str(),
+                "tensor-f64-cpu-v1" | "tensor-f64-cpu-matrix-v2"
+            ))
         || (binding.layout == "status-i64-out-v1" && binding.route != "native-c")
     {
         report.push(
@@ -404,7 +476,11 @@ fn check_binding(
     }
     if binding.route == "libtorch" {
         let mut declared = binding.symbols.clone();
-        let mut expected = libtorch_facade_symbols();
+        let mut expected = if binding.layout == "tensor-f64-cpu-matrix-v2" {
+            libtorch_matrix_facade_symbols()
+        } else {
+            libtorch_facade_symbols()
+        };
         declared.sort_by(|left, right| left.name.cmp(&right.name));
         expected.sort_by(|left, right| left.name.cmp(&right.name));
         if binding.library != "cgx2.libtorch.cpu" || declared != expected {

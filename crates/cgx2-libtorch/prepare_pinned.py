@@ -142,8 +142,8 @@ def symbol(name, parameters, result, ownership="none", release=None, error="none
     }
 
 
-def facade_symbols():
-    return sorted([
+def facade_symbols(matrix=False):
+    symbols = [
         symbol("cgx2_library_identity", [], "cstr_ptr"),
         symbol("cgx2_library_version", [], "cstr_ptr"),
         symbol("cgx2_abi_version", [], "u32"),
@@ -158,7 +158,24 @@ def facade_symbols():
         symbol("cgx2_torch_copy_f64", ["handle_const_ptr", "f64_mut_ptr", "u64"],
                "i32", error="status"),
         symbol("cgx2_torch_release", ["handle_mut_ptr"], "i32", error="status"),
-    ], key=lambda item: item["name"])
+    ]
+    if matrix:
+        symbols.extend([
+            symbol("cgx2_torch_matrix_api_version", [], "u32"),
+            symbol("cgx2_torch_matrix_f64_cpu",
+                   ["f64_const_ptr", "u64", "u64", "handle_out_ptr"],
+                   "i32", "owned", "cgx2_torch_release", "status"),
+            symbol("cgx2_torch_matmul",
+                   ["handle_const_ptr", "handle_const_ptr", "handle_out_ptr"],
+                   "i32", "owned", "cgx2_torch_release", "status"),
+            symbol("cgx2_torch_matrix_shape",
+                   ["handle_const_ptr", "u64_out_ptr", "u64_out_ptr"],
+                   "i32", error="status"),
+            symbol("cgx2_torch_matrix_copy_f64",
+                   ["handle_const_ptr", "f64_mut_ptr", "u64"],
+                   "i32", error="status"),
+        ])
+    return sorted(symbols, key=lambda item: item["name"])
 
 
 def write_json(path, value):
@@ -312,7 +329,8 @@ def prepare(args):
         "version": args.version, "artifact": facade.name,
         "sha256": facade_entry["sha256"], "os": "linux",
         "arch": platform.machine(), "abi": ABI, "calling_convention": "c",
-        "layout": "tensor-f64-cpu-v1", "symbols": facade_symbols(),
+        "layout": "tensor-f64-cpu-matrix-v2" if args.matrix else "tensor-f64-cpu-v1",
+        "symbols": facade_symbols(args.matrix),
     }
     (package / "src").mkdir(exist_ok=True)
     canonical_dir(package / "src")
@@ -357,6 +375,8 @@ def main():
                         help="exact dependency search directory; repeat for system ELF directories")
     parser.add_argument("--select-dependency", action="append", default=[],
                         help="resolve a duplicate as NAME=/canonical/path/to/ELF")
+    parser.add_argument("--matrix", action="store_true",
+                        help="pin additive two-dimensional float64 matrix API v2 exports")
     args = parser.parse_args()
     try:
         prepare(args)

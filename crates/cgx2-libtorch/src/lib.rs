@@ -15,6 +15,17 @@ type Length = unsafe extern "C" fn(*const c_void, *mut u64) -> i32;
 type Copy = unsafe extern "C" fn(*const c_void, *mut f64, u64) -> i32;
 type Release = unsafe extern "C" fn(*mut c_void) -> i32;
 type LastError = unsafe extern "C" fn() -> *const c_char;
+type MatrixVersion = unsafe extern "C" fn() -> u32;
+type MatrixCreate = unsafe extern "C" fn(*const f64, u64, u64, *mut *mut c_void) -> i32;
+type Matmul = unsafe extern "C" fn(*const c_void, *const c_void, *mut *mut c_void) -> i32;
+type MatrixShape = unsafe extern "C" fn(*const c_void, *mut u64, *mut u64) -> i32;
+type MatrixCopy = unsafe extern "C" fn(*const c_void, *mut f64, u64) -> i32;
+struct MatrixFunctions {
+    create: MatrixCreate,
+    matmul: Matmul,
+    shape: MatrixShape,
+    copy: MatrixCopy,
+}
 /// Maximum bytes read from a foreign error string before truncation.
 pub const MAX_ERROR_BYTES: usize = 4096;
 
@@ -25,13 +36,39 @@ pub const MAX_COPY_ELEMENTS: usize = 1_048_576;
 pub enum Error {
     Native(NativeError),
     InvalidLength,
-    LengthLimitExceeded { reported: usize, maximum: usize },
-    ShapeMismatch { expected: usize, reported: usize },
+    InvalidMatrixShape,
+    MatrixDimensionMismatch {
+        left_cols: usize,
+        right_rows: usize,
+    },
+    MatrixShapeMismatch {
+        expected: [usize; 2],
+        reported: [usize; 2],
+    },
+    CapacityMismatch {
+        expected: usize,
+        provided: usize,
+    },
+    MatrixApiUnavailable,
+    MatrixApiVersion {
+        reported: u32,
+    },
+    LengthLimitExceeded {
+        reported: usize,
+        maximum: usize,
+    },
+    ShapeMismatch {
+        expected: usize,
+        reported: usize,
+    },
     UnverifiedLoader(ClosureError),
     NullHandle,
     DifferentRuntime,
     AlreadyReleased,
-    Foreign { status: i32, message: String },
+    Foreign {
+        status: i32,
+        message: String,
+    },
 }
 
 #[derive(Debug, PartialEq, Eq)]
@@ -51,6 +88,7 @@ struct Inner {
     _library: Library,
     pinned: Option<VerifiedClosure>,
     create: Create,
+    matrix: Option<MatrixFunctions>,
     add: Add,
     length: Length,
     copy: Copy,
@@ -129,6 +167,38 @@ impl Inner {
             expected_length,
         })
     }
+
+    fn matrix(
+        self: &Rc<Self>,
+        status: i32,
+        raw: *mut c_void,
+        shape: [usize; 2],
+    ) -> Result<Matrix, Error> {
+        if let Err(error) = self.check(status) {
+            if !raw.is_null()
+                && !matches!(error, Error::UnverifiedLoader(_))
+                && !self.live_handles.borrow().contains(&(raw as usize))
+                && self.check_pinned().is_ok()
+            {
+                unsafe {
+                    (self.release)(raw);
+                }
+            }
+            return Err(error);
+        }
+        let raw = NonNull::new(raw).ok_or(Error::NullHandle)?;
+        if !self.live_handles.borrow_mut().insert(raw.as_ptr() as usize) {
+            return Err(Error::Foreign {
+                status: -1,
+                message: "facade returned an already owned handle".into(),
+            });
+        }
+        Ok(Matrix {
+            inner: self.clone(),
+            raw: Some(raw),
+            expected_shape: shape,
+        })
+    }
 }
 
 #[derive(Clone)]
@@ -167,6 +237,9 @@ impl Torch {
         Rc::get_mut(&mut torch.inner)
             .expect("new adapter has one owner")
             .pinned = Some(verified);
+        if binding.layout == "tensor-f64-cpu-matrix-v2" {
+            torch.enable_matrix().map_err(PinnedError::Adapter)?;
+        }
         Ok(torch)
     }
     /// `exact_version` must match the LibTorch version used to compile the facade.
@@ -188,6 +261,7 @@ impl Torch {
             Inner {
                 pinned: None,
                 create: library.symbol("cgx2_torch_f64_cpu")?,
+                matrix: None,
                 add: library.symbol("cgx2_torch_add")?,
                 length: library.symbol("cgx2_torch_length")?,
                 copy: library.symbol("cgx2_torch_copy_f64")?,
@@ -210,6 +284,81 @@ impl Torch {
         let status = unsafe { (self.inner.create)(values.as_ptr(), length, &mut raw) };
         self.inner.tensor(status, raw, values.len())
     }
+
+    /// Open the additive matrix API without package closure pinning. Intended
+    /// for reviewed local facades and mock tests; use `open_pinned` for packages.
+    ///
+    /// # Safety
+    /// The caller must verify all matrix C signatures and handle lifetimes.
+    pub unsafe fn open_matrix(path: &Path, exact_version: &str) -> Result<Self, Error> {
+        let mut torch = unsafe { Self::open(path, exact_version) }?;
+        torch.enable_matrix()?;
+        Ok(torch)
+    }
+
+    fn enable_matrix(&mut self) -> Result<(), Error> {
+        self.inner.check_pinned()?;
+        let inner = Rc::get_mut(&mut self.inner).expect("new adapter has one owner");
+        let library = &inner._library;
+        let version: MatrixVersion = unsafe { library.symbol("cgx2_torch_matrix_api_version")? };
+        let matrix = unsafe {
+            MatrixFunctions {
+                create: library.symbol("cgx2_torch_matrix_f64_cpu")?,
+                matmul: library.symbol("cgx2_torch_matmul")?,
+                shape: library.symbol("cgx2_torch_matrix_shape")?,
+                copy: library.symbol("cgx2_torch_matrix_copy_f64")?,
+            }
+        };
+        inner.check_pinned()?;
+        let reported = unsafe { version() };
+        inner.check_pinned()?;
+        if reported != 2 {
+            return Err(Error::MatrixApiVersion { reported });
+        }
+        inner.matrix = Some(matrix);
+        Ok(())
+    }
+
+    /// Copy a nonempty contiguous row-major matrix into LibTorch-owned CPU storage.
+    pub fn from_f64_matrix(
+        &self,
+        rows: usize,
+        cols: usize,
+        values: &[f64],
+    ) -> Result<Matrix, Error> {
+        let count = matrix_count(rows, cols)?;
+        if count != values.len() {
+            return Err(Error::CapacityMismatch {
+                expected: count,
+                provided: values.len(),
+            });
+        }
+        self.inner.check_pinned()?;
+        let functions = self
+            .inner
+            .matrix
+            .as_ref()
+            .ok_or(Error::MatrixApiUnavailable)?;
+        let mut raw = std::ptr::null_mut();
+        let status =
+            unsafe { (functions.create)(values.as_ptr(), rows as u64, cols as u64, &mut raw) };
+        self.inner.matrix(status, raw, [rows, cols])
+    }
+}
+
+fn matrix_count(rows: usize, cols: usize) -> Result<usize, Error> {
+    if rows == 0 || cols == 0 {
+        return Err(Error::InvalidMatrixShape);
+    }
+    let count = rows.checked_mul(cols).ok_or(Error::InvalidMatrixShape)?;
+    if count > MAX_COPY_ELEMENTS
+        || count.checked_mul(size_of::<f64>()).is_none()
+        || u64::try_from(rows).is_err()
+        || u64::try_from(cols).is_err()
+    {
+        return Err(Error::InvalidMatrixShape);
+    }
+    Ok(count)
 }
 
 pub struct Tensor {
@@ -298,6 +447,128 @@ impl Tensor {
 }
 
 impl Drop for Tensor {
+    fn drop(&mut self) {
+        let _ = self.release();
+    }
+}
+
+/// One owned two-dimensional CPU float64 handle. Its LibTorch allocation is foreign;
+/// CGx2 owns only this wrapper and host copies returned by `to_vec_bounded`.
+pub struct Matrix {
+    inner: Rc<Inner>,
+    raw: Option<NonNull<c_void>>,
+    expected_shape: [usize; 2],
+}
+
+impl Matrix {
+    fn ptr(&self) -> Result<*mut c_void, Error> {
+        self.raw.map(NonNull::as_ptr).ok_or(Error::AlreadyReleased)
+    }
+
+    /// Multiply `[m, k]` by `[k, n]`, producing an owned `[m, n]` matrix.
+    pub fn matmul(&self, other: &Self) -> Result<Self, Error> {
+        if !Rc::ptr_eq(&self.inner, &other.inner) {
+            return Err(Error::DifferentRuntime);
+        }
+        let left = self.ptr()?;
+        let right = other.ptr()?;
+        if self.expected_shape[1] != other.expected_shape[0] {
+            return Err(Error::MatrixDimensionMismatch {
+                left_cols: self.expected_shape[1],
+                right_rows: other.expected_shape[0],
+            });
+        }
+        matrix_count(self.expected_shape[0], other.expected_shape[1])?;
+        self.inner.check_pinned()?;
+        let functions = self
+            .inner
+            .matrix
+            .as_ref()
+            .ok_or(Error::MatrixApiUnavailable)?;
+        let mut raw = std::ptr::null_mut();
+        let status = unsafe { (functions.matmul)(left, right, &mut raw) };
+        self.inner.matrix(
+            status,
+            raw,
+            [self.expected_shape[0], other.expected_shape[1]],
+        )
+    }
+
+    pub fn shape(&self) -> Result<[usize; 2], Error> {
+        let raw = self.ptr()?;
+        self.inner.check_pinned()?;
+        let functions = self
+            .inner
+            .matrix
+            .as_ref()
+            .ok_or(Error::MatrixApiUnavailable)?;
+        let (mut rows, mut cols) = (0, 0);
+        let status = unsafe { (functions.shape)(raw, &mut rows, &mut cols) };
+        self.inner.check(status)?;
+        let reported = [
+            usize::try_from(rows).map_err(|_| Error::InvalidMatrixShape)?,
+            usize::try_from(cols).map_err(|_| Error::InvalidMatrixShape)?,
+        ];
+        matrix_count(reported[0], reported[1])?;
+        if reported != self.expected_shape {
+            return Err(Error::MatrixShapeMismatch {
+                expected: self.expected_shape,
+                reported,
+            });
+        }
+        Ok(reported)
+    }
+
+    /// Copy into a caller-owned buffer whose capacity exactly matches the shape.
+    pub fn copy_into(&self, output: &mut [f64]) -> Result<(), Error> {
+        let [rows, cols] = self.shape()?;
+        let count = matrix_count(rows, cols)?;
+        if output.len() != count {
+            return Err(Error::CapacityMismatch {
+                expected: count,
+                provided: output.len(),
+            });
+        }
+        self.inner.check_pinned()?;
+        let functions = self
+            .inner
+            .matrix
+            .as_ref()
+            .ok_or(Error::MatrixApiUnavailable)?;
+        let status = unsafe { (functions.copy)(self.ptr()?, output.as_mut_ptr(), count as u64) };
+        self.inner.check(status)
+    }
+
+    /// Allocate a CGx2 host copy bounded by `maximum` elements and 8 MiB.
+    pub fn to_vec_bounded(&self, maximum: usize) -> Result<Vec<f64>, Error> {
+        let [rows, cols] = self.shape()?;
+        let count = matrix_count(rows, cols)?;
+        let maximum = maximum.min(MAX_COPY_ELEMENTS);
+        if count > maximum {
+            return Err(Error::LengthLimitExceeded {
+                reported: count,
+                maximum,
+            });
+        }
+        let mut output = vec![0.0; count];
+        self.copy_into(&mut output)?;
+        Ok(output)
+    }
+
+    pub fn release(&mut self) -> Result<(), Error> {
+        let raw = self.raw.ok_or(Error::AlreadyReleased)?;
+        self.inner.check_pinned()?;
+        self.raw = None;
+        self.inner
+            .live_handles
+            .borrow_mut()
+            .remove(&(raw.as_ptr() as usize));
+        self.inner
+            .check(unsafe { (self.inner.release)(raw.as_ptr()) })
+    }
+}
+
+impl Drop for Matrix {
     fn drop(&mut self) {
         let _ = self.release();
     }
