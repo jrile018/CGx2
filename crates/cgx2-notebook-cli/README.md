@@ -103,3 +103,33 @@ The [conditional notebook](examples/conditionals.cgnb) demonstrates pure
 Boolean function bodies, local record returns, independent branch scopes and
 inactive-branch dependency invalidation. Top-level conditional cells remain
 unsupported; notebook persistence and runner interfaces are unchanged.
+
+
+## Public record package notebooks (Wave 26)
+
+The [public-record example](examples/public-records/public-records.cgnb) includes
+its two-module fixture. Both modules export `Point` and the notebook also defines
+a distinct local `Point`.
+
+```sh
+cgx2-notebook run crates/cgx2-notebook-cli/examples/public-records/public-records.cgnb --project crates/cgx2-notebook-cli/examples/public-records --out /tmp/records.cgnb
+cgx2-notebook inspect /tmp/records.cgnb --project crates/cgx2-notebook-cli/examples/public-records
+cgx2-notebook sweep crates/cgx2-notebook-cli/examples/public-records/public-records.cgnb parameter --value 1 --value 2 --project crates/cgx2-notebook-cli/examples/public-records --out-dir /tmp/records-sweep
+```
+
+`run`, `restart`, `inspect`, `delete` and `sweep` accept `--project ROOT`.
+A sweep checks the package before publishing trials and uses fresh kernels for
+each trial. Source imports must be explicit/direct, and imported functions must
+be pure in the bounded scalar/public-record profile; private, nested, generic,
+managed, foreign, effectful and contract-bearing APIs remain rejected. Constructors
+and annotations may use `alpha.Point` or `demo.alpha.Point`; functions use
+`alpha.function`. Nominal identities remain module-qualified across values,
+functions, workers, selective rerun, save/reopen and Restart and Run All.
+
+Exported notebooks and sweep trials carry notebook text and verified assets;
+they do not embed package source or its manifest. They still require the local
+project to execute. `show` can display a saved observation without that project;
+this is not execution or restoration of live state. Package captures bind the
+canonical root as well as source/manifest hashes. Changed inputs discard affected
+retained definitions, preserve independent outputs, and require reopening the
+checked project. [Kernel details and limits](../cgx2-notebook-kernel/README.md).

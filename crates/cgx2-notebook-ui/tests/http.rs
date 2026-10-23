@@ -1044,3 +1044,65 @@ fn conditional_inactive_dependency_stales_http_users_and_survives_save_restart()
     let mut reopened = cgx2_notebook_kernel::NotebookKernel::open(saved).unwrap();
     reopened.restart_and_run_all().unwrap();
 }
+
+#[test]
+fn public_imported_records_cross_http_rerun_save_export_and_reopen() {
+    let fixture = Fixture::new(include_str!(
+        "../../cgx2-notebook-cli/examples/public-records/public-records.cgnb"
+    ));
+    let project =
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("../cgx2-notebook-cli/examples/public-records");
+    let mut session = UiSession::open_with_project(fixture.input.clone(), Some(&project)).unwrap();
+    session.configure_worker(env!("CARGO_BIN_EXE_cgx2-notebook-ui").into());
+    let listener = TcpListener::bind("127.0.0.1:0").unwrap();
+    let port = listener.local_addr().unwrap().port();
+    let handle = thread::spawn(move || serve_n(listener, session, 6).unwrap());
+    let secret = token(port);
+    let (status, state) = post(port, "/api/restart", json!({}), &secret);
+    assert_eq!(status, 200, "{state}");
+    assert_eq!(
+        state["cells"][6]["outputs"][0]["body"],
+        "demo.alpha.Point(x: 42, active: true)"
+    );
+    let independent = state["cells"][10]["provenance"].clone();
+    let (status, state) = post(
+        port,
+        "/api/edit",
+        json!({"id":"parameter", "source":"let delta = 2"}),
+        &secret,
+    );
+    assert_eq!(status, 200, "{state}");
+    assert_eq!(state["cells"][7]["status"], "stale");
+    let (status, state) = post(port, "/api/run-cell", json!({"id":"parameter"}), &secret);
+    assert_eq!(status, 200, "{state}");
+    assert_eq!(state["cells"][7]["outputs"][0]["body"], "43");
+    assert_eq!(state["cells"][10]["provenance"], independent);
+    assert_eq!(
+        post(
+            port,
+            "/api/save",
+            json!({"name":"saved.cgnb", "overwrite":false}),
+            &secret
+        )
+        .0,
+        200
+    );
+    assert_eq!(
+        post(
+            port,
+            "/api/export",
+            json!({"name":"exported.cgnb", "overwrite":false}),
+            &secret
+        )
+        .0,
+        200
+    );
+    handle.join().unwrap();
+    for name in ["saved.cgnb", "exported.cgnb"] {
+        UiSession::open_with_project(fixture.dir.join(name), Some(&project)).unwrap();
+        assert!(UiSession::open(fixture.dir.join(name))
+            .err()
+            .unwrap()
+            .contains("--project"));
+    }
+}

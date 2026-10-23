@@ -64,14 +64,18 @@ pub fn write_notebook(notebook: &Notebook) -> Result<String, NotebookError> {
         if let Some(p) = &cell.provenance {
             let package = p.package.as_ref().map_or_else(String::new, |package| {
                 format!(
-                    " manifest_sha256={} module_sha256={}",
+                    " manifest_sha256={} module_sha256={}{}",
                     package.manifest_sha256,
                     package
                         .modules
                         .iter()
                         .map(|(name, hash)| format!("{name}:{hash}"))
                         .collect::<Vec<_>>()
-                        .join(",")
+                        .join(","),
+                    package
+                        .root_sha256
+                        .as_ref()
+                        .map_or_else(String::new, |root| format!(" root_sha256={root}"))
                 )
             });
             out.push_str(&format!("%% provenance id={} schema={} source_sha256={} prefix_sha256={} evaluator={} ordinal={} output_ordinal={} result={}{}{}\n",

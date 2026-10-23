@@ -228,6 +228,14 @@ fn scalar_kind(expr: &ExprKind) -> Result<SweepScalarKind, KernelError> {
 
 /// Reject opaque or effectful source before any sweep files are published.
 pub fn validate_pure_sweep_notebook(notebook: &Notebook) -> Result<(), KernelError> {
+    validate_pure_sweep_notebook_with_project(notebook, None)
+}
+
+/// Validate a clean sweep against the same checked package boundary as cell execution.
+pub fn validate_pure_sweep_notebook_with_project(
+    notebook: &Notebook,
+    root: Option<&FsPath>,
+) -> Result<(), KernelError> {
     validate_limits(notebook)?;
     let mut known_functions = BTreeSet::new();
     for cell in notebook
@@ -251,7 +259,19 @@ pub fn validate_pure_sweep_notebook(notebook: &Notebook) -> Result<(), KernelErr
                 .map(|function| function.name.clone()),
         );
         known_functions.extend(module.records.iter().map(|record| record.name.clone()));
+        known_functions.extend(
+            module
+                .imports
+                .iter()
+                .filter_map(|path| path.segments.last().cloned()),
+        );
+        known_functions.extend(module.imports.iter().map(|path| path.segments.join(".")));
     }
+    let project = root
+        .map(Project::load)
+        .transpose()
+        .map_err(|message| error("CGNK012", message))?;
+    new_session(notebook.clone(), project)?;
     Ok(())
 }
 
@@ -314,25 +334,33 @@ impl NotebookKernel {
     ) -> Result<Self, KernelError> {
         validate_limits(&notebook)?;
         let project = root.map(Project::load).transpose().map_err(|message| {
-            if message.contains("CGT022") {
-                for cell in &notebook.cells {
-                    if let Ok(module) = parse_module(&cell.source) {
-                        if let Some(path) = module.imports.iter().find(|path| {
-                            path.segments
-                                .last()
-                                .is_some_and(|name| message.contains(&format!("/{name}.cg")))
-                        }) {
-                            return KernelError {
-                                code: "CGNK012",
-                                message: format!(
-                                    "imported record boundary at {}..{}: {message}",
-                                    path.span.start, path.span.end
-                                ),
-                                cell_id: Some(cell.id.clone()),
-                            };
-                        }
-                    }
-                }
+            let imports: Vec<_> = notebook
+                .cells
+                .iter()
+                .filter_map(|cell| {
+                    parse_module(&cell.source)
+                        .ok()
+                        .map(|module| (cell, module.imports))
+                })
+                .flat_map(|(cell, imports)| imports.into_iter().map(move |path| (cell, path)))
+                .collect();
+            if let Some((cell, path)) = imports
+                .iter()
+                .find(|(_, path)| {
+                    path.segments
+                        .last()
+                        .is_some_and(|name| message.contains(&format!("/{name}.cg")))
+                })
+                .or_else(|| imports.first())
+            {
+                return KernelError {
+                    code: "CGNK012",
+                    message: format!(
+                        "imported package boundary at {}..{}: {message}",
+                        path.span.start, path.span.end
+                    ),
+                    cell_id: Some(cell.id.clone()),
+                };
             }
             error("CGNK012", message)
         })?;
@@ -387,6 +415,37 @@ impl NotebookKernel {
         self.code_order.get(self.next_code).map(String::as_str)
     }
 
+    fn check_project(&mut self, id: &str) -> Result<(), KernelError> {
+        let failure = self
+            .session
+            .executor_mut()
+            .project
+            .as_ref()
+            .and_then(|project| {
+                project
+                    .verify_unchanged()
+                    .err()
+                    .map(|message| (message, project.changed_modules()))
+            });
+        if let Some((message, modules)) = failure {
+            self.session.invalidate_package_modules(&modules);
+            let end = self
+                .notebook()
+                .cells
+                .iter()
+                .find(|cell| cell.id == id)
+                .map_or(0, |cell| cell.source.len());
+            return Err(KernelError {
+                code: "CGNK012",
+                message: format!(
+                    "{message} at 0..{end}; reopen the checked project before execution"
+                ),
+                cell_id: Some(id.to_owned()),
+            });
+        }
+        Ok(())
+    }
+
     pub fn run_cell(&mut self, id: &str) -> Result<(), KernelError> {
         let Some(index) = self.code_order.iter().position(|candidate| candidate == id) else {
             return Err(session_error(match self.session.status(id) {
@@ -403,7 +462,10 @@ impl NotebookKernel {
         if index != self.next_code {
             return Err(error("CGNK005", "code cells must execute in file order"));
         }
-        self.session.run_cell(id).map_err(session_error)?;
+        self.check_project(id)?;
+        let result = self.session.run_cell(id);
+        self.check_project(id)?;
+        result.map_err(session_error)?;
         self.next_code += 1;
         Ok(())
     }
@@ -416,7 +478,10 @@ impl NotebookKernel {
                 Err(source) => source,
             }));
         };
-        if let Err(error) = self.session.rerun_cell(id) {
+        self.check_project(id)?;
+        let result = self.session.rerun_cell(id);
+        self.check_project(id)?;
+        if let Err(error) = result {
             self.requires_restart = true;
             return Err(session_error(error));
         }
@@ -432,7 +497,10 @@ impl NotebookKernel {
         self.rerun_cell(id)?;
         for candidate in affected {
             if self.session.status(&candidate).map_err(session_error)? == CellStatus::Stale {
-                if let Err(error) = self.session.run_cell(&candidate) {
+                self.check_project(&candidate)?;
+                let result = self.session.run_cell(&candidate);
+                self.check_project(&candidate)?;
+                if let Err(error) = result {
                     self.requires_restart = true;
                     return Err(session_error(error));
                 }
@@ -539,6 +607,7 @@ fn new_session(
     let mut known_functions = BTreeSet::new();
     let mut imported = BTreeMap::<String, String>::new();
     let mut package_provenance = BTreeMap::new();
+    let mut local_roots = BTreeSet::new();
     for cell in notebook
         .cells
         .iter()
@@ -567,6 +636,26 @@ fn new_session(
                 ));
             }
             if let Some(project) = &project {
+                for root in &cell_facts.defines {
+                    if !module.imports.is_empty() {
+                        continue;
+                    }
+                    if imported.contains_key(root)
+                        || imported
+                            .values()
+                            .any(|name| name.split('.').next() == Some(root.as_str()))
+                    {
+                        return Err(error(
+                            "CGNK012",
+                            format!(
+                                "cell {}: ambiguous local/module root {root} at 0..{}",
+                                cell.id,
+                                cell.source.len()
+                            ),
+                        ));
+                    }
+                    local_roots.insert(root.clone());
+                }
                 if cell.source.contains("__cgx2_pkg") {
                     return Err(error(
                         "CGNK012",
@@ -575,8 +664,10 @@ fn new_session(
                 }
                 let mut used = BTreeSet::new();
                 for read in &cell_facts.reads {
-                    if let Some(name) = imported.get(read) {
-                        used.insert(name.clone());
+                    for (short, name) in &imported {
+                        if read == short || read == name {
+                            used.insert(name.clone());
+                        }
                     }
                 }
                 if !module.imports.is_empty()
@@ -594,6 +685,20 @@ fn new_session(
                     let (short, full) = project.resolve_import(path).map_err(|message| {
                         error("CGNK012", format!("cell {}: {message}", cell.id))
                     })?;
+                    if local_roots.contains(&short)
+                        || full
+                            .split('.')
+                            .next()
+                            .is_some_and(|root| local_roots.contains(root))
+                    {
+                        return Err(error(
+                            "CGNK012",
+                            format!(
+                                "cell {}: ambiguous local/module root {short} at {}..{}",
+                                cell.id, path.span.start, path.span.end
+                            ),
+                        ));
+                    }
                     if imported.contains_key(&short) {
                         return Err(error(
                             "CGNK012",
@@ -624,6 +729,7 @@ fn new_session(
                         .map(|function| function.name.clone()),
                 );
                 known_functions.extend(module.records.iter().map(|record| record.name.clone()));
+                known_functions.extend(module.imports.iter().map(|path| path.segments.join(".")));
                 known_functions.extend(
                     module
                         .imports
@@ -690,6 +796,7 @@ fn known_functions_before(notebook: &Notebook, id: &str) -> BTreeSet<String> {
                     .map(|function| function.name.clone()),
             );
             known.extend(module.records.iter().map(|record| record.name.clone()));
+            known.extend(module.imports.iter().map(|path| path.segments.join(".")));
             known.extend(
                 module
                     .imports
@@ -762,7 +869,11 @@ fn collect_call_names(expression: &Expr, names: &mut BTreeSet<String>) {
             if let ExprKind::Name(path) = &callee.kind {
                 if let Some(name) = path.segments.first() {
                     if !name.starts_with("$cgx2_cmp_") {
-                        names.insert(name.to_owned());
+                        names.insert(if path.segments.len() > 2 {
+                            path.segments[..path.segments.len() - 1].join(".")
+                        } else {
+                            name.to_owned()
+                        });
                     }
                 }
             }
@@ -811,6 +922,9 @@ pub fn facts_for_source(source: &str) -> Result<CellFacts, KernelError> {
                     format!("duplicate module short name {short}"),
                 ));
             }
+        }
+        for path in &module.imports {
+            facts.defines.insert(path.segments.join("."));
         }
         return Ok(facts);
     }
@@ -866,9 +980,12 @@ pub fn facts_for_source(source: &str) -> Result<CellFacts, KernelError> {
             StmtKind::Let {
                 mutable: false,
                 name,
+                annotation,
                 value,
-                ..
             } => {
+                if let Some(ty) = annotation {
+                    function_type(ty, &mut facts)?;
+                }
                 collect_external_reads(value, &locals, &mut facts)?;
                 facts.defines.insert(name.clone());
                 locals.insert(name.clone());
@@ -969,9 +1086,13 @@ fn collect_function_block(
 }
 
 fn function_type(ty: &cgx2_syntax::TypeSyntax, facts: &mut CellFacts) -> Result<(), KernelError> {
-    if ty.arguments.is_empty() && ty.path.segments.len() == 1 {
+    if ty.arguments.is_empty() && !ty.path.segments.is_empty() {
         let name = &ty.path.segments[0];
-        if !matches!(name.as_str(), "i64" | "Bool" | "String") {
+        if ty.path.segments.len() > 1 {
+            facts
+                .reads
+                .insert(ty.path.segments[..ty.path.segments.len() - 1].join("."));
+        } else if !matches!(name.as_str(), "i64" | "Bool" | "String") {
             // Resolve nominal names with the shared checker against the records
             // visible at execution. Even an unused annotation is a dependency.
             facts.reads.insert(format!("type:{name}"));
@@ -1029,9 +1150,14 @@ fn collect_expression(
                     "computed calls are unsupported in pure notebook cells",
                 ));
             };
-            let name = match path.segments.as_slice() {
-                [short, _function] => short.as_str(),
-                _ => simple_name(path)?,
+            let full_root = path.segments[..path.segments.len().saturating_sub(1)].join(".");
+            let name = if path.segments.len() > 2 {
+                full_root.as_str()
+            } else {
+                path.segments
+                    .first()
+                    .ok_or_else(|| error("CGNK001", "empty call path"))?
+                    .as_str()
             };
             if matches!(name, "arg" | "arg_count") {
                 return Err(error(
@@ -1297,6 +1423,9 @@ impl RetainedExecutor {
                 let name = ty.to_string();
                 if !matches!(name.as_str(), "i64" | "Bool" | "String")
                     && !visible_records.contains(name.as_str())
+                    && !self.project.as_ref().is_some_and(|project| {
+                        project.record(&project.canonical_identity(&name)).is_some()
+                    })
                 {
                     return Err(format!(
                         "CGNK011: type {ty} is not a visible local record at {}..{}",
@@ -1374,16 +1503,30 @@ impl RetainedExecutor {
                 .filter(|binding| self.order[&binding.cell_id] < selected_index)
                 .max_by_key(|binding| self.order[&binding.cell_id])
             {
-                append_binding(&mut script, name, &binding.value)?;
+                append_binding(&mut script, name, &self.replay_value(&binding.value))?;
             }
         }
         for (name, value) in pending {
-            append_binding(&mut script, name, value)?;
+            append_binding(&mut script, name, &self.replay_value(value))?;
         }
         if script.len() > MAX_REPLAY_BYTES {
             return Err(limit_error());
         }
         Ok(script)
+    }
+
+    fn replay_value(&self, value: &Value) -> Value {
+        let mut value = value.clone();
+        if let Value::Record { name, .. } = &mut value {
+            if let Some(lowered) = self
+                .project
+                .as_ref()
+                .and_then(|project| project.lowered_record(name))
+            {
+                *name = lowered;
+            }
+        }
+        value
     }
 
     fn charge(&mut self, bytes: usize) -> Result<(), String> {
@@ -1439,7 +1582,8 @@ impl RetainedExecutor {
             return Ok(CellResult { text: None });
         }
         let lowered = project.lower_cell(source, &module, &imported)?;
-        self.execute_pure_named(id, &lowered)
+        self.execute_pure_named(id, &lowered.source)
+            .map_err(|message| lowered.diagnostic(message))
     }
 
     fn execute_pure_named(&mut self, id: &str, source: &str) -> Result<CellResult, String> {
@@ -1481,6 +1625,9 @@ impl RetainedExecutor {
             self.check_deadline(deadline)?;
             if self.binding_bytes() + self.definition_bytes(id, &module) > MAX_REPLAY_BYTES {
                 return Err(limit_error());
+            }
+            if let Some(project) = &self.project {
+                project.verify_unchanged()?;
             }
             self.commit_definitions(id, source, &module);
             return Ok(CellResult { text: None });
@@ -1528,7 +1675,33 @@ impl RetainedExecutor {
                 return Err(limit_error());
             }
             self.charge(script.len())?;
-            let value = match &self.control {
+            let typed = check_source(&script).map_err(|diagnostics| {
+                let first = &diagnostics[0];
+                format!(
+                    "{}: {} at {}..{}",
+                    first.code, first.message, statement.span.start, statement.span.end
+                )
+            })?;
+            let syntax = parse_module(&script).map_err(|_| "CGNK010: invalid checked script")?;
+            let expected = if let Some(main) = typed.functions.get("main") {
+                main.return_type.to_string()
+            } else {
+                let span = match &syntax
+                    .statements
+                    .last()
+                    .ok_or("CGNK010: missing result")?
+                    .kind
+                {
+                    StmtKind::Expr(expr) => expr.span,
+                    _ => return Err("CGNK010: missing result expression".into()),
+                };
+                typed
+                    .expressions
+                    .get(span)
+                    .ok_or("CGNK010: missing checked result type")?
+                    .to_string()
+            };
+            let mut value = match &self.control {
                 Some(control) => {
                     run_worker(&script, control, deadline.expect("controlled deadline")).map_err(
                         |message| {
@@ -1550,6 +1723,25 @@ impl RetainedExecutor {
                         .value
                 }
             };
+            if let Value::Record { name, .. } = &mut value {
+                if let Some(project) = &self.project {
+                    *name = project.canonical_identity(name);
+                }
+            }
+            let expected = self.project.as_ref().map_or_else(
+                || expected.clone(),
+                |project| project.canonical_identity(&expected),
+            );
+            let actual = match &value {
+                Value::Record { name, .. } => name.as_str(),
+                Value::I64(_) => "i64",
+                Value::Bool(_) => "Bool",
+                Value::String(_) => "String",
+                Value::Unit => "Unit",
+            };
+            if actual != expected {
+                return Err(format!("CGNK010: worker result type {actual} does not match checked type {expected} at {}..{}", statement.span.start, statement.span.end));
+            }
             self.validate_record_value(&value, &module)?;
             if let Some(name) = defined {
                 if value == Value::Unit {
@@ -1571,6 +1763,9 @@ impl RetainedExecutor {
             return Err(limit_error());
         }
         self.check_deadline(deadline)?;
+        if let Some(project) = &self.project {
+            project.verify_unchanged()?;
+        }
         self.commit_definitions(id, source, &module);
         for (name, value) in pending {
             self.bindings
@@ -1594,7 +1789,11 @@ impl RetainedExecutor {
         let Value::Record { name, fields } = value else {
             return Ok(());
         };
-        let local = module.records.iter().find(|record| &record.name == name);
+        let local = self
+            .project
+            .as_ref()
+            .and_then(|project| project.record(name))
+            .or_else(|| module.records.iter().find(|record| &record.name == name));
         let retained = self
             .records
             .get(name)
@@ -1730,8 +1929,12 @@ fn valid_record_identifier(name: &str) -> bool {
         && name.len() <= MAX_RECORD_IDENTIFIER_BYTES
 }
 
+fn valid_record_identity(name: &str) -> bool {
+    name.len() <= MAX_RECORD_IDENTIFIER_BYTES && name.split('.').all(valid_record_identifier)
+}
+
 fn encode_worker_record(name: &str, fields: &[(String, Value)]) -> Result<Vec<u8>, String> {
-    if !valid_record_identifier(name) || fields.is_empty() || fields.len() > 8 {
+    if !valid_record_identity(name) || fields.is_empty() || fields.len() > 8 {
         return Err("CGNK010: invalid record result".into());
     }
     let mut bytes = Vec::with_capacity(1 + 2 + name.len() + 1 + fields.len() * 140);
@@ -1775,7 +1978,7 @@ fn decode_worker_record(bytes: &[u8]) -> Result<Value, String> {
         *offset = end;
         Ok(slice)
     }
-    fn identifier(bytes: &[u8], offset: &mut usize) -> Result<String, String> {
+    fn identifier(bytes: &[u8], offset: &mut usize, qualified: bool) -> Result<String, String> {
         let size =
             u16::from_be_bytes(take(bytes, offset, 2)?.try_into().expect("two bytes")) as usize;
         if size == 0 || size > MAX_RECORD_IDENTIFIER_BYTES {
@@ -1783,7 +1986,11 @@ fn decode_worker_record(bytes: &[u8]) -> Result<Value, String> {
         }
         let name = std::str::from_utf8(take(bytes, offset, size)?)
             .map_err(|_| "CGNK010: invalid record UTF-8")?;
-        if !valid_record_identifier(name) {
+        if !(if qualified {
+            valid_record_identity(name)
+        } else {
+            valid_record_identifier(name)
+        }) {
             return Err("CGNK010: invalid record identifier".into());
         }
         Ok(name.to_owned())
@@ -1792,7 +1999,7 @@ fn decode_worker_record(bytes: &[u8]) -> Result<Value, String> {
         return Err("CGNK010: invalid record result".into());
     }
     let mut offset = 1;
-    let name = identifier(bytes, &mut offset)?;
+    let name = identifier(bytes, &mut offset, true)?;
     let count = take(bytes, &mut offset, 1)?[0] as usize;
     if !(1..=8).contains(&count) {
         return Err("CGNK010: invalid record field count".into());
@@ -1800,7 +2007,7 @@ fn decode_worker_record(bytes: &[u8]) -> Result<Value, String> {
     let mut fields = Vec::with_capacity(count);
     let mut seen = BTreeSet::new();
     for _ in 0..count {
-        let field = identifier(bytes, &mut offset)?;
+        let field = identifier(bytes, &mut offset, false)?;
         if !seen.insert(field.clone()) {
             return Err("CGNK010: duplicate record field".into());
         }
@@ -2091,5 +2298,36 @@ mod record_protocol_tests {
         assert!(
             encode_worker_record("Point", &[("x".into(), Value::String("bad".into()))]).is_err()
         );
+    }
+}
+
+#[cfg(test)]
+mod qualified_record_protocol_tests {
+    use super::*;
+
+    #[test]
+    fn qualified_identity_preserves_unicode_and_exact_scalar_values() {
+        let fields = vec![
+            ("位置".to_owned(), Value::I64(i64::MIN)),
+            ("有効".to_owned(), Value::Bool(true)),
+        ];
+        let frame = encode_worker_record("demo.座標.点", &fields).unwrap();
+        assert_eq!(
+            decode_worker_record(&frame).unwrap(),
+            Value::Record {
+                name: "demo.座標.点".into(),
+                fields
+            }
+        );
+        for bad in [
+            ".Point",
+            "demo..Point",
+            "demo.Point.",
+            "demo.7Point",
+            "demo.Point(x:1)",
+        ] {
+            assert!(encode_worker_record(bad, &[("x".into(), Value::I64(7))]).is_err());
+        }
+        assert!(encode_worker_record("demo.Point", &[("x.y".into(), Value::I64(7))]).is_err());
     }
 }

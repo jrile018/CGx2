@@ -73,13 +73,15 @@ pub(crate) fn validate_provenance(cell: &Cell) -> Result<(), NotebookError> {
         || (cell.outputs.is_empty() != provenance.output_ordinal.is_none())
         || provenance.package.as_ref().is_some_and(|package| {
             !crate::assets::valid_digest(&package.manifest_sha256)
+                || package
+                    .root_sha256
+                    .as_ref()
+                    .is_some_and(|hash| !crate::assets::valid_digest(hash))
                 || package.modules.is_empty()
                 || package.modules.iter().any(|(name, hash)| {
                     name.split('.').any(|segment| {
                         segment.is_empty()
-                            || !segment
-                                .chars()
-                                .all(|c| c.is_ascii_alphanumeric() || c == '_')
+                            || !segment.chars().all(|c| c.is_alphanumeric() || c == '_')
                     }) || !crate::assets::valid_digest(hash)
                 })
         })

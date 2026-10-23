@@ -1,0 +1,31 @@
+#!cgnb 1
+%% markdown id=about
+# Imported public records
+Run with `--project crates/cgx2-notebook-cli/examples/public-records`.
+The two Point types and the notebook's local Point have separate identities.
+Exports include notebook text and assets; this local package remains required.
+%% code id=alpha_import
+import demo.alpha
+%% code id=beta_import
+import demo.beta
+%% code id=parameter
+let delta = 1
+%% code id=local
+record Point:
+    x: i64
+    active: Bool
+%% code id=function
+fn next(p: alpha.Point) -> alpha.Point:
+    alpha.bump(p)
+%% code id=value
+let p: alpha.Point = next(alpha.Point(active: true, x: 40 + delta))
+p
+%% code id=read
+alpha.value(p)
+%% code id=beta
+let q = beta.Point(active: false, x: 7)
+beta.value(q)
+%% code id=local_value
+Point(active: false, x: 9)
+%% code id=independent
+42

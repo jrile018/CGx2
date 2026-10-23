@@ -317,13 +317,13 @@ fn imported_record_function_is_rejected_at_cell_boundary() {
 }
 
 #[test]
-fn local_function_cannot_use_an_imported_record_annotation() {
+fn local_function_cannot_use_a_private_imported_record_annotation() {
     let project = Project::new();
     project.write(
         "src/alpha.cg",
         "module demo.alpha\nrecord Point:\n    x: i64\npub fn value() -> i64 effects() caps():\n    1\n",
     );
-    let mut kernel = NotebookKernel::open_with_project(
+    let error = NotebookKernel::open_with_project(
         Notebook {
             version: 1,
             cells: vec![
@@ -333,12 +333,11 @@ fn local_function_cannot_use_an_imported_record_annotation() {
         },
         Some(project.root()),
     )
-    .unwrap();
-    kernel.run_cell("import").unwrap();
-    let error = kernel.run_cell("bad").unwrap_err();
-    assert_eq!(error.cell_id.as_deref(), Some("bad"));
-    assert_eq!(error.code, "CGNK011");
-    assert!(error.message.contains("at "), "{error}");
+    .unwrap_err();
+    assert!(
+        error.message.contains("public scalar record") && error.message.contains("at "),
+        "{error}"
+    );
 }
 
 #[test]
@@ -381,7 +380,7 @@ fn conditional_imports_lower_both_branches_and_track_inactive_module_dependencie
 }
 
 #[test]
-fn imported_public_records_fail_before_execution_with_cell_and_span() {
+fn imported_public_records_execute_at_the_cell_boundary() {
     let project = Project::new();
     project.write("src/alpha.cg", "module demo.alpha\npub record Point:\n    x: i64\npub fn make() -> Point effects() caps():\n    Point(x: 4)\n");
     for call in [
@@ -396,15 +395,8 @@ fn imported_public_records_fail_before_execution_with_cell_and_span() {
                 code("record_use", call),
             ],
         };
-        let error = NotebookKernel::open_with_project(notebook, Some(project.root()))
-            .unwrap_err()
-            .to_string();
-        assert!(
-            error.contains("CGNK012")
-                && error.contains("records_import")
-                && error.contains("7..17")
-                && error.contains("imported records"),
-            "{error}"
-        );
+        let mut kernel = NotebookKernel::open_with_project(notebook, Some(project.root())).unwrap();
+        kernel.restart_and_run_all().unwrap();
+        assert_eq!(kernel.status("record_use").unwrap(), CellStatus::Current);
     }
 }

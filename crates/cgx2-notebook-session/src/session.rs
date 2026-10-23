@@ -239,6 +239,40 @@ impl<E: CellExecutor> NotebookSession<E> {
         self.package_provenance = package_provenance;
     }
 
+    /// Discard live definitions and stale only readers of changed checked package inputs.
+    pub fn invalidate_package_modules(&mut self, modules: &BTreeSet<String>) {
+        let mut invalid = BTreeSet::new();
+        for (index, cell) in self.notebook.cells.iter().enumerate() {
+            if self
+                .package_provenance
+                .get(&cell.id)
+                .is_some_and(|package| {
+                    package
+                        .modules
+                        .keys()
+                        .any(|module| modules.contains(module))
+                })
+            {
+                invalid.insert(index);
+                invalid.extend(affected_after(
+                    &self.notebook.cells,
+                    &self.facts,
+                    index,
+                    &self.facts[&cell.id].defines,
+                    self.facts[&cell.id].opaque_effects,
+                ));
+            }
+        }
+        let ids = invalid
+            .iter()
+            .map(|index| self.notebook.cells[*index].id.clone())
+            .collect::<Vec<_>>();
+        self.executor.invalidate_cells(&ids);
+        for index in invalid {
+            self.mark_stale(index);
+        }
+    }
+
     pub fn package_provenance(&self) -> &BTreeMap<String, PackageProvenance> {
         &self.package_provenance
     }
