@@ -8,6 +8,19 @@ fn kinds(source: &str) -> Vec<TokenKind> {
 }
 
 #[test]
+fn negative_range_loop_formatter_round_trips() {
+    let source = "for item in range(-9223372036854775808, -2):\n    item\n";
+    let parsed = parse_module(source).unwrap();
+    let formatted = format_module(&parsed);
+    let reparsed = parse_module(&formatted).unwrap();
+    assert_eq!(format_module(&reparsed), formatted);
+    assert!(
+        matches!(&reparsed.statements[0].kind, StmtKind::For { iter: Expr { kind: ExprKind::Call { arguments, .. }, .. }, .. }
+        if matches!(&arguments[0].value.kind, ExprKind::Integer(value) if value == "-9223372036854775808"))
+    );
+}
+
+#[test]
 fn python_foreign_declaration_round_trips_with_source_spans() {
     let source = "foreign python fn isqrt(x: i64) -> i64 effects(Foreign) caps(ForeignCall) = math.isqrt runtime \"local:cpython\" ownership copied\n\nfn main() -> i64 effects(Foreign) caps(ForeignCall):\n    isqrt(9)\n";
     let parsed = parse_module(source).unwrap();

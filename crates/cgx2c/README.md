@@ -1,5 +1,7 @@
 # cgx2c native compiler preview
 
+Scalar native output supports `for item in range(start, end):`. Bounds are checked `i64` expressions evaluated once; iteration is ascending, ends before `end`, and allocates no list or managed object. The iterator name is local to the loop. Every statement, expression, and iteration shares the deterministic 1,000,000-step budget with `cgx2 run`; exhaustion reports `CGR010` with a source byte span. A reversed range is empty. `range` outside the exact loop form, list iteration, memory-script loops, loop `return`, unsafe foreign calls, and ownership crossings remain unsupported. Python output is a separate target and may reject these loops. This does not imply generic iteration, automatic parallelism, or GPU execution.
+
 From the repository root, with Rust 1.98 and `rustc` installed:
 
 ```sh

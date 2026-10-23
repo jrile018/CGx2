@@ -39,7 +39,37 @@ struct Binding {
     mutable: bool,
     annotation: Option<TypeSyntax>,
 }
-type Scope = HashMap<String, Binding>;
+struct Scope(Vec<HashMap<String, Binding>>);
+
+impl Scope {
+    fn new() -> Self {
+        Self(vec![HashMap::new()])
+    }
+    fn push(&mut self) {
+        self.0.push(HashMap::new());
+    }
+    fn pop(&mut self) {
+        self.0.pop();
+    }
+    fn clear_current(&mut self) {
+        self.0.last_mut().expect("scope").clear();
+    }
+    fn contains_key(&self, name: &str) -> bool {
+        self.0.last().expect("scope").contains_key(name)
+    }
+    fn insert(&mut self, name: String, binding: Binding) {
+        self.0.last_mut().expect("scope").insert(name, binding);
+    }
+    fn get(&self, name: &str) -> Option<&Binding> {
+        self.0.iter().rev().find_map(|scope| scope.get(name))
+    }
+    fn get_mut(&mut self, name: &str) -> Option<&mut Binding> {
+        self.0
+            .iter_mut()
+            .rev()
+            .find_map(|scope| scope.get_mut(name))
+    }
+}
 enum Flow {
     Continue(Value),
     Return(Value),
@@ -196,12 +226,46 @@ impl Evaluator<'_> {
                     return Ok(Flow::Return(value));
                 }
                 StmtKind::Expr(expr) => tail = self.eval_expr(expr, scope)?,
-                StmtKind::For { .. } => {
-                    return Err(error(
-                        "CGR009",
-                        "for loops are unsupported in the execution preview",
-                        stmt.span,
-                    ))
+                StmtKind::For {
+                    binding,
+                    iter,
+                    body,
+                } => {
+                    let ExprKind::Call { arguments, .. } = &iter.kind else {
+                        unreachable!("checked range")
+                    };
+                    self.step(iter.span)?;
+                    let start = self.eval_expr(&arguments[0].value, scope)?;
+                    let end = self.eval_expr(&arguments[1].value, scope)?;
+                    let (Value::I64(start), Value::I64(end)) = (start, end) else {
+                        unreachable!("checked i64 range")
+                    };
+                    scope.push();
+                    scope.insert(
+                        binding.clone(),
+                        Binding {
+                            value: Value::I64(start),
+                            mutable: false,
+                            annotation: None,
+                        },
+                    );
+                    scope.push();
+                    for current in start..end {
+                        self.step(stmt.span)?;
+                        let index = scope.0.len() - 2;
+                        scope.0[index]
+                            .get_mut(binding)
+                            .expect("range binding")
+                            .value = Value::I64(current);
+                        let flow = self.eval_block(body, scope);
+                        scope.clear_current();
+                        if let Flow::Return(value) = flow? {
+                            return Ok(Flow::Return(value));
+                        }
+                    }
+                    scope.pop();
+                    scope.pop();
+                    tail = Value::Unit;
                 }
                 StmtKind::NoGc { .. } => {
                     return Err(error(
@@ -463,12 +527,18 @@ fn reject_unsupported(statements: &[Stmt]) -> Result<(), RunError> {
                 stmt.span,
             ));
         }
-        if matches!(stmt.kind, StmtKind::For { .. }) {
-            return Err(error(
-                "CGR009",
-                "for loops are unsupported in the execution preview",
-                stmt.span,
-            ));
+        if let StmtKind::For { iter, body, .. } = &stmt.kind {
+            let valid = matches!(&iter.kind, ExprKind::Call { callee, arguments }
+                if matches!(&callee.kind, ExprKind::Name(path) if path.segments.as_slice() == ["range"])
+                && arguments.len() == 2 && arguments.iter().all(|arg| arg.name.is_none()));
+            if !valid {
+                return Err(error(
+                    "CGR009",
+                    "only range(start, end) loops execute in the scalar preview",
+                    iter.span,
+                ));
+            }
+            reject_unsupported(body)?;
         }
     }
     Ok(())
@@ -485,6 +555,18 @@ pub(crate) fn stmt_has_memory(stmt: &Stmt) -> bool {
         }
         StmtKind::NoGc { .. } => true,
         StmtKind::Return(None) => false,
+    }
+}
+
+pub(crate) fn stmt_has_for(stmt: &Stmt) -> bool {
+    match &stmt.kind {
+        StmtKind::For { iter, body, .. } => {
+            matches!(&iter.kind, ExprKind::Call { callee, .. }
+                if matches!(&callee.kind, ExprKind::Name(path) if path.segments.as_slice() == ["range"]))
+                || body.iter().any(stmt_has_for)
+        }
+        StmtKind::NoGc { body, .. } => body.iter().any(stmt_has_for),
+        _ => false,
     }
 }
 
