@@ -21,7 +21,8 @@ python3 tools/docs-check/check.py \
 `--tool NAME=/absolute/PATH --pin NAME=APPROVED_SHA256` supplies optional
 `native` (`cgx2c`), `package-runner` (`cgx2-native`), `rustc` (the real Rust
 1.98.1 compiler executable), `notebook` (`cgx2-notebook`) and `verify`
-(`cgx2-verify`). Missing tools block their cases. A supplied tool without a pin
+(`cgx2-verify`), and `python` (a compatible Python interpreter for generated `.py`
+and `.pyz` execution). Missing tools block their cases. A supplied tool without a pin
 is invalid configuration. A wrong digest fails before that executable's help
 probe or fixture command. Symlink executable paths are resolved to the actual
 executable and hashed there. Pins identify bytes; the caller still owns review
@@ -36,8 +37,9 @@ hash. The `rustc` argument uses the supplied pin rather than PATH discovery.
 
 `--suite` defaults to `docs/first-release/expectations.json`. JSON must be UTF-8,
 at most 1 MiB, schema version 1, with no duplicate or unknown keys or nonfinite
-numbers. A suite has `baseline` (full commit), `fixture_root` (relative path)
-and 1–200 `cases`. Each case contains:
+numbers. A suite has `baseline` (historical full commit), optional `candidate` (current
+integrated full commit), `fixture_root` (relative path) and 1–200 `cases`. Each
+case contains:
 
 - `id`, `requirements` (`R01`–`R15`), `scope` (`source`, `cli`, `library-only`,
   `external`), `disposition`, and `steps` (at most 20).
@@ -58,7 +60,8 @@ executes only the regular file `{work}/program` produced in the same case.
 Fixtures are copied into isolated per-case working directories; inputs with
 symlinks/special entries or traversal paths are rejected. Commands run with that
 copy as cwd so source locations stay package-relative. Environment `CGX2*`
-overrides are removed; Rust 1.98.1, two Cargo jobs and the private target are set.
+overrides are removed; Rust 1.98.1 and two Cargo jobs are set. Caller
+`CARGO_TARGET_DIR` is preserved, defaulting to this checkout's `target/release-docs`.
 The per-process timeout defaults to 20 seconds, configurable in `(0, 60]`.
 Each stdout/stderr stream is capped at 1 MiB; exceeding either cap or timing out
 fails the step and kills its process group. This cleanup targets ordinary child

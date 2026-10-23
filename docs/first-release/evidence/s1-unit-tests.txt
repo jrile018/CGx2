@@ -1,0 +1,25 @@
+test_absent_named_prerequisite_blocked (test_check.CheckerTests.test_absent_named_prerequisite_blocked) ... ok
+test_caller_private_cargo_target_is_preserved (test_check.CheckerTests.test_caller_private_cargo_target_is_preserved) ... ok
+test_candidate_is_separate_from_historical_baseline (test_check.CheckerTests.test_candidate_is_separate_from_historical_baseline) ... ok
+test_duplicate_keys_nan_and_malformed_json (test_check.CheckerTests.test_duplicate_keys_nan_and_malformed_json) ... ok
+test_future_and_external_never_pass (test_check.CheckerTests.test_future_and_external_never_pass) ... ok
+test_json_expectation_is_type_strict (test_check.CheckerTests.test_json_expectation_is_type_strict) ... ok
+test_malformed_expectations (test_check.CheckerTests.test_malformed_expectations) ... ok
+test_missing_compiler_blocked_and_never_passed (test_check.CheckerTests.test_missing_compiler_blocked_and_never_passed) ... ok
+test_missing_executable_blocked (test_check.CheckerTests.test_missing_executable_blocked) ... ok
+test_negative_diagnostics_and_utf8_span (test_check.CheckerTests.test_negative_diagnostics_and_utf8_span) ... ok
+test_output_limit_and_timeout_are_failure (test_check.CheckerTests.test_output_limit_and_timeout_are_failure) ... ok
+test_pin_and_tool_argument_validation (test_check.CheckerTests.test_pin_and_tool_argument_validation) ... ok
+test_positive_and_deterministic_report (test_check.CheckerTests.test_positive_and_deterministic_report) ... ok
+test_report_cannot_replace_fixture (test_check.CheckerTests.test_report_cannot_replace_fixture) ... ok
+test_report_never_overwrites (test_check.CheckerTests.test_report_never_overwrites) ... ok
+test_symlink_and_traversal_report_paths (test_check.CheckerTests.test_symlink_and_traversal_report_paths) ... ok
+test_symlink_fixture_rejected (test_check.CheckerTests.test_symlink_fixture_rejected) ... ok
+test_tampered_compiler_not_executed (test_check.CheckerTests.test_tampered_compiler_not_executed) ... ok
+test_wrong_exit_stdout_and_stderr_fail (test_check.CheckerTests.test_wrong_exit_stdout_and_stderr_fail) ... ok
+test_all_requirements_and_cases_linked (test_check.InventoryTests.test_all_requirements_and_cases_linked) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 0.475s
+
+OK

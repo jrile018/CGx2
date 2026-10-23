@@ -1,4 +1,8 @@
-# Owned verification evidence
+# Historical Wave 28 verification evidence
+
+This is historical provenance, preserved with its original reports and results.
+It does not describe the current suite. Its reproduction commands refer to the
+suite at the historical baseline. See [Stage 1 evidence](CURRENT-EVIDENCE.md).
 
 Date: 2026-10-23. Branch: `riley/release-docs`. Reviewed source base:
 `0f0b0b9c87d817f39830f3e2b311dbae2ae3e0f3`.

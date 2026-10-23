@@ -183,6 +183,25 @@
           "tool": "compiler",
           "args": [
             "api",
+            "--json",
+            "scalar/answer.cg"
+          ],
+          "exit": 0,
+          "stdout": {
+            "contains": [
+              "double",
+              "i64",
+              "requires"
+            ]
+          },
+          "stderr": {
+            "equals": ""
+          }
+        },
+        {
+          "tool": "compiler",
+          "args": [
+            "api",
             "scalar/answer.cg",
             "--json"
           ],
@@ -826,40 +845,6 @@
       ]
     },
     {
-      "id": "unified-build-unsupported",
-      "requirements": [
-        "R05"
-      ],
-      "scope": "cli",
-      "disposition": "expected-unsupported",
-      "steps": [
-        {
-          "tool": "compiler",
-          "args": [
-            "--diagnostic-format=json",
-            "build",
-            "scalar/answer.cg"
-          ],
-          "exit": 1,
-          "stdout": {
-            "equals": ""
-          },
-          "stderr": {
-            "contains": [
-              "CGC001"
-            ]
-          },
-          "diagnostics": [
-            {
-              "code": "CGC001",
-              "file": "<command>",
-              "span": null
-            }
-          ]
-        }
-      ]
-    },
-    {
       "id": "unified-test-unsupported",
       "requirements": [
         "R05"
@@ -907,42 +892,6 @@
             "--diagnostic-format=json",
             "verify",
             "scalar/proof.cg"
-          ],
-          "exit": 1,
-          "stdout": {
-            "equals": ""
-          },
-          "stderr": {
-            "contains": [
-              "CGC001"
-            ]
-          },
-          "diagnostics": [
-            {
-              "code": "CGC001",
-              "file": "<command>",
-              "span": null
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "unified-emit-unsupported",
-      "requirements": [
-        "R05"
-      ],
-      "scope": "cli",
-      "disposition": "expected-unsupported",
-      "steps": [
-        {
-          "tool": "compiler",
-          "args": [
-            "--diagnostic-format=json",
-            "emit",
-            "scalar/answer.cg",
-            "--target",
-            "python"
           ],
           "exit": 1,
           "stdout": {
@@ -1087,17 +1036,6 @@
       "handoff": "S3-N: one selected effect once, explicit rerun, crash/timeout outcome_unknown, stale/restart/cleanup fixtures."
     },
     {
-      "id": "python-source-cli",
-      "requirements": [
-        "R10"
-      ],
-      "disposition": "future",
-      "scope": "source",
-      "steps": [],
-      "reason": "Python emission currently has a Rust library API, no installed CLI target.",
-      "handoff": "S2b/S3-C: add pinned emitted-Python execution parity after reviewed CLI integration; preserve target rejections."
-    },
-    {
       "id": "live-solver",
       "requirements": [
         "R11"
@@ -1151,6 +1089,681 @@
       "steps": [],
       "reason": "Documentation fixtures cannot close all release gates or certify distribution packaging.",
       "handoff": "Run outside-checkout smoke in INSTALL.md, then integrate every R01\u2013R14 evidence row and independent final review."
+    },
+    {
+      "id": "unified-build",
+      "requirements": [
+        "R05",
+        "R10"
+      ],
+      "scope": "cli",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "build",
+            "scalar/loops.cg",
+            "--out",
+            "{work}/program",
+            "--rustc",
+            "{tool:rustc}"
+          ],
+          "exit": 0,
+          "stdout": {
+            "contains": [
+              "source_sha256=",
+              "toolchain=rustc 1.98.1",
+              "profile=debug"
+            ]
+          },
+          "stderr": {
+            "equals": ""
+          }
+        },
+        {
+          "tool": "artifact",
+          "args": [],
+          "exit": 0,
+          "stdout": {
+            "equals": "42\n"
+          },
+          "stderr": {
+            "equals": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "unified-package-build",
+      "requirements": [
+        "R04",
+        "R05",
+        "R06",
+        "R10"
+      ],
+      "scope": "cli",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "build",
+            "package",
+            "--out",
+            "{work}/program",
+            "--release",
+            "--rustc",
+            "{tool:rustc}"
+          ],
+          "exit": 0,
+          "stdout": {
+            "contains": [
+              "package_manifest_sha256=",
+              "toolchain=rustc 1.98.1",
+              "profile=release"
+            ]
+          },
+          "stderr": {
+            "equals": ""
+          }
+        },
+        {
+          "tool": "artifact",
+          "args": [],
+          "exit": 0,
+          "stdout": {
+            "equals": "42\n"
+          },
+          "stderr": {
+            "equals": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "unified-rust-emission",
+      "requirements": [
+        "R05",
+        "R10"
+      ],
+      "scope": "cli",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "emit",
+            "scalar/answer.cg",
+            "--target",
+            "rust",
+            "--out",
+            "{work}/answer.rs"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "equals": ""
+          }
+        },
+        {
+          "tool": "rustc",
+          "args": [
+            "--edition=2024",
+            "--crate-name",
+            "cgx2_doc_generated",
+            "--cap-lints",
+            "allow",
+            "{work}/answer.rs",
+            "-o",
+            "{work}/program"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "equals": ""
+          }
+        },
+        {
+          "tool": "artifact",
+          "args": [],
+          "exit": 0,
+          "stdout": {
+            "equals": "42\n"
+          },
+          "stderr": {
+            "equals": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "unified-package-rust-emission",
+      "requirements": [
+        "R05",
+        "R10"
+      ],
+      "scope": "cli",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "emit",
+            "package",
+            "--target",
+            "rust",
+            "--out",
+            "{work}/answer.rs"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "equals": ""
+          }
+        },
+        {
+          "tool": "rustc",
+          "args": [
+            "--edition=2024",
+            "--crate-name",
+            "cgx2_doc_generated",
+            "--cap-lints",
+            "allow",
+            "{work}/answer.rs",
+            "-o",
+            "{work}/program"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "equals": ""
+          }
+        },
+        {
+          "tool": "artifact",
+          "args": [],
+          "exit": 0,
+          "stdout": {
+            "equals": "42\n"
+          },
+          "stderr": {
+            "equals": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "python-source-cli",
+      "requirements": [
+        "R05",
+        "R10"
+      ],
+      "scope": "cli",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "emit",
+            "scalar/answer.cg",
+            "--target",
+            "python",
+            "--out",
+            "{work}/answer.py"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "equals": ""
+          }
+        },
+        {
+          "tool": "python",
+          "args": [
+            "-I",
+            "{work}/answer.py"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": "42\n"
+          },
+          "stderr": {
+            "equals": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "python-package-source-cli",
+      "requirements": [
+        "R05",
+        "R06",
+        "R10"
+      ],
+      "scope": "cli",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "emit",
+            "package",
+            "--target",
+            "python",
+            "--out",
+            "{work}/answer.pyz"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "equals": ""
+          }
+        },
+        {
+          "tool": "python",
+          "args": [
+            "-I",
+            "{work}/answer.pyz"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": "42\n"
+          },
+          "stderr": {
+            "equals": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "build-missing-output",
+      "requirements": [
+        "R05"
+      ],
+      "scope": "cli",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "--diagnostic-format=json",
+            "build",
+            "scalar/answer.cg"
+          ],
+          "exit": 1,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "contains": [
+              "CGXC001",
+              "--out BINARY"
+            ]
+          },
+          "diagnostics": [
+            {
+              "code": "CGXC001",
+              "file": "scalar/answer.cg",
+              "span": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emit-missing-output",
+      "requirements": [
+        "R05"
+      ],
+      "scope": "cli",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "--diagnostic-format=json",
+            "emit",
+            "scalar/answer.cg",
+            "--target",
+            "python"
+          ],
+          "exit": 1,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "contains": [
+              "CGXC001",
+              "--out FILE.py"
+            ]
+          },
+          "diagnostics": [
+            {
+              "code": "CGXC001",
+              "file": "scalar/answer.cg",
+              "span": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emit-unknown-target",
+      "requirements": [
+        "R05",
+        "R10"
+      ],
+      "scope": "cli",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "--diagnostic-format=json",
+            "emit",
+            "scalar/answer.cg",
+            "--target",
+            "gpu",
+            "--out",
+            "{work}/rejected"
+          ],
+          "exit": 1,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "contains": [
+              "CGC001",
+              "expected rust or python"
+            ]
+          },
+          "diagnostics": [
+            {
+              "code": "CGC001",
+              "file": "<command>",
+              "span": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "build-input-destination",
+      "requirements": [
+        "R05"
+      ],
+      "scope": "cli",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "--diagnostic-format=json",
+            "build",
+            "scalar/answer.cg",
+            "--out",
+            "scalar/answer.cg",
+            "--force",
+            "--rustc",
+            "{tool:rustc}"
+          ],
+          "exit": 1,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "contains": [
+              "CGXC004",
+              "output is the source file"
+            ]
+          },
+          "diagnostics": [
+            {
+              "code": "CGXC004",
+              "file": "scalar/answer.cg",
+              "span": null
+            }
+          ]
+        },
+        {
+          "tool": "compiler",
+          "args": [
+            "run",
+            "scalar/answer.cg"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": "42\n"
+          },
+          "stderr": {
+            "equals": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "emit-occupied-destination",
+      "requirements": [
+        "R05",
+        "R10"
+      ],
+      "scope": "cli",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "emit",
+            "scalar/answer.cg",
+            "--target",
+            "rust",
+            "--out",
+            "{work}/answer.rs"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "equals": ""
+          }
+        },
+        {
+          "tool": "compiler",
+          "args": [
+            "--diagnostic-format=json",
+            "emit",
+            "scalar/seven.cg",
+            "--target",
+            "rust",
+            "--out",
+            "{work}/answer.rs"
+          ],
+          "exit": 1,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "contains": [
+              "CGXC004",
+              "exists"
+            ]
+          },
+          "diagnostics": [
+            {
+              "code": "CGXC004",
+              "file": "scalar/seven.cg",
+              "span": null
+            }
+          ]
+        },
+        {
+          "tool": "rustc",
+          "args": [
+            "--edition=2024",
+            "--crate-name",
+            "cgx2_doc_generated",
+            "--cap-lints",
+            "allow",
+            "{work}/answer.rs",
+            "-o",
+            "{work}/program"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "equals": ""
+          }
+        },
+        {
+          "tool": "artifact",
+          "args": [],
+          "exit": 0,
+          "stdout": {
+            "equals": "42\n"
+          },
+          "stderr": {
+            "equals": ""
+          }
+        },
+        {
+          "tool": "compiler",
+          "args": [
+            "emit",
+            "scalar/seven.cg",
+            "--target",
+            "rust",
+            "--out",
+            "{work}/answer.rs",
+            "--force"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "equals": ""
+          }
+        },
+        {
+          "tool": "rustc",
+          "args": [
+            "--edition=2024",
+            "--crate-name",
+            "cgx2_doc_generated",
+            "--cap-lints",
+            "allow",
+            "{work}/answer.rs",
+            "-o",
+            "{work}/program"
+          ],
+          "exit": 0,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "equals": ""
+          }
+        },
+        {
+          "tool": "artifact",
+          "args": [],
+          "exit": 0,
+          "stdout": {
+            "equals": "7\n"
+          },
+          "stderr": {
+            "equals": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "python-package-extension",
+      "requirements": [
+        "R05",
+        "R10"
+      ],
+      "scope": "cli",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "--diagnostic-format=json",
+            "emit",
+            "package",
+            "--target",
+            "python",
+            "--out",
+            "{work}/answer.py"
+          ],
+          "exit": 1,
+          "stdout": {
+            "equals": ""
+          },
+          "stderr": {
+            "contains": [
+              "CGXC001",
+              "FILE.pyz"
+            ]
+          },
+          "diagnostics": [
+            {
+              "code": "CGXC001",
+              "file": "package",
+              "span": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "package-public-api",
+      "requirements": [
+        "R04",
+        "R05"
+      ],
+      "scope": "cli",
+      "disposition": "implemented",
+      "steps": [
+        {
+          "tool": "compiler",
+          "args": [
+            "api",
+            "--json",
+            "package"
+          ],
+          "exit": 0,
+          "stdout": {
+            "json": {
+              "schema_version": 2,
+              "name": "release_docs",
+              "entry": "src/main.cg",
+              "imports_supported": true
+            }
+          },
+          "stderr": {
+            "equals": ""
+          }
+        }
+      ]
     }
-  ]
+  ],
+  "candidate": "2b9855c48713794d4cf819bc391813c1260f287b"
 }

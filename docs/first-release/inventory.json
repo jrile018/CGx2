@@ -8,7 +8,6 @@
       "name": "Canonical language and nominal types",
       "release_gate": "open",
       "owner": "S2a",
-      "baseline_scope": "Scalar records/loops run; variants, exhaustive matching, Option/Result remain reserved.",
       "cases": [
         "scalar-check",
         "scalar-run",
@@ -17,25 +16,25 @@
         "canonical-format",
         "nominal-variants-match"
       ],
-      "handoff": "ACCEPTANCE.md#r01"
+      "handoff": "ACCEPTANCE.md#r01",
+      "candidate_scope": "Scalar records/loops run; variants, exhaustive matching, Option/Result remain reserved."
     },
     {
       "id": "R02",
       "name": "Generics and standard data",
       "release_gate": "open",
       "owner": "S2b",
-      "baseline_scope": "Named constraints, usable generic collections, strings/errors and checked indexing await source integration.",
       "cases": [
         "generics-standard-data"
       ],
-      "handoff": "ACCEPTANCE.md#r02"
+      "handoff": "ACCEPTANCE.md#r02",
+      "candidate_scope": "Named constraints, usable generic collections, strings/errors and checked indexing await source integration."
     },
     {
       "id": "R03",
       "name": "Memory and ownership",
       "release_gate": "open",
       "owner": "S1 memory/ownership \u2192 S2b \u2192 S3-M",
-      "baseline_scope": "Explicit bounded scripts run; ordinary aggregates/lifetimes, fault/cancel/leak corpus and audit remain open.",
       "cases": [
         "no-gc-collect-rejected",
         "manual-memory",
@@ -43,14 +42,14 @@
         "native-memory",
         "ordinary-memory-ownership"
       ],
-      "handoff": "ACCEPTANCE.md#r03"
+      "handoff": "ACCEPTANCE.md#r03",
+      "candidate_scope": "Explicit bounded scripts run; ordinary aggregates/lifetimes, fault/cancel/leak corpus and audit remain open."
     },
     {
       "id": "R04",
       "name": "Modules, effects, capabilities, contracts",
       "release_gate": "open",
       "owner": "S1 analysis/notebook \u2192 S2b",
-      "baseline_scope": "Checked three-module explicit pure wrappers and runtime requires run; general capability enforcement and package contract parity remain open.",
       "cases": [
         "scalar-check",
         "scalar-run",
@@ -59,16 +58,18 @@
         "hidden-effect",
         "package-effects",
         "native-package",
-        "enforced-capabilities"
+        "enforced-capabilities",
+        "unified-package-build",
+        "package-public-api"
       ],
-      "handoff": "ACCEPTANCE.md#r04"
+      "handoff": "ACCEPTANCE.md#r04",
+      "candidate_scope": "Checked three-module explicit pure wrappers and runtime requires run; general capability enforcement and package contract parity remain open."
     },
     {
       "id": "R05",
       "name": "Installed CLI and structured API",
       "release_gate": "open",
       "owner": "S1 core \u2192 S2b",
-      "baseline_scope": "Scalar commands/byte diagnostics run; unified build/test/verify/emit/notebook commands reject on baseline.",
       "cases": [
         "scalar-check",
         "scalar-run",
@@ -80,132 +81,154 @@
         "type-mismatch",
         "checked-overflow",
         "native-build",
-        "unified-build-unsupported",
         "unified-test-unsupported",
         "unified-verify-unsupported",
-        "unified-emit-unsupported",
-        "unified-notebook-unsupported"
+        "unified-notebook-unsupported",
+        "unified-build",
+        "unified-package-build",
+        "unified-rust-emission",
+        "unified-package-rust-emission",
+        "python-source-cli",
+        "python-package-source-cli",
+        "build-missing-output",
+        "emit-missing-output",
+        "emit-unknown-target",
+        "build-input-destination",
+        "emit-occupied-destination",
+        "python-package-extension",
+        "package-public-api"
       ],
-      "handoff": "ACCEPTANCE.md#r05"
+      "handoff": "ACCEPTANCE.md#r05",
+      "candidate_scope": "Integrated build, Rust/Python emit and package API run; unified test/verify/notebook/bind integration remains reserved."
     },
     {
       "id": "R06",
       "name": "Reproducible packages and foreign declarations",
       "release_gate": "open",
       "owner": "S1 native/Python/worker \u2192 S2b",
-      "baseline_scope": "Manifest-listed schema-1 local source packages run; full compiler/runtime/environment/foreign artifact lock workflow remains open.",
       "cases": [
         "package-effects",
         "native-package",
-        "pinned-packages-foreign"
+        "pinned-packages-foreign",
+        "unified-package-build",
+        "python-package-source-cli"
       ],
-      "handoff": "ACCEPTANCE.md#r06"
+      "handoff": "ACCEPTANCE.md#r06",
+      "candidate_scope": "Manifest-listed schema-1 local source packages run; full compiler/runtime/environment/foreign artifact lock workflow remains open."
     },
     {
       "id": "R07",
       "name": "Explicit Python-only access",
       "release_gate": "open",
       "owner": "S1 Python \u2192 S2b \u2192 S3-F",
-      "baseline_scope": "Bounded one-shot scalar worker preview is distinct from full pinned package acceptance; no foreign runtime evidence created here.",
       "cases": [
         "python-only-package"
       ],
-      "handoff": "ACCEPTANCE.md#r07"
+      "handoff": "ACCEPTANCE.md#r07",
+      "candidate_scope": "Bounded one-shot scalar worker preview is distinct from full pinned package acceptance; no foreign runtime evidence created here."
     },
     {
       "id": "R08",
       "name": "Direct typed LibTorch",
       "release_gate": "open",
       "owner": "S1 native \u2192 S2b \u2192 S3-F",
-      "baseline_scope": "Bounded literal vector/matmul source preview exists; general typed tensors/inference/application/GPU acceptance remains open.",
       "cases": [
         "direct-libtorch-inference"
       ],
-      "handoff": "ACCEPTANCE.md#r08"
+      "handoff": "ACCEPTANCE.md#r08",
+      "candidate_scope": "Bounded literal vector/matmul source preview exists; general typed tensors/inference/application/GPU acceptance remains open."
     },
     {
       "id": "R09",
       "name": "Persistent native notebooks",
       "release_gate": "open",
       "owner": "S1 notebook/worker \u2192 S3-N",
-      "baseline_scope": "Pure bounded local accumulator notebook runs; effect cells explicitly reject, external persistent effects await integration.",
       "cases": [
         "notebook-local",
         "notebook-effects-rejected",
         "persistent-notebook-effects"
       ],
-      "handoff": "ACCEPTANCE.md#r09"
+      "handoff": "ACCEPTANCE.md#r09",
+      "candidate_scope": "Pure bounded local accumulator notebook runs; effect cells explicitly reject, external persistent effects await integration."
     },
     {
       "id": "R10",
       "name": "Rust and portable Python source",
       "release_gate": "open",
       "owner": "S1 core \u2192 S2a/b \u2192 S3-C",
-      "baseline_scope": "Native scalar/package build and Rust emission run; Python emitter is library-only and not executed by this checker.",
       "cases": [
         "native-build",
         "native-package",
         "rust-emission",
         "native-memory",
-        "python-source-cli"
+        "python-source-cli",
+        "unified-build",
+        "unified-package-build",
+        "unified-rust-emission",
+        "unified-package-rust-emission",
+        "python-package-source-cli",
+        "emit-unknown-target",
+        "emit-occupied-destination",
+        "python-package-extension"
       ],
-      "handoff": "ACCEPTANCE.md#r10"
+      "handoff": "ACCEPTANCE.md#r10",
+      "candidate_scope": "Installed scalar/package native build, emitted Rust execution and portable Python .py/.pyz execution covered with pinned tools; full conformance and blinded editability remain open."
     },
     {
       "id": "R11",
       "name": "Bounded proofs",
       "release_gate": "open",
       "owner": "S1 verification \u2192 S2 \u2192 S3-V",
-      "baseline_scope": "Finite source/core/SMT-term audit returns live proof unknown; trusted real solver/loop/bounds profile remains open.",
       "cases": [
         "finite-audit-not-proof",
         "live-solver"
       ],
-      "handoff": "ACCEPTANCE.md#r11"
+      "handoff": "ACCEPTANCE.md#r11",
+      "candidate_scope": "Finite source/core/SMT-term audit returns live proof unknown; trusted real solver/loop/bounds profile remains open."
     },
     {
       "id": "R12",
       "name": "Security and performance analysis",
       "release_gate": "open",
       "owner": "S1 analysis/execution \u2192 S2b \u2192 S3-A",
-      "baseline_scope": "Advisory scalar tools and CPU policy libraries do not establish enforceable capabilities or general source parallelism.",
       "cases": [
         "security-performance"
       ],
-      "handoff": "ACCEPTANCE.md#r12"
+      "handoff": "ACCEPTANCE.md#r12",
+      "candidate_scope": "Advisory scalar tools and CPU policy libraries do not establish enforceable capabilities or general source parallelism."
     },
     {
       "id": "R13",
       "name": "Memory, correctness, resource acceptance",
       "release_gate": "open",
       "owner": "S1 evidence/owner runners \u2192 S4",
-      "baseline_scope": "Requires leak-enabled host, independent audit and real calibrated quiet-host benchmarks with provenance.",
       "cases": [
         "memory-audit-resource-gates"
       ],
-      "handoff": "ACCEPTANCE.md#r13"
+      "handoff": "ACCEPTANCE.md#r13",
+      "candidate_scope": "Requires leak-enabled host, independent audit and real calibrated quiet-host benchmarks with provenance."
     },
     {
       "id": "R14",
       "name": "Human/model value and grammar decision",
       "release_gate": "open",
       "owner": "S1 evidence/docs \u2192 S4",
-      "baseline_scope": "Requires genuine independently reviewed 60\u2013100 task holdout, two model families, paired runs and blinded human studies.",
       "cases": [
         "human-model-grammar-study"
       ],
-      "handoff": "ACCEPTANCE.md#r14"
+      "handoff": "ACCEPTANCE.md#r14",
+      "candidate_scope": "Requires genuine independently reviewed 60\u2013100 task holdout, two model families, paired runs and blinded human studies."
     },
     {
       "id": "R15",
       "name": "Packaging, support matrix and final review",
       "release_gate": "open",
       "owner": "All rows \u2192 S4",
-      "baseline_scope": "Detached smoke and documentation cover a preview; global release waits for every requirement and independent review.",
       "cases": [
         "release-install-review"
       ],
-      "handoff": "ACCEPTANCE.md#r15"
+      "handoff": "ACCEPTANCE.md#r15",
+      "candidate_scope": "Detached smoke and documentation cover a preview; global release waits for every requirement and independent review."
     }
   ],
   "commands": [
@@ -223,15 +246,18 @@
     {
       "id": "build",
       "contract": "cgx2 build PATH",
-      "route": "cgx2c build FILE.cg|--package ROOT --out OUTPUT",
-      "status": "companion",
+      "route": "cgx2 build FILE.cg|PACKAGE --out BINARY [--release] [--force] [--rustc PATH]",
+      "status": "implemented-preview",
       "cases": [
+        "unified-build",
+        "unified-package-build",
+        "build-missing-output",
+        "build-input-destination",
         "native-build",
         "native-package",
-        "unified-build-unsupported",
         "native-memory"
       ],
-      "limitation": "Unified command absent; scalar and bounded memory/native package target profiles differ."
+      "limitation": "Explicit --out required; scalar/package and bounded memory target profiles differ. Outputs protect inputs and require --force for replacement."
     },
     {
       "id": "run",
@@ -280,24 +306,31 @@
     {
       "id": "emit-rust",
       "contract": "cgx2 emit PATH --target rust",
-      "route": "cgx2c emit-rust FILE.cg|--package ROOT --out FILE.rs",
-      "status": "companion",
+      "route": "cgx2 emit FILE.cg|PACKAGE --target rust --out FILE.rs [--force]",
+      "status": "implemented-preview",
       "cases": [
-        "rust-emission",
-        "unified-emit-unsupported"
+        "unified-rust-emission",
+        "unified-package-rust-emission",
+        "emit-occupied-destination",
+        "emit-missing-output",
+        "emit-unknown-target",
+        "rust-emission"
       ],
-      "limitation": "Rust target has its own checked profile; memory emission requires embedded-runtime build/link support."
+      "limitation": "Generated scalar/package Rust is compiled and executed with pinned Rust; memory emission needs embedded runtime build/link support."
     },
     {
       "id": "emit-python",
       "contract": "cgx2 emit PATH --target python",
-      "route": "cgx2_emit_python::{emit_python,emit_package_python,write_package_python} Rust library APIs",
-      "status": "library-only",
+      "route": "cgx2 emit FILE.cg|PACKAGE --target python --out FILE.py|FILE.pyz [--force]",
+      "status": "implemented-preview",
       "cases": [
         "python-source-cli",
-        "unified-emit-unsupported"
+        "python-package-source-cli",
+        "python-package-extension",
+        "emit-missing-output",
+        "emit-unknown-target"
       ],
-      "limitation": "No installed emitter CLI; regions/no_gc/owned borrows/foreign effects explicitly unsupported."
+      "limitation": "Single files emit .py; checked packages require source zipapp .pyz. Execution requires caller-pinned Python; regions/no_gc/owned borrows/foreign effects remain outside the profile."
     },
     {
       "id": "fmt",
@@ -312,12 +345,13 @@
     {
       "id": "api",
       "contract": "cgx2 api --json PATH",
-      "route": "cgx2 api FILE.cg --json",
+      "route": "cgx2 api --json FILE.cg|PACKAGE (legacy api PATH --json also accepted)",
       "status": "implemented-preview",
       "cases": [
-        "public-api"
+        "public-api",
+        "package-public-api"
       ],
-      "limitation": "Argument order differs from design table; package public index is cgx2-package, not this single-file CLI."
+      "limitation": "Checked package index includes module/public import provenance; broader language types remain reserved."
     },
     {
       "id": "notebook-open",
@@ -384,5 +418,6 @@
       ],
       "limitation": "No installed general performance command or arbitrary source parallel/GPU implementation; no timing during busy host work."
     }
-  ]
+  ],
+  "candidate": "2b9855c48713794d4cf819bc391813c1260f287b"
 }
