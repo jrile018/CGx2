@@ -1,0 +1,380 @@
+   Compiling cgx2-runtime v0.1.0 (/home/john-riley/.codex/worktrees/c6cd/lang/crates/cgx2-runtime)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.08s
+     Running unittests src/lib.rs (target/release-memory/debug/deps/cgx2_memory_conformance-53d54c4c7c51609d)
+
+running 3 tests
+test tests::model_tracks_roots_collection_isolation_and_close ... ok
+test tests::v2_model_promotion_moves_owner_and_copy_leaves_managed_root ... ok
+test tests::fixed_seeds_cover_modes_and_open_closed_states ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/release-memory/debug/deps/cgx2_memory_conformance-fd28ecada648aeb0)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/automatic_collection_faults.rs (target/release-memory/debug/deps/automatic_collection_faults-6f0e9fbb458714ac)
+
+running 4 tests
+test failed_edge_growth_is_atomic_across_the_next_auto_collection ... ok
+test object_reserve_faults_precede_auto_safepoint_but_byte_fault_follows_it ... ok
+test nested_no_gc_defers_each_auto_region_without_collecting_manual_region ... ok
+test promotion_preserves_frozen_no_safepoint_contract_and_owned_value_on_failure ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/automatic_collection_model.rs (target/release-memory/debug/deps/automatic_collection_model-df50275c60f6b66a)
+
+running 1 test
+test automatic_collection_state_model_corpus ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+
+     Running tests/automatic_pressure_wave23.rs (target/release-memory/debug/deps/automatic_pressure_wave23-d774d83710d09552)
+
+running 6 tests
+test automatic_pressure::corrupted_oracle_is_rejected ... ok
+test automatic_pressure::non_safepoint_reserve_sites_preserve_graph_and_first_failure ... ok
+test automatic_pressure::reserve_failures_before_and_after_collection ... ok
+test automatic_pressure::rooted_region_limit_failure_can_follow_collection ... ok
+test automatic_pressure::both_nested_budget_orders_and_exit_retry ... ok
+test automatic_pressure::pressure_corpus ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/conditional_source.rs (target/release-memory/debug/deps/conditional_source-7b09813aaa2f7028)
+
+running 1 test
+test selected_paths_charge_cumulatively_across_regions_at_budget_boundary ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/conformance.rs (target/release-memory/debug/deps/conformance-86e16560260d38d5)
+
+running 4 tests
+test region_limit_is_dynamic_and_returns_no_success_report ... ok
+test nested_budget_failure_preserves_prior_allocation_without_collection ... ok
+test one_operation_mutations_are_rejected_with_exact_diagnostics ... ok
+test fixed_corpus_is_deterministic_bounded_and_matches_runtime ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/failure_regressions.rs (target/release-memory/debug/deps/failure_regressions-705f293448d48f99)
+
+running 2 tests
+test capacity_pressure_reclaims_below_trigger_and_failure_keeps_rooted_handle ... ok
+test preflight_failures_preserve_auto_state_until_a_valid_safepoint ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/fallible_lifetime_model.rs (target/release-memory/debug/deps/fallible_lifetime_model-fc0653d0ab2cbeb5)
+
+running 1 test
+test replay_entry_root_cleanup_and_exit_transitions ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/fault_injection.rs (target/release-memory/debug/deps/fault_injection-ee666c5632d5bff3)
+
+running 5 tests
+test auto_safepoint_before_failed_slot_reserve_is_reported ... ok
+test conversion_and_edge_reserves_retain_ownership_and_references ... ok
+test logical_manual_region_limit_precedes_injected_host_failure ... ok
+test every_managed_reserve_can_fail_without_committing_graph_state ... ok
+test region_table_failure_and_nested_no_gc_failure_preserve_counters ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/faulted_state_model.rs (target/release-memory/debug/deps/faulted_state_model-6f7b0773f0d31d72)
+
+running 4 tests
+test duplicate_roots_protect_cycle_until_final_release ... ok
+test owned_buffer_promotion_fault_preserves_value_and_model ... ok
+test replay_one_based_host_reserve_failures ... ok
+test bounded_root_graph_and_region_state_replay ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/graph.rs (target/release-memory/debug/deps/graph-50edf46c1837dda7)
+
+running 1 test
+test deterministic_graph_state_machine_matches_regions_and_reports ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/graph_failure_model.rs (target/release-memory/debug/deps/graph_failure_model-ef7c7d31966f3e53)
+
+running 1 test
+test seeded_failure_graph_model_preserves_reachability_and_reports ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/region_graph_wave22.rs (target/release-memory/debug/deps/region_graph_wave22-a526c673b41dab8c)
+
+running 4 tests
+test nested_guard_exhaustion_retry_and_failed_link_then_close ... ok
+test injected_oracle_mismatch_is_detected ... ok
+test reserve_failures_at_each_allocation_site_preserve_both_regions ... ok
+test deterministic_region_graph_replay ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/release_cleanup.rs (target/release-memory/debug/deps/release_cleanup-cc0866dbaec11355)
+
+running 1 test
+test unwind_and_returned_error_release_nested_guards_without_implicit_collection ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/release_faults.rs (target/release-memory/debug/deps/release_faults-16e1ac4a901c05ac)
+
+running 3 tests
+test object_slot_reservation_failure_rolls_back_and_releases_once ... ok
+test legacy_edge_reservation_is_atomic_and_known_manual_limit_precedes_fault ... ok
+test fixed_point_collection_needs_no_host_worklist_reservation ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/release_graph_audit.rs (target/release-memory/debug/deps/release_graph_audit-8325a0d6afdf469b)
+
+running 1 test
+test bounded_graph_release_corpus ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/root_census_cleanup.rs (target/release-memory/debug/deps/root_census_cleanup-ffb12bbdab9d7388)
+
+running 1 test
+test failed_nested_scope_and_source_like_cleanup_leave_no_registrations ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/transfer_assurance.rs (target/release-memory/debug/deps/transfer_assurance-d89bdbbd541ae120)
+
+running 1 test
+test checked_cross_region_reference_and_copy_survive_both_close_orders ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/v2.rs (target/release-memory/debug/deps/v2-9a74a70e766e61bb)
+
+running 5 tests
+test invalid_source_operations_have_exact_diagnostic_families_and_spans ... ok
+test v2_model_rejects_a_deliberately_mismatched_report ... ok
+test v2_generation_is_deterministic_and_bounded ... ok
+test failed_promotions_return_dynamic_errors_without_success_reports ... ok
+test both_fixed_corpora_replay_twice_with_identical_sources_and_counters ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests/v3.rs (target/release-memory/debug/deps/v3-02a12fdb9b003463)
+
+running 4 tests
+test auto_safepoint_and_region_isolation_follow_model ... ok
+test faulty_model_is_replayable_and_shrinks ... ok
+test deterministic_and_bounded ... ok
+test fixed_manifest_passes ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+
+     Running tests/v4.rs (target/release-memory/debug/deps/v4-91bba11f0701671d)
+
+running 4 tests
+test replay_and_shrink_keep_a_real_per_step_mismatch ... ok
+test named_adversarial_families_and_errors_are_observed ... ok
+test manifest_and_generator_are_exact_and_bounded ... ok
+test fixed_corpus_passes_twice_with_identical_summary ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.71s
+
+     Running tests/v5.rs (target/release-memory/debug/deps/v5-a2f45305e7efb3e3)
+
+running 5 tests
+test v5_trace_has_bounded_fixed_prefix_and_replayable_ops ... ok
+test unwinding_nested_guards_restores_collection_permission ... ok
+test independent_preflight_and_reclaim_transitions ... ok
+test reducer_replays_a_real_step_mismatch_in_a_fresh_session ... ok
+test deterministic_v5_corpus_checks_every_state ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running unittests src/lib.rs (target/release-memory/debug/deps/cgx2_runtime-ccf4fa121a8ff7f7)
+
+running 5 tests
+test report::tests::pause_histogram_bounds_and_saturating_units ... ok
+test root_census_tests::registration_sum_overflow_is_reported ... ok
+test scope::tests::cleanup_continues_after_corruption_and_preserves_primary_error ... ok
+test scope::tests::identifier_exhaustion_is_fallible_and_does_not_wrap ... ok
+test scope::tests::overflow_and_invalid_handles_leave_scope_empty ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/assurance.rs (target/release-memory/debug/deps/assurance-1a77282fde1e08d7)
+
+running 4 tests
+test failed_near_limit_promotion_is_atomic_and_other_region_stays_untouched ... ok
+test conversion_handles_obey_cross_region_edges_roots_and_close ... ok
+test zero_length_conversion_charges_metadata_and_stales_only_after_collection ... ok
+test failed_nested_promotion_and_copy_do_not_collect_or_consume_source ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/audit.rs (target/release-memory/debug/deps/audit-878bbb60659495ed)
+
+running 2 tests
+test closed_region_id_and_handles_remain_stale_after_new_region_is_created ... ok
+test unwinding_nested_guards_does_not_collect_or_leave_a_budget_active ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/automatic_pressure_wave23.rs (target/release-memory/debug/deps/automatic_pressure_wave23-89370fe0a7f777fd)
+
+running 6 tests
+test automatic_pressure::corrupted_oracle_is_rejected ... ok
+test automatic_pressure::non_safepoint_reserve_sites_preserve_graph_and_first_failure ... ok
+test automatic_pressure::reserve_failures_before_and_after_collection ... ok
+test automatic_pressure::rooted_region_limit_failure_can_follow_collection ... ok
+test automatic_pressure::both_nested_budget_orders_and_exit_retry ... ok
+test automatic_pressure::pressure_corpus ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/failure_paths.rs (target/release-memory/debug/deps/failure_paths-8092326a1a09b7d6)
+
+running 7 tests
+test auto_collection_cannot_make_rooted_capacity_available ... ok
+test auto_reclaims_on_capacity_pressure_below_trigger ... ok
+test manual_failure_waits_for_explicit_collection ... ok
+test host_capacity_overflow_fails_before_auto_collection ... ok
+test invalid_and_closed_regions_cannot_collect_or_change_other_regions ... ok
+test nested_guards_exhaust_budget_without_collecting_any_region ... ok
+test overflow_and_intrinsically_oversized_requests_fail_before_auto_collection ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/fallible_lifetimes.rs (target/release-memory/debug/deps/fallible_lifetimes-93a485a6e370ba58)
+
+running 6 tests
+test entry_and_root_reserve_faults_are_atomic_and_retryable ... ok
+test failed_guard_entry_preserves_outer_budget_and_collection_prohibition ... ok
+test root_bookkeeping_budget_failure_preserves_existing_roots ... ok
+test scoped_roots_own_duplicates_without_consuming_manual_registrations ... ok
+test nested_cleanup_on_early_return_and_unwind_is_region_local ... ok
+test root_bookkeeping_charges_each_guard_and_cleanup_does_not_refund ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/objects.rs (target/release-memory/debug/deps/objects-a157e8a8937dd600)
+
+running 5 tests
+test bad_updates_and_shape_failures_leave_graph_and_charge_unchanged ... ok
+test checked_slots_trace_shared_children_and_reclaim_cycles_after_clear ... ok
+test closing_one_region_does_not_touch_another_and_invalidates_handles ... ok
+test legacy_links_and_checked_slots_are_both_strong ... ok
+test nested_guard_fails_atomically_and_never_collects_any_region ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/owned.rs (target/release-memory/debug/deps/owned-2b488eef99476f2b)
+
+running 13 tests
+test copying_stale_handle_returns_invalid_handle ... ok
+test impossible_owned_allocation_fails_without_panicking ... ok
+test invalid_region_failure_returns_unchanged_owned_bytes ... ok
+test managed_copy_budget_failure_keeps_source_valid ... ok
+test nested_budget_failure_does_not_commit_promotion_or_collect ... ok
+test managed_copy_is_independent_and_preserves_source_handle ... ok
+test nested_guards_charge_owned_allocations_without_collection ... ok
+test owned_allocation_charges_active_guard_without_collecting ... ok
+test owned_allocation_is_zero_filled_and_can_be_mutated ... ok
+test promotion_moves_bytes_into_region_and_obeys_roots ... ok
+test region_limit_failure_returns_unchanged_owned_bytes ... ok
+test zero_length_managed_copy_has_empty_owned_payload ... ok
+test zero_length_owned_allocation_is_valid ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/region_graph_wave22.rs (target/release-memory/debug/deps/region_graph_wave22-84610a12df035af3)
+
+running 4 tests
+test region_graph_wave22::nested_guard_exhaustion_retry_and_failed_link_then_close ... ok
+test region_graph_wave22::injected_oracle_mismatch_is_detected ... ok
+test region_graph_wave22::reserve_failures_at_each_allocation_site_preserve_both_regions ... ok
+test region_graph_wave22::deterministic_region_graph_replay ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/regions.rs (target/release-memory/debug/deps/regions-4aec7236554ee247)
+
+running 20 tests
+test allocation_charges_payload_and_slot_metadata ... ok
+test auto_collects_at_next_allocation_safepoint_after_trigger ... ok
+test budget_failure_is_before_commit_and_preserves_existing_object ... ok
+test creating_region_inside_guard_charges_global_budget ... ok
+test cross_region_edges_are_rejected_without_mutation ... ok
+test default_region_uses_auto_limit_and_trigger ... ok
+test duplicate_link_needs_no_budget_or_region_headroom ... ok
+test explicit_collection_is_forbidden_in_guard_even_for_other_region ... ok
+test growing_edges_inside_guard_charges_full_new_buffer_allocation ... ok
+test guard_drop_after_error_restores_collection ... ok
+test impossible_allocation_counts_as_failure_without_collection ... ok
+test limit_failure_does_not_commit_or_damage_previous_allocation ... ok
+test manual_region_never_collects_during_allocation ... ok
+test named_regions_preserve_mode_and_limit ... ok
+test nested_budgets_charge_each_guard_and_first_exhausted_fails ... ok
+test one_guard_suppresses_two_auto_regions_until_their_next_safepoints ... ok
+test reclaimed_handle_cannot_alias_reused_slot ... ok
+test rooted_cycle_survives_and_unrooted_cycle_is_reclaimed ... ok
+test rooted_region_cannot_close_and_other_region_survives_close ... ok
+test deterministic_graph_operations_preserve_reachability_and_handle_validity ... ok
+
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/report.rs (target/release-memory/debug/deps/report-62ccab7be1dcc13a)
+
+running 5 tests
+test collection_pauses_record_only_completed_cycles ... ok
+test limit_failure_and_closed_region_leave_terminal_report_without_aliasing ... ok
+test nested_guards_keep_two_regions_and_pause_counts_stable_on_failure ... ok
+test report_has_stable_order_totals_and_terminal_rows ... ok
+test report_rendering_has_a_versioned_stable_schema ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/root_census.rs (target/release-memory/debug/deps/root_census-8eab0a08e85c5393)
+
+running 2 tests
+test duplicate_registrations_and_failed_unroot_preserve_counts ... ok
+test cycle_collection_close_and_stale_handles_follow_live_slots ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/transfer_replay.rs (target/release-memory/debug/deps/transfer_replay-4f01fbf723930f2a)
+
+running 2 tests
+test nested_no_gc_copy_failures_preserve_regions_guards_and_first_error ... ok
+test replay_copy_alias_edge_and_both_close_orders ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/unwind_replay.rs (target/release-memory/debug/deps/unwind_replay-65ff5f625d5a0619)
+
+running 1 test
+test fixed_host_unwind_corpus ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_memory_conformance
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_runtime
+
+running 1 test
+test crates/cgx2-runtime/src/owned.rs - owned::OwnedBytes (line 11) - compile fail ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s

@@ -2,6 +2,7 @@ use std::ops::{Deref, DerefMut};
 
 use crate::{AllocationError, Session};
 
+#[derive(Clone, Copy)]
 pub(crate) struct Budget {
     pub limit: usize,
     pub spent: usize,

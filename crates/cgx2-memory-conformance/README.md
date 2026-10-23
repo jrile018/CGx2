@@ -1,5 +1,15 @@
 # Deterministic memory corpus
 
+The S1-02 [fallible entry/lifetime report](release-memory.md) covers the additive
+Rust APIs, fixed transition replay, reserve audit and exact source/library boundary.
+`tests/fallible_lifetime_model.rs` replays `corpus/release-lifetimes.csv` across
+manual/auto modes and return/cancel/unwind exits. The external handoff is
+`python3 crates/cgx2-memory-conformance/scripts/accept_lifetimes_asan.py --output
+"$PWD/target/release-memory/asan-leaks"`; it defaults to `detect_leaks=1`, requires
+a leaking negative control, and writes commands, effective sanitizer options,
+source hashes, diagnostics and a passed/failed/blocked result. Use a private
+target on a capable host. `--detect-leaks 0` is a separate non-leak ASan result.
+
 Wave 15's real auto-threshold model, reserve-boundary tests and gate matrix are
 in [release-gate-wave15.md](release-gate-wave15.md).
 

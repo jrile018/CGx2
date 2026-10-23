@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "base_commit": "0f0b0b9c87d817f39830f3e2b311dbae2ae3e0f3",
+  "branch": "riley/release-memory",
+  "scope": "S1-02 additive runtime library only",
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "$PWD/target/release-memory",
+    "TMPDIR": "$PWD/target/tmp-memory",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "checks": [
+    {
+      "command": "cargo test -p cgx2-runtime -p cgx2-memory-conformance --all-features --offline",
+      "exit_code": 0,
+      "passed": 145,
+      "failed": 0,
+      "ignored": 0,
+      "log": "tests.log"
+    },
+    {
+      "command": "cargo test -p cgx2-runtime --no-default-features --offline",
+      "exit_code": 0,
+      "passed": 77,
+      "failed": 0,
+      "ignored": 0,
+      "log": "no-feature-tests.log"
+    },
+    {
+      "command": "cargo clippy -p cgx2-runtime -p cgx2-memory-conformance --all-targets --all-features --offline -- -D warnings",
+      "exit_code": 0,
+      "log": "clippy.log"
+    },
+    {
+      "command": "cargo fmt -p cgx2-runtime -p cgx2-memory-conformance --check",
+      "exit_code": 0
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 crates/cgx2-memory-conformance/scripts/accept_lifetimes_asan.py --output \"$PWD/target/release-memory/asan-leaks\"",
+      "exit_code": 2,
+      "status": "blocked",
+      "result": "asan-leaks/result.json"
+    },
+    {
+      "command": "python3 crates/cgx2-memory-conformance/scripts/accept_lifetimes_asan.py --output \"$PWD/target/release-memory/asan-no-leaks\" --detect-leaks 0",
+      "exit_code": 0,
+      "status": "passed",
+      "result": "asan-no-leaks/result.json"
+    }
+  ],
+  "remaining_gates": {
+    "leak_enabled_acceptance": "blocked: LeakSanitizer fatal ptrace restriction",
+    "source_lowering": "unrun: S2 owner; no source compiler edits",
+    "notebook_foreign_integration": "unrun: dependent S3 owners",
+    "release_performance_and_independent_audit": "unrun: external S4 acceptance"
+  }
+}

@@ -7,6 +7,7 @@ pub(crate) struct Object {
     pub edges: Vec<Handle>,
     pub references: Option<Vec<Option<Handle>>>,
     pub roots: usize,
+    pub scoped_roots: usize,
     pub charge: usize,
 }
 

@@ -1,0 +1,7 @@
+seed,mode,exit
+0x510201,manual,return
+0x510202,manual,cancel
+0x510203,manual,unwind
+0x510211,auto,return
+0x510212,auto,cancel
+0x510213,auto,unwind
