@@ -24,6 +24,7 @@ fn run() -> Result<String, String> {
     let mut file = None;
     let mut format = "text";
     let mut syntax_only = false;
+    let mut package = false;
     while let Some(arg) = args.next() {
         match arg.as_str() {
             "--format" => {
@@ -34,11 +35,25 @@ fn run() -> Result<String, String> {
                 format = if value == "json" { "json" } else { "text" };
             }
             "--syntax-only" => syntax_only = true,
+            "--package" => package = true,
             _ if arg.starts_with('-') || file.is_some() => return Err(usage()),
             _ => file = Some(arg),
         }
     }
     let file = file.ok_or_else(usage)?;
+    if package {
+        if syntax_only {
+            return Err("--package requires checked sources".into());
+        }
+        let index = cgx2_effect_index::package_v1::index_package(std::path::Path::new(&file))
+            .map_err(|errors| format!("{errors:?}"))?;
+        return if format == "json" {
+            index.to_json().map(|s| format!("{s}\n"))
+        } else {
+            index.to_text()
+        }
+        .map_err(|errors| format!("{errors:?}"));
+    }
     let mut input = Vec::new();
     File::open(&file)
         .map_err(|err| format!("CGI002 input {file}:0:0 [0..0): {err}"))?
@@ -67,7 +82,7 @@ fn run() -> Result<String, String> {
 }
 
 fn usage() -> String {
-    "usage: cgx2-effect-index FILE.cg [--format text|json] [--syntax-only]".into()
+    "usage: cgx2-effect-index FILE.cg [--format text|json] [--syntax-only], or --package ROOT [--format text|json]".into()
 }
 
 fn display_diagnostic(file: &str, source: &str, diagnostic: &Diagnostic) -> String {

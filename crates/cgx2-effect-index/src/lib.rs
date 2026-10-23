@@ -1,4 +1,5 @@
 //! Advisory, source-located call and effect summaries for one CGx2 module.
+pub mod package_v1;
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 use std::fmt::Write;
 

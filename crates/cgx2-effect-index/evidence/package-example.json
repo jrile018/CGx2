@@ -1,0 +1,198 @@
+{
+  "advisory": true,
+  "analysis": "checked_package_effects_v1",
+  "entries": [
+    {
+      "calls": [],
+      "capabilities": [],
+      "declaration": {
+        "source": "src/foreign.cg",
+        "span": {
+          "end": 0,
+          "start": 0
+        }
+      },
+      "effects": [],
+      "identity": {
+        "name": "<top-level>",
+        "source": "src/foreign.cg"
+      },
+      "public": false
+    },
+    {
+      "calls": [],
+      "capabilities": [
+        "ForeignCall"
+      ],
+      "declaration": {
+        "source": "src/foreign.cg",
+        "span": {
+          "end": 252,
+          "start": 108
+        }
+      },
+      "effects": [
+        "Foreign"
+      ],
+      "identity": {
+        "name": "stringify",
+        "source": "src/foreign.cg"
+      },
+      "public": true
+    },
+    {
+      "calls": [],
+      "capabilities": [],
+      "declaration": {
+        "source": "src/forward.cg",
+        "span": {
+          "end": 0,
+          "start": 0
+        }
+      },
+      "effects": [],
+      "identity": {
+        "name": "<top-level>",
+        "source": "src/forward.cg"
+      },
+      "public": false
+    },
+    {
+      "calls": [
+        {
+          "declaration": {
+            "source": "src/foreign.cg",
+            "span": {
+              "end": 252,
+              "start": 108
+            }
+          },
+          "identity": {
+            "name": "stringify",
+            "source": "src/foreign.cg"
+          },
+          "location": {
+            "source": "src/forward.cg",
+            "span": {
+              "end": 144,
+              "start": 118
+            }
+          },
+          "resolution": "function",
+          "target": "audit.foreign.stringify"
+        }
+      ],
+      "capabilities": [
+        "ForeignCall"
+      ],
+      "declaration": {
+        "source": "src/forward.cg",
+        "span": {
+          "end": 145,
+          "start": 42
+        }
+      },
+      "effects": [
+        "Foreign"
+      ],
+      "identity": {
+        "name": "forward",
+        "source": "src/forward.cg"
+      },
+      "public": true
+    },
+    {
+      "calls": [],
+      "capabilities": [],
+      "declaration": {
+        "source": "src/main.cg",
+        "span": {
+          "end": 0,
+          "start": 0
+        }
+      },
+      "effects": [],
+      "identity": {
+        "name": "<top-level>",
+        "source": "src/main.cg"
+      },
+      "public": false
+    },
+    {
+      "calls": [
+        {
+          "declaration": {
+            "source": "src/forward.cg",
+            "span": {
+              "end": 145,
+              "start": 42
+            }
+          },
+          "identity": {
+            "name": "forward",
+            "source": "src/forward.cg"
+          },
+          "location": {
+            "source": "src/main.cg",
+            "span": {
+              "end": 152,
+              "start": 123
+            }
+          },
+          "resolution": "function",
+          "target": "audit.forward.forward"
+        },
+        {
+          "declaration": null,
+          "identity": null,
+          "location": {
+            "source": "src/main.cg",
+            "span": {
+              "end": 151,
+              "start": 145
+            }
+          },
+          "resolution": "builtin",
+          "target": "arg"
+        }
+      ],
+      "capabilities": [
+        "ArgsRead",
+        "ForeignCall"
+      ],
+      "declaration": {
+        "source": "src/main.cg",
+        "span": {
+          "end": 153,
+          "start": 39
+        }
+      },
+      "effects": [
+        "Foreign",
+        "ReadArgs"
+      ],
+      "identity": {
+        "name": "main",
+        "source": "src/main.cg"
+      },
+      "public": true
+    }
+  ],
+  "manifest_sha256": "1bf0a533fdd87022f8c620fc6939dab744e1bdf8f8094dd3d8925886d803233a",
+  "provenance": [
+    {
+      "sha256": "82d8b037f95815ad423c5a396e35cd51e4226eb88c5177b14317646d39bf9a8d",
+      "source": "src/main.cg"
+    },
+    {
+      "sha256": "52b3af2528742abc44924244d30d6d4c7653431a8fa7b3407243a3ad01bb483f",
+      "source": "src/forward.cg"
+    },
+    {
+      "sha256": "4287a72e242dbbfd8acaaea68da4497c158ded1454dcdb99e6afb1913a6a73a7",
+      "source": "src/foreign.cg"
+    }
+  ],
+  "schema_version": 1,
+  "span_unit": "utf8_byte_offset"
+}

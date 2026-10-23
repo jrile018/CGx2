@@ -1,4 +1,5 @@
 //! Bounded, syntax-level security policy preview for one CGx2 source file.
+pub mod package_v1;
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt::Write;
 

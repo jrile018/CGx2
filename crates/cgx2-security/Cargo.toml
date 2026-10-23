@@ -6,4 +6,5 @@ edition = "2021"
 [dependencies]
 cgx2-effect-index = { path = "../cgx2-effect-index" }
 cgx2-syntax = { path = "../cgx2-syntax" }
+cgx2-package = { path = "../cgx2-package" }
 serde_json = "1"
