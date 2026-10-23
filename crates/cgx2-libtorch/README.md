@@ -1,5 +1,17 @@
 # cgx2-libtorch
 
+## Additive CPU float32 matrix API v3
+
+`tensor-f32-cpu-matrix-v3` extends the pinned schema-2 lock with five float32
+symbols while keeping the v1/v2 exports and facade ABI version 1. The v3 API
+version returns 3. `Torch::from_f32_matrix(rows, cols, values)` copies finite
+row-major values and returns `MatrixF32`, which cannot be mixed with the v2
+float64 `Matrix` type. `MatrixF32::info` reports facade shape and dtype code
+independently of the requested shape; math and copies then validate both.
+The existing 1,048,576-element bound, exact copy capacity, and owned handle
+release rules apply. See [PREPARE.md](PREPARE.md) and
+[REAL-F32-CPU-EVIDENCE.md](REAL-F32-CPU-EVIDENCE.md) for the real CPU run.
+
 ## Additive CPU matrix API v2
 
 `Torch::open_pinned` accepts a schema-2 binding with layout

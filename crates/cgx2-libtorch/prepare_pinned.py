@@ -142,7 +142,7 @@ def symbol(name, parameters, result, ownership="none", release=None, error="none
     }
 
 
-def facade_symbols(matrix=False):
+def facade_symbols(matrix=False, matrix_f32=False):
     symbols = [
         symbol("cgx2_library_identity", [], "cstr_ptr"),
         symbol("cgx2_library_version", [], "cstr_ptr"),
@@ -173,6 +173,22 @@ def facade_symbols(matrix=False):
                    "i32", error="status"),
             symbol("cgx2_torch_matrix_copy_f64",
                    ["handle_const_ptr", "f64_mut_ptr", "u64"],
+                   "i32", error="status"),
+        ])
+    if matrix_f32:
+        symbols.extend([
+            symbol("cgx2_torch_matrix_f32_api_version", [], "u32"),
+            symbol("cgx2_torch_matrix_f32_cpu",
+                   ["f32_const_ptr", "u64", "u64", "handle_out_ptr"],
+                   "i32", "owned", "cgx2_torch_release", "status"),
+            symbol("cgx2_torch_matmul_f32",
+                   ["handle_const_ptr", "handle_const_ptr", "handle_out_ptr"],
+                   "i32", "owned", "cgx2_torch_release", "status"),
+            symbol("cgx2_torch_matrix_f32_info",
+                   ["handle_const_ptr", "u64_out_ptr", "u64_out_ptr", "u32_out_ptr"],
+                   "i32", error="status"),
+            symbol("cgx2_torch_matrix_copy_f32",
+                   ["handle_const_ptr", "f32_mut_ptr", "u64"],
                    "i32", error="status"),
         ])
     return sorted(symbols, key=lambda item: item["name"])
@@ -329,8 +345,9 @@ def prepare(args):
         "version": args.version, "artifact": facade.name,
         "sha256": facade_entry["sha256"], "os": "linux",
         "arch": platform.machine(), "abi": ABI, "calling_convention": "c",
-        "layout": "tensor-f64-cpu-matrix-v2" if args.matrix else "tensor-f64-cpu-v1",
-        "symbols": facade_symbols(args.matrix),
+        "layout": "tensor-f32-cpu-matrix-v3" if args.matrix_f32 else
+                  "tensor-f64-cpu-matrix-v2" if args.matrix else "tensor-f64-cpu-v1",
+        "symbols": facade_symbols(args.matrix or args.matrix_f32, args.matrix_f32),
     }
     (package / "src").mkdir(exist_ok=True)
     canonical_dir(package / "src")
@@ -377,6 +394,8 @@ def main():
                         help="resolve a duplicate as NAME=/canonical/path/to/ELF")
     parser.add_argument("--matrix", action="store_true",
                         help="pin additive two-dimensional float64 matrix API v2 exports")
+    parser.add_argument("--matrix-f32", action="store_true",
+                        help="pin additive CPU float32 matrix API v3 plus v1/v2 exports")
     args = parser.parse_args()
     try:
         prepare(args)

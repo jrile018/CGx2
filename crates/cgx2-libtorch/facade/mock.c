@@ -2,10 +2,12 @@
 #include "facade.h"
 #include <stddef.h>
 #include <string.h>
+#include <math.h>
 
 #ifndef MOCK_VERSION
 #define MOCK_VERSION "2.6.0"
 #endif
+
 #ifndef MOCK_ABI
 #define MOCK_ABI 1
 #endif
@@ -15,6 +17,9 @@
 #ifndef MOCK_MATRIX_API_VERSION
 #define MOCK_MATRIX_API_VERSION 2
 #endif
+#ifndef MOCK_F32_API_VERSION
+#define MOCK_F32_API_VERSION 3
+#endif
 
 typedef struct {
     int alive;
@@ -23,6 +28,8 @@ typedef struct {
     uint64_t rows;
     uint64_t cols;
     double values[8];
+    float values_f32[8];
+    uint32_t dtype;
 } MockTensor;
 static MockTensor slots[64];
 static uint64_t next_slot;
@@ -226,6 +233,93 @@ int32_t cgx2_torch_matrix_copy_f64(const void *raw, double *output, uint64_t cap
         return 5;
     }
     memcpy(output, matrix->values, (size_t)capacity * sizeof(double));
+    return 0;
+}
+#endif
+
+uint32_t cgx2_torch_matrix_f32_api_version(void) { return MOCK_F32_API_VERSION; }
+
+int32_t cgx2_torch_matrix_f32_cpu(const float *values, uint64_t rows, uint64_t cols, void **output) {
+    if (output) *output = NULL;
+    if (!output || !values || !rows || !cols || rows > 8 / cols) {
+        error_message = "invalid float32 matrix input";
+        return 1;
+    }
+    for (uint64_t i = 0; i < rows * cols; ++i) {
+        if (!isfinite(values[i])) {
+            error_message = "nonfinite float32 matrix input";
+            return 1;
+        }
+    }
+    MockTensor *matrix = allocate();
+    if (!matrix) return 1;
+    matrix->rows = rows;
+    matrix->cols = cols;
+    matrix->length = rows * cols;
+    matrix->dtype = CGX2_TORCH_DTYPE_F32;
+    matrix->profile = values[0] <= -301 && values[0] >= -305 ? (int)-values[0] : 0;
+    memcpy(matrix->values_f32, values, (size_t)matrix->length * sizeof(float));
+    *output = matrix;
+    if (matrix->profile == 304) {
+        error_message = "injected float32 create failure with handle";
+        return 7;
+    }
+    return 0;
+}
+
+int32_t cgx2_torch_matmul_f32(const void *left, const void *right, void **output) {
+    if (output) *output = NULL;
+    MockTensor *a = checked(left);
+    MockTensor *b = checked(right);
+    if (!output || !a || !b || a->dtype != CGX2_TORCH_DTYPE_F32 ||
+        b->dtype != CGX2_TORCH_DTYPE_F32 || !a->rows || !b->rows ||
+        a->cols != b->rows || a->rows > 8 / b->cols) {
+        error_message = "float32 matrix shape or dtype mismatch";
+        return 2;
+    }
+    if (a->profile == 305) {
+        *output = a;
+        return 0;
+    }
+    MockTensor *product = allocate();
+    if (!product) return 2;
+    product->rows = a->rows;
+    product->cols = b->cols;
+    product->length = a->rows * b->cols;
+    product->dtype = CGX2_TORCH_DTYPE_F32;
+    for (uint64_t row = 0; row < a->rows; ++row) {
+        for (uint64_t col = 0; col < b->cols; ++col) {
+            float sum = 0;
+            for (uint64_t k = 0; k < a->cols; ++k)
+                sum += a->values_f32[row * a->cols + k] * b->values_f32[k * b->cols + col];
+            product->values_f32[row * b->cols + col] = sum;
+        }
+    }
+    *output = product;
+    return 0;
+}
+
+int32_t cgx2_torch_matrix_f32_info(const void *raw, uint64_t *rows, uint64_t *cols, uint32_t *dtype) {
+    MockTensor *matrix = checked(raw);
+    if (!matrix || !rows || !cols || !dtype || !matrix->rows) {
+        error_message = "invalid float32 matrix info";
+        return 3;
+    }
+    *rows = matrix->profile == 302 ? matrix->rows + 1 : matrix->rows;
+    *cols = matrix->cols;
+    *dtype = matrix->profile == 301 ? 2 : matrix->dtype;
+    return 0;
+}
+
+#ifndef MOCK_MISSING_F32_COPY
+int32_t cgx2_torch_matrix_copy_f32(const void *raw, float *output, uint64_t capacity) {
+    MockTensor *matrix = checked(raw);
+    if (!matrix || matrix->dtype != CGX2_TORCH_DTYPE_F32 || !output || capacity != matrix->length) {
+        error_message = "float32 matrix capacity or dtype mismatch";
+        return 4;
+    }
+    memcpy(output, matrix->values_f32, (size_t)capacity * sizeof(float));
+    if (matrix->profile == 303) output[0] = NAN;
     return 0;
 }
 #endif

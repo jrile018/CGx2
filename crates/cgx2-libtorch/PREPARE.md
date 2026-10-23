@@ -1,4 +1,21 @@
 # Reproducible local LibTorch package
+For the float32 rank-2 route, append `--matrix-f32` to the preparation command
+below instead of `--matrix`. This selects layout `tensor-f32-cpu-matrix-v3`
+with all v1/v2 exports and the five new v3 exports. The v3 matrix API version
+is 3; the original facade ABI remains 1. After preparation, run the bind
+preflight command below, then run:
+
+```sh
+LD_LIBRARY_PATH="$PACKAGE${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" \
+  CGX2_LIBTORCH_REAL_PACKAGE="$PACKAGE" RUSTUP_TOOLCHAIN=1.98.1 \
+  cargo test -p cgx2-libtorch --offline --test matrix_f32 \
+  real_pinned_float32_reference_and_cycles -- --ignored --nocapture
+```
+
+The test computes its own float32 reference with absolute tolerance `1e-5`,
+checks shape and dtype, and runs two create/multiply/copy/release cycles.
+Pinned closure verification checks mapped dependencies and rejects `libpython`.
+
 For the additive matrix route, compile the current facade and append
 `--matrix` to `prepare_pinned.py`. This pins layout
 `tensor-f64-cpu-matrix-v2`, its five additional exports, and all v1 exports.
