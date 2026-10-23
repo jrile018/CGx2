@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-23",
+  "base": "e3a01dffee423ab93d9cc8cd6d69c0f910c667f4",
+  "integrated_head": "9dfa4adcd4a3e5362d8ac75b0a8b6fece71d6006",
+  "worker_commits": {
+    "notebook": "d071062",
+    "memory": "0c1af17"
+  },
+  "integration_commits": {
+    "notebook": "6c9d0db",
+    "memory": "af9a0a1",
+    "compatibility_repair": "9dfa4ad"
+  },
+  "cargo_target_dir": "/home/john-riley/projects/lang/target/wave28-review",
+  "rust_passed": 840,
+  "rust_ignored": 5,
+  "http_passed": 22,
+  "benchmark_passed": 122,
+  "asan_binary_cases_passed": 24,
+  "asan_detect_leaks": false,
+  "logs": {
+    "workspace-test.log": {
+      "path": "/home/john-riley/projects/lang/target/wave27-workspace-test.log",
+      "sha256": "2343fe08881b2d5bf757f3219915dd5c5ef7bbfa57c55f552f3b2dcaa1da57e5"
+    },
+    "benchmark-test.log": {
+      "path": "/home/john-riley/projects/lang/target/wave27-benchmark-test.log",
+      "sha256": "25e4471a2db9f673ec9df9088bed3d80abf0e3a74909a36cdd032888fac4e5f9"
+    },
+    "clippy.log": {
+      "path": "/home/john-riley/projects/lang/target/wave27-clippy.log",
+      "sha256": "f23081607424a9813e5c23dced1049c035277a3ad8990b9e99310866bd4e6bbc"
+    },
+    "readiness.json": {
+      "path": "/home/john-riley/projects/lang/target/wave27-readiness.json",
+      "sha256": "914f7f5de67d1d82324e0c9553f0e0d33811c883d741bcad57cb0c4b70635e5d"
+    },
+    "debug-build.log": {
+      "path": "/home/john-riley/projects/lang/target/wave27-debug-build.log",
+      "sha256": "ee1d3fffa2022e962e63e0dbe4d35c9c198450a20c29fc09030f635dbb38bfcd"
+    },
+    "release-build.log": {
+      "path": "/home/john-riley/projects/lang/target/wave27-release-build.log",
+      "sha256": "cc2c50870bd185ae4ce74447559881f2f7b5802438575b3ff9ae1a2d3bd98e72"
+    },
+    "consumers.log": {
+      "path": "/home/john-riley/projects/lang/target/wave27-consumers.log",
+      "sha256": "b2e5cb4db80a2a27f52421fb078c96bf817b4f6fc85a678ce103ac738c5a5828"
+    },
+    "asan.log": {
+      "path": "/home/john-riley/projects/lang/target/wave27-asan.log",
+      "sha256": "64040c12554d80b1027afbe9ef833b95f9070804c45b3badd2a647d7b0f3c8c0"
+    },
+    "unnamed-regression.log": {
+      "path": "/home/john-riley/projects/lang/target/wave27-unnamed-regression.log",
+      "sha256": "7bf2fb80770234f7f367df8a5b4bf12a85a4503e75ac9d9f344e69d8b1b9ddc9"
+    },
+    "unnamed-fixed.log": {
+      "path": "/home/john-riley/projects/lang/target/wave27-unnamed-fixed.log",
+      "sha256": "eb43afceb5ab7ef63f50f58f1e5221a6d27f36f54bcbf472dadcd21f6890114c"
+    }
+  }
+}
