@@ -329,13 +329,208 @@ fn live_solver_boolean_crosscheck_when_configured() {
 }
 
 #[test]
-fn conditional_contract_body_is_explicitly_unsupported() {
+fn conditional_contract_reports_a_replayable_false_branch() {
     let source = Source::new("pub fn choose(flag: Bool) -> i64 effects() caps():\n    requires true\n    ensures result == 1\n    if flag:\n        return 1\n    else:\n        return 2\n");
     let result = source.run(&["--function", "choose"]);
-    assert!(
-        result
-            .to_string()
-            .contains("conditional contract bodies are unsupported"),
+    assert_eq!(result["verdict"]["kind"], "disproved");
+    assert_eq!(result["verdict"]["counterexample"]["flag"], false);
+    assert_eq!(result["verdict"]["failure"], "EnsuresFalse");
+    assert_eq!(result["bounded_solver_result"]["source_parity"], true);
+    assert_eq!(
+        result["bounded_solver_result"]["obligations"]["ensures_false"],
+        1
+    );
+}
+
+#[test]
+fn nested_trees_and_both_result_sorts_have_independent_encoding_parity() {
+    for text in [
+        include_str!("../examples/conditional.cg"),
+        include_str!("../examples/conditional-bool.cg"),
+    ] {
+        let result = Source::new(text).run(&["--domain", "x:-1:1"]);
+        assert_eq!(result["verdict"]["kind"], "proved", "{result}");
+        assert_eq!(result["verdict"]["checked_cases"], 6);
+        assert_eq!(result["bounded_solver_result"]["source_parity"], true);
+        assert_eq!(result["proof"]["kind"], "unknown");
+        assert!(result["smtlib"].as_str().unwrap().contains("(ite "));
+    }
+}
+
+#[test]
+fn only_selected_branch_and_guard_overflow_are_violations() {
+    for text in [
+        include_str!("../examples/conditional-overflow.cg"),
+        include_str!("../examples/conditional-guard-overflow.cg"),
+    ] {
+        let result =
+            Source::new(text).run(&["--domain", "x:9223372036854775807:9223372036854775807"]);
+        assert_eq!(result["verdict"]["failure"], "Overflow", "{result}");
+        assert_eq!(result["bounded_solver_result"]["source_parity"], true);
+    }
+    let text = include_str!("../examples/conditional-overflow.cg").replace("if flag:", "if true:");
+    let result = Source::new(&text).run(&["--domain", "x:9223372036854775807:9223372036854775807"]);
+    assert_eq!(result["verdict"]["kind"], "proved", "{result}");
+    assert_eq!(
+        result["bounded_solver_result"]["obligations"]["ensures_overflow"],
+        0
+    );
+    assert_eq!(result["proof"]["kind"], "unknown");
+    let result =
+        Source::new(&text.replace("requires true", "requires false")).run(&["--domain", "x:0:0"]);
+    assert_eq!(result["verdict"]["kind"], "unknown");
+    assert_eq!(result["proof"]["kind"], "unknown");
+}
+
+fn conditional_source(body: &str) -> String {
+    format!("# λ Unicode prefix\npub fn f(flag: Bool, x: i64) -> i64 effects() caps():\n    requires true\n    ensures true\n{body}")
+}
+
+fn reject_conditional(text: &str) -> Value {
+    let result = Source::new(text).run(&["--domain", "x:0:1"]);
+    assert_eq!(result["verdict"]["kind"], "unknown", "{result}");
+    assert_eq!(
+        result["verdict"]["diagnostic"]["code"], "CGV001",
         "{result}"
     );
+    assert_eq!(result["bounded_solver_result"]["kind"], "unrun");
+    let span = &result["verdict"]["diagnostic"]["span"];
+    let start = span["start"].as_u64().unwrap() as usize;
+    let end = span["end"].as_u64().unwrap() as usize;
+    assert!(start > "# λ Unicode prefix\n".len());
+    assert!(text.is_char_boundary(start) && text.is_char_boundary(end));
+    assert!(start < end && end <= text.len());
+    result
+}
+
+#[test]
+fn out_of_profile_branches_reject_before_solver_even_when_inactive() {
+    for rejected in [
+        "        true\n",
+        "        return\n",
+        "        return true\n",
+        "        let y = 1\n        return y\n",
+        "        let mut y = 1\n        y = 2\n        return y\n",
+        "        return x * 2\n",
+        "        return x / 2\n",
+        "        return f(flag, x)\n",
+        "        return python.abs(x)\n",
+        "        return R(value: x)\n",
+        "        return memory.owned_bytes(x)\n",
+        "        for y in range(0, 2):\n            x\n",
+        "        return 1\n        return 2\n",
+    ] {
+        reject_conditional(&conditional_source(&format!(
+            "    if true:\n        return 1\n    else:\n{rejected}"
+        )));
+    }
+    reject_conditional(&conditional_source(
+        "    if x:\n        return 1\n    else:\n        return 2\n",
+    ));
+}
+
+#[test]
+fn incomplete_paths_and_source_logical_syntax_remain_parser_rejections() {
+    for body in [
+        "    if flag:\n        return 1\n",
+        "    if flag:\n        return 1\n    else:\n",
+        "    if flag and true:\n        return 1\n    else:\n        return 2\n",
+    ] {
+        let result = Source::new(&conditional_source(body)).run(&["--domain", "x:0:1"]);
+        assert_eq!(result["verdict"]["kind"], "unknown");
+        assert_eq!(result["bounded_solver_result"]["kind"], "unrun");
+        assert!(result["verdict"]["diagnostic"]["code"]
+            .as_str()
+            .unwrap()
+            .starts_with("CGS"));
+    }
+}
+
+#[cfg(unix)]
+#[test]
+fn conditional_sat_transport_replays_selected_overflow_against_source() {
+    use std::os::unix::fs::PermissionsExt;
+    let directory = std::env::temp_dir().join(format!(
+        "cgx2-conditional-solver-{}-{}",
+        std::process::id(),
+        NEXT.fetch_add(1, Ordering::Relaxed)
+    ));
+    fs::create_dir_all(&directory).unwrap();
+    let solver = directory.join("z3");
+    for (flag, expected) in [
+        ("true", "sat_candidate_unvalidated"),
+        ("false", "validated_counterexample"),
+    ] {
+        // This fixture emulator tests SAT transport/replay only.
+        // It has no trusted digest and must never supply proof.
+        fs::write(&solver, format!("#!/bin/sh\nif [ \"$1\" = \"--version\" ]; then echo 'Z3 version 4.12.2'; exit 0; fi\ninput=$(cat)\ncase \"$input\" in\n  *get-value*) printf 'sat\\n((v_666c6167 {flag}) (v_78 9223372036854775807))\\n' ;;\n  *v_666c6167*) printf 'unsat\\nsat\\nunsat\\nsat\\n' ;;\n  *'(not false)'*) printf 'unsat\\nsat\\nsat\\nunsat\\n' ;;\n  *'(+ v_78 1)'*) printf 'unsat\\nsat\\nunsat\\nsat\\n' ;;\n  *) printf 'unsat\\nsat\\nunsat\\nunsat\\n' ;;\nesac\n")).unwrap();
+        fs::set_permissions(&solver, fs::Permissions::from_mode(0o700)).unwrap();
+        let text = include_str!("../examples/conditional-overflow.cg")
+            .replace("ensures result == x", "ensures true");
+        let result =
+            Source::new(&text).run(&["--domain", "x:0:0", "--solver", solver.to_str().unwrap()]);
+        assert_eq!(result["solver"]["response"], expected, "{result}");
+        assert_ne!(result["proof"]["kind"], "proved");
+        if flag == "false" {
+            assert_eq!(result["proof"]["kind"], "disproved");
+            assert_eq!(
+                result["proof"]["meaning"],
+                "solver_witness_validated_against_source"
+            );
+            assert_eq!(result["proof"]["counterexample"]["flag"], false);
+            assert_eq!(result["proof"]["counterexample"]["x"], i64::MAX);
+        }
+    }
+    fs::remove_dir_all(directory).unwrap();
+}
+
+fn chain(depth: usize) -> String {
+    let mut text = String::new();
+    for level in 0..depth {
+        text.push_str(&format!("{}if flag:\n", "    ".repeat(level + 1)));
+    }
+    text.push_str(&format!("{}return 1\n", "    ".repeat(depth + 1)));
+    for level in (0..depth).rev() {
+        text.push_str(&format!(
+            "{}else:\n{}return 2\n",
+            "    ".repeat(level + 1),
+            "    ".repeat(level + 2)
+        ));
+    }
+    text
+}
+
+#[test]
+fn conditional_depth_and_node_caps_cover_inactive_subtrees() {
+    let accepted = Source::new(&conditional_source(&chain(32))).run(&["--domain", "x:0:0"]);
+    assert_eq!(accepted["verdict"]["kind"], "proved", "{accepted}");
+    assert_eq!(accepted["bounded_solver_result"]["source_parity"], true);
+    let rejected = reject_conditional(&conditional_source(&chain(33)));
+    assert!(rejected["verdict"]["diagnostic"]["message"]
+        .as_str()
+        .unwrap()
+        .contains("depth limit"));
+    fn tree(depth: usize, indent: usize) -> String {
+        let pad = "    ".repeat(indent);
+        if depth == 0 {
+            return format!("{pad}return 1\n");
+        }
+        format!(
+            "{pad}if true:\n{}{pad}else:\n{}",
+            tree(depth - 1, indent + 1),
+            tree(depth - 1, indent + 1)
+        )
+    }
+    let accepted = Source::new(&conditional_source(&tree(8, 1))).run(&["--domain", "x:0:0"]);
+    assert_eq!(accepted["verdict"]["kind"], "proved");
+    assert_eq!(accepted["bounded_solver_result"]["source_parity"], true);
+    let rejected = reject_conditional(&conditional_source(&tree(8, 1).replacen(
+        "return 1",
+        "return 1 + 0",
+        1,
+    )));
+    assert!(rejected["verdict"]["diagnostic"]["message"]
+        .as_str()
+        .unwrap()
+        .contains("node limit"));
 }

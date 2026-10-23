@@ -6,6 +6,7 @@ use serde_json::{json, Value as Json};
 use std::collections::BTreeMap;
 
 const SOURCE_NODE_LIMIT: usize = 1024;
+const SOURCE_CONDITIONAL_DEPTH_LIMIT: usize = 32;
 
 #[derive(Debug)]
 pub struct Diagnostic {
@@ -99,6 +100,31 @@ fn eval_source(
     }
 }
 
+// This oracle executes the original statements, independently of lowering and core evaluation.
+fn eval_source_body(
+    body: &[cgx2_syntax::Stmt],
+    values: &BTreeMap<String, Value>,
+) -> Result<Value, EvalError> {
+    let [statement] = body else {
+        return Err(EvalError::Unsupported("source body".into()));
+    };
+    match &statement.kind {
+        StmtKind::Expr(expression) | StmtKind::Return(Some(expression)) => {
+            eval_source(expression, values)
+        }
+        StmtKind::If {
+            condition,
+            then_body,
+            else_body,
+        } => match eval_source(condition, values)? {
+            Value::Bool(true) => eval_source_body(then_body, values),
+            Value::Bool(false) => eval_source_body(else_body, values),
+            _ => Err(EvalError::SortMismatch),
+        },
+        _ => Err(EvalError::Unsupported("source body".into())),
+    }
+}
+
 impl Selected {
     pub fn source_obligations(
         &self,
@@ -117,12 +143,7 @@ impl Selected {
         let mut false_post = false;
         let mut overflow = false;
         if admitted {
-            let body = match &self.source_function.body[0].kind {
-                StmtKind::Expr(expression) | StmtKind::Return(Some(expression)) => {
-                    eval_source(expression, values)
-                }
-                _ => return Err(AuditError::Unsupported("source body".into())),
-            };
+            let body = eval_source_body(&self.source_function.body, values);
             match body {
                 Ok(result) => {
                     let mut post_values = values.clone();
@@ -242,6 +263,55 @@ fn lower(
     }
 }
 
+fn lower_body(
+    body: &[cgx2_syntax::Stmt],
+    depth: usize,
+    nodes: &mut usize,
+    span: Span,
+) -> Result<Expr, Diagnostic> {
+    let [statement] = body else {
+        return Err(Diagnostic::unsupported(
+            "body must contain exactly one return or conditional",
+            span,
+        ));
+    };
+    // Keep the legacy single-expression/return node accounting unchanged.
+    if depth != 0 || matches!(statement.kind, StmtKind::If { .. }) {
+        *nodes += 1;
+    }
+    if *nodes > SOURCE_NODE_LIMIT {
+        return Err(Diagnostic::unsupported(
+            "source body exceeds verification node limit",
+            statement.span,
+        ));
+    }
+    match &statement.kind {
+        StmtKind::Expr(expression) if depth == 0 => lower(expression, None, nodes),
+        StmtKind::Return(Some(expression)) => lower(expression, None, nodes),
+        StmtKind::If {
+            condition,
+            then_body,
+            else_body,
+        } => {
+            if depth >= SOURCE_CONDITIONAL_DEPTH_LIMIT {
+                return Err(Diagnostic::unsupported(
+                    "conditional nesting exceeds verification depth limit (32)",
+                    statement.span,
+                ));
+            }
+            Ok(Expr::If(
+                Box::new(lower(condition, None, nodes)?),
+                Box::new(lower_body(then_body, depth + 1, nodes, statement.span)?),
+                Box::new(lower_body(else_body, depth + 1, nodes, statement.span)?),
+            ))
+        }
+        _ => Err(Diagnostic::unsupported(
+            "only explicit scalar returns or complete conditional trees are supported",
+            statement.span,
+        )),
+    }
+}
+
 fn select<'a>(
     functions: &'a [Function],
     requested: Option<&str>,
@@ -313,31 +383,29 @@ pub fn parse(
             statement.span,
         ));
     }
-    fn conditional(body: &[cgx2_syntax::Stmt]) -> Option<Span> {
-        body.iter().find_map(|stmt| match &stmt.kind {
-            StmtKind::If { .. } => Some(stmt.span),
-            StmtKind::For { body, .. } | StmtKind::NoGc { body, .. } => conditional(body),
-            _ => None,
+    let mut nodes = 0;
+    let body = lower_body(&function.body, 0, &mut nodes, function.span)?;
+    // Validate both branches before source checking, including statically inactive branches.
+    let sorts = function
+        .parameters
+        .iter()
+        .filter_map(|parameter| {
+            let sort = match parameter.ty.to_string().as_str() {
+                "i64" => Sort::I64,
+                "Bool" => Sort::Bool,
+                _ => return None,
+            };
+            Some((parameter.name.as_str(), sort))
         })
+        .collect();
+    if matches!(body, Expr::If(..)) {
+        body.sort(&sorts).map_err(|error| {
+            Diagnostic::unsupported(
+                format!("conditional body invalid: {error:?}"),
+                function.body[0].span,
+            )
+        })?;
     }
-    if let Some(span) = conditional(&function.body) {
-        return Err(Diagnostic::unsupported(
-            "conditional contract bodies are unsupported",
-            span,
-        ));
-    }
-    let Some(body) = (match function.body.as_slice() {
-        [statement] => match &statement.kind {
-            StmtKind::Expr(expression) | StmtKind::Return(Some(expression)) => Some(expression),
-            _ => None,
-        },
-        _ => None,
-    }) else {
-        return Err(Diagnostic::unsupported(
-            "body must be one scalar expression or return expression",
-            function.span,
-        ));
-    };
     check_module(&module).map_err(|errors| {
         let error = &errors[0];
         Diagnostic {
@@ -373,9 +441,7 @@ pub fn parse(
             function.span,
         ));
     }
-    let body_span = body.span;
-    let mut nodes = 0;
-    let body = lower(body, None, &mut nodes)?;
+    let body_span = function.body[0].span;
     let requires = lower(&function.requires[0], None, &mut nodes)?;
     let postconditions = lower(&function.ensures[0], Some(&body), &mut nodes)?;
     // Evaluating the body is required even when the postcondition never reads `result`.
@@ -405,4 +471,76 @@ pub fn parse(
         ],
         source_function: function.clone(),
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use cgx2_verify_core::{audit_encoding, audit_encoding_with_source, emit_smtlib};
+
+    #[test]
+    fn original_source_oracle_rejects_corrupted_lowering_and_encoding() {
+        let text = "pub fn choose(flag: Bool) -> i64 effects() caps():\n    requires true\n    ensures result == 1\n    if flag:\n        return 1\n    else:\n        return 2\n";
+        let selected = parse(text, None, vec![]).unwrap();
+        let script = emit_smtlib(&selected.contract).unwrap();
+        let oracle = |values: &BTreeMap<String, Value>| selected.source_obligations(values);
+        let audit =
+            audit_encoding_with_source(&selected.contract, &[], 2, &script, &oracle).unwrap();
+        assert_eq!(audit.obligations, [0, 2, 1, 0]);
+        // A self-consistent but corrupted lowering still disagrees with original source.
+        let mut corrupted = selected.contract.clone();
+        corrupted.ensures = Expr::Bool(true);
+        let corrupted_script = emit_smtlib(&corrupted).unwrap();
+        assert!(audit_encoding(&corrupted, &[], 2, &corrupted_script).is_ok());
+        assert!(matches!(
+            audit_encoding_with_source(&corrupted, &[], 2, &corrupted_script, &oracle),
+            Err(AuditError::SourceMismatch { .. })
+        ));
+        // Swapping branches in emitted terms must fail even though each term parses.
+        let corrupted_script = script.replace("(ite v_666c6167 1 2)", "(ite v_666c6167 2 1)");
+        assert_ne!(script, corrupted_script);
+        assert!(matches!(
+            audit_encoding_with_source(&selected.contract, &[], 2, &corrupted_script, &oracle),
+            Err(AuditError::Mismatch { .. })
+        ));
+    }
+
+    #[test]
+    fn original_source_replay_and_oracle_reject_unconditional_branch_definedness() {
+        let selected = parse(
+            include_str!("../examples/conditional-overflow.cg"),
+            None,
+            vec![Domain::new("x", i64::MAX, i64::MAX)],
+        )
+        .unwrap();
+        let values = BTreeMap::from([
+            ("x".into(), Value::I64(i64::MAX)),
+            ("flag".into(), Value::Bool(true)),
+        ]);
+        assert_eq!(
+            selected.source_obligations(&values).unwrap(),
+            [false, true, false, false]
+        );
+        let mut active = values.clone();
+        active.insert("flag".into(), Value::Bool(false));
+        assert_eq!(
+            selected.source_obligations(&active).unwrap(),
+            [false, true, false, true]
+        );
+        let script = emit_smtlib(&selected.contract).unwrap();
+        let overflow_defined = "(and true true (>= (+ v_78 1) (- 9223372036854775808)) (<= (+ v_78 1) 9223372036854775807))";
+        let selected_defined = format!("(ite v_666c6167 true {overflow_defined})");
+        let corrupted = script.replace(&selected_defined, overflow_defined);
+        assert_ne!(script, corrupted);
+        assert!(matches!(
+            audit_encoding_with_source(
+                &selected.contract,
+                &selected.domains,
+                2,
+                &corrupted,
+                &|values| selected.source_obligations(values)
+            ),
+            Err(AuditError::Mismatch { .. })
+        ));
+    }
 }

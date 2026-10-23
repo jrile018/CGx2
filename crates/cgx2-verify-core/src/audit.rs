@@ -190,6 +190,10 @@ fn evaluate(
             let Some(Term::Atom(op)) = items.first() else {
                 return Err(AuditError::MalformedFormula("operator".into()));
             };
+            if op == "ite" && items.len() == 4 {
+                let guard = bool_value(evaluate(&items[1], variables, depth + 1)?)?;
+                return evaluate(&items[if guard { 2 } else { 3 }], variables, depth + 1);
+            }
             let args = items[1..]
                 .iter()
                 .map(|item| evaluate(item, variables, depth + 1))

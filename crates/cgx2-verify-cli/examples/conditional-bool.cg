@@ -1,0 +1,10 @@
+pub fn choose(flag: Bool, x: i64) -> Bool effects() caps():
+    requires true
+    ensures result == (x >= 0)
+    if flag:
+        if x < 0:
+            return false
+        else:
+            return true
+    else:
+        return x >= 0

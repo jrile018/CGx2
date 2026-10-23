@@ -1,0 +1,317 @@
+{
+  "schema_version": 1,
+  "base_commit": "7f4c4525c61da165a4b628f34eb095521a14b349",
+  "toolchain": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "live_solver_gate": {
+    "status": "unrun",
+    "reason": "Neither z3 nor cvc5 is on PATH",
+    "executables": {
+      "z3": null,
+      "cvc5": null
+    },
+    "trusted_digest": null
+  },
+  "cases": [
+    {
+      "source": "crates/cgx2-verify-cli/examples/conditional.cg",
+      "source_sha256": "63adccbd61be13ec987e586331600ce5d3ece38630e9dc6a270fb24b60deba46",
+      "arguments": [
+        "--domain",
+        "x:-1:1",
+        "--format",
+        "json"
+      ],
+      "smtlib": "conditional.smt2",
+      "smtlib_sha256": "3f1994e811aac9dc1aab7c0c9054e0f6676efec7dc377f3c41a1ea1220b974d0",
+      "verdict": {
+        "assumptions": [
+          "all listed finite inputs enumerated",
+          "checked i64 addition/subtraction; overflow is a contract failure"
+        ],
+        "checked_cases": 6,
+        "kind": "proved",
+        "meaning": "finite_domain_only",
+        "scope": {
+          "arithmetic": "checked_i64_add_sub",
+          "boolean_parameters": [
+            "flag"
+          ],
+          "domains": [
+            {
+              "max": 1,
+              "min": -1,
+              "name": "x"
+            }
+          ],
+          "max_cases": 100000
+        }
+      },
+      "encoding_audit": {
+        "checked_cases": 6,
+        "evaluator": "independent_smt_term_interpreter",
+        "kind": "cross_checked",
+        "obligations": {
+          "ensures_false": 0,
+          "ensures_overflow": 0,
+          "requires_defined": 0,
+          "requires_satisfiable": 6
+        },
+        "source_parity": true
+      },
+      "proof": {
+        "kind": "unknown",
+        "state": "unknown",
+        "meaning": "no_trusted_solver_proof"
+      }
+    },
+    {
+      "source": "crates/cgx2-verify-cli/examples/conditional-bool.cg",
+      "source_sha256": "3b11c0a69ad873b45e3bf0a5ccf31dd41eba626ca4bee6b6a18ab676240d721a",
+      "arguments": [
+        "--domain",
+        "x:-1:1",
+        "--format",
+        "json"
+      ],
+      "smtlib": "conditional-bool.smt2",
+      "smtlib_sha256": "853ea6c3fb61bab915801efdfd74fe647b61bc2b9fd37a8ae78d903972337006",
+      "verdict": {
+        "assumptions": [
+          "all listed finite inputs enumerated",
+          "checked i64 addition/subtraction; overflow is a contract failure"
+        ],
+        "checked_cases": 6,
+        "kind": "proved",
+        "meaning": "finite_domain_only",
+        "scope": {
+          "arithmetic": "checked_i64_add_sub",
+          "boolean_parameters": [
+            "flag"
+          ],
+          "domains": [
+            {
+              "max": 1,
+              "min": -1,
+              "name": "x"
+            }
+          ],
+          "max_cases": 100000
+        }
+      },
+      "encoding_audit": {
+        "checked_cases": 6,
+        "evaluator": "independent_smt_term_interpreter",
+        "kind": "cross_checked",
+        "obligations": {
+          "ensures_false": 0,
+          "ensures_overflow": 0,
+          "requires_defined": 0,
+          "requires_satisfiable": 6
+        },
+        "source_parity": true
+      },
+      "proof": {
+        "kind": "unknown",
+        "state": "unknown",
+        "meaning": "no_trusted_solver_proof"
+      }
+    },
+    {
+      "source": "crates/cgx2-verify-cli/examples/conditional-false.cg",
+      "source_sha256": "1a46e24beb189ddf554a89bb1d28d2b0fc018ad33d0e84a599d95b75f69c0ae9",
+      "arguments": [
+        "--format",
+        "json"
+      ],
+      "smtlib": "conditional-false.smt2",
+      "smtlib_sha256": "dacc5457a0628f6c066479b408de86cf5617266a48b2c342ddb90984e0a361a6",
+      "verdict": {
+        "counterexample": {
+          "flag": false
+        },
+        "failure": "EnsuresFalse",
+        "kind": "disproved",
+        "meaning": "finite_domain_validated_counterexample",
+        "scope": {
+          "arithmetic": "checked_i64_add_sub",
+          "boolean_parameters": [
+            "flag"
+          ],
+          "domains": [],
+          "max_cases": 100000
+        }
+      },
+      "encoding_audit": {
+        "checked_cases": 2,
+        "evaluator": "independent_smt_term_interpreter",
+        "kind": "cross_checked",
+        "obligations": {
+          "ensures_false": 1,
+          "ensures_overflow": 0,
+          "requires_defined": 0,
+          "requires_satisfiable": 2
+        },
+        "source_parity": true
+      },
+      "proof": {
+        "kind": "disproved",
+        "state": "counterexample",
+        "meaning": "finite_domain_cross_checked_counterexample"
+      }
+    },
+    {
+      "source": "crates/cgx2-verify-cli/examples/conditional-inactive-overflow.cg",
+      "source_sha256": "8b39e30bd4acd001155607d19cccb99788262c4916279c7096b4308d8af8f697",
+      "arguments": [
+        "--domain",
+        "x:9223372036854775807:9223372036854775807",
+        "--format",
+        "json"
+      ],
+      "smtlib": "conditional-inactive-overflow.smt2",
+      "smtlib_sha256": "ae982dd7e57d987c4dc35dbc105358496a98b0dd988092b4af00407a2ae7dbf2",
+      "verdict": {
+        "assumptions": [
+          "all listed finite inputs enumerated",
+          "checked i64 addition/subtraction; overflow is a contract failure"
+        ],
+        "checked_cases": 1,
+        "kind": "proved",
+        "meaning": "finite_domain_only",
+        "scope": {
+          "arithmetic": "checked_i64_add_sub",
+          "boolean_parameters": [],
+          "domains": [
+            {
+              "max": 9223372036854775807,
+              "min": 9223372036854775807,
+              "name": "x"
+            }
+          ],
+          "max_cases": 100000
+        }
+      },
+      "encoding_audit": {
+        "checked_cases": 1,
+        "evaluator": "independent_smt_term_interpreter",
+        "kind": "cross_checked",
+        "obligations": {
+          "ensures_false": 0,
+          "ensures_overflow": 0,
+          "requires_defined": 0,
+          "requires_satisfiable": 1
+        },
+        "source_parity": true
+      },
+      "proof": {
+        "kind": "unknown",
+        "state": "unknown",
+        "meaning": "no_trusted_solver_proof"
+      }
+    },
+    {
+      "source": "crates/cgx2-verify-cli/examples/conditional-overflow.cg",
+      "source_sha256": "bf744e63769163d7676ea78dd2655b1fdbfdbc48bb138fdabde259f85c749d25",
+      "arguments": [
+        "--domain",
+        "x:9223372036854775807:9223372036854775807",
+        "--format",
+        "json"
+      ],
+      "smtlib": "conditional-overflow.smt2",
+      "smtlib_sha256": "f7cb2e3aa81352d55e2a767b4474b5b635c030b8ec627c1f9c090c0cd3f1522e",
+      "verdict": {
+        "counterexample": {
+          "flag": false,
+          "x": 9223372036854775807
+        },
+        "failure": "Overflow",
+        "kind": "disproved",
+        "meaning": "finite_domain_validated_counterexample",
+        "scope": {
+          "arithmetic": "checked_i64_add_sub",
+          "boolean_parameters": [
+            "flag"
+          ],
+          "domains": [
+            {
+              "max": 9223372036854775807,
+              "min": 9223372036854775807,
+              "name": "x"
+            }
+          ],
+          "max_cases": 100000
+        }
+      },
+      "encoding_audit": {
+        "checked_cases": 2,
+        "evaluator": "independent_smt_term_interpreter",
+        "kind": "cross_checked",
+        "obligations": {
+          "ensures_false": 0,
+          "ensures_overflow": 1,
+          "requires_defined": 0,
+          "requires_satisfiable": 2
+        },
+        "source_parity": true
+      },
+      "proof": {
+        "kind": "disproved",
+        "state": "counterexample",
+        "meaning": "finite_domain_cross_checked_counterexample"
+      }
+    },
+    {
+      "source": "crates/cgx2-verify-cli/examples/conditional-guard-overflow.cg",
+      "source_sha256": "aec6b0d5c2fe222ba05c94f53522b6dc82748103dd417ec91d21614a6386fe8b",
+      "arguments": [
+        "--domain",
+        "x:9223372036854775807:9223372036854775807",
+        "--format",
+        "json"
+      ],
+      "smtlib": "conditional-guard-overflow.smt2",
+      "smtlib_sha256": "923a735ee46cfbd590bf1d1a09cc9f8f7b50340c6bfc9efe4fb1e139b91ef5b9",
+      "verdict": {
+        "counterexample": {
+          "flag": false,
+          "x": 9223372036854775807
+        },
+        "failure": "Overflow",
+        "kind": "disproved",
+        "meaning": "finite_domain_validated_counterexample",
+        "scope": {
+          "arithmetic": "checked_i64_add_sub",
+          "boolean_parameters": [
+            "flag"
+          ],
+          "domains": [
+            {
+              "max": 9223372036854775807,
+              "min": 9223372036854775807,
+              "name": "x"
+            }
+          ],
+          "max_cases": 100000
+        }
+      },
+      "encoding_audit": {
+        "checked_cases": 2,
+        "evaluator": "independent_smt_term_interpreter",
+        "kind": "cross_checked",
+        "obligations": {
+          "ensures_false": 0,
+          "ensures_overflow": 2,
+          "requires_defined": 0,
+          "requires_satisfiable": 2
+        },
+        "source_parity": true
+      },
+      "proof": {
+        "kind": "disproved",
+        "state": "counterexample",
+        "meaning": "finite_domain_cross_checked_counterexample"
+      }
+    }
+  ]
+}

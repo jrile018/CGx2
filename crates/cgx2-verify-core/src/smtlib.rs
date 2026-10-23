@@ -143,6 +143,18 @@ fn encode(
             term: symbol("v", name),
             defined: "true".into(),
         },
+        If(guard, yes, no) => {
+            let guard = encode(guard, variables, functions, foreign_bounds);
+            let yes = encode(yes, variables, functions, foreign_bounds);
+            let no = encode(no, variables, functions, foreign_bounds);
+            Encoded {
+                term: format!("(ite {} {} {})", guard.term, yes.term, no.term),
+                defined: format!(
+                    "(and {} (ite {} {} {}))",
+                    guard.defined, guard.term, yes.defined, no.defined
+                ),
+            }
+        }
         Not(a) => {
             let a = encode(a, variables, functions, foreign_bounds);
             Encoded {

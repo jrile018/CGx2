@@ -21,6 +21,8 @@ pub enum Expr {
     And(Box<Self>, Box<Self>),
     Or(Box<Self>, Box<Self>),
     Not(Box<Self>),
+    /// A Boolean guard and two equal-sort branches; only the selected branch evaluates.
+    If(Box<Self>, Box<Self>, Box<Self>),
     /// A foreign/unmodeled result. It is never evaluated or proved by the finite engine.
     Uninterpreted {
         name: String,
@@ -91,6 +93,15 @@ fn expect(actual: Sort, expected: Sort) -> Result<(), ValidationError> {
 impl Expr {
     pub fn sort(&self, variables: &BTreeMap<&str, Sort>) -> Result<Sort, ValidationError> {
         match self {
+            Self::If(guard, yes, no) => {
+                expect(guard.sort(variables)?, Sort::Bool)?;
+                let left = yes.sort(variables)?;
+                let right = no.sort(variables)?;
+                if left != right {
+                    return Err(ValidationError::ExpectedEqualSorts { left, right });
+                }
+                Ok(left)
+            }
             Self::Bool(_) => Ok(Sort::Bool),
             Self::I64(_) => Ok(Sort::I64),
             Self::Var(name) => variables
@@ -138,6 +149,11 @@ impl Expr {
 
     pub fn contains_uninterpreted(&self) -> bool {
         match self {
+            Self::If(guard, yes, no) => {
+                guard.contains_uninterpreted()
+                    || yes.contains_uninterpreted()
+                    || no.contains_uninterpreted()
+            }
             Self::Uninterpreted { .. } => true,
             Self::Add(a, b)
             | Self::Sub(a, b)

@@ -19,6 +19,13 @@ pub enum EvalError {
 pub fn eval(expr: &Expr, values: &BTreeMap<String, Value>) -> Result<Value, EvalError> {
     use Expr::*;
     match expr {
+        If(guard, yes, no) => {
+            if as_bool(eval(guard, values)?)? {
+                eval(yes, values)
+            } else {
+                eval(no, values)
+            }
+        }
         Bool(v) => Ok(Value::Bool(*v)),
         I64(v) => Ok(Value::I64(*v)),
         Var(name) => values

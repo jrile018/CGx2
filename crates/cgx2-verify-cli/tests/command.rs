@@ -52,6 +52,45 @@ fn fixture(text: &str) -> Temp {
 }
 
 #[test]
+fn json_conditionals_are_typed_and_select_only_one_branch() {
+    let mut document = json!({
+        "version": 1, "parameters": [{"name": "flag", "sort": "bool"}], "domains": [],
+        "requires": {"op": "bool", "value": true},
+        "ensures": {"op": "if", "condition": {"op": "var", "name": "flag"},
+            "then": {"op": "bool", "value": true},
+            "else": {"op": "eq", "left": {"op": "i64", "value": 7}, "right": {
+                "op": "if", "condition": {"op": "bool", "value": false},
+                "then": {"op": "add", "left": {"op": "i64", "value": i64::MAX}, "right": {"op": "i64", "value": 1}},
+                "else": {"op": "i64", "value": 7}}}}
+    });
+    let input = fixture(&document.to_string());
+    let result = parsed(&input, &["--format", "json"]);
+    assert_eq!(result["verdict"]["kind"], "proved");
+    assert_eq!(result["verdict"]["checked_cases"], 2);
+    assert_eq!(result["proof"]["kind"], "unknown");
+    document["ensures"]["then"] = json!({"op": "i64", "value": 0});
+    assert_eq!(
+        run(&fixture(&document.to_string()), &["--format", "json"])
+            .status
+            .code(),
+        Some(2)
+    );
+    document["ensures"]["then"] = json!({"op": "bool", "value": true});
+    document["ensures"]["condition"] = json!({"op": "i64", "value": 0});
+    assert_eq!(
+        run(&fixture(&document.to_string()), &["--format", "json"])
+            .status
+            .code(),
+        Some(2)
+    );
+    document["ensures"]["surprise"] = json!(true);
+    assert_eq!(
+        run(&fixture(&document.to_string()), &[]).status.code(),
+        Some(2)
+    );
+}
+
+#[test]
 fn finite_proof_scope_and_stable_json() {
     let input = fixture(include_str!("../examples/valid.json"));
     let args = ["--format", "json"];

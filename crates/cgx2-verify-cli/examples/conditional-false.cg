@@ -1,0 +1,7 @@
+pub fn choose(flag: Bool) -> i64 effects() caps():
+    requires true
+    ensures result == 1
+    if flag:
+        return 1
+    else:
+        return 2

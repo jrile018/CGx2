@@ -1,0 +1,2 @@
+    Checking cgx2-verify-cli v0.1.0 (/home/john-riley/.codex/worktrees/e84a/lang/crates/cgx2-verify-cli)
+    Finished `dev` profile [unoptimized] target(s) in 0.07s

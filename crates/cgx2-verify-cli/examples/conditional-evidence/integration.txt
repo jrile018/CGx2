@@ -1,0 +1,29 @@
+   Compiling cgx2-syntax v0.1.0 (/home/john-riley/.codex/worktrees/e84a/lang/crates/cgx2-syntax)
+   Compiling cgx2-sema v0.1.0 (/home/john-riley/.codex/worktrees/e84a/lang/crates/cgx2-sema)
+   Compiling cgx2-cli v0.1.0 (/home/john-riley/.codex/worktrees/e84a/lang/crates/cgx2-cli)
+    Finished `test` profile [unoptimized] target(s) in 0.14s
+     Running tests/conditionals.rs (target/wave25-conditional/debug/deps/conditionals-9c1ec13b8e2461f7)
+
+running 3 tests
+test nested_record_returns_and_untaken_failure ... ok
+test taken_failure_has_exact_utf8_span_and_source_order ... ok
+test selected_branch_nested_scopes_outer_mutation_and_unit_fallthrough ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/conditionals.rs (target/wave25-conditional/debug/deps/conditionals-4a70d76b489aa794)
+
+running 3 tests
+test conditional_memory_is_rejected_even_nested_or_inactive ... ok
+test both_branches_are_checked_and_scopes_do_not_escape ... ok
+test explicit_returns_infer_and_join_but_branch_tails_are_unit ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/conditionals.rs (target/wave25-conditional/debug/deps/conditionals-35fd825c19609c55)
+
+running 2 tests
+test malformed_branches_are_source_located_errors ... ok
+test nested_unicode_conditionals_round_trip ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

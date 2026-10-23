@@ -195,6 +195,14 @@ fn expr(value: &Json, depth: usize, count: &mut usize) -> Result<Expr, String> {
             object(value, &["op", "name"])?;
             Expr::Var(name(field(map, "name")?)?)
         }
+        "if" => {
+            object(value, &["op", "condition", "then", "else"])?;
+            Expr::If(
+                Box::new(expr(field(map, "condition")?, depth + 1, count)?),
+                Box::new(expr(field(map, "then")?, depth + 1, count)?),
+                Box::new(expr(field(map, "else")?, depth + 1, count)?),
+            )
+        }
         "add" => {
             let (a, b) = binary(count)?;
             Expr::Add(a, b)
