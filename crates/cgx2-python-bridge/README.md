@@ -1,5 +1,16 @@
 # Build profiles
 
+The additive `EmbeddedIdentityV1`, `PythonSourceV1`, `PinnedInvocationV1`,
+`embedded_identity_v1`, `call_pinned_copied_v1` and Linux-only unsafe
+`initialize_isolated_v1` support the authenticated package route in
+[`cgx2-foreign`](../cgx2-foreign/PINNED-PYTHON-V1.md). The foreign crate owns lock,
+grant, hash and typed-signature validation. These low-level bridge calls do not
+authenticate supplied source. Isolated startup requires exclusive startup before
+any other CPython client, checked runtime artifacts and explicit cache-free stdlib
+paths; ordinary `PythonBridge::new` retains its existing trusted-host behavior.
+Package calls copy results and release temporary references while attached.
+No default feature or scalar child behavior changes.
+
 The default feature set exposes only Python-free `BridgeError`, `PythonFailure`, and limit metadata. It neither builds PyO3 nor needs Python development libraries. Enable `in-process` explicitly for `PythonBridge`, `BridgeValue`, `PyHandle`, `TensorHandle`, copied f64 arrays, and the existing host APIs below:
 
 ```sh

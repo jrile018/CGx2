@@ -258,10 +258,27 @@ impl PythonBridge {
     }
 
     pub fn to_value(&self, handle: &PyHandle) -> Result<BridgeValue, BridgeError> {
+        self.to_value_with_live_bytes_v1(handle, 0)
+    }
+
+    pub(crate) fn to_value_with_live_bytes_v1(
+        &self,
+        handle: &PyHandle,
+        input_bytes: usize,
+    ) -> Result<BridgeValue, BridgeError> {
         Python::attach(|py| {
             let value = handle.0.bind(py);
             let mut budget = ValueBudget::default();
             budget.check_python(py, value, 0, &mut Vec::new())?;
+            if input_bytes
+                .checked_add(budget.bytes)
+                .is_none_or(|n| n > MAX_LIVE_ARRAY_BYTES)
+            {
+                return Err(conversion_error(
+                    "at most 16777216 live copied payload bytes",
+                    "input plus result exceeded".into(),
+                ));
+            }
             python_to_bridge(py, value, &mut Vec::new())
         })
     }
@@ -285,7 +302,7 @@ pub(crate) fn conversion_error(expected: &'static str, actual: String) -> Bridge
 }
 
 #[derive(Default)]
-struct ValueBudget {
+pub(crate) struct ValueBudget {
     elements: usize,
     bytes: usize,
     array_bytes: usize,
@@ -334,7 +351,11 @@ impl ValueBudget {
         Ok(())
     }
 
-    fn check_rust(&mut self, value: &BridgeValue, depth: usize) -> Result<(), BridgeError> {
+    pub(crate) fn check_rust(
+        &mut self,
+        value: &BridgeValue,
+        depth: usize,
+    ) -> Result<(), BridgeError> {
         self.add_element(depth)?;
         match value {
             BridgeValue::F64Array1DCopyV1(values) => {
@@ -549,7 +570,10 @@ fn python_to_bridge(
     Ok(BridgeValue::Handle(PyHandle(value.clone().unbind())))
 }
 
-fn bridge_to_python(py: Python<'_>, arg: &BridgeValue) -> Result<Py<PyAny>, BridgeError> {
+pub(crate) fn bridge_to_python(
+    py: Python<'_>,
+    arg: &BridgeValue,
+) -> Result<Py<PyAny>, BridgeError> {
     match arg {
         BridgeValue::None => Ok(py.None()),
         BridgeValue::Bool(value) => Ok(value

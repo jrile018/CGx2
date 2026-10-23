@@ -1,5 +1,10 @@
 # CGx2 declared Python calls
 
+The additive opt-in [pinned package API v1](PINNED-PYTHON-V1.md) validates exact
+runtime/environment/distribution/source identities and copied signatures, offers
+isolated embedded startup, and includes a supplied-environment dateutil handoff.
+It is a Rust library route; the existing scalar source/child route below is unchanged.
+
 `cgx2-foreign` provides Python-free declaration/error metadata and a bounded scalar worker by default. Enable `in-process` for the existing linked Rust host API over `cgx2-python-bridge`. It parses a UTF-8 JSON declaration (at most 65,536 bytes), then permits calls only by exact declared key. Parsing does not import Python. A call validates the key, positional count and types, keyword names and types, and the existing bridge depth/node/byte/keyword limits before importing a module or reading an attribute. Python execution is not transactional: a return conversion error may follow a successful call with side effects.
 
 ```json
