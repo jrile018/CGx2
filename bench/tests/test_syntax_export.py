@@ -101,7 +101,7 @@ class TrialIntakeTests(unittest.TestCase):
             "seed": 18, "order_position": 1,
             "export_manifest_sha256": hashlib.sha256((out / "export-manifest.json").read_bytes()).hexdigest(),
             "visible_files": files,
-            "transcript": [{"role": "user", "content": "Use the supplied public files."},
+            "transcript": [{"role": "user", "content": syntax_trial.public_context(out)},
                            {"role": "assistant", "content": source}],
             "provider_usage_records": [{"provider": "fixture", "response_id": "fixture-1",
                                         "input_tokens": 100, "output_tokens": 20,
@@ -132,6 +132,15 @@ class TrialIntakeTests(unittest.TestCase):
             row = self.trace(out)
             jsonschema.Draft202012Validator(schema).validate(row)
             self.assertEqual(syntax_trial.validate_trace(row, out), row)
+            omitted = copy.deepcopy(row)
+            omitted["transcript"][0]["content"] = "Use the supplied public files."
+            with self.assertRaisesRegex(ValueError, "exact public export context"):
+                syntax_trial.validate_trace(omitted, out)
+            replaced = copy.deepcopy(row)
+            replaced["transcript"][0]["content"] = replaced["transcript"][0]["content"].replace(
+                "TODO()", "42", 1)
+            with self.assertRaisesRegex(ValueError, "exact public export context"):
+                syntax_trial.validate_trace(replaced, out)
             missing = copy.deepcopy(row)
             missing["provider_usage_records"] = []
             with self.assertRaisesRegex(ValueError, "usage"):
@@ -146,8 +155,8 @@ class TrialIntakeTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "raw provider response"):
                 syntax_trial.validate_trace(altered_receipt, out)
             leak = copy.deepcopy(row)
-            leak["transcript"][0]["content"] = (syntax_packet.PACKET /
-                "private/reference/indent/precedence.cg").read_text()
+            leak["transcript"].insert(1, {"role": "tool", "content": (syntax_packet.PACKET /
+                "private/reference/indent/precedence.cg").read_text()})
             with self.assertRaisesRegex(ValueError, "private reference"):
                 syntax_trial.validate_trace(leak, out)
             isolation = copy.deepcopy(row)
@@ -158,10 +167,25 @@ class TrialIntakeTests(unittest.TestCase):
             tamper["visible_files"]["starter.cg"] = "TODO()\n"
             with self.assertRaisesRegex(ValueError, "visible file differs"):
                 syntax_trial.validate_trace(tamper, out)
+            forged_dir = Path(tmp) / "forged"
+            shutil.copytree(out, forged_dir)
+            (forged_dir / "starter.cg").write_text("fn main() -> i64:\n    42\n")
+            forged_manifest = json.loads((forged_dir / "export-manifest.json").read_text())
+            forged_manifest["files_sha256"]["starter.cg"] = hashlib.sha256(
+                (forged_dir / "starter.cg").read_bytes()).hexdigest()
+            (forged_dir / "export-manifest.json").write_text(json.dumps(forged_manifest))
+            forged = copy.deepcopy(row)
+            forged["export_manifest_sha256"] = hashlib.sha256(
+                (forged_dir / "export-manifest.json").read_bytes()).hexdigest()
+            forged["visible_files"] = {name: (forged_dir / name).read_text()
+                                       for name in forged["visible_files"]}
+            forged["transcript"][0]["content"] = syntax_trial.public_context(forged_dir)
+            with self.assertRaisesRegex(ValueError, "differs from frozen public packet"):
+                syntax_trial.validate_trace(forged, forged_dir)
 
     def test_unregistered_model_cannot_be_scored(self):
         with self.assertRaisesRegex(ValueError, "not frozen"):
-            syntax_trial.paired_report([])
+            syntax_trial.paired_report([], {})
 
     def test_complete_balanced_grid_charges_failures_and_bootstraps_tasks(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -173,17 +197,27 @@ class TrialIntakeTests(unittest.TestCase):
             protocol["registered_model"] = {key: template[key] for key in
                                             ("model_family", "model_version", "model_settings", "seed")}
             rows = []
+            exports = {}
             for item in protocol["order"]:
                 for position, variant in enumerate((item["first"], item["second"]), 1):
-                    row = copy.deepcopy(template)
+                    export_dir = Path(tmp) / f"{item['task_id']}-{variant}"
+                    syntax_export.export(item["task_id"], variant, export_dir)
+                    exports[(item["task_id"], variant)] = export_dir
+                    row = self.trace(export_dir)
                     row["task_id"] = item["task_id"]
                     row["variant"] = variant
                     row["order_position"] = position
                     row["provider_usage_records"][0]["response_id"] = f"{item['task_id']}-{variant}"
+                    row["provider_usage_records"][0]["raw_response"] = json.dumps({
+                        "id": f"{item['task_id']}-{variant}",
+                        "usage": {"input_tokens": 100, "output_tokens": 20},
+                    })
                     if item["task_id"] == "overflow" and variant == "indent":
                         row["test_success"] = False
                     rows.append(row)
-            report = syntax_trial.paired_report(rows, protocol)
+            report = syntax_trial.paired_report(rows, exports, protocol)
+            self.assertEqual(report["validated_paired_traces"], 6)
+            self.assertNotIn("genuine_paired_traces", report)
             self.assertEqual(report["paired_successes"], 5)
             self.assertEqual(report["completion_difference_indent_minus_brace"], -1 / 6)
             self.assertEqual(report["all_task_charges"]["indent"]["tokens"], 5 * 120 + 4096)
@@ -192,7 +226,20 @@ class TrialIntakeTests(unittest.TestCase):
             altered = copy.deepcopy(rows)
             altered[0]["model_settings"]["temperature"] = 0.5
             with self.assertRaisesRegex(ValueError, "model, settings"):
-                syntax_trial.paired_report(altered, protocol)
+                syntax_trial.paired_report(altered, exports, protocol)
+            copied = copy.deepcopy(rows)
+            copied[1]["transcript"] = copy.deepcopy(copied[0]["transcript"])
+            with self.assertRaisesRegex(ValueError, "exact public export context"):
+                syntax_trial.paired_report(copied, exports, protocol)
+            reused = copy.deepcopy(rows)
+            reused[1]["provider_usage_records"][0]["response_id"] = reused[0][
+                "provider_usage_records"][0]["response_id"]
+            reused[1]["provider_usage_records"][0]["raw_response"] = reused[0][
+                "provider_usage_records"][0]["raw_response"]
+            with self.assertRaisesRegex(ValueError, "reused provider response ID"):
+                syntax_trial.paired_report(reused, exports, protocol)
+            with self.assertRaisesRegex(ValueError, "one export per"):
+                syntax_trial.paired_report(rows, {key: out for key in list(exports)[:1]}, protocol)
 
 
 if __name__ == "__main__":

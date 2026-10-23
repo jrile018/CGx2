@@ -29,7 +29,17 @@ temperature, top-p, max-output setting and seed for all twelve runs, and the
 protocol hash. Record actual provider usage for every call, elapsed wall time,
 repair iterations, exact model-visible files and transcript, final source,
 compiler and hidden-test outcomes, and external verification references. The
-v2 schema and `bench/syntax_trial.py` reject missing or inconsistent provider
+first model transcript message must be a `user` message with content exactly
+equal to `syntax_trial.public_context(EXPORT_DIRECTORY)`. This canonical JSON
+contains every exported public file, including the starter and export manifest.
+The operator must send that message unchanged to the model and retain the
+provider request evidence. `paired_report(rows, exports, protocol)` requires a
+distinct frozen-packet export for each task and variant, validates all twelve
+rows again, and rejects reused provider response IDs. Its pair count is a
+structural count; genuine provider and isolation evidence still requires
+independent operator verification.
+
+The v2 schema and `bench/syntax_trial.py` reject missing or inconsistent provider
 usage, leaked private input, changed visible files, over-budget runs, and
 failed isolation. An operator must independently authenticate provider and
 isolation receipts; JSON booleans alone are not proof. A complete authenticated

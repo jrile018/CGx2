@@ -12,8 +12,9 @@ import math
 from pathlib import Path
 import random
 import statistics
+import tempfile
 
-from syntax_export import _strings, verify_export
+from syntax_export import _strings, export as create_export, verify_export
 from syntax_packet import PACKET
 
 
@@ -35,6 +36,20 @@ ISOLATION_FIELDS = {
 
 def sha(data):
     return hashlib.sha256(data).hexdigest()
+
+
+def public_context(export_dir):
+    """Return the exact first model message for a public trial export."""
+    export_dir = Path(export_dir)
+    manifest = verify_export(export_dir)
+    names = sorted(manifest["files_sha256"])
+    files = {name: (export_dir / name).read_text() for name in names}
+    files["export-manifest.json"] = (export_dir / "export-manifest.json").read_text()
+    return json.dumps({
+        "schema_version": 1,
+        "export_manifest_sha256": sha((export_dir / "export-manifest.json").read_bytes()),
+        "files": files,
+    }, sort_keys=True, separators=(",", ":"))
 
 
 def _private_bytes(packet):
@@ -61,6 +76,11 @@ def validate_trace(row, export_dir, packet=PACKET, protocol=PROTOCOL):
         raise ValueError("packet/protocol hash mismatch")
     if (row["task_id"], row["variant"]) != (exported["task_id"], exported["variant"]):
         raise ValueError("trace/export task mismatch")
+    with tempfile.TemporaryDirectory() as temporary:
+        expected = create_export(row["task_id"], row["variant"],
+                                 Path(temporary) / "expected", packet=packet)
+    if exported != expected:
+        raise ValueError("export differs from frozen public packet")
     order = next((o for o in protocol["order"] if o["task_id"] == row["task_id"]), None)
     if order is None or row["order_position"] not in (1, 2):
         raise ValueError("unregistered task or order")
@@ -83,6 +103,8 @@ def validate_trace(row, export_dir, packet=PACKET, protocol=PROTOCOL):
                 or message["role"] not in ("system", "user", "assistant", "tool")
                 or not isinstance(message["content"], str)):
             raise ValueError("invalid model transcript message")
+    if transcript[0] != {"role": "user", "content": public_context(export_dir)}:
+        raise ValueError("transcript must begin with exact public export context")
     # Assistant answers may independently equal a reference. Inspect only
     # material supplied to the model, including tool output and repair prompts.
     supplied = [message for message in transcript if message["role"] != "assistant"]
@@ -174,15 +196,34 @@ def validate_trace(row, export_dir, packet=PACKET, protocol=PROTOCOL):
     return row
 
 
-def paired_report(rows, protocol=PROTOCOL):
-    """Summarize an authenticated complete grid; rows were validated first."""
+def paired_report(rows, exports, protocol=PROTOCOL, packet=PACKET):
+    """Validate and summarize a complete grid of operator-attested traces."""
     protocol = json.loads(Path(protocol).read_text()) if not isinstance(protocol, dict) else protocol
     if protocol["status"] != "frozen" or not protocol.get("registered_model"):
         raise ValueError("model/settings protocol not frozen before trials")
     expected = {item["task_id"] for item in protocol["order"]}
+    expected_exports = {(task_id, variant) for task_id in expected
+                        for variant in ("indent", "brace")}
+    if not isinstance(exports, dict) or set(exports) != expected_exports:
+        raise ValueError("one export per registered task and variant required")
     by_task = {}
     model = protocol["registered_model"]
+    response_ids = set()
+    export_hashes = set()
     for row in rows:
+        if not isinstance(row, dict):
+            raise ValueError("trial row must be an object")
+        key = (row.get("task_id"), row.get("variant"))
+        if key not in expected_exports:
+            raise ValueError("unknown trial task or variant")
+        validate_trace(row, exports[key], packet=packet, protocol=protocol)
+        if row["export_manifest_sha256"] in export_hashes:
+            raise ValueError("reused public export in paired report")
+        export_hashes.add(row["export_manifest_sha256"])
+        for record in row["provider_usage_records"]:
+            if record["response_id"] in response_ids:
+                raise ValueError("reused provider response ID in paired report")
+            response_ids.add(record["response_id"])
         if row["task_id"] not in expected or row["variant"] in by_task.get(row["task_id"], {}):
             raise ValueError("unknown or duplicate trial")
         if any(row[key] != model[key] for key in ("model_family", "model_version", "model_settings", "seed")):
@@ -237,7 +278,8 @@ def paired_report(rows, protocol=PROTOCOL):
                                          if charge["successes"] else None)
     return {
         "scope": "six_public_scalar_task_pairs_only",
-        "genuine_paired_traces": 6,
+        "validated_paired_traces": len(expected),
+        "authenticity": "operator_attested; external receipts require independent verification",
         "completion_difference_indent_minus_brace": statistics.mean(differences),
         "completion_difference_95pct_task_bootstrap": interval(differences, statistics.mean),
         "mean_repair_difference_indent_minus_brace": statistics.mean(repair_differences),
