@@ -1,8 +1,9 @@
 //! Conservative lowering of checked CGx2 source contracts to finite VCs.
 use cgx2_sema::check_module;
 use cgx2_syntax::{parse_module, BinaryOp, Expr as SourceExpr, ExprKind, Function, Span, StmtKind};
-use cgx2_verify_core::{Contract, Domain, Expr, Parameter, Sort};
+use cgx2_verify_core::{AuditError, Contract, Domain, EvalError, Expr, Parameter, Sort, Value};
 use serde_json::{json, Value as Json};
+use std::collections::BTreeMap;
 
 const SOURCE_NODE_LIMIT: usize = 1024;
 
@@ -34,6 +35,117 @@ pub struct Selected {
     pub name: String,
     pub span: Span,
     pub obligations: Vec<Json>,
+    source_function: Function,
+}
+
+fn source_i64(value: Value) -> Result<i64, EvalError> {
+    match value {
+        Value::I64(value) => Ok(value),
+        Value::Bool(_) => Err(EvalError::SortMismatch),
+    }
+}
+
+/// Evaluates the parsed CGx2 expression directly, without using the lowered
+/// verifier Expr or its evaluator. The parser represents comparisons as
+/// `$cgx2_cmp_*` calls; ordinary calls are outside this source subset.
+fn eval_source(
+    expression: &SourceExpr,
+    values: &BTreeMap<String, Value>,
+) -> Result<Value, EvalError> {
+    match &expression.kind {
+        ExprKind::Boolean(value) => Ok(Value::Bool(*value)),
+        ExprKind::Integer(value) => value
+            .parse::<i64>()
+            .map(Value::I64)
+            .map_err(|_| EvalError::Overflow),
+        ExprKind::Name(path) if path.segments.len() == 1 => values
+            .get(&path.segments[0])
+            .cloned()
+            .ok_or_else(|| EvalError::UnknownVariable(path.segments[0].clone())),
+        ExprKind::Binary { left, op, right } => {
+            let left = source_i64(eval_source(left, values)?)?;
+            let right = source_i64(eval_source(right, values)?)?;
+            let result = match op {
+                BinaryOp::Add => left.checked_add(right),
+                BinaryOp::Subtract => left.checked_sub(right),
+                _ => return Err(EvalError::Unsupported("source binary operation".into())),
+            };
+            result.map(Value::I64).ok_or(EvalError::Overflow)
+        }
+        ExprKind::Call { callee, arguments } => {
+            let ExprKind::Name(path) = &callee.kind else {
+                return Err(EvalError::Unsupported("call".into()));
+            };
+            let [name] = path.segments.as_slice() else {
+                return Err(EvalError::Unsupported("call".into()));
+            };
+            if arguments.len() != 2 || arguments.iter().any(|arg| arg.name.is_some()) {
+                return Err(EvalError::Unsupported("call arguments".into()));
+            }
+            let left = eval_source(&arguments[0].value, values)?;
+            let right = eval_source(&arguments[1].value, values)?;
+            let answer = match name.as_str() {
+                "$cgx2_cmp_eq" => left == right,
+                "$cgx2_cmp_ne" => left != right,
+                "$cgx2_cmp_lt" => source_i64(left)? < source_i64(right)?,
+                "$cgx2_cmp_le" => source_i64(left)? <= source_i64(right)?,
+                "$cgx2_cmp_gt" => source_i64(left)? > source_i64(right)?,
+                "$cgx2_cmp_ge" => source_i64(left)? >= source_i64(right)?,
+                _ => return Err(EvalError::Unsupported(name.clone())),
+            };
+            Ok(Value::Bool(answer))
+        }
+        _ => Err(EvalError::Unsupported("source expression".into())),
+    }
+}
+
+impl Selected {
+    pub fn source_obligations(
+        &self,
+        values: &BTreeMap<String, Value>,
+    ) -> Result<[bool; 4], AuditError> {
+        let pre = eval_source(&self.source_function.requires[0], values);
+        let undefined = pre == Err(EvalError::Overflow);
+        let admitted = pre == Ok(Value::Bool(true));
+        if let Err(error) = &pre {
+            if *error != EvalError::Overflow {
+                return Err(AuditError::Unsupported(format!(
+                    "source requires: {error:?}"
+                )));
+            }
+        }
+        let mut false_post = false;
+        let mut overflow = false;
+        if admitted {
+            let body = match &self.source_function.body[0].kind {
+                StmtKind::Expr(expression) | StmtKind::Return(Some(expression)) => {
+                    eval_source(expression, values)
+                }
+                _ => return Err(AuditError::Unsupported("source body".into())),
+            };
+            match body {
+                Ok(result) => {
+                    let mut post_values = values.clone();
+                    post_values.insert("result".into(), result);
+                    match eval_source(&self.source_function.ensures[0], &post_values) {
+                        Ok(Value::Bool(false)) => false_post = true,
+                        Ok(Value::Bool(true)) => (),
+                        Err(EvalError::Overflow) => overflow = true,
+                        other => {
+                            return Err(AuditError::Unsupported(format!(
+                                "source ensures: {other:?}"
+                            )))
+                        }
+                    }
+                }
+                Err(EvalError::Overflow) => overflow = true,
+                Err(error) => {
+                    return Err(AuditError::Unsupported(format!("source body: {error:?}")))
+                }
+            }
+        }
+        Ok([undefined, admitted, false_post, overflow])
+    }
 }
 
 fn lower(
@@ -278,5 +390,6 @@ pub fn parse(
             json!({"kind": "body_defined", "span": {"start": body_span.start, "end": body_span.end}}),
             json!({"kind": "ensures", "span": {"start": function.ensures[0].span.start, "end": function.ensures[0].span.end}}),
         ],
+        source_function: function.clone(),
     })
 }

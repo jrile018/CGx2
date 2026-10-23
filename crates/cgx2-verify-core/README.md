@@ -1,22 +1,37 @@
-# CGx2 bounded verification core
+# CGx2 verification core
 
-This crate accepts typed `Contract` values. The `cgx2-verify-cli` source adapter parses and checks `.cg` before lowering a small pure scalar subset into this crate; the core itself does not parse source. The supported executable subset is Boolean expressions and checked signed `i64` addition/subtraction, equality, and ordering. Both operands of `and` and `or` are evaluated. An uninterpreted call is outside this subset.
+`Contract` represents a pure Boolean and checked signed-`i64` fragment.
+Supported expressions are literals, variables, `+`, `-`, equality, ordering,
+`and`, `or`, and `not`; both Boolean operands evaluate. Uninterpreted calls
+are outside the executable and trusted proof fragment.
 
-For source functions, the adapter substitutes the expression body for `result` in the single postcondition and prefixes a definedness expression. This ensures checked body overflow is a finite counterexample even when the postcondition does not mention `result`. A finite `Verdict::Proved` covers only the supplied domain and does not upgrade `proof.kind` to global proof.
+`verify_bounded(contract, domains, max_cases)` enumerates inclusive integer
+domains and both Boolean values. `Verdict::Proved` covers only those inputs.
+False postconditions and checked overflow return a finite counterexample;
+undefined/inconsistent preconditions, unsupported calls, or a case cap return
+`Unknown`.
 
-`verify_bounded(&contract, &domains, max_cases)` enumerates inclusive integer domains and both Boolean values. `Verdict::Proved` covers **only** the listed finite inputs, with at least one input satisfying `requires`. A false `ensures` or checked postcondition overflow returns a counterexample re-evaluated against the original contract. Inconsistent or overflowing preconditions, unsupported calls, and an exhausted case cap return `Unknown`.
+`emit_smtlib` models integers as mathematical `Int` values constrained to
+signed `i64`, with explicit range guards for checked `+`/`-`. It emits four
+separate `check-sat` obligations:
 
-`emit_smtlib` uses mathematical `Int` constrained to signed `i64` parameters and explicit checked arithmetic guards. Its four independent `check-sat` conditions, in transcript order, are:
+| Obligation | SAT means |
+| --- | --- |
+| `requires_defined` | The precondition may overflow. |
+| `requires_satisfiable` | Some input satisfies the precondition. |
+| `ensures_false` | A defined postcondition is false. |
+| `ensures_overflow` | The postcondition or substituted body overflows. |
 
-| Index | Label | SAT means |
-| --- | --- | --- |
-| 0 | `requires_defined` | Some input makes precondition arithmetic undefined; proof is unknown. |
-| 1 | `requires_satisfiable` | At least one defined input satisfies the precondition. UNSAT is vacuous, reported unknown. |
-| 2 | `ensures_false` | A satisfying input makes a defined postcondition false. |
-| 3 | `ensures_overflow` | A satisfying input makes postcondition arithmetic undefined. |
+`audit_encoding` parses and interprets the **emitted SMT assertions** without
+using the contract evaluator. It compares all four obligations for every
+finite tuple. `audit_encoding_with_source` also accepts a separate source-AST
+evaluator callback. Missing, malformed, or disagreeing formulas fail closed;
+finite parity is encoding evidence, not a proof for all `i64` inputs.
 
-`parse_solver_result` accepts exactly four status lines, zero exit code, and empty stderr. `unsat, sat, unsat, unsat` is only `SolverResponse::Unsat`: an **untrusted protocol observation**, never a formal proof. An `unknown`, malformed output, timeout, or inconsistent precondition stays unknown. SAT on either postcondition condition is only a candidate.
-
-`emit_witness_smtlib(contract, failure)` reissues one violation condition and requests all parameter values. `validate_solver_witness` accepts one complete `sat` plus `get-value` response. It checks variable names, sorts, duplicates, missing assignments, trailing output, and signed `i64` bounds, then evaluates `requires` and `ensures` using checked arithmetic. Only a real violation becomes a validated `Counterexample`. An arbitrary executable can supply such a witness, but its UNSAT claim never becomes a proof. Uninterpreted calls cannot produce a validated witness because their behavior cannot be re-evaluated.
-
-Solver observation retains at most 16 KiB per output stream, includes stdin write and pipe closure in its deadline, and kills the process group on Unix at timeout. No version-pinned solver trust path is configured. When Z3/CVC5 are absent, tests check the generated script structure and adversarial fake protocols; live solver proof coverage is skipped.
+`parse_solver_result` accepts exactly four status lines, zero exit, and empty
+stderr. `Unsat` is only a protocol observation until the CLI establishes
+source, encoding, fixture, and solver identity conditions.
+`validate_solver_witness` parses a complete `get-value` response and checks
+names, sorts, ranges, and the claimed violation. `observe_solver` limits each
+output stream to 16 KiB and includes stdin, exit, and pipe closure in its
+deadline. On Linux it also limits address space to 512 MiB.

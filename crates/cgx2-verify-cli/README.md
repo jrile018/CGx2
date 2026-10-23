@@ -1,47 +1,66 @@
-# `cgx2-verify`: finite contracts from JSON or checked `.cg` source
+# `cgx2-verify`
 
-This command checks an external JSON v1 contract or a selected checked `.cg` function. The finite engine checks explicit integer domains and both Boolean values; it does not establish a theorem over all signed `i64` inputs.
-
-```sh
-RUSTUP_TOOLCHAIN=1.98.1 cargo run -p cgx2-verify-cli --offline -- crates/cgx2-verify-cli/examples/valid.json --format json
-```
+The command checks a JSON contract or one checked `.cg` function. The finite
+engine enumerates every supplied `i64` value and both values of each `Bool`
+parameter. Its `verdict.kind: proved` covers only the listed finite domain.
+The separate `proof.kind` describes the global checked fragment.
 
 ```text
 cgx2-verify CONTRACT.json [--format text|json] [--max-cases N] [--solver PATH] [--timeout-ms N]
 cgx2-verify FILE.cg [--function NAME] [--domain NAME:MIN:MAX]... [--format text|json] [--max-cases N] [--solver PATH] [--timeout-ms N]
 ```
 
-`--format` defaults to `text`. `--max-cases` defaults to 100,000 and must be 1–1,000,000. `--timeout-ms` defaults to 2,000 and must be 1–10,000; it applies separately to the version, condition, and witness subprocesses. Input is limited to 65,536 bytes, 32 parameters, 1,024 expression nodes, and depth 64. Solver stdout and stderr are each retained up to 16,384 bytes. Invalid input exits 2; any valid contract result exits 0.
+`--format` defaults to `text`; `--max-cases` defaults to 100,000 and accepts
+1–1,000,000. Each `i64` parameter needs one inclusive `--domain`; Boolean
+parameters need none. `--timeout-ms` defaults to 2,000 and accepts 1–10,000.
+Input is capped at 65,536 bytes. Invalid input exits 2; a valid result exits 0.
 
-The input's top-level keys are `version`, `parameters`, `domains`, `requires`, and `ensures`. `version` is `1`. A parameter has `name` and `sort` (`i64` or `bool`). Each `i64` parameter has exactly one inclusive `{"name":"x","min":-2,"max":3}` domain; Boolean domains are implicit. Duplicate, missing, or extra domains are errors. Expressions use `op` values `bool`, `i64`, `var`, `add`, `sub`, `eq`, `lt`, `le`, `gt`, `ge`, `and`, `or`, `not`, or `call`, with the usual `value`, `name`, `left`/`right`, `arg`, or `args` fields. `call` is an unsupported foreign result for executable verification.
+## Checked source fragment
 
-## Checked `.cg` source subset (result JSON v3)
+The selected function must be public, semantically checked, declare
+`effects()`, have `i64`/`Bool` parameters and return type, exactly one
+`requires`, exactly one `ensures`, and one pure expression body or return.
+The source adapter accepts literals, parameters, `result` in `ensures`, checked
+`+`/`-`, and `==`, `!=`, `<`, `<=`, `>`, `>=`. The current source parser does not
+expose Boolean `and`/`or`/`not` syntax, although typed JSON/core contracts
+support those operators. Calls, `assert` statements, multiplication/division,
+loops, foreign declarations, and effects return `unknown` with a zero-based,
+half-open source byte span. Source results use `schema_version: 3`; JSON
+contract results use `schema_version: 2`.
+
+## Encoding audit and solver trust
+
+Each result includes generated `smtlib` and a `solver_fixture_catalog` with
+true, false, and overflow contracts, expected four-status transcripts, and
+script hashes. `bounded_solver_result` says whether an independent SMT-term
+interpreter agreed with the contract evaluator on **every tuple** in the
+requested finite domain. For `.cg`, it also compares the parsed source AST.
+The four named obligations are `requires_defined`, `requires_satisfiable`,
+`ensures_false`, and `ensures_overflow`; the last includes substituted body
+overflow. A failed or unrun audit cannot support a global proof.
+Saved copies and expected statuses are in
+[`examples/proof-encoding-audit/manifest.json`](examples/proof-encoding-audit/manifest.json).
+Its `live_solver: unrun` records the absence of Z3/CVC5 on the audit host.
+
+`--solver PATH` accepts an executable named exactly `z3` or `cvc5` for the
+global proof gate. The result records its canonical path, SHA-256, version,
+arguments, four complete status lines, bounded output, exits, and fixture
+probes. Global `proved` requires checked `.cg` source, successful source/SMT
+parity, all three live fixture probes, stable recognized solver identity, and
+exactly `unsat/sat/unsat/unsat` for the four obligations. This is a conditional
+solver-backed claim for the documented pure fragment. A path, hash, and
+version string alone do not attest a binary. With no live solver,
+`proof.kind` is `unknown` with reason `live_solver_unrun` after source audit.
+
+A finite counterexample becomes `proof.kind: disproved` only after the audit
+cross-checks it. Solver SAT is only a candidate: a separate `get-value` query
+must supply a complete in-range model violating checked semantics and, for
+`.cg`, the source evaluator. Unrecognized stub solvers exercise transport and
+protocol rejection only. Unknown, malformed, truncated, inconsistent, or
+over-limit output never proves. Each process has its own deadline; stdout and
+stderr are each capped at 16 KiB; Linux solver processes have a 512 MiB
+address-space limit.
 
 ```sh
-RUSTUP_TOOLCHAIN=1.98.1 cargo run -p cgx2-verify-cli --offline -- crates/cgx2-verify-cli/examples/finite.cg --domain x:0:2 --format json
-RUSTUP_TOOLCHAIN=1.98.1 cargo run -p cgx2-verify-cli --offline -- crates/cgx2-verify-cli/examples/false.cg --domain x:0:2 --format json
+RUSTUP_TOOLCHAIN=1.98.1 cargo run --offline -p cgx2-verify-cli -- crates/cgx2-verify-cli/examples/finite.cg --domain x:0:2 --format json
 ```
-
-The file is parsed and semantically checked with `cgx2-syntax` and `cgx2-sema`. With one function, selection is implicit; with several, pass `--function NAME`. The selected function must be public, have explicit `effects()`, `i64`/`Bool` parameters and return type, exactly one `requires` and one `ensures`, and a single pure expression or `return` expression body. Accepted expressions are parameters, `result` in `ensures`, Boolean and signed `i64` literals, checked `+`/`-`, and scalar `==`, `!=`, `<`, `<=`, `>`, `>=`. Calls, foreign declarations, effects, multiplication/division, loops, and other statements are outside this subset. Unsupported source produces `unknown` with a zero-based, half-open UTF-8 source byte span.
-
-Pass one inclusive `--domain NAME:MIN:MAX` for every `i64` parameter; Boolean parameters enumerate both values without a domain flag. Missing, extra, inconsistent, or too-large domains yield `unknown`. `--max-cases` limits enumeration. The exact source bytes are hashed as `input_sha256` on every run, so a changed file has a different digest. Source results use `schema_version: 3` and add `source.path`, `source.function`, and `source.span`; unsupported-source results use the diagnostic span and include requested domains and `max_cases` under `verdict.scope`. The external JSON v1 input and its result JSON v2 remain unchanged.
-
-`verdict.kind: proved` means only **finite-domain proved** for the stated bounds and checked arithmetic. `disproved` carries a counterexample re-evaluated by the finite engine, including body overflow. `unknown` covers unsupported source, undefined or inconsistent preconditions, and exhausted limits. `proof.kind` remains `unknown` for global claims unless a violating counterexample is validated; solver protocol text, including UNSAT, is never trusted as a global proof.
-
-## Result JSON v2
-
-`schema_version` is `2`; the input contract version remains `1`. `input_sha256` hashes exact input bytes. `verdict` is the finite enumeration result: `proved` means **finite domain only**, `disproved` includes a re-evaluated finite counterexample, and `unknown` includes a reason. `proof` is the global result. It is `disproved` only with a validated counterexample from finite enumeration or a solver model; otherwise it is `unknown` with `no_trusted_solver_proof`. This version never emits a global `proved` result.
-
-With `--solver PATH`, the command runs `PATH --version`, then sends a four condition SMT-LIB script to `PATH` through stdin. The four statuses correspond to precondition definedness, satisfiable precondition, false postcondition, and postcondition overflow, in that order. The `solver` block records the supplied path, reported version, script SHA-256, statuses, bounded output, exit and timeout details. Its `trust` is always `untrusted_protocol`. A complete `unsat/sat/unsat/unsat` transcript has response `unsat_protocol_only` and leaves `proof` unknown. A SAT violation triggers a separate `get-value` query; `witness_attempts` records its script hash, bounded output, exit, and validation. Only a complete model that violates the original contract under checked `i64` evaluation yields `validated_counterexample` and global `disproved`. Bad models, fake UNSAT, unknown statuses, missing solver, crashes, floods, and timeouts never establish proof.
-
-No installed, version-pinned real solver is trusted by this implementation. The live proof gate is skipped where Z3/CVC5 are unavailable. The solver path and `--version` text are observations, not attestation. Uninterpreted calls have pure, total, bounded-result assumptions in SMT; they are never validated as counterexamples against external code.
-
-## Bounded solver observation (Wave 16)
-
-The source fragment is a public, semantically checked, pure `effects()` function with `i64` or `Bool` parameters and return value, one `requires`, one `ensures`, and one scalar expression body. Arithmetic is checked signed `i64` addition/subtraction: either operand overflow is an obligation failure, not wraparound. `source.obligations` records byte spans for the precondition, body, and postcondition; `source.unsupported_obligations` is empty for accepted source. Unsupported effects, foreign calls, and `assert(...)` statements return `unknown` with a source span in `unsupported_obligations`. The current syntax/sema API does not supply a checked `assert` statement, so this verifier does not invent one.
-
-SMT emission is deterministic quantifier-free `QF_UFLIA` over mathematical integers bounded to signed `i64`. The four checks are undefined `requires`, satisfiable `requires`, false `ensures`, and undefined `ensures`. `solver.script_sha256` hashes the exact script. The source `verdict.scope.domains` contains inclusive requested bounds for independent enumeration; solver queries cover the full modeled `i64`/Boolean inputs.
-
-For a configured executable named `z3` or `cvc5`, the verifier resolves its path, records its SHA-256 and one-line version, and invokes it directly with `-in -smt2` or `--lang=smt2 --incremental --produce-models`. Each version, condition, and witness process has its own `--timeout-ms` deadline, 16 KiB output per stream, and a 512 MiB address-space limit on Linux. The executable is hashed again after the condition query. Missing identity, partial or malformed replies, inconsistent preconditions, `unknown`, and unsupported calls leave `solver.bounded_result` as `unknown`. A complete `unsat/sat/unsat/unsat` reply from a stable recognized executable is `unsat_observed`; it remains `proof.kind: unknown` because a path, hash, and version string do not attest solver correctness. `sat` witnesses are parsed and re-evaluated with checked arithmetic before disproof.
-
-Set `CGX2_LIVE_SOLVER` to an installed exact `z3` or `cvc5` executable path to run the conditional live Boolean cross-check. Stub executables exercise rejection paths only. Without an installed solver this gate is unrun.

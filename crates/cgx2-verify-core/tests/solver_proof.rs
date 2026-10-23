@@ -76,12 +76,21 @@ fn statuses_reject_contradictions_and_extra_output() {
         "unsat\nsat\nsat\nunsat\nextra\n",
         "unsat\nsat\nunsat\n",
         "unsat\nsat\nunknown\nunsat\n",
+        "unsat\n\nsat\nunsat\nunsat\n",
     ] {
         assert!(matches!(
             parse_solver_result(output, "", SolverExit::Code(0)),
             SolverResponse::Unknown(_)
         ));
     }
+    assert_eq!(
+        parse_solver_result(
+            &"x".repeat(cgx2_verify_core::SOLVER_OUTPUT_LIMIT + 1),
+            "",
+            SolverExit::Code(0)
+        ),
+        SolverResponse::Unknown(UnknownReason::MalformedResponse),
+    );
 }
 
 #[test]

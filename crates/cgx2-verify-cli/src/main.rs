@@ -8,9 +8,9 @@ use std::time::Duration;
 mod source;
 
 use cgx2_verify_core::{
-    emit_smtlib, emit_witness_smtlib, observe_solver, parse_solver_result, validate_solver_witness,
-    verify_bounded, Contract, Counterexample, Domain, Expr, Failure, Parameter, SolverExit,
-    SolverObservation, SolverResponse, Sort, Value, Verdict,
+    audit_encoding, audit_encoding_with_source, emit_smtlib, emit_witness_smtlib, observe_solver,
+    parse_solver_result, validate_solver_witness, verify_bounded, Contract, Counterexample, Domain,
+    Expr, Failure, Parameter, SolverExit, SolverObservation, SolverResponse, Sort, Value, Verdict,
 };
 use serde_json::{json, Map, Value as Json};
 use sha2::{Digest, Sha256};
@@ -424,7 +424,83 @@ fn executable_hash(path: &str) -> Option<String> {
     Some(format!("{:x}", digest.finalize()))
 }
 
-fn solver_json(path: &str, script: &str, contract: &Contract, timeout_ms: u64) -> Json {
+fn solver_fixtures() -> [(&'static str, Contract, &'static str); 3] {
+    let x = Expr::Var("x".into());
+    [
+        (
+            "true",
+            Contract {
+                parameters: vec![],
+                requires: Expr::Bool(true),
+                ensures: Expr::Bool(true),
+            },
+            "unsat\nsat\nunsat\nunsat",
+        ),
+        (
+            "false",
+            Contract {
+                parameters: vec![],
+                requires: Expr::Bool(true),
+                ensures: Expr::Bool(false),
+            },
+            "unsat\nsat\nsat\nunsat",
+        ),
+        (
+            "overflow",
+            Contract {
+                parameters: vec![Parameter::new("x", Sort::I64)],
+                requires: Expr::Bool(true),
+                ensures: Expr::Eq(
+                    Box::new(Expr::Add(Box::new(x.clone()), Box::new(Expr::I64(1)))),
+                    Box::new(Expr::Add(Box::new(x), Box::new(Expr::I64(1)))),
+                ),
+            },
+            "unsat\nsat\nunsat\nsat",
+        ),
+    ]
+}
+
+fn solver_fixture_catalog() -> Json {
+    Json::Array(
+        solver_fixtures()
+            .into_iter()
+            .map(|(name, contract, expected)| {
+                let script = emit_smtlib(&contract).expect("fixture contract is valid");
+                json!({"name": name, "smtlib": script, "script_sha256": hash(script.as_bytes()),
+            "expected": expected.split('\n').collect::<Vec<_>>()})
+            })
+            .collect(),
+    )
+}
+
+fn solver_fixture_probes(executable: &str, args: &[&str], timeout: Duration) -> (bool, Vec<Json>) {
+    let mut evidence = Vec::new();
+    let mut passed = true;
+    for (name, contract, expected) in solver_fixtures() {
+        let script = emit_smtlib(&contract).expect("fixture contract is valid");
+        let observed = observe_solver(executable, args, &script, timeout);
+        let valid = observed.exit == SolverExit::Code(0)
+            && !observed.output_limit_exceeded
+            && !observed.write_error
+            && observed.stderr.is_empty()
+            && observed.stdout.trim_end_matches('\n') == expected;
+        passed &= valid;
+        evidence.push(
+            json!({"name": name, "script_sha256": hash(script.as_bytes()),
+            "expected": expected.split('\n').collect::<Vec<_>>(), "observed": observed.stdout,
+            "exit": exit_json(observed.exit), "valid": valid}),
+        );
+    }
+    (passed, evidence)
+}
+
+fn solver_json(
+    path: &str,
+    script: &str,
+    contract: &Contract,
+    timeout_ms: u64,
+    selected: Option<&source::Selected>,
+) -> Json {
     let timeout = Duration::from_millis(timeout_ms);
     let (family, args) = solver_protocol(path);
     let canonical = fs::canonicalize(path).ok();
@@ -464,6 +540,11 @@ fn solver_json(path: &str, script: &str, contract: &Contract, timeout_ms: u64) -
     let executable_stable =
         executable_sha256.is_some() && executable_sha256 == executable_hash(executable);
     let response = response_json(&observation);
+    let (fixtures_valid, fixture_evidence) = if version_valid && executable_stable {
+        solver_fixture_probes(executable, args, timeout)
+    } else {
+        (false, Vec::new())
+    };
     let bounded_reason = if family == "unrecognized" {
         "unrecognized_solver"
     } else if executable_sha256.is_none() {
@@ -472,6 +553,8 @@ fn solver_json(path: &str, script: &str, contract: &Contract, timeout_ms: u64) -
         "invalid_version_response"
     } else if !executable_stable {
         "executable_changed"
+    } else if !fixtures_valid {
+        "solver_fixture_failed"
     } else if contract.requires.contains_uninterpreted()
         || contract.ensures.contains_uninterpreted()
     {
@@ -489,7 +572,9 @@ fn solver_json(path: &str, script: &str, contract: &Contract, timeout_ms: u64) -
         "arguments": args,
         "executable_sha256": executable_sha256,
         "identity_valid": version_valid,
-        "executable_stable": executable_stable,
+    "executable_stable": executable_stable,
+    "fixtures_valid": fixtures_valid,
+    "fixture_probes": fixture_evidence,
         "version": if version.exit == SolverExit::Code(0) && !version.output_limit_exceeded {
             version.stdout.trim().to_owned()
         } else { "unavailable".to_owned() },
@@ -514,6 +599,10 @@ fn solver_json(path: &str, script: &str, contract: &Contract, timeout_ms: u64) -
         "witness_attempts": [],
     });
     if response_json(&observation) == "sat_candidate_unvalidated"
+        && family != "unrecognized"
+        && version_valid
+        && executable_stable
+        && fixtures_valid
         && !contract.requires.contains_uninterpreted()
         && !contract.ensures.contains_uninterpreted()
     {
@@ -530,7 +619,19 @@ fn solver_json(path: &str, script: &str, contract: &Contract, timeout_ms: u64) -
             {
                 Err(cgx2_verify_core::UnknownReason::MalformedResponse)
             } else {
-                validate_solver_witness(contract, &witness.stdout, failure)
+                validate_solver_witness(contract, &witness.stdout, failure).and_then(|candidate| {
+                    if let Some(selected) = selected {
+                        let source_valid = selected
+                            .source_obligations(&candidate.values)
+                            .is_ok_and(|obligations| obligations[index]);
+                        if !source_valid {
+                            return Err(cgx2_verify_core::UnknownReason::Evaluation(
+                                "witness fails source parity".into(),
+                            ));
+                        }
+                    }
+                    Ok(candidate)
+                })
             };
             result["witness_attempts"]
                 .as_array_mut()
@@ -564,8 +665,9 @@ fn source_unknown(options: &Options, bytes: &[u8], diagnostic: &source::Diagnost
         "verdict": {"kind": "unknown", "meaning": "source_subset_unsupported",
             "scope": {"requested_domains": domain_json(&options.domains), "max_cases": options.max_cases},
             "diagnostic": diagnostic.json()},
-        "unsupported_obligations": [diagnostic.json()],
-        "proof": {"kind": "unknown", "meaning": "no_trusted_solver_proof"},
+    "unsupported_obligations": [diagnostic.json()],
+    "bounded_solver_result": {"kind": "unrun", "reason": "source_subset_unsupported", "source_parity": false},
+    "proof": {"kind": "unknown", "meaning": "no_trusted_solver_proof", "reason": "source_subset_unsupported"},
     });
     if options.format == "json" {
         println!("{}", result);
@@ -593,16 +695,17 @@ fn run() -> Result<(), String> {
     let source_input = Path::new(&options.input)
         .extension()
         .is_some_and(|ext| ext == "cg");
-    let (contract, domains, source_meta) = if source_input {
+    let (contract, domains, source_meta, source_selected) = if source_input {
         let text = std::str::from_utf8(&bytes).map_err(|_| "source must be UTF-8")?;
         match source::parse(text, options.function.as_deref(), options.domains.clone()) {
             Ok(selected) => (
-                selected.contract,
-                selected.domains,
+                selected.contract.clone(),
+                selected.domains.clone(),
                 Some(json!({"path": options.input, "function": selected.name,
-                        "span": {"start": selected.span.start, "end": selected.span.end},
-                        "obligations": selected.obligations,
-                        "unsupported_obligations": []})),
+                "span": {"start": selected.span.start, "end": selected.span.end},
+                "obligations": selected.obligations,
+                "unsupported_obligations": []})),
+                Some(selected),
             ),
             Err(diagnostic) => {
                 source_unknown(&options, &bytes, &diagnostic);
@@ -614,7 +717,7 @@ fn run() -> Result<(), String> {
             return Err("--function and --domain require a .cg source file".into());
         }
         let (contract, domains) = parse_document(&bytes)?;
-        (contract, domains, None)
+        (contract, domains, None, None)
     };
     let verdict = verify_bounded(&contract, &domains, options.max_cases);
     let mut result = json!({
@@ -632,27 +735,78 @@ fn run() -> Result<(), String> {
             });
         }
     }
+    let script = emit_smtlib(&contract).map_err(|e| format!("SMT emission failed: {e:?}"))?;
+    let audit = if let Some(selected) = &source_selected {
+        audit_encoding_with_source(&contract, &domains, options.max_cases, &script, &|values| {
+            selected.source_obligations(values)
+        })
+    } else {
+        audit_encoding(&contract, &domains, options.max_cases, &script)
+    };
+    result["bounded_solver_result"] = match &audit {
+        Ok(checked) => {
+            json!({"kind": "cross_checked", "evaluator": "independent_smt_term_interpreter", "checked_cases": checked.cases,
+            "obligations": {"requires_defined": checked.obligations[0], "requires_satisfiable": checked.obligations[1],
+                "ensures_false": checked.obligations[2], "ensures_overflow": checked.obligations[3]},
+            "source_parity": source_selected.is_some()})
+        }
+        Err(error) => {
+            let kind = if matches!(
+                error,
+                cgx2_verify_core::AuditError::Mismatch { .. }
+                    | cgx2_verify_core::AuditError::SourceMismatch { .. }
+            ) {
+                "failed"
+            } else {
+                "unrun"
+            };
+            json!({"kind": kind, "reason": format!("{error:?}"), "source_parity": false})
+        }
+    };
+    result["smtlib"] = json!(script);
+    result["solver_fixture_catalog"] = solver_fixture_catalog();
     if let Some(path) = &options.solver {
-        let script = emit_smtlib(&contract).map_err(|e| format!("SMT emission failed: {e:?}"))?;
-        result["solver"] = solver_json(path, &script, &contract, options.timeout_ms);
+        result["solver"] = solver_json(
+            path,
+            &script,
+            &contract,
+            options.timeout_ms,
+            source_selected.as_ref(),
+        );
     }
+    let source_parity = source_selected.is_some() && audit.is_ok();
+    let trusted_solver = source_parity
+        && result["solver"]["bounded_reason"] == "none"
+        && result["solver"]["statuses"] == json!(["unsat", "sat", "unsat", "unsat"])
+        && result["solver"]["fixtures_valid"] == true
+        && result["solver"]["identity_valid"] == true
+        && result["solver"]["executable_stable"] == true;
     result["proof"] = match &verdict {
-        Verdict::Disproved { counterexample } => {
+        Verdict::Disproved { counterexample } if audit.is_ok() => {
             let mut proof = counterexample_json(counterexample);
             proof["kind"] = json!("disproved");
-            proof["meaning"] = json!("finite_domain_validated_counterexample");
+            proof["meaning"] = json!("finite_domain_cross_checked_counterexample");
             proof
         }
-        _ if result["solver"]["response"] == "validated_counterexample" => {
+        _ if result["solver"]["response"] == "validated_counterexample" && audit.is_ok() => {
             let mut proof = result["solver"]["validated_counterexample"].clone();
             proof["kind"] = json!("disproved");
-            proof["meaning"] = json!("validated_counterexample");
+            proof["meaning"] = json!("solver_witness_validated_against_source");
             proof
+        }
+        _ if trusted_solver => {
+            result["solver"]["trust"] = json!("recognized_live_solver_with_fixture_probes");
+            json!({"kind": "proved", "meaning": "global_checked_pure_fragment",
+                "trust_conditions": ["four_complete_obligations", "source_and_smt_term_parity",
+                    "recognized_solver_version_and_sha256", "true_false_overflow_fixture_probes"]})
         }
         _ => json!({
             "kind": "unknown",
             "meaning": "no_trusted_solver_proof",
-            "reason": result["solver"]["response"].as_str().unwrap_or("solver_not_configured"),
+            "reason": if audit.is_err() { "encoding_or_source_audit_unrun_or_failed" }
+                else if source_selected.is_none() { "source_parity_unrun" }
+                else if options.solver.is_none() { "live_solver_unrun" }
+                else { result["solver"]["bounded_reason"].as_str().unwrap_or("incomplete_solver_obligation") },
         }),
     };
     if options.format == "json" {
@@ -667,6 +821,11 @@ fn run() -> Result<(), String> {
             "proof: {} ({})",
             result["proof"]["kind"].as_str().unwrap(),
             result["proof"]["meaning"].as_str().unwrap()
+        );
+        println!(
+            "encoding_audit: {} (source_parity: {})",
+            result["bounded_solver_result"]["kind"].as_str().unwrap(),
+            result["bounded_solver_result"]["source_parity"]
         );
         println!("scope: {}", result["verdict"]["scope"]);
         match &verdict {

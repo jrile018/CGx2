@@ -142,7 +142,7 @@ fn fake_solver(body: &str) -> Temp {
 
 #[cfg(unix)]
 #[test]
-fn fake_solver_only_disproves_with_a_validated_model() {
+fn fake_solver_is_protocol_evidence_only() {
     let input = fixture(include_str!("../examples/valid.json"));
     let valid = fake_solver("printf 'unsat\\nsat\\nsat\\nunsat\\n'");
     let result = parsed(
@@ -167,10 +167,9 @@ fn fake_solver_only_disproves_with_a_validated_model() {
         ],
     );
     assert_eq!(result["verdict"]["meaning"], "finite_domain_only");
-    assert_eq!(result["proof"]["kind"], "disproved", "{result}");
-    assert_eq!(result["proof"]["meaning"], "validated_counterexample");
-    assert_eq!(result["proof"]["counterexample"]["x"], 4);
-    assert_eq!(result["solver"]["response"], "validated_counterexample");
+    assert_eq!(result["proof"]["kind"], "unknown", "{result}");
+    assert_eq!(result["solver"]["response"], "sat_candidate_unvalidated");
+    assert_eq!(result["solver"]["witness_attempts"], json!([]));
 
     let invalid = body.replace("v_78 4", "v_78 0");
     let solver = Temp::new(invalid.as_bytes(), "invalid-model-solver.sh");

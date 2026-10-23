@@ -45,6 +45,54 @@ const TRUE: &str = include_str!("../examples/finite.cg");
 const FALSE: &str = include_str!("../examples/false.cg");
 
 #[test]
+fn source_and_smt_parity_covers_i64_max_body_overflow() {
+    let result = Source::new(TRUE).run(&["--domain", "x:9223372036854775806:9223372036854775807"]);
+    assert_eq!(result["bounded_solver_result"]["kind"], "cross_checked");
+    assert_eq!(result["bounded_solver_result"]["source_parity"], true);
+    assert_eq!(
+        result["solver_fixture_catalog"].as_array().unwrap().len(),
+        3
+    );
+    assert!(result["solver_fixture_catalog"][2]["smtlib"]
+        .as_str()
+        .unwrap()
+        .contains("; vc:ensures_overflow"));
+    assert_eq!(result["bounded_solver_result"]["checked_cases"], 2);
+    assert_eq!(
+        result["bounded_solver_result"]["obligations"]["ensures_overflow"],
+        1
+    );
+    assert_eq!(result["verdict"]["kind"], "disproved");
+    assert_eq!(result["proof"]["kind"], "disproved");
+    assert_eq!(result["proof"]["counterexample"]["x"], i64::MAX);
+    assert_eq!(result["source"]["obligations"][1]["kind"], "body_defined");
+}
+
+#[cfg(unix)]
+#[test]
+fn solver_version_spoof_with_canned_statuses_cannot_prove() {
+    use std::os::unix::fs::PermissionsExt;
+    let directory = std::env::temp_dir().join(format!(
+        "cgx2-solver-probe-{}-{}",
+        std::process::id(),
+        NEXT.fetch_add(1, Ordering::Relaxed)
+    ));
+    fs::create_dir(&directory).unwrap();
+    let solver = directory.join("z3");
+    fs::write(&solver, "#!/bin/sh\nif [ \"$1\" = \"--version\" ]; then echo 'Z3 version 4.12.2'; exit 0; fi\ncat >/dev/null\nprintf 'unsat\\nsat\\nunsat\\nunsat\\n'\n").unwrap();
+    fs::set_permissions(&solver, fs::Permissions::from_mode(0o700)).unwrap();
+    let result =
+        Source::new(TRUE).run(&["--domain", "x:0:2", "--solver", solver.to_str().unwrap()]);
+    assert_eq!(result["bounded_solver_result"]["source_parity"], true);
+    assert_eq!(result["solver"]["identity_valid"], true);
+    assert_eq!(result["solver"]["fixtures_valid"], false);
+    assert_eq!(result["solver"]["bounded_reason"], "solver_fixture_failed");
+    assert_eq!(result["proof"]["kind"], "unknown");
+    fs::remove_file(solver).unwrap();
+    fs::remove_dir(directory).unwrap();
+}
+
+#[test]
 fn finite_proof_and_re_evaluated_counterexample() {
     let valid = Source::new(TRUE).run(&["--domain", "x:0:2"]);
     assert_eq!(valid["schema_version"], 3);

@@ -37,6 +37,9 @@ pub enum SolverResponse {
 }
 
 pub fn parse_solver_result(stdout: &str, stderr: &str, exit_status: SolverExit) -> SolverResponse {
+    if stdout.len() > SOLVER_OUTPUT_LIMIT || stderr.len() > SOLVER_OUTPUT_LIMIT {
+        return SolverResponse::Unknown(UnknownReason::MalformedResponse);
+    }
     match exit_status {
         SolverExit::Timeout => return SolverResponse::Unknown(UnknownReason::Timeout),
         SolverExit::Unavailable => {
@@ -48,11 +51,7 @@ pub fn parse_solver_result(stdout: &str, stderr: &str, exit_status: SolverExit) 
     if !stderr.trim().is_empty() {
         return SolverResponse::Unknown(UnknownReason::MalformedResponse);
     }
-    let statuses = stdout
-        .lines()
-        .map(str::trim)
-        .filter(|line| !line.is_empty())
-        .collect::<Vec<_>>();
+    let statuses = stdout.lines().map(str::trim).collect::<Vec<_>>();
     if statuses.len() != 4
         || statuses
             .iter()
