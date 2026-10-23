@@ -729,13 +729,47 @@ impl Checker {
                 iter,
                 body,
             } => {
-                let element = match self.check_expr(iter) {
-                    Some(Type::List(inner)) => Some(*inner),
-                    Some(_) => {
-                        self.report("CGT003", "for iterator must be a List<T>", iter.span);
-                        None
+                let element = match &iter.kind {
+                    ExprKind::Call { callee, arguments } if matches!(&callee.kind, ExprKind::Name(path) if path.segments.as_slice() == ["range"]) => {
+                        if arguments.len() != 2 || arguments.iter().any(|arg| arg.name.is_some()) {
+                            self.report(
+                                "CGT005",
+                                "range requires exactly two positional i64 arguments",
+                                iter.span,
+                            );
+                            None
+                        } else {
+                            for arg in arguments {
+                                if !effects::contract_calls_are_safe(
+                                    &arg.value,
+                                    &self.effect_summaries,
+                                    &self.module,
+                                ) {
+                                    self.report(
+                                        "CGT012",
+                                        "range bounds require pure local calls",
+                                        arg.value.span,
+                                    );
+                                }
+                                if let Some(ty) = self.check_expr(&arg.value) {
+                                    self.expect_type(&ty, &Type::I64, arg.value.span);
+                                }
+                            }
+                            Some(Type::I64)
+                        }
                     }
-                    None => None,
+                    _ => match self.check_expr(iter) {
+                        Some(Type::List(inner)) => Some(*inner),
+                        Some(_) => {
+                            self.report(
+                                "CGT003",
+                                "for iterator must be a List<T> or range(start, end)",
+                                iter.span,
+                            );
+                            None
+                        }
+                        None => None,
+                    },
                 };
                 self.scopes.push(BTreeMap::new());
                 if let Some(element) = element {
@@ -750,6 +784,11 @@ impl Checker {
                         },
                     );
                 }
+                if matches!(&iter.kind, ExprKind::Call { callee, .. }
+                    if matches!(&callee.kind, ExprKind::Name(path) if path.segments.as_slice() == ["range"]))
+                {
+                    self.check_range_body_policy(body);
+                }
                 self.check_block(body, expected);
                 self.scopes.pop();
                 Some((Type::Unit, statement.span))
@@ -761,6 +800,37 @@ impl Checker {
                     statement.span,
                 );
                 None
+            }
+        }
+    }
+
+    fn check_range_body_policy(&mut self, body: &[Stmt]) {
+        for stmt in body {
+            let expression = match &stmt.kind {
+                StmtKind::Let { value, .. }
+                | StmtKind::Assign { value, .. }
+                | StmtKind::Expr(value) => Some(value),
+                StmtKind::Return(_) => {
+                    self.report("CGT003", "return in a range loop is unsupported", stmt.span);
+                    None
+                }
+                StmtKind::For { body, .. } => {
+                    self.check_range_body_policy(body);
+                    None
+                }
+                StmtKind::NoGc { .. } => {
+                    self.report("CGT003", "no_gc in a range loop is unsupported", stmt.span);
+                    None
+                }
+            };
+            if let Some(expr) = expression {
+                if !effects::contract_calls_are_safe(expr, &self.effect_summaries, &self.module) {
+                    self.report(
+                        "CGT012",
+                        "range loop body calls must be pure local",
+                        expr.span,
+                    );
+                }
             }
         }
     }
@@ -815,6 +885,11 @@ impl Checker {
                 }
             }
             ExprKind::Call { callee, arguments } => {
+                if matches!(&callee.kind, ExprKind::Name(path) if path.segments.as_slice() == ["range"])
+                {
+                    self.report("CGT003", "range is only valid in a for iterator", expr.span);
+                    return None;
+                }
                 let mut arg_types = Vec::new();
                 for arg in arguments {
                     if arg.name.is_some() {

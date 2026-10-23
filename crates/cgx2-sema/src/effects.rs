@@ -35,7 +35,7 @@ fn expr_sites(expr: &Expr, sites: &mut Vec<Site>) {
                     let name = path.segments.join(".");
                     match name.as_str() {
                         "$cgx2_cmp_eq" | "$cgx2_cmp_ne" | "$cgx2_cmp_lt" | "$cgx2_cmp_le"
-                        | "$cgx2_cmp_gt" | "$cgx2_cmp_ge" => return,
+                        | "$cgx2_cmp_gt" | "$cgx2_cmp_ge" | "range" => return,
                         "arg" | "arg_count" => (None, Some("ReadArgs"), Some("ArgsRead")),
                         "memory.collect" => (None, Some("Collect"), Some("MemoryCollect")),
                         n if n.starts_with("memory.alloc")

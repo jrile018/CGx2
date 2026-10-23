@@ -389,8 +389,8 @@ const PRELUDE: &str = r#"// Generated from CGx2's checked scalar profile.
 struct Cgx2Context { steps: usize, depth: usize }
 
 impl Cgx2Context {
-    fn step(&mut self) -> Result<(), String> {
-        if self.steps >= 1_000_000 { return Err("execution step limit of 1000000 exceeded".into()); }
+    fn step(&mut self, start: usize, end: usize) -> Result<(), String> {
+        if self.steps >= 1_000_000 { return Err(format!("CGR010 at {start}..{end}: execution step limit of 1000000 exceeded")); }
         self.steps += 1;
         Ok(())
     }
@@ -402,6 +402,10 @@ impl Cgx2Context {
     fn leave(&mut self) { self.depth -= 1; }
 }
 
+fn cgx2_at(error: String, start: usize, end: usize) -> String {
+    let code = if error == "division by zero" { "CGR006" } else { "CGR005" };
+    format!("{code} at {start}..{end}: {error}")
+}
 fn cgx2_add(left: i64, right: i64) -> Result<i64, String> {
     left.checked_add(right).ok_or_else(|| "i64 arithmetic overflow".into())
 }
@@ -525,11 +529,24 @@ fn validate_block(
                 }
             }
             StmtKind::Expr(expr) => validate_expr(expr, functions, allowed_imports, errors),
-            StmtKind::For { .. } => errors.push(EmitDiagnostic::new(
-                "CGRS001",
-                "for loops are unsupported by Rust scalar emission",
-                stmt.span,
-            )),
+            StmtKind::For { iter, body, .. } => {
+                if let ExprKind::Call { callee, arguments } = &iter.kind
+                    && matches!(&callee.kind, ExprKind::Name(path) if path.segments.as_slice() == ["range"])
+                    && arguments.len() == 2
+                    && arguments.iter().all(|arg| arg.name.is_none())
+                {
+                    for arg in arguments {
+                        validate_expr(&arg.value, functions, allowed_imports, errors);
+                    }
+                    validate_block(body, script, functions, allowed_imports, errors);
+                    continue;
+                }
+                errors.push(EmitDiagnostic::new(
+                    "CGRS001",
+                    "for iterator must be range(start, end)",
+                    stmt.span,
+                ));
+            }
             StmtKind::NoGc { .. } => errors.push(EmitDiagnostic::new(
                 "CGRS001",
                 "no_gc and memory are unsupported by Rust scalar emission",
@@ -749,7 +766,10 @@ fn emit_function_body(function: &Function, indent: usize, out: &mut String, modu
 fn emit_block_context(stmts: &[Stmt], indent: usize, out: &mut String, module: Option<&str>) {
     let pad = "    ".repeat(indent);
     for (index, stmt) in stmts.iter().enumerate() {
-        out.push_str(&format!("{pad}ctx.step()?;\n"));
+        out.push_str(&format!(
+            "{pad}ctx.step({}, {})?;\n",
+            stmt.span.start, stmt.span.end
+        ));
         let last = index + 1 == stmts.len();
         match &stmt.kind {
             StmtKind::Let {
@@ -773,8 +793,8 @@ fn emit_block_context(stmts: &[Stmt], indent: usize, out: &mut String, module: O
                         emit_expr_context(value, module)
                     )),
                     AssignOp::Add => out.push_str(&format!(
-                        "{pad}let cgx2_rhs = {}?;\n{pad}{name} = cgx2_add({name}, cgx2_rhs)?;\n",
-                        emit_expr_context(value, module)
+                        "{pad}let cgx2_rhs = {}?;\n{pad}{name} = cgx2_add({name}, cgx2_rhs).map_err(|e| cgx2_at(e, {}, {}))?;\n",
+                        emit_expr_context(value, module), stmt.span.start, stmt.span.end
                     )),
                 }
             }
@@ -791,7 +811,38 @@ fn emit_block_context(stmts: &[Stmt], indent: usize, out: &mut String, module: O
                 "{pad}let _ = {}?;\n",
                 emit_expr_context(expr, module)
             )),
-            StmtKind::For { .. } | StmtKind::NoGc { .. } => unreachable!("validated source"),
+            StmtKind::For {
+                binding,
+                iter,
+                body,
+            } => {
+                let ExprKind::Call { arguments, .. } = &iter.kind else {
+                    unreachable!("validated range")
+                };
+                out.push_str(&format!(
+                    "{pad}{{\n{pad}    ctx.step({}, {})?;\n",
+                    iter.span.start, iter.span.end
+                ));
+                out.push_str(&format!(
+                    "{pad}    let cgx2_range_start = {}?;\n",
+                    emit_expr_context(&arguments[0].value, module)
+                ));
+                out.push_str(&format!(
+                    "{pad}    let cgx2_range_end = {}?;\n",
+                    emit_expr_context(&arguments[1].value, module)
+                ));
+                out.push_str(&format!("{pad}    for cgx2_range_index in cgx2_range_start..cgx2_range_end {{\n{pad}        ctx.step({}, {})?;\n", stmt.span.start, stmt.span.end));
+                out.push_str(&format!(
+                    "{pad}        let {} = cgx2_range_index;\n",
+                    rust_name(binding)
+                ));
+                out.push_str(&format!(
+                    "{pad}        let _ = (|| -> Result<_, String> {{\n"
+                ));
+                emit_block_context(body, indent + 3, out, module);
+                out.push_str(&format!("{pad}        }})()?;\n{pad}    }}\n{pad}}}\n"));
+            }
+            StmtKind::NoGc { .. } => unreachable!("validated source"),
         }
     }
     if !matches!(
@@ -821,9 +872,11 @@ fn emit_expr_context(expr: &Expr, module: Option<&str>) -> String {
                 BinaryOp::Divide => "cgx2_div",
             };
             format!(
-                "{{ let left = {}?; let right = {}?; {helper}(left, right) }}",
+                "{{ let left = {}?; let right = {}?; {helper}(left, right).map_err(|e| cgx2_at(e, {}, {})) }}",
                 emit_expr_context(left, module),
-                emit_expr_context(right, module)
+                emit_expr_context(right, module),
+                expr.span.start,
+                expr.span.end
             )
         }
         ExprKind::Call { callee, arguments } => {
@@ -870,7 +923,10 @@ fn emit_expr_context(expr: &Expr, module: Option<&str>) -> String {
             format!("{{ {prefix}{call} }}")
         }
     };
-    format!("{{ ctx.step()?; {value} }}")
+    format!(
+        "{{ ctx.step({}, {})?; {value} }}",
+        expr.span.start, expr.span.end
+    )
 }
 
 fn decode_string(raw: &str) -> Option<String> {

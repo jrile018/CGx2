@@ -482,6 +482,13 @@ impl Parser {
             }
             self.expect(&TokenKind::RParen, "CGS103", "expected ) after budget")?;
             let budget = arguments.into_iter().next()?.value;
+            if matches!(&budget.kind, ExprKind::Integer(value) if value.starts_with('-')) {
+                self.errors.push(SyntaxDiagnostic {
+                    code: "CGS106",
+                    message: "no_gc budget must be nonnegative".into(),
+                    span: budget.span,
+                });
+            }
             let (body, end) = self.parse_suite()?;
             return Some(Stmt {
                 kind: StmtKind::NoGc { budget, body },
@@ -718,6 +725,22 @@ impl Parser {
                 Some(Expr {
                     kind: ExprKind::Integer(value),
                     span: token.span,
+                })
+            }
+            TokenKind::Minus => {
+                self.advance();
+                let integer = self.peek().clone();
+                let TokenKind::Integer(value) = integer.kind else {
+                    self.error("CGS103", "expected integer literal after unary minus");
+                    return None;
+                };
+                self.advance();
+                Some(Expr {
+                    kind: ExprKind::Integer(format!("-{value}")),
+                    span: Span {
+                        start: token.span.start,
+                        end: integer.span.end,
+                    },
                 })
             }
             TokenKind::StringLiteral(value) => {

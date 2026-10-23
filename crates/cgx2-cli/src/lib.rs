@@ -92,7 +92,12 @@ fn execute_with_failure(
             || f.capabilities.is_some()
             || f.foreign.is_some()
     });
-    if is_memory || check_scalar || requires_static_gate {
+    let has_for = module.statements.iter().any(eval::stmt_has_for)
+        || module
+            .functions
+            .iter()
+            .any(|f| f.body.iter().any(eval::stmt_has_for));
+    if is_memory || check_scalar || requires_static_gate || has_for {
         cgx2_sema::check_module(&module).map_err(|diagnostics| {
             diagnostics
                 .into_iter()
