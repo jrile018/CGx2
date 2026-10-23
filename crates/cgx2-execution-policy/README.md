@@ -1,5 +1,44 @@
 # CGx2 measured CPU policy
 
+## Wave 20 zip-map reliability contract
+
+`execute_zip_map(left, right, addend, policy, caps)` retains its existing API.
+`execute_zip_map_cancellable(left, right, addend, policy, caps, cancellation)`
+adds a shared `&AtomicBool` cancellation flag. For direct explicit parallel
+calls, use `zip_map_i64_checked_parallel_cancellable(left, right, addend,
+requested_workers, cancellation)`. The caller sets the flag to `true` to request
+cancellation and keeps it set until the call returns. Both execution modes return
+`MapError::Cancelled` when the request is observed before their final check.
+Completion and a simultaneous late
+request race at that check; a request made after the call returns cannot change
+the result.
+
+Zip-map validates input lengths first and explicit worker feasibility second,
+then checks cancellation. Sequential and parallel paths reserve output with
+`try_reserve_exact`; failure returns `MapError::AllocationFailed`. Parallel
+workers produce private chunks and every launched worker is joined, including
+after an overflow, allocation error, cancellation, or panic. A panic becomes
+`MapError::WorkerPanicked { chunk }`. Without cancellation, the first failed
+chunk in input order wins; an overflow within that chunk reports its lowest
+index. An observed cancellation wins over worker errors. No error returns a
+partial result. Empty and single-element inputs work through the sequential
+path; explicit parallel requests keep their existing infeasible-worker error.
+
+The deterministic parity corpus starts at seed `0x5eedead` and contains 96
+cases with boundary sizes and checked arithmetic extremes. Replay it with:
+
+```sh
+RUSTUP_TOOLCHAIN=1.98.1 cargo test --offline -p cgx2-execution-policy \
+  --test zip_map bounded_seeded_corpus_matches_every_backend -- --nocapture
+```
+
+The exact future `.cg` lowering entry point is `execute_zip_map_cancellable`:
+checked source lowering would supply two equal-length `&[i64]` slices, an
+`i64` addend, a policy, host-local capabilities and validated measurements,
+and a runtime cancellation flag. It must first prove pure independent work,
+safe ownership, and no managed-session sharing. This crate does not lower
+arbitrary `.cg` expressions, dispatch GPU work, or parallelize managed objects.
+
 This crate runs two reviewed pure CPU primitives: checked i64 elementwise
 `value * multiplier + addend` (`execute_map`) and checked two-input
 `left[i] * right[i] + addend` (`execute_zip_map`). Sequential and scoped-thread
