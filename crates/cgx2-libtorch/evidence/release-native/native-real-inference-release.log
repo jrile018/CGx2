@@ -1,0 +1,42 @@
+   Compiling version_check v0.9.5
+   Compiling proc-macro2 v1.0.107
+   Compiling typenum v1.20.1
+   Compiling generic-array v0.14.7
+   Compiling unicode-ident v1.0.26
+   Compiling quote v1.0.47
+   Compiling serde_core v1.0.229
+   Compiling cgx2-syntax v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-syntax)
+   Compiling crypto-common v0.1.7
+   Compiling block-buffer v0.10.4
+   Compiling cgx2-ownership v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-ownership)
+   Compiling zmij v1.0.23
+   Compiling cgx2-sema v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-sema)
+   Compiling syn v3.0.6
+   Compiling digest v0.10.7
+   Compiling cpufeatures v0.2.17
+   Compiling serde_json v1.0.149
+   Compiling cfg-if v1.0.5
+   Compiling serde v1.0.229
+   Compiling sha2 v0.10.9
+   Compiling serde_derive v1.0.229
+   Compiling cgx2-api-index v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-api-index)
+   Compiling itoa v1.0.18
+   Compiling memchr v2.8.3
+   Compiling cgx2-package v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-package)
+   Compiling cgx2-ffi-core v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-ffi-core)
+   Compiling cgx2-bind v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-bind)
+   Compiling cgx2-ffi-native v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-ffi-native)
+   Compiling cgx2-libtorch v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-libtorch)
+    Finished `release` profile [optimized] target(s) in 10.41s
+     Running tests/inference.rs (target/release-native/release/deps/inference-1d935cd884cd711d)
+
+running 1 test
+real_cpu_output=[-6.5, 8.5]
+real_cpu_output=[-6.5, 8.5]
+real_cpu_output=[-6.5, 8.5]
+real_cpu_output=[-6.5, 8.5]
+no_libpython=true; device=cpu; dtype=f32; tolerance=1e-5
+test real_pinned_two_layer_inference_no_python ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 56.38s
+

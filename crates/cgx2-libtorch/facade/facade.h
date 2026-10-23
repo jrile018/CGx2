@@ -44,6 +44,12 @@ CGX2_EXPORT int32_t cgx2_torch_matrix_f32_cpu(const float *values, uint64_t rows
 CGX2_EXPORT int32_t cgx2_torch_matmul_f32(const void *left, const void *right, void **output);
 CGX2_EXPORT int32_t cgx2_torch_matrix_f32_info(const void *matrix, uint64_t *rows, uint64_t *cols, uint32_t *dtype);
 CGX2_EXPORT int32_t cgx2_torch_matrix_copy_f32(const void *matrix, float *output, uint64_t capacity);
+/* Additive inference API v4 on ABI v1: exact-shape f32 CPU add and ReLU.
+ * Inputs borrowed; outputs distinct/owned and finite. No broadcasting, retained
+ * caller buffers, autograd, callbacks or foreign exceptions across this ABI. */
+CGX2_EXPORT uint32_t cgx2_torch_inference_api_version(void);
+CGX2_EXPORT int32_t cgx2_torch_matrix_add_f32(const void *, const void *, void **);
+CGX2_EXPORT int32_t cgx2_torch_matrix_relu_f32(const void *, void **);
 #ifdef __cplusplus
 }
 #endif

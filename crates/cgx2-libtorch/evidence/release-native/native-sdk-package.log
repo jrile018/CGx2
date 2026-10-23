@@ -1,0 +1,2 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running `target/release-native/debug/examples/package_native_sdk /home/john-riley/.codex/worktrees/93bf/lang/target/release-native/libsdk.so /home/john-riley/.codex/worktrees/93bf/lang/target/release-native/sdk-package sdk_fixture 1.0.0`

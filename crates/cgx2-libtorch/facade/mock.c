@@ -8,9 +8,14 @@
 #define MOCK_VERSION "2.6.0"
 #endif
 
+#ifndef MOCK_INFERENCE_API_VERSION
+#define MOCK_INFERENCE_API_VERSION 4
+#endif
+
 #ifndef MOCK_ABI
 #define MOCK_ABI 1
 #endif
+
 #ifndef MOCK_IDENTITY
 #define MOCK_IDENTITY "cgx2.libtorch.cpu"
 #endif
@@ -323,3 +328,41 @@ int32_t cgx2_torch_matrix_copy_f32(const void *raw, float *output, uint64_t capa
     return 0;
 }
 #endif
+
+uint32_t cgx2_torch_inference_api_version(void) { return MOCK_INFERENCE_API_VERSION; }
+#ifndef MOCK_MISSING_RELU
+int32_t cgx2_torch_matrix_relu_f32(const void *input, void **output) {
+    if (output) *output = NULL;
+    MockTensor *a = checked(input);
+    if (!output || !a || a->dtype != CGX2_TORCH_DTYPE_F32) return 3;
+    if (a->profile == 305) { *output = a; return 0; }
+    MockTensor *result = allocate();
+    if (!result) return 4;
+    result->rows = a->rows; result->cols = a->cols;
+    result->length = a->length; result->dtype = a->dtype;
+    for (uint64_t i = 0; i < a->length; ++i)
+        result->values_f32[i] = a->values_f32[i] > 0 ? a->values_f32[i] : 0;
+    *output = result;
+    if (a->profile == 304) return 7;
+    return 0;
+}
+#endif
+int32_t cgx2_torch_matrix_add_f32(const void *left, const void *right, void **output) {
+    if (output) *output = NULL;
+    MockTensor *a = checked(left), *b = checked(right);
+    if (!output || !a || !b || a->rows != b->rows || a->cols != b->cols ||
+        a->dtype != CGX2_TORCH_DTYPE_F32 || b->dtype != a->dtype) return 3;
+    MockTensor *result = allocate();
+    if (!result) return 4;
+    result->rows = a->rows; result->cols = a->cols;
+    result->length = a->length; result->dtype = a->dtype;
+    for (uint64_t i = 0; i < a->length; ++i) {
+        result->values_f32[i] = a->values_f32[i] + b->values_f32[i];
+        if (!isfinite(result->values_f32[i])) {
+            cgx2_torch_release(result);
+            return 5;
+        }
+    }
+    *output = result;
+    return 0;
+}

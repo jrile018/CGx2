@@ -10,6 +10,7 @@ use cgx2_package::load_checked_package;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 mod closure;
+pub mod sdk_v2;
 mod trace;
 pub use closure::{
     verify_libtorch_closure, ClosureError, ClosureLock, LibraryPin, VerifiedClosure,
@@ -404,7 +405,7 @@ fn inspect_package(root: &Path) -> (Report, Option<BindingLock>) {
             return (report, None);
         }
     };
-    if !matches!(lock.schema_version, 1 | 2)
+    if !matches!(lock.schema_version, 1..=3)
         || lock.package != report.package
         || lock.bindings.is_empty()
         || lock.bindings.len() > MAX_BINDINGS
@@ -428,8 +429,19 @@ fn inspect_package(root: &Path) -> (Report, Option<BindingLock>) {
         if !seen.insert(binding.id.as_str()) {
             report.push("CGB004", &binding.id, "duplicate binding id");
         }
+        if matches!(
+            binding.layout.as_str(),
+            "native-sdk-v2" | "tensor-f32-cpu-inference-v4"
+        ) && lock.schema_version != 3
+        {
+            report.push(
+                "CGB004",
+                &binding.id,
+                "new SDK/inference layouts require lock schema 3",
+            );
+        }
         check_binding(root, binding, &mut report, &mut remaining_artifact_bytes);
-        if lock.schema_version == 2 && binding.route == "libtorch" {
+        if lock.schema_version >= 2 && binding.route == "libtorch" {
             if let Err(error) = verify_libtorch_closure(root, binding) {
                 report.push("CGB019", &binding.id, error.to_string());
             }
@@ -468,8 +480,14 @@ pub fn checked_artifact(root: &Path, binding: &Binding) -> Result<File, String> 
         return Err("artifact exceeds size limit".into());
     }
     let mut bytes = Vec::with_capacity(size as usize);
-    file.read_to_end(&mut bytes)
+    // Bound the read even if the file grows after the metadata check.
+    file.by_ref()
+        .take(MAX_ARTIFACT_BYTES + 1)
+        .read_to_end(&mut bytes)
         .map_err(|error| format!("cannot read artifact: {error}"))?;
+    if bytes.len() as u64 > MAX_ARTIFACT_BYTES {
+        return Err("artifact exceeds size limit".into());
+    }
     if format!("{:x}", Sha256::digest(&bytes)) != binding.sha256.to_ascii_lowercase() {
         return Err("artifact SHA-256 mismatch".into());
     }
@@ -502,6 +520,8 @@ fn check_binding(
         || !matches!(
             binding.layout.as_str(),
             "scalar-v1"
+                | "native-sdk-v2"
+                | "tensor-f32-cpu-inference-v4"
                 | "status-i64-out-v1"
                 | "tensor-f64-cpu-v1"
                 | "tensor-f64-cpu-matrix-v2"
@@ -510,12 +530,18 @@ fn check_binding(
         || (binding.route == "libtorch"
             && !matches!(
                 binding.layout.as_str(),
-                "tensor-f64-cpu-v1" | "tensor-f64-cpu-matrix-v2" | "tensor-f32-cpu-matrix-v3"
+                "tensor-f64-cpu-v1"
+                    | "tensor-f64-cpu-matrix-v2"
+                    | "tensor-f32-cpu-matrix-v3"
+                    | "tensor-f32-cpu-inference-v4"
             ))
         || (binding.route == "native-c"
             && matches!(
                 binding.layout.as_str(),
-                "tensor-f64-cpu-v1" | "tensor-f64-cpu-matrix-v2" | "tensor-f32-cpu-matrix-v3"
+                "tensor-f64-cpu-v1"
+                    | "tensor-f64-cpu-matrix-v2"
+                    | "tensor-f32-cpu-matrix-v3"
+                    | "tensor-f32-cpu-inference-v4"
             ))
         || (binding.layout == "status-i64-out-v1" && binding.route != "native-c")
     {
@@ -546,7 +572,9 @@ fn check_binding(
     }
     if binding.route == "libtorch" {
         let mut declared = binding.symbols.clone();
-        let mut expected = if binding.layout == "tensor-f32-cpu-matrix-v3" {
+        let mut expected = if binding.layout == "tensor-f32-cpu-inference-v4" {
+            sdk_v2::libtorch_inference_facade_symbols()
+        } else if binding.layout == "tensor-f32-cpu-matrix-v3" {
             libtorch_f32_matrix_facade_symbols()
         } else if binding.layout == "tensor-f64-cpu-matrix-v2" {
             libtorch_matrix_facade_symbols()
@@ -557,6 +585,18 @@ fn check_binding(
         expected.sort_by(|left, right| left.name.cmp(&right.name));
         if binding.library != "cgx2.libtorch.cpu" || declared != expected {
             report.push("CGB018", id, "LibTorch route requires exact cgx2.libtorch.cpu facade v1 exports and C signatures");
+        }
+    } else if binding.layout == "native-sdk-v2" {
+        let mut declared = binding.symbols.clone();
+        declared.sort_by(|a, b| a.name.cmp(&b.name));
+        let mut expected = sdk_v2::native_facade_symbols();
+        expected.sort_by(|a, b| a.name.cmp(&b.name));
+        if declared != expected {
+            report.push(
+                "CGB018",
+                id,
+                "native SDK v2 requires exact reviewed C signatures",
+            );
         }
     } else {
         let mut names = BTreeSet::new();
@@ -683,7 +723,11 @@ fn check_binding(
     if binding.os == "linux" && std::env::consts::OS == "linux" {
         match exported_symbols(&artifact) {
             Ok(exports) => {
-                if binding.layout == "status-i64-out-v1" || binding.route == "libtorch" {
+                if matches!(
+                    binding.layout.as_str(),
+                    "status-i64-out-v1" | "native-sdk-v2"
+                ) || binding.route == "libtorch"
+                {
                     for metadata in [
                         "cgx2_library_identity",
                         "cgx2_library_version",

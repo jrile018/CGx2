@@ -1,0 +1,7 @@
+   Compiling cgx2-ffi-core v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-ffi-core)
+   Compiling cgx2-bind v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-bind)
+   Compiling cgx2-ffi-native v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-ffi-native)
+   Compiling cgx2-libtorch v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-libtorch)
+    Finished `release` profile [optimized] target(s) in 2.36s
+     Running `target/release-native/release/examples/infer_cpu /home/john-riley/.codex/worktrees/93bf/lang/target/native-real-package`
+device=cpu dtype=1 shape=[2, 1] output=[-6.5, 8.5]

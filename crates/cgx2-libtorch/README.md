@@ -1,3 +1,5 @@
+Additive pinned CPU inference v4: [INFERENCE-V4.md](INFERENCE-V4.md). Existing tensor APIs v1-v3 below remain supported.
+
 # cgx2-libtorch
 
 ## Additive CPU float32 matrix API v3

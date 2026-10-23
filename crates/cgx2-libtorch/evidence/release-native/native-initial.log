@@ -1,0 +1,73 @@
+   Compiling version_check v0.9.5
+   Compiling typenum v1.20.1
+   Compiling generic-array v0.14.7
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.26
+   Compiling quote v1.0.47
+   Compiling serde_core v1.0.229
+   Compiling cgx2-syntax v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-syntax)
+   Compiling block-buffer v0.10.4
+   Compiling crypto-common v0.1.7
+   Compiling cgx2-ownership v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-ownership)
+   Compiling zmij v1.0.23
+   Compiling cgx2-sema v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-sema)
+   Compiling digest v0.10.7
+   Compiling syn v3.0.6
+   Compiling serde v1.0.229
+   Compiling cfg-if v1.0.5
+   Compiling serde_json v1.0.149
+   Compiling cpufeatures v0.2.17
+   Compiling sha2 v0.10.9
+   Compiling serde_derive v1.0.229
+   Compiling cgx2-api-index v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-api-index)
+   Compiling memchr v2.8.3
+   Compiling cgx2-ffi-core v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-ffi-core)
+   Compiling itoa v1.0.18
+   Compiling cgx2-package v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-package)
+   Compiling cgx2-bind v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-bind)
+   Compiling cgx2-ffi-native v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-ffi-native)
+   Compiling cgx2-libtorch v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-libtorch)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.24s
+     Running unittests src/lib.rs (target/release-native/debug/deps/cgx2_bind-323907632d0d7c83)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin/cgx2-bind.rs (target/release-native/debug/deps/cgx2_bind-6c998a54e0703d2e)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/preflight.rs (target/release-native/debug/deps/preflight-c523e43ad0657aa2)
+
+running 12 tests
+test unavailable_libtorch_is_reported_without_fallback ... ok
+test rejects_contract_platform_and_unknown_fields ... ok
+test rejects_traversal_and_symlink_escape ... ok
+test rejects_lock_schema_and_lock_symlink_escape ... FAILED
+test c_fixture_passes_and_cli_outputs_stable_json ... ok
+test rejects_hash_identity_symbol_and_missing_artifact ... ok
+test rejects_excessive_binding_and_symbol_counts_before_inspection ... ok
+test opt_in_trace_preserves_success_and_first_failure_report ... ok
+test mock_facade_preflight_rejects_missing_export ... ok
+test mock_facade_preflight_pins_exact_bytes_and_c_signatures_without_loading ... ok
+test float32_matrix_preflight_requires_exact_v3_exports ... ok
+test matrix_preflight_requires_exact_v2_exports_and_keeps_v1_valid ... ok
+
+failures:
+
+---- rejects_lock_schema_and_lock_symlink_escape stdout ----
+
+thread 'rejects_lock_schema_and_lock_symlink_escape' (2104) panicked at crates/cgx2-bind/tests/preflight.rs:236:5:
+assertion failed: codes(&fixture.0).contains(&"CGB004")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    rejects_lock_schema_and_lock_symlink_escape
+
+test result: FAILED. 11 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+error: test failed, to rerun pass `-p cgx2-bind --test preflight`

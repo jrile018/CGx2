@@ -1,0 +1,4 @@
+   Compiling cgx2-ffi-native v0.1.0 (/home/john-riley/.codex/worktrees/93bf/lang/crates/cgx2-ffi-native)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.11s
+     Running `target/release-native/debug/examples/sdk_roundtrip /home/john-riley/.codex/worktrees/93bf/lang/target/release-native/sdk-package`
+Utf8("héllohéllo"); retained_handle=42

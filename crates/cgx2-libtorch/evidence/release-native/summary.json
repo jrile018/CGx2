@@ -1,0 +1,75 @@
+{
+  "asan_fixture_no_leaks_exit_code": 0,
+  "base_commit": "0f0b0b9c87d817f39830f3e2b311dbae2ae3e0f3",
+  "benchmarks": {
+    "reason": "quiet calibrated host and full pipeline/native/Python baseline protocol required",
+    "status": "unrun"
+  },
+  "branch": "riley/release-native-sdk",
+  "build_jobs": 2,
+  "clippy_exit_code": 0,
+  "diff_check_exit_code": 0,
+  "format_exit_code": 0,
+  "leak_enabled_fixture": {
+    "exit_code": 1,
+    "reason": "LeakSanitizer fatal: does not work under ptrace",
+    "status": "blocked"
+  },
+  "owned_tests": {
+    "exit_code": 0,
+    "failed": 0,
+    "ignored": 6,
+    "passed": 44
+  },
+  "real_inference": {
+    "absolute_tolerance": 1e-05,
+    "cycles": 4,
+    "device": "cpu",
+    "dtype": "f32",
+    "exit_code": 0,
+    "facade_sha256": "49a895f6c8cd94960c8a226f08c30454896adea867d8e5c1b82cadc28095aa8a",
+    "no_libpython": true,
+    "output": [
+      -6.5,
+      8.5
+    ],
+    "reference": "independent scalar f32 Rust loops",
+    "status": "passed",
+    "torch_version": "2.11.0"
+  },
+  "real_v3_regression": {
+    "cycles": 2,
+    "exit_code": 0,
+    "status": "passed"
+  },
+  "schema_version": 1,
+  "scope": "S1 Rust/library facade only; no new source compiler integration",
+  "sdk_examples_exit_code": 0,
+  "source_sha256": {
+    "crates/cgx2-bind/Cargo.toml": "b6ccda1e9a795d448149fcfcf4b29bd7008cb5516a49ac351978a2910c3b3074",
+    "crates/cgx2-bind/examples/package_native_sdk.rs": "c8da1096e206d127661e7254cd6c0a49b632383f681297a6b27274a41154a976",
+    "crates/cgx2-bind/src/lib.rs": "498d49fce5be3168cfde4416caeb46dd741d84f158b23d901aba478e5624c0e1",
+    "crates/cgx2-bind/src/sdk_v2.rs": "3478b702d6b57d19046f5c04d957c567b8775b5c3a174f43d741de7c87a79014",
+    "crates/cgx2-bind/tests/preflight.rs": "5dfd30d22f7e04b8e34c7aa4c9da9ab57f521a9fa053ee35d999cd5815a58745",
+    "crates/cgx2-ffi-core/Cargo.toml": "24219a1dfe44d9a6ffff8a652b9411ebe615c03ac94a358c622c49b6332f38d2",
+    "crates/cgx2-ffi-core/src/lib.rs": "0a964abfeb41272e20666eff6c0a2cc0b77a1ff7cdf8d9ab799d53ed89e83ace",
+    "crates/cgx2-ffi-native/Cargo.toml": "6c3665ca5f6937f737ea07f5abd46d18fab147edd69c591065cec9e4c245fe5d",
+    "crates/cgx2-ffi-native/examples/sdk_roundtrip.rs": "7776c4de9e3351907aebc032e741c0a661e82150fc49852a65055e5a90a1719b",
+    "crates/cgx2-ffi-native/reproduce-sdk.sh": "479fa2957abbd0be6cc5deccfb2aa5edda3fb8ed5ed8db07fbf36a71f42c107a",
+    "crates/cgx2-ffi-native/sdk_v2.h": "4f2cd75aed36b789305b222cc8ecdae340e0ce45e00014c22fdae870f1c8839e",
+    "crates/cgx2-ffi-native/src/lib.rs": "464a8981cda29a94c18352f504a20159d1464d5c7780298f2ee5fcda4ee4fd6f",
+    "crates/cgx2-ffi-native/src/sdk_v2.rs": "ed5c346d5865b00937d0ea4e03fbbd5f66d998e2ef02c899713644bf39fd8ebb",
+    "crates/cgx2-ffi-native/tests/fixtures/sdk.cpp": "3d2a5f22ff93e9057e93b40e23c66938f397cc7f4706b8fae650e3475c88fc98",
+    "crates/cgx2-ffi-native/tests/fixtures/sdk_asan.cpp": "a32dd0b87c5fa10471c1c030ab4b476f7b5f4d94483aaf321fe0584ae54751dd",
+    "crates/cgx2-ffi-native/tests/sdk_v2.rs": "3d8367616c7472bf5a707526605f358da23355bae3a9cbdb9092f15bdfeb3dd7",
+    "crates/cgx2-libtorch/examples/infer_cpu.rs": "ff9346cf5ce04018f6e8b504273378afdc8cb9c3670e97c493e7dfdec20dc773",
+    "crates/cgx2-libtorch/facade/facade.cpp": "0276468b263577c1cea8f5d02f4fba0180c0c8505c7640dd72c19234f5a98d3d",
+    "crates/cgx2-libtorch/facade/facade.h": "8a128c4f96a4649a52cace444efea22c2e4bdea3f0400895d87724794eaf0fec",
+    "crates/cgx2-libtorch/facade/mock.c": "b0e7971afdd2aa3b938cf9687aaacafa57eddf902b4f7238bf336cd1e4ad11b8",
+    "crates/cgx2-libtorch/prepare_pinned.py": "603f3a322d20b4031683861b0c80d4506c809e67a7af57ad09f0177351f34474",
+    "crates/cgx2-libtorch/reproduce-inference.sh": "2c0634c1ef7b7eef1c61ec84e4f2cd9ce5ab32472581cdb92421f6f5d0cfcad8",
+    "crates/cgx2-libtorch/src/lib.rs": "8d6021916acb66755d3e4d62530ad9729747a4767316d62973531afa41330fa7",
+    "crates/cgx2-libtorch/tests/inference.rs": "0ea4f4e3ae17e71ac1fd654a7792a5344ff4ead11317877c34d7a75a30d58370"
+  },
+  "toolchain": "rustc 1.98.1 (48a229cea 2026-09-01)"
+}

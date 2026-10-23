@@ -1,3 +1,5 @@
+Additive lock schema 3 and offline SDK examples: [SDK-LOCK-SCHEMA3.md](SDK-LOCK-SCHEMA3.md). Historical profiles below remain unchanged.
+
 # CGx2 pinned native binding preflight
 
 For opt-in loader diagnostics, set `CGX2_LOADER_TRACE=1` before starting the

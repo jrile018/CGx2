@@ -1,0 +1,32 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 3c3a15d..12eb73f 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -35,6 +35,7 @@ dependencies = [
+ name = "cgx2-bind"
+ version = "0.1.0"
+ dependencies = [
++ "cgx2-ffi-core",
+  "cgx2-package",
+  "serde",
+  "serde_json",
+@@ -91,9 +92,19 @@ dependencies = [
+ name = "cgx2-execution-policy"
+ version = "0.1.0"
+ 
++[[package]]
++name = "cgx2-ffi-core"
++version = "0.1.0"
++
+ [[package]]
+ name = "cgx2-ffi-native"
+ version = "0.1.0"
++dependencies = [
++ "cgx2-bind",
++ "cgx2-ffi-core",
++ "serde_json",
++ "sha2",
++]
+ 
+ [[package]]
+ name = "cgx2-foreign"
