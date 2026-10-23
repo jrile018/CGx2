@@ -1,0 +1,17 @@
+# Python-free native CLI with explicit Python worker calls
+
+**Goal.** Remove eager CPython linkage from ordinary `cgx2` while preserving existing explicit copied-scalar Python source calls. Wave 22 real f32 numerics passed, but `ldd target/debug/cgx2` exposed `libpython3.14.so.1.0` via CLI → foreign → Python bridge → PyO3.
+
+**Ownership.** Edit only `crates/cgx2-cli/**`, `crates/cgx2-foreign/**`, and `crates/cgx2-python-bridge/**`, including their manifests, tests, scripts, and READMEs. Do not edit syntax, sema, notebook, emitters, LibTorch/binding, root Cargo files, or shared docs.
+
+## Deliverable and contract
+
+1. Decouple pure declaration/value/error metadata from the in-process PyO3 host so documented `cargo build -p cgx2-cli --offline` produces a usable `cgx2` without libpython in its ELF dependencies or native-execution mappings. Moving calls to a child while retaining eager linkage is insufficient. Preserve public check/run signatures and opted-in in-process bridge/Registry APIs, including copied f64 arrays and explicit handle lifetime behavior.
+2. Route only the existing CLI Python subset (copied `i64`, `Bool`, `String`; declared allowlisted `math` and supported `builtins` calls; `runtime "local:cpython"`) through an isolated child. Do not broaden the source allowlist or add array/handle syntax. Use a versioned bounded protocol with request/response byte, string, and execution-time limits. Reject malformed tags, invalid UTF-8, truncation/trailing payloads, wrong worker/interpreter identity, unexpected exit, and oversized output before publishing a value.
+3. Specify interpreter and worker discovery/packaging. An audited stdlib-only worker script launched by selected CPython is acceptable. A compiled helper needs a reproducible build/install path; building another Cargo package does not automatically install it. Define default selection and an explicit override; record executable/version/prefix as provenance; diagnose missing dependencies. Preserve `local:cpython` as a local unpinned identity. If using `-I`, document module search while preserving the existing allowlist. Never silently switch interpreters or fall back in process.
+4. Separate user/module stdout from protocol frames. Validate declarations/capabilities before spawning or importing. Preserve checked conversions and source-located `CGR017`–`CGR021` classes, including first failure. Enforce deadlines, terminate and reap timed-out/failed children, and allow a later valid invocation. Native/LibTorch paths must never launch the Python worker.
+5. Prove exact documented default debug and release artifacts have no libpython ELF dependency. Inspect runtime maps during native execution, including the real pinned f32 route where available. Show explicit scalar Python calls still execute correctly in the child with error parity. Run existing in-process bridge/array/handle suites under their documented feature/profile. Verify workspace feature unification does not reintroduce eager native linkage.
+
+## Verification and handoff
+
+Run offline CLI, foreign, and bridge suites; adversarial protocol, timeout/crash/recovery, missing-worker, and error-span tests; float64/f32 mock source regressions; and real pinned f32 plus explicit Python subprocess smoke where available. Run owned format and Clippy `-D warnings`. Commit owned files; report exact binary hashes/build profiles, interpreter provenance, ELF/maps evidence, commands/results, real versus mock status, packaging rules, and limitations. Missing real dependencies are skips. Stop for review.
