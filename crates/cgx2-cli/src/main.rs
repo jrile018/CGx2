@@ -8,15 +8,34 @@ use cgx2_syntax::{format_module, parse_module};
 
 use diagnostics::{CliDiagnostic, DiagnosticFormat};
 
-const HELP: &str = "usage: cgx2 [--diagnostic-format=json] check FILE.cg|PACKAGE | cgx2 [--diagnostic-format=json] run FILE.cg|PACKAGE [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 api FILE.cg --json | cgx2 memory report FILE.cg [--format=json] | cgx2 memory failure-report FILE.cg | cgx2 fmt FILE.cg\ncheck validates syntax, scalar types, and a bounded memory/ownership script subset; a PACKAGE directory can run checked pure scalar/record functions through cgx2-native; schema 2 also supports bounded pinned native C calls; memory report shows CGx2 allocations only";
+const HELP: &str = "usage: cgx2 [--diagnostic-format=json] check FILE.cg|PACKAGE | cgx2 [--diagnostic-format=json] run FILE.cg|PACKAGE [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 api --json FILE.cg|PACKAGE | cgx2 build FILE.cg|PACKAGE --out BINARY [--release] [--force] [--rustc PATH] | cgx2 emit FILE.cg|PACKAGE --target rust|python --out FILE [--force] | cgx2 memory report FILE.cg [--format=json] | cgx2 memory failure-report FILE.cg | cgx2 fmt FILE.cg\ncheck validates syntax, scalar types, and a bounded memory/ownership script subset; a PACKAGE directory can run checked pure scalar/record functions through cgx2-native; schema 2 also supports bounded pinned native C calls; memory report shows CGx2 allocations only";
 
 enum Command {
-    Check { path: String },
-    Api { path: String, json: bool },
-    Run { path: String, args: Vec<String> },
-    MemoryReport { path: String, json: bool },
-    FailureReport { path: String },
-    Fmt { path: String },
+    Check {
+        path: String,
+    },
+    Compile {
+        path: String,
+        args: Vec<std::ffi::OsString>,
+    },
+    Api {
+        path: String,
+        json: bool,
+    },
+    Run {
+        path: String,
+        args: Vec<String>,
+    },
+    MemoryReport {
+        path: String,
+        json: bool,
+    },
+    FailureReport {
+        path: String,
+    },
+    Fmt {
+        path: String,
+    },
 }
 
 fn main() -> ExitCode {
@@ -40,8 +59,50 @@ fn main() -> ExitCode {
 fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
     let json = matches!(DiagnosticFormat::from_args(&args), DiagnosticFormat::Json);
     let command = parse_args(args).map_err(|error| vec![error])?;
+    if let Command::Compile { path, args } = command {
+        return cgx2c::run(args).map_err(|error| {
+            vec![CliDiagnostic::new(
+                &error.code,
+                error.message,
+                error
+                    .file
+                    .map_or(path, |p| p.to_string_lossy().into_owned()),
+                error.span,
+            )]
+        });
+    }
+    if let Command::Api { path, json } = &command {
+        if Path::new(path).is_dir() {
+            let root = Path::new(path);
+            let package = cgx2_package::load_checked_package(root).map_err(|errors| {
+                errors
+                    .into_iter()
+                    .map(|error| {
+                        CliDiagnostic::new(
+                            error.code,
+                            error.message,
+                            error
+                                .file
+                                .strip_prefix(root)
+                                .unwrap_or(&error.file)
+                                .to_string_lossy()
+                                .into_owned(),
+                            error.span,
+                        )
+                    })
+                    .collect::<Vec<_>>()
+            })?;
+            if *json {
+                println!("{}", package.index().render_json());
+            } else {
+                print!("{}", package.index().render_text());
+            }
+            return Ok(());
+        }
+    }
     let path = match &command {
-        Command::Check { path }
+        Command::Compile { path, .. }
+        | Command::Check { path }
         | Command::Api { path, .. }
         | Command::Run { path, .. }
         | Command::MemoryReport { path, .. }
@@ -111,6 +172,7 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
         )]
     })?;
     match command {
+        Command::Compile { .. } => unreachable!("compiler command handled before source read"),
         Command::Check { path } => {
             check_source(&source).map_err(|errors| {
                 errors
@@ -270,6 +332,19 @@ fn parse_args(args: Vec<String>) -> Result<Command, CliDiagnostic> {
             filtered.push(arg);
         }
     }
+    if matches!(filtered.first().map(String::as_str), Some("build" | "emit")) {
+        return parse_compile(&filtered)
+            .map_err(|message| CliDiagnostic::new("CGC001", message, "<command>".into(), None));
+    }
+    // Both documented `api --json PATH` and legacy `api PATH --json` work.
+    if filtered.first().map(String::as_str) == Some("api")
+        && filtered.get(1).map(String::as_str) == Some("--json")
+    {
+        if filtered.len() != 3 {
+            return Err(usage());
+        }
+        filtered.swap(1, 2);
+    }
     let (mode, rest) = match filtered.first().map(String::as_str) {
         Some("memory") if filtered.get(1).map(String::as_str) == Some("report") => {
             ("memory-report", &filtered[2..])
@@ -278,7 +353,7 @@ fn parse_args(args: Vec<String>) -> Result<Command, CliDiagnostic> {
             ("memory-failure-report", &filtered[2..])
         }
         Some("check") => ("check", &filtered[1..]),
-        Some("api") if !json => ("api", &filtered[1..]),
+        Some("api") => ("api", &filtered[1..]),
         Some("run") => ("run", &filtered[1..]),
         Some("fmt") if !json => ("fmt", &filtered[1..]),
         Some(path) if path.ends_with(".cg") || Path::new(path).is_dir() => ("run", &filtered[..]),
@@ -309,9 +384,7 @@ fn parse_args(args: Vec<String>) -> Result<Command, CliDiagnostic> {
         return Ok(Command::FailureReport { path: path.clone() });
     }
     if mode == "api" {
-        if Path::new(path).is_dir()
-            || (rest.len() != 1 && !(rest.len() == 2 && rest[1] == "--json"))
-        {
+        if rest.len() != 1 && !(rest.len() == 2 && rest[1] == "--json") {
             return Err(usage());
         }
         return Ok(Command::Api {
@@ -337,5 +410,65 @@ fn parse_args(args: Vec<String>) -> Result<Command, CliDiagnostic> {
     Ok(Command::Run {
         path: path.clone(),
         args,
+    })
+}
+
+// The compiler remains the single owner of output validation, target checking,
+// embedded runtime compilation, and publication. The product parser translates
+// only its public spelling; it never invokes a checkout-relative executable.
+fn parse_compile(args: &[String]) -> Result<Command, String> {
+    let usage = || HELP.to_owned();
+    let mut rest = Vec::new();
+    let mut target = None;
+    let mut index = 1;
+    while index < args.len() {
+        if args[index] == "--target" {
+            if args[0] != "emit" || target.is_some() {
+                return Err(usage());
+            }
+            target = Some(args.get(index + 1).ok_or_else(usage)?.as_str());
+            index += 2;
+        } else {
+            rest.push(args[index].clone());
+            // Flag values may themselves equal --target; leave their validation
+            // to the compiler rather than interpreting them as product options.
+            if matches!(
+                args[index].as_str(),
+                "--out" | "--rustc" | "--test-fail-reserve"
+            ) {
+                rest.push(args.get(index + 1).ok_or_else(usage)?.clone());
+                index += 1;
+            }
+            index += 1;
+        }
+    }
+    let mode = if args[0] == "build" {
+        "build"
+    } else {
+        match target {
+            Some("rust") => "emit-rust",
+            Some("python") => "emit-python",
+            Some(target) => {
+                return Err(format!(
+                    "unsupported emission target `{target}`; expected rust or python"
+                ))
+            }
+            None => return Err(usage()),
+        }
+    };
+    let path = rest.first().ok_or_else(usage)?.clone();
+    if Path::new(&path).extension().and_then(|s| s.to_str()) != Some("cg")
+        && !Path::new(&path).is_dir()
+    {
+        return Err(usage());
+    }
+    let mut compiler = vec![std::ffi::OsString::from(mode)];
+    if Path::new(&path).is_dir() {
+        compiler.push("--package".into());
+    }
+    compiler.extend(rest.into_iter().map(std::ffi::OsString::from));
+    Ok(Command::Compile {
+        path,
+        args: compiler,
     })
 }

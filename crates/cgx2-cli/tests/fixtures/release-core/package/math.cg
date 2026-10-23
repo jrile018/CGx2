@@ -1,0 +1,7 @@
+module release.math
+
+pub fn map_one(x: i64) -> i64 effects():
+    x * 3 + 1
+
+pub fn zip_one(left: i64, right: i64) -> i64 effects():
+    left + right + 2

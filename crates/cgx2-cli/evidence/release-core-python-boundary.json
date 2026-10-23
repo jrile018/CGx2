@@ -1,0 +1,98 @@
+{
+  "artifacts": [
+    {
+      "path": "/home/john-riley/.codex/worktrees/18b8/lang/target/tmp-core/install/bin/cgx2",
+      "sha256": "db9198cb110a43c1319c202a8e4dfe8bf6926457943c987be9180ddbbb2e8036",
+      "bytes": 3323120,
+      "needed": [
+        "libgcc_s.so.1",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "ldd": "\tlinux-vdso.so.1 (0x00007230bba15000)\n\tlibgcc_s.so.1 => /usr/lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007230bb9c0000)\n\tlibc.so.6 => /usr/lib/x86_64-linux-gnu/libc.so.6 (0x00007230bb200000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007230bba17000)\n"
+    },
+    {
+      "path": "/home/john-riley/.codex/worktrees/18b8/lang/target/tmp-core/install/bin/cgx2-native",
+      "sha256": "822cf44c2800f8be9933ac1bfeea305f4bc88b46a8fdb31123deb2e203e88ac1",
+      "bytes": 2829568,
+      "needed": [
+        "libgcc_s.so.1",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "ldd": "\tlinux-vdso.so.1 (0x000072894e169000)\n\tlibgcc_s.so.1 => /usr/lib/x86_64-linux-gnu/libgcc_s.so.1 (0x000072894e114000)\n\tlibc.so.6 => /usr/lib/x86_64-linux-gnu/libc.so.6 (0x000072894da00000)\n\t/lib64/ld-linux-x86-64.so.2 (0x000072894e16b000)\n"
+    }
+  ],
+  "native_scalar": {
+    "source": "/home/john-riley/.codex/worktrees/18b8/lang/target/tmp-core/cgx2-boundary-evidence-phoan8e9/scalar.cg",
+    "completed": true,
+    "map_samples": 3,
+    "mapped_files": [
+      "/etc/ld.so.cache",
+      "/home/john-riley/.codex/worktrees/18b8/lang/target/tmp-core/install/bin/cgx2",
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1"
+    ],
+    "child_executables": [],
+    "python_child_executables": [],
+    "stdout": "5000\n",
+    "stderr": ""
+  },
+  "explicit_python": {
+    "source": "/home/john-riley/.codex/worktrees/18b8/lang/target/tmp-core/cgx2-boundary-evidence-phoan8e9/explicit.cg",
+    "completed": true,
+    "map_samples": 92,
+    "mapped_files": [
+      "/etc/ld.so.cache",
+      "/home/john-riley/.codex/worktrees/18b8/lang/target/tmp-core/install/bin/cgx2",
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1"
+    ],
+    "child_executables": [
+      "/usr/bin/python3.14"
+    ],
+    "python_child_executables": [
+      "/usr/bin/python3.14"
+    ],
+    "stdout": "9\n",
+    "stderr": "Python worker executable=\"/usr/bin/python3\" version=\"3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]\" prefix=\"/usr\"\n"
+  },
+  "real_f32": {
+    "source": "/tmp/cgx2-wave23-boundary-f32",
+    "completed": true,
+    "map_samples": 4581,
+    "mapped_files": [
+      "/etc/ld.so.cache",
+      "/home/john-riley/.codex/worktrees/18b8/lang/target/tmp-core/install/bin/cgx2",
+      "/home/john-riley/.codex/worktrees/18b8/lang/target/tmp-core/install/bin/cgx2-native",
+      "/tmp/cgx2-wave23-boundary-f32/libc10.so",
+      "/tmp/cgx2-wave23-boundary-f32/libcgx2_libtorch_facade.so",
+      "/tmp/cgx2-wave23-boundary-f32/libgomp.so.1",
+      "/tmp/cgx2-wave23-boundary-f32/libtorch.so",
+      "/tmp/cgx2-wave23-boundary-f32/libtorch_cpu.so",
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "/usr/lib/x86_64-linux-gnu/libdl.so.2",
+      "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+      "/usr/lib/x86_64-linux-gnu/libm.so.6",
+      "/usr/lib/x86_64-linux-gnu/libpthread.so.0",
+      "/usr/lib/x86_64-linux-gnu/librt.so.1",
+      "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.35"
+    ],
+    "child_executables": [
+      "/home/john-riley/.codex/worktrees/18b8/lang/target/tmp-core/install/bin/cgx2-native",
+      "/usr/bin/x86_64-linux-gnu-nm",
+      "/usr/bin/x86_64-linux-gnu-readelf"
+    ],
+    "python_child_executables": [],
+    "stdout": "[[58.0, 64.0], [139.0, 154.0]]\n",
+    "stderr": ""
+  },
+  "real_package_pins": {
+    "cgx2-bind.lock.json": "51c669ebb5c90105012278d9f479067a8be8171f73a3db44a89761d913ecd768",
+    "cgx2-libtorch-closure.lock.json": "cb33d18e2cfeb6207a5bf8975b540516768682c70aa48fc8149800ef3c4d219c",
+    "cgx2-libtorch-evidence.json": "d967fa647ce125a44deb5802ab2df2c8ac134855848560c0f511cf589feb5d2a"
+  }
+}

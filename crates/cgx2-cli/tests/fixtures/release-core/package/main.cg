@@ -1,0 +1,5 @@
+module release.main
+import release.math
+
+fn main() -> i64 effects():
+    release.math.zip_one(release.math.map_one(4), 10)

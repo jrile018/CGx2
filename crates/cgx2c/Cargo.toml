@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+cgx2-emit-python = { path = "../cgx2-emit-python" }
 cgx2-syntax = { path = "../cgx2-syntax" }
 cgx2-sema = { path = "../cgx2-sema" }
 cgx2-emit-rust = { path = "../cgx2-emit-rust" }
@@ -11,4 +12,5 @@ cgx2-package = { path = "../cgx2-package" }
 sha2 = "0.10"
 
 [dev-dependencies]
+cgx2-execution-policy = { path = "../cgx2-execution-policy" }
 cgx2-cli = { path = "../cgx2-cli", features = ["failure-injection-test"] }
