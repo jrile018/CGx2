@@ -151,5 +151,18 @@
       "commit": "b080f231f1bd150ee6d202c0aaeaf76c8c6d1f15",
       "integrated_commit": "38c82c3"
     }
+  ],
+  "stage2": [
+    {
+      "lane": "s2a",
+      "title": "CGx2 S2a shared language and types",
+      "threadId": "01a16b0f-7fe8-79a3-b5d2-cf89fbb66b56",
+      "clientThreadId": "client-new-thread:0984f45a-9780-4fff-9477-c903eea48958",
+      "hostId": "local",
+      "worktree": "/home/john-riley/.codex/worktrees/88c6/lang",
+      "base": "18b82a381c9f70278fad9373ad3db044b8a57693",
+      "status": "running",
+      "afterCursor": "e8048631-e2ae-4980-b91f-fab9395a9eaa:1"
+    }
   ]
 }
