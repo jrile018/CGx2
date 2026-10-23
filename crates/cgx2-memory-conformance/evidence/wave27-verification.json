@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "wave": 27,
+  "profile": "bounded source/native memory range loops",
+  "base_commit": "e3a01dffee423ab93d9cc8cd6d69c0f910c667f4",
+  "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "environment": {
+    "CARGO_TARGET_DIR": "$PWD/.wave27/target",
+    "TMPDIR": "$PWD/.wave27/tmp",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "limits": {
+    "entered_iterations_per_invocation": 100000,
+    "statement_steps": 1000000,
+    "loop_limit_code": "CGR026",
+    "loop_limit_message": "memory entered-iteration limit of 100000 exceeded"
+  },
+  "checks": [
+    {
+      "name": "default-owned-suites",
+      "command": "cargo +1.98.1 test --offline -p cgx2-ownership -p cgx2-sema -p cgx2-cli -p cgx2-emit-rust -p cgx2c -p cgx2-runtime -p cgx2-memory-conformance",
+      "exit_code": 0,
+      "result": "passed",
+      "local_log": ".wave27/final-default-tests.log",
+      "log_sha256": "e7b8e8f7b549f1d317b6fbfa0184585080cc40db4f66096bdff34ce8cb87dd62",
+      "passed": 354,
+      "failed": 0,
+      "ignored": 0,
+      "result_groups": 89
+    },
+    {
+      "name": "all-feature-owned-suites",
+      "command": "cargo +1.98.1 test --offline -p cgx2-ownership -p cgx2-sema -p cgx2-cli -p cgx2-emit-rust -p cgx2c -p cgx2-runtime -p cgx2-memory-conformance --all-features",
+      "exit_code": 0,
+      "result": "passed",
+      "local_log": ".wave27/final-tests.log",
+      "log_sha256": "1643ac7f6f90da8b3dd06e1a86c96274e32602f39224dd8da24daeb08ece9832",
+      "passed": 354,
+      "failed": 0,
+      "ignored": 0,
+      "result_groups": 89
+    },
+    {
+      "name": "default-cli-range-tests",
+      "command": "cargo +1.98.1 test --offline -p cgx2-cli --test memory_range_loops",
+      "exit_code": 0,
+      "result": "passed",
+      "local_log": ".wave27/cli-default-focused.log",
+      "log_sha256": "abfe992fd2eb650989566291cb29610ff941cb57238850734b8ed4e9b2812dd4",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "result_groups": 1
+    },
+    {
+      "name": "clippy",
+      "command": "cargo +1.98.1 clippy --offline -p cgx2-ownership -p cgx2-sema -p cgx2-cli -p cgx2-emit-rust -p cgx2c -p cgx2-runtime -p cgx2-memory-conformance --all-targets --all-features -- -D warnings",
+      "exit_code": 0,
+      "result": "passed",
+      "local_log": ".wave27/clippy.log",
+      "log_sha256": "f600727592836a7982d19eb2c87ed25cc8fdd615dd6b7277f93d5a5fe5ee851f"
+    },
+    {
+      "name": "format",
+      "command": "cargo +1.98.1 fmt --check -p cgx2-ownership -p cgx2-sema -p cgx2-cli -p cgx2-emit-rust -p cgx2c -p cgx2-runtime -p cgx2-memory-conformance",
+      "exit_code": 0,
+      "result": "passed",
+      "local_log": ".wave27/fmt.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "instrumentation",
+      "command": "cargo +1.98.1 build --offline -p cgx2c\npython3 crates/cgx2c/scripts/verify_range_asan.py",
+      "exit_code": 0,
+      "result": "passed",
+      "local_log": ".wave27/asan.log",
+      "log_sha256": "64040c12554d80b1027afbe9ef833b95f9070804c45b3badd2a647d7b0f3c8c0"
+    },
+    {
+      "name": "read-only-consumer-boundaries",
+      "command": "sh crates/cgx2c/scripts/verify_range_consumers.sh",
+      "exit_code": 0,
+      "result": "passed",
+      "local_log": ".wave27/consumers.log",
+      "log_sha256": "581b193a7cd3244ada22bf5f0b8f6b76cd52c040f9ac8f67003097641325fb6e"
+    }
+  ],
+  "parity": {
+    "profiles": [
+      "interpreter",
+      "native debug",
+      "native release"
+    ],
+    "comparison": "deterministic region counters, first diagnostic/span, rollback, pre-cleanup roots/edges and final unwind roots; exclude addresses and pause timings"
+  },
+  "instrumentation": {
+    "profiles": [
+      "debug opt-level=0",
+      "release opt-level=3"
+    ],
+    "generated_binary_runs": 24,
+    "runtime_instrumented": true,
+    "generated_code_instrumented": true,
+    "flags": [
+      "--target x86_64-unknown-linux-gnu",
+      "-Zsanitizer=address",
+      "-Cdebuginfo=1"
+    ],
+    "RUSTC_BOOTSTRAP": "1",
+    "ASAN_OPTIONS": "detect_leaks=0",
+    "leak_detection": "not_run_host_blocked"
+  },
+  "fault_sweep": {
+    "reserve_indices_tested": [
+      1,
+      24
+    ],
+    "reached_failing_reserves": 13,
+    "later_indices": "program succeeds",
+    "primary_error": "HostAllocation",
+    "final_runtime_roots": 0
+  },
+  "boundaries": {
+    "python": "CGE001 rejection",
+    "notebook": "CGNK001/CGNK011 rejection, no outputs saved",
+    "scalar_verifier": "CGV001 unknown/unsupported, no solver invoked",
+    "other_lane_source_modified": false
+  },
+  "runtime_policy_or_api_changes": false,
+  "exclusions": [
+    "LeakSanitizer (host-blocked; leak detection disabled)",
+    "system allocator internals",
+    "live foreign/Python/LibTorch memory",
+    "live solver validation",
+    "delegated cgroups",
+    "paired human/model trials",
+    "whole-language memory-safety or leak-freedom proof"
+  ]
+}

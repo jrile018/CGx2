@@ -68,6 +68,11 @@ pub enum Op {
         region: String,
         span: Span,
     },
+    /// A possibly empty repetition whose backedge preserves the incoming state.
+    Loop {
+        body: Vec<Op>,
+        span: Span,
+    },
     If {
         then_ops: Vec<Op>,
         else_ops: Vec<Op>,
@@ -98,6 +103,7 @@ impl Op {
             | Self::EnterNoGc { span }
             | Self::ExitNoGc { span }
             | Self::Collect { span, .. }
+            | Self::Loop { span, .. }
             | Self::If { span, .. }
             | Self::Unsupported { span, .. } => *span,
         }

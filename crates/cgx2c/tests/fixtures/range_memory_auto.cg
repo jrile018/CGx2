@@ -1,0 +1,9 @@
+let r = memory.region(mode: auto, limit: 1048641)
+for i in range(0, 2):
+    if i == 0:
+        let temp = memory.alloc_bytes(r, 1048512)
+        memory.drop(temp)
+    else:
+        let temp = memory.alloc_bytes(r, 1)
+        memory.drop(temp)
+memory.close(r)

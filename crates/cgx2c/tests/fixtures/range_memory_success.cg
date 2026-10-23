@@ -1,0 +1,35 @@
+fn leaf(n: i64) -> Unit effects(ManagedAlloc, Mutate):
+    no_gc(budget: 102):
+        for j in range(0, n):
+            let t = memory.owned_bytes(2)
+            let u = memory.move(t)
+            memory.drop(u)
+fn main() -> Unit effects(ManagedAlloc, Mutate, Collect) caps(MemoryCollect):
+    let r = memory.region(mode: manual, limit: 512)
+    let outer = memory.owned_bytes(1)
+    for i in range(0, 3):
+        leaf(i)
+        let b = memory.borrow(outer)
+        memory.end_borrow(b)
+        if i >= 1:
+            let t = memory.alloc_bytes(r, i)
+            memory.drop(t)
+        else:
+            let t = memory.owned_bytes(1)
+            memory.drop(t)
+        memory.collect(r)
+    for i in range(3, 1):
+        let t = memory.owned_bytes(10000)
+        memory.drop(t)
+    no_gc(budget: 198):
+        for i in range(0, 3):
+            no_gc(budget: 66):
+                for j in range(0, 2):
+                    if i >= j:
+                        let temp = memory.owned_bytes(1)
+                        memory.drop(temp)
+                    else:
+                        let temp = memory.owned_bytes(1)
+                        memory.drop(temp)
+    memory.drop(outer)
+    memory.close(r)

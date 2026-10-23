@@ -31,6 +31,7 @@ struct Lowerer {
     bindings: BTreeMap<String, Kind>,
     names: BTreeMap<String, String>,
     branch_depth: usize,
+    loop_depth: usize,
     pending_locals: BTreeSet<String>,
     objects: BTreeMap<String, ObjectShape>,
     references: BTreeMap<String, String>,
@@ -45,6 +46,7 @@ struct LocalCall {
     arguments: Vec<CallArg>,
     span: Span,
     in_no_gc: bool,
+    indices: BTreeSet<String>,
 }
 
 /// Return `None` for the unchanged scalar checker, or check the bounded memory profile.
@@ -89,12 +91,29 @@ pub(crate) fn check_memory_module(
 fn without_local_calls(
     statements: &[Stmt],
     in_no_gc: bool,
+    indices: &BTreeSet<String>,
     calls: &mut Vec<LocalCall>,
     diagnostics: &mut Vec<TypeDiagnostic>,
 ) -> Vec<Stmt> {
     let mut retained = Vec::new();
     for stmt in statements {
         match &stmt.kind {
+            StmtKind::For {
+                binding,
+                iter,
+                body,
+            } => {
+                let mut nested = indices.clone();
+                nested.insert(binding.clone());
+                retained.push(Stmt {
+                    kind: StmtKind::For {
+                        binding: binding.clone(),
+                        iter: iter.clone(),
+                        body: without_local_calls(body, in_no_gc, &nested, calls, diagnostics),
+                    },
+                    span: stmt.span,
+                });
+            }
             StmtKind::If {
                 condition,
                 then_body,
@@ -102,8 +121,20 @@ fn without_local_calls(
             } => retained.push(Stmt {
                 kind: StmtKind::If {
                     condition: condition.clone(),
-                    then_body: without_local_calls(then_body, in_no_gc, calls, diagnostics),
-                    else_body: without_local_calls(else_body, in_no_gc, calls, diagnostics),
+                    then_body: without_local_calls(
+                        then_body,
+                        in_no_gc,
+                        indices,
+                        calls,
+                        diagnostics,
+                    ),
+                    else_body: without_local_calls(
+                        else_body,
+                        in_no_gc,
+                        indices,
+                        calls,
+                        diagnostics,
+                    ),
                 },
                 span: stmt.span,
             }),
@@ -127,6 +158,7 @@ fn without_local_calls(
                                 arguments: arguments.clone(),
                                 span: expr.span,
                                 in_no_gc,
+                                indices: indices.clone(),
                             });
                             continue;
                         }
@@ -137,7 +169,7 @@ fn without_local_calls(
             StmtKind::NoGc { budget, body } => retained.push(Stmt {
                 kind: StmtKind::NoGc {
                     budget: budget.clone(),
-                    body: without_local_calls(body, true, calls, diagnostics),
+                    body: without_local_calls(body, true, indices, calls, diagnostics),
                 },
                 span: stmt.span,
             }),
@@ -185,6 +217,7 @@ fn transitively_collects(
 fn contains_collect(ops: &[Op]) -> bool {
     ops.iter().any(|op| match op {
         Op::Collect { .. } => true,
+        Op::Loop { body, .. } => contains_collect(body),
         Op::If {
             then_ops, else_ops, ..
         } => contains_collect(then_ops) || contains_collect(else_ops),
@@ -278,7 +311,13 @@ fn check_memory_functions(module: &Module) -> Result<TypedModule, Vec<TypeDiagno
             },
         );
         let mut local_calls = Vec::new();
-        let body = without_local_calls(&function.body, false, &mut local_calls, &mut diagnostics);
+        let body = without_local_calls(
+            &function.body,
+            false,
+            &BTreeSet::new(),
+            &mut local_calls,
+            &mut diagnostics,
+        );
         let mut lowerer = Lowerer {
             scalar_parameters: parameter_names,
             ..Lowerer::default()
@@ -325,12 +364,13 @@ fn check_memory_functions(module: &Module) -> Result<TypedModule, Vec<TypeDiagno
                         site.span,
                     ));
                 }
-                let parameters: BTreeSet<String> = module
+                let mut parameters: BTreeSet<String> = module
                     .functions
                     .iter()
                     .find(|f| f.name == *caller)
                     .map(|f| f.parameters.iter().map(|p| p.name.clone()).collect())
                     .unwrap_or_default();
+                parameters.extend(site.indices.iter().cloned());
                 for arg in &site.arguments {
                     if !scalar_argument(&arg.value, &parameters) {
                         diagnostics.push(TypeDiagnostic::new(
@@ -461,6 +501,43 @@ impl Lowerer {
     fn block(&mut self, statements: &[Stmt]) {
         for stmt in statements {
             match &stmt.kind {
+                StmtKind::For {
+                    binding,
+                    iter,
+                    body,
+                } => {
+                    if !matches!(&iter.kind, ExprKind::Call { callee, .. }
+                        if matches!(&callee.kind, ExprKind::Name(path) if path.segments.as_slice() == ["range"]))
+                    {
+                        self.report(
+                            "only range(start, end) iteration is supported in memory programs",
+                            stmt.span,
+                        );
+                        continue;
+                    }
+                    let valid = matches!(&iter.kind, ExprKind::Call { callee, arguments }
+                        if matches!(&callee.kind, ExprKind::Name(path) if path.segments.as_slice() == ["range"])
+                        && arguments.len() == 2 && arguments.iter().all(|arg|
+                            arg.name.is_none() && guard_operand(&arg.value, &self.scalar_parameters)));
+                    if !valid {
+                        self.argument_error("memory range requires exactly two positional i64 literals, parameters or enclosing indices", iter.span);
+                    }
+                    if self.bindings.contains_key(binding)
+                        || self.scalar_parameters.contains(binding)
+                    {
+                        self.report(format!("duplicate loop index `{binding}`"), stmt.span);
+                        continue;
+                    }
+                    self.scalar_parameters.insert(binding.clone());
+                    self.loop_depth += 1;
+                    let (body, _, _) = self.arm(body, stmt.span);
+                    self.loop_depth -= 1;
+                    self.scalar_parameters.remove(binding);
+                    self.ops.push(Op::Loop {
+                        body,
+                        span: stmt.span,
+                    });
+                }
                 StmtKind::If {
                     condition,
                     then_body,
@@ -502,7 +579,10 @@ impl Lowerer {
                         continue;
                     }
                     if self.branch_depth > 0 && !branch_initializer(value) {
-                        self.report("conditional memory declarations require byte temporaries or borrow tokens", stmt.span);
+                        self.report(
+                            "scoped memory declarations require byte temporaries or borrow tokens",
+                            stmt.span,
+                        );
                         continue;
                     }
                     let internal = if self.branch_depth > 0 {
@@ -532,7 +612,7 @@ impl Lowerer {
                         self.call(expr, None);
                     }
                 }
-                StmtKind::Assign { .. } | StmtKind::For { .. } | StmtKind::Return(_) => {
+                StmtKind::Assign { .. } | StmtKind::Return(_) => {
                     self.report(
                         "assignment, control flow, and returns are unsupported in memory scripts",
                         stmt.span,
@@ -574,7 +654,12 @@ impl Lowerer {
         self.branch_depth -= 1;
         let leaked: Vec<_> = self.pending_locals.difference(&pending).cloned().collect();
         for name in leaked {
-            self.report(format!("conditional memory local `{name}` requires explicit drop/end_borrow on every path"), span);
+            self.report(
+                format!(
+                    "scoped memory local `{name}` requires explicit drop/end_borrow on every path"
+                ),
+                span,
+            );
         }
         let inherited_pending = self
             .pending_locals
@@ -618,6 +703,15 @@ impl Lowerer {
                 "calls outside reserved memory namespace are unsupported in memory scripts",
                 path.span,
             );
+            return None;
+        }
+        if self.loop_depth > 0
+            && matches!(
+                operation.as_str(),
+                "region" | "alloc_object" | "reference" | "set_reference" | "clear_reference"
+            )
+        {
+            self.report("region/object/reference declarations and graph mutation are unsupported in memory loops", expr.span);
             return None;
         }
         match operation.as_str() {

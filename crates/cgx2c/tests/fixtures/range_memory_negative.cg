@@ -1,0 +1,14 @@
+fn leaf(n: i64) -> Unit effects(ManagedAlloc, Mutate):
+    let r = memory.region(mode: manual, limit: 1024)
+    let t = memory.alloc_bytes(r, 1)
+    let x = memory.owned_bytes(n)
+    memory.drop(x)
+    memory.drop(t)
+    memory.close(r)
+fn main() -> Unit effects(ManagedAlloc, Mutate):
+    let r = memory.region(mode: manual, limit: 1024)
+    let outer = memory.alloc_bytes(r, 1)
+    for i in range(0, 5):
+        leaf(2 - i)
+    memory.drop(outer)
+    memory.close(r)

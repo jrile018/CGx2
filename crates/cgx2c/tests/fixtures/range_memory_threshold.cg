@@ -1,0 +1,14 @@
+fn leaf(n: i64) -> Unit effects(ManagedAlloc, Mutate):
+    let marker = memory.owned_bytes(0)
+    for j in range(0, n):
+        if false:
+            let t = memory.owned_bytes(0)
+            memory.drop(t)
+        else:
+            memory.use(marker)
+    memory.drop(marker)
+fn main() -> Unit effects(ManagedAlloc, Mutate):
+    let x = memory.owned_bytes(1)
+    for i in range(0, 10):
+        leaf(9999)
+    memory.drop(x)

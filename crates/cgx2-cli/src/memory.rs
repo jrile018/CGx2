@@ -20,6 +20,8 @@ pub(crate) struct MemoryFailure {
 
 #[derive(Default)]
 struct FailureState {
+    // Invocation-wide execution state: never reset by an arm, loop or local call.
+    entered_iterations: usize,
     rollback: Option<bool>,
     operation: Option<FailureObservation>,
     cleanup_errors: Vec<String>,
@@ -127,6 +129,12 @@ const AUTO_TRIGGER_BYTES: usize = 1 << 20;
 const STEP_LIMIT: usize = 1_000_000;
 
 enum Op {
+    Loop {
+        index: String,
+        start: Expr,
+        end: Expr,
+        body: Vec<SpannedOp>,
+    },
     If {
         condition: Expr,
         then_ops: Vec<SpannedOp>,
@@ -352,6 +360,24 @@ fn lower_stmt(
     in_branch: bool,
 ) -> Result<SpannedOp, RunError> {
     let op = match &stmt.kind {
+        StmtKind::For {
+            binding,
+            iter,
+            body,
+        } => {
+            let ExprKind::Call { arguments, .. } = &iter.kind else {
+                return Err(unsupported(iter.span));
+            };
+            if arguments.len() != 2 {
+                return Err(argument_error(iter.span));
+            }
+            Op::Loop {
+                index: binding.clone(),
+                start: arguments[0].value.clone(),
+                end: arguments[1].value.clone(),
+                body: lower_scope(body, &mut names.clone(), true)?,
+            }
+        }
         StmtKind::If {
             condition,
             then_body,
@@ -592,6 +618,30 @@ fn region(
 }
 
 type FunctionBodies = HashMap<String, (Vec<String>, Vec<SpannedOp>)>;
+fn cleanup_scope(
+    session: &mut Session,
+    bindings: &mut HashMap<String, Binding>,
+    outer: &HashSet<String>,
+    span: Span,
+    failure_state: &mut FailureState,
+) -> Option<RunError> {
+    let locals: Vec<_> = bindings
+        .keys()
+        .filter(|name| !outer.contains(*name))
+        .cloned()
+        .collect();
+    let mut cleanup_error = None;
+    for name in locals {
+        if let Some(Binding::Managed(handle)) = bindings.remove(&name) {
+            if let Err(failure) = session.unroot(handle) {
+                failure_state.cleanup_errors.push(format!("{failure:?}"));
+                cleanup_error.get_or_insert_with(|| runtime(failure, span));
+            }
+        }
+    }
+    cleanup_error
+}
+
 struct CallContext<'a> {
     functions: &'a FunctionBodies,
     scalars: &'a HashMap<String, i64>,
@@ -614,6 +664,9 @@ fn execute_with_functions(
                     failure_state.operation = Some(FailureObservation::new(session, bindings));
                 }
             }
+            if observe_rollback {
+                failure_state.rollback.get_or_insert(true);
+            }
             return Err(error(
                 "CGR010",
                 format!("execution step limit of {STEP_LIMIT} exceeded"),
@@ -626,6 +679,55 @@ fn execute_with_functions(
             .flatten();
         let result = (|| -> Result<(), RunError> {
             match op {
+                Op::Loop {
+                    index,
+                    start,
+                    end,
+                    body,
+                } => {
+                    let start = scalar(start, context.scalars)?;
+                    let end = scalar(end, context.scalars)?;
+                    let outer: HashSet<_> = bindings.keys().cloned().collect();
+                    let mut scalars = context.scalars.clone();
+                    for current in start..end {
+                        if failure_state.entered_iterations >= 100_000 {
+                            if observe_rollback {
+                                failure_state
+                                    .operation
+                                    .get_or_insert_with(|| {
+                                        FailureObservation::new(session, bindings)
+                                    })
+                                    .add_roots(session, bindings);
+                                failure_state.rollback.get_or_insert(true);
+                            }
+                            return Err(error(
+                                "CGR026",
+                                "memory entered-iteration limit of 100000 exceeded",
+                                *span,
+                            ));
+                        }
+                        failure_state.entered_iterations += 1;
+                        scalars.insert(index.clone(), current);
+                        let result = execute_with_functions(
+                            body,
+                            session,
+                            bindings,
+                            steps,
+                            &CallContext {
+                                functions: context.functions,
+                                scalars: &scalars,
+                            },
+                            failure_state,
+                            observe_rollback,
+                        );
+                        let cleanup_error =
+                            cleanup_scope(session, bindings, &outer, *span, failure_state);
+                        result?;
+                        if let Some(failure) = cleanup_error {
+                            return Err(failure);
+                        }
+                    }
+                }
                 Op::If {
                     condition: guard,
                     then_ops,
@@ -648,20 +750,8 @@ fn execute_with_functions(
                     );
                     // Inner execution records the failure census before these roots
                     // are removed. Always restore the outer environment on unwind.
-                    let locals: Vec<_> = bindings
-                        .keys()
-                        .filter(|name| !outer.contains(*name))
-                        .cloned()
-                        .collect();
-                    let mut cleanup_error = None;
-                    for name in locals {
-                        if let Some(Binding::Managed(handle)) = bindings.remove(&name) {
-                            if let Err(failure) = session.unroot(handle) {
-                                failure_state.cleanup_errors.push(format!("{failure:?}"));
-                                cleanup_error.get_or_insert_with(|| runtime(failure, *span));
-                            }
-                        }
-                    }
+                    let cleanup_error =
+                        cleanup_scope(session, bindings, &outer, *span, failure_state);
                     result?;
                     if let Some(failure) = cleanup_error {
                         return Err(failure);

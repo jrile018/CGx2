@@ -1,0 +1,18 @@
+let r = memory.region(mode: manual, limit: 1024)
+no_gc(budget: 198):
+    for i in range(-9223372036854775808, -9223372036854775807):
+        let t = memory.alloc_bytes(r, 1)
+        memory.drop(t)
+    for i in range(9223372036854775806, 9223372036854775807):
+        let t = memory.owned_bytes(1)
+        memory.drop(t)
+    for i in range(-2, 1):
+        let t = memory.owned_bytes(1)
+        memory.drop(t)
+    for i in range(9223372036854775807, -9223372036854775808):
+        let t = memory.owned_bytes(1000000)
+        memory.drop(t)
+    for i in range(0, 0):
+        let t = memory.owned_bytes(1000000)
+        memory.drop(t)
+memory.close(r)

@@ -201,8 +201,36 @@ fn emit_block(
     let pad = "    ".repeat(indent);
     for stmt in stmts {
         let span = format!("({}, {})", stmt.span.start, stmt.span.end);
-        out.push_str(&format!("{pad}if let Err(message) = step(steps, {span}) {{ record_rollback(None, session, &bindings); return Err(message); }}\n"));
+        out.push_str(&format!("{pad}if let Err(message) = step(steps, {span}) {{ record_rollback(graph_snapshot(session, &bindings), session, &bindings); return Err(message); }}\n"));
         match &stmt.kind {
+            StmtKind::For {
+                binding,
+                iter,
+                body,
+            } => {
+                let ExprKind::Call { arguments, .. } = &iter.kind else {
+                    return Err(unsupported("expected range", iter.span));
+                };
+                if arguments.len() != 2 {
+                    return Err(unsupported("expected two endpoints", iter.span));
+                }
+                let start = scalar_expr(&arguments[0].value, parameters)?;
+                let end = scalar_expr(&arguments[1].value, parameters)?;
+                let index = parameters.len();
+                let mut scoped = parameters.clone();
+                scoped.insert(binding.as_str(), index);
+                out.push_str(&format!("{pad}{{\n{pad}    let cgx2_start = {start};\n{pad}    let cgx2_end = {end};\n{pad}    for cgx2_param_{index} in cgx2_start..cgx2_end {{\n{pad}        if let Err(message) = enter_iteration(iterations, {span}) {{ record_rollback(graph_snapshot(session, &bindings), session, &bindings); return Err(message); }}\n{pad}        let cgx2_outer: HashSet<_> = bindings.keys().copied().collect();\n{pad}        let cgx2_iteration_result = (|| -> Result<(), String> {{\n"));
+                emit_block(
+                    body,
+                    out,
+                    indent + 3,
+                    functions,
+                    &scoped,
+                    &mut names.clone(),
+                    true,
+                )?;
+                out.push_str(&format!("{pad}            Ok(())\n{pad}        }})();\n{pad}        let cgx2_cleanup_error = cleanup_scope(session, &mut bindings, &cgx2_outer, {span});\n{pad}        cgx2_iteration_result?;\n{pad}        if let Some(failure) = cgx2_cleanup_error {{ return Err(failure); }}\n{pad}    }}\n{pad}}}\n"));
+            }
             StmtKind::If {
                 condition,
                 then_body,
@@ -380,7 +408,9 @@ fn emit_block(
                     emit_checked_statement(
                         out,
                         &pad,
-                        &format!("cgx2_memory_function_{index}(session, steps, {span}{values})?;"),
+                        &format!(
+                            "cgx2_memory_function_{index}(session, steps, iterations, {span}{values})?;"
+                        ),
                     );
                     continue;
                 }
@@ -473,7 +503,7 @@ pub(crate) fn emit_memory_rust(
             .map(|index| format!(", cgx2_param_{index}: i64"))
             .collect::<String>();
         out.push_str(&format!(
-            "\nfn cgx2_memory_function_{index}(session: &mut Session, steps: &mut usize, call_span: (usize, usize){parameter_list}) -> Result<(), String> {{\n    let mut bindings: HashMap<&'static str, Binding> = HashMap::new();\n    let result = (|| -> Result<(), String> {{\n"
+            "\nfn cgx2_memory_function_{index}(session: &mut Session, steps: &mut usize, iterations: &mut usize, call_span: (usize, usize){parameter_list}) -> Result<(), String> {{\n    let mut bindings: HashMap<&'static str, Binding> = HashMap::new();\n    let result = (|| -> Result<(), String> {{\n"
         ));
         let parameters = function
             .parameters
@@ -493,7 +523,7 @@ pub(crate) fn emit_memory_rust(
         .map_err(|error| vec![error])?;
         out.push_str("        Ok(())\n    })();\n    let mut cleanup_error = None;\n    for value in bindings.into_values() {\n        if let Binding::Managed(handle) = value {\n            if let Err(failure) = session.unroot(handle) {\n                CGX2_CLEANUP_ERRORS.with(|value| value.borrow_mut().push(format!(\"{failure:?}\")));\n                cleanup_error.get_or_insert_with(|| runtime(failure, call_span));\n            }\n        }\n    }\n    result?;\n    if let Some(failure) = cleanup_error { return Err(failure); }\n    Ok(())\n}\n");
     }
-    out.push_str("\nfn main() {\n    let report_path = match cgx2_report_path() {\n        Ok(path) => path,\n        Err(message) => { eprintln!(\"{message}\"); std::process::exit(1); }\n    };\n    CGX2_OBSERVE.with(|value| value.set(report_path.is_some()));\n    let mut session = Session::new();\n    #[cfg(feature = \"fault-injection\")]\n    session.inject_host_failure_at_reserve(option_env!(\"CGX2_TEST_FAIL_RESERVE\").expect(\"test fault index\").parse().expect(\"valid test fault index\"));\n    let mut bindings: HashMap<&'static str, Binding> = HashMap::new();\n    let mut steps = 0;\n    let result = (|| -> Result<(), String> {\n        let session = &mut session;\n        let steps = &mut steps;\n");
+    out.push_str("\nfn main() {\n    let report_path = match cgx2_report_path() {\n        Ok(path) => path,\n        Err(message) => { eprintln!(\"{message}\"); std::process::exit(1); }\n    };\n    CGX2_OBSERVE.with(|value| value.set(report_path.is_some()));\n    let mut session = Session::new();\n    #[cfg(feature = \"fault-injection\")]\n    session.inject_host_failure_at_reserve(option_env!(\"CGX2_TEST_FAIL_RESERVE\").expect(\"test fault index\").parse().expect(\"valid test fault index\"));\n    let mut bindings: HashMap<&'static str, Binding> = HashMap::new();\n    let mut steps = 0;\n    let mut iterations = 0;\n    let result = (|| -> Result<(), String> {\n        let session = &mut session;\n        let steps = &mut steps;\n        let iterations = &mut iterations;\n");
     if module.functions.is_empty() {
         emit_block(
             &module.statements,
@@ -519,7 +549,7 @@ pub(crate) fn emit_memory_rust(
         let index = functions["main"].0;
         let span = format!("({}, {})", main.span.start, main.span.end);
         out.push_str(&format!(
-            "        step(steps, {span})?;\n        cgx2_memory_function_{index}(session, steps, {span})?;\n"
+            "        step(steps, {span})?;\n        cgx2_memory_function_{index}(session, steps, iterations, {span})?;\n"
         ));
     }
     out.push_str("        Ok(())\n    })();\n    if let Err(message) = &result { eprintln!(\"{message}\"); }\n    if result.is_err() {\n        for binding in bindings.into_values() {\n            if let Binding::Managed(handle) = binding {\n                if let Err(failure) = session.unroot(handle) {\n                    CGX2_CLEANUP_ERRORS.with(|value| value.borrow_mut().push(format!(\"{failure:?}\")));\n                }\n            }\n        }\n    }\n    if let Some(path) = report_path {\n        if let Err(message) = cgx2_write_report(&path, &session, &result) {\n            eprintln!(\"{message}\");\n            std::process::exit(1);\n        }\n    }\n    if result.is_err() { std::process::exit(1); }\n}\n");

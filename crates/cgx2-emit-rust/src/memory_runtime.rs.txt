@@ -107,6 +107,13 @@ fn allocation(error: AllocationError, span: (usize, usize)) -> String {
 fn runtime(error: MemoryError, span: (usize, usize)) -> String {
     format!("CGR014 at {}..{}: memory operation failed: {error:?}", span.0, span.1)
 }
+fn enter_iteration(iterations: &mut usize, span: (usize, usize)) -> Result<(), String> {
+    if *iterations >= 100_000 {
+        return Err(format!("CGR026 at {}..{}: memory entered-iteration limit of 100000 exceeded", span.0, span.1));
+    }
+    *iterations += 1;
+    Ok(())
+}
 fn step(steps: &mut usize, span: (usize, usize)) -> Result<(), String> {
     if *steps >= 1_000_000 {
         return Err(format!("CGR010 at {}..{}: execution step limit of 1000000 exceeded", span.0, span.1));

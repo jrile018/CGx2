@@ -1,0 +1,7 @@
+pub fn memory_loop(n: i64) -> i64 effects() caps():
+    requires true
+    ensures result == n
+    for i in range(0, n):
+        let temp = memory.owned_bytes(1)
+        memory.drop(temp)
+    n

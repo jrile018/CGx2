@@ -1,0 +1,19 @@
+fn leaf(n: i64) -> Unit effects(ManagedAlloc, Mutate):
+    let r = memory.region(mode: manual, limit: 1024)
+    for j in range(0, n):
+        let t = memory.alloc_bytes(r, 1)
+        if j >= 2:
+            let extra = memory.owned_bytes(1)
+            memory.drop(extra)
+        else:
+            memory.use(t)
+        memory.drop(t)
+    memory.close(r)
+fn main() -> Unit effects(ManagedAlloc, Mutate):
+    let r = memory.region(mode: manual, limit: 1024)
+    let outer = memory.alloc_bytes(r, 1)
+    no_gc(budget: 712):
+        for i in range(0, 2):
+            leaf(3)
+    memory.drop(outer)
+    memory.close(r)

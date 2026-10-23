@@ -807,3 +807,84 @@ fn unsupported_loop_and_foreign_alias_are_reported() {
         );
     }
 }
+
+#[test]
+fn loop_backedge_is_semantic_outer_equality_with_zero_trip_join() {
+    let prefix = vec![
+        Op::OpenRegion {
+            region: "r".into(),
+            span: s(1),
+        },
+        Op::CreateOwned {
+            value: "x".into(),
+            span: s(2),
+        },
+    ];
+    for body in [
+        vec![Op::DropValue {
+            value: "x".into(),
+            span: s(3),
+        }],
+        vec![Op::CloseRegion {
+            region: "r".into(),
+            span: s(3),
+        }],
+        vec![Op::CreateOwned {
+            value: "local".into(),
+            span: s(3),
+        }],
+        vec![Op::BorrowShared {
+            value: "x".into(),
+            token: "b".into(),
+            span: s(3),
+        }],
+        vec![Op::EnterNoGc { span: s(3) }],
+        vec![Op::If {
+            then_ops: vec![Op::DropValue {
+                value: "x".into(),
+                span: s(4),
+            }],
+            else_ops: vec![],
+            span: s(3),
+        }],
+    ] {
+        let mut ops = prefix.clone();
+        ops.push(Op::Loop { body, span: s(10) });
+        assert_error(&ops, "CGO005", s(10));
+    }
+    let mut ops = prefix;
+    for _ in 0..2 {
+        ops.push(Op::Loop {
+            body: vec![
+                Op::CreateOwned {
+                    value: "local".into(),
+                    span: s(3),
+                },
+                Op::BorrowShared {
+                    value: "x".into(),
+                    token: "b".into(),
+                    span: s(4),
+                },
+                Op::EndBorrow {
+                    token: "b".into(),
+                    span: s(5),
+                },
+                Op::DropValue {
+                    value: "local".into(),
+                    span: s(6),
+                },
+            ],
+            span: s(10),
+        });
+    }
+    ops.push(Op::Use {
+        value: "x".into(),
+        span: s(11),
+    });
+    check_ops(&ops).unwrap();
+    ops.push(Op::Use {
+        value: "local".into(),
+        span: s(12),
+    });
+    assert_error(&ops, "CGO001", s(12));
+}

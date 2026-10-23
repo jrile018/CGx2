@@ -189,6 +189,32 @@ impl Checker {
         self.values = joined;
     }
 
+    fn check_loop(&mut self, body: &[Op], span: Span) {
+        let mut backedge = self.clone();
+        backedge.diagnostics.clear();
+        backedge.check(body);
+        // Dead scoped entries are irrelevant, but every incoming entry (including
+        // unavailable names) and all region/borrow/guard facts must be unchanged.
+        let outer_unchanged = self
+            .values
+            .iter()
+            .all(|(name, state)| backedge.values.get(name) == Some(state));
+        let locals_finished = backedge
+            .values
+            .iter()
+            .all(|(name, state)| self.values.contains_key(name) || *state == ValueState::Dead);
+        if !outer_unchanged
+            || !locals_finished
+            || self.regions != backedge.regions
+            || self.borrows != backedge.borrows
+            || self.no_gc != backedge.no_gc
+        {
+            backedge.report("CGO005", "loop backedge must preserve outer ownership, regions, borrows and no_gc state; locals must finish", span);
+        }
+        self.diagnostics.extend(backedge.diagnostics);
+        // The zero-trip join is exactly the incoming state, never the body state.
+    }
+
     fn check_end(&mut self) {
         let leaked: Vec<_> = self
             .borrows
@@ -323,6 +349,7 @@ impl Checker {
                         self.open_region(region, *span);
                     }
                 }
+                Op::Loop { body, span } => self.check_loop(body, *span),
                 Op::If {
                     then_ops,
                     else_ops,

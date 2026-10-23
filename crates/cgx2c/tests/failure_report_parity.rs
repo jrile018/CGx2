@@ -178,7 +178,7 @@ fn compare_failure(
         assert!(totals[4] > 0, "prepared region must be collected");
         assert_eq!(operation.runtime_root_registrations, Some(2));
     }
-    if name == "conditional_memory_auto.cg" {
+    if matches!(name, "conditional_memory_auto.cg" | "range_memory_auto.cg") {
         assert_eq!(operation.memory.totals.collection_count, 1);
         assert_eq!(operation.memory.totals.total_collected_bytes, 1 << 20);
         assert_eq!(operation.memory.totals.committed_bytes, 0);
@@ -551,6 +551,11 @@ fn conditional_selected_allocation_and_semantic_region_reports_match_native_prof
         "conditional_memory_functions.cg",
         "conditional_memory_graph.cg",
         "conditional_memory_auto.cg",
+        "range_memory_success.cg",
+        "range_memory_boundaries.cg",
+        "range_memory_threshold.cg",
+        "range_memory_auto.cg",
+        "range_memory_budget_exact.cg",
     ] {
         let case = Scratch::new();
         let source = fixture(name);
@@ -564,7 +569,9 @@ fn conditional_selected_allocation_and_semantic_region_reports_match_native_prof
             report.totals.collection_count,
             match name {
                 "conditional_memory_graph.cg" => 2,
+                "range_memory_success.cg" => 3,
                 "conditional_memory_auto.cg" => 1,
+                "range_memory_auto.cg" => 1,
                 _ => 0,
             }
         );
@@ -595,6 +602,84 @@ fn conditional_selected_allocation_and_semantic_region_reports_match_native_prof
                 semantic_json(&report.to_json()),
                 "{name} release={release}"
             );
+        }
+    }
+}
+
+#[test]
+fn range_failures_limits_and_faults_match_native_profiles() {
+    compare_failure(
+        "range_memory_steps.cg",
+        "CGR010",
+        "execution step limit of 1000000 exceeded",
+        None,
+        1,
+        0,
+    );
+    compare_failure(
+        "range_memory_budget_failure.cg",
+        "CGR013",
+        "BudgetExceeded",
+        None,
+        2,
+        0,
+    );
+    compare_failure(
+        "range_memory_limit.cg",
+        "CGR026",
+        "memory entered-iteration limit of 100000 exceeded",
+        None,
+        1,
+        0,
+    );
+    compare_failure(
+        "range_memory_region_failure.cg",
+        "CGR013",
+        "RegionLimit",
+        None,
+        2,
+        0,
+    );
+    compare_failure("range_memory_negative.cg", "CGR013", "negative", None, 2, 0);
+    compare_failure(
+        "range_memory_auto.cg",
+        "CGR013",
+        "HostAllocation",
+        Some(4),
+        0,
+        0,
+    );
+    // Outer root then loop-local allocations; fail with actually created locals alive.
+    compare_failure(
+        "range_memory_budget_failure.cg",
+        "CGR013",
+        "HostAllocation",
+        Some(8),
+        2,
+        0,
+    );
+}
+
+#[test]
+fn invalid_empty_loop_is_rejected_before_native_output_publication() {
+    for body in [
+        "memory.drop(x)",
+        "memory.close(r)",
+        "let t = memory.owned_bytes(1)",
+        "let b = memory.borrow(x)",
+    ] {
+        let case = Scratch::new();
+        let source = case.path("invalid.cg");
+        let text = format!(
+            "let r = memory.region(mode: manual, limit: 512)\nlet x = memory.owned_bytes(1)\nfor i in range(0, 0):\n    {body}\nmemory.drop(x)\nmemory.close(r)\n"
+        );
+        fs::write(&source, &text).unwrap();
+        assert!(run_checked_source_with_failure(&text, &[]).is_err());
+        for release in [false, true] {
+            let binary = case.path(&format!("invalid-{release}"));
+            let output = build(&source, &binary, release, None);
+            assert!(!output.status.success());
+            assert!(!binary.exists());
         }
     }
 }
