@@ -45,6 +45,125 @@ const TRUE: &str = include_str!("../examples/finite.cg");
 const FALSE: &str = include_str!("../examples/false.cg");
 
 #[test]
+fn useful_scalar_profile_source_core_and_smt_parity() {
+    for (text, domains, expected) in [
+        (
+            include_str!("../examples/scalar-v2/valid.cg"),
+            vec!["--domain", "x:0:3"],
+            [0, 1, 0, 0],
+        ),
+        (
+            include_str!("../examples/scalar-v2/false.cg"),
+            vec!["--domain", "x:0:3"],
+            [0, 4, 3, 0],
+        ),
+        (
+            include_str!("../examples/scalar-v2/mul-overflow.cg"),
+            vec!["--domain", "x:9223372036854775807:9223372036854775807"],
+            [0, 1, 0, 1],
+        ),
+        (
+            include_str!("../examples/scalar-v2/div-zero.cg"),
+            vec!["--domain", "x:0:1"],
+            [0, 2, 0, 2],
+        ),
+        (
+            include_str!("../examples/scalar-v2/div-min.cg"),
+            vec![
+                "--domain",
+                "x:-9223372036854775808:-9223372036854775808",
+                "--domain",
+                "y:-1:-1",
+            ],
+            [0, 1, 0, 1],
+        ),
+        (
+            include_str!("../examples/scalar-v2/div-truncate.cg"),
+            vec!["--domain", "x:-7:-7"],
+            [0, 1, 0, 0],
+        ),
+        (
+            include_str!("../examples/scalar-v2/inactive.cg"),
+            vec!["--domain", "x:-1:1"],
+            [0, 3, 0, 0],
+        ),
+        (
+            include_str!("../examples/scalar-v2/shadow.cg"),
+            vec!["--domain", "x:-2:2"],
+            [0, 1, 0, 0],
+        ),
+    ] {
+        let result = Source::new(text).run(&domains);
+        assert_eq!(result["scalar_profile"]["version"], 2);
+        assert_eq!(
+            result["bounded_solver_result"]["source_parity"], true,
+            "{result}"
+        );
+        for (index, name) in [
+            "requires_defined",
+            "requires_satisfiable",
+            "ensures_false",
+            "ensures_overflow",
+        ]
+        .iter()
+        .enumerate()
+        {
+            assert_eq!(
+                result["bounded_solver_result"]["obligations"][name], expected[index],
+                "{name}: {result}"
+            );
+        }
+        assert_ne!(
+            result["proof"]["kind"], "proved",
+            "finite audit never grants global proof"
+        );
+    }
+}
+
+#[test]
+fn accumulator_source_is_explicitly_blocked_by_shared_effect_contract() {
+    let text = include_str!("../examples/scalar-v2/accumulator.cg");
+    for (bound, code) in [
+        (None, "CGV001"),
+        (Some("2"), "CGV001"),
+        (Some("3"), "CGT012"),
+    ] {
+        let mut args = vec![
+            "--domain",
+            "x:0:2",
+            "--domain",
+            "i:7:7",
+            "--solver",
+            "/definitely/missing/z3",
+        ];
+        if let Some(bound) = bound {
+            args.extend(["--max-expansion", bound]);
+        }
+        let result = Source::new(text).run(&args);
+        assert_eq!(result["verdict"]["diagnostic"]["code"], code, "{result}");
+        assert_eq!(result["bounded_solver_result"]["kind"], "unrun");
+        assert!(
+            result.get("solver").is_none(),
+            "solver must not start for rejected source"
+        );
+    }
+}
+
+#[test]
+fn inactive_accumulators_share_the_expansion_budget_before_solver_startup() {
+    let text = "pub fn f(flag: Bool) -> i64 effects() caps():\n    requires true\n    ensures true\n    if true:\n        let mut a = 0\n        for i in range(0, 3):\n            a += i\n        return a\n    else:\n        let mut b = 0\n        for j in range(0, 3):\n            b += j\n        return b\n";
+    let result =
+        Source::new(text).run(&["--max-expansion", "5", "--solver", "/definitely/missing/z3"]);
+    assert_eq!(result["verdict"]["diagnostic"]["code"], "CGV001");
+    assert!(result["verdict"]["diagnostic"]["message"]
+        .as_str()
+        .unwrap()
+        .contains("expansion limit"));
+    assert_eq!(result["bounded_solver_result"]["kind"], "unrun");
+    assert!(result.get("solver").is_none());
+}
+
+#[test]
 fn source_and_smt_parity_covers_i64_max_body_overflow() {
     let result = Source::new(TRUE).run(&["--domain", "x:9223372036854775806:9223372036854775807"]);
     assert_eq!(result["bounded_solver_result"]["kind"], "cross_checked");
@@ -243,7 +362,6 @@ fn unsupported_calls_effects_and_foreign_declarations_have_source_spans() {
         "pub fn f(x: i64) -> i64 effects() caps():\n    requires true\n    ensures result == x\n    missing(x)\n",
         "pub fn f(x: i64) -> i64 effects(ReadArgs) caps(ArgsRead):\n    requires true\n    ensures result == x\n    x\n",
         "foreign python fn f(x: i64) -> i64 effects(Foreign) caps(ForeignCall) math.isqrt runtime \"local:cpython\" ownership copied\n",
-        "pub fn f(x: i64) -> i64 effects() caps():\n    requires true\n    ensures result == x\n    x * 2\n",
     ] {
         let result = Source::new(text).run(&["--domain", "x:0:1"]);
         assert_eq!(result["verdict"]["kind"], "unknown", "{result}");
@@ -409,10 +527,7 @@ fn out_of_profile_branches_reject_before_solver_even_when_inactive() {
         "        true\n",
         "        return\n",
         "        return true\n",
-        "        let y = 1\n        return y\n",
         "        let mut y = 1\n        y = 2\n        return y\n",
-        "        return x * 2\n",
-        "        return x / 2\n",
         "        return f(flag, x)\n",
         "        return python.abs(x)\n",
         "        return R(value: x)\n",

@@ -46,3 +46,28 @@ The independent SMT interpreter selects the `ite` branch. The four-obligation
 order, i64 range constraints, finite scope, witness validation and solver trust
 contract are unchanged. Conditional source admission, its independent AST
 oracle and the 32-level/1,024-node source caps belong to the CLI crate.
+
+
+## Additive scalar v2 API
+
+`scalar_v2` preserves the frozen root API while adding `Expr::Mul`, `Expr::Div`
+and `Expr::Let(name, initializer, body)`. Bindings are eager and lexical, including
+shadowing. Division truncates toward zero; zero and MIN/-1 fail with the existing
+`EvalError::Overflow` definedness outcome. SMT uses QF_UFNIA, guarded mathematical
+integers and sign-adjusted division; the finite audit independently interprets
+SMT `let`, multiplication and nonnegative division. Combining lexical bindings
+and unmodeled calls is explicitly rejected by `SmtError::UnmodeledLocalBinding`.
+
+`LiteralAccumulator { name, initial, index, start, end, increment, result }`
+provides library-only `.expand(max_expansion)`. A bound 1..=64 is mandatory;
+wide ranges are rejected before tree allocation. Reversed/empty half-open ranges
+execute no updates, but still eagerly evaluate `initial`. The index is scoped
+only to each update and cannot capture an outer index in `result`. Callers must
+account for cumulative expansion across multiple builders. Source admission is
+blocked by the shared Mutate effect checker, as described in the verifier CLI
+README. Array/invariant proofs and new type support remain outside this profile.
+
+Protocol handling, finite search and witness validation use one shared source
+compiled for the original and v2 types; the version-specific expression model,
+evaluator, encoding and independent SMT interpreter are separate modules. This
+keeps the old exhaustive enums stable while preserving security checks in both.

@@ -48,9 +48,9 @@ The selected source function must be public and semantically checked, declare
 `effects()`, use `i64`/`Bool` parameters and return type, have exactly one
 `requires` and one `ensures`, and have one pure expression body, return, or the bounded conditional tree described below.
 Supported source expressions are literals, parameters, `result` in `ensures`,
-checked `+`/`-`, and `==`, `!=`, `<`, `<=`, `>`, `>=`. The source parser does
+checked `+`/`-`/`*`/`/`, and `==`, `!=`, `<`, `<=`, `>`, `>=`. The source parser does
 not expose Boolean `and`/`or`/`not` syntax, though JSON/core contracts do.
-Calls, `assert`, multiplication/division, loops, foreign declarations, and
+Calls, `assert`, source mutation/loops, arrays/invariants, variant/generic types, foreign declarations, and
 effects report unsupported source with a zero based, half open byte span.
 Selecting one supported function from a larger file never checks the other
 functions. Source reports use schema version 3; JSON reports use version 2.
@@ -84,16 +84,16 @@ cargo fmt --all -- --check
 cargo clippy --offline -p cgx2-verify-core -p cgx2-verify-cli --all-targets -- -D warnings
 ```
 
-## Return-only conditional trees (Wave 25)
+## Return-only conditional trees (Wave 25 historical baseline)
 
 A body may contain exactly one mandatory-else `if`. Each branch contains
 exactly one explicit scalar `return expression` or another such conditional.
 Both branches are checked, even under a literal guard. Guards are Boolean;
 leaves have the same result sort and must match the declared `i64` or `Bool`.
-Local bindings, mutation, loops, calls, records, Unit returns, implicit branch
-tails, partial paths, multiple statements and source memory remain unsupported.
-Existing source operators are unchanged; multiplication, division and source
-logical syntax are not added.
+Wave 25 rejected locals and multiplication/division. The scalar v2 profile below
+adds immutable locals and checked multiplication/division. Mutation, source loops,
+calls, records, Unit returns, implicit branch tails, partial paths and source memory
+remain unsupported. Source logical syntax is unchanged.
 
 At most **32 nested conditionals** and **1,024 source nodes** are accepted.
 The counter covers conditional/branch statements, every guard and every leaf
@@ -125,3 +125,72 @@ cargo +1.98.1 run --offline -p cgx2-verify-cli -- crates/cgx2-verify-cli/example
 
 Exact Wave 25 checks, corruption experiments, supported/rejected profiles and
 the unrun live-solver gate are recorded in [wave25-evidence.md](wave25-evidence.md).
+
+
+## Useful scalar profile v2 (release completion S1-09)
+
+The CLI now uses the additive `cgx2_verify_core::scalar_v2` API. The original
+root `Expr`/`Contract`/result types remain unchanged. Reports retain their schema
+versions and include `scalar_profile.version: 2`; finite result scope and solver
+assumptions name checked add/sub/mul/div.
+
+Immutable `let` bindings may precede the terminal expression/return/conditional,
+including inside either branch. Initializers evaluate eagerly, even if the local
+is unused. Branch locals have lexical scopes; shadowing an outer parameter in a
+branch is supported. Same-scope duplicate names still fail shared type checking.
+The existing 1,024-node source budget includes binding nodes and initializers;
+conditional nesting remains capped at 32. Both branches are validated before a
+solver starts. An unselected failing initializer is inactive at evaluation time.
+
+Multiplication checks the signed i64 range. Division truncates toward zero;
+zero divisors and `MIN / -1` are undefined arithmetic. For compatibility, reports
+use the existing `Overflow` failure and `ensures_overflow` obligation for these
+invalid divisions. The SMT model uses mathematical integer multiplication,
+explicit range/nonzero guards, and sign-adjusted `div` over absolute values.
+The independent SMT interpreter supports the emitted lexical `let`, `*` and `div`.
+JSON adds `mul`/`div` with `left`/`right` operands; lexical binding is a v2 library
+API and source feature, without a new JSON binding syntax.
+
+`--max-expansion N` accepts an explicit 1..=64 budget (default 0, expansion
+disabled). It preflights the narrow literal accumulator pattern before solver
+startup and charges all branches against one budget. **Source accumulator
+verification remains blocked**: `effects()` produces shared checker `CGT012`
+for `+=` (`Mutate`), while this pure verifier rejects `effects(Mutate)`.
+No checker rules are bypassed. `scalar_v2::LiteralAccumulator::expand(N)` is
+library-only: one initial value, a literal half-open range, one checked additive
+update, and a result. General mutation, nested/general loops, array bounds and
+annotated invariants require later shared syntax/core work. Variants and generics
+are rejected rather than assumed safe.
+
+Defaults remain `--max-cases 100000`, `--timeout-ms 2000` **per solver process**,
+and 65536 input bytes. Existing configurable caps remain 1000000 cases and 10000
+milliseconds. A finite audit is required for a trusted proof; its unsupported
+SMT operations, i128 interpreter overflow, size/depth bounds or mismatches leave
+proof unknown/failing. These finite checks never grant a global proof alone.
+
+### Pinned live solver acceptance
+
+Python 3.11+ and an independently trusted installed Z3/CVC5 executable are required.
+Supply a previously trusted digest; computing a digest does not establish trust.
+No solver is installed or downloaded by this runner. Use a fresh evidence directory.
+
+```sh
+export RUSTUP_TOOLCHAIN=1.98.1 CARGO_BUILD_JOBS=2
+export CARGO_TARGET_DIR="$PWD/target/release-verification"
+export TMPDIR="$PWD/target/tmp-verification"
+mkdir -p "$CARGO_TARGET_DIR" "$TMPDIR"
+cargo build --offline -p cgx2-verify-cli
+python3 crates/cgx2-verify-cli/scripts/accept-scalar-v2.py \
+  --verifier "$CARGO_TARGET_DIR/debug/cgx2-verify" \
+  --solver /trusted/path/z3 --sha256 YOUR_PREVIOUSLY_TRUSTED_SHA256 \
+  --output crates/cgx2-verify-cli/acceptance-run
+```
+
+Replace `z3` with `cvc5` for that solver. The eight-case suite saves source and
+SMT hashes, full JSON reports with executable/version/pin/probe observations,
+raw stdout/stderr, solver answers and validated witness attempts. It requires
+actual complete solver obligations for each case; finite counterexamples cannot
+substitute for live witnesses. An unavailable solver/pin exits 3 and writes
+`blocked/unrun`; failures exit 1; acceptance exits 0 only for the supplied trusted
+executable. Accumulator source admission stays a separate blocker even when this
+scalar gate succeeds. See [release evidence](release-completion-evidence/report.md).

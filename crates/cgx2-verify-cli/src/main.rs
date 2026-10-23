@@ -7,7 +7,7 @@ use std::time::Duration;
 
 mod source;
 
-use cgx2_verify_core::{
+use cgx2_verify_core::scalar_v2::{
     audit_encoding, audit_encoding_with_source, emit_smtlib, emit_witness_smtlib, observe_solver,
     parse_solver_result, validate_solver_witness, verify_bounded, Contract, Counterexample, Domain,
     Expr, Failure, Parameter, SolverExit, SolverObservation, SolverResponse, Sort, Value, Verdict,
@@ -27,6 +27,7 @@ struct Options {
     input: String,
     format: String,
     max_cases: usize,
+    max_expansion: usize,
     solver: Option<String>,
     trusted_solver_sha256: Option<String>,
     timeout_ms: u64,
@@ -53,6 +54,7 @@ fn options() -> Result<Options, String> {
     let mut input = None;
     let mut format = "text".to_owned();
     let mut max_cases = DEFAULT_CASES;
+    let mut max_expansion = 0;
     let mut solver = None;
     let mut trusted_solver_sha256 = None;
     let mut timeout_ms = DEFAULT_TIMEOUT_MS;
@@ -61,6 +63,16 @@ fn options() -> Result<Options, String> {
     while let Some(arg) = args.next() {
         match arg.as_str() {
             "--format" => format = args.next().ok_or("--format requires text or json")?,
+            "--max-expansion" => {
+                max_expansion = args
+                    .next()
+                    .ok_or("--max-expansion requires 1..=64")?
+                    .parse::<usize>()
+                    .map_err(|_| "--max-expansion requires 1..=64")?;
+                if !(1..=64).contains(&max_expansion) {
+                    return Err("--max-expansion requires 1..=64".into());
+                }
+            }
             "--max-cases" => {
                 max_cases = args
                     .next()
@@ -92,7 +104,7 @@ fn options() -> Result<Options, String> {
             _ => return Err("expected one contract path".into()),
         }
     }
-    let input = input.ok_or("usage: cgx2-verify CONTRACT.json|FILE.cg [--function NAME] [--domain NAME:MIN:MAX] [--format text|json] [--max-cases N] [--solver PATH] [--trusted-solver-sha256 HEX] [--timeout-ms N]")?;
+    let input = input.ok_or("usage: cgx2-verify CONTRACT.json|FILE.cg [--function NAME] [--domain NAME:MIN:MAX] [--format text|json] [--max-cases N] [--max-expansion 1..64] [--solver PATH] [--trusted-solver-sha256 HEX] [--timeout-ms N]")?;
     if format != "text" && format != "json" {
         return Err("--format must be text or json".into());
     }
@@ -119,6 +131,7 @@ fn options() -> Result<Options, String> {
         input,
         format,
         max_cases,
+        max_expansion,
         solver,
         trusted_solver_sha256,
         timeout_ms,
@@ -210,6 +223,14 @@ fn expr(value: &Json, depth: usize, count: &mut usize) -> Result<Expr, String> {
         "sub" => {
             let (a, b) = binary(count)?;
             Expr::Sub(a, b)
+        }
+        "mul" => {
+            let (a, b) = binary(count)?;
+            Expr::Mul(a, b)
+        }
+        "div" => {
+            let (a, b) = binary(count)?;
+            Expr::Div(a, b)
         }
         "eq" => {
             let (a, b) = binary(count)?;
@@ -380,7 +401,7 @@ fn verdict_json(
         "domains": domain_json(domains),
         "boolean_parameters": bools,
         "max_cases": max_cases,
-        "arithmetic": "checked_i64_add_sub",
+        "arithmetic": "checked_i64_add_sub_mul_div",
     });
     match verdict {
         Verdict::Proved { scope: proved } => json!({
@@ -619,14 +640,14 @@ fn solver_json(
         } else { "unavailable".to_owned() },
         "version_exit": exit_json(version.exit),
         "script_sha256": hash(script.as_bytes()),
-        "assumptions": ["mathematical Int constrained to signed i64; checked add/sub have range guards", "uninterpreted calls are pure total functions with bounded i64 results"],
+        "assumptions": ["mathematical Int constrained to signed i64; checked add/sub/mul/div have definedness guards; division truncates toward zero", "uninterpreted calls are pure total functions with bounded i64 results"],
         "statuses": statuses,
         "stdout": observation.stdout,
         "stderr": observation.stderr,
         "exit": exit_json(observation.exit),
         "timeout_ms": timeout_ms,
         "memory_limit_bytes": if cfg!(target_os = "linux") {
-            Some(cgx2_verify_core::SOLVER_MEMORY_LIMIT_BYTES)
+            Some(cgx2_verify_core::scalar_v2::SOLVER_MEMORY_LIMIT_BYTES)
         } else { None },
         "output_limit_exceeded": observation.output_limit_exceeded,
         "write_error": observation.write_error,
@@ -656,7 +677,7 @@ fn solver_json(
                 || witness.exit != SolverExit::Code(0)
                 || !witness.stderr.trim().is_empty()
             {
-                Err(cgx2_verify_core::UnknownReason::MalformedResponse)
+                Err(cgx2_verify_core::scalar_v2::UnknownReason::MalformedResponse)
             } else {
                 validate_solver_witness(contract, &witness.stdout, failure).and_then(|candidate| {
                     if let Some(selected) = selected {
@@ -664,7 +685,7 @@ fn solver_json(
                             .source_obligations(&candidate.values)
                             .is_ok_and(|obligations| obligations[index]);
                         if !source_valid {
-                            return Err(cgx2_verify_core::UnknownReason::Evaluation(
+                            return Err(cgx2_verify_core::scalar_v2::UnknownReason::Evaluation(
                                 "witness fails source parity".into(),
                             ));
                         }
@@ -750,7 +771,12 @@ fn run() -> Result<(), String> {
         .is_some_and(|ext| ext == "cg");
     let (contract, domains, source_meta, source_selected) = if source_input {
         let text = std::str::from_utf8(&bytes).map_err(|_| "source must be UTF-8")?;
-        match source::parse(text, options.function.as_deref(), options.domains.clone()) {
+        match source::parse_with_expansion(
+            text,
+            options.function.as_deref(),
+            options.domains.clone(),
+            options.max_expansion,
+        ) {
             Ok(selected) => (
                 selected.contract.clone(),
                 selected.domains.clone(),
@@ -806,8 +832,8 @@ fn run() -> Result<(), String> {
         Err(error) => {
             let kind = if matches!(
                 error,
-                cgx2_verify_core::AuditError::Mismatch { .. }
-                    | cgx2_verify_core::AuditError::SourceMismatch { .. }
+                cgx2_verify_core::scalar_v2::AuditError::Mismatch { .. }
+                    | cgx2_verify_core::scalar_v2::AuditError::SourceMismatch { .. }
             ) {
                 "failed"
             } else {
@@ -817,6 +843,7 @@ fn run() -> Result<(), String> {
         }
     };
     result["smtlib"] = json!(script);
+    result["scalar_profile"] = json!({"version": 2, "immutable_locals": true, "checked_operations": ["add", "sub", "mul", "div"], "max_expansion": options.max_expansion, "expansion_cap": 64, "literal_accumulator": "library_only_shared_effect_admission_blocked"});
     result["solver_fixture_catalog"] = solver_fixture_catalog();
     if let Some(path) = &options.solver {
         result["solver"] = solver_json(
@@ -871,7 +898,7 @@ fn run() -> Result<(), String> {
         _ if matches!(
             &verdict,
             Verdict::Unknown {
-                reason: cgx2_verify_core::UnknownReason::Unsupported(_)
+                reason: cgx2_verify_core::scalar_v2::UnknownReason::Unsupported(_)
             }
         ) || result["solver"]["bounded_reason"] == "unsupported_uninterpreted_call" =>
         {
@@ -933,7 +960,7 @@ fn run() -> Result<(), String> {
             "executable_sha256": result["solver"]["executable_sha256"],
             "trusted_solver_sha256": options.trusted_solver_sha256,
             "timeout_ms_per_process": options.timeout_ms,
-            "output_limit_bytes_per_stream": cgx2_verify_core::SOLVER_OUTPUT_LIMIT,
+            "output_limit_bytes_per_stream": cgx2_verify_core::scalar_v2::SOLVER_OUTPUT_LIMIT,
         });
     }
     if options.format == "json" {

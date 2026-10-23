@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet};
 
-use crate::{eval, Contract, EvalError, Sort, Value};
+use super::{eval, Contract, EvalError, Sort, Value};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Domain {
@@ -171,7 +171,7 @@ pub fn verify_bounded(contract: &Contract, domains: &[Domain], max_cases: usize)
             cases: search.visited,
             assumptions: vec![
                 "all listed finite inputs enumerated".into(),
-                "checked i64 addition/subtraction; overflow is a contract failure".into(),
+                super::ARITHMETIC_ASSUMPTION.into(),
             ],
         },
     }

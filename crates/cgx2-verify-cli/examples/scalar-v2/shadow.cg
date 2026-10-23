@@ -1,0 +1,9 @@
+pub fn f(x: i64) -> i64 effects() caps():
+    requires x == 2
+    ensures result == x * 2
+    let y = x * 2
+    if true:
+        let x = y
+        return x
+    else:
+        return y

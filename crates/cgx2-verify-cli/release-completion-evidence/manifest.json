@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "reviewed_base": "0f0b0b9c87d817f39830f3e2b311dbae2ae3e0f3",
+  "library_profile": "cgx2_verify_core::scalar_v2",
+  "scalar_source_scope": "immutable eager lexical locals, checked i64 add/sub/mul/div, mandatory-else terminal conditional trees, i64/Bool only",
+  "accumulator_scope": "library-only; source blocked CGT012 Mutate; expansion explicit 1..=64",
+  "live_solver": "blocked/unrun: neither Z3 nor CVC5 installed",
+  "tests": 64,
+  "runner_preflight_tests": 2,
+  "fixture_sha256": {
+    "crates/cgx2-verify-cli/examples/scalar-v2/accumulator.cg": "5c8f38c1e75933ce0d0bae84e056fdab5c2a4b8e6c0e8a0322c03c7d7500417a",
+    "crates/cgx2-verify-cli/examples/scalar-v2/div-min.cg": "4878de061c31ad6ef2ec4ffb966ed16677e1a32a9380c51bbde1fe3f82e8d49f",
+    "crates/cgx2-verify-cli/examples/scalar-v2/div-truncate.cg": "3afbbc608e7ec9d829569ed8849fcb6c71ce00549bf078e38b0645ba6aa84873",
+    "crates/cgx2-verify-cli/examples/scalar-v2/div-zero.cg": "37f6573957642cdf18e3d12255fa30f55b21e5364abe5c5ae90a615156cc43e4",
+    "crates/cgx2-verify-cli/examples/scalar-v2/false.cg": "6d0459a41efecf27ede0619bd8a376a8519fd97130c0f3bbfe0f2df46f8c8e01",
+    "crates/cgx2-verify-cli/examples/scalar-v2/inactive.cg": "d7105e5314824e64c4ee869669933555700406f3d93ba165e47c17bb0dc80fc1",
+    "crates/cgx2-verify-cli/examples/scalar-v2/mul-overflow.cg": "25784913636fc1c01b011925f1a40e5921bb749e7162d45e29f14973a0a685a0",
+    "crates/cgx2-verify-cli/examples/scalar-v2/shadow.cg": "4a1f8da98bc70112cf407b0dfd448153df433597b05e8a2612b60c3341e8dff3",
+    "crates/cgx2-verify-cli/examples/scalar-v2/valid.cg": "f64b69637d17920562daa2ef7b0b27b69552a5915920d4444cdd27ea97819bf2"
+  }
+}
