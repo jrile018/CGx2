@@ -1,6 +1,8 @@
 //! Readable, standalone Rust output for checked CGx2 scalar programs.
 
 mod memory;
+mod variants;
+use variants::{emit_variants, syntax_type};
 
 pub use memory::is_memory_script;
 
@@ -27,6 +29,35 @@ pub struct PackageEmitDiagnostic {
 
 /// Emit one standalone Rust program from a checked, immutable local package snapshot.
 pub fn emit_package_rust(package: &CheckedPackage) -> Result<String, Vec<PackageEmitDiagnostic>> {
+    let known_variants = package
+        .modules()
+        .iter()
+        .flat_map(|source| {
+            source.syntax().variants.iter().map(move |v| {
+                format!(
+                    "{}.{}",
+                    source
+                        .syntax()
+                        .name
+                        .as_ref()
+                        .expect("named module")
+                        .segments
+                        .join("."),
+                    v.name
+                )
+            })
+        })
+        .collect();
+    let canonical: BTreeMap<_, _> = package
+        .modules()
+        .iter()
+        .map(|source| {
+            (
+                source.source().to_path_buf(),
+                cgx2_syntax::canonical_module(source.syntax(), &known_variants),
+            )
+        })
+        .collect();
     let mut errors = Vec::new();
     let by_name: BTreeMap<_, _> = package
         .modules()
@@ -53,13 +84,17 @@ pub fn emit_package_rust(package: &CheckedPackage) -> Result<String, Vec<Package
             ),
         }]);
     };
-    let Some(entry_name) = entry.syntax().name.as_ref().map(|p| p.segments.join(".")) else {
+    let Some(entry_name) = canonical[entry.source()]
+        .name
+        .as_ref()
+        .map(|p| p.segments.join("."))
+    else {
         return Err(vec![PackageEmitDiagnostic {
             file: entry.source().to_path_buf(),
             diagnostic: EmitDiagnostic::new(
                 "CGRS001",
                 "package entry requires a module declaration",
-                entry.syntax().span,
+                canonical[entry.source()].span,
             ),
         }]);
     };
@@ -106,17 +141,17 @@ pub fn emit_package_rust(package: &CheckedPackage) -> Result<String, Vec<Package
                     .map(move |name| format!("{imported}.{name}"))
             })
             .collect();
-        if !source.syntax().statements.is_empty() {
+        if !canonical[source.source()].statements.is_empty() {
             errors.push(package_error(
                 source,
                 EmitDiagnostic::new(
                     "CGRS001",
                     "script-style package modules are unsupported",
-                    source.syntax().statements[0].span,
+                    canonical[source.source()].statements[0].span,
                 ),
             ));
         }
-        for function in &source.syntax().functions {
+        for function in &canonical[source.source()].functions {
             let mut local_errors = Vec::new();
             if let Some(binding) = &function.foreign {
                 local_errors.push(EmitDiagnostic::new(
@@ -167,10 +202,10 @@ pub fn emit_package_rust(package: &CheckedPackage) -> Result<String, Vec<Package
         let mut local_errors = Vec::new();
         let mut stack = Vec::new();
         let mut seen = BTreeSet::new();
-        for function in &source.syntax().functions {
+        for function in &canonical[source.source()].functions {
             find_cycle(
                 &function.name,
-                source.syntax(),
+                &canonical[source.source()],
                 &mut stack,
                 &mut seen,
                 &mut local_errors,
@@ -190,7 +225,12 @@ pub fn emit_package_rust(package: &CheckedPackage) -> Result<String, Vec<Package
         Some(main)
             if !matches!(
                 main.return_type,
-                Type::I64 | Type::Bool | Type::String | Type::Unit | Type::Record(_)
+                Type::I64
+                    | Type::Bool
+                    | Type::String
+                    | Type::Unit
+                    | Type::Record(_)
+                    | Type::Variant { .. }
             ) =>
         {
             errors.push(package_error(
@@ -207,7 +247,7 @@ pub fn emit_package_rust(package: &CheckedPackage) -> Result<String, Vec<Package
             EmitDiagnostic::new(
                 "CGRS001",
                 "package entry requires a main function",
-                entry.syntax().span,
+                canonical[entry.source()].span,
             ),
         )),
         _ => {}
@@ -216,6 +256,14 @@ pub fn emit_package_rust(package: &CheckedPackage) -> Result<String, Vec<Package
         return Err(errors);
     }
     let mut out = String::from(PRELUDE);
+    emit_variants(
+        &package
+            .modules()
+            .iter()
+            .map(|source| (&canonical[source.source()], source.typed()))
+            .collect::<Vec<_>>(),
+        &mut out,
+    );
     for source in package.modules() {
         let module = source
             .syntax()
@@ -238,7 +286,7 @@ pub fn emit_package_rust(package: &CheckedPackage) -> Result<String, Vec<Package
     }
     for name in &package.index().topological_order {
         let source = by_name[name];
-        for function in &source.syntax().functions {
+        for function in &canonical[source.source()].functions {
             let signature = &source.typed().functions[&function.name];
             let params = function
                 .parameters
@@ -286,7 +334,7 @@ fn package_error(
 fn scalar_type(ty: &Type) -> bool {
     matches!(
         ty,
-        Type::I64 | Type::Bool | Type::String | Type::Unit | Type::Record(_)
+        Type::I64 | Type::Bool | Type::String | Type::Unit | Type::Record(_) | Type::Variant { .. }
     )
 }
 
@@ -305,6 +353,19 @@ pub fn emit_rust(module: &Module, checked: &TypedModule) -> Result<String, Vec<E
     if memory::is_memory_script(module) {
         return memory::emit_memory_rust(module, checked);
     }
+    let original_module = module;
+    let known = module
+        .variants
+        .iter()
+        .map(|v| {
+            module.name.as_ref().map_or_else(
+                || v.name.clone(),
+                |p| format!("{}.{}", p.segments.join("."), v.name),
+            )
+        })
+        .collect();
+    let normalized = cgx2_syntax::canonical_module(module, &known);
+    let module = &normalized;
     let mut errors = Vec::new();
     let functions = module
         .functions
@@ -376,19 +437,25 @@ pub fn emit_rust(module: &Module, checked: &TypedModule) -> Result<String, Vec<E
     if !errors.is_empty() {
         return Err(errors);
     }
-    match check_module(module) {
+    match check_module(original_module) {
         Ok(fresh) if fresh == *checked => {}
         _ => {
             return Err(vec![EmitDiagnostic::new(
                 "CGRS002",
                 "typed summary does not match a fresh check of the syntax tree",
-                module.span,
+                original_module.span,
             )]);
         }
     }
-
     let mut out = String::from(PRELUDE);
-    emit_records(&module.records, &mut out);
+    emit_variants(&[(module, checked)], &mut out);
+    let mut records = module.records.clone();
+    if let Some(name) = &module.name {
+        for record in &mut records {
+            record.name = format!("{}.{}", name.segments.join("."), record.name);
+        }
+    }
+    emit_records(&records, &mut out);
     for function in &module.functions {
         let signature = &checked.functions[&function.name];
         let params = function
@@ -486,7 +553,9 @@ fn cgx2_arg(args: &[String], index: i64) -> Result<String, String> {
 "#;
 
 fn validate_type(ty: &TypeSyntax, errors: &mut Vec<EmitDiagnostic>) {
-    if !ty.arguments.is_empty() {
+    if !ty.arguments.is_empty()
+        && !matches!(ty.path.segments.join(".").as_str(), "Option" | "Result")
+    {
         errors.push(EmitDiagnostic::new(
             "CGRS001",
             format!("type {ty} is unsupported by Rust scalar emission"),
@@ -515,6 +584,12 @@ fn comparison_operator(name: &str) -> Option<&'static str> {
 
 fn validate_contract_expr(expr: &Expr, errors: &mut Vec<EmitDiagnostic>) {
     match &expr.kind {
+        ExprKind::Constructor { .. } | ExprKind::Collection(_) | ExprKind::Index { .. } => errors
+            .push(EmitDiagnostic::new(
+                "CGRS001",
+                "new aggregate expressions are unsupported in scalar contracts",
+                expr.span,
+            )),
         ExprKind::Name(path) if path.segments.len() == 1 => (),
         ExprKind::Integer(raw) if raw.replace('_', "").parse::<i64>().is_ok() => (),
         ExprKind::Boolean(_) => (),
@@ -549,6 +624,24 @@ fn validate_block(
 ) {
     for stmt in stmts {
         match &stmt.kind {
+            StmtKind::Match { scrutinee, arms } => {
+                validate_expr(scrutinee, functions, allowed_imports, allow_fields, errors);
+                for arm in arms {
+                    validate_block(
+                        &arm.body,
+                        script,
+                        functions,
+                        allowed_imports,
+                        allow_fields,
+                        errors,
+                    );
+                }
+            }
+            StmtKind::LoopContract { .. } => errors.push(EmitDiagnostic::new(
+                "CGRS001",
+                "annotated loops require S2b/S3-V",
+                stmt.span,
+            )),
             StmtKind::If {
                 condition,
                 then_body,
@@ -647,6 +740,17 @@ fn validate_expr(
     errors: &mut Vec<EmitDiagnostic>,
 ) {
     match &expr.kind {
+        ExprKind::Constructor { arguments, .. } => {
+            for arg in arguments {
+                validate_expr(&arg.value, functions, allowed_imports, allow_fields, errors);
+            }
+        }
+        ExprKind::Collection(_) | ExprKind::Index { .. } => errors.push(EmitDiagnostic::new(
+            "CGRS001",
+            "collections/indexing require S2b",
+            expr.span,
+        )),
+
         ExprKind::Name(path)
             if path.segments.len() > 2 || (path.segments.len() == 2 && !allow_fields) =>
         {
@@ -697,6 +801,7 @@ fn validate_expr(
                     && !matches!(name.as_str(), "arg" | "arg_count")
                     && comparison_operator(&name).is_none()
                     && !functions.contains(name.as_str())
+                    && !(allow_fields && arguments.iter().any(|arg| arg.name.is_some()))
                 {
                     errors.push(EmitDiagnostic::new(
                         "CGRS001",
@@ -755,6 +860,15 @@ fn find_cycle<'a>(
 
 fn calls_in_stmt<'a>(stmt: &'a Stmt, calls: &mut Vec<(&'a str, Span)>) {
     match &stmt.kind {
+        StmtKind::Match { scrutinee, arms } => {
+            calls_in_expr(scrutinee, calls);
+            for arm in arms {
+                for stmt in &arm.body {
+                    calls_in_stmt(stmt, calls);
+                }
+            }
+        }
+        StmtKind::LoopContract { expression, .. } => calls_in_expr(expression, calls),
         StmtKind::If {
             condition,
             then_body,
@@ -787,6 +901,20 @@ fn calls_in_stmt<'a>(stmt: &'a Stmt, calls: &mut Vec<(&'a str, Span)>) {
 
 fn calls_in_expr<'a>(expr: &'a Expr, calls: &mut Vec<(&'a str, Span)>) {
     match &expr.kind {
+        ExprKind::Constructor { arguments, .. } => {
+            for arg in arguments {
+                calls_in_expr(&arg.value, calls);
+            }
+        }
+        ExprKind::Collection(values) => {
+            for value in values {
+                calls_in_expr(value, calls);
+            }
+        }
+        ExprKind::Index { collection, index } => {
+            calls_in_expr(collection, calls);
+            calls_in_expr(index, calls);
+        }
         ExprKind::Call { callee, arguments } => {
             if let ExprKind::Name(path) = &callee.kind
                 && let [name] = path.segments.as_slice()
@@ -822,25 +950,38 @@ fn rust_type(ty: &Type) -> String {
         Type::Unit => "()".into(),
         Type::List(_) => unreachable!("validated scalar type"),
         Type::Record(name) => rust_name(name),
+        Type::Variant { .. } => rust_name(&ty.to_string()),
     }
 }
 
 fn emit_records(records: &[Record], out: &mut String) {
     for record in records {
         let name = rust_name(&record.name);
-        out.push_str(&format!("#[derive(Clone, Copy)]\nstruct {name} {{\n"));
+        let derive = if record
+            .fields
+            .iter()
+            .all(|f| matches!(syntax_type(&f.ty), Type::I64 | Type::Bool | Type::Unit))
+        {
+            "Clone, Copy"
+        } else {
+            "Clone"
+        };
+        out.push_str(&format!("#[derive({derive})]\nstruct {name} {{\n"));
         for field in &record.fields {
-            let ty = if field.ty.to_string() == "i64" {
-                "i64"
-            } else {
-                "bool"
-            };
+            let ty = rust_type(&syntax_type(&field.ty));
             out.push_str(&format!("    {}: {ty},\n", rust_name(&field.name)));
         }
         out.push_str("}\n");
         out.push_str(&format!("impl std::fmt::Display for {name} {{\n    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {{\n        write!(f, \"{}(\")?;\n", record.name));
         for (index, field) in record.fields.iter().enumerate() {
             let comma = if index == 0 { "" } else { ", " };
+            if syntax_type(&field.ty) == Type::Unit {
+                out.push_str(&format!(
+                    "        f.write_str({})?;\n",
+                    quote_rust(&format!("{comma}{}: ", field.name))
+                ));
+                continue;
+            }
             out.push_str(&format!(
                 "        write!(f, \"{comma}{}: {{}}\", self.{})?;\n",
                 field.name,
@@ -853,6 +994,9 @@ fn emit_records(records: &[Record], out: &mut String) {
 
 fn tail_type(stmts: &[Stmt], typed: &TypedModule) -> Type {
     match stmts.last().map(|s| &s.kind) {
+        Some(StmtKind::Match { arms, .. }) => arms
+            .first()
+            .map_or(Type::Unit, |arm| tail_type(&arm.body, typed)),
         Some(StmtKind::Expr(expr)) | Some(StmtKind::Return(Some(expr))) => typed
             .expressions
             .get(expr.span)
@@ -915,6 +1059,47 @@ fn emit_block_context(
         ));
         let last = index + 1 == stmts.len();
         match &stmt.kind {
+            StmtKind::Match { scrutinee, arms } => {
+                out.push_str(&format!(
+                    "{pad}match {}? {{\n",
+                    emit_expr_context(scrutinee, module)
+                ));
+                for arm in arms {
+                    let pattern = match &arm.pattern {
+                        cgx2_syntax::Pattern::Wildcard(_) => "_".to_owned(),
+                        cgx2_syntax::Pattern::Case {
+                            ty, case, bindings, ..
+                        } => {
+                            let payloads = if bindings.is_empty() {
+                                String::new()
+                            } else {
+                                format!(
+                                    "({})",
+                                    bindings
+                                        .iter()
+                                        .map(|b| if b.name == "_" {
+                                            "_".to_owned()
+                                        } else {
+                                            rust_name(&b.name)
+                                        })
+                                        .collect::<Vec<_>>()
+                                        .join(", ")
+                                )
+                            };
+                            format!(
+                                "{}::{}{payloads}",
+                                rust_type(&syntax_type(ty)),
+                                rust_name(case)
+                            )
+                        }
+                    };
+                    out.push_str(&format!("{pad}    {pattern} => {{\n"));
+                    emit_block_context(&arm.body, indent + 2, out, module, last && return_tail);
+                    out.push_str(&format!("{pad}    }},\n"));
+                }
+                out.push_str(&format!("{pad}}}\n"));
+            }
+            StmtKind::LoopContract { .. } => unreachable!("validated loop contract rejection"),
             StmtKind::If {
                 condition,
                 then_body,
@@ -1009,7 +1194,7 @@ fn emit_block_context(
         && !block_returns(stmts)
         && !matches!(
             stmts.last().map(|s| &s.kind),
-            Some(StmtKind::Expr(_) | StmtKind::Return(_))
+            Some(StmtKind::Expr(_) | StmtKind::Return(_) | StmtKind::Match { .. })
         )
     {
         out.push_str(&format!("{pad}Ok(())\n"));
@@ -1018,6 +1203,14 @@ fn emit_block_context(
 
 fn emit_expr_context(expr: &Expr, module: Option<&str>) -> String {
     let value = match &expr.kind {
+        ExprKind::Constructor {
+            ty,
+            case,
+            arguments,
+        } => variants::constructor(ty, case, arguments, module),
+        ExprKind::Collection(_) | ExprKind::Index { .. } => {
+            unreachable!("validated collection rejection")
+        }
         ExprKind::Name(path) => match path.segments.as_slice() {
             [name] => format!("Ok::<_, String>({}.clone())", rust_name(name)),
             [base, field] => format!(
@@ -1077,13 +1270,15 @@ fn emit_expr_context(expr: &Expr, module: Option<&str>) -> String {
                     .join(", ");
                 format!(
                     "Ok::<_, String>({} {{ {fields} }})",
-                    rust_name(&if path.segments.len() > 1 {
-                        path.segments.join(".")
-                    } else if let Some(module) = module {
-                        format!("{module}.{}", path.segments[0])
-                    } else {
-                        path.segments[0].clone()
-                    })
+                    rust_name(
+                        &if path.segments.len() > 1 || path.segments[0].contains('.') {
+                            path.segments.join(".")
+                        } else if let Some(module) = module {
+                            format!("{module}.{}", path.segments[0])
+                        } else {
+                            path.segments[0].clone()
+                        }
+                    )
                 )
             } else {
                 match path.segments.as_slice() {
@@ -1163,6 +1358,9 @@ fn quote_rust(value: &str) -> String {
 fn block_returns(body: &[Stmt]) -> bool {
     body.iter().any(|stmt| match &stmt.kind {
         StmtKind::Return(_) => true,
+        StmtKind::Match { arms, .. } => {
+            !arms.is_empty() && arms.iter().all(|arm| block_returns(&arm.body))
+        }
         StmtKind::If {
             then_body,
             else_body,

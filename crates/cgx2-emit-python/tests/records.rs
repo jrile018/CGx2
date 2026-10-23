@@ -152,7 +152,10 @@ fn unsupported_record_shapes_never_reach_python_emission() {
         "record Pointer:\n    value: owned<i64>\nfn main() -> i64:\n    1\n",
     ] {
         let module = parse_module(source).unwrap();
-        assert!(check_module(&module).is_err(), "{source}");
+        if let Ok(typed) = check_module(&module) {
+            let errors = emit_python(&module, &typed).unwrap_err();
+            assert!(errors.iter().any(|error| error.code == "CGE006"));
+        }
     }
     let public =
         parse_module("record Point:\n    x: i64\npub fn id(p: Point) -> Point:\n    p\n").unwrap();
@@ -189,4 +192,21 @@ fn conditionals_preserve_branch_scope_unit_and_first_failure() {
         String::from_utf8_lossy(&output.stderr)
     );
     assert_eq!(output.stdout, b"42\n");
+}
+
+#[test]
+fn defining_module_identity_is_preserved_for_standalone_records() {
+    let source="module sample\nrecord Point:\n    x: i64\nfn relay(p: Point) -> Point:\n    p\nfn main() -> Point:\n    relay(Point(x: 42))\n";
+    let cli = run_source(source, &[]).unwrap();
+    let output = run_python(source);
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    assert_eq!(cli.value.to_string(), "sample.Point(x: 42)");
+    assert_eq!(
+        String::from_utf8_lossy(&output.stdout).trim(),
+        cli.value.to_string()
+    );
 }

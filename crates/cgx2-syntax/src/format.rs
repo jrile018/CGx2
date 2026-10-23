@@ -14,7 +14,8 @@ pub fn format_module(module: &Module) -> String {
         out.push('\n');
     }
     if !out.is_empty()
-        && (!module.records.is_empty()
+        && ((!module.records.is_empty() || !module.variants.is_empty())
+            || !module.variants.is_empty()
             || !module.functions.is_empty()
             || !module.statements.is_empty())
     {
@@ -26,6 +27,7 @@ pub fn format_module(module: &Module) -> String {
         }
         out.push_str("record ");
         out.push_str(&record.name);
+        write_type_parameters(&mut out, &record.type_parameters);
         out.push_str(":\n");
         for field in &record.fields {
             out.push_str("    ");
@@ -35,11 +37,39 @@ pub fn format_module(module: &Module) -> String {
             out.push('\n');
         }
         if index + 1 < module.records.len()
+            || !module.variants.is_empty()
             || !module.functions.is_empty()
             || !module.statements.is_empty()
         {
             out.push('\n');
         }
+    }
+    for variant in &module.variants {
+        if variant.public {
+            out.push_str("pub ");
+        }
+        out.push_str("variant ");
+        out.push_str(&variant.name);
+        write_type_parameters(&mut out, &variant.type_parameters);
+        out.push_str(":\n");
+        for case in &variant.cases {
+            out.push_str("    ");
+            out.push_str(&case.name);
+            if !case.payloads.is_empty() {
+                out.push('(');
+                out.push_str(
+                    &case
+                        .payloads
+                        .iter()
+                        .map(ToString::to_string)
+                        .collect::<Vec<_>>()
+                        .join(", "),
+                );
+                out.push(')');
+            }
+            out.push('\n');
+        }
+        out.push('\n');
     }
     for (index, function) in module.functions.iter().enumerate() {
         if index > 0 {
@@ -70,6 +100,7 @@ fn write_function(out: &mut String, function: &Function) {
     }
     out.push_str("fn ");
     out.push_str(&function.name);
+    write_type_parameters(out, &function.type_parameters);
     out.push('(');
     for (index, parameter) in function.parameters.iter().enumerate() {
         if index > 0 {
@@ -136,6 +167,52 @@ fn write_stmt(out: &mut String, stmt: &Stmt, indent: usize) {
         out.push_str("    ");
     }
     match &stmt.kind {
+        StmtKind::Match { scrutinee, arms } => {
+            out.push_str("match ");
+            write_expr(out, scrutinee, 0);
+            out.push_str(":\n");
+            for arm in arms {
+                out.push_str(&"    ".repeat(indent + 1));
+                match &arm.pattern {
+                    crate::Pattern::Wildcard(_) => out.push('_'),
+                    crate::Pattern::Case {
+                        ty, case, bindings, ..
+                    } => {
+                        out.push_str(&ty.to_string());
+                        out.push('.');
+                        out.push_str(case);
+                        if !bindings.is_empty() {
+                            out.push('(');
+                            out.push_str(
+                                &bindings
+                                    .iter()
+                                    .map(|b| b.name.as_str())
+                                    .collect::<Vec<_>>()
+                                    .join(", "),
+                            );
+                            out.push(')');
+                        }
+                    }
+                }
+                out.push_str(":\n");
+                for nested in &arm.body {
+                    write_stmt(out, nested, indent + 2);
+                }
+            }
+        }
+        StmtKind::LoopContract {
+            decreases,
+            expression,
+        } => {
+            out.push_str(if *decreases {
+                "decreases "
+            } else {
+                "invariant "
+            });
+            write_expr(out, expression, 0);
+            out.push('\n');
+        }
+
         StmtKind::If {
             condition,
             then_body,
@@ -259,6 +336,44 @@ fn write_expr(out: &mut String, expr: &Expr, required: u8) {
         out.push('(');
     }
     match &expr.kind {
+        ExprKind::Constructor {
+            ty,
+            case,
+            arguments,
+        } => {
+            out.push_str(&ty.to_string());
+            out.push('.');
+            out.push_str(case);
+            out.push('(');
+            for (i, arg) in arguments.iter().enumerate() {
+                if i > 0 {
+                    out.push_str(", ");
+                }
+                if let Some(name) = &arg.name {
+                    out.push_str(name);
+                    out.push_str(": ");
+                }
+                write_expr(out, &arg.value, 0);
+            }
+            out.push(')');
+        }
+        ExprKind::Collection(values) => {
+            out.push('[');
+            for (i, value) in values.iter().enumerate() {
+                if i > 0 {
+                    out.push_str(", ");
+                }
+                write_expr(out, value, 0);
+            }
+            out.push(']');
+        }
+        ExprKind::Index { collection, index } => {
+            write_expr(out, collection, 7);
+            out.push('[');
+            write_expr(out, index, 0);
+            out.push(']');
+        }
+
         ExprKind::Name(path) => out.push_str(&path.segments.join(".")),
         ExprKind::Integer(value) | ExprKind::StringLiteral(value) => out.push_str(value),
         ExprKind::Boolean(value) => out.push_str(if *value { "true" } else { "false" }),
@@ -308,4 +423,29 @@ pub fn format_expression(expr: &Expr) -> String {
     let mut out = String::new();
     write_expr(&mut out, expr, 0);
     out
+}
+
+fn write_type_parameters(out: &mut String, parameters: &[crate::TypeParameter]) {
+    if parameters.is_empty() {
+        return;
+    }
+    out.push('<');
+    for (index, parameter) in parameters.iter().enumerate() {
+        if index > 0 {
+            out.push_str(", ");
+        }
+        out.push_str(&parameter.name);
+        if !parameter.constraints.is_empty() {
+            out.push_str(": ");
+            out.push_str(
+                &parameter
+                    .constraints
+                    .iter()
+                    .map(|p| p.segments.join("."))
+                    .collect::<Vec<_>>()
+                    .join(" + "),
+            );
+        }
+    }
+    out.push('>');
 }

@@ -116,6 +116,15 @@ pub fn index_source(source: &str, syntax_only: bool) -> Result<Index, Vec<Diagno
             })
             .collect::<Vec<_>>()
     })?;
+    if let Some(span) = cgx2_syntax::s2a_feature_span(&module) {
+        return Err(vec![Diagnostic {
+            stage: "admission",
+            code: "CGI006".into(),
+            message: "S2a variant/generic/collection/loop-contract analysis is deferred to S3-A"
+                .into(),
+            span,
+        }]);
+    }
     let typed = if syntax_only {
         None
     } else {
@@ -293,6 +302,9 @@ impl<'a> Visitor<'a> {
     fn statements(&mut self, statements: &[Stmt]) {
         for statement in statements {
             match &statement.kind {
+                StmtKind::Match { .. } | StmtKind::LoopContract { .. } => {
+                    unreachable!("S2a source/package profiles rejected before advisory analysis")
+                }
                 StmtKind::If {
                     condition,
                     then_body,

@@ -8,7 +8,7 @@ use cgx2_syntax::{format_module, parse_module};
 
 use diagnostics::{CliDiagnostic, DiagnosticFormat};
 
-const HELP: &str = "usage: cgx2 [--diagnostic-format=json] check FILE.cg|PACKAGE | cgx2 [--diagnostic-format=json] run FILE.cg|PACKAGE [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 api --json FILE.cg|PACKAGE | cgx2 build FILE.cg|PACKAGE --out BINARY [--release] [--force] [--rustc PATH] | cgx2 emit FILE.cg|PACKAGE --target rust|python --out FILE [--force] | cgx2 memory report FILE.cg [--format=json] | cgx2 memory failure-report FILE.cg | cgx2 fmt FILE.cg\ncheck validates syntax, scalar types, and a bounded memory/ownership script subset; a PACKAGE directory can run checked pure scalar/record functions through cgx2-native; schema 2 also supports bounded pinned native C calls; memory report shows CGx2 allocations only";
+const HELP: &str = "usage: cgx2 [--diagnostic-format=json] check FILE.cg|PACKAGE | cgx2 [--diagnostic-format=json] run FILE.cg|PACKAGE [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 api [--json] [--syntax-only] FILE.cg|PACKAGE | cgx2 build FILE.cg|PACKAGE --out BINARY [--release] [--force] [--rustc PATH] | cgx2 emit FILE.cg|PACKAGE --target rust|python --out FILE [--force] | cgx2 memory report FILE.cg [--format=json] | cgx2 memory failure-report FILE.cg | cgx2 fmt FILE.cg\ncheck validates syntax, scalar types, and a bounded memory/ownership script subset; a PACKAGE directory can run checked pure scalar/record functions through cgx2-native; schema 2 also supports bounded pinned native C calls; memory report shows CGx2 allocations only";
 
 enum Command {
     Check {
@@ -21,6 +21,7 @@ enum Command {
     Api {
         path: String,
         json: bool,
+        syntax_only: bool,
     },
     Run {
         path: String,
@@ -71,8 +72,21 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
             )]
         });
     }
-    if let Command::Api { path, json } = &command {
+    if let Command::Api {
+        path,
+        json,
+        syntax_only,
+    } = &command
+    {
         if Path::new(path).is_dir() {
+            if *syntax_only {
+                return Err(vec![CliDiagnostic::new(
+                    "CGC001",
+                    "syntax-only API metadata currently requires a source file".into(),
+                    path.clone(),
+                    None,
+                )]);
+            }
             let root = Path::new(path);
             let package = cgx2_package::load_checked_package(root).map_err(|errors| {
                 errors
@@ -181,7 +195,26 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
                     .collect::<Vec<_>>()
             })?;
         }
-        Command::Api { path, json } => {
+        Command::Api {
+            path,
+            json,
+            syntax_only,
+        } => {
+            if syntax_only {
+                let module = parse_module(&source).map_err(|errors| {
+                    errors
+                        .into_iter()
+                        .map(|d| CliDiagnostic::new(d.code, d.message, path.clone(), Some(d.span)))
+                        .collect::<Vec<_>>()
+                })?;
+                let index = cgx2_api_index::build_syntax_index(&module);
+                if json {
+                    println!("{}", index.render_json());
+                } else {
+                    print!("{}", index.render_text());
+                }
+                return Ok(());
+            }
             let typed = check_source(&source).map_err(|errors| {
                 errors
                     .into_iter()
@@ -336,14 +369,22 @@ fn parse_args(args: Vec<String>) -> Result<Command, CliDiagnostic> {
         return parse_compile(&filtered)
             .map_err(|message| CliDiagnostic::new("CGC001", message, "<command>".into(), None));
     }
-    // Both documented `api --json PATH` and legacy `api PATH --json` work.
-    if filtered.first().map(String::as_str) == Some("api")
-        && filtered.get(1).map(String::as_str) == Some("--json")
-    {
-        if filtered.len() != 3 {
+    if filtered.first().map(String::as_str) == Some("api") {
+        let json = filtered.iter().any(|arg| arg == "--json");
+        let syntax_only = filtered.iter().any(|arg| arg == "--syntax-only");
+        let paths: Vec<_> = filtered
+            .iter()
+            .skip(1)
+            .filter(|arg| arg.as_str() != "--json" && arg.as_str() != "--syntax-only")
+            .collect();
+        if paths.len() != 1 {
             return Err(usage());
         }
-        filtered.swap(1, 2);
+        return Ok(Command::Api {
+            path: paths[0].clone(),
+            json,
+            syntax_only,
+        });
     }
     let (mode, rest) = match filtered.first().map(String::as_str) {
         Some("memory") if filtered.get(1).map(String::as_str) == Some("report") => {
@@ -390,6 +431,7 @@ fn parse_args(args: Vec<String>) -> Result<Command, CliDiagnostic> {
         return Ok(Command::Api {
             path: path.clone(),
             json: rest.len() == 2,
+            syntax_only: false,
         });
     }
     if mode == "check" || mode == "fmt" {

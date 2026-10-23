@@ -1,0 +1,17 @@
+module app.main
+import app.left
+import app.right
+fn left(value: app.left.Reply) -> i64 effects():
+    match value:
+        app.left.Reply.Value(point):
+            point.x
+        app.left.Reply.Empty:
+            0
+fn main() -> i64 effects():
+    let first: app.left.Reply = app.left.make(20)
+    let second: app.right.Reply = app.right.make(22)
+    match second:
+        app.right.Reply.Value(point):
+            left(first) + point.x
+        app.right.Reply.Empty:
+            1 / 0

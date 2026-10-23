@@ -57,6 +57,7 @@ pub fn scalar_worker_main() -> i32 {
     };
     let result = match run_source(&script, &[]) {
         Ok(result) => match result.value {
+            Value::Variant { .. } => b"ECGNK026: variant worker output requires S3-N".to_vec(),
             Value::I64(number) => format!("I{number}").into_bytes(),
             Value::Bool(boolean) => format!("B{boolean}").into_bytes(),
             Value::String(value) => {
@@ -919,6 +920,9 @@ pub fn facts_for_source(source: &str) -> Result<CellFacts, KernelError> {
             ),
         )
     })?;
+    if let Some(span) = cgx2_syntax::s2a_feature_span(&module) {
+        return Err(error("CGNK026",format!("S2a variant/generic/collection/loop-contract notebook execution is deferred to S3-N at {}..{}",span.start,span.end)));
+    }
     if module.name.is_some() {
         return Err(error(
             "CGNK001",
@@ -1284,6 +1288,15 @@ fn collect_expression(
     function_body: bool,
 ) -> Result<(), KernelError> {
     match &expression.kind {
+        ExprKind::Constructor { .. } | ExprKind::Collection(_) | ExprKind::Index { .. } => {
+            return Err(error(
+                "CGNK026",
+                format!(
+                    "S2a expression execution requires S3-N at {}..{}",
+                    expression.span.start, expression.span.end
+                ),
+            ))
+        }
         ExprKind::Name(path) => {
             let name = simple_name(path)?;
             if !locals.contains(name) {
@@ -1752,6 +1765,9 @@ impl RetainedExecutor {
                 |project| project.canonical_identity(&expected),
             );
             let actual = match &value {
+                Value::Variant { .. } => {
+                    return Err("CGNK026: variant worker output requires S3-N".into())
+                }
                 Value::Record { name, .. } => name.as_str(),
                 Value::I64(_) => "i64",
                 Value::Bool(_) => "Bool",
@@ -2164,6 +2180,15 @@ fn limit_error() -> String {
 fn value_size(value: &Value) -> usize {
     match value {
         Value::String(text) => text.len(),
+        Value::Variant {
+            ty,
+            case_name,
+            payloads,
+            ..
+        } => payloads.iter().fold(
+            ty.to_string().len().saturating_add(case_name.len()),
+            |size, value| size.saturating_add(value_size(value)),
+        ),
         Value::Record { name, fields } => fields.iter().fold(name.len(), |size, (field, value)| {
             size.saturating_add(field.len())
                 .saturating_add(value_size(value))
@@ -2174,6 +2199,9 @@ fn value_size(value: &Value) -> usize {
 
 fn append_value(script: &mut String, value: &Value) -> Result<(), String> {
     match value {
+        Value::Variant { .. } => {
+            return Err("CGNK026: retained variant execution requires S3-N".into())
+        }
         Value::I64(number) if *number == i64::MIN => script.push_str("0 - 9223372036854775807 - 1"),
         Value::I64(number) if *number < 0 => {
             script.push_str("0 - ");

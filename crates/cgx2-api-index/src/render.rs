@@ -36,6 +36,39 @@ impl ApiIndex {
             out.push_str(",\"end\":");
             out.push_str(&function.span.end.to_string());
             out.push('}');
+            if self.schema_version >= 6 {
+                out.push_str(",\"type_parameters\":");
+                push_parameters(&mut out, &function.type_parameters);
+                out.push_str(",\"loop_contracts\":[");
+                for (i, contract) in function.loop_contracts.iter().enumerate() {
+                    if i > 0 {
+                        out.push(',');
+                    }
+                    out.push_str("{\"kind\":");
+                    push_json_string(&mut out, &contract.kind);
+                    out.push_str(",\"expression\":");
+                    push_json_string(&mut out, &contract.expression);
+                    out.push_str(",\"status\":");
+                    push_json_string(&mut out, &contract.status);
+                    out.push_str(",\"span\":");
+                    push_span(&mut out, contract.span);
+                    out.push('}');
+                }
+                out.push(']');
+                out.push_str(",\"parameter_types\":[");
+                for (i, ty) in function.parameter_types.iter().enumerate() {
+                    if i > 0 {
+                        out.push(',');
+                    }
+                    push_type(&mut out, ty);
+                }
+                out.push_str("],\"result_type\":");
+                if let Some(ty) = &function.result_type {
+                    push_type(&mut out, ty);
+                } else {
+                    out.push_str("null");
+                }
+            }
             if self.schema_version >= 2 {
                 out.push_str(",\"effects\":");
                 push_json_array(&mut out, &function.effects);
@@ -110,6 +143,20 @@ impl ApiIndex {
                 }
                 out.push_str("{\"name\":");
                 push_json_string(&mut out, &record.name);
+                if self.schema_version >= 6 {
+                    out.push_str(",\"identity\":");
+                    push_json_string(&mut out, &record.identity);
+                    out.push_str(",\"type_parameters\":");
+                    push_parameters(&mut out, &record.type_parameters);
+                    out.push_str(",\"field_types\":[");
+                    for (i, ty) in record.field_types.iter().enumerate() {
+                        if i > 0 {
+                            out.push(',');
+                        }
+                        push_type(&mut out, ty);
+                    }
+                    out.push(']');
+                }
                 out.push_str(",\"fields\":[");
                 for (field_index, field) in record.fields.iter().enumerate() {
                     if field_index > 0 {
@@ -129,6 +176,44 @@ impl ApiIndex {
             }
             out.push(']');
         }
+        if self.schema_version >= 6 {
+            out.push_str(",\"semantics_status\":");
+            push_json_string(&mut out, &self.semantics_status);
+            out.push_str(",\"variants\":[");
+            for (i, variant) in self.variants.iter().enumerate() {
+                if i > 0 {
+                    out.push(',');
+                }
+                out.push_str("{\"name\":");
+                push_json_string(&mut out, &variant.name);
+                out.push_str(",\"identity\":");
+                push_json_string(&mut out, &variant.identity);
+                out.push_str(",\"type_parameters\":");
+                push_parameters(&mut out, &variant.type_parameters);
+                out.push_str(",\"span\":");
+                push_span(&mut out, variant.span);
+                out.push_str(",\"cases\":[");
+                for (j, case) in variant.cases.iter().enumerate() {
+                    if j > 0 {
+                        out.push(',');
+                    }
+                    out.push_str("{\"name\":");
+                    push_json_string(&mut out, &case.name);
+                    out.push_str(",\"span\":");
+                    push_span(&mut out, case.span);
+                    out.push_str(",\"payloads\":[");
+                    for (k, ty) in case.payloads.iter().enumerate() {
+                        if k > 0 {
+                            out.push(',');
+                        }
+                        push_type(&mut out, ty);
+                    }
+                    out.push_str("]}");
+                }
+                out.push_str("]}");
+            }
+            out.push(']');
+        }
         out.push('}');
         out
     }
@@ -136,6 +221,23 @@ impl ApiIndex {
     /// Render one public signature per line, with half-open byte spans.
     pub fn render_text(&self) -> String {
         let mut out = format!("module {}\n", self.module.as_deref().unwrap_or("<unnamed>"));
+        for variant in &self.variants {
+            out.push_str(&format!(
+                "variant {} [{}, {})\n",
+                variant.identity, variant.span.start, variant.span.end
+            ));
+            for case in &variant.cases {
+                out.push_str(&format!(
+                    "    {}({})\n",
+                    case.name,
+                    case.payloads
+                        .iter()
+                        .map(|t| t.identity.as_str())
+                        .collect::<Vec<_>>()
+                        .join(", ")
+                ));
+            }
+        }
         for record in &self.records {
             out.push_str(&format!(
                 "record {} [{}, {})\n",
@@ -239,4 +341,41 @@ fn push_json_string(out: &mut String, value: &str) {
         }
     }
     out.push('"');
+}
+
+fn push_span(out: &mut String, span: cgx2_syntax::Span) {
+    out.push_str(&format!(
+        "{{\"start\":{},\"end\":{}}}",
+        span.start, span.end
+    ));
+}
+fn push_type(out: &mut String, ty: &crate::ApiType) {
+    out.push_str("{\"identity\":");
+    push_json_string(out, &ty.identity);
+    out.push_str(",\"arguments\":[");
+    for (i, arg) in ty.arguments.iter().enumerate() {
+        if i > 0 {
+            out.push(',');
+        }
+        push_type(out, arg);
+    }
+    out.push_str("],\"span\":");
+    push_span(out, ty.span);
+    out.push('}');
+}
+fn push_parameters(out: &mut String, parameters: &[crate::ApiTypeParameter]) {
+    out.push('[');
+    for (i, p) in parameters.iter().enumerate() {
+        if i > 0 {
+            out.push(',');
+        }
+        out.push_str("{\"name\":");
+        push_json_string(out, &p.name);
+        out.push_str(",\"constraints\":");
+        push_json_array(out, &p.constraints);
+        out.push_str(",\"span\":");
+        push_span(out, p.span);
+        out.push('}');
+    }
+    out.push(']');
 }

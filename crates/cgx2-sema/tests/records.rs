@@ -53,9 +53,7 @@ fn record_diagnostics_have_source_spans() {
         assert!(error.span.start < error.span.end);
         assert!(error.span.end <= source.len());
     }
-    assert!(diagnostics("record Point:\n    x: String\n")
-        .iter()
-        .any(|d| d.code == "CGT018"));
+    assert!(check_module(&parse_module("record Point:\n    x: String\n").unwrap()).is_ok());
     assert!(diagnostics("fn main() -> Missing:\n    1\n")
         .iter()
         .any(|d| d.code == "CGT002"));

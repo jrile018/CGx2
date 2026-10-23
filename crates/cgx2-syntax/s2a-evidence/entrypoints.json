@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "cases": 10,
+  "passed": true,
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/88c6/lang/target/release-s2a",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/88c6/lang/target/tmp-s2a",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "observations": [
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/88c6/lang/target/release-s2a/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/88c6/lang/crates/cgx2-syntax/s2a-evidence/fixtures/variants.cg"
+      ],
+      "exit_code": 0,
+      "stdout": "42\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/88c6/lang/target/release-s2a/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/88c6/lang/crates/cgx2-syntax/s2a-evidence/fixtures/branches.cg"
+      ],
+      "exit_code": 0,
+      "stdout": "42\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/88c6/lang/target/release-s2a/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/88c6/lang/crates/cgx2-syntax/s2a-evidence/fixtures/package"
+      ],
+      "exit_code": 0,
+      "stdout": "42\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/88c6/lang/target/release-s2a/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/88c6/lang/crates/cgx2-syntax/s2a-evidence/fixtures/variants.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/88c6/lang/target/s2a-entrypoints/native-variants",
+        "--force"
+      ],
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: source_sha256=d64a27710284640ab2606b7e79cb0ae6fca3517b064a7f486618b7d1e4b29b8f rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=none output=/home/john-riley/.codex/worktrees/88c6/lang/target/s2a-entrypoints/native-variants\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/88c6/lang/target/s2a-entrypoints/native-variants"
+      ],
+      "exit_code": 0,
+      "stdout": "42\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/88c6/lang/target/release-s2a/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/88c6/lang/crates/cgx2-syntax/s2a-evidence/fixtures/package",
+        "--out",
+        "/home/john-riley/.codex/worktrees/88c6/lang/target/s2a-entrypoints/native-package",
+        "--force"
+      ],
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: package_manifest_sha256=c4d964c9e5ed5bf3c9f8ee5db15d40f3bddff33fe8cb57eee73565275d70126d package_sources_sha256=[\"src/main.cg:1d126347d1e5270a3b02d3cd9e8771c27b17cce450aa00aee2d90a50f11cc4b7\", \"src/left.cg:9ccfb798c589e857e582d3484b0dc2fcd0eb031d8b77b5627c7db50676cc847b\", \"src/right.cg:6d28bd224007e9c4efa95121c7429670b43d49d84ce5329b4c8f465ac9f6b8c8\"] rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug output=/home/john-riley/.codex/worktrees/88c6/lang/target/s2a-entrypoints/native-package\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/88c6/lang/target/s2a-entrypoints/native-package"
+      ],
+      "exit_code": 0,
+      "stdout": "42\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/88c6/lang/target/release-s2a/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/88c6/lang/crates/cgx2-syntax/s2a-evidence/fixtures/variants.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/88c6/lang/target/s2a-entrypoints/unsupported.py"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGE006: /home/john-riley/.codex/worktrees/88c6/lang/crates/cgx2-syntax/s2a-evidence/fixtures/variants.cg:0..46: Python target does not yet support S2a variants, generic applications, collections/indexing or annotated loops (S2b)\n"
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/88c6/lang/target/release-s2a/debug/cgx2",
+        "api",
+        "--syntax-only",
+        "--json",
+        "/home/john-riley/.codex/worktrees/88c6/lang/crates/cgx2-syntax/s2a-evidence/fixtures/generic-contract.cg"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"schema_version\":6,\"module\":\"app.generic\",\"functions\":[{\"name\":\"first\",\"parameters\":[{\"name\":\"values\",\"ty\":\"Array<T>\"}],\"return_type\":\"T\",\"span\":{\"start\":63,\"end\":214},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\"],\"span\":{\"start\":76,\"end\":81}}],\"loop_contracts\":[{\"kind\":\"invariant\",\"expression\":\"i >= 0\",\"status\":\"unchecked\",\"span\":{\"start\":141,\"end\":158}},{\"kind\":\"decreases\",\"expression\":\"1 - i\",\"status\":\"unchecked\",\"span\":{\"start\":166,\"end\":182}}],\"parameter_types\":[{\"identity\":\"Array\",\"arguments\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":97,\"end\":98}}],\"span\":{\"start\":91,\"end\":99}}],\"result_type\":{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":104,\"end\":105}},\"effects\":[],\"effects_status\":\"unchecked\",\"capabilities\":[],\"capabilities_status\":\"unchecked\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[],\"semantics_status\":\"syntax-only\",\"variants\":[{\"name\":\"Box\",\"identity\":\"app.generic.Box\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":35,\"end\":47}}],\"span\":{\"start\":19,\"end\":63},\"cases\":[{\"name\":\"Value\",\"span\":{\"start\":54,\"end\":63},\"payloads\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":60,\"end\":61}}]}]}]}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/88c6/lang/target/release-s2a/debug/cgx2",
+        "--diagnostic-format=json",
+        "check",
+        "/home/john-riley/.codex/worktrees/88c6/lang/crates/cgx2-syntax/s2a-evidence/fixtures/generic-contract.cg"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "{\"code\":\"CGT032\",\"severity\":\"error\",\"message\":\"user generic declarations and named constraint semantics are deferred to S2b\",\"file\":\"/home/john-riley/.codex/worktrees/88c6/lang/crates/cgx2-syntax/s2a-evidence/fixtures/generic-contract.cg\",\"span\":{\"start\":35,\"end\":47}}\n{\"code\":\"CGT032\",\"severity\":\"error\",\"message\":\"user generic declarations and named constraint semantics are deferred to S2b\",\"file\":\"/home/john-riley/.codex/worktrees/88c6/lang/crates/cgx2-syntax/s2a-evidence/fixtures/generic-contract.cg\",\"span\":{\"start\":76,\"end\":81}}\n"
+    }
+  ]
+}

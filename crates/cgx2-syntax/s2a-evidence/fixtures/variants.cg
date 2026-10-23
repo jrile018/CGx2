@@ -1,0 +1,34 @@
+variant Reply:
+    Empty
+    Value(i64, Bool)
+record Boxed:
+    value: Option<Reply>
+variant Envelope:
+    Item(Boxed)
+fn checked(x: i64) -> i64 effects():
+    requires x > 0
+    ensures result > 0
+    x + 1
+fn unwrap(value: Result<Option<Envelope>, String>) -> i64:
+    match value:
+        Result<Option<Envelope>, String>.Ok(envelope):
+            match envelope:
+                Option<Envelope>.Some(inner):
+                    match inner:
+                        Envelope.Item(box):
+                            match box.value:
+                                Option<Reply>.Some(reply):
+                                    match reply:
+                                        Reply.Value(value, yes):
+                                            checked(value)
+                                        Reply.Empty:
+                                            1 / 0
+                                Option<Reply>.None:
+                                    1 / 0
+                Option<Envelope>.None:
+                    1 / 0
+        Result<Option<Envelope>, String>.Err(message):
+            1 / 0
+fn main() -> i64:
+    let box = Boxed(value: Option<Reply>.Some(Reply.Value(41, true)))
+    unwrap(Result<Option<Envelope>, String>.Ok(Option<Envelope>.Some(Envelope.Item(box))))

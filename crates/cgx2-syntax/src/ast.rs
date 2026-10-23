@@ -36,8 +36,50 @@ pub struct Module {
     pub name: Option<Path>,
     pub imports: Vec<Path>,
     pub records: Vec<Record>,
+    pub variants: Vec<Variant>,
     pub functions: Vec<Function>,
     pub statements: Vec<Stmt>,
+    pub span: Span,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct TypeParameter {
+    pub name: String,
+    pub constraints: Vec<Path>,
+    pub span: Span,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Variant {
+    pub public: bool,
+    pub name: String,
+    pub type_parameters: Vec<TypeParameter>,
+    pub cases: Vec<VariantCase>,
+    pub span: Span,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct VariantCase {
+    pub name: String,
+    pub payloads: Vec<TypeSyntax>,
+    pub span: Span,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum Pattern {
+    Wildcard(Span),
+    Case {
+        ty: TypeSyntax,
+        case: String,
+        bindings: Vec<DeclaredName>,
+        span: Span,
+    },
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct MatchArm {
+    pub pattern: Pattern,
+    pub body: Vec<Stmt>,
     pub span: Span,
 }
 
@@ -45,6 +87,7 @@ pub struct Module {
 pub struct Record {
     pub public: bool,
     pub name: String,
+    pub type_parameters: Vec<TypeParameter>,
     pub fields: Vec<RecordField>,
     pub span: Span,
 }
@@ -60,6 +103,7 @@ pub struct RecordField {
 pub struct Function {
     pub public: bool,
     pub name: String,
+    pub type_parameters: Vec<TypeParameter>,
     pub parameters: Vec<Parameter>,
     pub return_type: Option<TypeSyntax>,
     /// `None` retains legacy inference; `Some([])` is an explicit pure declaration.
@@ -111,6 +155,15 @@ pub struct Stmt {
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum StmtKind {
+    Match {
+        scrutinee: Expr,
+        arms: Vec<MatchArm>,
+    },
+    /// Syntax-only next-stage loop contracts; semantics explicitly deferred.
+    LoopContract {
+        decreases: bool,
+        expression: Expr,
+    },
     /// A statement with two lexical scopes and no tail-expression value.
     If {
         condition: Expr,
@@ -162,6 +215,17 @@ pub struct CallArg {
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum ExprKind {
+    /// Explicit type application on a constructor (e.g. Option<i64>.Some(1)).
+    Constructor {
+        ty: TypeSyntax,
+        case: String,
+        arguments: Vec<CallArg>,
+    },
+    Collection(Vec<Expr>),
+    Index {
+        collection: Box<Expr>,
+        index: Box<Expr>,
+    },
     Name(Path),
     Integer(String),
     StringLiteral(String),

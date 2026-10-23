@@ -424,6 +424,9 @@ impl<'a> TaintAnalyzer<'a> {
             }
             self.steps += 1;
             match &stmt.kind {
+                StmtKind::Match { .. } | StmtKind::LoopContract { .. } => unreachable!(
+                    "S2a profile rejected by effect-index admission before security analysis"
+                ),
                 StmtKind::If {
                     condition,
                     then_body,
@@ -506,6 +509,11 @@ impl<'a> TaintAnalyzer<'a> {
         }
         self.steps += 1;
         match &expr.kind {
+            ExprKind::Constructor { .. } | ExprKind::Collection(_) | ExprKind::Index { .. } => {
+                unreachable!(
+                    "S2a profile rejected by effect-index admission before security analysis"
+                )
+            }
             ExprKind::Name(path) if path.segments.len() == 1 => env
                 .get(&path.segments[0])
                 .copied()

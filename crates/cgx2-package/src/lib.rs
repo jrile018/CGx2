@@ -507,11 +507,29 @@ pub fn load_checked_package(root: &Path) -> Result<CheckedPackage, Vec<PackageDi
     imported.modules.extend(named.keys().cloned());
     for source in &parsed_sources {
         if let Some(name) = &source.name {
+            for variant in &source.module.variants {
+                let identity = format!("{name}.{}", variant.name);
+                if variant.public {
+                    let mut variant = variant.clone();
+                    variant.name = identity.clone();
+                    for case in &mut variant.cases {
+                        for payload in &mut case.payloads {
+                            cgx2_syntax::qualify_type(payload, &source.module);
+                        }
+                    }
+                    imported.public_variants.insert(identity, variant);
+                } else {
+                    imported.private_variants.insert(identity);
+                }
+            }
             for record in &source.module.records {
                 let identity = format!("{name}.{}", record.name);
                 if record.public {
                     let mut record = record.clone();
                     record.name = identity.clone();
+                    for field in &mut record.fields {
+                        cgx2_syntax::qualify_type(&mut field.ty, &source.module);
+                    }
                     imported.public_records.insert(identity, record);
                 } else {
                     imported.private_records.insert(identity);
@@ -771,6 +789,9 @@ fn topo_order(graph: &BTreeMap<String, Vec<String>>) -> Result<Vec<String>, Vec<
 fn contains_memory_script(module: &Module) -> bool {
     fn expr(node: &Expr) -> bool {
         match &node.kind {
+            ExprKind::Constructor { arguments, .. } => arguments.iter().any(|arg| expr(&arg.value)),
+            ExprKind::Collection(values) => values.iter().any(expr),
+            ExprKind::Index { collection, index } => expr(collection) || expr(index),
             ExprKind::Name(path) => path.segments.first().is_some_and(|name| name == "memory"),
             ExprKind::Call { callee, arguments } => {
                 expr(callee) || arguments.iter().any(|arg| expr(&arg.value))
@@ -781,6 +802,10 @@ fn contains_memory_script(module: &Module) -> bool {
     }
     fn stmt(node: &Stmt) -> bool {
         match &node.kind {
+            StmtKind::Match { scrutinee, arms } => {
+                expr(scrutinee) || arms.iter().any(|arm| arm.body.iter().any(stmt))
+            }
+            StmtKind::LoopContract { expression, .. } => expr(expression),
             StmtKind::If {
                 condition,
                 then_body,
@@ -801,6 +826,20 @@ fn contains_memory_script(module: &Module) -> bool {
 fn collect_calls(module: &Module, public: &BTreeSet<String>, out: &mut Vec<ResolvedCall>) {
     fn expr(node: &Expr, public: &BTreeSet<String>, out: &mut Vec<ResolvedCall>) {
         match &node.kind {
+            ExprKind::Constructor { arguments, .. } => {
+                for arg in arguments {
+                    expr(&arg.value, public, out);
+                }
+            }
+            ExprKind::Collection(values) => {
+                for value in values {
+                    expr(value, public, out);
+                }
+            }
+            ExprKind::Index { collection, index } => {
+                expr(collection, public, out);
+                expr(index, public, out);
+            }
             ExprKind::Call { callee, arguments } => {
                 if let ExprKind::Name(path) = &callee.kind {
                     let name = path.segments.join(".");
@@ -824,6 +863,15 @@ fn collect_calls(module: &Module, public: &BTreeSet<String>, out: &mut Vec<Resol
     }
     fn stmt(node: &Stmt, public: &BTreeSet<String>, out: &mut Vec<ResolvedCall>) {
         match &node.kind {
+            StmtKind::Match { scrutinee, arms } => {
+                expr(scrutinee, public, out);
+                for arm in arms {
+                    for nested in &arm.body {
+                        stmt(nested, public, out);
+                    }
+                }
+            }
+            StmtKind::LoopContract { expression, .. } => expr(expression, public, out),
             StmtKind::If {
                 condition,
                 then_body,

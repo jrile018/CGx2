@@ -212,9 +212,15 @@ fn json_round_trips_escapes_controls_and_unicode() {
     let function_name = "f\"\\\n\t\r\u{0001}é";
     let parameter_name = "p\u{0000}λ";
     let index = ApiIndex {
+        variants: vec![],
+        semantics_status: "checked".into(),
         schema_version: 2,
         module: Some(module_name.into()),
         functions: vec![ApiFunction {
+            loop_contracts: vec![],
+            parameter_types: vec![],
+            result_type: None,
+            type_parameters: vec![],
             name: function_name.into(),
             parameters: vec![ApiParameter {
                 name: parameter_name.into(),

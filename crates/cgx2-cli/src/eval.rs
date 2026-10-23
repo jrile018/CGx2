@@ -15,6 +15,12 @@ pub enum Value {
     I64(i64),
     Bool(bool),
     String(String),
+    Variant {
+        ty: cgx2_sema::Type,
+        case_index: usize,
+        case_name: String,
+        payloads: Vec<Value>,
+    },
     Record {
         name: String,
         fields: Vec<(String, Value)>,
@@ -28,6 +34,21 @@ impl fmt::Display for Value {
             Self::I64(v) => write!(f, "{v}"),
             Self::Bool(v) => write!(f, "{v}"),
             Self::String(v) => f.write_str(v),
+            Self::Variant {
+                ty,
+                case_name,
+                payloads,
+                ..
+            } => {
+                write!(f, "{ty}.{case_name}(")?;
+                for (i, value) in payloads.iter().enumerate() {
+                    if i > 0 {
+                        f.write_str(", ")?;
+                    }
+                    write!(f, "{value}")?;
+                }
+                f.write_str(")")
+            }
             Self::Record { name, fields } => {
                 write!(f, "{name}(")?;
                 for (index, (field, value)) in fields.iter().enumerate() {
@@ -100,6 +121,18 @@ struct Evaluator<'a> {
 }
 
 pub(crate) fn run_module(module: &Module, args: &[String]) -> Result<RunResult, RunError> {
+    let known = module
+        .variants
+        .iter()
+        .map(|v| {
+            module.name.as_ref().map_or_else(
+                || v.name.clone(),
+                |p| format!("{}.{}", p.segments.join("."), v.name),
+            )
+        })
+        .collect();
+    let normalized = cgx2_syntax::canonical_module(module, &known);
+    let module = &normalized;
     for function in &module.functions {
         if matches!(function.name.as_str(), "arg" | "arg_count") {
             return Err(error(
@@ -205,6 +238,59 @@ impl Evaluator<'_> {
         for stmt in statements {
             self.step(stmt.span)?;
             match &stmt.kind {
+                StmtKind::Match { scrutinee, arms } => {
+                    let value = self.eval_expr(scrutinee, scope)?;
+                    let Value::Variant {
+                        ty,
+                        case_index,
+                        payloads,
+                        ..
+                    } = value
+                    else {
+                        return Err(error("CGR009", "match requires a variant", scrutinee.span));
+                    };
+                    let cases = cgx2_sema::variant_cases(self.module, &Default::default(), &ty)
+                        .ok_or_else(|| {
+                            error("CGR009", "unknown variant identity", scrutinee.span)
+                        })?;
+                    let arm = arms
+                        .iter()
+                        .find(|arm| match &arm.pattern {
+                            cgx2_syntax::Pattern::Wildcard(_) => true,
+                            cgx2_syntax::Pattern::Case { case, .. } => {
+                                cases.get(case_index).is_some_and(|(name, _)| name == case)
+                            }
+                        })
+                        .ok_or_else(|| error("CGR009", "nonexhaustive match", stmt.span))?;
+                    scope.push();
+                    if let cgx2_syntax::Pattern::Case { bindings, .. } = &arm.pattern {
+                        for (binding, value) in bindings.iter().zip(payloads) {
+                            if binding.name != "_" {
+                                scope.insert(
+                                    binding.name.clone(),
+                                    Binding {
+                                        value,
+                                        mutable: false,
+                                        annotation: None,
+                                    },
+                                );
+                            }
+                        }
+                    }
+                    let flow = self.eval_block(&arm.body, scope);
+                    scope.pop();
+                    match flow? {
+                        Flow::Return(value) => return Ok(Flow::Return(value)),
+                        Flow::Continue(value) => tail = value,
+                    }
+                }
+                StmtKind::LoopContract { .. } => {
+                    return Err(error(
+                        "CGR009",
+                        "annotated loops require S2b/S3-V",
+                        stmt.span,
+                    ))
+                }
                 StmtKind::If {
                     condition,
                     then_body,
@@ -230,7 +316,7 @@ impl Evaluator<'_> {
                 } => {
                     let value = self.eval_expr(value, scope)?;
                     if let Some(ty) = annotation {
-                        check_type(ty, &value)?;
+                        check_type(self.module, ty, &value)?;
                     }
                     if scope.contains_key(name) {
                         return Err(error(
@@ -269,7 +355,7 @@ impl Evaluator<'_> {
                         }
                     };
                     if let Some(ty) = &binding.annotation {
-                        check_type(ty, &assigned)?;
+                        check_type(self.module, ty, &assigned)?;
                     } else if std::mem::discriminant(&binding.value)
                         != std::mem::discriminant(&assigned)
                     {
@@ -346,6 +432,37 @@ impl Evaluator<'_> {
     fn eval_expr(&mut self, expr: &Expr, scope: &Scope) -> Result<Value, RunError> {
         self.step(expr.span)?;
         match &expr.kind {
+            ExprKind::Constructor {
+                ty,
+                case,
+                arguments,
+            } => {
+                let resolved = cgx2_sema::resolve_type(self.module, &Default::default(), ty)
+                    .map_err(|_| error("CGR009", "invalid constructor type", ty.span))?;
+                let cases = cgx2_sema::variant_cases(self.module, &Default::default(), &resolved)
+                    .ok_or_else(|| {
+                    error("CGR009", "constructor requires a variant", ty.span)
+                })?;
+                let case_index = cases
+                    .iter()
+                    .position(|(name, _)| name == case)
+                    .ok_or_else(|| error("CGR009", "unknown constructor case", expr.span))?;
+                let payloads: Result<Vec<_>, _> = arguments
+                    .iter()
+                    .map(|arg| self.eval_expr(&arg.value, scope))
+                    .collect();
+                Ok(Value::Variant {
+                    ty: resolved,
+                    case_index,
+                    case_name: case.clone(),
+                    payloads: payloads?,
+                })
+            }
+            ExprKind::Collection(_) | ExprKind::Index { .. } => Err(error(
+                "CGR009",
+                "collections/indexing require S2b",
+                expr.span,
+            )),
             ExprKind::Integer(raw) => raw
                 .replace('_', "")
                 .parse::<i64>()
@@ -384,12 +501,12 @@ impl Evaluator<'_> {
                     ));
                 };
                 let name = single_name(&path.segments, path.span)?;
-                if let Some(record) = self
-                    .module
-                    .records
-                    .iter()
-                    .find(|record| record.name == name)
-                {
+                if let Some(record) = self.module.records.iter().find(|record| {
+                    record.name == name
+                        || self.module.name.as_ref().is_some_and(|p| {
+                            format!("{}.{}", p.segments.join("."), record.name) == name
+                        })
+                }) {
                     let mut values = HashMap::new();
                     for arg in arguments {
                         let value = self.eval_expr(&arg.value, scope)?;
@@ -408,7 +525,15 @@ impl Evaluator<'_> {
                         })
                         .collect();
                     return Ok(Value::Record {
-                        name: record.name.clone(),
+                        name: self
+                            .module
+                            .name
+                            .as_ref()
+                            .filter(|_| !record.name.contains('.'))
+                            .map_or_else(
+                                || record.name.clone(),
+                                |p| format!("{}.{}", p.segments.join("."), record.name),
+                            ),
                         fields,
                     });
                 }
@@ -528,7 +653,9 @@ impl Evaluator<'_> {
                 Value::I64(value) => ScalarValue::I64(value),
                 Value::Bool(value) => ScalarValue::Bool(value),
                 Value::String(value) => ScalarValue::String(value),
-                Value::Record { .. } => unreachable!("checked scalar argument"),
+                Value::Record { .. } | Value::Variant { .. } => {
+                    unreachable!("checked scalar argument")
+                }
                 Value::Unit => unreachable!("checked scalar argument"),
             })
             .collect();
@@ -576,7 +703,7 @@ impl Evaluator<'_> {
         self.depth += 1;
         let mut scope = Scope::new();
         for (param, value) in function.parameters.iter().zip(args) {
-            check_type(&param.ty, &value)?;
+            check_type(self.module, &param.ty, &value)?;
             scope.insert(
                 param.name.clone(),
                 Binding {
@@ -596,7 +723,7 @@ impl Evaluator<'_> {
                 Flow::Continue(value) | Flow::Return(value) => value,
             };
             if let Some(ty) = &function.return_type {
-                check_type(ty, &value)?;
+                check_type(self.module, ty, &value)?;
             }
             scope.insert(
                 "result".into(),
@@ -632,6 +759,18 @@ fn foreign_shape(ty: &TypeSyntax) -> ValueShape {
 
 fn reject_unsupported(statements: &[Stmt]) -> Result<(), RunError> {
     for stmt in statements {
+        if let StmtKind::Match { arms, .. } = &stmt.kind {
+            for arm in arms {
+                reject_unsupported(&arm.body)?;
+            }
+        }
+        if let StmtKind::LoopContract { .. } = &stmt.kind {
+            return Err(error(
+                "CGR009",
+                "annotated loops require S2b/S3-V",
+                stmt.span,
+            ));
+        }
         if let StmtKind::If {
             then_body,
             else_body,
@@ -667,6 +806,11 @@ fn reject_unsupported(statements: &[Stmt]) -> Result<(), RunError> {
 
 pub(crate) fn stmt_has_memory(stmt: &Stmt) -> bool {
     match &stmt.kind {
+        StmtKind::Match { scrutinee, arms } => {
+            expr_has_memory(scrutinee)
+                || arms.iter().any(|arm| arm.body.iter().any(stmt_has_memory))
+        }
+        StmtKind::LoopContract { expression, .. } => expr_has_memory(expression),
         StmtKind::If {
             condition,
             then_body,
@@ -703,6 +847,13 @@ pub(crate) fn stmt_has_for(stmt: &Stmt) -> bool {
 
 fn expr_has_memory(expr: &Expr) -> bool {
     match &expr.kind {
+        ExprKind::Constructor { arguments, .. } => {
+            arguments.iter().any(|arg| expr_has_memory(&arg.value))
+        }
+        ExprKind::Collection(values) => values.iter().any(expr_has_memory),
+        ExprKind::Index { collection, index } => {
+            expr_has_memory(collection) || expr_has_memory(index)
+        }
         ExprKind::Name(path) => path.segments.first().is_some_and(|s| s == "memory"),
         ExprKind::Call { callee, arguments } => {
             expr_has_memory(callee) || arguments.iter().any(|a| expr_has_memory(&a.value))
@@ -713,27 +864,35 @@ fn expr_has_memory(expr: &Expr) -> bool {
 }
 
 fn validate_type(ty: &TypeSyntax) -> Result<(), RunError> {
-    if ty.arguments.is_empty() && ty.path.segments.len() == 1 {
+    if ty.arguments.is_empty() || matches!(ty.path.segments.join(".").as_str(), "Option" | "Result")
+    {
+        for argument in &ty.arguments {
+            validate_type(argument)?;
+        }
         Ok(())
     } else {
         Err(error(
             "CGR009",
-            format!("type {ty} is unsupported in the execution preview"),
+            format!("type {ty} is unsupported in this execution profile"),
             ty.span,
         ))
     }
 }
 
-fn check_type(ty: &TypeSyntax, value: &Value) -> Result<(), RunError> {
+fn check_type(module: &Module, ty: &TypeSyntax, value: &Value) -> Result<(), RunError> {
     validate_type(ty)?;
-    let matches = matches!(
-        (ty.path.segments[0].as_str(), value),
-        ("i64", Value::I64(_))
-            | ("Bool", Value::Bool(_))
-            | ("String", Value::String(_))
-            | ("Unit", Value::Unit)
-    ) || matches!(value, Value::Record { name, .. } if name == &ty.path.segments[0]);
-    if matches {
+    let resolved = cgx2_sema::resolve_type(module, &Default::default(), ty)
+        .map_err(|_| error("CGR004", format!("unknown declared type {ty}"), ty.span))?;
+    let valid = match (&resolved, value) {
+        (cgx2_sema::Type::I64, Value::I64(_))
+        | (cgx2_sema::Type::Bool, Value::Bool(_))
+        | (cgx2_sema::Type::String, Value::String(_))
+        | (cgx2_sema::Type::Unit, Value::Unit) => true,
+        (cgx2_sema::Type::Record(expected), Value::Record { name, .. }) => expected == name,
+        (cgx2_sema::Type::Variant { .. }, Value::Variant { ty: actual, .. }) => actual == &resolved,
+        _ => false,
+    };
+    if valid {
         Ok(())
     } else {
         Err(error(

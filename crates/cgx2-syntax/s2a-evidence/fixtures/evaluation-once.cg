@@ -1,0 +1,14 @@
+variant Item:
+    Value(i64)
+    Empty
+fn make() -> Item:
+    let mut value = 0
+    for i in range(0, 200000):
+        value += 1
+    Item.Value(value)
+fn main() -> i64:
+    match make():
+        Item.Value(value):
+            value
+        Item.Empty:
+            1 / 0

@@ -4,12 +4,14 @@ use cgx2_syntax::{
     AssignOp, CallArg, Expr, ExprKind, Function, Module, Path, Record, Span, Stmt, StmtKind,
 };
 
-use crate::types::resolve;
 use crate::{effects, EffectSummary, Type, TypeDiagnostic};
 
 fn block_returns(body: &[Stmt]) -> bool {
     body.iter().any(|stmt| match &stmt.kind {
         StmtKind::Return(_) => true,
+        StmtKind::Match { arms, .. } => {
+            !arms.is_empty() && arms.iter().all(|arm| block_returns(&arm.body))
+        }
         StmtKind::If {
             then_body,
             else_body,
@@ -66,68 +68,22 @@ pub struct ImportedSignatures {
     /// Keys and record names are defining-module-qualified nominal identities.
     pub public_records: BTreeMap<String, Record>,
     pub private_records: BTreeSet<String>,
+    pub public_variants: BTreeMap<String, cgx2_syntax::Variant>,
+    pub private_variants: BTreeSet<String>,
     /// Opaque body-checked summaries. Defaults to no trusted imported effects.
     pub checked_effects: crate::CheckedImportedEffects,
 }
 
-fn record_identity(module: &Module, name: &str, imported: &ImportedSignatures) -> String {
-    if imported.modules.is_empty() {
-        return name.to_owned();
-    }
-    module.name.as_ref().map_or_else(
-        || name.to_owned(),
-        |path| format!("{}.{name}", path.segments.join(".")),
-    )
+fn record_identity(module: &Module, name: &str, _imported: &ImportedSignatures) -> String {
+    crate::nominal::identity(module, name)
 }
-
 fn resolve_in_module(
     ty: &cgx2_syntax::TypeSyntax,
     module: &Module,
     imported: &ImportedSignatures,
     diagnostics: &mut Vec<TypeDiagnostic>,
 ) -> Option<Type> {
-    if ty.path.segments.len() > 1 {
-        let prefix = ty.path.segments[..ty.path.segments.len() - 1].join(".");
-        if !module
-            .imports
-            .iter()
-            .any(|path| path.segments.join(".") == prefix)
-        {
-            diagnostics.push(TypeDiagnostic::new(
-                "CGT008",
-                format!("module `{prefix}` is not imported"),
-                ty.span,
-            ));
-            return None;
-        }
-        if imported
-            .private_records
-            .contains(&ty.path.segments.join("."))
-        {
-            diagnostics.push(TypeDiagnostic::new(
-                "CGT022",
-                format!("record `{}` is private", ty.path.segments.join(".")),
-                ty.span,
-            ));
-            return None;
-        }
-    }
-    let mut records = module.records.clone();
-    for import in &module.imports {
-        let prefix = format!("{}.", import.segments.join("."));
-        records.extend(imported.public_records.iter().filter_map(|(name, record)| {
-            name.strip_prefix(&prefix)
-                .filter(|tail| !tail.contains('.'))
-                .map(|_| record.clone())
-        }));
-    }
-    let mut resolved = resolve(ty, &records, diagnostics)?;
-    if let Type::Record(name) = &mut resolved {
-        if module.records.iter().any(|record| record.name == *name) {
-            *name = record_identity(module, name, imported);
-        }
-    }
-    Some(resolved)
+    crate::nominal::resolve(ty, module, imported, diagnostics)
 }
 
 #[derive(Clone)]
@@ -172,6 +128,25 @@ pub fn check_module_with_imports(
     module: &Module,
     imported: &ImportedSignatures,
 ) -> Result<TypedModule, Vec<TypeDiagnostic>> {
+    let generic = module
+        .records
+        .iter()
+        .flat_map(|r| &r.type_parameters)
+        .chain(module.variants.iter().flat_map(|v| &v.type_parameters))
+        .chain(module.functions.iter().flat_map(|f| &f.type_parameters));
+    let deferred: Vec<_> = generic
+        .map(|p| {
+            TypeDiagnostic::new(
+                "CGT032",
+                "user generic declarations and named constraint semantics are deferred to S2b"
+                    .into(),
+                p.span,
+            )
+        })
+        .collect();
+    if !deferred.is_empty() {
+        return Err(deferred);
+    }
     crate::tensor::tensor_profile(module)?;
     let mut foreign_errors = Vec::new();
     for function in &module.functions {
@@ -349,6 +324,13 @@ pub fn check_module_with_imports(
         return Err(foreign_errors);
     }
     if let Some(result) = crate::memory::check_memory_module(module) {
+        if let Some(span) = cgx2_syntax::s2a_feature_span(module) {
+            return Err(vec![TypeDiagnostic::new(
+                "CGT023",
+                "S2a aggregates and syntax cannot cross the memory script profile".into(),
+                span,
+            )]);
+        }
         if let Some(record) = module.records.first() {
             return Err(vec![TypeDiagnostic::new(
                 "CGT023",
@@ -440,6 +422,20 @@ pub fn collect_public_signatures_with_imports(
     module: &Module,
     imported: &ImportedSignatures,
 ) -> Result<BTreeMap<String, FunctionSignature>, Vec<TypeDiagnostic>> {
+    if let Some(parameter) = module
+        .records
+        .iter()
+        .flat_map(|r| &r.type_parameters)
+        .chain(module.variants.iter().flat_map(|v| &v.type_parameters))
+        .chain(module.functions.iter().flat_map(|f| &f.type_parameters))
+        .next()
+    {
+        return Err(vec![TypeDiagnostic::new(
+            "CGT032",
+            "user generic declarations and named constraint semantics are deferred to S2b".into(),
+            parameter.span,
+        )]);
+    }
     let mut signatures = BTreeMap::new();
     let mut seen = BTreeSet::new();
     let mut errors = Vec::new();
@@ -472,16 +468,11 @@ pub fn collect_public_signatures_with_imports(
             }
         };
         if let (Some(result), true) = (result, parameters.iter().all(Option::is_some)) {
-            let is_private = |ty: &Type| match ty {
-                Type::Record(name) => module.records.iter().any(|record| {
-                    !record.public && record_identity(module, &record.name, imported) == *name
-                }),
-                _ => false,
-            };
+            let is_private = |ty: &Type| crate::nominal::private_type(ty, module);
             if is_private(&result) || parameters.iter().flatten().any(is_private) {
                 errors.push(TypeDiagnostic::new(
                     "CGT022",
-                    "public signature exposes a private record".into(),
+                    "public signature exposes a private nominal type".into(),
                     function.span,
                 ));
                 continue;
@@ -508,6 +499,20 @@ pub fn collect_public_signatures_with_imports(
 fn function_order(functions: &[Function]) -> Vec<&Function> {
     fn calls_in_expr(expr: &Expr, calls: &mut Vec<String>) {
         match &expr.kind {
+            ExprKind::Constructor { arguments, .. } => {
+                for arg in arguments {
+                    calls_in_expr(&arg.value, calls);
+                }
+            }
+            ExprKind::Collection(values) => {
+                for value in values {
+                    calls_in_expr(value, calls);
+                }
+            }
+            ExprKind::Index { collection, index } => {
+                calls_in_expr(collection, calls);
+                calls_in_expr(index, calls);
+            }
             ExprKind::Call { callee, arguments } => {
                 if let ExprKind::Name(path) = &callee.kind {
                     if let [name] = path.segments.as_slice() {
@@ -529,6 +534,15 @@ fn function_order(functions: &[Function]) -> Vec<&Function> {
 
     fn calls_in_stmt(stmt: &Stmt, calls: &mut Vec<String>) {
         match &stmt.kind {
+            StmtKind::Match { scrutinee, arms } => {
+                calls_in_expr(scrutinee, calls);
+                for arm in arms {
+                    for stmt in &arm.body {
+                        calls_in_stmt(stmt, calls);
+                    }
+                }
+            }
+            StmtKind::LoopContract { expression, .. } => calls_in_expr(expression, calls),
             StmtKind::If {
                 condition,
                 then_body,
@@ -602,30 +616,279 @@ fn function_order(functions: &[Function]) -> Vec<&Function> {
 impl Checker {
     fn check_records(&mut self) {
         let mut names = BTreeSet::new();
-        for record in &self.module.records {
-            if !names.insert(record.name.clone())
-                || self.module.functions.iter().any(|f| f.name == record.name)
+        let mut graph: BTreeMap<String, Vec<String>> = BTreeMap::new();
+        let declarations: Vec<_> = self
+            .module
+            .records
+            .iter()
+            .map(|r| {
+                (
+                    r.name.clone(),
+                    r.public,
+                    r.span,
+                    r.fields.iter().map(|f| f.ty.clone()).collect::<Vec<_>>(),
+                )
+            })
+            .chain(self.module.variants.iter().map(|v| {
+                (
+                    v.name.clone(),
+                    v.public,
+                    v.span,
+                    v.cases
+                        .iter()
+                        .flat_map(|c| c.payloads.clone())
+                        .collect::<Vec<_>>(),
+                )
+            }))
+            .collect();
+        fn dependencies(ty: &Type, out: &mut Vec<String>) {
+            match ty {
+                Type::Record(n) => out.push(n.clone()),
+                Type::Variant { name, arguments } => {
+                    out.push(name.clone());
+                    for arg in arguments {
+                        dependencies(arg, out);
+                    }
+                }
+                Type::List(t) => dependencies(t, out),
+                _ => {}
+            }
+        }
+        for (name, public, span, payloads) in &declarations {
+            if !names.insert(name.clone())
+                || self.module.functions.iter().any(|f| f.name == *name)
                 || matches!(
-                    record.name.as_str(),
-                    "i64" | "Bool" | "String" | "Unit" | "List" | "arg" | "arg_count" | "range"
+                    name.as_str(),
+                    "i64"
+                        | "Bool"
+                        | "String"
+                        | "Unit"
+                        | "List"
+                        | "Array"
+                        | "Option"
+                        | "Result"
+                        | "arg"
+                        | "arg_count"
+                        | "range"
                 )
             {
-                self.diagnostics.push(TypeDiagnostic::new(
+                self.report(
                     "CGT017",
-                    format!("duplicate or reserved record name `{}`", record.name),
-                    record.span,
-                ));
+                    format!("duplicate or reserved nominal type `{name}`"),
+                    *span,
+                );
             }
-            for field in &record.fields {
-                if !matches!(field.ty.to_string().as_str(), "i64" | "Bool") {
-                    self.diagnostics.push(TypeDiagnostic::new(
-                        "CGT018",
-                        "record fields must be i64 or Bool scalar values".into(),
-                        field.ty.span,
-                    ));
+            let mut edges = Vec::new();
+            for payload in payloads {
+                if let Some(ty) =
+                    resolve_in_module(payload, &self.module, &self.imported, &mut self.diagnostics)
+                {
+                    if *public && crate::nominal::private_type(&ty, &self.module) {
+                        self.report(
+                            "CGT022",
+                            "public aggregate exposes a private nominal type",
+                            payload.span,
+                        );
+                    }
+                    if matches!(ty, Type::List(_)) {
+                        self.report(
+                            "CGT032",
+                            "collection aggregate payload semantics are deferred to S2b",
+                            payload.span,
+                        );
+                    }
+                    dependencies(&ty, &mut edges);
+                }
+            }
+            graph.insert(record_identity(&self.module, name, &self.imported), edges);
+        }
+        fn cycle(
+            node: &str,
+            graph: &BTreeMap<String, Vec<String>>,
+            active: &mut BTreeSet<String>,
+            done: &mut BTreeSet<String>,
+        ) -> bool {
+            if active.contains(node) {
+                return true;
+            }
+            if done.contains(node) {
+                return false;
+            }
+            // Source/module limits are not a recursion guarantee. Fail closed.
+            if active.len() >= 64 {
+                return true;
+            }
+            active.insert(node.to_owned());
+            if graph
+                .get(node)
+                .is_some_and(|edges| edges.iter().any(|n| cycle(n, graph, active, done)))
+            {
+                return true;
+            }
+            active.remove(node);
+            done.insert(node.to_owned());
+            false
+        }
+        let mut done = BTreeSet::new();
+        for (name, _, span, _) in &declarations {
+            if cycle(
+                &record_identity(&self.module, name, &self.imported),
+                &graph,
+                &mut BTreeSet::new(),
+                &mut done,
+            ) {
+                self.report(
+                    "CGT030",
+                    "recursive or excessively deep aggregate value types are unsupported",
+                    *span,
+                );
+            }
+        }
+    }
+
+    fn check_constructor(
+        &mut self,
+        syntax: &cgx2_syntax::TypeSyntax,
+        case: &str,
+        arguments: &[CallArg],
+        span: Span,
+    ) -> Option<Type> {
+        let ty = resolve_in_module(syntax, &self.module, &self.imported, &mut self.diagnostics)?;
+        let Some(cases) =
+            crate::nominal::cases(&ty, &self.module, &self.imported, &mut self.diagnostics)
+        else {
+            self.report("CGT033", "constructor requires a variant type", syntax.span);
+            return None;
+        };
+        let Some((_, payloads)) = cases.iter().find(|(name, _)| name == case) else {
+            for arg in arguments {
+                self.check_expr(&arg.value);
+            }
+            self.report(
+                "CGT033",
+                format!("variant `{ty}` has no case `{case}`"),
+                span,
+            );
+            return None;
+        };
+        if arguments.len() != payloads.len() || arguments.iter().any(|arg| arg.name.is_some()) {
+            self.report(
+                "CGT034",
+                format!(
+                    "case `{case}` requires {} positional payloads",
+                    payloads.len()
+                ),
+                span,
+            );
+        }
+        for (index, arg) in arguments.iter().enumerate() {
+            if let Some(actual) = self.check_expr(&arg.value) {
+                if let Some(expected) = payloads.get(index) {
+                    self.expect_type(&actual, expected, arg.value.span);
                 }
             }
         }
+        Some(ty)
+    }
+
+    fn check_match(
+        &mut self,
+        scrutinee: &Expr,
+        arms: &[cgx2_syntax::MatchArm],
+        expected: Option<&Type>,
+        span: Span,
+    ) -> Option<(Type, Span)> {
+        let ty = self.check_expr(scrutinee)?;
+        let Some(cases) =
+            crate::nominal::cases(&ty, &self.module, &self.imported, &mut self.diagnostics)
+        else {
+            self.report(
+                "CGT035",
+                "match requires a nominal variant scrutinee",
+                scrutinee.span,
+            );
+            return None;
+        };
+        let mut covered = BTreeSet::new();
+        let mut wildcard = false;
+        let mut result: Option<Type> = None;
+        for arm in arms {
+            if wildcard || covered.len() == cases.len() {
+                self.report("CGT037", "unreachable match arm", arm.span);
+            }
+            self.scopes.push(BTreeMap::new());
+            match &arm.pattern {
+                cgx2_syntax::Pattern::Wildcard(_) => wildcard = true,
+                cgx2_syntax::Pattern::Case {
+                    ty: syntax,
+                    case,
+                    bindings,
+                    span: pattern_span,
+                } => {
+                    if let Some(pattern_ty) = resolve_in_module(
+                        syntax,
+                        &self.module,
+                        &self.imported,
+                        &mut self.diagnostics,
+                    ) {
+                        self.expect_type(&pattern_ty, &ty, syntax.span);
+                    }
+                    if !covered.insert(case.clone()) {
+                        self.report(
+                            "CGT037",
+                            format!("duplicate match case `{case}`"),
+                            *pattern_span,
+                        );
+                    }
+                    if let Some((_, payloads)) = cases.iter().find(|(name, _)| name == case) {
+                        if bindings.len() != payloads.len() {
+                            self.report(
+                                "CGT034",
+                                format!("pattern `{case}` requires {} bindings", payloads.len()),
+                                *pattern_span,
+                            );
+                        }
+                        for (binding, payload) in bindings.iter().zip(payloads) {
+                            if binding.name != "_" {
+                                self.define(&binding.name, payload.clone(), false, binding.span);
+                            }
+                        }
+                    } else {
+                        self.report(
+                            "CGT033",
+                            format!("unknown case `{case}` for `{ty}`"),
+                            *pattern_span,
+                        );
+                    }
+                }
+            }
+            if let Some((branch, branch_span)) = self.check_block(&arm.body, expected) {
+                if let Some(result) = &result {
+                    self.expect_type(&branch, result, branch_span);
+                } else {
+                    result = Some(branch.clone());
+                }
+                if let Some(expected) = expected {
+                    self.expect_type(&branch, expected, branch_span);
+                }
+            }
+            self.scopes.pop();
+        }
+        if !wildcard {
+            let missing: Vec<_> = cases
+                .iter()
+                .filter(|(name, _)| !covered.contains(name))
+                .map(|(name, _)| name.as_str())
+                .collect();
+            if !missing.is_empty() {
+                self.report(
+                    "CGT036",
+                    format!("nonexhaustive match; missing {}", missing.join(", ")),
+                    span,
+                );
+            }
+        }
+        result.map(|ty| (ty, span))
     }
 
     fn report(&mut self, code: &'static str, message: impl Into<String>, span: Span) {
@@ -670,6 +933,21 @@ impl Checker {
             self.report(
                 "CGT006",
                 "public function requires a return annotation",
+                function.span,
+            );
+        }
+        if function.public
+            && (parameters
+                .iter()
+                .flatten()
+                .any(|ty| crate::nominal::private_type(ty, &self.module))
+                || result
+                    .as_ref()
+                    .is_some_and(|ty| crate::nominal::private_type(ty, &self.module)))
+        {
+            self.report(
+                "CGT022",
+                "public signature exposes a private nominal type",
                 function.span,
             );
         }
@@ -840,6 +1118,17 @@ impl Checker {
 
     fn check_stmt(&mut self, statement: &Stmt, expected: Option<&Type>) -> Option<(Type, Span)> {
         match &statement.kind {
+            StmtKind::Match { scrutinee, arms } => {
+                self.check_match(scrutinee, arms, expected, statement.span)
+            }
+            StmtKind::LoopContract { expression, .. } => {
+                self.report(
+                    "CGT032",
+                    "annotated loop semantics are deferred to S2b/S3-V",
+                    expression.span,
+                );
+                None
+            }
             StmtKind::If {
                 condition,
                 then_body,
@@ -1016,6 +1305,16 @@ impl Checker {
     fn check_range_body_policy(&mut self, body: &[Stmt]) {
         for stmt in body {
             let expression = match &stmt.kind {
+                StmtKind::Match { scrutinee, arms } => {
+                    for arm in arms {
+                        self.check_range_body_policy(&arm.body);
+                    }
+                    Some(scrutinee)
+                }
+                StmtKind::LoopContract { expression, .. } => {
+                    self.report("CGT032", "loop contracts are deferred to S3-V", stmt.span);
+                    Some(expression)
+                }
                 StmtKind::If {
                     condition,
                     then_body,
@@ -1095,12 +1394,13 @@ impl Checker {
                 );
             }
             if let Some(field) = record.fields.iter().find(|field| field.name == *name) {
-                let expected = if field.ty.to_string() == "i64" {
-                    Type::I64
-                } else {
-                    Type::Bool
-                };
-                if let Some(actual) = actual {
+                let expected = crate::nominal::resolve_member(
+                    &field.ty,
+                    &self.module,
+                    &self.imported,
+                    &mut self.diagnostics,
+                );
+                if let (Some(actual), Some(expected)) = (actual, expected) {
                     self.expect_type(&actual, &expected, arg.value.span);
                 }
             } else {
@@ -1132,6 +1432,32 @@ impl Checker {
 
     fn check_expr(&mut self, expr: &Expr) -> Option<Type> {
         let ty = match &expr.kind {
+            ExprKind::Constructor {
+                ty,
+                case,
+                arguments,
+            } => self.check_constructor(ty, case, arguments, expr.span),
+            ExprKind::Collection(values) => {
+                for value in values {
+                    self.check_expr(value);
+                }
+                self.report(
+                    "CGT032",
+                    "collection semantics are deferred to S2b",
+                    expr.span,
+                );
+                None
+            }
+            ExprKind::Index { collection, index } => {
+                self.check_expr(collection);
+                self.check_expr(index);
+                self.report(
+                    "CGT032",
+                    "checked indexing semantics are deferred to S2b",
+                    expr.span,
+                );
+                None
+            }
             ExprKind::Name(path) => match path.segments.as_slice() {
                 [name] => match self.local(name) {
                     Some(binding) => Some(binding.ty),
@@ -1165,11 +1491,12 @@ impl Checker {
                                     record.fields.iter().find(|item| item.name == *field)
                                 });
                             match found {
-                                Some(item) => Some(if item.ty.to_string() == "i64" {
-                                    Type::I64
-                                } else {
-                                    Type::Bool
-                                }),
+                                Some(item) => crate::nominal::resolve_member(
+                                    &item.ty,
+                                    &self.module,
+                                    &self.imported,
+                                    &mut self.diagnostics,
+                                ),
                                 None => {
                                     self.report(
                                         "CGT021",
@@ -1236,6 +1563,33 @@ impl Checker {
                 }
                 if let ExprKind::Name(path) = &callee.kind {
                     let name = path.segments.join(".");
+                    if path.segments.len() >= 2 {
+                        let type_name = path.segments[..path.segments.len() - 1].join(".");
+                        if matches!(type_name.as_str(), "Option" | "Result")
+                            || self.module.variants.iter().any(|v| v.name == type_name)
+                            || self.imported.public_variants.contains_key(&type_name)
+                            || self.imported.private_variants.contains(&type_name)
+                        {
+                            let syntax = cgx2_syntax::TypeSyntax {
+                                path: Path {
+                                    segments: path.segments[..path.segments.len() - 1].to_vec(),
+                                    span: path.span,
+                                },
+                                arguments: vec![],
+                                span: path.span,
+                            };
+                            let ty = self.check_constructor(
+                                &syntax,
+                                path.segments.last().expect("case"),
+                                arguments,
+                                expr.span,
+                            );
+                            if let Some(ty) = &ty {
+                                self.expressions.insert(expr.span, ty.clone());
+                            }
+                            return ty;
+                        }
+                    }
                     let record = if path.segments.len() == 1 {
                         self.module
                             .records

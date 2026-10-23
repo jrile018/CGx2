@@ -649,3 +649,24 @@ fn conditional_depth_and_node_caps_cover_inactive_subtrees() {
         .unwrap()
         .contains("node limit"));
 }
+
+#[test]
+fn s2a_variants_are_unsupported_and_never_proved() {
+    let source = Source::new("pub variant Reply:\n    Empty\npub fn check(x: i64) -> i64 effects():\n    ensures result == x\n    x\n");
+    let result = source.run(&[
+        "--function",
+        "check",
+        "--domain",
+        "x:0:2",
+        "--solver",
+        "/definitely/missing/z3",
+    ]);
+    assert_eq!(result["verdict"]["kind"], "unknown");
+    assert_eq!(result["proof"]["state"], "unsupported");
+    assert_eq!(result["bounded_solver_result"]["kind"], "unrun");
+    assert!(result["verdict"]["diagnostic"]["message"]
+        .as_str()
+        .unwrap()
+        .contains("S3-V"));
+    assert!(result.get("solver").is_none());
+}
