@@ -1,5 +1,6 @@
 use cgx2_bind::{
-    libtorch_facade_symbols, render_lock, Binding, BindingLock, ClosureLock, LibraryPin,
+    libtorch_facade_symbols, libtorch_matrix_facade_symbols, render_lock, Binding, BindingLock,
+    ClosureLock, LibraryPin,
 };
 use cgx2_cli::{check_native_package, run_native_package, Value};
 use sha2::{Digest, Sha256};
@@ -13,6 +14,7 @@ static NEXT: AtomicUsize = AtomicUsize::new(0);
 static TEST_LOCK: Mutex<()> = Mutex::new(());
 const FIXTURE: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/fixtures/tensor-cpu");
 const DEP: &str = "libcgx2_closure_dep.so";
+const MATRIX_SOURCE: &str = include_str!("fixtures/matrix-cpu/main.cg");
 
 struct Fixture {
     root: PathBuf,
@@ -126,6 +128,14 @@ impl Fixture {
             .unwrap(),
         )
         .unwrap();
+    }
+    fn matrix() -> Self {
+        let mut fixture = Self::new();
+        fixture.set_source(MATRIX_SOURCE);
+        fixture.lock.bindings[0].layout = "tensor-f64-cpu-matrix-v2".into();
+        fixture.lock.bindings[0].symbols = libtorch_matrix_facade_symbols();
+        fixture.write_lock();
+        fixture
     }
     fn source(&self) -> String {
         fs::read_to_string(self.root.join("src/main.cg")).unwrap()
@@ -261,5 +271,161 @@ fn nonfinite_result_is_rejected_after_foreign_copy() {
     check_native_package(&fixture.root).unwrap();
     let errors = run_native_package(&fixture.root, &[]).unwrap_err();
     assert_eq!(errors[0].code, "CGR024");
+    assert!(errors[0].span.is_some());
+}
+
+#[test]
+fn checked_matrix_source_runs_pinned_v2_facade_repeatedly() {
+    let _guard = TEST_LOCK.lock().unwrap();
+    let fixture = Fixture::matrix();
+    check_native_package(&fixture.root).unwrap();
+    let checked = Command::new(env!("CARGO_BIN_EXE_cgx2"))
+        .args(["check", fixture.root.to_str().unwrap()])
+        .output()
+        .unwrap();
+    assert!(
+        checked.status.success(),
+        "{}",
+        String::from_utf8_lossy(&checked.stderr)
+    );
+    for _ in 0..12 {
+        assert_eq!(
+            run_native_package(&fixture.root, &[]).unwrap().value,
+            Value::String("[[58.0, 64.0], [139.0, 154.0]]".into())
+        );
+    }
+    let ran = Command::new(env!("CARGO_BIN_EXE_cgx2"))
+        .args(["run", fixture.root.to_str().unwrap()])
+        .output()
+        .unwrap();
+    assert!(
+        ran.status.success(),
+        "{}",
+        String::from_utf8_lossy(&ran.stderr)
+    );
+    assert_eq!(ran.stdout, b"[[58.0, 64.0], [139.0, 154.0]]\n");
+}
+
+#[test]
+fn matrix_source_and_binding_errors_are_located_before_loading() {
+    let _guard = TEST_LOCK.lock().unwrap();
+    let mut fixture = Fixture::matrix();
+    let original = fixture.source();
+    let left = "[[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]]";
+    let right = "[[7.0, 8.0], [9.0, 10.0], [11.0, 12.0]]";
+    for (literal, message) in [
+        ("[]", "rows"),
+        ("[[]]", "columns"),
+        ("[[1.0], [2.0, 3.0]]", "equal lengths"),
+        ("[[[1.0]]]", "rank two"),
+        ("[[NaN]]", "finite"),
+        ("[[1e309]]", "Infinity"),
+        ("[[1.0], [2.0]]", "left columns"),
+        ("[[1.0],]", "trailing comma"),
+    ] {
+        fixture.set_source(&original.replace(left, literal));
+        let errors = check_native_package(&fixture.root).unwrap_err();
+        assert_eq!(errors[0].code, "CGT018", "{literal}: {errors:?}");
+        assert!(errors[0].message.contains(message), "{literal}: {errors:?}");
+        assert!(errors[0].span.is_some());
+    }
+    let too_many_columns = format!("[[{}]]", vec!["1.0"; 33].join(", "));
+    fixture.set_source(&original.replace(left, &too_many_columns));
+    assert_eq!(
+        check_native_package(&fixture.root).unwrap_err()[0].code,
+        "CGT018"
+    );
+    let too_many_rows = format!("[{}]", vec!["[1.0]"; 33].join(", "));
+    fixture.set_source(&original.replace(left, &too_many_rows));
+    assert_eq!(
+        check_native_package(&fixture.root).unwrap_err()[0].code,
+        "CGT018"
+    );
+    fixture.set_source(&original.replace(right, "[[1.0, 2.0]]"));
+    assert_eq!(
+        check_native_package(&fixture.root).unwrap_err()[0].code,
+        "CGT018"
+    );
+    fixture.set_source(&original);
+    fixture.lock.bindings[0].layout = "tensor-f64-cpu-v1".into();
+    fixture.lock.bindings[0].symbols = libtorch_facade_symbols();
+    fixture.write_lock();
+    assert_eq!(
+        check_native_package(&fixture.root).unwrap_err()[0].code,
+        "CGN004"
+    );
+    fixture.lock.bindings[0].layout = "tensor-f64-cpu-matrix-v2".into();
+    fixture.lock.bindings[0].symbols = libtorch_matrix_facade_symbols();
+    fixture.lock.bindings[0].route = "native-c".into();
+    fixture.write_lock();
+    assert!(!check_native_package(&fixture.root).unwrap_err().is_empty());
+    fixture.lock.bindings[0].route = "libtorch".into();
+    fixture.write_lock();
+    fixture.lock.bindings[0].abi = "wrong".into();
+    fixture.write_lock();
+    assert!(!check_native_package(&fixture.root).unwrap_err().is_empty());
+    fixture.lock.bindings[0].abi = "cgx2-libtorch-facade-v1".into();
+    fixture.write_lock();
+    fs::remove_file(fixture.root.join("cgx2-bind.lock.json")).unwrap();
+    assert!(!check_native_package(&fixture.root).unwrap_err().is_empty());
+}
+
+#[test]
+fn matrix_runtime_rejects_nonfinite_output_and_missing_artifact() {
+    let _guard = TEST_LOCK.lock().unwrap();
+    let fixture = Fixture::matrix();
+    fixture.set_source(&fixture.source().replace(
+        "[[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]]",
+        "[[1e308, 1e308, 1e308]]",
+    ));
+    check_native_package(&fixture.root).unwrap();
+    let errors = run_native_package(&fixture.root, &[]).unwrap_err();
+    assert_eq!(errors[0].code, "CGR024");
+    assert!(errors[0].span.is_some());
+    fixture.set_source(MATRIX_SOURCE);
+    fs::remove_file(fixture.root.join("libmock.so")).unwrap();
+    assert!(!check_native_package(&fixture.root).unwrap_err().is_empty());
+}
+
+#[test]
+fn real_pinned_matrix_source_when_available() {
+    let Ok(root) = std::env::var("CGX2_LIBTORCH_SOURCE_PACKAGE") else {
+        eprintln!("skipped: set CGX2_LIBTORCH_SOURCE_PACKAGE to a reviewed schema-2 matrix source package");
+        return;
+    };
+    let root = PathBuf::from(root);
+    check_native_package(&root).unwrap();
+    assert_eq!(
+        run_native_package(&root, &[]).unwrap().value,
+        Value::String("[[58.0, 64.0], [139.0, 154.0]]".into())
+    );
+}
+
+#[test]
+fn matrix_profile_rejects_missing_and_multiple_source_packages() {
+    let _guard = TEST_LOCK.lock().unwrap();
+    let fixture = Fixture::matrix();
+    assert!(!check_native_package(&fixture.root.join("absent"))
+        .unwrap_err()
+        .is_empty());
+    fixture.set_source(&format!(
+        "module tensor_cpu_fixture.main\n\n{MATRIX_SOURCE}"
+    ));
+    fs::write(
+        fixture.root.join("src/extra.cg"),
+        "module tensor_cpu_fixture.extra\n\nfn helper() -> i64:\n    1\n",
+    )
+    .unwrap();
+    let manifest = fs::read_to_string(fixture.root.join("cgx2.toml")).unwrap();
+    fs::write(
+        fixture.root.join("cgx2.toml"),
+        manifest.replace(
+            "sources = [\"src/main.cg\"]",
+            "sources = [\"src/main.cg\", \"src/extra.cg\"]",
+        ),
+    )
+    .unwrap();
+    let errors = check_native_package(&fixture.root).unwrap_err();
+    assert_eq!(errors[0].code, "CGN001");
     assert!(errors[0].span.is_some());
 }

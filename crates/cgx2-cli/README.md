@@ -88,3 +88,9 @@ fn main() -> Unit effects(ManagedAlloc, Mutate):
 ```
 
 `cgx2 check FILE.cg`, `cgx2 run FILE.cg`, and `cgx2 api FILE.cg --json` use this same source. `0 - 1` is a signed negative call argument; a subsequent allocation fails with `CGR013` at `size`. On a 64-bit target every nonnegative `i64` fits `usize`, so `i64::MAX` reaches the region-limit check; a narrower target can reject it during conversion.
+
+## Checked CPU matrix multiplication
+
+`tests/fixtures/matrix-cpu/main.cg` shows the bounded matrix source profile. Its one unsafe native declaration targets `torch_cpu.cgx2_torch_matmul` with `runtime "cgx2.libtorch.cpu@2.6.0"` and `ownership copied`. A local `main` makes one direct call with two quoted row-major rank-2 float64 literals. Each input must be rectangular and nonempty, have 1–32 rows and columns, at most 1,024 elements, and finite decimal or exponent values. The left column count must equal the right row count. The checked result capacity is at most 1,024 elements. The example returns `[[58.0, 64.0], [139.0, 154.0]]`.
+
+The package needs a schema-2 binding and complete closure lock, route `libtorch`, library `cgx2.libtorch.cpu`, ABI `cgx2-libtorch-facade-v1`, layout `tensor-f64-cpu-matrix-v2`, exact version, and v2 facade exports. `cgx2 check PACKAGE` validates source and pins before any foreign call. `cgx2 run PACKAGE` opens that pinned facade, creates both matrix handles, multiplies, checks output shape and copy capacity, and releases every handle. It reports a primary operation error and any release errors separately. Handles stay opaque; this profile does not add general tensor values or implicit tensor memory management. Native `cgx2c` and Python-library targets are outside this source profile.

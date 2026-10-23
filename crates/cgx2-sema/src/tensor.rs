@@ -1,16 +1,36 @@
-//! Deliberately lexical source profile: no tensor handle is representable in CGx2 values.
+//! Lexical source profile: foreign tensor handles cannot become CGx2 values.
 use cgx2_syntax::{Expr, ExprKind, Module, Span, StmtKind};
 
 use crate::TypeDiagnostic;
 
 pub const MAX_F64_VECTOR: usize = 1024;
+pub const MAX_MATRIX_DIMENSION: usize = 32;
+pub const MAX_MATRIX_ELEMENTS: usize = 1024;
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct MatrixLiteral {
+    pub rows: usize,
+    pub cols: usize,
+    pub values: Vec<f64>,
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub enum TensorOperation {
+    VectorAdd {
+        left: Vec<f64>,
+        right: Vec<f64>,
+    },
+    MatrixMultiply {
+        left: MatrixLiteral,
+        right: MatrixLiteral,
+    },
+}
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct TensorProfile {
     pub binding_id: String,
     pub version: String,
-    pub left: Vec<f64>,
-    pub right: Vec<f64>,
+    pub operation: TensorOperation,
     pub call_span: Span,
     pub declaration_span: Span,
 }
@@ -19,25 +39,50 @@ fn error(message: impl Into<String>, span: Span) -> Vec<TypeDiagnostic> {
     vec![TypeDiagnostic::new("CGT018", message.into(), span)]
 }
 
-fn vector(expr: &Expr) -> Result<Vec<f64>, Vec<TypeDiagnostic>> {
+fn quoted(expr: &Expr) -> Result<&str, Vec<TypeDiagnostic>> {
     let ExprKind::StringLiteral(raw) = &expr.kind else {
-        return Err(error(
-            "tensor input must be a literal float64 vector",
-            expr.span,
-        ));
+        return Err(error("tensor input must be a quoted literal", expr.span));
     };
-    let Some(inner) = raw.strip_prefix('"').and_then(|s| s.strip_suffix('"')) else {
+    raw.strip_prefix('"')
+        .and_then(|s| s.strip_suffix('"'))
+        .ok_or_else(|| error("tensor input must be a quoted literal", expr.span))
+}
+
+fn float64(part: &str, span: Span) -> Result<f64, Vec<TypeDiagnostic>> {
+    let part = part.trim();
+    if !part.contains(['.', 'e', 'E'])
+        || !part
+            .bytes()
+            .all(|b| b.is_ascii_digit() || matches!(b, b'.' | b'+' | b'-' | b'e' | b'E'))
+    {
         return Err(error(
-            "tensor input must be a quoted float64 vector",
-            expr.span,
+            "tensor elements must be finite float64 literals",
+            span,
         ));
-    };
-    let Some(inner) = inner.strip_prefix('[').and_then(|s| s.strip_suffix(']')) else {
+    }
+    let value = part
+        .parse::<f64>()
+        .map_err(|_| error("invalid float64 literal", span))?;
+    if !value.is_finite() {
         return Err(error(
-            "tensor literal must have one dimension: \"[1.0, 2.0]\"",
-            expr.span,
+            "NaN and Infinity are unsupported tensor elements",
+            span,
         ));
-    };
+    }
+    Ok(value)
+}
+
+fn vector(expr: &Expr) -> Result<Vec<f64>, Vec<TypeDiagnostic>> {
+    let raw = quoted(expr)?;
+    let inner = raw
+        .strip_prefix('[')
+        .and_then(|s| s.strip_suffix(']'))
+        .ok_or_else(|| {
+            error(
+                "tensor literal must be one dimension: \"[1.0, 2.0]\"",
+                expr.span,
+            )
+        })?;
     let parts: Vec<_> = inner.split(',').collect();
     if parts.is_empty() || parts.len() > MAX_F64_VECTOR || inner.trim().is_empty() {
         return Err(error(
@@ -47,33 +92,65 @@ fn vector(expr: &Expr) -> Result<Vec<f64>, Vec<TypeDiagnostic>> {
     }
     parts
         .into_iter()
-        .map(|part| {
-            let part = part.trim();
-            if !part.contains(['.', 'e', 'E'])
-                || !part
-                    .bytes()
-                    .all(|b| b.is_ascii_digit() || matches!(b, b'.' | b'+' | b'-' | b'e' | b'E'))
-            {
-                return Err(error(
-                    "tensor elements must be finite float64 literals",
-                    expr.span,
-                ));
-            }
-            let value = part
-                .parse::<f64>()
-                .map_err(|_| error("invalid float64 literal", expr.span))?;
-            if !value.is_finite() {
-                return Err(error(
-                    "NaN and Infinity are unsupported tensor elements",
-                    expr.span,
-                ));
-            }
-            Ok(value)
-        })
+        .map(|part| float64(part, expr.span))
         .collect()
 }
 
-/// Recognize and validate the entire bounded source profile before a native adapter is loaded.
+fn matrix(expr: &Expr) -> Result<MatrixLiteral, Vec<TypeDiagnostic>> {
+    let raw = quoted(expr)?;
+    let mut remaining = raw
+        .strip_prefix('[')
+        .and_then(|s| s.strip_suffix(']'))
+        .ok_or_else(|| error("matrix literal must be nested row-major arrays", expr.span))?;
+    let mut rows = 0usize;
+    let mut cols = None;
+    let mut values = Vec::new();
+    loop {
+        remaining = remaining.trim_start();
+        let row = remaining
+            .strip_prefix('[')
+            .and_then(|s| s.split_once(']'))
+            .ok_or_else(|| error("matrix literal must contain rows in brackets", expr.span))?;
+        if row.0.contains('[') {
+            return Err(error("matrix literal must have rank two", expr.span));
+        }
+        let elements: Vec<_> = row.0.split(',').collect();
+        if elements.is_empty() || elements.len() > MAX_MATRIX_DIMENSION || row.0.trim().is_empty() {
+            return Err(error("matrix columns must be 1..=32", expr.span));
+        }
+        if cols.is_some_and(|width| width != elements.len()) {
+            return Err(error("matrix rows must have equal lengths", expr.span));
+        }
+        cols = Some(elements.len());
+        rows += 1;
+        if rows > MAX_MATRIX_DIMENSION || rows * elements.len() > MAX_MATRIX_ELEMENTS {
+            return Err(error(
+                "matrix size exceeds 32 rows or 1,024 elements",
+                expr.span,
+            ));
+        }
+        for element in elements {
+            values.push(float64(element, expr.span)?);
+        }
+        remaining = row.1.trim_start();
+        if remaining.is_empty() {
+            break;
+        }
+        remaining = remaining
+            .strip_prefix(',')
+            .ok_or_else(|| error("matrix rows must be comma-separated", expr.span))?;
+        if remaining.trim().is_empty() {
+            return Err(error("matrix literal has a trailing comma", expr.span));
+        }
+    }
+    Ok(MatrixLiteral {
+        rows,
+        cols: cols.expect("a parsed matrix has at least one row"),
+        values,
+    })
+}
+
+/// Recognize and check the entire bounded source profile before loading native code.
 pub fn tensor_profile(module: &Module) -> Result<Option<TensorProfile>, Vec<TypeDiagnostic>> {
     let tensor: Vec<_> = module
         .functions
@@ -81,11 +158,9 @@ pub fn tensor_profile(module: &Module) -> Result<Option<TensorProfile>, Vec<Type
         .filter(|function| {
             function.foreign.as_ref().is_some_and(|binding| {
                 binding.route == "native"
-                    && binding
-                        .target
-                        .segments
-                        .get(1)
-                        .is_some_and(|symbol| symbol == "cgx2_torch_add")
+                    && binding.target.segments.get(1).is_some_and(|symbol| {
+                        symbol == "cgx2_torch_add" || symbol == "cgx2_torch_matmul"
+                    })
             })
         })
         .collect();
@@ -102,7 +177,10 @@ pub fn tensor_profile(module: &Module) -> Result<Option<TensorProfile>, Vec<Type
         || !module.statements.is_empty()
         || !module.imports.is_empty()
     {
-        return Err(error("tensor profile requires one native declaration and one local main; handles cannot escape", binding.span));
+        return Err(error(
+            "tensor profile requires one native declaration and one local main; handles cannot escape",
+            binding.span,
+        ));
     }
     let main = module
         .functions
@@ -124,7 +202,10 @@ pub fn tensor_profile(module: &Module) -> Result<Option<TensorProfile>, Vec<Type
             .as_ref()
             .is_none_or(|ty| ty.to_string() != "String")
     {
-        return Err(error("tensor declaration requires unsafe foreign native, (String, String) -> String, copied ownership, and cgx2.libtorch.cpu@VERSION", binding.span));
+        return Err(error(
+            "tensor declaration requires unsafe foreign native, (String, String) -> String, copied ownership, and cgx2.libtorch.cpu@VERSION",
+            binding.span,
+        ));
     }
     let declares = |function: &cgx2_syntax::Function| {
         function
@@ -163,14 +244,11 @@ pub fn tensor_profile(module: &Module) -> Result<Option<TensorProfile>, Vec<Type
         ));
     };
     let ExprKind::Call { callee, arguments } = &expr.kind else {
-        return Err(error(
-            "tensor result must call the declared adapter",
-            expr.span,
-        ));
+        return Err(error("tensor result must call declared adapter", expr.span));
     };
     let ExprKind::Name(path) = &callee.kind else {
         return Err(error(
-            "tensor result must call the declared adapter",
+            "tensor result must call declared adapter",
             callee.span,
         ));
     };
@@ -179,23 +257,41 @@ pub fn tensor_profile(module: &Module) -> Result<Option<TensorProfile>, Vec<Type
         || arguments.iter().any(|argument| argument.name.is_some())
     {
         return Err(error(
-            "tensor call requires exactly two positional literal vectors",
+            "tensor call requires exactly two positional literal inputs",
             expr.span,
         ));
     }
-    let left = vector(&arguments[0].value)?;
-    let right = vector(&arguments[1].value)?;
-    if left.len() != right.len() {
-        return Err(error(
-            "tensor addition requires equal one-dimensional shapes",
-            expr.span,
-        ));
-    }
+    let operation = if binding.target.segments[1] == "cgx2_torch_matmul" {
+        let left = matrix(&arguments[0].value)?;
+        let right = matrix(&arguments[1].value)?;
+        if left.cols != right.rows {
+            return Err(error(
+                "matrix multiplication requires left columns equal right rows",
+                expr.span,
+            ));
+        }
+        if left.rows * right.cols > MAX_MATRIX_ELEMENTS {
+            return Err(error(
+                "matrix output capacity exceeds 1,024 elements",
+                expr.span,
+            ));
+        }
+        TensorOperation::MatrixMultiply { left, right }
+    } else {
+        let left = vector(&arguments[0].value)?;
+        let right = vector(&arguments[1].value)?;
+        if left.len() != right.len() {
+            return Err(error(
+                "tensor addition requires equal one-dimensional shapes",
+                expr.span,
+            ));
+        }
+        TensorOperation::VectorAdd { left, right }
+    };
     Ok(Some(TensorProfile {
         binding_id: binding.target.segments[0].clone(),
         version: binding.runtime["cgx2.libtorch.cpu@".len()..].into(),
-        left,
-        right,
+        operation,
         call_span: expr.span,
         declaration_span: binding.span,
     }))

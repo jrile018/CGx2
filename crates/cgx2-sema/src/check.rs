@@ -106,21 +106,19 @@ pub fn check_module_with_imports(
                 ));
             }
             if binding.route == "native" {
-                let tensor_shape = binding
-                    .target
-                    .segments
-                    .get(1)
-                    .is_some_and(|name| name == "cgx2_torch_add")
-                    && binding.runtime.starts_with("cgx2.libtorch.cpu@")
-                    && function.parameters.len() == 2
-                    && function
-                        .parameters
-                        .iter()
-                        .all(|parameter| parameter.ty.to_string() == "String")
-                    && function
-                        .return_type
-                        .as_ref()
-                        .is_some_and(|ty| ty.to_string() == "String");
+                let tensor_shape =
+                    binding.target.segments.get(1).is_some_and(|name| {
+                        name == "cgx2_torch_add" || name == "cgx2_torch_matmul"
+                    }) && binding.runtime.starts_with("cgx2.libtorch.cpu@")
+                        && function.parameters.len() == 2
+                        && function
+                            .parameters
+                            .iter()
+                            .all(|parameter| parameter.ty.to_string() == "String")
+                        && function
+                            .return_type
+                            .as_ref()
+                            .is_some_and(|ty| ty.to_string() == "String");
                 let valid_shape = binding.unsafe_call
                     && binding.ownership == "copied"
                     && binding.target.segments.len() == 2

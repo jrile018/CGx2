@@ -13,5 +13,5 @@ pub use check::{
 };
 pub use diagnostic::TypeDiagnostic;
 pub use effects::EffectSummary;
-pub use tensor::{tensor_profile, TensorProfile};
+pub use tensor::{tensor_profile, MatrixLiteral, TensorOperation, TensorProfile};
 pub use types::Type;
