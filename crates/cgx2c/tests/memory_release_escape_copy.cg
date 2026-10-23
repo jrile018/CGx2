@@ -1,0 +1,10 @@
+fn main() -> Unit effects(ManagedAlloc, Mutate):
+    let source = memory.region(mode: manual, limit: 1024)
+    let destination = memory.region(mode: auto, limit: 1024)
+    let original = memory.alloc_bytes(source, 3)
+    let copied = memory.copy_to_owned(original)
+    let transferred = memory.promote_owned(destination, copied)
+    memory.drop(original)
+    memory.close(source)
+    memory.close(destination)
+    memory.use(transferred)

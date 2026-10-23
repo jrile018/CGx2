@@ -1,0 +1,13 @@
+Wave 22 minimal replay operation trace (seed 0x22):
+create manual r0 and auto r1; object parent r1; object child r1; object foreign r0;
+root parent twice; root foreign; parent[0] = child; link parent to child;
+clear parent[0]; reject parent[0] = foreign;
+copy parent to owned, mutate byte 0, promote r0; root copy; collect r1;
+allocate unrooted garbage r1; collect r1; allocate replacement r1; reject stale root;
+reject rooted close r1; unroot parent twice; close r1; verify copy survives;
+unroot foreign and copy; close r0.
+
+Additional bounded transitions: `nested_guard_exhaustion_retry_and_failed_link_then_close`
+and `reserve_failures_at_each_allocation_site_preserve_both_regions` in
+tests/region_graph_wave22.rs. The test prints the executed prefix on any
+model mismatch; each corpus seed is replayed independently.
