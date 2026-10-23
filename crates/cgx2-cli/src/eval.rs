@@ -14,6 +14,10 @@ pub enum Value {
     I64(i64),
     Bool(bool),
     String(String),
+    Record {
+        name: String,
+        fields: Vec<(String, Value)>,
+    },
     Unit,
 }
 
@@ -23,6 +27,16 @@ impl fmt::Display for Value {
             Self::I64(v) => write!(f, "{v}"),
             Self::Bool(v) => write!(f, "{v}"),
             Self::String(v) => f.write_str(v),
+            Self::Record { name, fields } => {
+                write!(f, "{name}(")?;
+                for (index, (field, value)) in fields.iter().enumerate() {
+                    if index > 0 {
+                        f.write_str(", ")?;
+                    }
+                    write!(f, "{field}: {value}")?;
+                }
+                f.write_str(")")
+            }
             Self::Unit => Ok(()),
         }
     }
@@ -289,13 +303,23 @@ impl Evaluator<'_> {
                 .map_err(|_| error("CGR005", "integer literal exceeds i64 range", expr.span)),
             ExprKind::StringLiteral(raw) => decode_string(raw, expr.span).map(Value::String),
             ExprKind::Boolean(value) => Ok(Value::Bool(*value)),
-            ExprKind::Name(path) => {
-                let name = single_name(&path.segments, path.span)?;
-                scope
+            ExprKind::Name(path) => match path.segments.as_slice() {
+                [name] => scope
                     .get(name)
                     .map(|b| b.value.clone())
-                    .ok_or_else(|| error("CGR001", format!("unknown name {name}"), path.span))
-            }
+                    .ok_or_else(|| error("CGR001", format!("unknown name {name}"), path.span)),
+                [base, field] => match scope.get(base).map(|b| &b.value) {
+                    Some(Value::Record { fields, .. }) => fields
+                        .iter()
+                        .find(|(name, _)| name == field)
+                        .map(|(_, value)| value.clone())
+                        .ok_or_else(|| {
+                            error("CGR001", format!("unknown field {field}"), path.span)
+                        }),
+                    _ => Err(error("CGR001", format!("unknown record {base}"), path.span)),
+                },
+                _ => Err(error("CGR001", "unsupported field path", path.span)),
+            },
             ExprKind::Binary { left, op, right } => {
                 let left = self.eval_expr(left, scope)?;
                 let right = self.eval_expr(right, scope)?;
@@ -310,6 +334,34 @@ impl Evaluator<'_> {
                     ));
                 };
                 let name = single_name(&path.segments, path.span)?;
+                if let Some(record) = self
+                    .module
+                    .records
+                    .iter()
+                    .find(|record| record.name == name)
+                {
+                    let mut values = HashMap::new();
+                    for arg in arguments {
+                        let value = self.eval_expr(&arg.value, scope)?;
+                        if let Some(field) = &arg.name {
+                            values.insert(field.clone(), value);
+                        }
+                    }
+                    let fields = record
+                        .fields
+                        .iter()
+                        .map(|field| {
+                            (
+                                field.name.clone(),
+                                values.remove(&field.name).expect("checked record field"),
+                            )
+                        })
+                        .collect();
+                    return Ok(Value::Record {
+                        name: record.name.clone(),
+                        fields,
+                    });
+                }
                 if matches!(
                     name,
                     "$cgx2_cmp_eq"
@@ -427,6 +479,7 @@ impl Evaluator<'_> {
                 Value::I64(value) => BridgeValue::I64(value),
                 Value::Bool(value) => BridgeValue::Bool(value),
                 Value::String(value) => BridgeValue::String(value),
+                Value::Record { .. } => BridgeValue::None,
                 Value::Unit => BridgeValue::None,
             })
             .collect();
@@ -582,13 +635,7 @@ fn expr_has_memory(expr: &Expr) -> bool {
 }
 
 fn validate_type(ty: &TypeSyntax) -> Result<(), RunError> {
-    if ty.arguments.is_empty()
-        && ty.path.segments.len() == 1
-        && matches!(
-            ty.path.segments[0].as_str(),
-            "i64" | "Bool" | "String" | "Unit"
-        )
-    {
+    if ty.arguments.is_empty() && ty.path.segments.len() == 1 {
         Ok(())
     } else {
         Err(error(
@@ -607,7 +654,7 @@ fn check_type(ty: &TypeSyntax, value: &Value) -> Result<(), RunError> {
             | ("Bool", Value::Bool(_))
             | ("String", Value::String(_))
             | ("Unit", Value::Unit)
-    );
+    ) || matches!(value, Value::Record { name, .. } if name == &ty.path.segments[0]);
     if matches {
         Ok(())
     } else {

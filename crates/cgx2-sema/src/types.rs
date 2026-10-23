@@ -1,4 +1,4 @@
-use cgx2_syntax::TypeSyntax;
+use cgx2_syntax::{Record, TypeSyntax};
 
 use crate::TypeDiagnostic;
 
@@ -9,6 +9,7 @@ pub enum Type {
     String,
     Unit,
     List(Box<Type>),
+    Record(String),
 }
 
 impl std::fmt::Display for Type {
@@ -19,11 +20,16 @@ impl std::fmt::Display for Type {
             Self::String => write!(f, "String"),
             Self::Unit => write!(f, "Unit"),
             Self::List(inner) => write!(f, "List<{inner}>"),
+            Self::Record(name) => write!(f, "{name}"),
         }
     }
 }
 
-pub(crate) fn resolve(ty: &TypeSyntax, diagnostics: &mut Vec<TypeDiagnostic>) -> Option<Type> {
+pub(crate) fn resolve(
+    ty: &TypeSyntax,
+    records: &[Record],
+    diagnostics: &mut Vec<TypeDiagnostic>,
+) -> Option<Type> {
     let name = ty.path.segments.as_slice();
     let resolved = match (name, ty.arguments.as_slice()) {
         ([name], []) if name == "i64" => Some(Type::I64),
@@ -31,7 +37,21 @@ pub(crate) fn resolve(ty: &TypeSyntax, diagnostics: &mut Vec<TypeDiagnostic>) ->
         ([name], []) if name == "String" => Some(Type::String),
         ([name], []) if name == "Unit" => Some(Type::Unit),
         ([name], [inner]) if name == "List" => {
-            resolve(inner, diagnostics).map(|t| Type::List(Box::new(t)))
+            resolve(inner, records, diagnostics).and_then(|inner_ty| {
+                if matches!(inner_ty, Type::Record(_)) {
+                    diagnostics.push(TypeDiagnostic::new(
+                        "CGT023",
+                        "record values in generic containers are unsupported".into(),
+                        ty.span,
+                    ));
+                    None
+                } else {
+                    Some(Type::List(Box::new(inner_ty)))
+                }
+            })
+        }
+        ([name], []) if records.iter().any(|record| &record.name == name) => {
+            Some(Type::Record(name.clone()))
         }
         _ => None,
     };

@@ -101,13 +101,50 @@ impl ApiIndex {
             }
             out.push('}');
         }
-        out.push_str("]}");
+        out.push(']');
+        if self.schema_version >= 5 {
+            out.push_str(",\"records\":[");
+            for (index, record) in self.records.iter().enumerate() {
+                if index > 0 {
+                    out.push(',');
+                }
+                out.push_str("{\"name\":");
+                push_json_string(&mut out, &record.name);
+                out.push_str(",\"fields\":[");
+                for (field_index, field) in record.fields.iter().enumerate() {
+                    if field_index > 0 {
+                        out.push(',');
+                    }
+                    out.push_str("{\"name\":");
+                    push_json_string(&mut out, &field.name);
+                    out.push_str(",\"ty\":");
+                    push_json_string(&mut out, &field.ty);
+                    out.push('}');
+                }
+                out.push_str("],\"span\":{\"start\":");
+                out.push_str(&record.span.start.to_string());
+                out.push_str(",\"end\":");
+                out.push_str(&record.span.end.to_string());
+                out.push_str("}}");
+            }
+            out.push(']');
+        }
+        out.push('}');
         out
     }
 
     /// Render one public signature per line, with half-open byte spans.
     pub fn render_text(&self) -> String {
         let mut out = format!("module {}\n", self.module.as_deref().unwrap_or("<unnamed>"));
+        for record in &self.records {
+            out.push_str(&format!(
+                "record {} [{}, {})\n",
+                record.name, record.span.start, record.span.end
+            ));
+            for field in &record.fields {
+                out.push_str(&format!("    {}: {}\n", field.name, field.ty));
+            }
+        }
         for function in &self.functions {
             out.push_str("pub fn ");
             out.push_str(&function.name);

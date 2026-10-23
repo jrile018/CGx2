@@ -1,6 +1,8 @@
 use std::collections::{BTreeMap, BTreeSet};
 
-use cgx2_syntax::{AssignOp, Expr, ExprKind, Function, Module, Path, Span, Stmt, StmtKind};
+use cgx2_syntax::{
+    AssignOp, CallArg, Expr, ExprKind, Function, Module, Path, Record, Span, Stmt, StmtKind,
+};
 
 use crate::types::resolve;
 use crate::{effects, EffectSummary, Type, TypeDiagnostic};
@@ -269,6 +271,13 @@ pub fn check_module_with_imports(
         return Err(foreign_errors);
     }
     if let Some(result) = crate::memory::check_memory_module(module) {
+        if let Some(record) = module.records.first() {
+            return Err(vec![TypeDiagnostic::new(
+                "CGT023",
+                "record values cannot cross the managed or owned memory profile".into(),
+                record.span,
+            )]);
+        }
         if !module.imports.is_empty() {
             return Err(vec![TypeDiagnostic::new(
                 "CGM001",
@@ -297,6 +306,7 @@ pub fn check_module_with_imports(
     checker.diagnostics.extend(effect_diagnostics);
     checker.insert_builtin("arg_count", vec![], Type::I64);
     checker.insert_builtin("arg", vec![Type::I64], Type::String);
+    checker.check_records();
     for function in &module.functions {
         checker.declare_function(function);
     }
@@ -362,10 +372,10 @@ pub fn collect_public_signatures(
         let parameters: Vec<_> = function
             .parameters
             .iter()
-            .map(|p| resolve(&p.ty, &mut errors))
+            .map(|p| resolve(&p.ty, &module.records, &mut errors))
             .collect();
         let result = match &function.return_type {
-            Some(ty) => resolve(ty, &mut errors),
+            Some(ty) => resolve(ty, &module.records, &mut errors),
             None => {
                 errors.push(TypeDiagnostic::new(
                     "CGT006",
@@ -376,6 +386,20 @@ pub fn collect_public_signatures(
             }
         };
         if let (Some(result), true) = (result, parameters.iter().all(Option::is_some)) {
+            if matches!(result, Type::Record(_))
+                || parameters
+                    .iter()
+                    .flatten()
+                    .any(|ty| matches!(ty, Type::Record(_)))
+            {
+                errors.push(TypeDiagnostic::new(
+                    "CGT022",
+                    "public record values across package modules are unsupported in this profile"
+                        .into(),
+                    function.span,
+                ));
+                continue;
+            }
             signatures.insert(
                 function.name.clone(),
                 FunctionSignature {
@@ -479,6 +503,34 @@ fn function_order(functions: &[Function]) -> Vec<&Function> {
 }
 
 impl Checker {
+    fn check_records(&mut self) {
+        let mut names = BTreeSet::new();
+        for record in &self.module.records {
+            if !names.insert(record.name.clone())
+                || self.module.functions.iter().any(|f| f.name == record.name)
+                || matches!(
+                    record.name.as_str(),
+                    "i64" | "Bool" | "String" | "Unit" | "List" | "arg" | "arg_count" | "range"
+                )
+            {
+                self.diagnostics.push(TypeDiagnostic::new(
+                    "CGT017",
+                    format!("duplicate or reserved record name `{}`", record.name),
+                    record.span,
+                ));
+            }
+            for field in &record.fields {
+                if !matches!(field.ty.to_string().as_str(), "i64" | "Bool") {
+                    self.diagnostics.push(TypeDiagnostic::new(
+                        "CGT018",
+                        "record fields must be i64 or Bool scalar values".into(),
+                        field.ty.span,
+                    ));
+                }
+            }
+        }
+    }
+
     fn report(&mut self, code: &'static str, message: impl Into<String>, span: Span) {
         self.diagnostics
             .push(TypeDiagnostic::new(code, message.into(), span));
@@ -512,12 +564,12 @@ impl Checker {
         let parameters = function
             .parameters
             .iter()
-            .map(|p| resolve(&p.ty, &mut self.diagnostics))
+            .map(|p| resolve(&p.ty, &self.module.records, &mut self.diagnostics))
             .collect();
         let result = function
             .return_type
             .as_ref()
-            .and_then(|ty| resolve(ty, &mut self.diagnostics));
+            .and_then(|ty| resolve(ty, &self.module.records, &mut self.diagnostics));
         if function.public && function.return_type.is_none() {
             self.report(
                 "CGT006",
@@ -665,7 +717,7 @@ impl Checker {
                 let value_ty = self.check_expr(value);
                 let annotated = annotation
                     .as_ref()
-                    .and_then(|ty| resolve(ty, &mut self.diagnostics));
+                    .and_then(|ty| resolve(ty, &self.module.records, &mut self.diagnostics));
                 if let (Some(actual), Some(expected)) = (&value_ty, &annotated) {
                     self.expect_type(actual, expected, value.span);
                 }
@@ -685,6 +737,18 @@ impl Checker {
             }
             StmtKind::Assign { target, op, value } => {
                 let value_ty = self.check_expr(value);
+                if let [base, field] = target.segments.as_slice() {
+                    if let Some(binding) = self.local(base) {
+                        if matches!(binding.ty, Type::Record(_)) {
+                            self.report(
+                                "CGT004",
+                                format!("cannot assign to immutable record field `{base}.{field}`"),
+                                target.span,
+                            );
+                            return Some((Type::Unit, statement.span));
+                        }
+                    }
+                }
                 if let Some(binding) = self.lookup(target) {
                     if !binding.mutable {
                         self.report(
@@ -843,14 +907,132 @@ impl Checker {
         }
     }
 
+    fn local(&self, name: &str) -> Option<Binding> {
+        self.scopes
+            .iter()
+            .rev()
+            .find_map(|scope| scope.get(name).cloned())
+    }
+
+    fn check_record_constructor(
+        &mut self,
+        record: &Record,
+        arguments: &[CallArg],
+        span: Span,
+    ) -> Type {
+        let mut supplied = BTreeSet::new();
+        for arg in arguments {
+            let actual = self.check_expr(&arg.value);
+            let Some(name) = &arg.name else {
+                self.report(
+                    "CGT019",
+                    "record constructor requires named fields",
+                    arg.span,
+                );
+                continue;
+            };
+            if !supplied.insert(name.clone()) {
+                self.report(
+                    "CGT019",
+                    format!("duplicate record field `{name}`"),
+                    arg.span,
+                );
+            }
+            if let Some(field) = record.fields.iter().find(|field| field.name == *name) {
+                let expected = if field.ty.to_string() == "i64" {
+                    Type::I64
+                } else {
+                    Type::Bool
+                };
+                if let Some(actual) = actual {
+                    self.expect_type(&actual, &expected, arg.value.span);
+                }
+            } else {
+                self.report(
+                    "CGT019",
+                    format!("unknown field `{name}` for record `{}`", record.name),
+                    arg.span,
+                );
+            }
+        }
+        for field in &record.fields {
+            if !supplied.contains(&field.name) {
+                self.report(
+                    "CGT019",
+                    format!(
+                        "missing field `{}` for record `{}`",
+                        field.name, record.name
+                    ),
+                    span,
+                );
+            }
+        }
+        Type::Record(record.name.clone())
+    }
+
     fn check_expr(&mut self, expr: &Expr) -> Option<Type> {
         let ty = match &expr.kind {
-            ExprKind::Name(path) => match self.lookup(path) {
-                Some(binding) => Some(binding.ty),
-                None => {
+            ExprKind::Name(path) => match path.segments.as_slice() {
+                [name] => match self.local(name) {
+                    Some(binding) => Some(binding.ty),
+                    None => {
+                        self.report("CGT001", format!("unknown name `{name}`"), path.span);
+                        None
+                    }
+                },
+                [base, field] => match self.local(base) {
+                    Some(binding) => {
+                        if self.imports.contains(base) {
+                            self.report(
+                                "CGT020",
+                                format!(
+                                    "ambiguous `{base}.{field}`: local value and imported module"
+                                ),
+                                path.span,
+                            );
+                            None
+                        } else if let Type::Record(record_name) = binding.ty {
+                            let found = self
+                                .module
+                                .records
+                                .iter()
+                                .find(|record| record.name == record_name)
+                                .and_then(|record| {
+                                    record.fields.iter().find(|item| item.name == *field)
+                                });
+                            match found {
+                                Some(item) => Some(if item.ty.to_string() == "i64" {
+                                    Type::I64
+                                } else {
+                                    Type::Bool
+                                }),
+                                None => {
+                                    self.report(
+                                        "CGT021",
+                                        format!("record `{record_name}` has no field `{field}`"),
+                                        path.span,
+                                    );
+                                    None
+                                }
+                            }
+                        } else {
+                            self.report("CGT021", format!("`{base}` is not a record"), path.span);
+                            None
+                        }
+                    }
+                    None => {
+                        self.report(
+                            "CGT001",
+                            format!("unknown name `{}`", path.segments.join(".")),
+                            path.span,
+                        );
+                        None
+                    }
+                },
+                _ => {
                     self.report(
-                        "CGT001",
-                        format!("unknown name `{}`", path.segments.join(".")),
+                        "CGT021",
+                        "field access requires one record field segment",
                         path.span,
                     );
                     None
@@ -888,6 +1070,34 @@ impl Checker {
                     self.report("CGT003", "range is only valid in a for iterator", expr.span);
                     return None;
                 }
+                if let ExprKind::Name(path) = &callee.kind {
+                    if let [name] = path.segments.as_slice() {
+                        if let Some(record) = self
+                            .module
+                            .records
+                            .iter()
+                            .find(|record| &record.name == name)
+                            .cloned()
+                        {
+                            let ty = self.check_record_constructor(&record, arguments, expr.span);
+                            self.expressions.insert(expr.span, ty.clone());
+                            return Some(ty);
+                        }
+                        if !self.functions.contains_key(name)
+                            && arguments.iter().any(|arg| arg.name.is_some())
+                        {
+                            for arg in arguments {
+                                self.check_expr(&arg.value);
+                            }
+                            self.report(
+                                "CGT002",
+                                format!("unknown record type `{name}`"),
+                                path.span,
+                            );
+                            return None;
+                        }
+                    }
+                }
                 let mut arg_types = Vec::new();
                 for arg in arguments {
                     if arg.name.is_some() {
@@ -904,6 +1114,22 @@ impl Checker {
                     self.report("CGT003", "callee must be a function name", expr.span);
                     return None;
                 };
+                if let Some(base) = path
+                    .segments
+                    .first()
+                    .filter(|base| path.segments.len() > 1 && self.local(base).is_some())
+                {
+                    let message = if self.imports.contains(base) {
+                        format!(
+                            "ambiguous `{}`: local value and imported module",
+                            path.segments.join(".")
+                        )
+                    } else {
+                        format!("record field `{}` is not callable", path.segments.join("."))
+                    };
+                    self.report("CGT020", message, path.span);
+                    return None;
+                }
                 if let [name] = path.segments.as_slice() {
                     if matches!(
                         name.as_str(),
