@@ -349,7 +349,7 @@ pub fn build_zip_profile_for_size(
     )
 }
 
-fn build_profile_inner(
+pub(crate) fn build_profile_inner(
     csv: &str,
     machine: &MachineFingerprint,
     workers: usize,
@@ -457,7 +457,7 @@ fn build_profile_inner(
     })
 }
 
-fn parse_profile(text: &str) -> Result<Profile, ProfileError> {
+pub(crate) fn parse_profile(text: &str) -> Result<Profile, ProfileError> {
     if text.len() > 16_384 {
         return Err(ProfileError::InvalidProfile);
     }
@@ -543,7 +543,7 @@ pub fn load_zip_profile(
     )
 }
 
-fn load_profile_inner(
+pub(crate) fn load_profile_inner(
     text: &str,
     csv: &str,
     machine: &MachineFingerprint,

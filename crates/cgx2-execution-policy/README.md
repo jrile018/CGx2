@@ -1,5 +1,11 @@
 # CGx2 measured CPU policy
 
+The additive [owned CPU execution contract v1](OWNED-V1.md) provides uniform
+owned map/zip cancellation, atomic result publication, validated operation-bound
+profiles and structured budget/performance reports for the S2 integration seam.
+The source adapter is still pending; the executable example is Rust library evidence.
+
+
 ## Wave 20 zip-map reliability contract
 
 `execute_zip_map(left, right, addend, policy, caps)` retains its existing API.
