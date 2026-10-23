@@ -162,6 +162,16 @@ fn build_index(module: &Module, typed: Option<&cgx2_sema::TypedModule>) -> Index
             visitor
                 .bindings
                 .push(function.parameters.iter().map(|p| p.name.clone()).collect());
+            // Contracts see parameters, but never bindings introduced by the body.
+            for contract in &function.requires {
+                visitor.expr(contract);
+            }
+            // The implicit result binding exists only in postconditions.
+            visitor.bindings.push(BTreeSet::from(["result".into()]));
+            for contract in &function.ensures {
+                visitor.expr(contract);
+            }
+            visitor.bindings.pop();
             visitor.statements(&function.body);
             let direct_effects = visitor.effects;
             visitor.calls.sort_by(|a, b| {

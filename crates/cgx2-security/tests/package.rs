@@ -55,6 +55,98 @@ const FORWARD:&str="pub fn forward(x: String) -> String effects(Foreign) caps(Fo
 fn chain(argument: &str) -> Fixture {
     Fixture::new(SINK,FORWARD,&format!("fn pick(x: String, y: String) -> String:\n    y\npub fn run() -> String effects(ReadArgs, Foreign) caps(ArgsRead, ForeignCall):\n    demo.middle.forward({argument})\n"))
 }
+
+#[test]
+fn contract_only_helpers_reach_public_security_graph_without_inventing_findings() {
+    use cgx2_effect_index::package_v1::{Identity, Resolution};
+
+    let f = Fixture::new(
+        "pub fn helper(x: Bool) -> Bool:\n    x\n",
+        "pub fn helper(x: Bool) -> Bool:\n    x\n",
+        "# café 🦀\nfn helper(x: Bool) -> Bool:\n    x\npub fn run(x: Bool) -> Bool effects() caps():\n    requires helper(helper(x))\n    ensures helper(result)\n    ensures helper(result)\n    let helper = false\n    x\n",
+    );
+    let report = f.report();
+    assert!(report.findings().is_empty());
+    let run = report
+        .analysis()
+        .entry(&Identity {
+            source: "src/main.cg".into(),
+            name: "run".into(),
+        })
+        .unwrap();
+    assert_eq!(run.calls.len(), 4);
+    assert!(run.effects.is_empty());
+    assert!(run.capabilities.is_empty());
+    let helper = Identity {
+        source: "src/main.cg".into(),
+        name: "helper".into(),
+    };
+    assert!(run
+        .calls
+        .iter()
+        .all(|c| c.resolution == Resolution::Function(helper.clone())));
+    let source = fs::read_to_string(f.0.join("src/main.cg")).unwrap();
+    let sites: Vec<_> = run
+        .calls
+        .iter()
+        .map(|c| &source[c.location.span.start..c.location.span.end])
+        .collect();
+    assert_eq!(
+        sites,
+        [
+            "helper(helper(x))",
+            "helper(x)",
+            "helper(result)",
+            "helper(result)"
+        ]
+    );
+    let json = report.to_json().unwrap();
+    assert_eq!(json, f.report().to_json().unwrap());
+    let json: Value = serde_json::from_str(&json).unwrap();
+    assert_eq!(json["schema_version"], 2);
+    assert_eq!(json["analysis"], "checked_package_security_v1");
+    assert_eq!(json["provenance"].as_array().unwrap().len(), 3);
+    let sarif = report.to_sarif().unwrap();
+    assert_eq!(sarif, f.report().to_sarif().unwrap());
+    let sarif: Value = serde_json::from_str(&sarif).unwrap();
+    assert_eq!(sarif["version"], "2.1.0");
+    assert!(sarif["runs"][0]["results"].as_array().unwrap().is_empty());
+
+    fs::write(f.0.join("src/main.cg"), "module demo.main\n").unwrap();
+    assert!(report.to_json().is_err());
+    assert!(report.to_sarif().is_err());
+}
+
+#[test]
+fn unknown_contract_calls_have_distinct_source_located_policy_findings() {
+    let f = Fixture::new(
+        "pub fn helper() -> Bool:\n    true\n",
+        "pub fn helper() -> Bool:\n    true\n",
+        "# café 🦀\nfn result() -> Bool:\n    true\npub fn run() -> Bool:\n    ensures result()\n    ensures result()\n    true\n",
+    );
+    let report = f.report();
+    let source = fs::read_to_string(f.0.join("src/main.cg")).unwrap();
+    let findings: Vec<_> = report
+        .findings()
+        .iter()
+        .filter(|f| {
+            f.rule_id == "CGSEC002"
+                && &source[f.location.span.start..f.location.span.end] == "result()"
+        })
+        .collect();
+    assert_eq!(findings.len(), 2);
+    assert_ne!(findings[0].location.span, findings[1].location.span);
+    assert!(!report
+        .findings()
+        .iter()
+        .any(|f| matches!(f.rule_id, "CGSEC001" | "CGSEC003" | "CGSEC005")));
+    let sarif: Value = serde_json::from_str(&report.to_sarif().unwrap()).unwrap();
+    assert_eq!(
+        sarif["runs"][0]["results"].as_array().unwrap().len(),
+        report.findings().len()
+    );
+}
+
 #[test]
 fn transitive_taint_reaches_checked_foreign_sink_with_cross_file_origin_and_declaration() {
     let f = chain("arg(0)");
