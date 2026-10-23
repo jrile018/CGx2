@@ -128,13 +128,12 @@ impl Project {
         let mut modules = BTreeMap::new();
         let mut dependencies = BTreeMap::new();
         for (index, module) in checked.modules().iter().enumerate() {
-            let name = module
-                .syntax()
-                .name
-                .as_ref()
-                .ok_or("CGNK012: checked module has no name")?
-                .segments
-                .join(".");
+            // A single-source package may have an unnamed entry. It remains
+            // checked project context, but cannot be an import-graph node.
+            let Some(path) = &module.syntax().name else {
+                continue;
+            };
+            let name = path.segments.join(".");
             if modules
                 .insert(
                     name.clone(),

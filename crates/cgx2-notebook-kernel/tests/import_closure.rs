@@ -707,3 +707,19 @@ fn canonical_module_provenance_roundtrips_and_legacy_captures_stale() {
     assert_eq!(reopened.status("read").unwrap(), CellStatus::Stale);
     assert_eq!(reopened.status("independent").unwrap(), CellStatus::Cached);
 }
+
+#[test]
+fn unnamed_single_source_package_remains_valid_project_context() {
+    let project = Project::new();
+    project.write(
+        "cgx2.toml",
+        "schema_version = 1\nname = \"demo\"\nentry = \"main.cg\"\nsources = [\"main.cg\"]\n",
+    );
+    project.write("main.cg", "42\n");
+    let mut kernel = project.open(book(vec![code("value", "40 + 2")]));
+    kernel.run_cell("value").unwrap();
+    assert_eq!(output(&kernel, "value"), "42");
+    let saved = write_notebook(kernel.notebook()).unwrap();
+    let reopened = project.open(parse_notebook(&saved).unwrap());
+    assert_eq!(reopened.status("value").unwrap(), CellStatus::Cached);
+}
