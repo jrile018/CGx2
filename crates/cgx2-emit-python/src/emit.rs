@@ -1,5 +1,5 @@
-use cgx2_sema::{check_module, TypedModule};
-use cgx2_syntax::{AssignOp, BinaryOp, Expr, ExprKind, Module, Stmt, StmtKind, TypeSyntax};
+use cgx2_sema::{check_module, Type, TypedModule};
+use cgx2_syntax::{AssignOp, BinaryOp, Expr, ExprKind, Module, Record, Stmt, StmtKind, TypeSyntax};
 use std::collections::{BTreeMap, BTreeSet};
 
 use crate::error::EmitDiagnostic;
@@ -66,7 +66,7 @@ def _cgx2_show(value):
         return "true" if value else "false"
     if _cgx2_builtins.type(value) is _cgx2_builtins.int:
         return _cgx2_builtins.str(_cgx2_i64(value))
-    return value
+    return _cgx2_builtins.str(value)
 
 class _cgx2_ContractError(_cgx2_builtins.RuntimeError):
     def __init__(self, code, start, end):
@@ -105,6 +105,35 @@ fn emit_impl(
     imports: &str,
 ) -> Result<String, Vec<EmitDiagnostic>> {
     let mut errors = Vec::new();
+    let record_names = module
+        .records
+        .iter()
+        .map(|record| record.name.clone())
+        .collect::<BTreeSet<_>>();
+    if package_mode {
+        for record in &module.records {
+            errors.push(EmitDiagnostic::new(
+                "CGE001",
+                "record package import/export unsupported by Python emission",
+                record.span,
+            ));
+        }
+    } else {
+        for record in &module.records {
+            if !(1..=8).contains(&record.fields.len())
+                || record
+                    .fields
+                    .iter()
+                    .any(|field| !matches!(field.ty.to_string().as_str(), "i64" | "Bool"))
+            {
+                errors.push(EmitDiagnostic::new(
+                    "CGE001",
+                    "only immutable records with one to eight i64/Bool fields are supported",
+                    record.span,
+                ));
+            }
+        }
+    }
     for import in &module.imports {
         errors.push(EmitDiagnostic::new(
             "CGE001",
@@ -128,17 +157,17 @@ fn emit_impl(
             ));
         }
         for parameter in &function.parameters {
-            validate_type(&parameter.ty, &mut errors);
+            validate_type(&parameter.ty, &record_names, &mut errors);
         }
         if let Some(ty) = &function.return_type {
-            validate_type(ty, &mut errors);
+            validate_type(ty, &record_names, &mut errors);
         }
         for contract in function.requires.iter().chain(&function.ensures) {
-            validate_expr(contract, &mut errors);
+            validate_expr(contract, &record_names, &mut errors);
         }
-        validate_block(&function.body, false, &mut errors);
+        validate_block(&function.body, false, &record_names, &mut errors);
     }
-    validate_block(&module.statements, true, &mut errors);
+    validate_block(&module.statements, true, &record_names, &mut errors);
     if !package_mode && !module.functions.is_empty() {
         match module
             .functions
@@ -176,6 +205,9 @@ fn emit_impl(
     for function in &module.functions {
         validate_metadata(function, typed, package_mode, &mut errors);
     }
+    if !package_mode {
+        validate_record_bindings(module, typed, &mut errors);
+    }
     if !errors.is_empty() {
         return Err(errors);
     }
@@ -190,6 +222,9 @@ fn emit_impl(
     output.push_str(imports);
     if !imports.is_empty() {
         output.push('\n');
+    }
+    for record in &module.records {
+        emit_record(record, &mut output);
     }
     for function in &module.functions {
         let params = function
@@ -239,6 +274,208 @@ fn emit_impl(
     output.push_str("    if _cgx2_result is not None:\n");
     output.push_str("        _cgx2_sys.stdout.write(_cgx2_show(_cgx2_result) + \"\\n\")\n");
     Ok(output)
+}
+
+fn record_type(ty: &TypeSyntax, records: &[Record]) -> Option<String> {
+    if ty.arguments.is_empty() && ty.path.segments.len() == 1 {
+        let name = &ty.path.segments[0];
+        if records.iter().any(|record| &record.name == name) {
+            return Some(name.clone());
+        }
+    }
+    None
+}
+
+fn expression_record(expr: &Expr, typed: &TypedModule) -> Option<String> {
+    match typed.expressions.get(expr.span) {
+        Some(Type::Record(name)) => Some(name.clone()),
+        _ => None,
+    }
+}
+
+type RecordScopes = Vec<BTreeMap<String, Option<String>>>;
+
+fn lookup_record(scopes: &RecordScopes, name: &str) -> Option<Option<String>> {
+    scopes
+        .iter()
+        .rev()
+        .find_map(|scope| scope.get(name).cloned())
+}
+
+fn validate_record_expr(
+    expr: &Expr,
+    scopes: &RecordScopes,
+    records: &[Record],
+    errors: &mut Vec<EmitDiagnostic>,
+) {
+    match &expr.kind {
+        ExprKind::Name(path) if path.segments.len() == 2 => {
+            let [base, field] = path.segments.as_slice() else {
+                unreachable!()
+            };
+            let valid = lookup_record(scopes, base)
+                .flatten()
+                .and_then(|record_name| records.iter().find(|record| record.name == record_name))
+                .is_some_and(|record| record.fields.iter().any(|item| item.name == *field));
+            if !valid {
+                errors.push(EmitDiagnostic::new(
+                    "CGE001",
+                    "qualified name is not a local record field",
+                    path.span,
+                ));
+            }
+        }
+        ExprKind::Binary { left, right, .. } => {
+            validate_record_expr(left, scopes, records, errors);
+            validate_record_expr(right, scopes, records, errors);
+        }
+        ExprKind::Call { arguments, .. } => {
+            for arg in arguments {
+                validate_record_expr(&arg.value, scopes, records, errors);
+            }
+        }
+        _ => {}
+    }
+}
+
+fn validate_record_block(
+    stmts: &[Stmt],
+    scopes: &mut RecordScopes,
+    records: &[Record],
+    typed: &TypedModule,
+    errors: &mut Vec<EmitDiagnostic>,
+) {
+    for stmt in stmts {
+        match &stmt.kind {
+            StmtKind::Let {
+                mutable,
+                name,
+                annotation,
+                value,
+            } => {
+                validate_record_expr(value, scopes, records, errors);
+                let record = annotation
+                    .as_ref()
+                    .and_then(|ty| record_type(ty, records))
+                    .or_else(|| expression_record(value, typed));
+                if *mutable && record.is_some() {
+                    errors.push(EmitDiagnostic::new(
+                        "CGE001",
+                        "mutable record bindings unsupported by Python emission",
+                        stmt.span,
+                    ));
+                }
+                scopes
+                    .last_mut()
+                    .expect("record scope")
+                    .insert(name.clone(), record);
+            }
+            StmtKind::Assign { value, .. }
+            | StmtKind::Return(Some(value))
+            | StmtKind::Expr(value) => {
+                validate_record_expr(value, scopes, records, errors);
+            }
+            StmtKind::For {
+                binding,
+                iter,
+                body,
+            } => {
+                validate_record_expr(iter, scopes, records, errors);
+                scopes.push(BTreeMap::from([(binding.clone(), None)]));
+                validate_record_block(body, scopes, records, typed, errors);
+                scopes.pop();
+            }
+            StmtKind::NoGc { budget, body } => {
+                validate_record_expr(budget, scopes, records, errors);
+                scopes.push(BTreeMap::new());
+                validate_record_block(body, scopes, records, typed, errors);
+                scopes.pop();
+            }
+            StmtKind::Return(None) => {}
+        }
+    }
+}
+
+fn validate_record_bindings(
+    module: &Module,
+    typed: &TypedModule,
+    errors: &mut Vec<EmitDiagnostic>,
+) {
+    if module.records.is_empty() {
+        return;
+    }
+    for function in &module.functions {
+        let mut scopes = vec![function
+            .parameters
+            .iter()
+            .map(|parameter| {
+                (
+                    parameter.name.clone(),
+                    record_type(&parameter.ty, &module.records),
+                )
+            })
+            .collect()];
+        for condition in &function.requires {
+            validate_record_expr(condition, &scopes, &module.records, errors);
+        }
+        validate_record_block(&function.body, &mut scopes, &module.records, typed, errors);
+        let result_record = typed.functions.get(&function.name).and_then(|signature| {
+            match &signature.return_type {
+                Type::Record(name) => Some(name.clone()),
+                _ => None,
+            }
+        });
+        scopes[0].insert("result".to_owned(), result_record);
+        for condition in &function.ensures {
+            validate_record_expr(condition, &scopes, &module.records, errors);
+        }
+    }
+    validate_record_block(
+        &module.statements,
+        &mut vec![BTreeMap::new()],
+        &module.records,
+        typed,
+        errors,
+    );
+}
+
+fn emit_record(record: &Record, output: &mut String) {
+    let class = python_name(&record.name);
+    let fields = record
+        .fields
+        .iter()
+        .map(|field| python_name(&field.name))
+        .collect::<Vec<_>>();
+    output.push_str(&format!("class {class}:\n"));
+    output.push_str(&format!(
+        "    __slots__ = ({},)\n",
+        fields
+            .iter()
+            .map(|field| format!("{field:?}"))
+            .collect::<Vec<_>>()
+            .join(", ")
+    ));
+    output.push_str(&format!(
+        "    def __init__(self, *, {}):\n",
+        fields.join(", ")
+    ));
+    for field in &fields {
+        output.push_str(&format!(
+            "        _cgx2_builtins.object.__setattr__(self, {field:?}, {field})\n"
+        ));
+    }
+    output.push_str("    def __setattr__(self, name, value):\n        raise _cgx2_builtins.AttributeError('immutable CGx2 record')\n");
+    output.push_str("    def __delattr__(self, name):\n        raise _cgx2_builtins.AttributeError('immutable CGx2 record')\n");
+    output.push_str("    def __str__(self):\n");
+    let parts = record
+        .fields
+        .iter()
+        .zip(&fields)
+        .map(|(field, py_field)| format!("{}: {{_cgx2_show(self.{py_field})}}", field.name))
+        .collect::<Vec<_>>()
+        .join(", ");
+    output.push_str(&format!("        return f\"{}({parts})\"\n", record.name));
+    output.push_str("    __repr__ = __str__\n\n");
 }
 
 fn validate_metadata(
@@ -312,13 +549,13 @@ fn emit_contract_check(
     ));
 }
 
-fn validate_type(ty: &TypeSyntax, errors: &mut Vec<EmitDiagnostic>) {
+fn validate_type(ty: &TypeSyntax, records: &BTreeSet<String>, errors: &mut Vec<EmitDiagnostic>) {
     if !ty.arguments.is_empty()
         || ty.path.segments.len() != 1
         || !matches!(
             ty.path.segments[0].as_str(),
             "i64" | "Bool" | "String" | "Unit"
-        )
+        ) && !records.contains(&ty.path.segments[0])
     {
         errors.push(EmitDiagnostic::new(
             "CGE001",
@@ -328,16 +565,21 @@ fn validate_type(ty: &TypeSyntax, errors: &mut Vec<EmitDiagnostic>) {
     }
 }
 
-fn validate_block(stmts: &[Stmt], script: bool, errors: &mut Vec<EmitDiagnostic>) {
+fn validate_block(
+    stmts: &[Stmt],
+    script: bool,
+    records: &BTreeSet<String>,
+    errors: &mut Vec<EmitDiagnostic>,
+) {
     for stmt in stmts {
         match &stmt.kind {
             StmtKind::Let {
                 annotation, value, ..
             } => {
                 if let Some(ty) = annotation {
-                    validate_type(ty, errors);
+                    validate_type(ty, records, errors);
                 }
-                validate_expr(value, errors);
+                validate_expr(value, records, errors);
             }
             StmtKind::Assign { target, value, .. } => {
                 if target.segments.len() != 1 {
@@ -347,7 +589,7 @@ fn validate_block(stmts: &[Stmt], script: bool, errors: &mut Vec<EmitDiagnostic>
                         target.span,
                     ));
                 }
-                validate_expr(value, errors);
+                validate_expr(value, records, errors);
             }
             StmtKind::Return(value) => {
                 if script {
@@ -358,17 +600,17 @@ fn validate_block(stmts: &[Stmt], script: bool, errors: &mut Vec<EmitDiagnostic>
                     ));
                 }
                 if let Some(expr) = value {
-                    validate_expr(expr, errors);
+                    validate_expr(expr, records, errors);
                 }
             }
-            StmtKind::Expr(expr) => validate_expr(expr, errors),
+            StmtKind::Expr(expr) => validate_expr(expr, records, errors),
             StmtKind::For { iter, body, .. } => {
                 let valid = matches!(&iter.kind, ExprKind::Call { callee, arguments }
                     if matches!(&callee.kind, ExprKind::Name(path) if path.segments.as_slice() == ["range"])
                     && arguments.len() == 2 && arguments.iter().all(|arg| arg.name.is_none()));
                 if valid {
-                    validate_expr(iter, errors);
-                    validate_block(body, script, errors);
+                    validate_expr(iter, records, errors);
+                    validate_block(body, script, records, errors);
                 } else {
                     errors.push(EmitDiagnostic::new(
                         "CGE001",
@@ -386,13 +628,17 @@ fn validate_block(stmts: &[Stmt], script: bool, errors: &mut Vec<EmitDiagnostic>
     }
 }
 
-fn validate_expr(expr: &Expr, errors: &mut Vec<EmitDiagnostic>) {
+fn validate_expr(expr: &Expr, records: &BTreeSet<String>, errors: &mut Vec<EmitDiagnostic>) {
     match &expr.kind {
-        ExprKind::Name(path) if path.segments.len() != 1 => errors.push(EmitDiagnostic::new(
-            "CGE001",
-            "qualified names are unsupported by Python emission",
-            path.span,
-        )),
+        ExprKind::Name(path)
+            if path.segments.len() != 1 && !(path.segments.len() == 2 && !records.is_empty()) =>
+        {
+            errors.push(EmitDiagnostic::new(
+                "CGE001",
+                "qualified names are unsupported by Python emission",
+                path.span,
+            ))
+        }
         ExprKind::Integer(raw) if raw.replace('_', "").parse::<i64>().is_err() => {
             errors.push(EmitDiagnostic::new(
                 "CGE003",
@@ -408,8 +654,8 @@ fn validate_expr(expr: &Expr, errors: &mut Vec<EmitDiagnostic>) {
             ));
         }
         ExprKind::Binary { left, right, .. } => {
-            validate_expr(left, errors);
-            validate_expr(right, errors);
+            validate_expr(left, records, errors);
+            validate_expr(right, records, errors);
         }
         ExprKind::Call { callee, arguments } => {
             if matches!(&callee.kind, ExprKind::Name(path) if path.segments.first().is_some_and(|s| s == "memory"))
@@ -428,15 +674,17 @@ fn validate_expr(expr: &Expr, errors: &mut Vec<EmitDiagnostic>) {
                     callee.span,
                 ));
             }
+            let constructor = matches!(&callee.kind, ExprKind::Name(path)
+                if path.segments.len() == 1 && records.contains(&path.segments[0]));
             for arg in arguments {
-                if arg.name.is_some() {
+                if arg.name.is_some() != constructor {
                     errors.push(EmitDiagnostic::new(
                         "CGE001",
-                        "named calls are unsupported by Python emission",
+                        "record constructors require named fields; other calls require positional arguments",
                         arg.span,
                     ));
                 }
-                validate_expr(&arg.value, errors);
+                validate_expr(&arg.value, records, errors);
             }
         }
         _ => {}
@@ -491,7 +739,7 @@ fn lookup_scoped(name: &str, scopes: &[BTreeMap<String, String>]) -> Option<Stri
 
 fn scope_expr(expr: &mut Expr, scopes: &[BTreeMap<String, String>]) {
     match &mut expr.kind {
-        ExprKind::Name(path) if path.segments.len() == 1 => {
+        ExprKind::Name(path) if matches!(path.segments.len(), 1 | 2) => {
             if let Some(name) = lookup_scoped(&path.segments[0], scopes) {
                 path.segments[0] = name;
             }
@@ -572,6 +820,10 @@ fn scope_module(module: &mut Module) {
         reserved.insert(function.name.clone());
         used.extend(function.parameters.iter().map(|p| p.name.clone()));
         collect_bindings(&function.body, &mut used);
+    }
+    for record in &module.records {
+        used.insert(record.name.clone());
+        reserved.insert(record.name.clone());
     }
     collect_bindings(&module.statements, &mut used);
     let mut next = 0;
@@ -691,8 +943,17 @@ fn emit_expr(expr: &Expr) -> String {
 fn emit_expr_with_result(expr: &Expr, bind_result: bool) -> String {
     let value = match &expr.kind {
         ExprKind::Name(path) if bind_result && path.segments[0] == "result" => {
-            "_cgx2_contract_result".to_owned()
+            if path.segments.len() == 2 {
+                format!("_cgx2_contract_result.{}", python_name(&path.segments[1]))
+            } else {
+                "_cgx2_contract_result".to_owned()
+            }
         }
+        ExprKind::Name(path) if path.segments.len() == 2 => format!(
+            "{}.{}",
+            python_name(&path.segments[0]),
+            python_name(&path.segments[1])
+        ),
         ExprKind::Name(path) => python_name(&path.segments[0]),
         ExprKind::Integer(raw) => raw.replace('_', ""),
         ExprKind::StringLiteral(raw) => {
@@ -723,7 +984,13 @@ fn emit_expr_with_result(expr: &Expr, bind_result: bool) -> String {
             };
             let args = arguments
                 .iter()
-                .map(|arg| emit_expr_with_result(&arg.value, bind_result))
+                .map(|arg| {
+                    let value = emit_expr_with_result(&arg.value, bind_result);
+                    match &arg.name {
+                        Some(field) => format!("{}={value}", python_name(field)),
+                        None => value,
+                    }
+                })
                 .collect::<Vec<_>>()
                 .join(", ");
             let comparison = match path.segments[0].as_str() {
@@ -791,4 +1058,26 @@ fn quote_python(value: &str) -> String {
     }
     result.push('"');
     result
+}
+
+#[cfg(test)]
+mod record_tests {
+    use super::emit_package_module;
+    use cgx2_sema::check_module;
+    use cgx2_syntax::parse_module;
+
+    #[test]
+    fn package_record_is_rejected_before_source_generation() {
+        let module = parse_module(
+            "record Point:\n    x: i64\nfn main() -> i64:\n    let p = Point(x: 1)\n    p.x\n",
+        );
+        // The package emitter must reject record declarations even when a
+        // standalone checked summary is supplied to its internal entry point.
+        let module = module.unwrap();
+        let typed = check_module(&module).unwrap();
+        let errors = emit_package_module(&module, &typed, "").unwrap_err();
+        assert!(errors
+            .iter()
+            .any(|error| error.message.contains("record package import/export")));
+    }
 }

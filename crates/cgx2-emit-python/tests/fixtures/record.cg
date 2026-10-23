@@ -1,0 +1,9 @@
+record Point:
+    x: i64
+    live: Bool
+
+fn id(p: Point) -> Point:
+    p
+
+fn main() -> Point:
+    id(Point(live: true, x: -9223372036854775808))
