@@ -1,5 +1,10 @@
 # CGx2 baseline and pilot benchmark harness
 
+The versioned [release evidence command](RELEASE-EVIDENCE.md) composes these
+engines into immutable, provenance-checked bundles with a complete empirical
+gate inventory. Its local plan reports external blockers and does not run
+performance benchmarks without explicit quiet-host admission.
+
 This is an on-demand, standard-library-only harness for calibrating tasks and measurement noise. It does not invoke a model, install dependencies, implement CGx2, or make a release judgment. The older smoke and sample-result fixtures are synthetic or harness-only and are **not evidence of a CGx2 result**. The Wave 4 pilot below records real CLI invocations but is too narrow for a release claim.
 
 ## Wave 4 executable scalar pilot

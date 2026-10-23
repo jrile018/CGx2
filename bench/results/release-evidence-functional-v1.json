@@ -1,0 +1,968 @@
+{
+  "archive_note": "Full content-addressed archive is in ignored target; this committed document is a report, not a substitute bundle. Reproduce with the documented collector.",
+  "bundle_sha256": "b26cf9b2344d0de9b9609277c08f3abcba9749d38ba4298f6bfe4b7d1853c692",
+  "collection_exit_code": 2,
+  "functional_plan": {
+    "compiler": null,
+    "jobs": [
+      {
+        "adapter": "isolation-probe",
+        "id": "host-isolation"
+      },
+      {
+        "adapter": "isolation-selftest",
+        "args": [
+          "--toolchain-root",
+          "/home/john-riley/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu",
+          "--compiler-relative",
+          "bin/rustc"
+        ],
+        "id": "real-isolation-selftest"
+      },
+      {
+        "adapter": "task-study",
+        "args": [
+          "--pack",
+          "bench/fixtures/task-candidates/v3/pack.json"
+        ],
+        "id": "candidate-intake"
+      },
+      {
+        "adapter": "public-export",
+        "args": [
+          "--task",
+          "precedence",
+          "--variant",
+          "indent"
+        ],
+        "id": "public-syntax-context"
+      },
+      {
+        "adapter": "native-runtime",
+        "id": "native-queue"
+      },
+      {
+        "adapter": "libtorch-runtime",
+        "id": "libtorch-queue"
+      },
+      {
+        "adapter": "owner",
+        "args": [
+          "/external-owner/cgx2-trusted-solver-evidence-v1"
+        ],
+        "gate": "trusted-solver",
+        "id": "solver-owner"
+      },
+      {
+        "adapter": "owner",
+        "args": [
+          "/external-owner/cgx2-leak-evidence-v1"
+        ],
+        "gate": "leak-check",
+        "id": "leak-owner"
+      }
+    ],
+    "operator": "local-unreviewed",
+    "purpose": "release",
+    "schema_version": 1
+  },
+  "limitations": [
+    "No release timing run; quiet-host gates blocked.",
+    "No delegated cgroup controllers; real selftest ran no fixtures.",
+    "No compiler selected in this local blocker plan.",
+    "No independent candidate/task reviews, frozen holdout, paired real model traces or human assessments.",
+    "No actual owner solver or leak runner is installed at the handoff paths.",
+    "No source-level acceptance, runtime target, inference result or release-readiness claim."
+  ],
+  "local_archive": "/home/john-riley/.codex/worktrees/5b29/lang/target/release-evidence/functional-bundles/b26cf9b2344d0de9b9609277c08f3abcba9749d38ba4298f6bfe4b7d1853c692",
+  "provenance": {
+    "compiler": null,
+    "environment": "c0e3c9e71be0ab71aefd2c813b3469fe49b43d8780bf308d7e41a31a34d1b88d",
+    "git_head": "0f0b0b9c87d817f39830f3e2b311dbae2ae3e0f3",
+    "interpreter": "d859dbaefb7e40401d3f7e8a9bc1959fac1932de73d3643034194869b3a16ce2",
+    "source": "5228b821985899ed4d7f0ccc7bf9a889be43b60d37dfdc567c52484ab2773cdc",
+    "tools": "d50a1e062b08c9b113ee4c1141fa04803fe22d0c4277e7479cee67fe1568f2e1"
+  },
+  "raw_observations": [
+    {
+      "adapter": "isolation-probe",
+      "blocker": null,
+      "command": {
+        "argv": [
+          "/usr/bin/python3",
+          "/home/john-riley/.codex/worktrees/5b29/lang/bench/scored_candidate.py",
+          "--probe"
+        ],
+        "cwd": "/home/john-riley/.codex/worktrees/5b29/lang",
+        "environment": "6b013f55e2568be60a6c5a5f438bcaef65ac8fe250c023dcae4b3bfc42d58e59",
+        "executable_sha256": "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41",
+        "exit_code": 2,
+        "reason": null,
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout": "be632685d6e0bdd9a032ca9e176062056dc74d02bfce24b1b6f5400004b3d9f6",
+        "wall_seconds": 0.044499829004053026
+      },
+      "id": "host-isolation",
+      "raw_result": {
+        "profile": {
+          "aggregate_isolation": "dedicated cgroup v2 cpu, memory, pids with kill and cleanup",
+          "capabilities": "dropped",
+          "environment": {
+            "HOME": "/scratch",
+            "LANG": "C.UTF-8",
+            "LC_ALL": "C.UTF-8",
+            "PATH": "/toolchain/bin:/usr/bin:/bin",
+            "TMPDIR": "/scratch"
+          },
+          "landlock": "execute only result and ELF interpreter",
+          "limits": {
+            "address_bytes": 2147483648,
+            "aggregate_cpu_period_us": 100000,
+            "aggregate_cpu_quota_us": 100000,
+            "aggregate_cpu_seconds": 90,
+            "cpu_seconds": 90,
+            "file_bytes": 67108864,
+            "open_files": 64,
+            "output_bytes": 1000000,
+            "processes": 32,
+            "scratch_bytes": 268435456,
+            "tmp_bytes": 16777216,
+            "wall_seconds": 120
+          },
+          "mounts": [
+            "/usr ro",
+            "/bin ro",
+            "/lib ro",
+            "/lib64 ro",
+            "/etc/alternatives ro",
+            "/etc/ld.so.cache ro",
+            "/toolchain ro",
+            "/workspace ro",
+            "/scratch tmpfs",
+            "/tmp tmpfs"
+          ],
+          "namespaces": "user,mount,pid,network,ipc,uts",
+          "outer_seccomp_denied": [
+            "socket",
+            "socketpair",
+            "connect",
+            "bind",
+            "listen",
+            "accept",
+            "accept4",
+            "sendto",
+            "sendmsg",
+            "recvfrom",
+            "recvmsg",
+            "mount",
+            "umount2",
+            "pivot_root",
+            "ptrace",
+            "bpf",
+            "userfaultfd",
+            "keyctl",
+            "add_key",
+            "request_key",
+            "open_by_handle_at",
+            "init_module",
+            "finit_module",
+            "delete_module",
+            "kexec_load",
+            "reboot",
+            "swapon",
+            "swapoff",
+            "unshare",
+            "setns"
+          ],
+          "runtime_seccomp_denied": [
+            "socket",
+            "socketpair",
+            "connect",
+            "bind",
+            "listen",
+            "accept",
+            "accept4",
+            "sendto",
+            "sendmsg",
+            "recvfrom",
+            "recvmsg",
+            "mount",
+            "umount2",
+            "pivot_root",
+            "ptrace",
+            "bpf",
+            "userfaultfd",
+            "keyctl",
+            "add_key",
+            "request_key",
+            "open_by_handle_at",
+            "init_module",
+            "finit_module",
+            "delete_module",
+            "kexec_load",
+            "reboot",
+            "swapon",
+            "swapoff",
+            "unshare",
+            "setns",
+            "clone",
+            "clone3",
+            "fork",
+            "vfork"
+          ],
+          "uid_gid": 65534,
+          "version": 2
+        },
+        "reason": "cgroup_controllers_not_delegated:cpu,memory,pids",
+        "status": "unsupported_isolation"
+      },
+      "result_sha256": "be632685d6e0bdd9a032ca9e176062056dc74d02bfce24b1b6f5400004b3d9f6"
+    },
+    {
+      "adapter": "isolation-selftest",
+      "blocker": null,
+      "command": {
+        "argv": [
+          "/usr/bin/python3",
+          "/home/john-riley/.codex/worktrees/5b29/lang/bench/isolation_selftest.py",
+          "--toolchain-root",
+          "/home/john-riley/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu",
+          "--compiler-relative",
+          "bin/rustc"
+        ],
+        "cwd": "/home/john-riley/.codex/worktrees/5b29/lang",
+        "environment": "6b013f55e2568be60a6c5a5f438bcaef65ac8fe250c023dcae4b3bfc42d58e59",
+        "executable_sha256": "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41",
+        "exit_code": 2,
+        "reason": null,
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout": "69f7719b1aa94b964d627b6a4f43d6829f93d5dc8c5cce204d47f31ad4dd825d",
+        "wall_seconds": 0.06364587000280153
+      },
+      "id": "real-isolation-selftest",
+      "raw_result": {
+        "cases": [],
+        "profile": {
+          "aggregate_isolation": "dedicated cgroup v2 cpu, memory, pids with kill and cleanup",
+          "capabilities": "dropped",
+          "environment": {
+            "HOME": "/scratch",
+            "LANG": "C.UTF-8",
+            "LC_ALL": "C.UTF-8",
+            "PATH": "/toolchain/bin:/usr/bin:/bin",
+            "TMPDIR": "/scratch"
+          },
+          "landlock": "execute only result and ELF interpreter",
+          "limits": {
+            "address_bytes": 2147483648,
+            "aggregate_cpu_period_us": 100000,
+            "aggregate_cpu_quota_us": 100000,
+            "aggregate_cpu_seconds": 90,
+            "cpu_seconds": 90,
+            "file_bytes": 67108864,
+            "open_files": 64,
+            "output_bytes": 1000000,
+            "processes": 32,
+            "scratch_bytes": 268435456,
+            "tmp_bytes": 16777216,
+            "wall_seconds": 120
+          },
+          "mounts": [
+            "/usr ro",
+            "/bin ro",
+            "/lib ro",
+            "/lib64 ro",
+            "/etc/alternatives ro",
+            "/etc/ld.so.cache ro",
+            "/toolchain ro",
+            "/workspace ro",
+            "/scratch tmpfs",
+            "/tmp tmpfs"
+          ],
+          "namespaces": "user,mount,pid,network,ipc,uts",
+          "outer_seccomp_denied": [
+            "socket",
+            "socketpair",
+            "connect",
+            "bind",
+            "listen",
+            "accept",
+            "accept4",
+            "sendto",
+            "sendmsg",
+            "recvfrom",
+            "recvmsg",
+            "mount",
+            "umount2",
+            "pivot_root",
+            "ptrace",
+            "bpf",
+            "userfaultfd",
+            "keyctl",
+            "add_key",
+            "request_key",
+            "open_by_handle_at",
+            "init_module",
+            "finit_module",
+            "delete_module",
+            "kexec_load",
+            "reboot",
+            "swapon",
+            "swapoff",
+            "unshare",
+            "setns"
+          ],
+          "runtime_seccomp_denied": [
+            "socket",
+            "socketpair",
+            "connect",
+            "bind",
+            "listen",
+            "accept",
+            "accept4",
+            "sendto",
+            "sendmsg",
+            "recvfrom",
+            "recvmsg",
+            "mount",
+            "umount2",
+            "pivot_root",
+            "ptrace",
+            "bpf",
+            "userfaultfd",
+            "keyctl",
+            "add_key",
+            "request_key",
+            "open_by_handle_at",
+            "init_module",
+            "finit_module",
+            "delete_module",
+            "kexec_load",
+            "reboot",
+            "swapon",
+            "swapoff",
+            "unshare",
+            "setns",
+            "clone",
+            "clone3",
+            "fork",
+            "vfork"
+          ],
+          "uid_gid": 65534,
+          "version": 2
+        },
+        "reason": "cgroup_controllers_not_delegated:cpu,memory,pids",
+        "status": "unsupported_isolation"
+      },
+      "result_sha256": "69f7719b1aa94b964d627b6a4f43d6829f93d5dc8c5cce204d47f31ad4dd825d"
+    },
+    {
+      "adapter": "task-study",
+      "blocker": null,
+      "command": {
+        "argv": [
+          "/usr/bin/python3",
+          "/home/john-riley/.codex/worktrees/5b29/lang/bench/task_evidence.py",
+          "report",
+          "--pack",
+          "bench/fixtures/task-candidates/v3/pack.json",
+          "--out",
+          "/home/john-riley/.codex/worktrees/5b29/lang/target/tmp-evidence/evidence-g_njjfn6/result.json"
+        ],
+        "cwd": "/home/john-riley/.codex/worktrees/5b29/lang",
+        "environment": "6b013f55e2568be60a6c5a5f438bcaef65ac8fe250c023dcae4b3bfc42d58e59",
+        "executable_sha256": "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41",
+        "exit_code": 1,
+        "reason": null,
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "wall_seconds": 0.043341398995835334
+      },
+      "id": "candidate-intake",
+      "raw_result": {
+        "comparison": null,
+        "release_verdict": "insufficient_evidence",
+        "schema_version": 3,
+        "status": "insufficient_evidence",
+        "summary": {
+          "candidate_count": 2,
+          "category_counts": {
+            "numerical_edge": 1,
+            "package_api": 1
+          },
+          "exclusions_by_language": {
+            "ocaml": 2,
+            "python": 2,
+            "typescript": 2
+          },
+          "expected_run_count": 0,
+          "findings": [
+            {
+              "code": "independent_review",
+              "detail": "candidate is not a reviewed holdout task",
+              "severity": "missing",
+              "where": "quote-credit-v3"
+            },
+            {
+              "code": "independent_review",
+              "detail": "candidate is not a reviewed holdout task",
+              "severity": "missing",
+              "where": "grid-quote-v3"
+            },
+            {
+              "code": "protocol_not_frozen",
+              "detail": "unassigned pins: prompt_sha256, tools_sha256, documentation_sha256, dependency_lock_sha256, cgx2_source_sha256, compiler_sha256, dependency_sha256, tool_version, hardware",
+              "severity": "missing",
+              "where": "pack"
+            },
+            {
+              "code": "no_runs",
+              "detail": "no model runs preregistered; candidate pack is planning only",
+              "severity": "missing",
+              "where": "pack"
+            }
+          ],
+          "schema_version": 3,
+          "status": "insufficient_evidence",
+          "task_count": 2,
+          "tier_status_counts": {
+            "large/candidate": 1,
+            "small/candidate": 1
+          },
+          "validated_run_count": 0
+        }
+      },
+      "result_sha256": "96aeb6b6406588e85a32d7b94858dd287f0bc0d157db130f8484875638767a48"
+    },
+    {
+      "adapter": "public-export",
+      "blocker": null,
+      "command": {
+        "argv": [
+          "/usr/bin/python3",
+          "/home/john-riley/.codex/worktrees/5b29/lang/bench/syntax_export.py",
+          "--task",
+          "precedence",
+          "--variant",
+          "indent",
+          "--out",
+          "/home/john-riley/.codex/worktrees/5b29/lang/target/tmp-evidence/evidence-__nocc9o/public"
+        ],
+        "cwd": "/home/john-riley/.codex/worktrees/5b29/lang",
+        "environment": "6b013f55e2568be60a6c5a5f438bcaef65ac8fe250c023dcae4b3bfc42d58e59",
+        "executable_sha256": "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41",
+        "exit_code": 0,
+        "reason": null,
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout": "53ac574051278bb4a6d81eb05d1914ba407ef81359b3240faaec2735706d353b",
+        "wall_seconds": 0.04327860900957603
+      },
+      "id": "public-syntax-context",
+      "raw_result": {
+        "files_sha256": {
+          "acceptance-interface.json": "661bffd031b9798fc70349257b730e43afa1097fcd2a11a9158b05fec835a173",
+          "prompt.json": "f0138491891f041517a0f330fe05157e48ef815fb343c792fb59c6db2426f66a",
+          "starter.cg": "038c46ceca255ebb9a993c146d4c75dfa194d649e0f1ceee5af69aca08515a60",
+          "syntax_normalize.py": "a5541a6db5e05a861146bf3e2414caa553ca07320c844527015f1dd9f1f398e3",
+          "syntax_tool.py": "fd3b876164858c9a08b3a338edc0f61b19e83abefea0233523149c2168fe60aa"
+        },
+        "packet_sha256": "af194f0c68ca67ceb0d0ddf0065e6046681928a764f76886251a048d2f79735f",
+        "schema_version": 1,
+        "task_id": "precedence",
+        "variant": "indent"
+      },
+      "result_sha256": "53ac574051278bb4a6d81eb05d1914ba407ef81359b3240faaec2735706d353b"
+    },
+    {
+      "adapter": "native-runtime",
+      "blocker": "quiet_host_required: operator --quiet-host and one-minute load <=0.5; queue manually",
+      "command": null,
+      "id": "native-queue",
+      "raw_result": null,
+      "result_sha256": null
+    },
+    {
+      "adapter": "libtorch-runtime",
+      "blocker": "quiet_host_required: operator --quiet-host and one-minute load <=0.5; queue manually",
+      "command": null,
+      "id": "libtorch-queue",
+      "raw_result": null,
+      "result_sha256": null
+    },
+    {
+      "adapter": "owner",
+      "blocker": "runner_unavailable: /external-owner/cgx2-trusted-solver-evidence-v1",
+      "command": null,
+      "id": "solver-owner",
+      "raw_result": null,
+      "result_sha256": null
+    },
+    {
+      "adapter": "owner",
+      "blocker": "runner_unavailable: /external-owner/cgx2-leak-evidence-v1",
+      "command": null,
+      "id": "leak-owner",
+      "raw_result": null,
+      "result_sha256": null
+    }
+  ],
+  "report": {
+    "bundle_sha256": "b26cf9b2344d0de9b9609277c08f3abcba9749d38ba4298f6bfe4b7d1853c692",
+    "gates": [
+      {
+        "gate": "isolation",
+        "observations": [
+          {
+            "id": "host-isolation",
+            "limitations": [],
+            "reason": "cgroup_controllers_not_delegated:cpu,memory,pids",
+            "result_sha256": "be632685d6e0bdd9a032ca9e176062056dc74d02bfce24b1b6f5400004b3d9f6",
+            "review_subject_sha256": "0f9366bd8f558f4f976870bff1f23c450c7f9f0f7a3603832687950f8053ca35",
+            "scope": {
+              "level": "harness",
+              "supported": [
+                "bounded isolation-probe observation; exact workload in raw artifacts"
+              ],
+              "unsupported": [
+                "broader source semantics or other release gates"
+              ]
+            },
+            "status": "blocked"
+          },
+          {
+            "id": "real-isolation-selftest",
+            "limitations": [],
+            "reason": "cgroup_controllers_not_delegated:cpu,memory,pids",
+            "result_sha256": "69f7719b1aa94b964d627b6a4f43d6829f93d5dc8c5cce204d47f31ad4dd825d",
+            "review_subject_sha256": "2dd2a17ad22ddad426bbe6d6ffec403e3493cc7f0f329229789a733246377549",
+            "scope": {
+              "level": "harness",
+              "supported": [
+                "bounded isolation-selftest observation; exact workload in raw artifacts"
+              ],
+              "unsupported": [
+                "broader source semantics or other release gates"
+              ]
+            },
+            "status": "blocked"
+          }
+        ],
+        "required_checks": [
+          "all_cases"
+        ],
+        "requirement": "R14",
+        "status": "blocked",
+        "title": "Scored positive/adversarial isolation"
+      },
+      {
+        "gate": "submission",
+        "observations": [],
+        "required_checks": [
+          "hidden_tests"
+        ],
+        "requirement": "R14",
+        "status": "unrun",
+        "title": "Isolated hidden-test submission"
+      },
+      {
+        "gate": "public-context",
+        "observations": [
+          {
+            "id": "public-syntax-context",
+            "limitations": [],
+            "reason": "compiler provenance missing",
+            "result_sha256": "53ac574051278bb4a6d81eb05d1914ba407ef81359b3240faaec2735706d353b",
+            "review_subject_sha256": "7acd5cf708528e2da7046832d5073c1ce422c70201dcc86e222dc75395a8ff8b",
+            "scope": {
+              "level": "harness",
+              "supported": [
+                "bounded public-export observation; exact workload in raw artifacts"
+              ],
+              "unsupported": [
+                "broader source semantics or other release gates"
+              ]
+            },
+            "status": "blocked"
+          }
+        ],
+        "required_checks": [
+          "no_private_material"
+        ],
+        "requirement": "R14",
+        "status": "blocked",
+        "title": "Public-only context export"
+      },
+      {
+        "gate": "task-study",
+        "observations": [
+          {
+            "id": "candidate-intake",
+            "limitations": [],
+            "reason": "incomplete study or external prerequisites; see raw result",
+            "result_sha256": "96aeb6b6406588e85a32d7b94858dd287f0bc0d157db130f8484875638767a48",
+            "review_subject_sha256": "3dffcbd1e6352e054f52790b7270349247bd4e3b1b7cc19cc77f3952b311f26c",
+            "scope": {
+              "level": "harness",
+              "supported": [
+                "bounded task-study observation; exact workload in raw artifacts"
+              ],
+              "unsupported": [
+                "broader source semantics or other release gates"
+              ]
+            },
+            "status": "blocked"
+          }
+        ],
+        "required_checks": [
+          "paired_holdout"
+        ],
+        "requirement": "R14",
+        "status": "blocked",
+        "title": "Reviewed holdout and paired model value"
+      },
+      {
+        "gate": "syntax-observation",
+        "observations": [],
+        "required_checks": [
+          "validated_trace"
+        ],
+        "requirement": "R14",
+        "status": "unrun",
+        "title": "Public syntax pilot trace intake"
+      },
+      {
+        "gate": "syntax-study",
+        "observations": [],
+        "required_checks": [
+          "human_assessment",
+          "two_families",
+          "paired_trials"
+        ],
+        "requirement": "R14",
+        "status": "unrun",
+        "title": "Blinded paired syntax decision"
+      },
+      {
+        "gate": "native-observation",
+        "observations": [
+          {
+            "id": "native-queue",
+            "limitations": [],
+            "reason": "quiet_host_required: operator --quiet-host and one-minute load <=0.5; queue manually",
+            "result_sha256": null,
+            "review_subject_sha256": "ee045d035869bde25524731d9e9ee4cf94dfbc3348277cf5caa9d02f96788cc5",
+            "scope": {
+              "level": "harness",
+              "supported": [
+                "bounded native-runtime observation; exact workload in raw artifacts"
+              ],
+              "unsupported": [
+                "broader source semantics or other release gates"
+              ]
+            },
+            "status": "blocked"
+          }
+        ],
+        "required_checks": [
+          "raw_pairs"
+        ],
+        "requirement": "R13",
+        "status": "blocked",
+        "title": "Native/worker calibrated observations"
+      },
+      {
+        "gate": "libtorch-observation",
+        "observations": [
+          {
+            "id": "libtorch-queue",
+            "limitations": [],
+            "reason": "quiet_host_required: operator --quiet-host and one-minute load <=0.5; queue manually",
+            "result_sha256": null,
+            "review_subject_sha256": "ee4dda91e70aae4f14ee0e10908f6eee9d8385a1ddb90d89bd738146e25fd16b",
+            "scope": {
+              "level": "harness",
+              "supported": [
+                "bounded libtorch-runtime observation; exact workload in raw artifacts"
+              ],
+              "unsupported": [
+                "broader source semantics or other release gates"
+              ]
+            },
+            "status": "blocked"
+          }
+        ],
+        "required_checks": [
+          "raw_runs"
+        ],
+        "requirement": "R08/R13",
+        "status": "blocked",
+        "title": "Native LibTorch observations"
+      },
+      {
+        "gate": "memory-safety",
+        "observations": [],
+        "required_checks": [
+          "source_and_runtime",
+          "invalid_programs",
+          "fault_cancel_unwind",
+          "independent_audit"
+        ],
+        "requirement": "R03/R13",
+        "status": "unrun",
+        "title": "Supported memory corpus and independent audit"
+      },
+      {
+        "gate": "manual-no-gc",
+        "observations": [],
+        "required_checks": [
+          "manual_explicit_only",
+          "zero_protected_collections",
+          "failure_and_nested_paths"
+        ],
+        "requirement": "R03",
+        "status": "unrun",
+        "title": "Manual and no_gc collection invariants"
+      },
+      {
+        "gate": "regions-foreign",
+        "observations": [],
+        "required_checks": [
+          "cross_region_roots",
+          "release_aliasing",
+          "foreign_memory_separate"
+        ],
+        "requirement": "R03/R06",
+        "status": "unrun",
+        "title": "Region roots, transfers and foreign lifetimes"
+      },
+      {
+        "gate": "leak-check",
+        "observations": [
+          {
+            "id": "leak-owner",
+            "limitations": [],
+            "reason": "runner_unavailable: /external-owner/cgx2-leak-evidence-v1",
+            "result_sha256": null,
+            "review_subject_sha256": "598f7fde6440614d266a22a0302d120fb6c71cf6ce0babd881414e5ac0d77fe8",
+            "scope": {
+              "level": "harness",
+              "supported": [
+                "bounded owner observation; exact workload in raw artifacts"
+              ],
+              "unsupported": [
+                "broader source semantics or other release gates"
+              ]
+            },
+            "status": "blocked"
+          }
+        ],
+        "required_checks": [
+          "leak_detection_enabled",
+          "full_supported_corpus",
+          "no_leaks"
+        ],
+        "requirement": "R03/R13",
+        "status": "blocked",
+        "title": "Leak-enabled external host assurance"
+      },
+      {
+        "gate": "functional",
+        "observations": [],
+        "required_checks": [
+          "source_semantics",
+          "cli",
+          "packages",
+          "notebooks_once",
+          "cross_target",
+          "security",
+          "documentation"
+        ],
+        "requirement": "R01-R12",
+        "status": "unrun",
+        "title": "Source-level release conformance"
+      },
+      {
+        "gate": "trusted-solver",
+        "observations": [
+          {
+            "id": "solver-owner",
+            "limitations": [],
+            "reason": "runner_unavailable: /external-owner/cgx2-trusted-solver-evidence-v1",
+            "result_sha256": null,
+            "review_subject_sha256": "41f6a21b48073ddbca0116d4514cbc1462868194283d18f9f03c350fe3bada83",
+            "scope": {
+              "level": "harness",
+              "supported": [
+                "bounded owner observation; exact workload in raw artifacts"
+              ],
+              "unsupported": [
+                "broader source semantics or other release gates"
+              ]
+            },
+            "status": "blocked"
+          }
+        ],
+        "required_checks": [
+          "solver_identity",
+          "source_smt_audit",
+          "valid_proofs",
+          "false_witnesses",
+          "unknown_preserved"
+        ],
+        "requirement": "R11",
+        "status": "blocked",
+        "title": "Pinned trusted solver acceptance"
+      },
+      {
+        "gate": "managed-resources",
+        "observations": [],
+        "required_checks": [
+          "equivalent_workload",
+          "rss_le_2",
+          "throughput_ge_0_70",
+          "uncertainty",
+          "calibration_frozen"
+        ],
+        "requirement": "R13",
+        "status": "unrun",
+        "title": "Managed vs tuned OCaml resources"
+      },
+      {
+        "gate": "native-resources",
+        "observations": [],
+        "required_checks": [
+          "equivalent_workload",
+          "median_le_1_25",
+          "rss_le_1_5",
+          "uncertainty",
+          "calibration_frozen"
+        ],
+        "requirement": "R13",
+        "status": "unrun",
+        "title": "Native vs optimized Rust resources"
+      },
+      {
+        "gate": "libtorch-inference",
+        "observations": [],
+        "required_checks": [
+          "real_inference",
+          "cpp_and_python_separate",
+          "throughput_ge_0_90",
+          "p95_le_1_15",
+          "no_libpython",
+          "device_dtype_pins",
+          "synchronized",
+          "uncertainty"
+        ],
+        "requirement": "R08/R13",
+        "status": "unrun",
+        "title": "Compute-dominant inference vs C++ and Python"
+      },
+      {
+        "gate": "native-ffi",
+        "observations": [],
+        "required_checks": [
+          "latency_le_1_25",
+          "correctness_copies",
+          "version_rejection",
+          "calibration_frozen",
+          "uncertainty"
+        ],
+        "requirement": "R06/R13",
+        "status": "unrun",
+        "title": "Checked C ABI vs native wrapper"
+      },
+      {
+        "gate": "python-bridge",
+        "observations": [],
+        "required_checks": [
+          "overhead_le_1_25",
+          "environment_pinned",
+          "separate_native_route",
+          "calibration_frozen",
+          "uncertainty"
+        ],
+        "requirement": "R07/R13",
+        "status": "unrun",
+        "title": "Explicit Python bridge vs PyO3"
+      },
+      {
+        "gate": "dispatch",
+        "observations": [],
+        "required_checks": [
+          "sequential_reference",
+          "effects_ownership_no_gc",
+          "full_dispatch_cost",
+          "small_large_inputs",
+          "uncertainty_disables_auto"
+        ],
+        "requirement": "R12/R13",
+        "status": "unrun",
+        "title": "Supported automatic execution selection"
+      },
+      {
+        "gate": "human-comprehension",
+        "observations": [],
+        "required_checks": [
+          "genuine_participants",
+          "blinded_rubric",
+          "bug_location_top1_top3",
+          "invariant_impact_answers",
+          "time_tokens",
+          "independent_review"
+        ],
+        "requirement": "R14",
+        "status": "unrun",
+        "title": "Genuine blinded human comprehension"
+      },
+      {
+        "gate": "generated-source",
+        "observations": [],
+        "required_checks": [
+          "both_targets",
+          "output_error_parity",
+          "genuine_maintainers",
+          "blinded_edit_tasks",
+          "readability",
+          "independent_review"
+        ],
+        "requirement": "R10/R14",
+        "status": "unrun",
+        "title": "Blinded Rust/Python edit and readability study"
+      },
+      {
+        "gate": "cli-notebook-latency",
+        "observations": [],
+        "required_checks": [
+          "check_build_run_cells",
+          "cold_warm_separate",
+          "source_tool_hashes",
+          "independent_processes",
+          "uncertainty"
+        ],
+        "requirement": "R05/R09/R13",
+        "status": "unrun",
+        "title": "Separate cold/warm command and cell latency"
+      }
+    ],
+    "purpose": "release",
+    "release_status": "not_ready",
+    "schema_version": 1,
+    "trust_boundary": "Hashes prove integrity, not participant/runner/reviewer authenticity; operator must authenticate identities and archive the bundle digest independently."
+  },
+  "reviewed_base": "0f0b0b9c87d817f39830f3e2b311dbae2ae3e0f3",
+  "schema_version": 1,
+  "scope": "Python orchestration/harness only; no new CGx2 source semantics",
+  "verification": {
+    "git_diff_check_exit_code": 0,
+    "py_compile_exit_code": 0,
+    "python_tests_passed": 166,
+    "python_unittest_command": "python3 -m unittest discover -s bench/tests -q",
+    "python_unittest_exit_code": 0,
+    "repeated_reports_identical": true,
+    "report_exit_code": 2,
+    "report_sha256": "19d26b5e508446f84010a335102e86f505746e652f00db792db31757833a0004",
+    "schema_validation": "Draft202012Validator actual collected manifest and owner/fixture schemas in unit suite",
+    "verify_exit_code": 0
+  }
+}

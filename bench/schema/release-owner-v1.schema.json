@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Owner-supplied source acceptance assessment; never manufactured by collector",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "gate", "status", "scope", "limitations", "checks", "evidence_sha256"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "gate": {"type": "string"},
+    "status": {"enum": ["passed", "failed", "blocked", "unrun"]},
+    "scope": {
+      "type": "object", "additionalProperties": false, "required": ["level", "supported", "unsupported"],
+      "properties": {
+        "level": {"enum": ["source", "library", "harness"]},
+        "supported": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "unsupported": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "checks": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "boolean"}},
+    "evidence_sha256": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+  }
+}

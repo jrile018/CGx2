@@ -1,0 +1,1 @@
+{"compiler":null,"jobs":[{"adapter":"owner","args":["/fixture/no-runner"],"gate":"leak-check","id":"fixture-only"}],"operator":"fixture-not-a-person","purpose":"fixture","schema_version":1}
