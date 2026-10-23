@@ -1,0 +1,10 @@
+module app.main
+variant Flag:
+    On
+record Holder:
+    flag: Flag
+fn main() -> i64:
+    let h = Holder(flag: Flag.On())
+    match h.flag:
+        Flag.On:
+            42

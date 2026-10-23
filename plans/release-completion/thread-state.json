@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-23T23:10:30.201Z",
+  "checked_at": "2026-10-23T23:50:30.225Z",
   "original_chats": [
     {
       "lane": "core",
@@ -161,8 +161,10 @@
       "hostId": "local",
       "worktree": "/home/john-riley/.codex/worktrees/88c6/lang",
       "base": "18b82a381c9f70278fad9373ad3db044b8a57693",
-      "status": "running",
-      "afterCursor": "e8048631-e2ae-4980-b91f-fab9395a9eaa:1"
+      "status": "repair-required",
+      "afterCursor": "e8048631-e2ae-4980-b91f-fab9395a9eaa:7",
+      "commit": "16028e7d4c78f3974c9e4a2f24878debeec56612",
+      "integrated_commit": "ca46bb35bc301b5b3282aee3a1af550b47a6773c"
     }
   ]
 }

@@ -1,0 +1,25 @@
+[
+  {
+    "command": [
+      "/home/john-riley/.codex/worktrees/88c6/lang/target/release-s2a/debug/cgx2",
+      "api",
+      "--syntax-only",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2a-review-7u3_9gph/api.cg"
+    ],
+    "exit": 0,
+    "stdout": "module <unnamed>\nvariant Wrap [0, 55)\n    Value(cgx2.core.Option)\npub fn id(x: T) -> T effects() [unchecked] caps() [unchecked] [55, 132)\n    requires true [runtime-checked]\n    ensures true [runtime-checked]\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/john-riley/.codex/worktrees/88c6/lang/target/release-s2a/debug/cgx2",
+      "api",
+      "--syntax-only",
+      "--json",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2a-review-7u3_9gph/api.cg"
+    ],
+    "exit": 0,
+    "stdout": "{\"schema_version\":6,\"module\":null,\"functions\":[{\"name\":\"id\",\"parameters\":[{\"name\":\"x\",\"ty\":\"T\"}],\"return_type\":\"T\",\"span\":{\"start\":55,\"end\":132},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":65,\"end\":77}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":82,\"end\":83}}],\"result_type\":{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":88,\"end\":89}},\"effects\":[],\"effects_status\":\"unchecked\",\"capabilities\":[],\"capabilities_status\":\"unchecked\",\"requires\":[{\"expression\":\"true\",\"status\":\"unchecked\",\"span\":{\"start\":104,\"end\":108}}],\"ensures\":[{\"expression\":\"true\",\"status\":\"unchecked\",\"span\":{\"start\":121,\"end\":125}}],\"foreign\":null}],\"records\":[],\"semantics_status\":\"syntax-only\",\"variants\":[{\"name\":\"Wrap\",\"identity\":\"Wrap\",\"type_parameters\":[],\"span\":{\"start\":0,\"end\":55},\"cases\":[{\"name\":\"Value\",\"span\":{\"start\":22,\"end\":55},\"payloads\":[{\"identity\":\"cgx2.core.Option\",\"arguments\":[{\"identity\":\"cgx2.core.Result\",\"arguments\":[{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":42,\"end\":45}},{\"identity\":\"Bool\",\"arguments\":[],\"span\":{\"start\":47,\"end\":51}}],\"span\":{\"start\":35,\"end\":52}}],\"span\":{\"start\":28,\"end\":53}}]}]}]}\n",
+    "stderr": ""
+  }
+]

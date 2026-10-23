@@ -43,3 +43,7 @@ Wave 28 integration passes 878 Rust tests (including 23 HTTP), 122 Python tests,
 ## Stage 1 parallel completion review
 
 All twelve implementation chats and three bounded repairs are integrated and reviewed. Current combined checks: 1032 Rust tests passed (six ignored), 166 benchmark tests, 20 docs harness tests, Clippy and formatting. Executable docs have 39 passes, no failures, six blocked and seven future cases. A cleanup-test scheduling race was repaired with a bounded strict descendant-exit check. S2a is ready for one shared language/type owner; parallel consumer work resumes after reviewed interfaces. No release percentage or external gate closure is inferred. See [review](release-completion/s1-review/README.md).
+
+## S2a language/type review
+
+S2a delivered variants, matching and typed Option/Result with 1059 recorded passing Rust tests. Coordinator review reproduced missing match-return inference, package record native type qualification, and misleading/incomplete human API output. Three bounded independent repairs are required; S2b/S3 remain gated. See [review and repair plans](release-completion/s2a-review/README.md). No release gate closure is inferred.

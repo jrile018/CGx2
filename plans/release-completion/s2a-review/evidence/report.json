@@ -1,0 +1,34 @@
+[
+  {
+    "command": [
+      "/home/john-riley/.codex/worktrees/88c6/lang/target/release-s2a/debug/cgx2",
+      "run",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2a-review-7u3_9gph/nontail.cg"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "CGT003: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2a-review-7u3_9gph/nontail.cg:95..102: expected i64, found Unit\n"
+  },
+  {
+    "command": [
+      "/home/john-riley/.codex/worktrees/88c6/lang/target/release-s2a/debug/cgx2",
+      "run",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2a-review-7u3_9gph/package"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "CGP005: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2a-review-7u3_9gph/package/src/left.cg: cannot resolve /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2a-review-7u3_9gph/package/src/left.cg: No such file or directory (os error 2)\nCGP005: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2a-review-7u3_9gph/package/src/right.cg: cannot resolve /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2a-review-7u3_9gph/package/src/right.cg: No such file or directory (os error 2)\n"
+  },
+  {
+    "command": [
+      "/home/john-riley/.codex/worktrees/88c6/lang/target/release-s2a/debug/cgx2",
+      "build",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2a-review-7u3_9gph/package",
+      "--out",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2a-review-7u3_9gph/native"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "CGP005: src/left.cg: cannot resolve /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2a-review-7u3_9gph/package/src/left.cg: No such file or directory (os error 2)\n"
+  }
+]

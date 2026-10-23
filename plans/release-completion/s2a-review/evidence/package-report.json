@@ -1,0 +1,24 @@
+[
+  {
+    "command": [
+      "/home/john-riley/.codex/worktrees/88c6/lang/target/release-s2a/debug/cgx2",
+      "run",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2a-review-7u3_9gph/package"
+    ],
+    "exit": 0,
+    "stdout": "42\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/john-riley/.codex/worktrees/88c6/lang/target/release-s2a/debug/cgx2",
+      "build",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2a-review-7u3_9gph/package",
+      "--out",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2a-review-7u3_9gph/native"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "CGXC005: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2a-review-7u3_9gph/package: rustc exited with exit status: 1: error[E0425]: cannot find type `cgx2_user_4_Flag` in this scope\n  --> /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2a-review-7u3_9gph/.cgx2c-4-1792799545974928254-0/generated.rs:59:23\n   |\n59 |     cgx2_user_4_flag: cgx2_user_4_Flag,\n   |                       ^^^^^^^^^^^^^^^^ not found in this scope\n\nwarning: type `cgx2_user_hex_6170702e6d61696e2e466c6167` should have an upper camel case name\n  --> /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2a-review-7u3_9gph/.cgx2c-4-1792799545974928254-0/generated.rs:46:6\n   |\n46 | enum cgx2_user_hex_6170702e6d61696e2e466c6167 {\n   |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `Cgx2UserHex6170702e6d61696e2e466c6167`\n   |\n   = note: `#[warn(non_camel_case_types)]` (part of `#[warn(nonstandard_style)]`) on by default\n\nwarning: variant `cgx2_user_2_On` should have an upper camel case name\n  --> /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2a-review-7u3_9gph/.cgx2c-4-1792799545974928254-0/generated.rs:47:5\n   |\n47 |     cgx2_user_2_On,\n   |     ^^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `Cgx2User2On`\n\nwarning: type `cgx2_user_hex_6170702e6d61696e2e486f6c646572` should have an upper camel case name\n  --> /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2a-review-7u3_9gph/.cgx2c-4-1792799545974928254-0/generated.rs:58:8\n   |\n58 | struct cgx2_user_hex_6170702e6d61696e2e486f6c646572 {\n   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `Cgx2UserHex6170702e6d61696e2e486f6c646572`\n\nwarning: unnecessary braces around block return value\n  --> /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2a-review-7u3_9gph/.cgx2c-4-1792799545974928254-0/generated.rs:73:93\n   |\n73 | ... = { ctx.step(110, 119)?; { Ok::<_, String>(cgx2_user_hex_6170702e6d61696e2e466c6167::cgx2_user_2_On) } }?; Ok::<_, String>(cgx2_...\n   |                              ^^                                                                         ^^\n   |\n   = note: `#[warn(unused_braces)]` (part of `#[warn(unused)]`) on by default\nhelp: remove these braces\n   |\n73 -         let cgx2_user_1_h = { ctx.step(97, 120)?; { let cgx2_arg_0 = { ctx.step(110, 119)?; { Ok::<_, String>(cgx2_user_hex_6170702e6d61696e2e466c6167::cgx2_user_2_On) } }?; Ok::<_, String>(cgx2_user_hex_6170702e6d61696e2e486f6c646572 { cgx2_user_4_flag: cgx2_arg_0 }) } }?;\n73 +         let cgx2_user_1_h = { ctx.step(97, 120)?; { let cgx2_arg_0 = { ctx.step(110, 119)?; Ok::<_, String>(cgx2_user_hex_6170702e6d61696e2e466c6167::cgx2_user_2_On) }?; Ok::<_, String>(cgx2_user_hex_6170702e6d61696e2e486f6c646572 { cgx2_user_4_flag: cgx2_arg_0 }) } }?;\n   |\n\nerror: aborting due to 1 previous error; 4 warnings emitted\n\nFor more information about this error, try `rustc --explain E0425`.\n\n"
+  }
+]

@@ -1,0 +1,6 @@
+pub variant Wrap:
+    Value(Option<Result<i64, Bool>>)
+pub fn id<T: Eq + Show>(x: T) -> T:
+    requires true
+    ensures true
+    x

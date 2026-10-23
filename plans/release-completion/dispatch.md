@@ -57,3 +57,7 @@ All three repairs passed review and integrated checks; see s1-review/README.md f
 ## S2a launched
 
 Base: 18b82a381c9f70278fad9373ad3db044b8a57693. One shared language/type chat is confirmed running: 01a16b0f-7fe8-79a3-b5d2-cf89fbb66b56, worktree /home/john-riley/.codex/worktrees/88c6/lang. Initial queued client ID: client-new-thread:0984f45a-9780-4fff-9477-c903eea48958. Worktree HEAD matches the reviewed base. The app recent list omitted the agent-created chat; read-only exact-path metadata resolved its permanent ID, validated by wait_threads. Cursor is saved in thread-state.json. No duplicate chat was created.
+
+## S2a review: three bounded repairs
+
+S2a delivered 16028e7 and is staged as ca46bb3, repair-required. Coordinator reproduced match-flow, native package-record and human API-output defects; see s2a-review/README.md. No dependent feature stage is accepted. Three disjoint repair plans are ready; actual dispatch IDs/status follow.
