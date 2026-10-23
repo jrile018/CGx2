@@ -53,7 +53,7 @@ def main():
             wall_start = time.perf_counter_ns()
             got, matmul_ns = call()
             wall_ns = time.perf_counter_ns() - wall_start
-            if any(abs(a - b) > 1e-9 for a, b in zip(got, output)) or len(got) != len(output):
+            if got != output:
                 raise SystemExit('output changed')
             samples.append({'wall_ns': wall_ns, 'cpu_ns': time.process_time_ns() - cpu_start,
                             'matmul_wall_ns': matmul_ns,

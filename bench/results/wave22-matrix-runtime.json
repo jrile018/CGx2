@@ -1,0 +1,1409 @@
+{
+  "cases": [
+    {
+      "canonical_output_sha256": "e68a273e09ddd0819c9ff9afb45a5050ff2849b046f74e592f067857fda09a07",
+      "output_hashes": {
+        "cpp": {
+          "canonical_sha256": "e68a273e09ddd0819c9ff9afb45a5050ff2849b046f74e592f067857fda09a07",
+          "raw_sha256": "6ffa25a66ac4ecc753ec563388e7910ea20de0b0ef8b4acf446edfe5c900b961"
+        },
+        "source": {
+          "canonical_sha256": "e68a273e09ddd0819c9ff9afb45a5050ff2849b046f74e592f067857fda09a07",
+          "raw_sha256": "0cc84ec121d7c3e4d20cc7d918bf0c7947a1fa7ada544d59fbf3bfe3021b2516"
+        }
+      },
+      "question": "cold_source_vs_cpp",
+      "routes": {
+        "cpp": {
+          "cold_wall": {
+            "median_ns": 104029143,
+            "n": 1,
+            "status": "insufficient_samples"
+          }
+        },
+        "source": {
+          "cold_wall": {
+            "median_ns": 156654034546,
+            "n": 1,
+            "status": "insufficient_samples"
+          }
+        }
+      },
+      "shape": [
+        2,
+        3,
+        2
+      ]
+    },
+    {
+      "canonical_output_sha256": "3daa0a610faa6d55e160e81b953aa3e74cbc503a225e65211b43880f71849bf4",
+      "output_hashes": {
+        "cpp": {
+          "canonical_sha256": "3daa0a610faa6d55e160e81b953aa3e74cbc503a225e65211b43880f71849bf4",
+          "raw_sha256": "14a8a60b43791291d814a1a5d624f1263975c3c2e2858ee793802591f96f387d"
+        },
+        "source": {
+          "canonical_sha256": "3daa0a610faa6d55e160e81b953aa3e74cbc503a225e65211b43880f71849bf4",
+          "raw_sha256": "2e127c78c4d03bdd7642acc800f2c7520b408c45cd09c9c9bbe05c5a53c20127"
+        }
+      },
+      "question": "cold_source_vs_cpp",
+      "routes": {
+        "cpp": {
+          "cold_wall": {
+            "median_ns": 103958452,
+            "n": 1,
+            "status": "insufficient_samples"
+          }
+        },
+        "source": {
+          "cold_wall": {
+            "median_ns": 157844318838,
+            "n": 1,
+            "status": "insufficient_samples"
+          }
+        }
+      },
+      "shape": [
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "canonical_output_sha256": "a1fbbe0cdb67b26f3d887eebe79af8ba2b851166ef414994747602b567e69879",
+      "output_hashes": {
+        "cpp": {
+          "canonical_sha256": "a1fbbe0cdb67b26f3d887eebe79af8ba2b851166ef414994747602b567e69879",
+          "raw_sha256": "13cb48b9e8c0f4cb999b453cf60945a7dbbdd6e8be0cae41653d4875a6981d32",
+          "warm_raw_sha256": "13cb48b9e8c0f4cb999b453cf60945a7dbbdd6e8be0cae41653d4875a6981d32"
+        },
+        "facade": {
+          "canonical_sha256": "a1fbbe0cdb67b26f3d887eebe79af8ba2b851166ef414994747602b567e69879",
+          "raw_sha256": "13cb48b9e8c0f4cb999b453cf60945a7dbbdd6e8be0cae41653d4875a6981d32",
+          "warm_raw_sha256": "13cb48b9e8c0f4cb999b453cf60945a7dbbdd6e8be0cae41653d4875a6981d32"
+        }
+      },
+      "question": "warm_facade_vs_cpp",
+      "routes": {
+        "cpp": {
+          "warm_inclusive_wall": {
+            "median_ci_ns": [
+              82041.0,
+              101796.0
+            ],
+            "median_ns": 94491.0,
+            "n": 20,
+            "p95_ns": 137792,
+            "status": "bootstrap_95_percentile"
+          },
+          "warm_matmul_wall": {
+            "median_ci_ns": [
+              74726.0,
+              93431.0
+            ],
+            "median_ns": 85176.0,
+            "n": 20,
+            "p95_ns": 128712,
+            "status": "bootstrap_95_percentile"
+          },
+          "warm_non_matmul_wall": {
+            "median_ci_ns": [
+              7840.0,
+              8875.0
+            ],
+            "median_ns": 8605.0,
+            "n": 20,
+            "p95_ns": 9860,
+            "status": "bootstrap_95_percentile"
+          }
+        },
+        "facade": {
+          "warm_inclusive_wall": {
+            "median_ci_ns": [
+              74170.5,
+              93011.0
+            ],
+            "median_ns": 85961.0,
+            "n": 20,
+            "p95_ns": 144691,
+            "status": "bootstrap_95_percentile"
+          },
+          "warm_matmul_wall": {
+            "median_ci_ns": [
+              68291.0,
+              86826.0
+            ],
+            "median_ns": 77956.0,
+            "n": 20,
+            "p95_ns": 133151,
+            "status": "bootstrap_95_percentile"
+          },
+          "warm_non_matmul_wall": {
+            "median_ci_ns": [
+              5890.0,
+              6380.0
+            ],
+            "median_ns": 6110.0,
+            "n": 20,
+            "p95_ns": 11540,
+            "status": "bootstrap_95_percentile"
+          }
+        }
+      },
+      "shape": [
+        128,
+        128,
+        128
+      ]
+    },
+    {
+      "canonical_output_sha256": "f656c68a13084ab135026544fb1bbfc48c9417d6c1e8a050b0d2ea22a40ef8d3",
+      "output_hashes": {
+        "cpp": {
+          "canonical_sha256": "f656c68a13084ab135026544fb1bbfc48c9417d6c1e8a050b0d2ea22a40ef8d3",
+          "raw_sha256": "90a43378b913247eb72cc9b0e925754f44d441d86e4245834a89af19e9379c36",
+          "warm_raw_sha256": "90a43378b913247eb72cc9b0e925754f44d441d86e4245834a89af19e9379c36"
+        },
+        "facade": {
+          "canonical_sha256": "f656c68a13084ab135026544fb1bbfc48c9417d6c1e8a050b0d2ea22a40ef8d3",
+          "raw_sha256": "90a43378b913247eb72cc9b0e925754f44d441d86e4245834a89af19e9379c36",
+          "warm_raw_sha256": "90a43378b913247eb72cc9b0e925754f44d441d86e4245834a89af19e9379c36"
+        }
+      },
+      "question": "warm_facade_vs_cpp",
+      "routes": {
+        "cpp": {
+          "warm_inclusive_wall": {
+            "median_ci_ns": [
+              4711641.0,
+              4721520.0
+            ],
+            "median_ns": 4715306.0,
+            "n": 20,
+            "p95_ns": 4757952,
+            "status": "bootstrap_95_percentile"
+          },
+          "warm_matmul_wall": {
+            "median_ci_ns": [
+              4104815.0,
+              4114919.0
+            ],
+            "median_ns": 4109949.0,
+            "n": 20,
+            "p95_ns": 4142435,
+            "status": "bootstrap_95_percentile"
+          },
+          "warm_non_matmul_wall": {
+            "median_ci_ns": [
+              603731.5,
+              610066.5
+            ],
+            "median_ns": 605542.0,
+            "n": 20,
+            "p95_ns": 618296,
+            "status": "bootstrap_95_percentile"
+          }
+        },
+        "facade": {
+          "warm_inclusive_wall": {
+            "median_ci_ns": [
+              4354561.5,
+              4479008.0
+            ],
+            "median_ns": 4387887.0,
+            "n": 20,
+            "p95_ns": 4616540,
+            "status": "bootstrap_95_percentile"
+          },
+          "warm_matmul_wall": {
+            "median_ci_ns": [
+              4028313.0,
+              4071279.0
+            ],
+            "median_ns": 4045263.5,
+            "n": 20,
+            "p95_ns": 4170265,
+            "status": "bootstrap_95_percentile"
+          },
+          "warm_non_matmul_wall": {
+            "median_ci_ns": [
+              322599.5,
+              376903.5
+            ],
+            "median_ns": 350754.0,
+            "n": 20,
+            "p95_ns": 443845,
+            "status": "bootstrap_95_percentile"
+          }
+        }
+      },
+      "shape": [
+        512,
+        512,
+        512
+      ]
+    }
+  ],
+  "conditions": {
+    "build_timeout_seconds": 600,
+    "cold_budget_seconds": 300,
+    "cold_reps": 1,
+    "cold_shapes": [
+      [
+        2,
+        3,
+        2
+      ],
+      [
+        16,
+        16,
+        16
+      ]
+    ],
+    "device": "CPU",
+    "dtype": "float64",
+    "interop_threads": 1,
+    "intraop_threads": 1,
+    "matrix_element_limit": 1048576,
+    "row_major": true,
+    "timeout_seconds": 300,
+    "tolerance_abs": 1e-09,
+    "tolerance_rel": 1e-09,
+    "warm_reps": 20,
+    "warm_shapes": [
+      [
+        128,
+        128,
+        128
+      ],
+      [
+        512,
+        512,
+        512
+      ]
+    ],
+    "warmup": 2
+  },
+  "errors": [],
+  "exclusions": [],
+  "host": {
+    "logical_cpus": 16,
+    "machine": "x86_64",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43"
+  },
+  "inputs": {
+    "compiler": "/usr/bin/x86_64-linux-gnu-g++-15",
+    "package": "/tmp/cgx2-wave19-libtorch-package",
+    "python_torch": null,
+    "torch_root": "/home/john-riley/Desktop/Projects/Optiver/.venv/lib/python3.12/site-packages/torch"
+  },
+  "interval_method": {
+    "bootstrap_percentile_indexes": [
+      49,
+      1949
+    ],
+    "bootstrap_seed": 20261023,
+    "median": "2000 bootstrap resamples, percentile 95% CI; n>=5",
+    "p95": "nearest rank; n>=20, otherwise unavailable"
+  },
+  "package_hashes": {
+    "cgx2-bind.lock.json": "d8319e9ef8d0d8cac22c8dcde36093186955e1721a67e164ae526eec93ac5396",
+    "cgx2-libtorch-closure.lock.json": "69c652626d345d9e150ef3a894e3badcc9e223b087c40f742b90cc8a847e29ff",
+    "cgx2-libtorch-evidence.json": "8dbf50279f87355bc25cba1a542aafad2293a58f6aa3b89e9b268032da38759d",
+    "cgx2.toml": "be4382c0eb86acdc941bc30754e6bbeb08f2dc88c1215f793aa8bd7131e5ce5d",
+    "libc10.so": "e8ad028c6a3b3f787b619f35d3c772485476c029c2e9faca659a56212ae7c00a",
+    "libcgx2_libtorch_facade.so": "8af1cc79644d383872782675f84b6f9a819b8b34ab066e0ba2c4bfe31e979b27",
+    "libgomp.so.1": "78511033caddec6ccae8f4d62b94d56135f377c4cee33120e6d7df2ef499f69f",
+    "libtorch.so": "59a95807d56ca89993351a173839f160ca9c2c6ec6f6b89a5e691d8f1392d3ff",
+    "libtorch_cpu.so": "ad0bcc0225bf260968e0464982b78c2f25358400769720ce63c209ffc9929313",
+    "src/main.cg": "614cb0146fc3b8416dae6139a34c0c78a0e6b11041bc5e3779c249db24813a8c"
+  },
+  "phases": {
+    "cold_source_adapter_copy": "unmeasured",
+    "cold_source_validation": "measured separately as whole cgx2 check process",
+    "warm_adapter_copy_release": "measured only as aggregate inclusive-minus-matmul",
+    "warm_matmul": "measured inside each call"
+  },
+  "pinned_torch_version": "2.11.0",
+  "post_run_verification": {
+    "final_cpp_source_sha256": "85f36e1180bfea173d8fd2d4b0bd2d6aca803676410b67530dbf192ca6d540b7",
+    "independent_rebuild_cpp_binary_sha256": "cd90faf540e130360c03c8696c54ab055ae7bb7c279da528e59aebe73047253d",
+    "method": "Same Torch root, g++-15, Release CMake flags; rebuilt binary byte-identical.",
+    "reason": "Two C++ source lines were indented after the timed build; no executable code changed.",
+    "timed_cpp_binary_sha256": "cd90faf540e130360c03c8696c54ab055ae7bb7c279da528e59aebe73047253d",
+    "timed_cpp_source_sha256": "8ed16e76c4686441c1e03788167a25f633a82e227b1dcb30002cbc649bdc634e"
+  },
+  "runs": [
+    {
+      "argv": [
+        "/home/john-riley/.codex/worktrees/b391/lang/target/debug/cgx2",
+        "run",
+        "/tmp/cgx2-matrix-bench-x306t_7b/package"
+      ],
+      "canonical_output_sha256": "e68a273e09ddd0819c9ff9afb45a5050ff2849b046f74e592f067857fda09a07",
+      "cpu_ns": 156100000000,
+      "exit_code": 0,
+      "peak_rss_kib": 118640,
+      "phase": "validation",
+      "raw_output_sha256": "0cc84ec121d7c3e4d20cc7d918bf0c7947a1fa7ada544d59fbf3bfe3021b2516",
+      "route": "source",
+      "shape": [
+        2,
+        3,
+        2
+      ],
+      "stderr": "",
+      "stdout_bytes": 31,
+      "stdout_sha256": "6e6c111a78f44644557a5e9d4b4c7c9c1baed0c8b780ef17603bfc21bc198450",
+      "timeout": false,
+      "wall_ns": 156849269269
+    },
+    {
+      "argv": [
+        "/tmp/cgx2-matrix-bench-x306t_7b/cpp-build/cgx2_matrix_baseline",
+        "baseline",
+        "cold",
+        "2",
+        "3",
+        "2",
+        "2",
+        "20",
+        "/tmp/cgx2-matrix-bench-x306t_7b/package/libcgx2_libtorch_facade.so"
+      ],
+      "canonical_output_sha256": "e68a273e09ddd0819c9ff9afb45a5050ff2849b046f74e592f067857fda09a07",
+      "cpu_ns": 140000000,
+      "exit_code": 0,
+      "peak_rss_kib": 113784,
+      "phase": "validation",
+      "raw_output_sha256": "6ffa25a66ac4ecc753ec563388e7910ea20de0b0ef8b4acf446edfe5c900b961",
+      "route": "cpp",
+      "shape": [
+        2,
+        3,
+        2
+      ],
+      "stderr": "",
+      "stdout_bytes": 46,
+      "stdout_sha256": "c2d5821ebe1002478b96d1cc0726e97b8015a46316f0666e9c8f2a00cb91a9ab",
+      "timeout": false,
+      "wall_ns": 182071443
+    },
+    {
+      "argv": [
+        "/home/john-riley/.codex/worktrees/b391/lang/target/debug/cgx2",
+        "check",
+        "/tmp/cgx2-matrix-bench-x306t_7b/package"
+      ],
+      "cpu_ns": 6210000000,
+      "exit_code": 0,
+      "peak_rss_kib": 11004,
+      "phase": "check_manifest_closure",
+      "route": "source",
+      "shape": [
+        2,
+        3,
+        2
+      ],
+      "stderr": "",
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "timeout": false,
+      "wall_ns": 6317272106
+    },
+    {
+      "argv": [
+        "/home/john-riley/.codex/worktrees/b391/lang/target/debug/cgx2",
+        "run",
+        "/tmp/cgx2-matrix-bench-x306t_7b/package"
+      ],
+      "canonical_output_sha256": "e68a273e09ddd0819c9ff9afb45a5050ff2849b046f74e592f067857fda09a07",
+      "cpu_ns": 156110000000,
+      "exit_code": 0,
+      "index": 0,
+      "peak_rss_kib": 118732,
+      "phase": "cold",
+      "raw_output_sha256": "0cc84ec121d7c3e4d20cc7d918bf0c7947a1fa7ada544d59fbf3bfe3021b2516",
+      "route": "source",
+      "shape": [
+        2,
+        3,
+        2
+      ],
+      "stderr": "",
+      "stdout_bytes": 31,
+      "stdout_sha256": "6e6c111a78f44644557a5e9d4b4c7c9c1baed0c8b780ef17603bfc21bc198450",
+      "timeout": false,
+      "wall_ns": 156654034546
+    },
+    {
+      "argv": [
+        "/tmp/cgx2-matrix-bench-x306t_7b/cpp-build/cgx2_matrix_baseline",
+        "baseline",
+        "cold",
+        "2",
+        "3",
+        "2",
+        "2",
+        "20",
+        "/tmp/cgx2-matrix-bench-x306t_7b/package/libcgx2_libtorch_facade.so"
+      ],
+      "canonical_output_sha256": "e68a273e09ddd0819c9ff9afb45a5050ff2849b046f74e592f067857fda09a07",
+      "cpu_ns": 90000000,
+      "exit_code": 0,
+      "index": 0,
+      "peak_rss_kib": 115004,
+      "phase": "cold",
+      "raw_output_sha256": "6ffa25a66ac4ecc753ec563388e7910ea20de0b0ef8b4acf446edfe5c900b961",
+      "route": "cpp",
+      "shape": [
+        2,
+        3,
+        2
+      ],
+      "stderr": "",
+      "stdout_bytes": 46,
+      "stdout_sha256": "c2d5821ebe1002478b96d1cc0726e97b8015a46316f0666e9c8f2a00cb91a9ab",
+      "timeout": false,
+      "wall_ns": 104029143
+    },
+    {
+      "argv": [
+        "/home/john-riley/.codex/worktrees/b391/lang/target/debug/cgx2",
+        "run",
+        "/tmp/cgx2-matrix-bench-x306t_7b/package"
+      ],
+      "canonical_output_sha256": "3daa0a610faa6d55e160e81b953aa3e74cbc503a225e65211b43880f71849bf4",
+      "cpu_ns": 154170000000,
+      "exit_code": 0,
+      "peak_rss_kib": 118896,
+      "phase": "validation",
+      "raw_output_sha256": "2e127c78c4d03bdd7642acc800f2c7520b408c45cd09c9c9bbe05c5a53c20127",
+      "route": "source",
+      "shape": [
+        16,
+        16,
+        16
+      ],
+      "stderr": "",
+      "stdout_bytes": 5247,
+      "stdout_sha256": "9cca799fb857bb6674efb560be951caa8f6cde73c598213bc207629bee4f6d79",
+      "timeout": false,
+      "wall_ns": 154745222391
+    },
+    {
+      "argv": [
+        "/tmp/cgx2-matrix-bench-x306t_7b/cpp-build/cgx2_matrix_baseline",
+        "baseline",
+        "cold",
+        "16",
+        "16",
+        "16",
+        "2",
+        "20",
+        "/tmp/cgx2-matrix-bench-x306t_7b/package/libcgx2_libtorch_facade.so"
+      ],
+      "canonical_output_sha256": "3daa0a610faa6d55e160e81b953aa3e74cbc503a225e65211b43880f71849bf4",
+      "cpu_ns": 90000000,
+      "exit_code": 0,
+      "peak_rss_kib": 114804,
+      "phase": "validation",
+      "raw_output_sha256": "14a8a60b43791291d814a1a5d624f1263975c3c2e2858ee793802591f96f387d",
+      "route": "cpp",
+      "shape": [
+        16,
+        16,
+        16
+      ],
+      "stderr": "",
+      "stdout_bytes": 5043,
+      "stdout_sha256": "c5ec86f9c433bfacc1dfe4a82c7febbf7f1d4e9787fc7ca0669bdbde38150872",
+      "timeout": false,
+      "wall_ns": 103256736
+    },
+    {
+      "argv": [
+        "/home/john-riley/.codex/worktrees/b391/lang/target/debug/cgx2",
+        "check",
+        "/tmp/cgx2-matrix-bench-x306t_7b/package"
+      ],
+      "cpu_ns": 5810000000,
+      "exit_code": 0,
+      "peak_rss_kib": 10824,
+      "phase": "check_manifest_closure",
+      "route": "source",
+      "shape": [
+        16,
+        16,
+        16
+      ],
+      "stderr": "",
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "timeout": false,
+      "wall_ns": 5817815958
+    },
+    {
+      "argv": [
+        "/home/john-riley/.codex/worktrees/b391/lang/target/debug/cgx2",
+        "run",
+        "/tmp/cgx2-matrix-bench-x306t_7b/package"
+      ],
+      "canonical_output_sha256": "3daa0a610faa6d55e160e81b953aa3e74cbc503a225e65211b43880f71849bf4",
+      "cpu_ns": 157000000000,
+      "exit_code": 0,
+      "index": 0,
+      "peak_rss_kib": 118700,
+      "phase": "cold",
+      "raw_output_sha256": "2e127c78c4d03bdd7642acc800f2c7520b408c45cd09c9c9bbe05c5a53c20127",
+      "route": "source",
+      "shape": [
+        16,
+        16,
+        16
+      ],
+      "stderr": "",
+      "stdout_bytes": 5247,
+      "stdout_sha256": "9cca799fb857bb6674efb560be951caa8f6cde73c598213bc207629bee4f6d79",
+      "timeout": false,
+      "wall_ns": 157844318838
+    },
+    {
+      "argv": [
+        "/tmp/cgx2-matrix-bench-x306t_7b/cpp-build/cgx2_matrix_baseline",
+        "baseline",
+        "cold",
+        "16",
+        "16",
+        "16",
+        "2",
+        "20",
+        "/tmp/cgx2-matrix-bench-x306t_7b/package/libcgx2_libtorch_facade.so"
+      ],
+      "canonical_output_sha256": "3daa0a610faa6d55e160e81b953aa3e74cbc503a225e65211b43880f71849bf4",
+      "cpu_ns": 100000000,
+      "exit_code": 0,
+      "index": 0,
+      "peak_rss_kib": 114940,
+      "phase": "cold",
+      "raw_output_sha256": "14a8a60b43791291d814a1a5d624f1263975c3c2e2858ee793802591f96f387d",
+      "route": "cpp",
+      "shape": [
+        16,
+        16,
+        16
+      ],
+      "stderr": "",
+      "stdout_bytes": 5043,
+      "stdout_sha256": "c5ec86f9c433bfacc1dfe4a82c7febbf7f1d4e9787fc7ca0669bdbde38150872",
+      "timeout": false,
+      "wall_ns": 103958452
+    },
+    {
+      "argv": [
+        "/tmp/cgx2-matrix-bench-x306t_7b/cpp-build/cgx2_matrix_baseline",
+        "baseline",
+        "cold",
+        "128",
+        "128",
+        "128",
+        "2",
+        "20",
+        "/tmp/cgx2-matrix-bench-x306t_7b/package/libcgx2_libtorch_facade.so"
+      ],
+      "canonical_output_sha256": "a1fbbe0cdb67b26f3d887eebe79af8ba2b851166ef414994747602b567e69879",
+      "cpu_ns": 100000000,
+      "exit_code": 0,
+      "peak_rss_kib": 115720,
+      "phase": "validation",
+      "raw_output_sha256": "13cb48b9e8c0f4cb999b453cf60945a7dbbdd6e8be0cae41653d4875a6981d32",
+      "route": "cpp",
+      "shape": [
+        128,
+        128,
+        128
+      ],
+      "stderr": "",
+      "stdout_bytes": 321595,
+      "stdout_sha256": "dc9cb3dd302a7950acfc156f53b2526c2fb70bc6bb3610ff7c93c0d149c269fb",
+      "timeout": false,
+      "wall_ns": 116951612
+    },
+    {
+      "argv": [
+        "/tmp/cgx2-matrix-bench-x306t_7b/cpp-build/cgx2_matrix_baseline",
+        "facade",
+        "cold",
+        "128",
+        "128",
+        "128",
+        "2",
+        "20",
+        "/tmp/cgx2-matrix-bench-x306t_7b/package/libcgx2_libtorch_facade.so"
+      ],
+      "canonical_output_sha256": "a1fbbe0cdb67b26f3d887eebe79af8ba2b851166ef414994747602b567e69879",
+      "cpu_ns": 100000000,
+      "exit_code": 0,
+      "peak_rss_kib": 115376,
+      "phase": "validation",
+      "raw_output_sha256": "13cb48b9e8c0f4cb999b453cf60945a7dbbdd6e8be0cae41653d4875a6981d32",
+      "route": "facade",
+      "shape": [
+        128,
+        128,
+        128
+      ],
+      "stderr": "",
+      "stdout_bytes": 321595,
+      "stdout_sha256": "dc9cb3dd302a7950acfc156f53b2526c2fb70bc6bb3610ff7c93c0d149c269fb",
+      "timeout": false,
+      "wall_ns": 110004307
+    },
+    {
+      "argv": [
+        "/tmp/cgx2-matrix-bench-x306t_7b/cpp-build/cgx2_matrix_baseline",
+        "baseline",
+        "warm",
+        "128",
+        "128",
+        "128",
+        "2",
+        "20",
+        "/tmp/cgx2-matrix-bench-x306t_7b/package/libcgx2_libtorch_facade.so"
+      ],
+      "canonical_output_sha256": "a1fbbe0cdb67b26f3d887eebe79af8ba2b851166ef414994747602b567e69879",
+      "cpu_ns": 120000000,
+      "exit_code": 0,
+      "peak_rss_kib": 115304,
+      "phase": "warm",
+      "raw_output_sha256": "13cb48b9e8c0f4cb999b453cf60945a7dbbdd6e8be0cae41653d4875a6981d32",
+      "route": "cpp",
+      "samples": [
+        {
+          "cpu_ns": 96320,
+          "matmul_wall_ns": 85681,
+          "peak_rss_kib": 113384,
+          "wall_ns": 94511
+        },
+        {
+          "cpu_ns": 81930,
+          "matmul_wall_ns": 74131,
+          "peak_rss_kib": 113384,
+          "wall_ns": 81731
+        },
+        {
+          "cpu_ns": 78820,
+          "matmul_wall_ns": 70051,
+          "peak_rss_kib": 113384,
+          "wall_ns": 78551
+        },
+        {
+          "cpu_ns": 79129,
+          "matmul_wall_ns": 72691,
+          "peak_rss_kib": 113384,
+          "wall_ns": 78951
+        },
+        {
+          "cpu_ns": 82080,
+          "matmul_wall_ns": 75321,
+          "peak_rss_kib": 113384,
+          "wall_ns": 81901
+        },
+        {
+          "cpu_ns": 93879,
+          "matmul_wall_ns": 87341,
+          "peak_rss_kib": 113384,
+          "wall_ns": 96451
+        },
+        {
+          "cpu_ns": 120850,
+          "matmul_wall_ns": 107251,
+          "peak_rss_kib": 113384,
+          "wall_ns": 120521
+        },
+        {
+          "cpu_ns": 138029,
+          "matmul_wall_ns": 128712,
+          "peak_rss_kib": 113384,
+          "wall_ns": 137792
+        },
+        {
+          "cpu_ns": 94709,
+          "matmul_wall_ns": 84671,
+          "peak_rss_kib": 113384,
+          "wall_ns": 94471
+        },
+        {
+          "cpu_ns": 99420,
+          "matmul_wall_ns": 91131,
+          "peak_rss_kib": 113384,
+          "wall_ns": 99191
+        },
+        {
+          "cpu_ns": 116199,
+          "matmul_wall_ns": 107321,
+          "peak_rss_kib": 113384,
+          "wall_ns": 115941
+        },
+        {
+          "cpu_ns": 122320,
+          "matmul_wall_ns": 113161,
+          "peak_rss_kib": 113384,
+          "wall_ns": 122081
+        },
+        {
+          "cpu_ns": 82389,
+          "matmul_wall_ns": 73591,
+          "peak_rss_kib": 113384,
+          "wall_ns": 82181
+        },
+        {
+          "cpu_ns": 146290,
+          "matmul_wall_ns": 137311,
+          "peak_rss_kib": 113384,
+          "wall_ns": 145972
+        },
+        {
+          "cpu_ns": 104639,
+          "matmul_wall_ns": 95731,
+          "peak_rss_kib": 113384,
+          "wall_ns": 104401
+        },
+        {
+          "cpu_ns": 74080,
+          "matmul_wall_ns": 67621,
+          "peak_rss_kib": 113384,
+          "wall_ns": 73891
+        },
+        {
+          "cpu_ns": 81749,
+          "matmul_wall_ns": 73841,
+          "peak_rss_kib": 113384,
+          "wall_ns": 81541
+        },
+        {
+          "cpu_ns": 83990,
+          "matmul_wall_ns": 76551,
+          "peak_rss_kib": 113384,
+          "wall_ns": 83751
+        },
+        {
+          "cpu_ns": 92579,
+          "matmul_wall_ns": 84351,
+          "peak_rss_kib": 113384,
+          "wall_ns": 92331
+        },
+        {
+          "cpu_ns": 96460,
+          "matmul_wall_ns": 86321,
+          "peak_rss_kib": 113384,
+          "wall_ns": 96181
+        }
+      ],
+      "shape": [
+        128,
+        128,
+        128
+      ],
+      "stderr": "",
+      "stdout_bytes": 323184,
+      "stdout_sha256": "bd862eda3a8d87cfbfae56d16fa64f0318428c9d88d81cc31b40e36222c8399b",
+      "timeout": false,
+      "wall_ns": 157012032
+    },
+    {
+      "argv": [
+        "/tmp/cgx2-matrix-bench-x306t_7b/cpp-build/cgx2_matrix_baseline",
+        "facade",
+        "warm",
+        "128",
+        "128",
+        "128",
+        "2",
+        "20",
+        "/tmp/cgx2-matrix-bench-x306t_7b/package/libcgx2_libtorch_facade.so"
+      ],
+      "canonical_output_sha256": "a1fbbe0cdb67b26f3d887eebe79af8ba2b851166ef414994747602b567e69879",
+      "cpu_ns": 160000000,
+      "exit_code": 0,
+      "peak_rss_kib": 115936,
+      "phase": "warm",
+      "raw_output_sha256": "13cb48b9e8c0f4cb999b453cf60945a7dbbdd6e8be0cae41653d4875a6981d32",
+      "route": "facade",
+      "samples": [
+        {
+          "cpu_ns": 75839,
+          "matmul_wall_ns": 68811,
+          "peak_rss_kib": 112960,
+          "wall_ns": 75131
+        },
+        {
+          "cpu_ns": 94350,
+          "matmul_wall_ns": 87411,
+          "peak_rss_kib": 113088,
+          "wall_ns": 94121
+        },
+        {
+          "cpu_ns": 93989,
+          "matmul_wall_ns": 87381,
+          "peak_rss_kib": 113216,
+          "wall_ns": 93821
+        },
+        {
+          "cpu_ns": 92560,
+          "matmul_wall_ns": 86271,
+          "peak_rss_kib": 113344,
+          "wall_ns": 92381
+        },
+        {
+          "cpu_ns": 96509,
+          "matmul_wall_ns": 90061,
+          "peak_rss_kib": 113472,
+          "wall_ns": 96341
+        },
+        {
+          "cpu_ns": 93820,
+          "matmul_wall_ns": 87531,
+          "peak_rss_kib": 113600,
+          "wall_ns": 93641
+        },
+        {
+          "cpu_ns": 91639,
+          "matmul_wall_ns": 85181,
+          "peak_rss_kib": 113728,
+          "wall_ns": 91461
+        },
+        {
+          "cpu_ns": 91630,
+          "matmul_wall_ns": 85380,
+          "peak_rss_kib": 113856,
+          "wall_ns": 91461
+        },
+        {
+          "cpu_ns": 74369,
+          "matmul_wall_ns": 68220,
+          "peak_rss_kib": 113856,
+          "wall_ns": 74200
+        },
+        {
+          "cpu_ns": 74900,
+          "matmul_wall_ns": 68741,
+          "peak_rss_kib": 113856,
+          "wall_ns": 74731
+        },
+        {
+          "cpu_ns": 74200,
+          "matmul_wall_ns": 68241,
+          "peak_rss_kib": 113856,
+          "wall_ns": 74041
+        },
+        {
+          "cpu_ns": 74069,
+          "matmul_wall_ns": 68141,
+          "peak_rss_kib": 113856,
+          "wall_ns": 73901
+        },
+        {
+          "cpu_ns": 73940,
+          "matmul_wall_ns": 68001,
+          "peak_rss_kib": 113856,
+          "wall_ns": 73771
+        },
+        {
+          "cpu_ns": 74310,
+          "matmul_wall_ns": 68341,
+          "peak_rss_kib": 113856,
+          "wall_ns": 74141
+        },
+        {
+          "cpu_ns": 74099,
+          "matmul_wall_ns": 68130,
+          "peak_rss_kib": 113856,
+          "wall_ns": 73910
+        },
+        {
+          "cpu_ns": 73980,
+          "matmul_wall_ns": 68060,
+          "peak_rss_kib": 113856,
+          "wall_ns": 73820
+        },
+        {
+          "cpu_ns": 83759,
+          "matmul_wall_ns": 75651,
+          "peak_rss_kib": 113856,
+          "wall_ns": 83531
+        },
+        {
+          "cpu_ns": 88680,
+          "matmul_wall_ns": 80261,
+          "peak_rss_kib": 113856,
+          "wall_ns": 88391
+        },
+        {
+          "cpu_ns": 155209,
+          "matmul_wall_ns": 137972,
+          "peak_rss_kib": 113856,
+          "wall_ns": 154822
+        },
+        {
+          "cpu_ns": 145010,
+          "matmul_wall_ns": 133151,
+          "peak_rss_kib": 113856,
+          "wall_ns": 144691
+        }
+      ],
+      "shape": [
+        128,
+        128,
+        128
+      ],
+      "stderr": "",
+      "stdout_bytes": 323173,
+      "stdout_sha256": "98cf6bc6fcd512f84022ccd7796ac63d7d94b3f41a45796de29445dedc8a2f30",
+      "timeout": false,
+      "wall_ns": 208684524
+    },
+    {
+      "argv": [
+        "/tmp/cgx2-matrix-bench-x306t_7b/cpp-build/cgx2_matrix_baseline",
+        "baseline",
+        "cold",
+        "512",
+        "512",
+        "512",
+        "2",
+        "20",
+        "/tmp/cgx2-matrix-bench-x306t_7b/package/libcgx2_libtorch_facade.so"
+      ],
+      "canonical_output_sha256": "f656c68a13084ab135026544fb1bbfc48c9417d6c1e8a050b0d2ea22a40ef8d3",
+      "cpu_ns": 130000000,
+      "exit_code": 0,
+      "peak_rss_kib": 126608,
+      "phase": "validation",
+      "raw_output_sha256": "90a43378b913247eb72cc9b0e925754f44d441d86e4245834a89af19e9379c36",
+      "route": "cpp",
+      "shape": [
+        512,
+        512,
+        512
+      ],
+      "stderr": "",
+      "stdout_bytes": 4822410,
+      "stdout_sha256": "5d49030badc9cc16ed651f3cbe5251f965ae42328ad0577cbe545fac65076d7b",
+      "timeout": false,
+      "wall_ns": 142492834
+    },
+    {
+      "argv": [
+        "/tmp/cgx2-matrix-bench-x306t_7b/cpp-build/cgx2_matrix_baseline",
+        "facade",
+        "cold",
+        "512",
+        "512",
+        "512",
+        "2",
+        "20",
+        "/tmp/cgx2-matrix-bench-x306t_7b/package/libcgx2_libtorch_facade.so"
+      ],
+      "canonical_output_sha256": "f656c68a13084ab135026544fb1bbfc48c9417d6c1e8a050b0d2ea22a40ef8d3",
+      "cpu_ns": 130000000,
+      "exit_code": 0,
+      "peak_rss_kib": 126196,
+      "phase": "validation",
+      "raw_output_sha256": "90a43378b913247eb72cc9b0e925754f44d441d86e4245834a89af19e9379c36",
+      "route": "facade",
+      "shape": [
+        512,
+        512,
+        512
+      ],
+      "stderr": "",
+      "stdout_bytes": 4822410,
+      "stdout_sha256": "5d49030badc9cc16ed651f3cbe5251f965ae42328ad0577cbe545fac65076d7b",
+      "timeout": false,
+      "wall_ns": 141256901
+    },
+    {
+      "argv": [
+        "/tmp/cgx2-matrix-bench-x306t_7b/cpp-build/cgx2_matrix_baseline",
+        "baseline",
+        "warm",
+        "512",
+        "512",
+        "512",
+        "2",
+        "20",
+        "/tmp/cgx2-matrix-bench-x306t_7b/package/libcgx2_libtorch_facade.so"
+      ],
+      "canonical_output_sha256": "f656c68a13084ab135026544fb1bbfc48c9417d6c1e8a050b0d2ea22a40ef8d3",
+      "cpu_ns": 240000000,
+      "exit_code": 0,
+      "peak_rss_kib": 129288,
+      "phase": "warm",
+      "raw_output_sha256": "90a43378b913247eb72cc9b0e925754f44d441d86e4245834a89af19e9379c36",
+      "route": "cpp",
+      "samples": [
+        {
+          "cpu_ns": 4722828,
+          "matmul_wall_ns": 4111814,
+          "peak_rss_kib": 129288,
+          "wall_ns": 4721520
+        },
+        {
+          "cpu_ns": 4721778,
+          "matmul_wall_ns": 4109604,
+          "peak_rss_kib": 129288,
+          "wall_ns": 4721061
+        },
+        {
+          "cpu_ns": 4708148,
+          "matmul_wall_ns": 4102925,
+          "peak_rss_kib": 129288,
+          "wall_ns": 4706851
+        },
+        {
+          "cpu_ns": 4758687,
+          "matmul_wall_ns": 4154415,
+          "peak_rss_kib": 129288,
+          "wall_ns": 4757952
+        },
+        {
+          "cpu_ns": 4731998,
+          "matmul_wall_ns": 4119914,
+          "peak_rss_kib": 129288,
+          "wall_ns": 4731360
+        },
+        {
+          "cpu_ns": 4707538,
+          "matmul_wall_ns": 4105134,
+          "peak_rss_kib": 129288,
+          "wall_ns": 4707271
+        },
+        {
+          "cpu_ns": 4710908,
+          "matmul_wall_ns": 4105925,
+          "peak_rss_kib": 129288,
+          "wall_ns": 4710261
+        },
+        {
+          "cpu_ns": 4696788,
+          "matmul_wall_ns": 4099724,
+          "peak_rss_kib": 129288,
+          "wall_ns": 4696530
+        },
+        {
+          "cpu_ns": 4719098,
+          "matmul_wall_ns": 4108024,
+          "peak_rss_kib": 129288,
+          "wall_ns": 4718451
+        },
+        {
+          "cpu_ns": 4767568,
+          "matmul_wall_ns": 4142435,
+          "peak_rss_kib": 129288,
+          "wall_ns": 4766871
+        },
+        {
+          "cpu_ns": 4722738,
+          "matmul_wall_ns": 4110294,
+          "peak_rss_kib": 129288,
+          "wall_ns": 4722091
+        },
+        {
+          "cpu_ns": 4714238,
+          "matmul_wall_ns": 4104815,
+          "peak_rss_kib": 129288,
+          "wall_ns": 4713901
+        },
+        {
+          "cpu_ns": 4725368,
+          "matmul_wall_ns": 4115034,
+          "peak_rss_kib": 129288,
+          "wall_ns": 4724650
+        },
+        {
+          "cpu_ns": 4716577,
+          "matmul_wall_ns": 4111594,
+          "peak_rss_kib": 129288,
+          "wall_ns": 4716331
+        },
+        {
+          "cpu_ns": 4708378,
+          "matmul_wall_ns": 4103234,
+          "peak_rss_kib": 129288,
+          "wall_ns": 4707701
+        },
+        {
+          "cpu_ns": 4714588,
+          "matmul_wall_ns": 4115524,
+          "peak_rss_kib": 129288,
+          "wall_ns": 4714281
+        },
+        {
+          "cpu_ns": 4714598,
+          "matmul_wall_ns": 4114804,
+          "peak_rss_kib": 129288,
+          "wall_ns": 4713921
+        },
+        {
+          "cpu_ns": 4713248,
+          "matmul_wall_ns": 4118944,
+          "peak_rss_kib": 129288,
+          "wall_ns": 4713021
+        },
+        {
+          "cpu_ns": 4705848,
+          "matmul_wall_ns": 4098874,
+          "peak_rss_kib": 129288,
+          "wall_ns": 4705221
+        },
+        {
+          "cpu_ns": 4721408,
+          "matmul_wall_ns": 4102645,
+          "peak_rss_kib": 129288,
+          "wall_ns": 4720941
+        }
+      ],
+      "shape": [
+        512,
+        512,
+        512
+      ],
+      "stderr": "",
+      "stdout_bytes": 4824102,
+      "stdout_sha256": "da3aa964b21736c55a97465cc7c72b89488b719fd9a85dcde66ef68a15155397",
+      "timeout": false,
+      "wall_ns": 253644981
+    },
+    {
+      "argv": [
+        "/tmp/cgx2-matrix-bench-x306t_7b/cpp-build/cgx2_matrix_baseline",
+        "facade",
+        "warm",
+        "512",
+        "512",
+        "512",
+        "2",
+        "20",
+        "/tmp/cgx2-matrix-bench-x306t_7b/package/libcgx2_libtorch_facade.so"
+      ],
+      "canonical_output_sha256": "f656c68a13084ab135026544fb1bbfc48c9417d6c1e8a050b0d2ea22a40ef8d3",
+      "cpu_ns": 240000000,
+      "exit_code": 0,
+      "peak_rss_kib": 139408,
+      "phase": "warm",
+      "raw_output_sha256": "90a43378b913247eb72cc9b0e925754f44d441d86e4245834a89af19e9379c36",
+      "route": "facade",
+      "samples": [
+        {
+          "cpu_ns": 4664368,
+          "matmul_wall_ns": 4050984,
+          "peak_rss_kib": 129068,
+          "wall_ns": 4663610
+        },
+        {
+          "cpu_ns": 4527589,
+          "matmul_wall_ns": 4083094,
+          "peak_rss_kib": 129068,
+          "wall_ns": 4526939
+        },
+        {
+          "cpu_ns": 4548239,
+          "matmul_wall_ns": 4164665,
+          "peak_rss_kib": 133164,
+          "wall_ns": 4547469
+        },
+        {
+          "cpu_ns": 4515769,
+          "matmul_wall_ns": 4144234,
+          "peak_rss_kib": 137260,
+          "wall_ns": 4515549
+        },
+        {
+          "cpu_ns": 4306869,
+          "matmul_wall_ns": 4125694,
+          "peak_rss_kib": 139308,
+          "wall_ns": 4306387
+        },
+        {
+          "cpu_ns": 4390679,
+          "matmul_wall_ns": 4047343,
+          "peak_rss_kib": 139308,
+          "wall_ns": 4390527
+        },
+        {
+          "cpu_ns": 4373119,
+          "matmul_wall_ns": 4047883,
+          "peak_rss_kib": 139308,
+          "wall_ns": 4372948
+        },
+        {
+          "cpu_ns": 4421529,
+          "matmul_wall_ns": 4059464,
+          "peak_rss_kib": 139308,
+          "wall_ns": 4431077
+        },
+        {
+          "cpu_ns": 4356409,
+          "matmul_wall_ns": 4029703,
+          "peak_rss_kib": 139308,
+          "wall_ns": 4356266
+        },
+        {
+          "cpu_ns": 4341079,
+          "matmul_wall_ns": 4021293,
+          "peak_rss_kib": 139308,
+          "wall_ns": 4340917
+        },
+        {
+          "cpu_ns": 4458509,
+          "matmul_wall_ns": 4023703,
+          "peak_rss_kib": 139308,
+          "wall_ns": 4464387
+        },
+        {
+          "cpu_ns": 4617289,
+          "matmul_wall_ns": 4185336,
+          "peak_rss_kib": 139328,
+          "wall_ns": 4616540
+        },
+        {
+          "cpu_ns": 4539239,
+          "matmul_wall_ns": 4170265,
+          "peak_rss_kib": 139408,
+          "wall_ns": 4538579
+        },
+        {
+          "cpu_ns": 4425740,
+          "matmul_wall_ns": 4043184,
+          "peak_rss_kib": 139408,
+          "wall_ns": 4425378
+        },
+        {
+          "cpu_ns": 4385760,
+          "matmul_wall_ns": 4026923,
+          "peak_rss_kib": 139408,
+          "wall_ns": 4385247
+        },
+        {
+          "cpu_ns": 4353430,
+          "matmul_wall_ns": 4032723,
+          "peak_rss_kib": 139408,
+          "wall_ns": 4352857
+        },
+        {
+          "cpu_ns": 4367070,
+          "matmul_wall_ns": 4037433,
+          "peak_rss_kib": 139408,
+          "wall_ns": 4366797
+        },
+        {
+          "cpu_ns": 4322170,
+          "matmul_wall_ns": 4011133,
+          "peak_rss_kib": 139408,
+          "wall_ns": 4322056
+        },
+        {
+          "cpu_ns": 4325500,
+          "matmul_wall_ns": 4011463,
+          "peak_rss_kib": 139408,
+          "wall_ns": 4325347
+        },
+        {
+          "cpu_ns": 4315770,
+          "matmul_wall_ns": 4006663,
+          "peak_rss_kib": 139408,
+          "wall_ns": 4315636
+        }
+      ],
+      "shape": [
+        512,
+        512,
+        512
+      ],
+      "stderr": "",
+      "stdout_bytes": 4824102,
+      "stdout_sha256": "492b8bd563c5245b59702fb4823a0b3acf57e19a7a43d95532bb90c94dec02e0",
+      "timeout": false,
+      "wall_ns": 249426426
+    }
+  ],
+  "schema_version": 2,
+  "scope_exclusions": [
+    "GPU",
+    "LLM authoring",
+    "inference workloads",
+    "arbitrary CGx2 source shapes"
+  ],
+  "status": "valid",
+  "summary": {
+    "facade_warm_vs_cpp": "compare transfer-inclusive per-call intervals",
+    "observations": [
+      {
+        "question": "cold_source_vs_cpp",
+        "shape": [
+          2,
+          3,
+          2
+        ],
+        "source_cold_over_cpp": 1505.8668179742672,
+        "target_status": "not_scored: selected matrix calls are not inference workloads"
+      },
+      {
+        "question": "cold_source_vs_cpp",
+        "shape": [
+          16,
+          16,
+          16
+        ],
+        "source_cold_over_cpp": 1518.3404119753534,
+        "target_status": "not_scored: selected matrix calls are not inference workloads"
+      },
+      {
+        "facade_warm_p95_over_cpp": 1.0500682187645147,
+        "facade_warm_throughput_over_cpp": 1.0992310466374287,
+        "question": "warm_facade_vs_cpp",
+        "shape": [
+          128,
+          128,
+          128
+        ],
+        "target_status": "not_scored: selected matrix calls are not inference workloads"
+      },
+      {
+        "facade_warm_p95_over_cpp": 0.9702788090338028,
+        "facade_warm_throughput_over_cpp": 1.0746188313418281,
+        "question": "warm_facade_vs_cpp",
+        "shape": [
+          512,
+          512,
+          512
+        ],
+        "target_status": "not_scored: selected matrix calls are not inference workloads"
+      }
+    ],
+    "phase_limits": "cold check is a separate process; warm non-matmul aggregates creation, copy, release and timer overhead",
+    "scope": "two cold source shapes and two larger warm float64 CPU shapes",
+    "source_cold_vs_cpp": "compare whole-process cold wall intervals"
+  },
+  "toolchain_hashes": {
+    "/home/john-riley/.cargo/bin/rustup": "dda7234360b7f578ca8b0ddcb80145646fa61a67c1720a5abc7051b35c9fcb71",
+    "/home/john-riley/.codex/worktrees/b391/lang/Cargo.lock": "936c7f8c58f522aa98e4f2bd96e0ebf69c31e4b9d9af982bf9c8695d255d7850",
+    "/home/john-riley/.codex/worktrees/b391/lang/bench/matrix_runtime.py": "71488088d13b01f53ea7a9a2457eb4bf069db3db160bc0d917780790644bbcd2",
+    "/home/john-riley/.codex/worktrees/b391/lang/bench/matrix_runtime_cpp/CMakeLists.txt": "b8f6b45ba6d96877ef445113e5c35b0f2f0ec3fdd3d7fc21ec5a526c7c30d557",
+    "/home/john-riley/.codex/worktrees/b391/lang/bench/matrix_runtime_cpp/main.cpp": "8ed16e76c4686441c1e03788167a25f633a82e227b1dcb30002cbc649bdc634e",
+    "/home/john-riley/.codex/worktrees/b391/lang/bench/matrix_runtime_torch.py": "2fedcd3316976819c9ddfed7de8d0119c3a4dfe784bc22ce3dcf6b228cba7508",
+    "/home/john-riley/.codex/worktrees/b391/lang/target/debug/cgx2": "74ff6c60ac7e4219aaa0469ed2401104e04896c6b4c20859fea6975ec7adae99",
+    "/home/john-riley/.codex/worktrees/b391/lang/target/debug/cgx2-bind": "4670440a9e4a49756693ca14111aaf36c9a406094697f6c4c715d6d19d744f17",
+    "/home/john-riley/.codex/worktrees/b391/lang/target/debug/cgx2-native": "d878c99284b0874de0520f0fa7add5a601e652af39dfd1e7ea542d65d11f8256",
+    "/home/john-riley/Desktop/Projects/Optiver/.venv/lib/python3.12/site-packages/torch/include/torch/csrc/api/include/torch/torch.h": "3e5eb79dca5c605bb17c76659953db8f9fdd27813aa6744063c1bd41b05dfabc",
+    "/home/john-riley/Desktop/Projects/Optiver/.venv/lib/python3.12/site-packages/torch/include/torch/csrc/api/include/torch/version.h": "7ba8f0bebd3f6720db5504fda5f9f81d7ed12db2ec3e37051439e28d372dd85b",
+    "/tmp/cgx2-matrix-bench-x306t_7b/cpp-build/cgx2_matrix_baseline": "cd90faf540e130360c03c8696c54ab055ae7bb7c279da528e59aebe73047253d",
+    "/usr/bin/cmake": "6e1dccda39845415d68eabb934c598998949c99ec4668625d571aee1827b05c7",
+    "/usr/bin/python3.14": "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41",
+    "/usr/bin/x86_64-linux-gnu-g++-15": "e6718f7e0c7d057c3ff77b550c603da9bc4030e3ede3c053705acce1293dbe4d"
+  },
+  "unavailable": [
+    "direct Python torch.matmul: no interpreter selected"
+  ]
+}

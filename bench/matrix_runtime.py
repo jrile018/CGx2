@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import platform
@@ -16,7 +17,9 @@ import time
 
 ROOT = Path(__file__).resolve().parents[1]
 VERSION = '2.11.0'
-CASES = ((2, 3, 2), (16, 16, 16))
+COLD_CASES = ((2, 3, 2), (16, 16, 16))
+WARM_CASES = ((128, 128, 128), (512, 512, 512))
+MAX_MATRIX_ELEMENTS = 1_048_576
 TOLERANCE = 1e-9
 
 
@@ -140,12 +143,14 @@ def checked_output(run, expected, route):
                 raise Invalid(f'{route}: Torch version mismatch')
             flat = payload['output']
         if len(flat) != len(expected) or any(
-                not isinstance(value, (int, float)) or
+                isinstance(value, bool) or not isinstance(value, (int, float)) or
+                not math.isfinite(value) or
                 abs(value - target) > TOLERANCE + TOLERANCE * abs(target)
                 for value, target in zip(flat, expected)):
             raise Invalid(f'{route}: output differs from float64 reference')
         canonical = ','.join(f'{float(value):.9f}' for value in flat).encode()
-        return hashlib.sha256(canonical).hexdigest(), payload
+        raw = json.dumps(flat, separators=(',', ':'), allow_nan=False).encode()
+        return hashlib.sha256(canonical).hexdigest(), hashlib.sha256(raw).hexdigest(), payload
     except (ValueError, TypeError, KeyError) as error:
         raise Invalid(f'{route}: invalid output: {error}') from error
 
@@ -160,32 +165,62 @@ def interval(samples):
     return {'status': 'bootstrap_95_percentile', 'n': len(samples),
             'median_ns': statistics.median(samples),
             'median_ci_ns': [medians[49], medians[1949]],
-            'p95_ns': sorted(samples)[max(0, int(.95 * len(samples)) - 1)]
+            'p95_ns': sorted(samples)[math.ceil(.95 * len(samples)) - 1]
             if len(samples) >= 20 else None}
+
+
+def record_run(report, run, shape, route, phase, index=None):
+    record = {key: value for key, value in run.items() if key != 'stdout'}
+    record.update({'shape': list(shape), 'route': route, 'phase': phase,
+                   'stdout_sha256': hashlib.sha256(run['stdout'].encode()).hexdigest(),
+                   'stdout_bytes': len(run['stdout'].encode())})
+    if index is not None:
+        record['index'] = index
+    report['runs'].append(record)
+    if run['timeout'] or run['exit_code'] != 0:
+        reason = 'timeout' if run['timeout'] else 'nonzero_exit'
+        report['exclusions'].append({'shape': list(shape), 'route': route,
+                                     'phase': phase, 'index': index, 'reason': reason})
+        raise Invalid(f'{route} {phase} {reason} at {shape}')
+    return record
+
+
+def checked_samples(payload, repetitions, route, shape):
+    samples = payload.get('samples')
+    if not isinstance(samples, list) or len(samples) != repetitions:
+        raise Invalid(f'{route} warm sample count mismatch at {shape}')
+    for sample in samples:
+        if not isinstance(sample, dict) or any(
+                not isinstance(sample.get(key), int) or isinstance(sample[key], bool)
+                or sample[key] < 0 for key in
+                ('wall_ns', 'cpu_ns', 'matmul_wall_ns', 'peak_rss_kib')):
+            raise Invalid(f'{route} invalid warm sample at {shape}')
+        if sample['wall_ns'] == 0 or sample['matmul_wall_ns'] > sample['wall_ns']:
+            raise Invalid(f'{route} invalid warm phase timing at {shape}')
+    return samples
 
 
 def observations(cases):
     observed = []
     for case in cases:
         routes = case['routes']
-        if not {'source', 'cpp', 'facade'} <= routes.keys():
-            continue
-        cpp_cold = routes['cpp']['cold_wall']['median_ns']
-        source_cold = routes['source']['cold_wall']['median_ns']
-        cpp_warm = routes['cpp']['warm_inclusive_wall']['median_ns']
-        facade_warm = routes['facade']['warm_inclusive_wall']['median_ns']
-        row = {'shape': case['shape'], 'source_cold_over_cpp': source_cold / cpp_cold,
-               'facade_warm_throughput_over_cpp': cpp_warm / facade_warm,
-               'provisional_throughput_target': 0.90,
-               'provisional_p95_latency_ceiling': 1.15,
-               'target_status': 'not_scored: small matrix calls, not compute-dominant inference'}
-        cpp_p95 = routes['cpp']['warm_inclusive_wall'].get('p95_ns')
-        facade_p95 = routes['facade']['warm_inclusive_wall'].get('p95_ns')
-        row['facade_warm_p95_over_cpp'] = (facade_p95 / cpp_p95
-                                            if cpp_p95 and facade_p95 else None)
-        if 'python' in routes:
-            python_warm = routes['python']['warm_inclusive_wall']['median_ns']
-            row['facade_warm_throughput_over_python'] = python_warm / facade_warm
+        row = {'shape': case['shape'], 'question': case['question'],
+               'target_status': 'not_scored: selected matrix calls are not inference workloads'}
+        if case['question'] == 'cold_source_vs_cpp':
+            cpp = routes['cpp']['cold_wall']['median_ns']
+            source = routes['source']['cold_wall']['median_ns']
+            row['source_cold_over_cpp'] = source / cpp
+        else:
+            cpp = routes['cpp']['warm_inclusive_wall']['median_ns']
+            facade = routes['facade']['warm_inclusive_wall']['median_ns']
+            row['facade_warm_throughput_over_cpp'] = cpp / facade
+            cpp_p95 = routes['cpp']['warm_inclusive_wall']['p95_ns']
+            facade_p95 = routes['facade']['warm_inclusive_wall']['p95_ns']
+            row['facade_warm_p95_over_cpp'] = (facade_p95 / cpp_p95
+                                               if cpp_p95 and facade_p95 else None)
+            if 'python' in routes:
+                python = routes['python']['warm_inclusive_wall']['median_ns']
+                row['facade_warm_throughput_over_python'] = python / facade
         observed.append(row)
     return observed
 
@@ -234,6 +269,29 @@ def build(args, output_dir, env):
     return cgx2.resolve(), binder.resolve(), cpp.resolve()
 
 
+def validated_run(report, command, timeout, env, shape, route, phase, expected, index=None):
+    run = run_timed(command, timeout, env)
+    record = record_run(report, run, shape, route, phase, index)
+    try:
+        canonical, raw, payload = checked_output(run, expected, route)
+    except Invalid:
+        report['exclusions'].append({'shape': list(shape), 'route': route,
+                                     'phase': phase, 'index': index,
+                                     'reason': 'wrong_output'})
+        raise
+    record['canonical_output_sha256'] = canonical
+    record['raw_output_sha256'] = raw
+    return record, canonical, raw, payload
+
+
+def same_outputs(report, case, outputs, phase):
+    if len(set(outputs.values())) != 1:
+        report['exclusions'].append({'shape': case['shape'], 'phase': phase,
+                                     'reason': 'route_hash_mismatch'})
+        raise Invalid(f'{phase} output hashes differ at {case["shape"]}: {outputs}')
+    case['canonical_output_sha256'] = next(iter(outputs.values()))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--package', type=Path, required=True)
@@ -242,7 +300,8 @@ def main():
     parser.add_argument('--compiler', default='/usr/bin/c++')
     parser.add_argument('--cgx2', type=Path)
     parser.add_argument('--binder', type=Path)
-    parser.add_argument('--python-torch', type=Path, help='optional Python with compatible CPU Torch 2.11.0')
+    parser.add_argument('--python-torch', type=Path,
+                        help='optional Python with compatible CPU Torch 2.11.0')
     parser.add_argument('--cold-reps', type=int, default=3)
     parser.add_argument('--warm-reps', type=int, default=30)
     parser.add_argument('--warmup', type=int, default=5)
@@ -255,47 +314,73 @@ def main():
         parser.error('repetitions and timeouts must be positive; warmup may be zero')
     args.out.parent.mkdir(parents=True, exist_ok=True)
     env = os.environ.copy()
-    env.update({'OMP_NUM_THREADS': '1', 'MKL_NUM_THREADS': '1', 'OPENBLAS_NUM_THREADS': '1',
-                'NUMEXPR_NUM_THREADS': '1', 'CUDA_VISIBLE_DEVICES': '',
+    env.update({'OMP_NUM_THREADS': '1', 'MKL_NUM_THREADS': '1',
+                'OPENBLAS_NUM_THREADS': '1', 'NUMEXPR_NUM_THREADS': '1',
+                'CUDA_VISIBLE_DEVICES': '',
                 'LD_LIBRARY_PATH': str(args.package.resolve())})
-    report = {'schema_version': 1, 'status': 'invalid', 'pinned_torch_version': VERSION,
-              'inputs': {'package': str(args.package), 'torch_root': str(args.torch_root),
-                         'compiler': str(args.compiler),
-                         'python_torch': str(args.python_torch) if args.python_torch else None},
-              'cases': [], 'runs': [], 'summary': {}, 'errors': [], 'exclusions': [],
-              'unavailable': ['GPU', 'LLM task gate', 'exact source phase decomposition'],
-              'settings': {'threads': 1, 'device': 'cpu', 'dtype': 'float64',
-                           'row_major': True, 'numeric_tolerance': TOLERANCE,
-                           'cold_reps': args.cold_reps, 'warm_reps': args.warm_reps,
-                           'warmup': args.warmup, 'timeout_seconds': args.timeout,
-                           'cold_budget_seconds': args.cold_budget_seconds},
-              'host': {'platform': platform.platform(), 'logical_cores': os.cpu_count(),
-                       'machine': platform.machine()}, 'toolchain_hashes': {},
-              'package_hashes': {}}
+    report = {
+        'schema_version': 2, 'status': 'invalid', 'pinned_torch_version': VERSION,
+        'inputs': {'package': str(args.package), 'torch_root': str(args.torch_root),
+                   'compiler': str(args.compiler),
+                   'python_torch': str(args.python_torch) if args.python_torch else None},
+        'scope_exclusions': ['GPU', 'LLM authoring', 'inference workloads',
+                             'arbitrary CGx2 source shapes'],
+        'conditions': {'cold_shapes': list(COLD_CASES), 'warm_shapes': list(WARM_CASES),
+                       'matrix_element_limit': MAX_MATRIX_ELEMENTS,
+                       'device': 'CPU', 'dtype': 'float64', 'row_major': True,
+                       'intraop_threads': 1, 'interop_threads': 1,
+                       'tolerance_abs': TOLERANCE, 'tolerance_rel': TOLERANCE,
+                       'cold_reps': args.cold_reps, 'warm_reps': args.warm_reps,
+                       'warmup': args.warmup, 'timeout_seconds': args.timeout,
+                       'build_timeout_seconds': args.build_timeout,
+                       'cold_budget_seconds': args.cold_budget_seconds},
+        'interval_method': {'median': '2000 bootstrap resamples, percentile 95% CI; n>=5',
+                            'bootstrap_seed': 20261023,
+                            'bootstrap_percentile_indexes': [49, 1949],
+                            'p95': 'nearest rank; n>=20, otherwise unavailable'},
+        'phases': {'cold_source_validation': 'measured separately as whole cgx2 check process',
+                   'cold_source_adapter_copy': 'unmeasured',
+                   'warm_matmul': 'measured inside each call',
+                   'warm_adapter_copy_release': 'measured only as aggregate inclusive-minus-matmul'},
+        'host': {'platform': platform.platform(), 'logical_cpus': os.cpu_count(),
+                 'machine': platform.machine()},
+        'runs': [], 'cases': [], 'errors': [], 'exclusions': [], 'unavailable': []}
     try:
         if platform.system() != 'Linux' or not Path('/usr/bin/time').is_file():
-            raise Invalid('Linux and /usr/bin/time are required for per-process resources')
+            raise Invalid('Linux and /usr/bin/time required for per-process resources')
         package = args.package.resolve(strict=True)
         torch_root = args.torch_root.resolve(strict=True)
         report['package_hashes'] = package_checks(package)
         for library in ('libtorch.so', 'libtorch_cpu.so', 'libc10.so'):
             if digest(package / library) != digest(torch_root / 'lib' / library):
-                raise Invalid(f'baseline LibTorch library differs from pinned package: {library}')
+                raise Invalid(f'baseline LibTorch library differs pinned package: {library}')
+        for shape in (*COLD_CASES, *WARM_CASES):
+            m, k, n = shape
+            if max(m * k, k * n, m * n) > MAX_MATRIX_ELEMENTS:
+                raise Invalid(f'shape exceeds facade element limit: {shape}')
         with tempfile.TemporaryDirectory(prefix='cgx2-matrix-bench-') as temporary:
             workspace = Path(temporary)
             measured_package = clone_package(package, workspace / 'package')
+            closure_files = ('cgx2-libtorch-closure.lock.json',
+                             'libcgx2_libtorch_facade.so', 'libtorch.so',
+                             'libtorch_cpu.so', 'libc10.so')
+            closure_hashes = {name: digest(measured_package / name)
+                              for name in closure_files}
             measured_env = dict(env, LD_LIBRARY_PATH=str(measured_package))
             cgx2, binder, cpp = build(args, workspace, measured_env)
             tool_files = (cgx2, binder, cpp, cgx2.with_name('cgx2-native'),
-                          ROOT / 'Cargo.lock', ROOT / 'bench/matrix_runtime_cpp/main.cpp',
+                          ROOT / 'Cargo.lock', ROOT / 'bench/matrix_runtime.py',
+                          ROOT / 'bench/matrix_runtime_cpp/main.cpp',
+                          ROOT / 'bench/matrix_runtime_cpp/CMakeLists.txt',
+                          ROOT / 'bench/matrix_runtime_torch.py',
                           torch_root / 'include/torch/csrc/api/include/torch/torch.h',
                           torch_root / 'include/torch/csrc/api/include/torch/version.h',
-                          Path(sys.executable).resolve(),
-                          Path(shutil.which('cargo')).resolve(),
+                          Path(sys.executable).resolve(), Path(shutil.which('cargo')).resolve(),
                           Path(shutil.which('rustc')).resolve(),
                           Path(shutil.which('cmake')).resolve())
             report['toolchain_hashes'] = {str(path): digest(path) for path in tool_files}
-            report['toolchain_hashes'][str(Path(args.compiler).resolve())] = digest(Path(args.compiler).resolve())
+            report['toolchain_hashes'][str(Path(args.compiler).resolve())] = digest(
+                Path(args.compiler).resolve())
             facade = measured_package / 'libcgx2_libtorch_facade.so'
             require_run([binder, 'check', measured_package], args.timeout, measured_env)
             python = args.python_torch.resolve(strict=True) if args.python_torch else None
@@ -303,47 +388,31 @@ def main():
                 report['toolchain_hashes'][str(python)] = digest(python)
             else:
                 report['unavailable'].append('direct Python torch.matmul: no interpreter selected')
-            for shape in CASES:
+
+            for shape in COLD_CASES:
                 m, k, n = shape
                 write_source(measured_package, shape)
-                case = {'shape': list(shape), 'reference_hash': None, 'routes': {}}
-                report['cases'].append(case)
                 expected = reference(*shape)
+                case = {'shape': list(shape), 'question': 'cold_source_vs_cpp',
+                        'routes': {}, 'output_hashes': {}}
+                report['cases'].append(case)
                 commands = {
                     'source': [cgx2, 'run', measured_package],
-                    'cpp': [cpp, 'baseline', 'cold', m, k, n, args.warmup, args.warm_reps, facade],
-                    'facade': [cpp, 'facade', 'cold', m, k, n, args.warmup, args.warm_reps, facade],
-                }
-                if python:
-                    commands['python'] = [python, ROOT / 'bench/matrix_runtime_torch.py',
-                                          'cold', m, k, n, args.warmup, args.warm_reps]
+                    'cpp': [cpp, 'baseline', 'cold', m, k, n, args.warmup,
+                            args.warm_reps, facade]}
                 hashes = {}
                 for route, command in commands.items():
-                    validation = run_timed(command, args.timeout, measured_env)
-                    report['runs'].append({'shape': list(shape), 'route': route,
-                                           'phase': 'validation', **validation})
-                    if validation['timeout'] or validation['exit_code'] != 0:
-                        report['exclusions'].append({'shape': list(shape), 'route': route,
-                                                     'phase': 'validation', 'reason':
-                                                     'timeout' if validation['timeout'] else 'nonzero_exit'})
-                        raise Invalid(f'{route} validation failed or timed out at {shape}')
-                    hashes[route], payload = checked_output(validation, expected, route)
-                    if route == 'python' and Path(payload['torch_root']).resolve() != torch_root:
-                        raise Invalid('Python Torch installation differs from pinned header/library root')
-                if len(set(hashes.values())) != 1:
-                    raise Invalid(f'output hashes differ for shape {shape}: {hashes}')
-                case['reference_hash'] = hashes['source']
-                check = run_timed([cgx2, 'check', measured_package], args.timeout, measured_env)
-                report['runs'].append({'shape': list(shape), 'route': 'source',
-                                       'phase': 'check_manifest_closure', **check})
-                if check['timeout'] or check['exit_code'] != 0:
-                    report['exclusions'].append({'shape': list(shape), 'route': 'source',
-                                                 'phase': 'check_manifest_closure', 'reason':
-                                                 'timeout' if check['timeout'] else 'nonzero_exit'})
-                    raise Invalid(f'source check failed or timed out at {shape}')
-                for route in ('source', 'cpp', 'facade', 'python'):
-                    if route not in commands:
-                        continue
+                    _, canonical, raw, _ = validated_run(
+                        report, command, args.timeout, measured_env, shape,
+                        route, 'validation', expected)
+                    hashes[route] = canonical
+                    case['output_hashes'][route] = {'canonical_sha256': canonical,
+                                                    'raw_sha256': raw}
+                same_outputs(report, case, hashes, 'validation')
+                check = run_timed([cgx2, 'check', measured_package], args.timeout,
+                                  measured_env)
+                record_run(report, check, shape, 'source', 'check_manifest_closure')
+                for route, command in commands.items():
                     samples = []
                     begun = time.monotonic()
                     for index in range(args.cold_reps):
@@ -355,50 +424,72 @@ def main():
                                                          'phase': 'cold', 'index': index,
                                                          'reason': 'stopped_budget'})
                             break
-                        run = run_timed(commands[route], args.timeout, measured_env)
-                        run.update({'shape': list(shape), 'route': route, 'phase': 'cold',
-                                    'index': index})
-                        report['runs'].append(run)
-                        if run['timeout'] or run['exit_code'] != 0:
-                            report['exclusions'].append({'shape': list(shape), 'route': route,
-                                                         'phase': 'cold', 'index': index,
-                                                         'reason': 'timeout' if run['timeout'] else 'nonzero_exit'})
-                            raise Invalid(f'{route} cold run failed or timed out at {shape}')
-                        hashed, _ = checked_output(run, expected, route)
-                        if hashed != hashes[route]:
-                            raise Invalid(f'{route} cold hash changed at {shape}')
-                        samples.append(run['wall_ns'])
+                        record, canonical, _, _ = validated_run(
+                            report, command, args.timeout, measured_env, shape,
+                            route, 'cold', expected, index)
+                        if canonical != hashes[route]:
+                            raise Invalid(f'{route} cold output hash changed at {shape}')
+                        samples.append(record['wall_ns'])
                     case['routes'][route] = {'cold_wall': interval(samples)}
-                for route in ('cpp', 'facade', 'python'):
-                    if route not in commands:
-                        continue
-                    command = list(commands[route])
-                    command[2 if route != 'python' else 2] = 'warm'
-                    warm = run_timed(command, args.timeout, measured_env)
-                    warm.update({'shape': list(shape), 'route': route, 'phase': 'warm'})
-                    report['runs'].append(warm)
-                    if warm['timeout'] or warm['exit_code'] != 0:
-                        report['exclusions'].append({'shape': list(shape), 'route': route,
-                                                     'phase': 'warm', 'reason':
-                                                     'timeout' if warm['timeout'] else 'nonzero_exit'})
-                        raise Invalid(f'{route} warm run failed or timed out at {shape}')
-                    hashed, payload = checked_output(warm, expected, route)
-                    if hashed != hashes[route] or len(payload.get('samples', [])) != args.warm_reps:
-                        raise Invalid(f'{route} warm sample count/hash mismatch at {shape}')
-                    warm['samples'] = payload['samples']
-                    case['routes'][route]['warm_inclusive_wall'] = interval(
-                        [s['wall_ns'] for s in payload['samples']])
-                    case['routes'][route]['warm_matmul_wall'] = interval(
-                        [s['matmul_wall_ns'] for s in payload['samples']])
-                    case['routes'][route]['warm_non_matmul_wall'] = interval(
-                        [s['wall_ns'] - s['matmul_wall_ns'] for s in payload['samples']])
+
+            for shape in WARM_CASES:
+                m, k, n = shape
+                expected = reference(*shape)
+                case = {'shape': list(shape), 'question': 'warm_facade_vs_cpp',
+                        'routes': {}, 'output_hashes': {}}
+                report['cases'].append(case)
+                commands = {
+                    'cpp': [cpp, 'baseline', 'warm', m, k, n, args.warmup,
+                            args.warm_reps, facade],
+                    'facade': [cpp, 'facade', 'warm', m, k, n, args.warmup,
+                               args.warm_reps, facade]}
+                if python:
+                    commands['python'] = [python, ROOT / 'bench/matrix_runtime_torch.py',
+                                          'warm', m, k, n, args.warmup, args.warm_reps]
+                hashes = {}
+                for route, command in commands.items():
+                    validation_command = list(command)
+                    validation_command[2] = 'cold'
+                    _, canonical, raw, payload = validated_run(
+                        report, validation_command, args.timeout, measured_env,
+                        shape, route, 'validation', expected)
+                    if route == 'python' and Path(payload['torch_root']).resolve() != torch_root:
+                        raise Invalid('Python Torch installation differs pinned header/library root')
+                    hashes[route] = canonical
+                    case['output_hashes'][route] = {'canonical_sha256': canonical,
+                                                    'raw_sha256': raw}
+                same_outputs(report, case, hashes, 'validation')
+                for route, command in commands.items():
+                    record, canonical, raw, payload = validated_run(
+                        report, command, args.timeout, measured_env, shape,
+                        route, 'warm', expected)
+                    if canonical != hashes[route]:
+                        raise Invalid(f'{route} warm output hash changed at {shape}')
+                    if route == 'python' and Path(payload['torch_root']).resolve() != torch_root:
+                        raise Invalid('Python Torch installation differs pinned header/library root')
+                    samples = checked_samples(payload, args.warm_reps, route, shape)
+                    record['samples'] = samples
+                    case['output_hashes'][route]['warm_raw_sha256'] = raw
+                    case['routes'][route] = {
+                        'warm_inclusive_wall': interval([s['wall_ns'] for s in samples]),
+                        'warm_matmul_wall': interval([s['matmul_wall_ns'] for s in samples]),
+                        'warm_non_matmul_wall': interval(
+                            [s['wall_ns'] - s['matmul_wall_ns'] for s in samples])}
+                same_outputs(report, case, {r: case['output_hashes'][r]['canonical_sha256']
+                                            for r in commands}, 'warm')
+            if package_checks(package) != report['package_hashes'] or any(
+                    digest(measured_package / name) != value
+                    for name, value in closure_hashes.items()):
+                raise Invalid('pinned package or measured closure changed during run')
             report['status'] = 'valid'
-            report['summary'] = {'scope': 'two CPU float64 matrix shapes only; source ceiling 32x32',
-                                 'source_cold_vs_cpp': 'compare case cold wall intervals',
-                                 'facade_warm_vs_cpp': 'compare transfer-inclusive wall intervals',
-                                 'phase_limits': 'source check is a separate full check, not a subtractable phase; warm non-matmul aggregates input creation, output copy, releases and timer overhead; source adapter/copy individually unmeasured',
-                                 'observations': observations(report['cases'])}
-    except (Invalid, OSError, KeyError, json.JSONDecodeError) as error:
+            report['summary'] = {
+                'scope': 'two cold source shapes and two larger warm float64 CPU shapes',
+                'source_cold_vs_cpp': 'compare whole-process cold wall intervals',
+                'facade_warm_vs_cpp': 'compare transfer-inclusive per-call intervals',
+                'phase_limits': 'cold check is a separate process; warm non-matmul aggregates creation, copy, release and timer overhead',
+                'observations': observations(report['cases'])}
+    except (Invalid, OSError, KeyError, TypeError, ValueError,
+            json.JSONDecodeError) as error:
         report['errors'].append(str(error))
     args.out.write_text(json.dumps(report, indent=2, sort_keys=True) + '\n')
     print(f'{report["status"]}: {args.out}')

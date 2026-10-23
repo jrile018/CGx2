@@ -148,7 +148,8 @@ int main(int argc, char **argv) {
         auto elapsed = wall_ns(start); auto cpu = cpu_ns() - c0;
         if (got.size() != answer.size()) throw std::runtime_error("output size changed");
         for (size_t j = 0; j < got.size(); ++j)
-          if (std::abs(got[j] - answer[j]) > 1e-9) throw std::runtime_error("output changed");
+          if (!std::isfinite(got[j]) || got[j] != answer[j])
+            throw std::runtime_error("output changed");
         if (i) std::cout << ',';
         std::cout << "{\"wall_ns\":" << elapsed << ",\"cpu_ns\":" << cpu
                   << ",\"matmul_wall_ns\":" << math << ",\"peak_rss_kib\":" << rss_kib() << '}';
