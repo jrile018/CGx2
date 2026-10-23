@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-23",
+  "base": "7f4c452",
+  "integrated_head": "2336e23",
+  "rust_passed": 778,
+  "rust_ignored": 5,
+  "http_passed": 20,
+  "benchmark_passed": 122,
+  "logs": {
+    "workspace-test.log": {
+      "path": "/home/john-riley/projects/lang/target/wave25-workspace-test.log",
+      "sha256": "0899e2a2048eae4ae5a11819b358a2f77712cde648adf5c84316dfa7883d2093"
+    },
+    "benchmark-test.log": {
+      "path": "/home/john-riley/projects/lang/target/wave25-benchmark-test.log",
+      "sha256": "6acc2a0042fc463d5e8621aa128acd6594e61ebed226244f89e69fdd63f5afed"
+    },
+    "clippy.log": {
+      "path": "/home/john-riley/projects/lang/target/wave25-clippy.log",
+      "sha256": "80bdf3dade4f869f2e0845790bb964d92f45798608b0dae824edc38b1205e1e5"
+    },
+    "readiness.json": {
+      "path": "/home/john-riley/projects/lang/target/wave25-readiness.json",
+      "sha256": "e002e1179f32b53b484dd73a8fb3e83b8f56cc2fb83538d68c4bd0472e480a90"
+    },
+    "release-build.log": {
+      "path": "/home/john-riley/projects/lang/target/wave25-release-build.log",
+      "sha256": "d9eceab637e1ed3db79ef09815035cf1a420646ee40a190c0d90082fce5d9d13"
+    }
+  }
+}
