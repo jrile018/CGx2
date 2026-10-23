@@ -59,6 +59,138 @@ fn run_python(path: &Path, args: &[&str]) -> Output {
         .unwrap()
 }
 
+fn run_python_limited(path: &Path) -> Output {
+    Command::new("timeout")
+        .args(["15s", "python3"])
+        .arg(path.join("__main__.py"))
+        .output()
+        .unwrap()
+}
+
+#[test]
+fn range_loops_preserve_scopes_calls_and_integer_bounds() {
+    let scratch = Scratch::new();
+    let root = fixture("package_three", &scratch);
+    scratch.write(
+        "src/math.cg",
+        "module app.math\npub fn add_one(x: i64) -> i64:\n    x + 1\n",
+    );
+    scratch.write("src/main.cg", "module app.main\nimport app.math\nfn bump(x: i64) -> i64:\n    x + 1\npub fn main() -> i64:\n    let mut total = 0\n    let i = 99\n    for i in range(0, 3):\n        for i in range(i, i + 2):\n            total += bump(i)\n    for zero in range(0, 0):\n        total += 100\n    for negative in range(-3, 0):\n        total += negative\n    for edge in range(9223372036854775806, 9223372036854775807):\n        total += 1\n    for edge in range(-9223372036854775808, -9223372036854775807):\n        total += 1\n    total + i + app.math.add_one(-1)\n");
+    let package = load_checked_package(&root).unwrap();
+    let files = emit_package_python(&package).unwrap();
+    assert_eq!(files, emit_package_python(&package).unwrap());
+    assert!(files
+        .values()
+        .any(|source| source.contains("# CGx2 bytes [")));
+    let output = scratch.0.join("python");
+    write_package_python(&package, &output).unwrap();
+    let python = run_python_limited(&output);
+    let native = run_native(&root, &scratch.0.join("native"), &[]);
+    assert_eq!(
+        python.status.code(),
+        Some(0),
+        "{}",
+        String::from_utf8_lossy(&python.stderr)
+    );
+    assert_eq!(python.stdout, native.stdout);
+    assert_eq!(python.stdout, b"110\n");
+}
+
+#[test]
+fn range_loop_overflow_and_budget_fail_explicitly() {
+    for (body, code) in [
+        ("    let mut total = 9223372036854775807\n    for i in range(0, 1):\n        total += 1\n    total\n", "CGR005"),
+        ("    for i in range(0, 1000000):\n        1\n    0\n", "CGR010"),
+    ] {
+        let scratch = Scratch::new();
+        let root = fixture("package_three", &scratch);
+        scratch.write("src/main.cg", &format!("module app.main\npub fn main() -> i64:\n{body}"));
+        let package = load_checked_package(&root).unwrap();
+        let output = scratch.0.join("python");
+        write_package_python(&package, &output).unwrap();
+        let python = run_python_limited(&output);
+        let native = run_native(&root, &scratch.0.join("native"), &[]);
+        assert_ne!(python.status.code(), Some(124), "Python subprocess exceeded 15 seconds");
+        assert!(!python.status.success());
+        assert_eq!(python.status.success(), native.status.success());
+        assert!(String::from_utf8_lossy(&python.stderr).contains(code));
+        assert!(String::from_utf8_lossy(&native.stderr).contains(code));
+    }
+}
+
+#[test]
+fn package_call_depth_matches_native_limit() {
+    let scratch = Scratch::new();
+    let root = fixture("package_three", &scratch);
+    let mut source = String::from("module app.main\npub fn main() -> i64:\n    f0()\n");
+    for index in 0..65 {
+        source.push_str(&format!("fn f{index}() -> i64:\n"));
+        if index == 64 {
+            source.push_str("    1\n");
+        } else {
+            source.push_str(&format!("    f{}()\n", index + 1));
+        }
+    }
+    scratch.write("src/main.cg", &source);
+    let package = load_checked_package(&root).unwrap();
+    let output = scratch.0.join("python");
+    write_package_python(&package, &output).unwrap();
+    let python = run_python_limited(&output);
+    let native = run_native(&root, &scratch.0.join("native"), &[]);
+    assert_ne!(
+        python.status.code(),
+        Some(124),
+        "Python subprocess exceeded 15 seconds"
+    );
+    assert!(!python.status.success());
+    assert_eq!(python.status.success(), native.status.success());
+    assert!(String::from_utf8_lossy(&python.stderr).contains("CGR011"));
+    assert!(String::from_utf8_lossy(&native.stderr)
+        .contains("function call depth limit of 64 exceeded"));
+}
+
+#[test]
+fn range_loop_step_boundary_matches_native() {
+    // Six fixed steps (range statement, iterator, two bounds, final expression)
+    // plus three steps per iteration (iteration, body statement, body expression).
+    for (end, succeeds) in [(333_331, true), (333_332, false)] {
+        let scratch = Scratch::new();
+        let root = fixture("package_three", &scratch);
+        scratch.write("src/main.cg", &format!("module app.main\npub fn main() -> i64:\n    for i in range(0, {end}):\n        1\n    0\n"));
+        let package = load_checked_package(&root).unwrap();
+        let output = scratch.0.join("python");
+        write_package_python(&package, &output).unwrap();
+        let python = run_python_limited(&output);
+        let native = run_native(&root, &scratch.0.join("native"), &[]);
+        assert_ne!(
+            python.status.code(),
+            Some(124),
+            "Python subprocess exceeded 15 seconds"
+        );
+        assert_eq!(python.status.success(), succeeds);
+        assert_eq!(python.status.success(), native.status.success());
+        if succeeds {
+            assert_eq!(python.stdout, b"0\n");
+            assert_eq!(python.stdout, native.stdout);
+        } else {
+            assert!(String::from_utf8_lossy(&python.stderr).contains("CGR010"));
+        }
+    }
+}
+
+#[test]
+fn malformed_range_bounds_keep_source_locations() {
+    for (iterator, code) in [("range(1)", "CGT005"), ("range(true, 2)", "CGT003")] {
+        let scratch = Scratch::new();
+        let root = fixture("package_three", &scratch);
+        scratch.write("src/main.cg", &format!("module app.main\npub fn main() -> i64:\n    for i in {iterator}:\n        1\n    0\n"));
+        let diagnostics = load_checked_package(&root).unwrap_err();
+        assert!(diagnostics
+            .iter()
+            .any(|d| d.code == code && d.file.ends_with("src/main.cg") && d.span.is_some()));
+    }
+}
+
 fn run_native(root: &Path, binary: &Path, args: &[&str]) -> Output {
     let package = load_checked_package(root).unwrap();
     let rust = emit_package_rust(&package).unwrap();
