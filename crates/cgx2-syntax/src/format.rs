@@ -133,6 +133,23 @@ fn write_stmt(out: &mut String, stmt: &Stmt, indent: usize) {
         out.push_str("    ");
     }
     match &stmt.kind {
+        StmtKind::If {
+            condition,
+            then_body,
+            else_body,
+        } => {
+            out.push_str("if ");
+            write_expr(out, condition, 0);
+            out.push_str(":\n");
+            for nested in then_body {
+                write_stmt(out, nested, indent + 1);
+            }
+            out.push_str(&"    ".repeat(indent));
+            out.push_str("else:\n");
+            for nested in else_body {
+                write_stmt(out, nested, indent + 1);
+            }
+        }
         StmtKind::NoGc { budget, body } => {
             out.push_str("no_gc(budget: ");
             write_expr(out, budget, 0);

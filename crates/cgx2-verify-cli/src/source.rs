@@ -313,6 +313,19 @@ pub fn parse(
             statement.span,
         ));
     }
+    fn conditional(body: &[cgx2_syntax::Stmt]) -> Option<Span> {
+        body.iter().find_map(|stmt| match &stmt.kind {
+            StmtKind::If { .. } => Some(stmt.span),
+            StmtKind::For { body, .. } | StmtKind::NoGc { body, .. } => conditional(body),
+            _ => None,
+        })
+    }
+    if let Some(span) = conditional(&function.body) {
+        return Err(Diagnostic::unsupported(
+            "conditional contract bodies are unsupported",
+            span,
+        ));
+    }
     let Some(body) = (match function.body.as_slice() {
         [statement] => match &statement.kind {
             StmtKind::Expr(expression) | StmtKind::Return(Some(expression)) => Some(expression),

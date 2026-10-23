@@ -1,0 +1,32 @@
+record Switch:
+    active: Bool
+    value: i64
+
+fn guard() -> Bool:
+    true
+
+fn choose(flag: Bool, left: i64, right: i64) -> i64:
+    if flag:
+        return left
+    else:
+        return right
+
+fn ignore(flag: Bool) -> Unit:
+    if flag:
+        7
+    else:
+        8
+
+fn main() -> i64:
+    let switch = Switch(active: guard(), value: 42)
+    let mut answer = 0
+    if switch.active:
+        answer = choose(true, switch.value, 0)
+        let answer = 99
+        if false:
+            1 / 0
+        else:
+            ignore(false)
+    else:
+        answer = 9223372036854775807 + 1
+    answer

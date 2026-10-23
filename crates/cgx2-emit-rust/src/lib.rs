@@ -541,6 +541,29 @@ fn validate_block(
 ) {
     for stmt in stmts {
         match &stmt.kind {
+            StmtKind::If {
+                condition,
+                then_body,
+                else_body,
+            } => {
+                validate_expr(condition, functions, allowed_imports, allow_fields, errors);
+                validate_block(
+                    then_body,
+                    script,
+                    functions,
+                    allowed_imports,
+                    allow_fields,
+                    errors,
+                );
+                validate_block(
+                    else_body,
+                    script,
+                    functions,
+                    allowed_imports,
+                    allow_fields,
+                    errors,
+                );
+            }
             StmtKind::Let {
                 annotation, value, ..
             } => {
@@ -724,11 +747,33 @@ fn find_cycle<'a>(
 
 fn calls_in_stmt<'a>(stmt: &'a Stmt, calls: &mut Vec<(&'a str, Span)>) {
     match &stmt.kind {
+        StmtKind::If {
+            condition,
+            then_body,
+            else_body,
+        } => {
+            calls_in_expr(condition, calls);
+            for nested in then_body.iter().chain(else_body) {
+                calls_in_stmt(nested, calls);
+            }
+        }
+        StmtKind::For { iter, body, .. } => {
+            calls_in_expr(iter, calls);
+            for nested in body {
+                calls_in_stmt(nested, calls);
+            }
+        }
+        StmtKind::NoGc { budget, body } => {
+            calls_in_expr(budget, calls);
+            for nested in body {
+                calls_in_stmt(nested, calls);
+            }
+        }
         StmtKind::Let { value, .. } | StmtKind::Assign { value, .. } | StmtKind::Expr(value) => {
             calls_in_expr(value, calls)
         }
         StmtKind::Return(Some(value)) => calls_in_expr(value, calls),
-        _ => {}
+        StmtKind::Return(None) => {}
     }
 }
 
@@ -810,12 +855,12 @@ fn tail_type(stmts: &[Stmt], typed: &TypedModule) -> Type {
 }
 
 fn emit_block(stmts: &[Stmt], indent: usize, out: &mut String) {
-    emit_block_context(stmts, indent, out, None);
+    emit_block_context(stmts, indent, out, None, true);
 }
 
 fn emit_function_body(function: &Function, indent: usize, out: &mut String, module: Option<&str>) {
     if function.requires.is_empty() && function.ensures.is_empty() {
-        emit_block_context(&function.body, indent, out, module);
+        emit_block_context(&function.body, indent, out, module, true);
         return;
     }
     let pad = "    ".repeat(indent);
@@ -828,7 +873,7 @@ fn emit_function_body(function: &Function, indent: usize, out: &mut String, modu
     out.push_str(&format!(
         "{pad}let cgx2_value = (|| -> Result<_, String> {{\n"
     ));
-    emit_block_context(&function.body, indent + 1, out, module);
+    emit_block_context(&function.body, indent + 1, out, module, true);
     out.push_str(&format!(
         "{pad}}})();\n{pad}let cgx2_value = cgx2_value?;\n"
     ));
@@ -847,7 +892,13 @@ fn emit_function_body(function: &Function, indent: usize, out: &mut String, modu
     out.push_str(&format!("{pad}Ok(cgx2_value)\n"));
 }
 
-fn emit_block_context(stmts: &[Stmt], indent: usize, out: &mut String, module: Option<&str>) {
+fn emit_block_context(
+    stmts: &[Stmt],
+    indent: usize,
+    out: &mut String,
+    module: Option<&str>,
+    return_tail: bool,
+) {
     let pad = "    ".repeat(indent);
     for (index, stmt) in stmts.iter().enumerate() {
         out.push_str(&format!(
@@ -856,6 +907,20 @@ fn emit_block_context(stmts: &[Stmt], indent: usize, out: &mut String, module: O
         ));
         let last = index + 1 == stmts.len();
         match &stmt.kind {
+            StmtKind::If {
+                condition,
+                then_body,
+                else_body,
+            } => {
+                out.push_str(&format!(
+                    "{pad}if {}? {{\n",
+                    emit_expr_context(condition, module)
+                ));
+                emit_block_context(then_body, indent + 1, out, module, false);
+                out.push_str(&format!("{pad}}} else {{\n"));
+                emit_block_context(else_body, indent + 1, out, module, false);
+                out.push_str(&format!("{pad}}}\n"));
+            }
             StmtKind::Let {
                 mutable,
                 name,
@@ -887,7 +952,7 @@ fn emit_block_context(stmts: &[Stmt], indent: usize, out: &mut String, module: O
                 emit_expr_context(expr, module)
             )),
             StmtKind::Return(None) => out.push_str(&format!("{pad}return Ok(());\n")),
-            StmtKind::Expr(expr) if last => out.push_str(&format!(
+            StmtKind::Expr(expr) if last && return_tail => out.push_str(&format!(
                 "{pad}return Ok({}?);\n",
                 emit_expr_context(expr, module)
             )),
@@ -923,16 +988,22 @@ fn emit_block_context(stmts: &[Stmt], indent: usize, out: &mut String, module: O
                 out.push_str(&format!(
                     "{pad}        let _ = (|| -> Result<_, String> {{\n"
                 ));
-                emit_block_context(body, indent + 3, out, module);
+                emit_block_context(body, indent + 3, out, module, true);
                 out.push_str(&format!("{pad}        }})()?;\n{pad}    }}\n{pad}}}\n"));
             }
             StmtKind::NoGc { .. } => unreachable!("validated source"),
         }
+        if block_returns(std::slice::from_ref(stmt)) {
+            break;
+        }
     }
-    if !matches!(
-        stmts.last().map(|s| &s.kind),
-        Some(StmtKind::Expr(_) | StmtKind::Return(_))
-    ) {
+    if return_tail
+        && !block_returns(stmts)
+        && !matches!(
+            stmts.last().map(|s| &s.kind),
+            Some(StmtKind::Expr(_) | StmtKind::Return(_))
+        )
+    {
         out.push_str(&format!("{pad}Ok(())\n"));
     }
 }
@@ -1073,4 +1144,16 @@ fn quote_rust(value: &str) -> String {
     }
     result.push('"');
     result
+}
+
+fn block_returns(body: &[Stmt]) -> bool {
+    body.iter().any(|stmt| match &stmt.kind {
+        StmtKind::Return(_) => true,
+        StmtKind::If {
+            then_body,
+            else_body,
+            ..
+        } => block_returns(then_body) && block_returns(else_body),
+        _ => false,
+    })
 }

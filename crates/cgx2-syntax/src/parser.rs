@@ -533,7 +533,28 @@ impl Parser {
     }
     fn parse_stmt(&mut self) -> Option<Stmt> {
         let start = self.peek().span.start;
-        let kind = if self.eat(&TokenKind::NoGc).is_some() {
+        let kind = if self.eat(&TokenKind::If).is_some() {
+            let condition = self.parse_expr(0)?;
+            let (then_body, _) = self.parse_suite()?;
+            self.expect(
+                &TokenKind::Else,
+                "CGS107",
+                "if statement requires else block",
+            )?;
+            let (else_body, end) = self.parse_suite()?;
+            return Some(Stmt {
+                kind: StmtKind::If {
+                    condition,
+                    then_body,
+                    else_body,
+                },
+                span: Span { start, end },
+            });
+        } else if self.at(&TokenKind::Else) {
+            self.error("CGS107", "misplaced or duplicate else block");
+            self.advance();
+            return None;
+        } else if self.eat(&TokenKind::NoGc).is_some() {
             self.expect(&TokenKind::LParen, "CGS103", "expected ( after no_gc")?;
             let arguments = self.parse_arguments()?;
             let label_span = arguments.first().map_or(self.peek().span, |arg| arg.span);

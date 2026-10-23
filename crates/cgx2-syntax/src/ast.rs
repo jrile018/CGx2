@@ -110,6 +110,12 @@ pub struct Stmt {
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum StmtKind {
+    /// A statement with two lexical scopes and no tail-expression value.
+    If {
+        condition: Expr,
+        then_body: Vec<Stmt>,
+        else_body: Vec<Stmt>,
+    },
     NoGc {
         budget: Expr,
         body: Vec<Stmt>,

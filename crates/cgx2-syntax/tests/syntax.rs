@@ -396,6 +396,15 @@ fn erase_stmts(stmts: &mut [Stmt]) {
     for stmt in stmts {
         stmt.span = Span { start: 0, end: 0 };
         match &mut stmt.kind {
+            StmtKind::If {
+                condition,
+                then_body,
+                else_body,
+            } => {
+                erase_expr(condition);
+                erase_stmts(then_body);
+                erase_stmts(else_body);
+            }
             StmtKind::Let {
                 annotation, value, ..
             } => {

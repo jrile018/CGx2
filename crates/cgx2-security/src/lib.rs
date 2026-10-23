@@ -324,6 +324,14 @@ fn call_effects(
 fn assignment_findings(statements: &[Stmt], policy: &Policy, out: &mut Vec<Finding>) {
     for stmt in statements {
         match &stmt.kind {
+            StmtKind::If {
+                then_body,
+                else_body,
+                ..
+            } => {
+                assignment_findings(then_body, policy, out);
+                assignment_findings(else_body, policy, out);
+            }
             StmtKind::Assign { .. } if !policy.allowed_effects.contains(&Effect::Mutate) => out
                 .push(Finding {
                     rule_id: "CGSEC001",
@@ -415,6 +423,21 @@ impl<'a> TaintAnalyzer<'a> {
             }
             self.steps += 1;
             match &stmt.kind {
+                StmtKind::If {
+                    condition,
+                    then_body,
+                    else_body,
+                } => {
+                    self.expr(condition, env, stack);
+                    let mut left = env.clone();
+                    let mut right = env.clone();
+                    let a = self.branch(then_body, &mut left, stack);
+                    let b = self.branch(else_body, &mut right, stack);
+                    for (name, value) in env.iter_mut() {
+                        *value = left[name].join(right[name]);
+                    }
+                    result = result.join(a).join(b);
+                }
                 StmtKind::Let { name, value, .. } => {
                     let value = self.expr(value, env, stack);
                     env.insert(name.clone(), value);
@@ -437,10 +460,10 @@ impl<'a> TaintAnalyzer<'a> {
                     }
                 }
                 StmtKind::Return(Some(expr)) => {
-                    return self.expr(expr, env, stack);
+                    return result.join(self.expr(expr, env, stack));
                 }
                 StmtKind::Expr(expr) => {
-                    result = self.expr(expr, env, stack);
+                    result = result.join(self.expr(expr, env, stack));
                 }
                 StmtKind::NoGc { budget, body } => {
                     self.expr(budget, env, stack);
@@ -463,7 +486,7 @@ impl<'a> TaintAnalyzer<'a> {
                     result = Taint::Unknown;
                 }
                 StmtKind::Return(None) => {
-                    return Taint::Clean;
+                    return result;
                 }
             }
         }
@@ -569,6 +592,32 @@ impl<'a> TaintAnalyzer<'a> {
                 }
             }
         }
+    }
+
+    fn branch(
+        &mut self,
+        body: &'a [Stmt],
+        env: &mut BTreeMap<String, Taint>,
+        stack: &mut Vec<&'a str>,
+    ) -> Taint {
+        let mut shadows = BTreeMap::new();
+        let mut result = Taint::Clean;
+        for stmt in body {
+            if let StmtKind::Let { name, .. } = &stmt.kind {
+                shadows
+                    .entry(name.clone())
+                    .or_insert_with(|| env.get(name).copied());
+            }
+            result = result.join(self.statements(std::slice::from_ref(stmt), env, stack));
+        }
+        for (name, value) in shadows {
+            if let Some(value) = value {
+                env.insert(name, value);
+            } else {
+                env.remove(&name);
+            }
+        }
+        result
     }
 
     fn unknown(&mut self, span: Span, message: &str) {

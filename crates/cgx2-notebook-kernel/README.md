@@ -21,3 +21,16 @@ Definitions remain in the live session and are passed to the frozen `check_sourc
 The kernel accepts at most 128 code cells and 64 KiB cumulative code source. At most 32 pure functions, 8 parameters per function, 32 static call levels, and 100,000 estimated scalar steps per cell are admitted. Evaluation scripts and retained state have a 1 MiB cumulative budget. Captured `text/plain` output is at most 65,536 UTF-8 bytes and includes schema 2 source and transitive dependency provenance. The CLI and UI use a killable worker with a default 2 second cell deadline. The frozen evaluator also enforces its own 1,000,000 step and 64 call-depth limits. In-process parsing and static checking are bounded by source size but are not preempted by the worker timeout.
 
 `run_cell(id)` executes the next code cell in file order. `rerun_cell(id)` executes just that cell; `rerun_affected(id)` also runs stale transitive readers. Forward dependencies produce `CGNK009`; a noncurrent prerequisite produces `CGNK004`. Failed execution retains earlier displayed text as a stale observation. Rich HTML or script is never executed by the kernel.
+
+## Bounded Boolean conditional profile (Wave 24)
+
+Pure function bodies support nested Boolean `if`/mandatory `else` statements
+on the existing scalar/local-record profile. Both branches and the guard
+contribute function/type dependencies; lexical locals stay within their branch.
+Changing a function used only in an inactive branch stales users. Replay admission
+counts both branches conservatively; runtime limits, transactional publication,
+worker timeout/cancellation, save/reopen and Restart and Run All remain in place.
+Top-level conditionals, captured cell values in function bodies, mutable/effectful
+functions, foreign calls and contract-bearing profiles retain their rejection
+boundaries. Cell values may be passed as ordinary arguments. See
+[the notebook example](../cgx2-notebook-cli/examples/conditionals.cgnb).

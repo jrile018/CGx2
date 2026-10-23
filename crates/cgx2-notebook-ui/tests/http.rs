@@ -1001,3 +1001,46 @@ fn record_definition_edit_marks_saved_values_stale_and_reruns_in_ui() {
     );
     handle.join().unwrap();
 }
+
+#[test]
+fn conditional_inactive_dependency_stales_http_users_and_survives_save_restart() {
+    let fixture = Fixture::new(include_str!(
+        "../../cgx2-notebook-cli/examples/conditionals.cgnb"
+    ));
+    let (port, handle) = server(&fixture.input, 6);
+    let secret = token(port);
+    let (status, state) = post(port, "/api/restart", json!({}), &secret);
+    assert_eq!(status, 200, "{state}");
+    assert_eq!(state["cells"][3]["outputs"][0]["body"], "42");
+    let independent = state["cells"][4]["provenance"].clone();
+    let (_, state) = post(
+        port,
+        "/api/edit",
+        json!({"id":"fallback", "source":"fn fallback() -> i64:\n    9\n"}),
+        &secret,
+    );
+    assert_eq!(state["cells"][2]["status"], "stale");
+    assert_eq!(state["cells"][3]["status"], "stale");
+    let (status, state) = post(port, "/api/run-cell", json!({"id":"fallback"}), &secret);
+    assert_eq!(status, 200, "{state}");
+    assert_eq!(state["cells"][3]["outputs"][0]["body"], "42");
+    assert_eq!(state["cells"][4]["provenance"], independent);
+    assert_eq!(
+        post(
+            port,
+            "/api/save",
+            json!({"name":"conditionals.cgnb", "overwrite":false}),
+            &secret
+        )
+        .0,
+        200
+    );
+    let (status, state) = post(port, "/api/restart", json!({}), &secret);
+    assert_eq!(status, 200, "{state}");
+    assert_eq!(state["cells"][3]["outputs"][0]["body"], "42");
+    handle.join().unwrap();
+    let saved =
+        parse_notebook_bytes(&fs::read(fixture.dir.join("conditionals.cgnb")).unwrap()).unwrap();
+    let mut reopened = cgx2_notebook_kernel::NotebookKernel::open(saved).unwrap();
+    reopened.restart_and_run_all().unwrap();
+}

@@ -45,3 +45,14 @@ A memory function module requires zero-argument `main()`, explicit `-> Unit`, de
 `memory.alloc_object(region, payload_bytes, reference_slots)` creates a rooted local object handle. The payload is at most 1,048,576 bytes and the number of reference slots at most 256, matching the frozen Wave 12 runtime limits. Arguments are direct names or nonnegative integer literals. `memory.set_reference(owner, index, target)` and `memory.clear_reference(owner, index)` require an object owner and a literal index below that owner's declared slot count. Targets must be object handles in the same region. `let found = memory.reference(owner, index)` creates a local optional reference; only `memory.use_reference(found)` may consume it. An empty or stale reference is checked dynamically. Object handles are rooted until `memory.drop(handle)`; links keep targets reachable after their local roots are dropped. `memory.close(region)` still requires all rooted handles dropped. Collection may reclaim unrooted cycles.
 
 The checker rejects wrong handle kinds, duplicate or aliased bindings, dynamic shapes and indices, cross-region edges, dropped handles, use of an optional reference after region close, and attempts to pass handles through calls, return them, store them globally, or use them in unsupported control flow. It does not claim typed records, concurrent collection, raw pointers, foreign tensor ownership, or native graph compilation. `CGM001` covers unsupported source forms, `CGM002` covers shape, index, kind, and region errors, and existing `CGO` codes cover ownership and `no_gc` violations.
+
+## Bounded Boolean conditional profile (Wave 24)
+
+Conditional guards must be Bool. Each branch has a lexical scope; assignments
+to an existing mutable scalar remain visible outside it. Both branches are
+checked and contribute effects/capabilities even under a literal guard. Branch
+expression tails are discarded: the statement has type Unit. A non-Unit function
+ending in a conditional requires explicit returns on every branch; a partial
+return needs a later tail expression/return. Private return inference joins
+explicit returns with any fallthrough result. Conditional memory programs are
+rejected with CGM001 before ownership lowering, including nested/inactive cases.

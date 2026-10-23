@@ -1,0 +1,29 @@
+#!cgnb 1
+%% markdown id=notes
+# Pure Boolean branches
+Both branches are checked and tracked as dependencies. Changing fallback stales
+choose and its caller, even while the true branch is selected. Branch bindings
+stay local. Top-level if statements and effectful functions remain unsupported.
+%% code id=fallback
+fn fallback() -> i64:
+    7
+%% code id=functions
+record Switch:
+    active: Bool
+    value: i64
+fn choose(flag: Bool) -> i64:
+    if flag:
+        let fallback = 42
+        return fallback
+    else:
+        return fallback()
+fn pick(switch: Switch) -> Switch:
+    if switch.active:
+        return switch
+    else:
+        return Switch(active: true, value: choose(false))
+%% code id=value
+let answer = pick(Switch(active: true, value: choose(true)))
+answer.value
+%% code id=independent
+6 * 7

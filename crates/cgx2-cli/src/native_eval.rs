@@ -51,6 +51,11 @@ fn entry_expression(module: &Module) -> Result<&Expr, NativeEvalError> {
         return Err(error("CGN009", "native C main must be a zero-argument i64 function with one scalar expression and no contracts", main.span));
     }
     match &main.body[0].kind {
+        StmtKind::If { .. } => Err(error(
+            "CGN009",
+            "conditional native foreign entry bodies are unsupported",
+            main.body[0].span,
+        )),
         StmtKind::Expr(expr) | StmtKind::Return(Some(expr)) => Ok(expr),
         _ => Err(error(
             "CGN009",

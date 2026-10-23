@@ -111,3 +111,18 @@ fn build_rejects_malformed_ranges_before_writing_binary() {
         fs::remove_dir_all(dir).unwrap();
     }
 }
+
+#[test]
+fn conditional_native_debug_release_parity() {
+    compare("if false:\n    1 / 0\nelse:\n    42\n");
+    compare("let mut result = 0\nif true:\n    result = 42\nelse:\n    result = 7\nresult\n");
+    compare(include_str!("../../cgx2-cli/examples/conditionals.cg"));
+    for flag in ["true", "false"] {
+        compare(&format!(
+            "fn main() -> i64:\n    let 名 = {flag}\n    if 名:\n        return 1 / 0\n    else:\n        return 9223372036854775807 + 1\n"
+        ));
+    }
+    compare(
+        "record R:\n    active: Bool\n    value: i64\nfn pick(r: R) -> R:\n    if r.active:\n        return r\n    else:\n        return R(active: true, value: 7)\nfn main() -> i64:\n    let r = pick(R(active: true, value: 42))\n    r.value\n",
+    );
+}

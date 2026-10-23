@@ -439,3 +439,36 @@ fn source_changed_during_compilation_is_rejected_before_install() {
             .starts_with(".cgx2c-")
     }));
 }
+
+#[test]
+fn conditional_calls_in_both_package_branches_build_in_debug_and_release() {
+    let c = Case::new();
+    c.manifest(&["src/main.cg", "src/choice.cg", "src/base.cg"]);
+    c.write("src/main.cg", "module demo.main\nimport demo.choice\npub fn main() -> i64:\n    demo.choice.choose(false)\n");
+    c.write("src/choice.cg", "module demo.choice\nimport demo.base\npub fn choose(flag: Bool) -> i64:\n    if flag:\n        return demo.base.answer() / 0\n    else:\n        let x = demo.base.answer()\n        return x\n");
+    c.write(
+        "src/base.cg",
+        "module demo.base\npub fn answer() -> i64:\n    42\n",
+    );
+    for release in [false, true] {
+        let binary = c.0.join(format!("conditional-{release}"));
+        let built = c.build(&binary, release);
+        assert!(built.status.success(), "{}", err(&built));
+        let output = Command::new(binary).output().unwrap();
+        assert!(output.status.success(), "{}", err(&output));
+        assert_eq!(output.stdout, b"42\n");
+    }
+    let output = c.0.join("atomic.rs");
+    fs::write(&output, "keep existing").unwrap();
+    c.write("src/base.cg", "module demo.base\npub fn answer() -> i64:\n    if true:\n        return 42\n    else:\n        return false\n");
+    let result = c.invoke(&[
+        "emit-rust",
+        "--package",
+        c.0.to_str().unwrap(),
+        "--out",
+        output.to_str().unwrap(),
+        "--force",
+    ]);
+    assert!(!result.status.success());
+    assert_eq!(fs::read_to_string(output).unwrap(), "keep existing");
+}

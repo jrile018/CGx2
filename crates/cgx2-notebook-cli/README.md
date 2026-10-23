@@ -96,3 +96,10 @@ cgx2-notebook import portable.cgnb --out reopened.cgnb
 `run` and `show` work on ordinary and portable `.cgnb` input. `export` embeds verified referenced PNG, JPEG, GIF, or WebP assets; `import` writes ordinary notebook text and verified sidecar assets. Neither command changes the input unless that path is explicitly used with `--out` and `--force`. Existing destinations require `--force`; failed validation does not replace them. Notebook cells cannot access external files, networks, host commands, Python, or arbitrary CGx2 effects. This command does not claim Jupyter plugin parity.
 
 `cgx2-notebook restart INPUT.cgnb --out OUTPUT.cgnb` persists stale saved observations without executing. `run` accepts `--timeout-ms N` (1–60,000; default 2,000) for each cell's scalar worker phase. On `CGNK010`, `run` exits nonzero and writes the partial notebook to `--out`: completed earlier cells remain current in that run, the interrupted cell is failed, and dependent saved outputs are stale. The input is untouched unless selected as `--out` with `--force`. The child process is killed at the deadline; static parse/check and output serialization remain in process and are not wall-clock preemptible. A later invocation starts from a clean session and does not restore in-memory bindings from saved output.
+
+## Bounded Boolean conditional profile (Wave 24)
+
+The [conditional notebook](examples/conditionals.cgnb) demonstrates pure
+Boolean function bodies, local record returns, independent branch scopes and
+inactive-branch dependency invalidation. Top-level conditional cells remain
+unsupported; notebook persistence and runner interfaces are unchanged.

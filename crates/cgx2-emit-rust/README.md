@@ -40,3 +40,13 @@ Run `cargo test -p cgx2-emit-rust --offline` for differential tests against `cgx
 The native failure report also carries `failure_report_schema_version: 1`, `file`, `span`, `rollback_preserved`, and additive `operation_failure`, `final_unwind`, and `cleanup_errors`. Each snapshot retains source-observed `rooted_handles` and `rooted_edges`, a runtime memory report, and adds `runtime_rooted_handles`, `runtime_root_registrations`, and `runtime_root_census_error` from `Session::root_census()`. The operation census precedes local unwind; the final census follows all cleanup attempts. Failed unroots remain visible in `cleanup_errors` while the primary diagnostic and span are preserved. Reports remain opt-in, atomic, and capped at 1 MiB.
 
 **Root observation limit:** Zero final `runtime_root_registrations` is necessary cleanup evidence, not a comprehensive memory-safety proof. Source binding counts can differ from runtime registrations, and census errors appear by name rather than as zero.
+
+## Bounded Boolean conditional profile (Wave 24)
+
+Boolean conditional statements emit lexical Rust branch blocks with one guard
+evaluation, discarded branch tails, explicit return propagation, and the existing
+checked-expression/step/depth handling. Supported scalar and local record
+functions work in debug/release native output. Local package imports retain the
+scalar-signature boundary. Conditional memory programs and source Python foreign
+bindings remain explicitly unsupported; neither branch is omitted from static
+validation or call discovery.

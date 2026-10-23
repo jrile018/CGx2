@@ -83,3 +83,9 @@ cargo test --offline -p cgx2-verify-core -p cgx2-verify-cli
 cargo fmt --all -- --check
 cargo clippy --offline -p cgx2-verify-core -p cgx2-verify-cli --all-targets -- -D warnings
 ```
+
+## Bounded Boolean conditional profile (Wave 24)
+
+Conditional contract bodies currently return unknown/unsupported (CGV001), with
+the conditional statement's source span. No branch selection or new solver
+encoding is used to claim a proof. This includes nested conditional bodies.

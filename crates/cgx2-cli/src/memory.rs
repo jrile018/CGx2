@@ -299,6 +299,7 @@ fn lower(statements: &[Stmt]) -> Result<Vec<SpannedOp>, RunError> {
 
 fn lower_stmt(stmt: &Stmt) -> Result<SpannedOp, RunError> {
     let op = match &stmt.kind {
+        StmtKind::If { .. } => return Err(unsupported(stmt.span)),
         StmtKind::NoGc { budget, body } => Op::NoGc {
             budget: bytes(budget)?,
             body: lower(body)?,

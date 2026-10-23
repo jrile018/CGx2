@@ -173,3 +173,33 @@ fn policy_and_source_size_are_bounded() {
     )
     .is_err());
 }
+
+#[test]
+fn conditional_taint_joins_assignments_returns_and_keeps_locals_separate() {
+    for branch in ["true", "false"] {
+        let source = format!("fn relay() -> String:\n    let mut value = \"clean\"\n    if {branch}:\n        value = arg(0)\n        let value = \"shadow\"\n    else:\n        let value = \"local\"\n    return value\nfn main() -> String:\n    python.call(\"eval\", relay())\n");
+        let report = audit(&source, &policy(&["ReadArgs", "Foreign", "Mutate"], true)).unwrap();
+        assert!(
+            report.findings.iter().any(|f| f.rule_id == "CGSEC003"),
+            "{report:?}"
+        );
+    }
+    let source = "fn relay() -> String:\n    if false:\n        return arg(0)\n    else:\n        return \"clean\"\nfn main() -> String:\n    python.call(\"eval\", relay())\n";
+    assert!(audit(source, &policy(&["ReadArgs", "Foreign"], true))
+        .unwrap()
+        .findings
+        .iter()
+        .any(|f| f.rule_id == "CGSEC003"));
+    let mixed = "fn relay() -> String:\n    if false:\n        return arg(0)\n    else:\n        \"ignored\"\n    return \"clean\"\nfn main() -> String:\n    python.call(\"eval\", relay())\n";
+    assert!(audit(mixed, &policy(&["ReadArgs", "Foreign"], true))
+        .unwrap()
+        .findings
+        .iter()
+        .any(|f| f.rule_id == "CGSEC003"));
+    let source = "fn relay() -> String:\n    let value = \"clean\"\n    if false:\n        let value = arg(0)\n    else:\n        let value = \"local\"\n    value\nfn main() -> String:\n    python.call(\"eval\", relay())\n";
+    assert!(!audit(source, &policy(&["ReadArgs", "Foreign"], true))
+        .unwrap()
+        .findings
+        .iter()
+        .any(|f| f.rule_id == "CGSEC003"));
+}

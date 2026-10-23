@@ -327,3 +327,15 @@ fn live_solver_boolean_crosscheck_when_configured() {
         "{invalid}"
     );
 }
+
+#[test]
+fn conditional_contract_body_is_explicitly_unsupported() {
+    let source = Source::new("pub fn choose(flag: Bool) -> i64 effects() caps():\n    requires true\n    ensures result == 1\n    if flag:\n        return 1\n    else:\n        return 2\n");
+    let result = source.run(&["--function", "choose"]);
+    assert!(
+        result
+            .to_string()
+            .contains("conditional contract bodies are unsupported"),
+        "{result}"
+    );
+}

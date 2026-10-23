@@ -347,6 +347,18 @@ fn validate_record_block(
 ) {
     for stmt in stmts {
         match &stmt.kind {
+            StmtKind::If {
+                condition,
+                then_body,
+                else_body,
+            } => {
+                validate_record_expr(condition, scopes, records, errors);
+                for body in [then_body, else_body] {
+                    scopes.push(BTreeMap::new());
+                    validate_record_block(body, scopes, records, typed, errors);
+                    scopes.pop();
+                }
+            }
             StmtKind::Let {
                 mutable,
                 name,
@@ -573,6 +585,15 @@ fn validate_block(
 ) {
     for stmt in stmts {
         match &stmt.kind {
+            StmtKind::If {
+                condition,
+                then_body,
+                else_body,
+            } => {
+                validate_expr(condition, records, errors);
+                validate_block(then_body, script, records, errors);
+                validate_block(else_body, script, records, errors);
+            }
             StmtKind::Let {
                 annotation, value, ..
             } => {
@@ -696,6 +717,14 @@ fn validate_expr(expr: &Expr, records: &BTreeSet<String>, errors: &mut Vec<EmitD
 fn collect_bindings(block: &[Stmt], used: &mut BTreeSet<String>) {
     for stmt in block {
         match &stmt.kind {
+            StmtKind::If {
+                then_body,
+                else_body,
+                ..
+            } => {
+                collect_bindings(then_body, used);
+                collect_bindings(else_body, used);
+            }
             StmtKind::Let { name, .. } => {
                 used.insert(name.clone());
             }
@@ -767,6 +796,18 @@ fn scope_block(
 ) {
     for stmt in block {
         match &mut stmt.kind {
+            StmtKind::If {
+                condition,
+                then_body,
+                else_body,
+            } => {
+                scope_expr(condition, scopes);
+                for body in [then_body, else_body] {
+                    scopes.push(BTreeMap::new());
+                    scope_block(body, scopes, used, assigned, reserved, next);
+                    scopes.pop();
+                }
+            }
             StmtKind::Let { name, value, .. } => {
                 scope_expr(value, scopes);
                 let original = name.clone();
@@ -882,6 +923,16 @@ fn emit_block(stmts: &[Stmt], indent: usize, return_tail: bool, output: &mut Str
         output.push_str(&"    ".repeat(indent));
         let last = index + 1 == stmts.len();
         match &stmt.kind {
+            StmtKind::If {
+                condition,
+                then_body,
+                else_body,
+            } => {
+                output.push_str(&format!("if {}:\n", emit_expr(condition)));
+                emit_block(then_body, indent + 1, false, output);
+                output.push_str(&format!("{}else:\n", "    ".repeat(indent)));
+                emit_block(else_body, indent + 1, false, output);
+            }
             StmtKind::Let { name, value, .. } => {
                 output.push_str(&format!("{} = {}\n", python_name(name), emit_expr(value)));
             }

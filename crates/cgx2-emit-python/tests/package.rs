@@ -395,3 +395,23 @@ fn traversal_existing_output_and_symlink_parent_are_rejected() {
     scratch.write("cgx2.toml", "schema_version = 1\nname = \"bad\"\nentry = \"../escape.cg\"\nsources = [\"../escape.cg\"]\n");
     assert_eq!(load_checked_package(&root).unwrap_err()[0].code, "CGP011");
 }
+
+#[test]
+fn conditional_package_imports_lower_guard_and_both_scoped_branches() {
+    let scratch = Scratch::new();
+    scratch.write("cgx2.toml", "schema_version = 1\nname = \"demo\"\nentry = \"src/main.cg\"\nsources = [\"src/main.cg\", \"src/choice.cg\", \"src/base.cg\"]\n");
+    scratch.write("src/main.cg", "module demo.main\nimport demo.choice\npub fn main() -> i64:\n    demo.choice.choose(false)\n");
+    scratch.write("src/choice.cg", "module demo.choice\nimport demo.base\npub fn choose(flag: Bool) -> i64:\n    if demo.base.guard(flag):\n        let result = demo.base.answer() / 0\n        return result\n    else:\n        let result = demo.base.answer()\n        return result\n");
+    scratch.write("src/base.cg", "module demo.base\npub fn guard(flag: Bool) -> Bool:\n    flag\npub fn answer() -> i64:\n    42\n");
+    let package = load_checked_package(&scratch.0).unwrap();
+    let directory = scratch.0.join("conditional-python");
+    write_package_python(&package, &directory).unwrap();
+    let output = run_python(&directory, &[]);
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    assert_eq!(output.stdout, b"42\n");
+    assert!(emit_package_rust(&package).is_ok());
+}

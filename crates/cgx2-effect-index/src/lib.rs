@@ -275,6 +275,18 @@ impl<'a> Visitor<'a> {
     fn statements(&mut self, statements: &[Stmt]) {
         for statement in statements {
             match &statement.kind {
+                StmtKind::If {
+                    condition,
+                    then_body,
+                    else_body,
+                } => {
+                    self.expr(condition);
+                    for body in [then_body, else_body] {
+                        self.bindings.push(BTreeSet::new());
+                        self.statements(body);
+                        self.bindings.pop();
+                    }
+                }
                 StmtKind::NoGc { budget, body } => {
                     self.expr(budget);
                     self.bindings.push(BTreeSet::new());

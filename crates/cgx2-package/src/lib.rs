@@ -749,6 +749,11 @@ fn contains_memory_script(module: &Module) -> bool {
     }
     fn stmt(node: &Stmt) -> bool {
         match &node.kind {
+            StmtKind::If {
+                condition,
+                then_body,
+                else_body,
+            } => expr(condition) || then_body.iter().chain(else_body).any(stmt),
             StmtKind::NoGc { .. } => true,
             StmtKind::Let { value, .. }
             | StmtKind::Assign { value, .. }
@@ -787,6 +792,16 @@ fn collect_calls(module: &Module, public: &BTreeSet<String>, out: &mut Vec<Resol
     }
     fn stmt(node: &Stmt, public: &BTreeSet<String>, out: &mut Vec<ResolvedCall>) {
         match &node.kind {
+            StmtKind::If {
+                condition,
+                then_body,
+                else_body,
+            } => {
+                expr(condition, public, out);
+                for nested in then_body.iter().chain(else_body) {
+                    stmt(nested, public, out);
+                }
+            }
             StmtKind::NoGc { budget, body } => {
                 expr(budget, public, out);
                 for nested in body {

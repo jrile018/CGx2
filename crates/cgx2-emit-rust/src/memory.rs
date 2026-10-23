@@ -6,15 +6,30 @@ use std::collections::BTreeMap;
 use crate::{EmitDiagnostic, quote_rust};
 
 pub fn is_memory_script(module: &Module) -> bool {
+    fn expr(e: &Expr) -> bool {
+        match &e.kind {
+            ExprKind::Name(path) => path.segments.first().is_some_and(|n| n == "memory"),
+            ExprKind::Call { callee, arguments } => {
+                expr(callee) || arguments.iter().any(|a| expr(&a.value))
+            }
+            ExprKind::Binary { left, right, .. } => expr(left) || expr(right),
+            _ => false,
+        }
+    }
     fn has_memory(stmt: &Stmt) -> bool {
         match &stmt.kind {
+            StmtKind::If {
+                condition,
+                then_body,
+                else_body,
+            } => expr(condition) || then_body.iter().chain(else_body).any(has_memory),
             StmtKind::NoGc { .. } => true,
             StmtKind::Let { value, .. }
             | StmtKind::Assign { value, .. }
-            | StmtKind::Expr(value) => {
-                matches!(&value.kind, ExprKind::Call { callee, .. } if matches!(&callee.kind, ExprKind::Name(path) if path.segments.first().is_some_and(|s| s == "memory")))
-            }
-            _ => false,
+            | StmtKind::Expr(value)
+            | StmtKind::Return(Some(value)) => expr(value),
+            StmtKind::For { iter, body, .. } => expr(iter) || body.iter().any(has_memory),
+            StmtKind::Return(None) => false,
         }
     }
     module.statements.iter().any(has_memory)
@@ -148,6 +163,12 @@ fn emit_block(
         let span = format!("({}, {})", stmt.span.start, stmt.span.end);
         out.push_str(&format!("{pad}if let Err(message) = step(steps, {span}) {{ record_rollback(None, session, &bindings); return Err(message); }}\n"));
         match &stmt.kind {
+            StmtKind::If { .. } => {
+                return Err(unsupported(
+                    "conditional memory programs are unsupported",
+                    stmt.span,
+                ));
+            }
             StmtKind::NoGc { budget, body } => {
                 let budget = size(budget)?;
                 out.push_str(&format!("{pad}{{\n{pad}    let mut cgx2_guard = session.no_gc({budget});\n{pad}    let session = &mut *cgx2_guard;\n"));

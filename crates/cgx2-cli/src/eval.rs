@@ -172,6 +172,23 @@ impl Evaluator<'_> {
         for stmt in statements {
             self.step(stmt.span)?;
             match &stmt.kind {
+                StmtKind::If {
+                    condition,
+                    then_body,
+                    else_body,
+                } => {
+                    let Value::Bool(condition) = self.eval_expr(condition, scope)? else {
+                        return Err(error("CGR009", "if condition must be Bool", condition.span));
+                    };
+                    scope.push();
+                    let flow =
+                        self.eval_block(if condition { then_body } else { else_body }, scope);
+                    scope.pop();
+                    if let Flow::Return(value) = flow? {
+                        return Ok(Flow::Return(value));
+                    }
+                    tail = Value::Unit;
+                }
                 StmtKind::Let {
                     mutable,
                     name,
@@ -579,6 +596,15 @@ fn foreign_shape(ty: &TypeSyntax) -> ValueShape {
 
 fn reject_unsupported(statements: &[Stmt]) -> Result<(), RunError> {
     for stmt in statements {
+        if let StmtKind::If {
+            then_body,
+            else_body,
+            ..
+        } = &stmt.kind
+        {
+            reject_unsupported(then_body)?;
+            reject_unsupported(else_body)?;
+        }
         if stmt_has_memory(stmt) {
             return Err(error(
                 "CGR009",
@@ -605,6 +631,11 @@ fn reject_unsupported(statements: &[Stmt]) -> Result<(), RunError> {
 
 pub(crate) fn stmt_has_memory(stmt: &Stmt) -> bool {
     match &stmt.kind {
+        StmtKind::If {
+            condition,
+            then_body,
+            else_body,
+        } => expr_has_memory(condition) || then_body.iter().chain(else_body).any(stmt_has_memory),
         StmtKind::Let { value, .. } | StmtKind::Assign { value, .. } | StmtKind::Expr(value) => {
             expr_has_memory(value)
         }
@@ -619,6 +650,11 @@ pub(crate) fn stmt_has_memory(stmt: &Stmt) -> bool {
 
 pub(crate) fn stmt_has_for(stmt: &Stmt) -> bool {
     match &stmt.kind {
+        StmtKind::If {
+            then_body,
+            else_body,
+            ..
+        } => then_body.iter().chain(else_body).any(stmt_has_for),
         StmtKind::For { iter, body, .. } => {
             matches!(&iter.kind, ExprKind::Call { callee, .. }
                 if matches!(&callee.kind, ExprKind::Name(path) if path.segments.as_slice() == ["range"]))

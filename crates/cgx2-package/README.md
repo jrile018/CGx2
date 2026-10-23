@@ -34,3 +34,10 @@ Run `cargo run -p cgx2-package --bin cgx2-package --offline -- check crates/cgx2
 ## Package index schema version 2
 
 The package index has `schema_version: 2` and `imports_supported: true` for this bounded static profile. Each sorted module record adds `imports` (source order) and `resolved_public_calls` (source order, with zero-based half-open call spans). The top-level `topological_order` is dependency-first with lexical tie breaking. The per-module API index remains schema version 1. The committed demo index gives a complete machine-readable example.
+
+## Bounded Boolean conditional profile (Wave 24)
+
+Local acyclic scalar packages may use Boolean conditional statements. Dependency
+call discovery and memory-profile detection inspect guards and both branches.
+Public record import/export signatures and conditional memory programs retain
+explicit unsupported boundaries.

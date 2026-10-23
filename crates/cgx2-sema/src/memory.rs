@@ -58,6 +58,23 @@ pub(crate) fn check_memory_module(
     {
         return None;
     }
+    fn conditional(body: &[Stmt]) -> Option<Span> {
+        body.iter().find_map(|stmt| match &stmt.kind {
+            StmtKind::If { .. } => Some(stmt.span),
+            StmtKind::NoGc { body, .. } | StmtKind::For { body, .. } => conditional(body),
+            _ => None,
+        })
+    }
+    if let Some(span) = conditional(&module.statements)
+        .or_else(|| module.functions.iter().find_map(|f| conditional(&f.body)))
+    {
+        return Some(Err(vec![TypeDiagnostic::new(
+            "CGM001",
+            "conditional memory programs are unsupported; ownership joins are not implemented"
+                .into(),
+            span,
+        )]));
+    }
     if !module.functions.is_empty() {
         return Some(check_memory_functions(module));
     }
@@ -92,6 +109,11 @@ fn without_local_calls(
     let mut retained = Vec::new();
     for stmt in statements {
         match &stmt.kind {
+            StmtKind::If { .. } => diagnostics.push(TypeDiagnostic::new(
+                "CGM001",
+                "conditional memory programs are unsupported".into(),
+                stmt.span,
+            )),
             StmtKind::Expr(Expr {
                 kind: ExprKind::Name(_),
                 ..
@@ -377,6 +399,11 @@ fn check_memory_functions(module: &Module) -> Result<TypedModule, Vec<TypeDiagno
 
 fn has_memory(stmt: &Stmt) -> bool {
     match &stmt.kind {
+        StmtKind::If {
+            condition,
+            then_body,
+            else_body,
+        } => expr_has_memory(condition) || then_body.iter().chain(else_body).any(has_memory),
         StmtKind::NoGc { .. } => true,
         StmtKind::Let { value, .. } | StmtKind::Assign { value, .. } | StmtKind::Expr(value) => {
             expr_has_memory(value)
@@ -412,6 +439,9 @@ impl Lowerer {
     fn block(&mut self, statements: &[Stmt]) {
         for stmt in statements {
             match &stmt.kind {
+                StmtKind::If { .. } => {
+                    self.report("conditional memory programs are unsupported", stmt.span)
+                }
                 StmtKind::NoGc { budget, body } => {
                     self.bytes(budget, "budget");
                     self.ops.push(Op::EnterNoGc { span: stmt.span });

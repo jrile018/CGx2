@@ -44,3 +44,9 @@ fn double(x: i64) -> i64:
 ```
 
 The corresponding text view lists each entry, call site, direct effects, and propagated effects. Current syntax disallows mixing function items and top-level script statements in one module; use a script-only file to index top-level calls. Checked mode is limited to the current scalar checker and frozen top-level memory script profile. Syntax-only mode is an analysis aid and must never be treated as a successful semantic check.
+
+## Bounded Boolean conditional profile (Wave 24)
+
+Conditional guards and both branches contribute call sites and transitive
+function effects/capabilities. Branch binding sets are scoped independently;
+a literal guard does not remove an inactive branch from the static index.

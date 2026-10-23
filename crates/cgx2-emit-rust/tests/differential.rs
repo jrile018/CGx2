@@ -262,3 +262,45 @@ fn malformed_literals_and_recursive_calls_are_rejected() {
     assert_eq!(error[0].code, "CGRS001");
     assert_eq!(error[0].span, mixed.statements[0].span);
 }
+
+#[test]
+fn conditionals_preserve_branch_scope_unit_and_first_failure() {
+    compare("if false:\n    1 / 0\nelse:\n    42\n", &[], "", None);
+    compare(
+        "let mut result = 0\nif true:\n    result = 42\nelse:\n    result = 7\nresult\n",
+        &[],
+        "42\n",
+        None,
+    );
+    compare(
+        "fn main() -> i64:\n    if true:\n        return 42\n    else:\n        return 7\n    false\n",
+        &[],
+        "42\n",
+        None,
+    );
+    let source = include_str!("../../cgx2-cli/examples/conditionals.cg");
+    {
+        compare(source, &[], "42\n", None);
+        for flag in ["true", "false"] {
+            let source = format!(
+                "fn main() -> i64:\n    if {flag}:\n        return 1 / 0\n    else:\n        return 9223372036854775807 + 1\n"
+            );
+            compare(
+                &source,
+                &[],
+                "",
+                Some(if flag == "true" {
+                    "division by zero"
+                } else {
+                    "i64 arithmetic overflow"
+                }),
+            );
+        }
+        compare(
+            "record R:\n    n: i64\n    flag: Bool\nfn pick(r: R) -> R:\n    if r.flag:\n        return r\n    else:\n        return R(n: 7, flag: true)\nfn main() -> i64:\n    let r = pick(R(n: 42, flag: true))\n    r.n\n",
+            &[],
+            "42\n",
+            None,
+        );
+    }
+}

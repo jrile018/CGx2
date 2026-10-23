@@ -338,3 +338,61 @@ fn selected_record_function_execution_never_replays_an_effect_cell() {
     assert!(kernel.notebook().cells[0].provenance.is_none());
     assert_eq!(output(&kernel, "call"), "Point(x: 1, active: true)");
 }
+
+#[test]
+fn conditional_inactive_dependencies_worker_reopen_and_failure_recovery() {
+    let example = include_str!("../../cgx2-notebook-cli/examples/conditionals.cgnb");
+    for worker in [false, true] {
+        let mut kernel = NotebookKernel::open(parse_notebook(example).unwrap()).unwrap();
+        if worker {
+            kernel.set_execution_control(control());
+        }
+        kernel.restart_and_run_all().unwrap();
+        assert_eq!(output(&kernel, "value"), "42");
+        kernel
+            .replace_cell("fallback", "fn fallback() -> i64:\n    9".into())
+            .unwrap();
+        assert_eq!(kernel.status("functions").unwrap(), CellStatus::Stale);
+        assert_eq!(kernel.status("value").unwrap(), CellStatus::Stale);
+        assert!(matches!(
+            kernel.status("independent").unwrap(),
+            CellStatus::Current | CellStatus::Cached
+        ));
+        kernel.rerun_affected("fallback").unwrap();
+        assert_eq!(output(&kernel, "value"), "42");
+        let saved = write_notebook(kernel.notebook()).unwrap();
+        let mut reopened = NotebookKernel::open(parse_notebook(&saved).unwrap()).unwrap();
+        if worker {
+            reopened.set_execution_control(control());
+        }
+        reopened.restart_and_run_all().unwrap();
+        reopened
+            .replace_cell(
+                "value",
+                "let pending = choose(false)\nchoose(true) / 0".into(),
+            )
+            .unwrap();
+        assert!(reopened.rerun_cell("value").is_err());
+        reopened.replace_cell("value", "pending".into()).unwrap();
+        assert!(reopened.rerun_cell("value").is_err());
+        reopened
+            .replace_cell("value", "choose(false)".into())
+            .unwrap();
+        reopened.rerun_cell("value").unwrap();
+        assert_eq!(output(&reopened, "value"), "9");
+        reopened.restart_and_run_all().unwrap();
+        assert_eq!(output(&reopened, "value"), "9");
+    }
+}
+
+#[test]
+fn conditional_dependencies_keep_sibling_and_nested_scopes_separate() {
+    let facts = facts_for_source("fn choose(flag: Bool) -> i64:\n    if flag:\n        let outside = 1\n        return outside\n    else:\n        if false:\n            let outside = 2\n            return outside\n        else:\n            return outside()\n").unwrap();
+    assert!(facts.reads.contains("outside"));
+    assert!(!facts.reads.contains("flag"));
+    assert!(facts_for_source("if true:\n    1\nelse:\n    2\n").is_err());
+    assert!(facts_for_source(
+        "fn bad() -> i64:\n    if true:\n        return 1\n    else:\n        return arg_count()\n"
+    )
+    .is_err());
+}

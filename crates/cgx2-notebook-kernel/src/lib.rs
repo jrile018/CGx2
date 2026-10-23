@@ -735,6 +735,16 @@ fn facts_or_opaque(
 
 fn collect_call_names_statement(statement: &cgx2_syntax::Stmt, names: &mut BTreeSet<String>) {
     match &statement.kind {
+        StmtKind::If {
+            condition,
+            then_body,
+            else_body,
+        } => {
+            collect_call_names(condition, names);
+            for stmt in then_body.iter().chain(else_body) {
+                collect_call_names_statement(stmt, names);
+            }
+        }
         StmtKind::Let { value, .. } | StmtKind::Expr(value) | StmtKind::Return(Some(value)) => {
             collect_call_names(value, names)
         }
@@ -847,6 +857,12 @@ pub fn facts_for_source(source: &str) -> Result<CellFacts, KernelError> {
     let mut locals = BTreeSet::new();
     for statement in &module.statements {
         match &statement.kind {
+            StmtKind::If { .. } => {
+                return Err(error(
+                    "CGNK001",
+                    "top-level conditional cells are unsupported; use a pure function body",
+                ))
+            }
             StmtKind::Let {
                 mutable: false,
                 name,
@@ -923,16 +939,30 @@ fn validate_function(function: &Function, facts: &mut CellFacts) -> Result<(), K
     if !facts.defines.insert(function.name.clone()) {
         return Err(error("CGNK001", "duplicate pure function name in cell"));
     }
-    for statement in &function.body {
+    collect_function_block(&function.body, &mut locals, facts)?;
+    Ok(())
+}
+
+fn collect_function_block(
+    body: &[cgx2_syntax::Stmt],
+    locals: &mut BTreeSet<String>,
+    facts: &mut CellFacts,
+) -> Result<(), KernelError> {
+    for statement in body {
         match &statement.kind {
-            StmtKind::Let { mutable: false, name, value, .. } => {
-                collect_expression(value, &locals, facts, true)?;
+            StmtKind::If { condition, then_body, else_body } => {
+                collect_expression(condition, locals, facts, true)?;
+                collect_function_block(then_body, &mut locals.clone(), facts)?;
+                collect_function_block(else_body, &mut locals.clone(), facts)?;
+            }
+            StmtKind::Let { mutable: false, name, annotation, value } => {
+                if let Some(ty) = annotation { function_type(ty, facts)?; }
+                collect_expression(value, locals, facts, true)?;
                 locals.insert(name.clone());
             }
-            StmtKind::Expr(value) | StmtKind::Return(Some(value)) => {
-                collect_expression(value, &locals, facts, true)?;
-            }
-            _ => return Err(error("CGNK011", "pure notebook functions allow only immutable let, expression, and return statements")),
+            StmtKind::Expr(value) | StmtKind::Return(Some(value)) => collect_expression(value, locals, facts, true)?,
+            StmtKind::Return(None) => {},
+            _ => return Err(error("CGNK011", "pure function bodies support immutable bindings, if/else, expressions and returns only")),
         }
     }
     Ok(())
@@ -1115,6 +1145,23 @@ fn statement_cost(
     records: &BTreeSet<&str>,
     stack: &mut Vec<String>,
 ) -> Result<usize, String> {
+    if let StmtKind::If {
+        condition,
+        then_body,
+        else_body,
+    } = &statement.kind
+    {
+        let mut cost =
+            1usize.saturating_add(expression_cost(condition, functions, records, stack)?);
+        // Count both branches conservatively for the replay admission bound.
+        for stmt in then_body.iter().chain(else_body) {
+            cost = cost.saturating_add(statement_cost(stmt, functions, records, stack)?);
+        }
+        return Ok(cost);
+    }
+    if matches!(statement.kind, StmtKind::Return(None)) {
+        return Ok(1);
+    }
     let expression = match &statement.kind {
         StmtKind::Let { value, .. } | StmtKind::Expr(value) | StmtKind::Return(Some(value)) => {
             value

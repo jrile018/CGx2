@@ -199,6 +199,17 @@ fn lower_statement(
     edits: &mut Vec<(usize, usize, String)>,
 ) -> Result<(), String> {
     match &statement.kind {
+        StmtKind::If {
+            condition,
+            then_body,
+            else_body,
+        } => {
+            lower_expression(project, condition, imported, edits)?;
+            for stmt in then_body.iter().chain(else_body) {
+                lower_statement(project, stmt, imported, edits)?;
+            }
+            Ok(())
+        }
         StmtKind::Let { value, .. } | StmtKind::Expr(value) | StmtKind::Return(Some(value)) => {
             lower_expression(project, value, imported, edits)
         }
@@ -284,42 +295,15 @@ fn lower_module(
             mangle(name, &function.name),
         ));
         let mut locals: BTreeSet<_> = function.parameters.iter().map(|p| p.name.clone()).collect();
-        for statement in &function.body {
-            match &statement.kind {
-                StmtKind::Let {
-                    mutable: false,
-                    name: binding,
-                    value,
-                    ..
-                } => {
-                    validate_expression(
-                        name,
-                        value,
-                        &locals,
-                        &local,
-                        &imports,
-                        &mut dependencies,
-                        &mut edits,
-                    )?;
-                    locals.insert(binding.clone());
-                }
-                StmtKind::Expr(value) | StmtKind::Return(Some(value)) => validate_expression(
-                    name,
-                    value,
-                    &locals,
-                    &local,
-                    &imports,
-                    &mut dependencies,
-                    &mut edits,
-                )?,
-                _ => {
-                    return Err(format!(
-                        "CGNK012: {} at {}..{} uses unsupported statement",
-                        function.name, statement.span.start, statement.span.end
-                    ))
-                }
-            }
-        }
+        validate_block(
+            name,
+            &function.body,
+            &mut locals,
+            &local,
+            &imports,
+            &mut dependencies,
+            &mut edits,
+        )?;
         source.push_str(&apply_edits(text, function.span, edits)?);
         source.push('\n');
     }
@@ -329,6 +313,75 @@ fn lower_module(
         hash: hash.to_owned(),
         public,
     })
+}
+
+#[allow(clippy::too_many_arguments)]
+fn validate_block(
+    module: &str,
+    body: &[cgx2_syntax::Stmt],
+    locals: &mut BTreeSet<String>,
+    local: &BTreeSet<String>,
+    imports: &BTreeSet<String>,
+    dependencies: &mut BTreeSet<String>,
+    edits: &mut Vec<(usize, usize, String)>,
+) -> Result<(), String> {
+    for statement in body {
+        match &statement.kind {
+            StmtKind::If {
+                condition,
+                then_body,
+                else_body,
+            } => {
+                validate_expression(
+                    module,
+                    condition,
+                    locals,
+                    local,
+                    imports,
+                    dependencies,
+                    edits,
+                )?;
+                validate_block(
+                    module,
+                    then_body,
+                    &mut locals.clone(),
+                    local,
+                    imports,
+                    dependencies,
+                    edits,
+                )?;
+                validate_block(
+                    module,
+                    else_body,
+                    &mut locals.clone(),
+                    local,
+                    imports,
+                    dependencies,
+                    edits,
+                )?;
+            }
+            StmtKind::Let {
+                mutable: false,
+                name,
+                value,
+                ..
+            } => {
+                validate_expression(module, value, locals, local, imports, dependencies, edits)?;
+                locals.insert(name.clone());
+            }
+            StmtKind::Expr(value) | StmtKind::Return(Some(value)) => {
+                validate_expression(module, value, locals, local, imports, dependencies, edits)?
+            }
+            StmtKind::Return(None) => {}
+            _ => {
+                return Err(format!(
+                    "CGNK012: {module} {}..{} uses unsupported statement",
+                    statement.span.start, statement.span.end
+                ))
+            }
+        }
+    }
+    Ok(())
 }
 
 fn validate_signature(module: &str, function: &Function) -> Result<(), String> {

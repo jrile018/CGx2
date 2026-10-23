@@ -340,3 +340,42 @@ fn local_function_cannot_use_an_imported_record_annotation() {
     assert_eq!(error.code, "CGNK011");
     assert!(error.message.contains("at "), "{error}");
 }
+
+#[test]
+fn conditional_imports_lower_both_branches_and_track_inactive_module_dependencies() {
+    let project = Project::new();
+    project.write("src/alpha.cg", "module demo.alpha\npub fn choose(flag: Bool) -> i64 effects() caps():\n    if flag:\n        return 42\n    else:\n        return 7\n");
+    let book = Notebook { version: 1, cells: vec![
+        code("import", "import demo.alpha\nimport demo.beta"),
+        code("function", "fn local(flag: Bool) -> i64:\n    if flag:\n        return alpha.choose(true)\n    else:\n        return beta.triple(3)\n"),
+        code("value", "local(true)"),
+    ] };
+    let mut kernel = NotebookKernel::open_with_project(book, Some(project.root())).unwrap();
+    kernel.restart_and_run_all().unwrap();
+    assert_eq!(body(&kernel.notebook().cells[2]), "42");
+    let saved = write_notebook(kernel.notebook()).unwrap();
+    assert!(kernel.notebook().cells[0]
+        .provenance
+        .as_ref()
+        .unwrap()
+        .package
+        .as_ref()
+        .unwrap()
+        .modules
+        .contains_key("demo.beta"));
+    project.write(
+        "src/beta.cg",
+        "module demo.beta\npub fn triple(x: i64) -> i64 effects() caps():\n    x * 4\n",
+    );
+    let mut reopened =
+        NotebookKernel::open_with_project(parse_notebook(&saved).unwrap(), Some(project.root()))
+            .unwrap();
+    assert_eq!(reopened.status("value").unwrap(), CellStatus::Stale);
+    reopened.restart_and_run_all().unwrap();
+    assert_eq!(body(&reopened.notebook().cells[2]), "42");
+    reopened
+        .replace_cell("value", "local(false)".into())
+        .unwrap();
+    reopened.rerun_cell("value").unwrap();
+    assert_eq!(body(&reopened.notebook().cells[2]), "12");
+}

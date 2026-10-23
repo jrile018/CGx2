@@ -36,3 +36,11 @@ The taint model follows direct local immutable/mutable bindings, assignments, sc
 | Dynamic dispatch, Python/PyTorch internals, cross-file body, or sanitizer behavior | Missed concrete exploit paths remain possible; only the documented calls and direct flow are inspected. |
 
 Allowed effects are policy labels, not runtime capability tokens. A zero-finding result does not establish general injection safety, enforce source capabilities, or clear the first-release security gate.
+
+## Bounded Boolean conditional profile (Wave 24)
+
+Conditional analysis visits the guard and both branches regardless of literal
+guards. Outer taint states join conservatively; branch-local bindings are restored
+or removed at scope exit. Conditional return taint is retained across later
+fallthrough statements/returns. This remains an advisory bounded explicit-flow
+analysis, not a proof of all paths or implicit information flows.

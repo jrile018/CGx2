@@ -69,3 +69,10 @@ The parser and formatter preserve direct calls `memory.alloc_object(region, payl
 ## Direct CPU tensor source spelling
 
 The bounded direct tensor call uses the existing `unsafe foreign native` declaration and a single call in `main`. Its two inputs are quoted, one-dimensional float64 vector literals such as `"[1.0, 2.0]"`. This intentionally keeps vector syntax inside the quoted literal for this preview; the checker accepts only finite decimal or exponent float64 elements, 1–1024 values per vector, equal lengths, and no nested arrays. The parser and formatter preserve that one call and quoted literal form. See `cgx2-cli/tests/fixtures/tensor-cpu/src/main.cg` for the exact source spelling. There is no general `Tensor` value or numeric tower in this grammar.
+
+## Bounded Boolean conditional profile (Wave 24)
+
+Mandatory-else `if <Bool expression>:` / `else:` statements use nonempty,
+indentation-delimited blocks. Nesting is supported; `elif`, conditional values,
+and truthiness are not. The formatter uses four-space branch indentation and
+preserves the statement form. Diagnostics and AST spans use UTF-8 byte offsets.

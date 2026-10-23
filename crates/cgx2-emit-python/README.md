@@ -35,3 +35,12 @@ The package profile supports an acyclic graph of manifest-listed modules with ex
 Only `i64`, `Bool`, `String`, and `Unit` signatures and expressions are supported. Checked `for item in range(start, end):` loops evaluate each bound once, support nesting and lexical shadowing, and perform checked `i64` arithmetic. The shared `_cgx2_support.py` counts each source statement, expression, range iteration, and local call frame; exhaustion raises `CGR010` at 1,000,000 steps or `CGR011` at 64 frames. Generated statement comments carry deterministic CGx2 byte spans for source mapping. The translator rejects script statements in package modules, foreign bindings, tensor and memory operations, `no_gc`, nonscalar signatures (including imported public functions), and other loop iterators with file and source span diagnostics. It does not preserve CGx2 memory regions, Python/PyTorch foreign allocations, or Python traceback text. Generated edits do not round-trip to `.cg`.
 
 The range-loop body checker currently accepts pure calls to functions in the same module. A qualified cross-module call inside the loop body is rejected by the checker as `CGT012` before emission; cross-module pure calls elsewhere in the package are supported. The subprocess parity tests use Python 3 with a 15-second timeout per generated execution.
+
+## Bounded Boolean conditional profile (Wave 24)
+
+Mandatory-else Boolean statements emit one Python `if`/`else`, including nested
+local-record functions and existing scalar package imports. Scope renaming keeps
+branch bindings separate while preserving outer mutable assignments. Branch tails
+are discarded; explicit returns propagate. Both branches undergo target validation
+and package import lowering. Conditional memory and the existing unsupported
+foreign profiles are rejected rather than translated speculatively.

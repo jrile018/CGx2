@@ -7,6 +7,18 @@ use cgx2_syntax::{
 use crate::types::resolve;
 use crate::{effects, EffectSummary, Type, TypeDiagnostic};
 
+fn block_returns(body: &[Stmt]) -> bool {
+    body.iter().any(|stmt| match &stmt.kind {
+        StmtKind::Return(_) => true,
+        StmtKind::If {
+            then_body,
+            else_body,
+            ..
+        } => block_returns(then_body) && block_returns(else_body),
+        _ => false,
+    })
+}
+
 /// A resolved function signature. Private unannotated returns are inferred from the body.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct FunctionSignature {
@@ -443,6 +455,16 @@ fn function_order(functions: &[Function]) -> Vec<&Function> {
 
     fn calls_in_stmt(stmt: &Stmt, calls: &mut Vec<String>) {
         match &stmt.kind {
+            StmtKind::If {
+                condition,
+                then_body,
+                else_body,
+            } => {
+                calls_in_expr(condition, calls);
+                for statement in then_body.iter().chain(else_body) {
+                    calls_in_stmt(statement, calls);
+                }
+            }
             StmtKind::Let { value, .. }
             | StmtKind::Assign { value, .. }
             | StmtKind::Expr(value) => calls_in_expr(value, calls),
@@ -646,21 +668,57 @@ impl Checker {
         }
         let tail = self.check_block(&function.body, signature.result.as_ref());
         self.scopes.pop();
-        if let Some((actual, span)) = tail {
-            if let Some(expected) = &signature.result {
-                if matches!(
-                    function.body.last().map(|stmt| &stmt.kind),
-                    Some(StmtKind::Return(_))
-                ) {
-                    return;
+        if let Some(expected) = &signature.result {
+            if !block_returns(&function.body) {
+                if let Some((actual, span)) = tail {
+                    self.expect_type(&actual, expected, span);
                 }
-                self.expect_type(&actual, expected, span);
-            } else if function.return_type.is_none() {
+            }
+        } else {
+            if let Some(inferred) = self.check_inferred_result(&function.body, tail) {
                 if let Some(entry) = self.functions.get_mut(&function.name) {
-                    entry.result = Some(actual);
+                    entry.result = Some(inferred);
                 }
             }
         }
+    }
+
+    fn check_inferred_result(&mut self, body: &[Stmt], tail: Option<(Type, Span)>) -> Option<Type> {
+        fn returns(body: &[Stmt], types: &SpanTypes, out: &mut Vec<(Type, Span)>) {
+            for stmt in body {
+                match &stmt.kind {
+                    StmtKind::Return(Some(expr)) => {
+                        if let Some(ty) = types.get(expr.span) {
+                            out.push((ty.clone(), expr.span));
+                        }
+                    }
+                    StmtKind::Return(None) => out.push((Type::Unit, stmt.span)),
+                    StmtKind::If {
+                        then_body,
+                        else_body,
+                        ..
+                    } => {
+                        returns(then_body, types, out);
+                        returns(else_body, types, out);
+                    }
+                    _ => {}
+                }
+            }
+        }
+        let mut returned = Vec::new();
+        returns(body, &self.expressions, &mut returned);
+        if !block_returns(body) {
+            if let Some(tail) = tail {
+                returned.push(tail);
+            }
+        }
+        if let Some((inferred, _)) = returned.first().cloned() {
+            for (actual, span) in returned {
+                self.expect_type(&actual, &inferred, span);
+            }
+            return Some(inferred);
+        }
+        None
     }
 
     fn check_contract(&mut self, expr: &Expr) {
@@ -709,6 +767,21 @@ impl Checker {
 
     fn check_stmt(&mut self, statement: &Stmt, expected: Option<&Type>) -> Option<(Type, Span)> {
         match &statement.kind {
+            StmtKind::If {
+                condition,
+                then_body,
+                else_body,
+            } => {
+                if let Some(ty) = self.check_expr(condition) {
+                    self.expect_type(&ty, &Type::Bool, condition.span);
+                }
+                for body in [then_body, else_body] {
+                    self.scopes.push(BTreeMap::new());
+                    self.check_block(body, expected);
+                    self.scopes.pop();
+                }
+                Some((Type::Unit, statement.span))
+            }
             StmtKind::Let {
                 mutable,
                 name,
@@ -870,6 +943,15 @@ impl Checker {
     fn check_range_body_policy(&mut self, body: &[Stmt]) {
         for stmt in body {
             let expression = match &stmt.kind {
+                StmtKind::If {
+                    condition,
+                    then_body,
+                    else_body,
+                } => {
+                    self.check_range_body_policy(then_body);
+                    self.check_range_body_policy(else_body);
+                    Some(condition)
+                }
                 StmtKind::Let { value, .. }
                 | StmtKind::Assign { value, .. }
                 | StmtKind::Expr(value) => Some(value),

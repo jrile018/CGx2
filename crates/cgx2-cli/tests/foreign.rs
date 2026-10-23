@@ -218,3 +218,43 @@ fn worker_error_frames_preserve_all_runtime_classes_and_first_call_span() {
     }
     fs::remove_dir_all(root).unwrap();
 }
+
+#[test]
+fn conditional_guard_calls_isolated_worker_exactly_once() {
+    let root = std::env::temp_dir().join(format!("cgx2-conditional-worker-{}", std::process::id()));
+    fs::create_dir(&root).unwrap();
+    let marker = root.join("calls");
+    let script = root.join("worker.py");
+    fs::write(&script, format!("import os,struct,sys\ndef s(x):\n b=x.encode();return struct.pack('>I',len(b))+b\nwith open({},'a') as f:f.write('call\\n')\nos.write(1,b'CGX2PY01R'+s('cpython')+s(sys.executable)+s(sys.version)+s(sys.prefix)+b'\\0b\\1')\n", serde_json::to_string(marker.to_str().unwrap()).unwrap())).unwrap();
+    let source = "foreign python fn truth(x: i64) -> Bool effects(Foreign) caps(ForeignCall) = builtins.bool runtime \"local:cpython\" ownership copied\nfn main() -> i64 effects(Foreign) caps(ForeignCall):\n    if truth(1):\n        return 42\n    else:\n        if truth(0):\n            return 1 / 0\n        else:\n            return 7\n";
+    let file = root.join("case.cg");
+    fs::write(&file, source).unwrap();
+    let output = Command::new(env!("CARGO_BIN_EXE_cgx2"))
+        .arg("run")
+        .arg(&file)
+        .env("CGX2_PYTHON_WORKER", &script)
+        .output()
+        .unwrap();
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    assert_eq!(output.stdout, b"42\n");
+    assert_eq!(fs::read_to_string(&marker).unwrap(), "call\n");
+    let dead = source.replace("if truth(1):", "if true:");
+    fs::write(&file, dead).unwrap();
+    let output = Command::new(env!("CARGO_BIN_EXE_cgx2"))
+        .arg("run")
+        .arg(&file)
+        .env("CGX2_PYTHON", "/missing/python")
+        .output()
+        .unwrap();
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    assert_eq!(output.stdout, b"42\n");
+    fs::remove_dir_all(root).unwrap();
+}

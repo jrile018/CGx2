@@ -104,3 +104,16 @@ Build the default artifacts with `cargo build -p cgx2-cli --offline` or `cargo b
 At runtime `CGX2_PYTHON=/absolute/python3` overrides the default `python3` on PATH. `CGX2_PYTHON_WORKER=/absolute/worker.py` explicitly overrides the embedded script; missing overrides fail. `CGX2_PYTHON_TRACE=1` prints successful-call executable/version/prefix provenance to stderr. Leave tracing unset for JSON-only diagnostics. The identity `local:cpython` remains unpinned. The worker uses `-I -S`, so current directory, `PYTHONPATH`, site packages, and startup hooks cannot extend the source allowlist. See [the worker protocol and packaging contract](../cgx2-foreign/README.md) for limits, discovery, cleanup, and platform support.
 
 Enable `cgx2-foreign/in-process` or `cgx2-python-bridge/in-process` explicitly for linked host, copied-array, and handle APIs. These retain their existing behavior and need CPython development libraries. The CLI uses separate scalar types so workspace feature unification does not introduce Python reference destructors into native execution. [The Wave 23 verification report](PYTHON_BOUNDARY_EVIDENCE.md) records artifact hashes, ELF dependencies, runtime maps, real versus mock checks, and reproduction commands.
+
+## Bounded Boolean conditional profile (Wave 24)
+
+Boolean `if`/mandatory `else` statements run on the existing scalar and local
+immutable-record interpreter paths. The guard runs once and only the selected
+branch executes. Branch locals do not escape; mutable outer scalar assignments
+persist. Unit functions may fall through; non-Unit functions need a tail result
+or definite explicit returns. Checked errors retain their selected expression's
+byte span and existing step/depth limits apply. Python foreign calls still use
+the isolated worker, and run only in an executed branch; static checking sees
+both branches. Conditional memory, native-C foreign entry bodies, and tensor
+adapter entry bodies remain unsupported. See [the example](examples/conditionals.cg)
+and [verification evidence](CONDITIONALS-EVIDENCE.md).

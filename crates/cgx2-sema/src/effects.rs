@@ -67,6 +67,16 @@ fn expr_sites(expr: &Expr, sites: &mut Vec<Site>) {
 
 fn stmt_sites(stmt: &Stmt, sites: &mut Vec<Site>) {
     match &stmt.kind {
+        StmtKind::If {
+            condition,
+            then_body,
+            else_body,
+        } => {
+            expr_sites(condition, sites);
+            for nested in then_body.iter().chain(else_body) {
+                stmt_sites(nested, sites);
+            }
+        }
         StmtKind::Let { value, .. } | StmtKind::Expr(value) | StmtKind::Return(Some(value)) => {
             expr_sites(value, sites)
         }

@@ -72,6 +72,14 @@ fn scalar(ty: &Type) -> bool {
 fn declared_names(block: &[Stmt], names: &mut BTreeSet<String>) {
     for stmt in block {
         match &stmt.kind {
+            StmtKind::If {
+                then_body,
+                else_body,
+                ..
+            } => {
+                declared_names(then_body, names);
+                declared_names(else_body, names);
+            }
             StmtKind::Let { name, .. } => {
                 names.insert(name.clone());
             }
@@ -144,6 +152,15 @@ fn lower_block(
 ) {
     for stmt in block {
         match &mut stmt.kind {
+            StmtKind::If {
+                condition,
+                then_body,
+                else_body,
+            } => {
+                lower_expr(condition, imports, private, aliases, file, errors);
+                lower_block(then_body, imports, private, aliases, file, errors);
+                lower_block(else_body, imports, private, aliases, file, errors);
+            }
             StmtKind::Let { value, .. }
             | StmtKind::Assign { value, .. }
             | StmtKind::Expr(value) => lower_expr(value, imports, private, aliases, file, errors),

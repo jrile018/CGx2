@@ -158,3 +158,35 @@ fn unsupported_record_shapes_never_reach_python_emission() {
         parse_module("record Point:\n    x: i64\npub fn id(p: Point) -> Point:\n    p\n").unwrap();
     assert!(collect_public_signatures(&public).is_err());
 }
+
+#[test]
+fn conditionals_preserve_branch_scope_unit_and_first_failure() {
+    let source = include_str!("../../cgx2-cli/examples/conditionals.cg");
+    let output = run_python(source);
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    assert_eq!(output.stdout, b"42\n");
+    for flag in ["true", "false"] {
+        let source = format!("fn main() -> i64:\n    if {flag}:\n        return 1 / 0\n    else:\n        return 9223372036854775807 + 1\n");
+        let output = run_python(&source);
+        assert!(!output.status.success());
+        assert!(
+            String::from_utf8_lossy(&output.stderr).contains(if flag == "true" {
+                "CGR006"
+            } else {
+                "CGR005"
+            })
+        );
+    }
+    let source = "record R:\n    n: i64\n    flag: Bool\nfn pick(r: R) -> R:\n    if r.flag:\n        return r\n    else:\n        return R(n: 7, flag: true)\nfn main() -> i64:\n    let r = pick(R(n: 42, flag: true))\n    r.n\n";
+    let output = run_python(source);
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    assert_eq!(output.stdout, b"42\n");
+}
