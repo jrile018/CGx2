@@ -14,6 +14,41 @@ use serde_json::{json, Value};
 static NEXT: AtomicU64 = AtomicU64::new(0);
 
 #[test]
+fn deleting_pure_function_exposes_stale_output_and_missing_definition() {
+    let fixture = Fixture::new(include_str!(
+        "../../cgx2-notebook-kernel/tests/fixtures/pure-functions.cgnb"
+    ));
+    let (port, handle) = server(&fixture.input, 5);
+    let secret = token(port);
+    assert_eq!(post(port, "/api/restart", json!({}), &secret).0, 200);
+    let (_, state) = post(port, "/api/delete", json!({"id":"defs"}), &secret);
+    assert_eq!(state["cells"][0]["id"], "value");
+    assert_eq!(state["cells"][0]["status"], "stale");
+    assert_eq!(state["cells"][1]["status"], "current");
+    assert_eq!(state["cells"][0]["outputs"][0]["body"], "5");
+    assert_eq!(
+        post(
+            port,
+            "/api/save",
+            json!({"name":"deleted.cgnb","overwrite":false}),
+            &secret
+        )
+        .0,
+        200
+    );
+    let saved = parse_notebook_bytes(&fs::read(fixture.dir.join("deleted.cgnb")).unwrap()).unwrap();
+    assert!(saved.cells[0].provenance.as_ref().unwrap().stale);
+    assert!(!saved.cells[1].provenance.as_ref().unwrap().stale);
+    let (status, diagnostic) = post(port, "/api/run-cell", json!({"id":"value"}), &secret);
+    assert_eq!(status, 409);
+    assert!(diagnostic["error"]
+        .as_str()
+        .unwrap()
+        .contains("define or rerun a pure function"));
+    handle.join().unwrap();
+}
+
+#[test]
 fn pure_function_status_tracks_selective_ui_rerun() {
     let fixture = Fixture::new(include_str!(
         "../../cgx2-notebook-kernel/tests/fixtures/pure-functions.cgnb"

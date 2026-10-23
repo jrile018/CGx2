@@ -22,7 +22,7 @@ function render(data) {
     const section = el("article", "cell");
     section.append(el("h2", "", `${cell.kind} · ${cell.id}`));
     section.append(el("p", "status", `Status: ${cell.status}`));
-    if (cell.provenance) section.append(el("p", "provenance", `Run #${cell.provenance.ordinal} (${cell.provenance.result}${cell.provenance.stale ? ", stale cache" : ""}) · ${cell.provenance.evaluator} · source ${cell.provenance.sourceSha256} · prefix ${cell.provenance.prefixSha256}`));
+    if (cell.provenance) section.append(el("p", "provenance", `Run #${cell.provenance.ordinal} (${cell.provenance.result}${cell.provenance.stale ? ", stale cache" : ""}) · ${cell.provenance.evaluator} · source ${cell.provenance.sourceSha256} · ${cell.provenance.schemaVersion === 2 ? "dependencies" : "prefix"} ${cell.provenance.prefixSha256}`));
     if (cell.kind === "code") {
       const editor = el("textarea");
       editor.value = pending.get(cell.id) ?? cell.source;
@@ -41,6 +41,10 @@ function render(data) {
       run.addEventListener("click", () => command("/api/run-cell", {id:cell.id}));
       section.append(run);
     } else section.append(el("pre", "", cell.source));
+    const remove = el("button", "", "Delete cell");
+    remove.setAttribute("aria-label", `Delete cell ${cell.id}`);
+    remove.addEventListener("click", () => command("/api/delete", {id:cell.id}));
+    section.append(remove);
     for (const output of cell.outputs) {
       const label = cell.status === "current" ? "Current output" : `${cell.status} output (saved observation)`;
       if (output.kind === "text") section.append(el("pre", "output", `${label}: ${output.body}`));

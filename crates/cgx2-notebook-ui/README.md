@@ -1,5 +1,13 @@
 # CGx2 loopback notebook UI
 
+**Delete cell** removes the selected cell in memory. Outputs that called a
+removed pure function remain visible with a stale indicator; unrelated
+successful outputs keep their run revision. Save as persists that state, and
+reopening it never restores live functions. Run the affected cells after
+restoring a definition, or use **Restart and run all** for a clean replay.
+The supported persistent subset remains bounded pure scalar functions and
+immutable scalar values; effectful state and arbitrary imports are unavailable.
+
 `POST /api/interrupt` replies with `{"interruptRequested":true}` when it sets the worker's interrupt signal. That reply does not claim the worker has stopped. Once the active run returns, its cell status is `failed`, retained output is a stale observation, and dependent outputs are `stale`. A later restart clears the signal before running cells again.
 
 From the repository root, run `cargo run --offline -p cgx2-notebook-ui -- open path/to/notebook.cgnb` and open the printed `http://127.0.0.1:PORT/` address on the same computer. The UI accepts ordinary and portable `.cgnb` files. It shows saved Markdown, captured text, supported images, cell status, and provenance without executing on open. Notebook content is inserted as text in the browser; browser-side execution of notebook HTML or script is unsupported.

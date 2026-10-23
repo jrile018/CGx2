@@ -188,6 +188,21 @@ impl UiSession {
         Ok(())
     }
 
+    fn delete(&mut self, id: &str) -> Result<(), String> {
+        let was_code = self
+            .kernel
+            .notebook()
+            .cells
+            .iter()
+            .find(|cell| cell.id == id)
+            .is_some_and(|cell| cell.kind == CellKind::Code);
+        self.kernel
+            .remove_cell(id)
+            .map_err(|error| error.to_string())?;
+        self.needs_restart |= was_code;
+        Ok(())
+    }
+
     fn save(&self, name: &str, overwrite: bool) -> Result<(), String> {
         if !valid_save_name(name) {
             return Err("save name must be a simple .cgnb filename".into());
@@ -500,7 +515,7 @@ fn dispatch(session: &mut UiSession, request: Request, port: u16) -> Vec<u8> {
         (
             "POST",
             "/api/run-next" | "/api/run-cell" | "/api/restart" | "/api/restart-only" | "/api/edit"
-            | "/api/save" | "/api/export",
+            | "/api/delete" | "/api/save" | "/api/export",
         ) => {
             if request.headers.get("x-cgx2-token") != Some(&session.token) {
                 return error_response(403, "missing or invalid token");
@@ -529,6 +544,12 @@ fn dispatch(session: &mut UiSession, request: Request, port: u16) -> Vec<u8> {
                 },
                 "/api/restart" if value == json!({}) => session.restart_and_run_all(),
                 "/api/restart-only" if value == json!({}) => session.restart(),
+                "/api/delete" => match value.get("id").and_then(Value::as_str) {
+                    Some(id) if value.as_object().is_some_and(|obj| obj.len() == 1) => {
+                        session.delete(id)
+                    }
+                    _ => Err("delete requires one notebook cell ID".into()),
+                },
                 "/api/edit" => match (
                     value.get("id").and_then(Value::as_str),
                     value.get("source").and_then(Value::as_str),
