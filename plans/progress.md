@@ -12,18 +12,19 @@ The old weighted estimate gave most areas all but their final point, then withhe
 | [23](wave23/README.md) | 4/4 | Automatic collection under pressure, Python-free native process with explicit worker, notebook record functions, optimized f32 observations |
 | [24](wave24/README.md) | 3/3 | Conditional statements, measured loader bottleneck with checks preserved, native/Python-worker paired observations |
 | [25](wave25/README.md) | 2/2 | Public nominal records across package modules and finite/source/SMT conditional contract verification |
+| [26](wave26/README.md) | 2/2 | Imported notebook public records and conditional source/native memory with scoped cleanup |
 
-These are **14 completed bounded deliveries across Waves 22–25**, including evidence work. They are not 14 closed release gates. The Wave 24 loader deliverable identified the bottleneck and did not improve performance.
+These are **16 completed bounded deliveries across Waves 22–26**, including evidence work. They are not 16 closed release gates. The Wave 24 loader deliverable identified the bottleneck and did not improve performance.
 
 ## Release acceptance remains incomplete
 
 | Area | Implemented and checked | Remaining acceptance work |
 | --- | --- | --- |
-| Memory | Managed/owned/manual regions, no_gc budgets, roots/graphs, finite fault/pressure models, supported source/native parity | Leak-enabled instrumentation on a compatible host; broader ownership/FFI coverage and full supported-semantics safety audit |
-| Language/native toolchain | Checked scalars, loops, immutable local records, bounded if/else, CLI and native builds | Variants, Option/Result, generics, richer standard types/libraries and complete semantic integration; conditional memory joins remain rejected |
-| Modules | Acyclic explicit imports and public scalar/nominal-record function APIs with visibility checks | Richer interfaces, ecosystem/package-resolution breadth and notebook consumption of public records |
+| Memory | Managed/owned/manual regions, no_gc budgets, roots/graphs, finite fault/pressure models, conditional joins/scopes and supported source/native parity | Leak-enabled instrumentation on a compatible host; broader ownership/FFI coverage and full supported-semantics safety audit |
+| Language/native toolchain | Checked scalars, loops, immutable local records, bounded if/else, CLI and native builds | Variants, Option/Result, generics, richer standard types/libraries and complete semantic integration; source memory loops remain rejected |
+| Modules | Acyclic explicit imports and public scalar/nominal-record function APIs with visibility checks | Richer interfaces and ecosystem/package-resolution breadth |
 | Foreign libraries/emission | Real direct CPU f32/f64 routes, native process without Python, explicit scalar Python child, supported Rust/Python emitters | Broader typed tensors/libraries, general foreign packaging and cross-target profile coverage; loader validation cost remains high |
-| Notebooks | Pure scalar/local-record functions, imports in the supported scalar profile, conditional function bodies, stale dependencies, persistence/CLI/UI | Imported record values, effectful workflows and broader retained execution |
+| Notebooks | Pure scalar/record functions, direct imported public records, conditional function bodies, source/root provenance, stale dependencies, persistence/CLI/UI | Transitive import closure, effectful workflows and broader retained execution |
 | Effects/contracts/security | Static effect/capability checks, checked runtime contracts, return-only conditional extraction, independent finite audit and bounded solver trust boundary | Trusted live solver evidence, broader proofs and analyzer coverage |
 | Empirical value | Reproducible selected native/matrix/worker observations with provenance and failure accounting | General runtime/inference/resource targets, scored isolation, independently reviewed paired LLM/human trials |
 
@@ -31,8 +32,8 @@ Passing tests on the implemented subset does not close the other cells. External
 
 ## Latest integrated verification
 
-Wave 25 on `riley/wave25-review`: **778 Rust tests passed, five ignored; 20 HTTP tests; 122 benchmark tests; formatting, Clippy and six public readiness checks pass.** Independent release real f32 execution/native Python isolation and conditional finite-verifier smoke pass. The compiler pilot subtree pin was refreshed. See [review and evidence](wave25/README.md).
+Wave 26 on `riley/wave26-review`: **808 Rust tests passed, five ignored; 21 HTTP tests; 122 benchmark tests; formatting, Clippy and six public readiness checks pass.** Independent release real f32/native Python isolation, combined consumer rejection and 22 generated conditional-memory ASan cases pass. Leak detection was disabled and remains host-blocked. See [review and evidence](wave26/README.md).
 
 ## Next bounded capabilities
 
-[Wave 26](wave26/README.md) targets imported public records in pure notebooks and conditional memory execution with conservative ownership joins. These use already committed package/type/conditional interfaces. Workers commit independently for review; acceptance criteria are fixed before work, with no completion credit for plans.
+[Wave 27](wave27/README.md) targets transitive pure notebook package imports and bounded source/native memory range loops. Inputs are already committed; direct source visibility, ownership invariants, execution limits and cleanup are explicit acceptance criteria. Workers commit independently for review; plans receive no completion credit.

@@ -1,0 +1,96 @@
+{
+  "artifacts": [
+    {
+      "path": "/home/john-riley/projects/lang/target/release/cgx2",
+      "sha256": "d7f0a65f6b5a95a1cbd1940e7c6576565bfaf8bb03a2d8c3b3449bbbb8f4fec4",
+      "bytes": 2078416,
+      "needed": [
+        "libgcc_s.so.1",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "ldd": "\tlinux-vdso.so.1 (0x00007323750c8000)\n\tlibgcc_s.so.1 => /usr/lib/x86_64-linux-gnu/libgcc_s.so.1 (0x0000732374ee6000)\n\tlibc.so.6 => /usr/lib/x86_64-linux-gnu/libc.so.6 (0x0000732374c00000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007323750ca000)\n"
+    },
+    {
+      "path": "/home/john-riley/projects/lang/target/release/cgx2-native",
+      "sha256": "738b9f3c3851e8943f283900c6fadeac444782104842667f7ae7d8e600648f84",
+      "bytes": 2659632,
+      "needed": [
+        "libgcc_s.so.1",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "ldd": "\tlinux-vdso.so.1 (0x0000714935e67000)\n\tlibgcc_s.so.1 => /usr/lib/x86_64-linux-gnu/libgcc_s.so.1 (0x0000714935c14000)\n\tlibc.so.6 => /usr/lib/x86_64-linux-gnu/libc.so.6 (0x0000714935800000)\n\t/lib64/ld-linux-x86-64.so.2 (0x0000714935e69000)\n"
+    }
+  ],
+  "native_scalar": {
+    "source": "/tmp/cgx2-boundary-evidence-xzkt_op3/scalar.cg",
+    "completed": true,
+    "map_samples": 3,
+    "mapped_files": [
+      "/etc/ld.so.cache",
+      "/home/john-riley/projects/lang/target/release/cgx2",
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1"
+    ],
+    "child_executables": [],
+    "python_child_executables": [],
+    "stdout": "5000\n",
+    "stderr": ""
+  },
+  "explicit_python": {
+    "source": "/tmp/cgx2-boundary-evidence-xzkt_op3/explicit.cg",
+    "completed": true,
+    "map_samples": 100,
+    "mapped_files": [
+      "/home/john-riley/projects/lang/target/release/cgx2",
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1"
+    ],
+    "child_executables": [
+      "/usr/bin/python3.14"
+    ],
+    "python_child_executables": [
+      "/usr/bin/python3.14"
+    ],
+    "stdout": "9\n",
+    "stderr": "Python worker executable=\"/usr/bin/python3\" version=\"3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]\" prefix=\"/usr\"\n"
+  },
+  "real_f32": {
+    "source": "/tmp/cgx2-wave23-boundary-f32",
+    "completed": true,
+    "map_samples": 3195,
+    "mapped_files": [
+      "/etc/ld.so.cache",
+      "/home/john-riley/projects/lang/target/release/cgx2",
+      "/home/john-riley/projects/lang/target/release/cgx2-native",
+      "/tmp/cgx2-wave23-boundary-f32/libc10.so",
+      "/tmp/cgx2-wave23-boundary-f32/libcgx2_libtorch_facade.so",
+      "/tmp/cgx2-wave23-boundary-f32/libgomp.so.1",
+      "/tmp/cgx2-wave23-boundary-f32/libtorch.so",
+      "/tmp/cgx2-wave23-boundary-f32/libtorch_cpu.so",
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "/usr/lib/x86_64-linux-gnu/libdl.so.2",
+      "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+      "/usr/lib/x86_64-linux-gnu/libm.so.6",
+      "/usr/lib/x86_64-linux-gnu/libpthread.so.0",
+      "/usr/lib/x86_64-linux-gnu/librt.so.1",
+      "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.35"
+    ],
+    "child_executables": [
+      "/home/john-riley/projects/lang/target/release/cgx2-native",
+      "/usr/bin/x86_64-linux-gnu-readelf"
+    ],
+    "python_child_executables": [],
+    "stdout": "[[58.0, 64.0], [139.0, 154.0]]\n",
+    "stderr": ""
+  },
+  "real_package_pins": {
+    "cgx2-bind.lock.json": "51c669ebb5c90105012278d9f479067a8be8171f73a3db44a89761d913ecd768",
+    "cgx2-libtorch-closure.lock.json": "cb33d18e2cfeb6207a5bf8975b540516768682c70aa48fc8149800ef3c4d219c",
+    "cgx2-libtorch-evidence.json": "d967fa647ce125a44deb5802ab2df2c8ac134855848560c0f511cf589feb5d2a"
+  }
+}

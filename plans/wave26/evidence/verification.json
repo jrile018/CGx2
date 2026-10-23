@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-23",
+  "base": "a574cea65d801c284e86c057bbab3fdd7ebb4549",
+  "integrated_head": "86fb6d3",
+  "worker_commits": {
+    "notebook": "5a0720bd4da4d294ec65ebc00bc73ed8ea432fe1",
+    "memory": "1d149434efa69c60e83f1906128440e6e7001f23"
+  },
+  "rust_passed": 808,
+  "rust_ignored": 5,
+  "http_passed": 21,
+  "benchmark_passed": 122,
+  "asan_binary_cases_passed": 22,
+  "asan_detect_leaks": false,
+  "logs": {
+    "workspace-test.log": {
+      "path": "/home/john-riley/projects/lang/target/wave26-workspace-test.log",
+      "sha256": "92b51a1726cffe0e272064e22c9dd0b69c3851c3baa1a52ddd6356d4889a936a"
+    },
+    "benchmark-test.log": {
+      "path": "/home/john-riley/projects/lang/target/wave26-benchmark-test.log",
+      "sha256": "fd8f98a100b4845a8774f316dd76d22fba90d664754391ffa874ef703d4880c5"
+    },
+    "clippy.log": {
+      "path": "/home/john-riley/projects/lang/target/wave26-clippy.log",
+      "sha256": "1a0ef02b0acbc691a94b42d791674b99a775c17fad759ee2f532b312a1eb528c"
+    },
+    "readiness.json": {
+      "path": "/home/john-riley/projects/lang/target/wave26-readiness.json",
+      "sha256": "f660e9e90260b99fff62f09c685c9fc13c5413ee091e09ae220483aceed5e3d8"
+    },
+    "release-build.log": {
+      "path": "/home/john-riley/projects/lang/target/wave26-release-build.log",
+      "sha256": "685933e2370f72f1055a650cfa467b10cfb7afc79b1141b82dfe576376136fec"
+    },
+    "consumers.log": {
+      "path": "/home/john-riley/projects/lang/target/wave26-consumers.log",
+      "sha256": "4fa34e876939fa3c74b6db3e7bded2cd02dd39eedfc228076987c9ffda69106a"
+    },
+    "asan.log": {
+      "path": "/home/john-riley/projects/lang/target/wave26-asan.log",
+      "sha256": "842837e323e22429e1a2e789d1b430a4ab0fc2a43baa42f5b805ebe01609547e"
+    }
+  }
+}
