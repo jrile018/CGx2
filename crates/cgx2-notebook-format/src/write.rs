@@ -62,10 +62,23 @@ pub fn write_notebook(notebook: &Notebook) -> Result<String, NotebookError> {
             }
         }
         if let Some(p) = &cell.provenance {
-            out.push_str(&format!("%% provenance id={} schema={} source_sha256={} prefix_sha256={} evaluator={} ordinal={} output_ordinal={} result={}{}\n",
+            let package = p.package.as_ref().map_or_else(String::new, |package| {
+                format!(
+                    " manifest_sha256={} module_sha256={}",
+                    package.manifest_sha256,
+                    package
+                        .modules
+                        .iter()
+                        .map(|(name, hash)| format!("{name}:{hash}"))
+                        .collect::<Vec<_>>()
+                        .join(",")
+                )
+            });
+            out.push_str(&format!("%% provenance id={} schema={} source_sha256={} prefix_sha256={} evaluator={} ordinal={} output_ordinal={} result={}{}{}\n",
                 cell.id, p.schema_version, p.source_sha256, p.prefix_sha256, p.evaluator, p.ordinal,
                 p.output_ordinal.map_or_else(|| "none".into(), |ordinal| ordinal.to_string()),
                 match p.result { crate::ProvenanceResult::Success => "success", crate::ProvenanceResult::Failed => "failed" },
+                package,
                 if p.stale { " state=stale" } else { "" }));
         }
         check_document_size(out.len())?;

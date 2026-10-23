@@ -147,6 +147,38 @@ fn stderr(output: &Output) -> String {
     String::from_utf8_lossy(&output.stderr).into_owned()
 }
 
+#[test]
+fn project_option_runs_checked_two_module_example() {
+    let fixture = Fixture::new();
+    let project = Path::new(env!("CARGO_MANIFEST_DIR")).join("examples/pure-imports");
+    let input = project.join("pure-imports.cgnb");
+    let output = fixture.path("pure-imports-result.cgnb");
+    let missing = run(&[Path::new("run"), &input, Path::new("--out"), &output]);
+    assert!(!missing.status.success());
+    assert!(stderr(&missing).contains("--project"));
+    let result = run(&[
+        Path::new("run"),
+        &input,
+        Path::new("--project"),
+        &project,
+        Path::new("--out"),
+        &output,
+    ]);
+    assert!(result.status.success(), "{}", stderr(&result));
+    let saved = parse_notebook_bytes(&fs::read(&output).unwrap()).unwrap();
+    assert!(matches!(&saved.cells[3].outputs[0], CellOutput::Text { body, .. } if body == "43"));
+    assert!(matches!(&saved.cells[4].outputs[0], CellOutput::Text { body, .. } if body == "21"));
+    assert!(saved.cells[4]
+        .provenance
+        .as_ref()
+        .unwrap()
+        .package
+        .as_ref()
+        .unwrap()
+        .modules
+        .contains_key("demo.beta"));
+}
+
 const INPUT: &str = "#!cgnb 1\n%% markdown id=notes\n# Reference: figure.png\n%% code id=seed\nlet x = 3\n%% output id=seed mime=text/plain ordinal=9\nstale\n%% code id=result\nx + 4\n%% output id=result mime=text/plain ordinal=10\nstale\n";
 
 #[test]

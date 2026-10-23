@@ -1,0 +1,4 @@
+module demo.beta
+
+pub fn triple(x: i64) -> i64 effects() caps():
+ x * 3

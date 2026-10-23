@@ -50,6 +50,10 @@ impl UiSession {
     }
 
     pub fn open(input: PathBuf) -> Result<Self, String> {
+        Self::open_with_project(input, None)
+    }
+
+    pub fn open_with_project(input: PathBuf, project: Option<&Path>) -> Result<Self, String> {
         if input.extension().is_none_or(|ext| ext != "cgnb") {
             return Err("expected a .cgnb input file".into());
         }
@@ -62,7 +66,7 @@ impl UiSession {
             .map_err(|error| format!("cannot read {}: {error}", input.display()))?;
         let document = open_notebook_bytes(&bytes, &sidecar(&input))
             .map_err(|error| format!("invalid {}: {error}", input.display()))?;
-        let kernel = NotebookKernel::open(document.notebook)
+        let kernel = NotebookKernel::open_with_project(document.notebook, project)
             .map_err(|error| format!("cannot open notebook kernel: {error}"))?;
         let mut secret = [0u8; 32];
         getrandom::getrandom(&mut secret)
@@ -125,7 +129,11 @@ impl UiSession {
                     "result":match p.result {
                         cgx2_notebook_format::ProvenanceResult::Success => "success",
                         cgx2_notebook_format::ProvenanceResult::Failed => "failed",
-                    }, "stale": p.stale}));
+            }, "stale": p.stale,
+            "package": p.package.as_ref().map(|package| json!({
+                "manifestSha256":package.manifest_sha256,
+                "modules":package.modules
+            }))}));
                 json!({"id":cell.id, "kind":if cell.kind == CellKind::Code {"code"} else {"markdown"},
                     "source":cell.source, "status":status, "outputs":outputs, "provenance":provenance})
             })
@@ -809,4 +817,33 @@ pub fn serve_n(listener: TcpListener, session: UiSession, count: usize) -> io::R
             .map_err(|_| io::Error::other("notebook handler panicked"))??;
     }
     Ok(())
+}
+
+#[cfg(test)]
+mod project_tests {
+    use super::*;
+
+    #[test]
+    fn project_startup_runs_and_reopens_two_module_notebook() {
+        let project = Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../cgx2-notebook-cli/examples/pure-imports");
+        let folder =
+            std::env::temp_dir().join(format!("cgx2-ui-pure-imports-{}", std::process::id()));
+        fs::create_dir_all(&folder).unwrap();
+        let input = folder.join("input.cgnb");
+        fs::copy(project.join("pure-imports.cgnb"), &input).unwrap();
+        let mut session = UiSession::open_with_project(input, Some(&project)).unwrap();
+        session.restart_and_run_all().unwrap();
+        let state = session.state();
+        assert_eq!(state["cells"][3]["outputs"][0]["body"], "43");
+        assert_eq!(state["cells"][4]["outputs"][0]["body"], "21");
+        assert!(state["cells"][4]["provenance"]["package"]["modules"]["demo.beta"].is_string());
+        session.save("saved.cgnb", false).unwrap();
+        let reopened =
+            UiSession::open_with_project(folder.join("saved.cgnb"), Some(&project)).unwrap();
+        assert_eq!(reopened.state()["cells"][4]["status"], "cached");
+        drop(reopened);
+        drop(session);
+        fs::remove_dir_all(folder).unwrap();
+    }
 }

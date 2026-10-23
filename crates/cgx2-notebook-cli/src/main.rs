@@ -26,7 +26,7 @@ static TEMP_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
 const HELP: &str = "cgx2-notebook: clean, pure scalar notebook file runner\n\
 Usage:\n\
-  cgx2-notebook run INPUT.cgnb --out OUTPUT.cgnb [--edit-cell ID --source CG_CODE] [--timeout-ms N] [--force]\n\
+cgx2-notebook run INPUT.cgnb --out OUTPUT.cgnb [--project ROOT] [--edit-cell ID --source CG_CODE] [--timeout-ms N] [--force]\n\
   cgx2-notebook restart INPUT.cgnb --out OUTPUT.cgnb [--force]\n\
   cgx2-notebook delete INPUT.cgnb CELL_ID --out OUTPUT.cgnb [--force]\n\
   cgx2-notebook inspect INPUT.cgnb\n\
@@ -70,11 +70,13 @@ enum Command {
         edit_cell: Option<String>,
         source: Option<String>,
         timeout: Duration,
+        project: Option<PathBuf>,
     },
     Restart {
         input: PathBuf,
         output: PathBuf,
         force: bool,
+        project: Option<PathBuf>,
     },
     Delete {
         input: PathBuf,
@@ -278,6 +280,7 @@ fn parse_command(mut args: impl Iterator<Item = OsString>) -> Result<Command, Co
         let mut source = None;
         let mut timeout = DEFAULT_CELL_TIMEOUT;
         let mut timeout_seen = false;
+        let mut project = None;
         while let Some(arg) = args.next() {
             if arg == "--out" {
                 if output.is_some() {
@@ -294,6 +297,13 @@ fn parse_command(mut args: impl Iterator<Item = OsString>) -> Result<Command, Co
                     return Err(CommandError::Usage("--force may appear only once".into()));
                 }
                 force = true;
+            } else if (command == "run" || command == "restart") && arg == "--project" {
+                if project.is_some() {
+                    return Err(CommandError::Usage("--project may appear only once".into()));
+                }
+                project = Some(PathBuf::from(args.next().ok_or_else(|| {
+                    CommandError::Usage("--project requires ROOT".into())
+                })?));
             } else if command == "run" && arg == "--edit-cell" {
                 if edit_cell.is_some() {
                     return Err(CommandError::Usage(
@@ -357,12 +367,14 @@ fn parse_command(mut args: impl Iterator<Item = OsString>) -> Result<Command, Co
                 edit_cell,
                 source,
                 timeout,
+                project,
             }
         } else if command == "restart" {
             Command::Restart {
                 input,
                 output,
                 force,
+                project,
             }
         } else if command == "export" {
             Command::Export {
@@ -464,11 +476,13 @@ fn execute(command: Command) -> Result<(), CommandError> {
             edit_cell,
             source,
             timeout,
+            project,
         } => {
             check_output_collision(&output, force)?;
             let document = read_document(&input)?;
-            let mut kernel = NotebookKernel::open(document.notebook)
-                .map_err(|error| CommandError::Input(error.to_string()))?;
+            let mut kernel =
+                NotebookKernel::open_with_project(document.notebook, project.as_deref())
+                    .map_err(|error| CommandError::Input(error.to_string()))?;
             kernel.set_execution_control(ExecutionControl::new(
                 env::current_exe().map_err(|error| CommandError::Cell(error.to_string()))?,
                 timeout,
@@ -515,11 +529,13 @@ fn execute(command: Command) -> Result<(), CommandError> {
             input,
             output,
             force,
+            project,
         } => {
             check_output_collision(&output, force)?;
             let document = read_document(&input)?;
-            let mut kernel = NotebookKernel::open(document.notebook)
-                .map_err(|error| CommandError::Input(error.to_string()))?;
+            let mut kernel =
+                NotebookKernel::open_with_project(document.notebook, project.as_deref())
+                    .map_err(|error| CommandError::Input(error.to_string()))?;
             kernel
                 .restart()
                 .map_err(|error| CommandError::Cell(error.to_string()))?;

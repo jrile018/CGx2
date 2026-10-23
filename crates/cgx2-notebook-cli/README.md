@@ -1,5 +1,23 @@
 # CGx2 notebook command
 
+## Checked local pure imports
+
+Run [the two-module example](examples/pure-imports/pure-imports.cgnb) with:
+
+```sh
+cgx2-notebook run crates/cgx2-notebook-cli/examples/pure-imports/pure-imports.cgnb \
+  --project crates/cgx2-notebook-cli/examples/pure-imports \
+  --out /tmp/pure-imports-result.cgnb
+```
+
+`--project ROOT` is explicit on `run` and `restart`. The notebook keeps native
+`.cgnb` syntax: an import-only cell binds a local module short name, and later
+cells call `module.function(...)`. Missing or changed package inputs are rejected
+or shown stale on reopen; saved provenance includes the manifest and source
+SHA-256 values. The project root is never searched through ambient Python,
+network packages, or unlisted files. Pure scalar imports do not enable external
+side effects, Python libraries, tensor handles, or general Jupyter kernels.
+
 ## Bounded pure scalar sweeps
 
 ```sh

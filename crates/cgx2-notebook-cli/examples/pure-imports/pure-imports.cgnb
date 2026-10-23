@@ -1,0 +1,11 @@
+#!cgnb 1
+%% code id=alpha_import
+import demo.alpha
+%% code id=alpha_value
+let value = alpha.double(21)
+%% code id=beta_import
+import demo.beta
+%% code id=alpha_result
+value + 1
+%% code id=beta_result
+beta.triple(7)

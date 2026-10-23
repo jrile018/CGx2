@@ -1,8 +1,8 @@
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 
 use crate::{
     check_document_size, valid_id, valid_mime, Cell, CellKind, Notebook, NotebookError, Output,
-    Provenance, ProvenanceResult,
+    PackageProvenance, Provenance, ProvenanceResult,
 };
 
 enum Body {
@@ -132,9 +132,40 @@ pub fn parse_notebook(text: &str) -> Result<Notebook, NotebookError> {
                 }
                 ["%%", "provenance", id_field, schema_field, source_field, prefix_field, evaluator_field, ordinal_field, output_ordinal_field, result_field, state @ ..] =>
                 {
-                    let stale = match state {
-                        [] => false,
-                        ["state=stale"] => true,
+                    let mut stale = false;
+                    let mut manifest = None;
+                    let mut modules = None;
+                    for field in state {
+                        if *field == "state=stale" && !stale {
+                            stale = true;
+                        } else if let Some(hash) = field.strip_prefix("manifest_sha256=") {
+                            if manifest.replace(hash.to_owned()).is_some() {
+                                return Err(malformed(zero_line + 1, line));
+                            }
+                        } else if let Some(list) = field.strip_prefix("module_sha256=") {
+                            if modules.is_some() {
+                                return Err(malformed(zero_line + 1, line));
+                            }
+                            let mut parsed = BTreeMap::new();
+                            for item in list.split(',') {
+                                let (name, hash) = item
+                                    .split_once(':')
+                                    .ok_or_else(|| malformed(zero_line + 1, line))?;
+                                if parsed.insert(name.to_owned(), hash.to_owned()).is_some() {
+                                    return Err(malformed(zero_line + 1, line));
+                                }
+                            }
+                            modules = Some(parsed);
+                        } else {
+                            return Err(malformed(zero_line + 1, line));
+                        }
+                    }
+                    let package = match (manifest, modules) {
+                        (None, None) => None,
+                        (Some(manifest_sha256), Some(modules)) => Some(PackageProvenance {
+                            manifest_sha256,
+                            modules,
+                        }),
                         _ => return Err(malformed(zero_line + 1, line)),
                     };
                     let id = id_field
@@ -195,6 +226,7 @@ pub fn parse_notebook(text: &str) -> Result<Notebook, NotebookError> {
                         ordinal,
                         output_ordinal,
                         result,
+                        package,
                         stale,
                     });
                 }

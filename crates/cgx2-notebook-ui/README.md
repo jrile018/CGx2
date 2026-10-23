@@ -1,5 +1,14 @@
 # CGx2 loopback notebook UI
 
+Open a notebook with checked local scalar imports using
+`cgx2-notebook-ui open FILE.cgnb --project ROOT [--port PORT]`. The project
+must contain `cgx2.toml`; only listed, checked pure scalar modules are
+available. Calls use `module.function(...)` after an import-only cell. The UI
+shows the checked manifest and module source hashes in output provenance and
+marks dependent outputs stale when a module changes. A missing project fails
+clearly at open. External side effects, arbitrary Python libraries, direct
+tensor handles, and broad Jupyter kernel compatibility remain unsupported.
+
 Markdown `![alt](asset:sha256:<64 lowercase hex>)` references render through the token-protected asset route after digest and image-type validation. Source text is shown verbatim; the UI builds image elements with DOM APIs and blob URLs under its restrictive Content Security Policy. Other Markdown links remain text and trigger no file or network fetch.
 
 For a parameter sweep, use `cgx2-notebook sweep INPUT.cgnb CELL_ID --value

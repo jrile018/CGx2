@@ -2,8 +2,8 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
 
 use cgx2_notebook_format::{
-    make_provenance, prefix_hash, source_hash, CellKind, Notebook, Output, ProvenanceResult,
-    CAPTURE_SCHEMA_VERSION, MAX_TEXT_OUTPUT_BYTES,
+    make_provenance, prefix_hash, source_hash, CellKind, Notebook, Output, PackageProvenance,
+    ProvenanceResult, CAPTURE_SCHEMA_VERSION, MAX_TEXT_OUTPUT_BYTES,
 };
 
 use crate::deps::{affected_after, dependency_digest, CellFacts};
@@ -81,6 +81,7 @@ pub struct NotebookSession<E: CellExecutor> {
     statuses: BTreeMap<String, CellStatus>,
     pending_affected: BTreeMap<String, BTreeSet<String>>,
     executor: E,
+    package_provenance: BTreeMap<String, PackageProvenance>,
     last_ordinal: u64,
     last_execution_ordinal: u64,
 }
@@ -90,6 +91,15 @@ impl<E: CellExecutor> NotebookSession<E> {
         notebook: Notebook,
         facts: BTreeMap<String, CellFacts>,
         executor: E,
+    ) -> Result<Self, SessionError> {
+        Self::new_with_packages(notebook, facts, executor, BTreeMap::new())
+    }
+
+    pub fn new_with_packages(
+        mut notebook: Notebook,
+        facts: BTreeMap<String, CellFacts>,
+        executor: E,
+        package_provenance: BTreeMap<String, PackageProvenance>,
     ) -> Result<Self, SessionError> {
         let mut seen = BTreeSet::new();
         let mut statuses = BTreeMap::new();
@@ -137,6 +147,7 @@ impl<E: CellExecutor> NotebookSession<E> {
                 if provenance.source_sha256 != source_hash(&cell.source)
                     || provenance.prefix_sha256 != expected_dependency
                     || provenance.stale
+                    || provenance.package != package_provenance.get(&cell.id).cloned()
                 {
                     CellStatus::Stale
                 } else if provenance.result == ProvenanceResult::Failed {
@@ -161,12 +172,45 @@ impl<E: CellExecutor> NotebookSession<E> {
                 last_execution_ordinal = last_execution_ordinal.max(provenance.ordinal);
             }
         }
+        // A changed checked module invalidates its direct cells and every
+        // transitive notebook reader, including readers of scalar bindings.
+        for index in 0..notebook.cells.len() {
+            let id = &notebook.cells[index].id;
+            if notebook.cells[index].kind != CellKind::Code
+                || statuses.get(id) != Some(&CellStatus::Stale)
+            {
+                continue;
+            }
+            let affected = affected_after(
+                &notebook.cells,
+                &facts,
+                index,
+                &facts[id].defines,
+                facts[id].opaque_effects,
+            );
+            for later in affected {
+                let candidate = &notebook.cells[later].id;
+                if statuses.get(candidate).is_some_and(|status| {
+                    matches!(status, CellStatus::Cached | CellStatus::Current)
+                }) {
+                    statuses.insert(candidate.clone(), CellStatus::Stale);
+                }
+            }
+        }
+        for cell in &mut notebook.cells {
+            if statuses.get(&cell.id) == Some(&CellStatus::Stale) {
+                if let Some(provenance) = &mut cell.provenance {
+                    provenance.stale = true;
+                }
+            }
+        }
         Ok(Self {
             notebook,
             facts,
             statuses,
             pending_affected: BTreeMap::new(),
             executor,
+            package_provenance,
             last_ordinal,
             last_execution_ordinal: last_execution_ordinal.max(last_ordinal),
         })
@@ -185,6 +229,18 @@ impl<E: CellExecutor> NotebookSession<E> {
 
     pub fn executor_mut(&mut self) -> &mut E {
         &mut self.executor
+    }
+
+    /// Refresh checked project inputs after the caller validates an edited notebook.
+    pub fn replace_package_provenance(
+        &mut self,
+        package_provenance: BTreeMap<String, PackageProvenance>,
+    ) {
+        self.package_provenance = package_provenance;
+    }
+
+    pub fn package_provenance(&self) -> &BTreeMap<String, PackageProvenance> {
+        &self.package_provenance
     }
 
     /// Reset execution while retaining saved outputs and their provenance.
@@ -301,6 +357,7 @@ impl<E: CellExecutor> NotebookSession<E> {
             make_provenance(&self.notebook, index, execution_ordinal, output_ordinal);
         provenance.schema_version = CAPTURE_SCHEMA_VERSION;
         provenance.prefix_sha256 = dependency_digest(&self.notebook.cells, &self.facts, index);
+        provenance.package = self.package_provenance.get(id).cloned();
         self.notebook.cells[index].provenance = Some(provenance);
         self.statuses.insert(id.into(), CellStatus::Current);
         self.pending_affected.remove(id);
@@ -418,6 +475,7 @@ impl<E: CellExecutor> NotebookSession<E> {
         }
         self.notebook.cells.remove(index);
         self.facts.remove(id);
+        self.package_provenance.remove(id);
         self.statuses.remove(id);
         self.pending_affected.remove(id);
         for pending in self.pending_affected.values_mut() {
@@ -504,6 +562,10 @@ impl<E: CellExecutor> NotebookSession<E> {
         let mut provenance = make_provenance(&self.notebook, index, ordinal, output_ordinal);
         provenance.schema_version = CAPTURE_SCHEMA_VERSION;
         provenance.prefix_sha256 = dependency_digest(&self.notebook.cells, &self.facts, index);
+        provenance.package = self
+            .package_provenance
+            .get(&self.notebook.cells[index].id)
+            .cloned();
         provenance.result = ProvenanceResult::Failed;
         self.notebook.cells[index].provenance = Some(provenance);
         self.last_execution_ordinal = ordinal;

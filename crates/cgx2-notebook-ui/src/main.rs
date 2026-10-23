@@ -9,25 +9,26 @@ use cgx2_notebook_ui::{serve, UiSession};
 fn run() -> Result<(), String> {
     let mut args = env::args_os().skip(1);
     if args.next().as_deref() != Some(std::ffi::OsStr::new("open")) {
-        return Err("usage: cgx2-notebook-ui open FILE.cgnb [--port PORT]".into());
+        return Err("usage: cgx2-notebook-ui open FILE.cgnb [--project ROOT] [--port PORT]".into());
     }
     let input = PathBuf::from(args.next().ok_or("open requires FILE.cgnb")?);
     let mut port = 0;
-    if let Some(option) = args.next() {
-        if option != "--port" {
-            return Err("only --port PORT is supported".into());
+    let mut project = None;
+    while let Some(option) = args.next() {
+        if option == "--port" {
+            port = args
+                .next()
+                .ok_or("--port requires a number")?
+                .to_string_lossy()
+                .parse::<u16>()
+                .map_err(|_| "invalid port number")?;
+        } else if option == "--project" && project.is_none() {
+            project = Some(PathBuf::from(args.next().ok_or("--project requires ROOT")?));
+        } else {
+            return Err("expected --project ROOT or --port PORT".into());
         }
-        port = args
-            .next()
-            .ok_or("--port requires a number")?
-            .to_string_lossy()
-            .parse::<u16>()
-            .map_err(|_| "invalid port number")?;
     }
-    if args.next().is_some() {
-        return Err("too many arguments".into());
-    }
-    let mut session = UiSession::open(input)?;
+    let mut session = UiSession::open_with_project(input, project.as_deref())?;
     session.configure_worker(env::current_exe().map_err(|error| error.to_string())?);
     let listener = TcpListener::bind(("127.0.0.1", port))
         .map_err(|error| format!("cannot bind 127.0.0.1:{port}: {error}"))?;
