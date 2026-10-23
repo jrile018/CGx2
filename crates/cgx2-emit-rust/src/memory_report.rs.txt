@@ -96,7 +96,9 @@ fn cgx2_write_report(
     let file = cgx2_json_string(option_env!("CGX2_SOURCE_FILE").unwrap_or("<source>"));
     let lifecycle = if result.is_err() {
         let operation = CGX2_FAILURE.with(|value| value.borrow().as_ref().map(FailureObservation::to_json));
-        format!(",\"operation_failure\":{},\"final_unwind\":{{\"rooted_handles\":0,\"rooted_edges\":0,\"memory\":{memory}}}", operation.as_deref().unwrap_or("null"))
+        let final_unwind = FailureObservation::new(session).to_json();
+        let cleanup_errors = CGX2_CLEANUP_ERRORS.with(|value| value.borrow().iter().map(|error| cgx2_json_string(error)).collect::<Vec<_>>().join(","));
+        format!(",\"operation_failure\":{},\"final_unwind\":{final_unwind},\"cleanup_errors\":[{cleanup_errors}]", operation.as_deref().unwrap_or("null"))
     } else {
         String::new()
     };

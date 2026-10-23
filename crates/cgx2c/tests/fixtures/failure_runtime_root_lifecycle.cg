@@ -1,0 +1,22 @@
+fn prepare() -> Unit effects(ManagedAlloc, Mutate, Collect) caps(MemoryCollect):
+    let old = memory.region(mode: manual, limit: 256)
+    let garbage = memory.alloc_object(old, 8, 0)
+    memory.drop(garbage)
+    memory.collect(old)
+    memory.close(old)
+
+fn exhaust() -> Unit effects(ManagedAlloc, Mutate):
+    let active = memory.region(mode: manual, limit: 512)
+    let parent = memory.alloc_object(active, 8, 1)
+    let child = memory.alloc_object(active, 4, 0)
+    memory.set_reference(parent, 0, child)
+    let denied = memory.alloc_object(active, 32, 0)
+    memory.drop(denied)
+    memory.clear_reference(parent, 0)
+    memory.drop(child)
+    memory.drop(parent)
+    memory.close(active)
+
+fn main() -> Unit effects(ManagedAlloc, Mutate, Collect) caps(MemoryCollect):
+    prepare()
+    exhaust()

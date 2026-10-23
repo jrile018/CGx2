@@ -34,6 +34,7 @@ pub struct RunFailure {
     pub rollback_preserved: Option<bool>,
     pub operation_failure: Option<Box<FailureSnapshot>>,
     pub final_unwind: Option<Box<FailureSnapshot>>,
+    pub cleanup_errors: Vec<String>,
 }
 
 fn no_report(error: RunError) -> RunFailure {
@@ -43,6 +44,7 @@ fn no_report(error: RunError) -> RunFailure {
         rollback_preserved: None,
         operation_failure: None,
         final_unwind: None,
+        cleanup_errors: Vec::new(),
     }
 }
 
@@ -113,6 +115,7 @@ fn execute_with_failure(
                     rollback_preserved: failure.rollback_preserved,
                     operation_failure: failure.operation_failure,
                     final_unwind: failure.final_unwind,
+                    cleanup_errors: failure.cleanup_errors,
                 }]
             })?;
         Ok((RunResult { value: Value::Unit }, Some(report)))

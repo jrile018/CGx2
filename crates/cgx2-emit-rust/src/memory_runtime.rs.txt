@@ -7,15 +7,25 @@ enum Binding { Region(RegionId), Owned(OwnedBytes), Managed(Handle), Reference(O
 thread_local! { static CGX2_ROLLBACK: std::cell::Cell<Option<bool>> = const { std::cell::Cell::new(None) }; }
 thread_local! { static CGX2_OBSERVE: std::cell::Cell<bool> = const { std::cell::Cell::new(false) }; }
 thread_local! { static CGX2_FAILURE: std::cell::RefCell<Option<FailureObservation>> = const { std::cell::RefCell::new(None) }; }
+thread_local! { static CGX2_CLEANUP_ERRORS: std::cell::RefCell<Vec<String>> = const { std::cell::RefCell::new(Vec::new()) }; }
 struct FailureObservation {
     memory: String,
     handles: HashSet<Handle>,
     edges: usize,
     observable: bool,
+    runtime_rooted_handles: Option<usize>,
+    runtime_root_registrations: Option<usize>,
+    runtime_root_census_error: Option<String>,
 }
 impl FailureObservation {
     fn new(session: &Session) -> Self {
-        Self { memory: session.memory_report().to_json(), handles: HashSet::new(), edges: 0, observable: true }
+        let (runtime_rooted_handles, runtime_root_registrations, runtime_root_census_error) =
+            match session.root_census() {
+                Ok(census) => (Some(census.rooted_handles), Some(census.root_registrations), None),
+                Err(error) => (None, None, Some(format!("{error:?}"))),
+            };
+        Self { memory: session.memory_report().to_json(), handles: HashSet::new(), edges: 0, observable: true,
+            runtime_rooted_handles, runtime_root_registrations, runtime_root_census_error }
     }
     fn add_roots(&mut self, session: &Session, bindings: &HashMap<&'static str, Binding>) {
         let Some(roots) = graph_snapshot(session, bindings) else {
@@ -31,7 +41,10 @@ impl FailureObservation {
     fn to_json(&self) -> String {
         let handles = if self.observable { self.handles.len().to_string() } else { "null".into() };
         let edges = if self.observable { self.edges.to_string() } else { "null".into() };
-        format!("{{\"rooted_handles\":{handles},\"rooted_edges\":{edges},\"memory\":{}}}", self.memory)
+        let runtime_handles = self.runtime_rooted_handles.map_or_else(|| "null".to_owned(), |value| value.to_string());
+        let registrations = self.runtime_root_registrations.map_or_else(|| "null".to_owned(), |value| value.to_string());
+        let census_error = self.runtime_root_census_error.as_deref().map_or_else(|| "null".to_owned(), cgx2_json_string);
+        format!("{{\"rooted_handles\":{handles},\"rooted_edges\":{edges},\"runtime_rooted_handles\":{runtime_handles},\"runtime_root_registrations\":{registrations},\"runtime_root_census_error\":{census_error},\"memory\":{}}}", self.memory)
     }
 }
 
