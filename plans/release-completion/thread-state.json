@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24T11:17:00.668Z",
+  "checked_at": "2026-10-24T11:37:00.683Z",
   "original_chats": [
     {
       "lane": "core",
@@ -235,9 +235,10 @@
       "worktree": "/home/john-riley/.codex/worktrees/4836/lang",
       "base": "0d321d3d1b0341121b8363a5a87eeaf674c20eec",
       "status": "running",
-      "afterCursor": "9a64eb13-4087-480b-808c-6ba54eb87c2d:2",
+      "afterCursor": "9a64eb13-4087-480b-808c-6ba54eb87c2d:3",
       "plan": "plans/release-completion/s2b-ordinary-memory/plan.md",
-      "setup_verified": "worktree HEAD equals reviewed base; read_thread and wait_threads active; list_threads omitted agent-created chat, exact read-only local metadata resolved without duplication"
+      "setup_verified": "worktree HEAD equals reviewed base; read_thread and wait_threads active; list_threads omitted agent-created chat, exact read-only local metadata resolved without duplication",
+      "progress_note": "Active; worker reports transactional graph-transfer runtime tests and failure-owner cleanup passing, now wiring source/native region/guard/Session entry. Uncommitted work, not reviewed acceptance."
     }
   ],
   "s2a_repairs": [
