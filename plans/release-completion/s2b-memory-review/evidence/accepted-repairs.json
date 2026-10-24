@@ -1,0 +1,96 @@
+{
+  "status": "two-bounded-repairs-accepted",
+  "code_commit": "2994ebfbeb80960d83fa25f0e707abdae8f64964",
+  "ordinary_memory_checkpoint_complete": false,
+  "release_complete": false,
+  "workspace": {
+    "suites": 256,
+    "passed": 1163,
+    "failed": 0,
+    "ignored": 6
+  },
+  "build": "passed",
+  "clippy_all_targets_all_features_Dwarnings": "passed",
+  "format": "passed",
+  "diff_check": "passed",
+  "repairs": {
+    "native-guards": {
+      "worker": "fe9714e018b2561850eaaebfaf5463b90ad0de65",
+      "integrated": "2994ebfbeb80960d83fa25f0e707abdae8f64964"
+    },
+    "report-layout": {
+      "worker": "d0a6055435bb2c2e2182f347f2478cd9e30febd2",
+      "integrated": "0a13447fd313b94455f1d811a33cacbed9105350"
+    }
+  },
+  "products": {
+    "guard": {
+      "passed": 518,
+      "checks": 518,
+      "path": "/home/john-riley/projects/lang/target/s2b-memory-repairs-guard-product.json",
+      "sha256": "2b143e6b4c37c5ae1a166fe68d7ce97d715b6cb184511c7603fb0f16d7c2125a"
+    },
+    "report": {
+      "passed": 265,
+      "checks": 265,
+      "path": "/home/john-riley/projects/lang/target/s2b-memory-repairs-report-product.json",
+      "sha256": "86d263e288e28f39b46b799b82bedf507eeb0aca30860bda52cc1659b15de6f6"
+    },
+    "graph": {
+      "passed": 99,
+      "checks": 99,
+      "path": "/home/john-riley/projects/lang/target/s2b-memory-repairs-graph-product.json",
+      "sha256": "1f283e3940558f1fc01bfe410d91147cf23f7e3f65c0258fe52a817afce1b8c8"
+    }
+  },
+  "logs": {
+    "tests": {
+      "path": "/home/john-riley/projects/lang/target/s2b-memory-repairs-tests.log",
+      "sha256": "b9aad99fe7bca62555da6400895a376ae28ab659d0c652d3c3c785bb74d1cb9d"
+    },
+    "build": {
+      "path": "/home/john-riley/projects/lang/target/s2b-memory-repairs-build.log",
+      "sha256": "ee2e40b60bc229da9e22f316409888d2ce768ed3adeb31bdd77cd2e3ec256fe6"
+    },
+    "clippy": {
+      "path": "/home/john-riley/projects/lang/target/s2b-memory-repairs-clippy.log",
+      "sha256": "34bd07ab87d59f544254572b8e558455c594e4422058d0ec0164832738bcbe8b"
+    },
+    "guard-product": {
+      "path": "/home/john-riley/projects/lang/target/s2b-memory-repairs-guard-product.log",
+      "sha256": "88de176cf1b58a8fbe70fe536d7ac1e75a8436000b3e74e62eafaeb26a2c0f01"
+    },
+    "report-product": {
+      "path": "/home/john-riley/projects/lang/target/s2b-memory-repairs-report-product.log",
+      "sha256": "97d9f2f87c2438386b802a2194219c86a50571065aa3603720f3e87314d1d9fc"
+    },
+    "graph-product": {
+      "path": "/home/john-riley/projects/lang/target/s2b-memory-repairs-graph-product.log",
+      "sha256": "8603c2cc4bcd524f20174740d9f95f470056bb62fd5577b3bf236c2a7ff64594"
+    }
+  },
+  "python_plan_correction": "Legacy memory scripts use existing explicit CGE001 unsupported diagnostic, normal exit1 and unchanged artifact, independently verified; original CGE006 plan criterion was mistaken. Historical worker evidence unchanged. Ordinary-owned CGE006 requirement unchanged.",
+  "ordinary_owned_chat": {
+    "threadId": "01a16bc8-90ff-7621-9e07-56cd23e25524",
+    "status": "running",
+    "afterCursor": "4b2d88ff-7fb1-4074-bcbe-85c6a2648334:4"
+  },
+  "remaining": "All ordinary source memory, subsequent S2b/S3/S4 and external evidence requirements remain mandatory.",
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/home/john-riley/projects/lang/target/release-plan-review",
+    "TMPDIR": "/home/john-riley/projects/lang/target/cgx2-wave21-tmp",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "commands": [
+    "cargo test --workspace --all-features --offline --locked",
+    "cargo build --workspace --offline --locked",
+    "cargo clippy --workspace --all-targets --all-features --offline --locked -- -D warnings",
+    "cargo fmt --all --check",
+    "git diff --check",
+    "python3 crates/cgx2-emit-rust/tests/graph_guard_parity/run.py --binary-dir /home/john-riley/projects/lang/target/release-plan-review/debug --output /home/john-riley/projects/lang/target/s2b-memory-repairs-guard-product.json",
+    "python3 crates/cgx2-cli/tests/memory_report_layout/run.py --binary /home/john-riley/projects/lang/target/release-plan-review/debug/cgx2 --output /home/john-riley/projects/lang/target/s2b-memory-repairs-report-product.json",
+    "python3 crates/cgx2-syntax/s2b-memory-evidence/run.py --binary-dir /home/john-riley/projects/lang/target/release-plan-review/debug --output /home/john-riley/projects/lang/target/s2b-memory-repairs-graph-product.json"
+  ]
+}

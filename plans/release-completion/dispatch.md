@@ -130,3 +130,7 @@ Common reviewed repair base9fcefbbb201f1f73f387f43672bc9b4f9d23eeb7. All three w
 | ordinary-owned | 01a16bc8-90ff-7621-9e07-56cd23e25524 | /home/john-riley/.codex/worktrees/bd1f/lang | running |
 | report-layout | 01a16bc8-7d97-7cc3-9f03-be20ce7186d7 | /home/john-riley/.codex/worktrees/b705/lang | running |
 | native-guards | 01a16bc8-738b-70a0-8606-4bee2ed891f0 | /home/john-riley/.codex/worktrees/58d1/lang | running |
+
+## Both memory repairs accepted; ordinary-owned remains running
+
+Native guard and report provenance deliveries passed independent review and combined1163Rust/882product checks, build/Clippy/fmt. Integrated code2994ebf. Saved worker/integration commits and current cursors in thread-state.json; details in s2b-memory-review/README.md and evidence/accepted-repairs.json. The ordinary-owned chat remains active. No additional safe interface consumer is ready and no duplicate/new chat was launched.

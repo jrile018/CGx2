@@ -67,3 +67,7 @@ The final source-specialization and native-constructor fixes are reviewed and in
 ## S2b memory supporting delivery reviewed
 
 Graph/payload delivery is staged repair-required. 1157 workspace tests and99 graph product checks pass; review found two executable regressions and confirmed that ordinary-function memory remains unimplemented. Three bounded parallel lanes address native guards, report provenance, and first ordinary-owned source execution. Full R03/R04 and broader release gates remain open; see [review](release-completion/s2b-memory-review/README.md).
+
+## S2b memory legacy repairs accepted
+
+The native guard budget and source report provenance regressions are fixed and independently reviewed. Combined1163Rust tests and882source/target product checks pass; default build, Clippy and fmt pass. Graph/payload support is accepted as infrastructure only. Ordinary-owned source execution is still running; full ordinary memory, remaining S2b, S3 and external evidence gates remain open. [Evidence](release-completion/s2b-memory-review/evidence/accepted-repairs.json).
