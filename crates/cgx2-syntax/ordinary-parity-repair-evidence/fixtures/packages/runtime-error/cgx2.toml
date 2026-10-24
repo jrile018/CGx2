@@ -1,0 +1,4 @@
+schema_version = 1
+name = "parity-error"
+entry = "main.cg"
+sources = ["main.cg", "lib.cg"]

@@ -1,0 +1,15 @@
+# café 🔧: byte spans must include this UTF-8 prefix
+fn main() -> i64 effects(ManagedAlloc):
+    match memory.try_no_gc(budget: 65536):
+        Result.Ok(guard):
+            match memory.try_region(mode: memory.Mode.Manual, limit: 4096):
+                Result.Ok(r):
+                    match memory.try_in(borrow(r), [20, 22]):
+                        Result.Ok(xs):
+                            length(xs) + 40
+                        Result.Err(error):
+                            -3
+                Result.Err(error):
+                    -2
+        Result.Err(error):
+            -1

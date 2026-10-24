@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "reviewed_base": "7bb7a480119826693db67ed503caaf7f23f6abb2",
+  "attempts": {
+    "auto-1": {
+      "passed": 29,
+      "failed": 0,
+      "complete": true,
+      "exceptions": []
+    },
+    "matrix-1": {
+      "passed": 822,
+      "failed": 88,
+      "complete": true,
+      "exceptions": []
+    },
+    "matrix-2": {
+      "passed": 901,
+      "failed": 76,
+      "complete": true,
+      "exceptions": []
+    },
+    "matrix-3": {
+      "passed": 902,
+      "failed": 75,
+      "complete": true,
+      "exceptions": []
+    },
+    "package-1": {
+      "passed": 40,
+      "failed": 0,
+      "complete": true,
+      "exceptions": []
+    },
+    "quality-1": {
+      "passed": 6,
+      "failed": 0,
+      "complete": true,
+      "exceptions": []
+    },
+    "quality-2": {
+      "passed": 6,
+      "failed": 0,
+      "complete": true,
+      "exceptions": []
+    },
+    "replay-1": {
+      "passed": 4,
+      "failed": 0,
+      "complete": true,
+      "exceptions": []
+    },
+    "review-1": {
+      "passed": 1,
+      "failed": 14,
+      "complete": true,
+      "exceptions": []
+    },
+    "review-2": {
+      "passed": 1,
+      "failed": 14,
+      "complete": true,
+      "exceptions": []
+    },
+    "smoke-1": {
+      "passed": 55,
+      "failed": 1,
+      "complete": true,
+      "exceptions": []
+    },
+    "verification-1": {
+      "passed": 0,
+      "failed": 1,
+      "complete": true,
+      "exceptions": []
+    },
+    "verification-2": {
+      "passed": 4,
+      "failed": 1,
+      "complete": true,
+      "exceptions": []
+    }
+  },
+  "ordinary_memory_accepted": false,
+  "release_accepted": false,
+  "interpretation": "Semantic failures remain failed. Timing fields supervise bounded commands only. Review report distinguishes source/library/unrun gates."
+}

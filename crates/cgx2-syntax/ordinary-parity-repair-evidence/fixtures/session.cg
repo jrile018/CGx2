@@ -1,0 +1,15 @@
+fn fallback() -> i64 effects(Mutate):
+    let mut result = -10
+    for i in range(0, 2):
+        result += i
+    result - 1
+fn main() -> i64 effects(ManagedAlloc, Mutate):
+    match memory.try_session():
+        Result.Ok(session):
+            42
+        Result.Err(error):
+            match error:
+                memory.SessionEntryError.HostAllocation(site):
+                    fallback()
+                memory.SessionEntryError.IdentifierExhausted:
+                    -11

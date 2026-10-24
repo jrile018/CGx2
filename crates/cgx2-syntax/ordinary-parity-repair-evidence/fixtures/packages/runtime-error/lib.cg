@@ -1,0 +1,5 @@
+module app.lib
+# café 🔧: runtime contract belongs to this dependency
+pub fn fail() -> i64:
+    requires false
+    1

@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "gzip_files_verified": 390,
+  "compressed_and_original_hashes_match": true,
+  "manifest_sha256": "e62e6b0d8124f121dbe882a30fe6202fc3fd0b1e7a2c9ebfa7ef65e417cfc7d4",
+  "final_frozen_sha256": {
+    "cgx2-verify": "bfe14596b761a50cb007680d93f66095c21ff309589dc928540be11ed394d871",
+    "libcgx2_package.rlib": "da10a37608bbdbdc9f2cf012ab9ee27825ac47b391f6185350cdf256ff34d252",
+    "libcgx2_emit_rust.rlib": "5a6cb8ddc9460586d972cef85b28579c56a189af302aa13245e8255b75269545",
+    "libcgx2_sema.rlib": "33ccbade1299030912d2e5ba10135fa9ad946fcb5c37ec65ddd078e0badb9c89",
+    "cgx2-effect-index": "5e8ed2ee204392e1ec8826c48bba33f9c20eb120493d843aef9f48d3241229e9",
+    "libcgx2_runtime.rlib": "fb78abe23ef2c7a111f03fb9e353fa47ea388e48a38195d40e56fdcbf19b56a4",
+    "cgx2-security": "e26a10cfa8bed631ad96719c85cba8545f97fa3641d9c70ef3249fdaba90577d",
+    "cgx2": "6f05ccdf5ac51c6d7b971ac2f55f5858ec2a121feda805211b2cb2843fe8ab5b",
+    "cgx2c": "451d270bbd66eefd60b2a4c52752d25730fa6150492660c7c7347632a05ec018",
+    "cgx2-native": "a5a55f7a55f2a55a20d2b9956961829962753b3d526f1cf2d63d86ec85debd02",
+    "cgx2-notebook": "4fa9d806b5dfd8b7f58fec5ccdc7f72df3a744969ca70af2fea6dfb172e2e75b",
+    "libcgx2_cli.rlib": "8669f3d9f4f175674835058320662b1f3de4d8e6ce9be01c1e1d1871bbf44a8e"
+  },
+  "all_frozen_hashes_match": true
+}
