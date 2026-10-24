@@ -167,3 +167,7 @@ Both repair chats reviewed-bounded-delivery. Combined code938c911 passes1237Rust
 ## Default ordinary managed source running
 
 Reviewed basec9d60229ecf3ed2bf76b29525fec0bdda41d0906. Chat01a16ca5-fff7-7a70-b960-e86e6714b71e (CGx2 default ordinary managed heap), worktree/home/john-riley/.codex/worktrees/685c/lang, is confirmed active by read_thread/wait_threads; HEAD matches base. Queued client6a37512e-ee9e-498e-ae81-995c71663b27 and cursor are saved. list_threads omitted agent-created chat; exact read-only local metadata plus app reads resolved identity without duplicate. Sole shared producer; consumers wait for reviewed implementation. Full memory/release gates remain open.
+
+## Managed verification temporary quota relieved (2026-10-24 07:50 UTC heartbeat)
+
+The sole managed worker remains running without a delivered commit. Both worker and coordinator sandbox startup hit /tmp user quota. Coordinator confirmed ownership and absence of process references, then removed only the inactive /tmp/cgx2-wave20-review-memory-target/debug/incremental rebuildable Rust cache (172,246,910 bytes). Normal sandbox git status now succeeds. No evidence or host settings changed. Worker notified to continue private-directory verification. Saved current cursor; no duplicate or consumer dispatch.

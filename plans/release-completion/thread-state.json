@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24T06:30:30.558Z",
+  "checked_at": "2026-10-24T07:50:30.573Z",
   "original_chats": [
     {
       "lane": "core",
@@ -220,7 +220,8 @@
       "worktree": "/home/john-riley/.codex/worktrees/685c/lang",
       "base": "c9d60229ecf3ed2bf76b29525fec0bdda41d0906",
       "status": "running",
-      "afterCursor": "306cfc56-28ee-4c5f-ae40-81a6de815086:1"
+      "afterCursor": "306cfc56-28ee-4c5f-ae40-81a6de815086:6",
+      "verification_note": "Temporary quota interruption resolved by coordinator cache cleanup; required verification remains in progress, no delivery accepted."
     }
   ],
   "s2a_repairs": [
