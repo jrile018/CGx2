@@ -98,4 +98,13 @@ Common repair base: b595724e1b086c604220cc5b165c141e65a0531f. All five worktree 
 
 ## First S2b repair wave reviewed; two follow-up repairs ready
 
-All five preceding repair chats are reviewed-bounded-repair; historical running table superseded. Combined 1126 tests and159 foundation product checks pass, but three reproduced residual defects keep foundation acceptance failed. Plans: s2b-review/source-specialization/plan.md and native-constructors/plan.md. No shared interface changes or downstream feature dispatch. Actual new chat identities follow.
+All five preceding repair chats are reviewed-bounded-repair; historical running table superseded. Combined 1126 tests and 159 foundation product checks pass, but three reproduced residual defects keep foundation acceptance failed. Plans: s2b-review/source-specialization/plan.md and native-constructors/plan.md. No shared interface changes or downstream feature dispatch. Actual new chat identities follow.
+
+## Two follow-up S2b repair chats running
+
+Base c2a039db3ea0b4e457a9f2e0c7626db77094d313 is confirmed at both worktree HEADs. Both permanent chats are active via read_thread/wait_threads. list_threads again omitted agent-created chats; read-only local metadata resolved exact worktree identities, then app reads verified titles and activity. Queued client IDs and cursors are retained in thread-state.json. No duplicate chats.
+
+| Lane | Chat | Worktree | Status |
+| --- | --- | --- | --- |
+| native-constructors | 01a16b8d-e2be-7142-b1f5-3d5c6810e806 | /home/john-riley/.codex/worktrees/5140/lang | running |
+| source-specialization | 01a16b8d-d23c-7a20-a84b-50ade10292b6 | /home/john-riley/.codex/worktrees/c9ae/lang | running |

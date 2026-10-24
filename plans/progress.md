@@ -58,4 +58,4 @@ Foundation delivery 414c71f is staged repair-required. Verified worker evidence 
 
 ## S2b first repairs integrated
 
-Five bounded fixes are reviewed and integrated. Combined1126 Rust tests (six ignored), Clippy, formatting, binaries and159 foundation product checks pass. Expanded tests still reproduce native constructor dispatch and two source-specialization defects; two exclusive repair plans address them. R02/R10 foundation acceptance remains failed, with the full remaining S2b, S3 and external evidence ledger preserved. See [review](release-completion/s2b-review/README.md).
+Five bounded fixes are reviewed and integrated. Combined 1126 Rust tests (six ignored), Clippy, formatting, binaries and 159 foundation product checks pass. Expanded tests still reproduce native constructor dispatch and two source-specialization defects; two exclusive repair plans address them. R02/R10 foundation acceptance remains failed, with the full remaining S2b, S3 and external evidence ledger preserved. See [review](release-completion/s2b-review/README.md).
