@@ -313,9 +313,11 @@ fn no_gc_package_is_rejected_with_source_location() {
         "module app.main\npub fn main() -> i64:\n    no_gc(budget: 0):\n        1\n    1\n",
     );
     let errors = load_checked_package(&root).unwrap_err();
+    // Ordinary no_gc now selects the authenticated owned profile. Packages
+    // still reject that profile before the copied-value/package walker.
     assert!(errors
         .iter()
-        .any(|d| d.code == "CGM001" && d.span.is_some()));
+        .any(|d| d.code == "CGT080" && d.span.is_some()));
 }
 
 #[test]

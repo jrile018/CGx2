@@ -1,0 +1,8 @@
+record R:
+    x: i64
+fn main() -> i64:
+    let prior = owned(R(x: 9))
+    no_gc(budget: 32):
+        no_gc(budget: 0):
+            0
+    42

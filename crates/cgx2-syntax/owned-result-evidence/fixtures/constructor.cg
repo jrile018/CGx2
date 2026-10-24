@@ -1,0 +1,6 @@
+# π
+record R:
+    x: i64
+fn main() -> i64:
+    let q = Result<owned<R>, AllocationError>.Ok(owned(R(x: 1)))
+    0

@@ -1,0 +1,7 @@
+# π
+record R:
+    x: i64
+fn bad(p: shared<R>) -> Result<owned<R>, AllocationError>:
+    try_owned(p)
+fn main() -> i64:
+    0

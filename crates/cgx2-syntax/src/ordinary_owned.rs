@@ -35,12 +35,29 @@ pub fn ordinary_owned_span(module: &Module) -> Option<Span> {
         }
     }
     let found = std::cell::Cell::new(None);
+    let guard = std::cell::Cell::new(None);
+    // The pre-existing memory-function profile requires explicit Unit/effects.
+    // Keep even guard-only legacy functions on their historical budget path.
+    let legacy_memory = std::cell::Cell::new(
+        !module.functions.is_empty()
+            && module.functions.iter().all(|f| {
+                f.effects.is_some()
+                    && f.return_type
+                        .as_ref()
+                        .is_some_and(|t| t.arguments.is_empty() && t.path.segments == ["Unit"])
+            }),
+    );
     let inspect = |e: &crate::Expr| {
         if let ExprKind::Call { callee, .. } = &e.kind {
             if let ExprKind::Name(p) = &callee.kind {
                 let name = p.segments.join(".");
-                if matches!(name.as_str(), "owned" | "borrow" | "borrow_mut")
-                    && !module.functions.iter().any(|f| f.name == name)
+                if name.starts_with("memory.") {
+                    legacy_memory.set(true);
+                }
+                if matches!(
+                    name.as_str(),
+                    "owned" | "try_owned" | "borrow" | "borrow_mut"
+                ) && !module.functions.iter().any(|f| f.name == name)
                     && !module.records.iter().any(|r| r.name == name)
                 {
                     found.set(Some(e.span));
@@ -53,6 +70,9 @@ pub fn ordinary_owned_span(module: &Module) -> Option<Span> {
         crate::visit_stmts(
             body,
             &mut |s| {
+                if matches!(s.kind, StmtKind::NoGc { .. }) && module.statements.is_empty() {
+                    guard.set(Some(s.span));
+                }
                 if let StmtKind::Let {
                     annotation: Some(t),
                     ..
@@ -66,5 +86,11 @@ pub fn ordinary_owned_span(module: &Module) -> Option<Span> {
             &mut |e| inspect(e),
         );
     }
-    found.get()
+    found.get().or_else(|| {
+        if legacy_memory.get() {
+            None
+        } else {
+            guard.get()
+        }
+    })
 }

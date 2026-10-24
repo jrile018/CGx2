@@ -1,0 +1,17 @@
+record R:
+    x: i64
+fn relay(a: i64, old: owned<R>, n: Bool, view: shared<R>, q: Result<owned<R>, AllocationError>) -> Result<owned<R>, AllocationError>:
+    let snapshot = view.x
+    if n:
+        return q
+    else:
+        return q
+fn main() -> i64:
+    let owner = owned(R(x: 9))
+    let old = owned(R(x: 4))
+    let q = relay(1, old, false, borrow(owner), try_owned(R(x: 42)))
+    match q:
+        Result.Ok(p):
+            return p.x
+        Result.Err(e):
+            return 0

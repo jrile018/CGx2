@@ -1,0 +1,1125 @@
+{
+  "schema_version": 1,
+  "checkpoint_complete": false,
+  "release_complete": false,
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "checks": [
+    {
+      "name": "build",
+      "command": [
+        "cargo",
+        "build",
+        "--workspace",
+        "--all-features",
+        "--offline",
+        "--locked"
+      ],
+      "exit": 0,
+      "log": "build.log",
+      "log_sha256": "f0fa278e4dea1ec3ee3429876f612b6c4ac0fec540b86e805af04b6030e70217",
+      "duration_seconds": 1.765,
+      "log_gzip": "build.log.gz",
+      "log_gzip_sha256": "1c1c361b069e465cc8e658f1ac13e829857d776c834c2f2cb659c9759dedfc06"
+    },
+    {
+      "name": "owned-result-product",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/owned-result-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/verification-commit/owned-result-product.json"
+      ],
+      "exit": 0,
+      "log": "owned-result-product.log",
+      "log_sha256": "299903edb8247103f30434a7df01f56ff0bc7272ec326240cd6e55376bebc92c",
+      "duration_seconds": 26.469,
+      "log_gzip": "owned-result-product.log.gz",
+      "log_gzip_sha256": "c198987a32eff801cffed15a8015250102fb4e3accc32078f03de0298e0ac0d8"
+    },
+    {
+      "name": "ordinary-product",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/ordinary-owned-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/verification-commit/ordinary-product.json"
+      ],
+      "exit": 0,
+      "log": "ordinary-product.log",
+      "log_sha256": "eac7a823e60dc4922bb955dde1af4379e8b81184461e3f67d3fb8dc4c578d82c",
+      "duration_seconds": 8.466,
+      "log_gzip": "ordinary-product.log.gz",
+      "log_gzip_sha256": "94c5a645f05957a5b93c5bf345f43bd62e7d3df70889b6e9293fda0036437f24"
+    },
+    {
+      "name": "workspace-tests",
+      "command": [
+        "cargo",
+        "test",
+        "--workspace",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--no-fail-fast"
+      ],
+      "exit": 0,
+      "log": "workspace-tests.log",
+      "log_sha256": "cd5b3eddba39fbf5cead0e13548a51c7d22f5603a3deb28356dd0da88554690e",
+      "duration_seconds": 89.937,
+      "suites": 265,
+      "passed": 1229,
+      "failed": 0,
+      "ignored": 6,
+      "log_gzip": "workspace-tests.log.gz",
+      "log_gzip_sha256": "62808b6d19367b986a8650121659746812316b9481b3bd2849fbef979752dd66"
+    },
+    {
+      "name": "clippy",
+      "command": [
+        "cargo",
+        "clippy",
+        "--workspace",
+        "--all-targets",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit": 0,
+      "log": "clippy.log",
+      "log_sha256": "9c6ee60c4c4b3f4836bdcd9e523aba6aca1a3f959b2c0b93c22ad52bab866832",
+      "duration_seconds": 2.915,
+      "log_gzip": "clippy.log.gz",
+      "log_gzip_sha256": "3d5cfe647c1ddfb01ca50226558ac4a533d5ce94dc5be3328b1433072ac4ab65"
+    },
+    {
+      "name": "format",
+      "command": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--check"
+      ],
+      "exit": 0,
+      "log": "format.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.664,
+      "log_gzip": "format.log.gz",
+      "log_gzip_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+    },
+    {
+      "name": "diff",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit": 0,
+      "log": "diff.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.032,
+      "log_gzip": "diff.log.gz",
+      "log_gzip_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+    },
+    {
+      "name": "foundation",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/s2b-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/verification-commit/foundation.json"
+      ],
+      "exit": 0,
+      "log": "foundation.log",
+      "log_sha256": "91adaa26ac56b550d1e84483cc1229283a3b9f7a60e70bc9e0ab8fb7d7f26e63",
+      "duration_seconds": 5.665,
+      "log_gzip": "foundation.log.gz",
+      "log_gzip_sha256": "9ea86ca6a70025064959d27305485fcb43283676da6757abb79e9ec74dad7634"
+    },
+    {
+      "name": "semantic",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-sema/tests/semantic_resolution/run.py",
+        "--binary",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "--output",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/verification-commit/semantic.json"
+      ],
+      "exit": 0,
+      "log": "semantic.log",
+      "log_sha256": "e4db6ae5c0ec9375767e16c4779338b9a11ef6a05ed0e58e10b42d064c87b578",
+      "duration_seconds": 5.665,
+      "log_gzip": "semantic.log.gz",
+      "log_gzip_sha256": "3b520fc16eba43c3eff7239e9733977981cbcbf05ac7a62bb2b11fed54f9913a"
+    },
+    {
+      "name": "specialization",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-sema/tests/source_specialization/run.py",
+        "--binary",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "--output-dir",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/verification-commit/specialization"
+      ],
+      "exit": 0,
+      "log": "specialization.log",
+      "log_sha256": "c727497e41be718a60be0db3ecb9d8954f06543d2a7934cce2cdf459da11feb7",
+      "duration_seconds": 3.915,
+      "log_gzip": "specialization.log.gz",
+      "log_gzip_sha256": "6af744d7525183b8bd6ca526cf7e9f5814f06a4d3e03b4724c8bc549657b327f"
+    },
+    {
+      "name": "visibility",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-api-index/tests/verify_visibility_cli.py",
+        "--binary",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "--output-dir",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/verification-commit/visibility"
+      ],
+      "exit": 0,
+      "log": "visibility.log",
+      "log_sha256": "dacc2878fc6636b163f385c9085c6a30a86e7cdce7dc7e9da67c534360cd8783",
+      "duration_seconds": 2.465,
+      "log_gzip": "visibility.log.gz",
+      "log_gzip_sha256": "404b7e6b2386972994394b43392e61739510871ac1e1d79de5e8fb0536977b6c"
+    },
+    {
+      "name": "binders",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-package/scripts/verify_binders.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/verification-commit/binders.json"
+      ],
+      "exit": 0,
+      "log": "binders.log",
+      "log_sha256": "1de475401a82ff4f803c6430b0f364bfc6567ccdb4a0957c994873b68737161d",
+      "duration_seconds": 1.115,
+      "log_gzip": "binders.log.gz",
+      "log_gzip_sha256": "c9b02c1bb41e54c3ac255e8c531dd2cc3ac93e35d5fe3d6f4b586dd5e903f427"
+    },
+    {
+      "name": "output",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-cli/scripts/verify_output_bounds.py",
+        "--binary",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "--output",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/verification-commit/output.json",
+        "--build-address-space-mib",
+        "4096"
+      ],
+      "exit": 0,
+      "log": "output.log",
+      "log_sha256": "eb1a6089eb7bdd7a005d7de27510fd7a7660f242399a66f115de0a4d38737b8f",
+      "duration_seconds": 146.99,
+      "log_gzip": "output.log.gz",
+      "log_gzip_sha256": "c817ff32bc6b9d5dbcabb84e0ec90cb60a660cda1c60a9061fa1f23b03009511"
+    },
+    {
+      "name": "emitters",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-emit-python/tests/s2b_product.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/verification-commit/emitters.json"
+      ],
+      "exit": 0,
+      "log": "emitters.log",
+      "log_sha256": "2620de15c25b6017d1e70477b0c9b9468613eaba3b3a94d83c34c36017f42eb2",
+      "duration_seconds": 4.115,
+      "log_gzip": "emitters.log.gz",
+      "log_gzip_sha256": "d40f10baca099082fcbd79170a02b1b845c38e75d3516c4db8d55403f8561692"
+    },
+    {
+      "name": "legacy-graph99",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/s2b-memory-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/verification-commit/legacy-graph99.json"
+      ],
+      "exit": 0,
+      "log": "legacy-graph99.log",
+      "log_sha256": "eaebe02018663dcbc7102520a5625f5e793a240fdc477c1b6afa9f0cee1ab3f8",
+      "duration_seconds": 6.065,
+      "log_gzip": "legacy-graph99.log.gz",
+      "log_gzip_sha256": "3ff241b602cad1dea43103748b75ba361f24fc01c45830ed628e19e561f70832"
+    },
+    {
+      "name": "native-guards518",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-emit-rust/tests/graph_guard_parity/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/verification-commit/native-guards518.json"
+      ],
+      "exit": 0,
+      "log": "native-guards518.log",
+      "log_sha256": "88de176cf1b58a8fbe70fe536d7ac1e75a8436000b3e74e62eafaeb26a2c0f01",
+      "duration_seconds": 19.368,
+      "log_gzip": "native-guards518.log.gz",
+      "log_gzip_sha256": "0893c84cf05fad22682c00d4be406a025d1c90dab8c43712d894842b0b707715"
+    },
+    {
+      "name": "report-layouts265",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-cli/tests/memory_report_layout/run.py",
+        "--binary",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "--output",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/verification-commit/report-layouts265.json"
+      ],
+      "exit": 0,
+      "log": "report-layouts265.log",
+      "log_sha256": "97d9f2f87c2438386b802a2194219c86a50571065aa3603720f3e87314d1d9fc",
+      "duration_seconds": 10.766,
+      "log_gzip": "report-layouts265.log.gz",
+      "log_gzip_sha256": "e31b411199bb70442fdb5414a5f795400a6f72788eb984768f1787a9c5853e38"
+    }
+  ],
+  "accepted_checks": [
+    {
+      "name": "build",
+      "command": [
+        "cargo",
+        "build",
+        "--workspace",
+        "--all-features",
+        "--offline",
+        "--locked"
+      ],
+      "exit": 0,
+      "log": "build.log",
+      "log_sha256": "f0fa278e4dea1ec3ee3429876f612b6c4ac0fec540b86e805af04b6030e70217",
+      "duration_seconds": 1.765,
+      "log_gzip": "build.log.gz",
+      "log_gzip_sha256": "1c1c361b069e465cc8e658f1ac13e829857d776c834c2f2cb659c9759dedfc06"
+    },
+    {
+      "name": "owned-result-product",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/owned-result-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/verification-commit/owned-result-product.json"
+      ],
+      "exit": 0,
+      "log": "owned-result-product.log",
+      "log_sha256": "299903edb8247103f30434a7df01f56ff0bc7272ec326240cd6e55376bebc92c",
+      "duration_seconds": 26.469,
+      "log_gzip": "owned-result-product.log.gz",
+      "log_gzip_sha256": "c198987a32eff801cffed15a8015250102fb4e3accc32078f03de0298e0ac0d8"
+    },
+    {
+      "name": "ordinary-product",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/ordinary-owned-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/verification-commit/ordinary-product.json"
+      ],
+      "exit": 0,
+      "log": "ordinary-product.log",
+      "log_sha256": "eac7a823e60dc4922bb955dde1af4379e8b81184461e3f67d3fb8dc4c578d82c",
+      "duration_seconds": 8.466,
+      "log_gzip": "ordinary-product.log.gz",
+      "log_gzip_sha256": "94c5a645f05957a5b93c5bf345f43bd62e7d3df70889b6e9293fda0036437f24"
+    },
+    {
+      "name": "workspace-tests",
+      "command": [
+        "cargo",
+        "test",
+        "--workspace",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--no-fail-fast"
+      ],
+      "exit": 0,
+      "log": "workspace-tests.log",
+      "log_sha256": "cd5b3eddba39fbf5cead0e13548a51c7d22f5603a3deb28356dd0da88554690e",
+      "duration_seconds": 89.937,
+      "suites": 265,
+      "passed": 1229,
+      "failed": 0,
+      "ignored": 6,
+      "log_gzip": "workspace-tests.log.gz",
+      "log_gzip_sha256": "62808b6d19367b986a8650121659746812316b9481b3bd2849fbef979752dd66"
+    },
+    {
+      "name": "clippy",
+      "command": [
+        "cargo",
+        "clippy",
+        "--workspace",
+        "--all-targets",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit": 0,
+      "log": "clippy.log",
+      "log_sha256": "9c6ee60c4c4b3f4836bdcd9e523aba6aca1a3f959b2c0b93c22ad52bab866832",
+      "duration_seconds": 2.915,
+      "log_gzip": "clippy.log.gz",
+      "log_gzip_sha256": "3d5cfe647c1ddfb01ca50226558ac4a533d5ce94dc5be3328b1433072ac4ab65"
+    },
+    {
+      "name": "format",
+      "command": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--check"
+      ],
+      "exit": 0,
+      "log": "format.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.664,
+      "log_gzip": "format.log.gz",
+      "log_gzip_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+    },
+    {
+      "name": "diff",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit": 0,
+      "log": "diff.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.032,
+      "log_gzip": "diff.log.gz",
+      "log_gzip_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+    },
+    {
+      "name": "foundation",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/s2b-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/verification-commit/foundation.json"
+      ],
+      "exit": 0,
+      "log": "foundation.log",
+      "log_sha256": "91adaa26ac56b550d1e84483cc1229283a3b9f7a60e70bc9e0ab8fb7d7f26e63",
+      "duration_seconds": 5.665,
+      "log_gzip": "foundation.log.gz",
+      "log_gzip_sha256": "9ea86ca6a70025064959d27305485fcb43283676da6757abb79e9ec74dad7634"
+    },
+    {
+      "name": "semantic",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-sema/tests/semantic_resolution/run.py",
+        "--binary",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "--output",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/verification-commit/semantic.json"
+      ],
+      "exit": 0,
+      "log": "semantic.log",
+      "log_sha256": "e4db6ae5c0ec9375767e16c4779338b9a11ef6a05ed0e58e10b42d064c87b578",
+      "duration_seconds": 5.665,
+      "log_gzip": "semantic.log.gz",
+      "log_gzip_sha256": "3b520fc16eba43c3eff7239e9733977981cbcbf05ac7a62bb2b11fed54f9913a"
+    },
+    {
+      "name": "specialization",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-sema/tests/source_specialization/run.py",
+        "--binary",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "--output-dir",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/verification-commit/specialization"
+      ],
+      "exit": 0,
+      "log": "specialization.log",
+      "log_sha256": "c727497e41be718a60be0db3ecb9d8954f06543d2a7934cce2cdf459da11feb7",
+      "duration_seconds": 3.915,
+      "log_gzip": "specialization.log.gz",
+      "log_gzip_sha256": "6af744d7525183b8bd6ca526cf7e9f5814f06a4d3e03b4724c8bc549657b327f"
+    },
+    {
+      "name": "visibility",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-api-index/tests/verify_visibility_cli.py",
+        "--binary",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "--output-dir",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/verification-commit/visibility"
+      ],
+      "exit": 0,
+      "log": "visibility.log",
+      "log_sha256": "dacc2878fc6636b163f385c9085c6a30a86e7cdce7dc7e9da67c534360cd8783",
+      "duration_seconds": 2.465,
+      "log_gzip": "visibility.log.gz",
+      "log_gzip_sha256": "404b7e6b2386972994394b43392e61739510871ac1e1d79de5e8fb0536977b6c"
+    },
+    {
+      "name": "binders",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-package/scripts/verify_binders.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/verification-commit/binders.json"
+      ],
+      "exit": 0,
+      "log": "binders.log",
+      "log_sha256": "1de475401a82ff4f803c6430b0f364bfc6567ccdb4a0957c994873b68737161d",
+      "duration_seconds": 1.115,
+      "log_gzip": "binders.log.gz",
+      "log_gzip_sha256": "c9b02c1bb41e54c3ac255e8c531dd2cc3ac93e35d5fe3d6f4b586dd5e903f427"
+    },
+    {
+      "name": "output",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-cli/scripts/verify_output_bounds.py",
+        "--binary",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "--output",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/verification-commit/output.json",
+        "--build-address-space-mib",
+        "4096"
+      ],
+      "exit": 0,
+      "log": "output.log",
+      "log_sha256": "eb1a6089eb7bdd7a005d7de27510fd7a7660f242399a66f115de0a4d38737b8f",
+      "duration_seconds": 146.99,
+      "log_gzip": "output.log.gz",
+      "log_gzip_sha256": "c817ff32bc6b9d5dbcabb84e0ec90cb60a660cda1c60a9061fa1f23b03009511"
+    },
+    {
+      "name": "emitters",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-emit-python/tests/s2b_product.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/verification-commit/emitters.json"
+      ],
+      "exit": 0,
+      "log": "emitters.log",
+      "log_sha256": "2620de15c25b6017d1e70477b0c9b9468613eaba3b3a94d83c34c36017f42eb2",
+      "duration_seconds": 4.115,
+      "log_gzip": "emitters.log.gz",
+      "log_gzip_sha256": "d40f10baca099082fcbd79170a02b1b845c38e75d3516c4db8d55403f8561692"
+    },
+    {
+      "name": "legacy-graph99",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/s2b-memory-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/verification-commit/legacy-graph99.json"
+      ],
+      "exit": 0,
+      "log": "legacy-graph99.log",
+      "log_sha256": "eaebe02018663dcbc7102520a5625f5e793a240fdc477c1b6afa9f0cee1ab3f8",
+      "duration_seconds": 6.065,
+      "log_gzip": "legacy-graph99.log.gz",
+      "log_gzip_sha256": "3ff241b602cad1dea43103748b75ba361f24fc01c45830ed628e19e561f70832"
+    },
+    {
+      "name": "native-guards518",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-emit-rust/tests/graph_guard_parity/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/verification-commit/native-guards518.json"
+      ],
+      "exit": 0,
+      "log": "native-guards518.log",
+      "log_sha256": "88de176cf1b58a8fbe70fe536d7ac1e75a8436000b3e74e62eafaeb26a2c0f01",
+      "duration_seconds": 19.368,
+      "log_gzip": "native-guards518.log.gz",
+      "log_gzip_sha256": "0893c84cf05fad22682c00d4be406a025d1c90dab8c43712d894842b0b707715"
+    },
+    {
+      "name": "report-layouts265",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-cli/tests/memory_report_layout/run.py",
+        "--binary",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "--output",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/verification-commit/report-layouts265.json"
+      ],
+      "exit": 0,
+      "log": "report-layouts265.log",
+      "log_sha256": "97d9f2f87c2438386b802a2194219c86a50571065aa3603720f3e87314d1d9fc",
+      "duration_seconds": 10.766,
+      "log_gzip": "report-layouts265.log.gz",
+      "log_gzip_sha256": "e31b411199bb70442fdb5414a5f795400a6f72788eb984768f1787a9c5853e38"
+    }
+  ],
+  "bounded_owned_result_deliverable_complete": true,
+  "preliminary_logs": [
+    {
+      "path": "preliminary/verification/verification.json.gz",
+      "raw_sha256": "d5bf5249aba8d3311886e9e55cd55de3600bf02f0e8cc25d820950daa7feee58",
+      "gzip_sha256": "fc831ddab2d8b6c64ad5c249a768608b6db60c52321eb77959b96a3413462a33"
+    },
+    {
+      "path": "preliminary/verification/workspace-tests.log.gz",
+      "raw_sha256": "126f7f3686c84d8a4daa856bb0bf49d63ce4b58e45576e6a776d1f734db908fb",
+      "gzip_sha256": "fe2a8794449caacbeee58e1943b12a8c50d1c3624b8ccd65ad1d54a360aa1df8"
+    },
+    {
+      "path": "preliminary/verification/clippy.log.gz",
+      "raw_sha256": "8ff67b6588cca867197bba0ef4c8b62991c4af7a3b2238755d1df67e66ab1ea9",
+      "gzip_sha256": "149ea3d3f4bf7f7cb0d788582cd8d367daab61db9a8219dde1eb81423e7bed48"
+    },
+    {
+      "path": "preliminary/verification/build.log.gz",
+      "raw_sha256": "5a44ee42b08eb1c47b1a7a0da37eedcfc79067df28fbfa24adfbe79f74e19c94",
+      "gzip_sha256": "d0c47cce321a5f3b44fbe9d60f17437d6e3929d5b056351e9be6e687e76e209f"
+    },
+    {
+      "path": "preliminary/verification/owned-result-product.log.gz",
+      "raw_sha256": "53045dc3d2a22adee1629fdf1e0cd8d14b30b943e1414c550fd97b0ce0a0a549",
+      "gzip_sha256": "432b4b420d6744bcbe03229e780c9ccf5fec3bd4fa17c51540f0d75fe4030e41"
+    },
+    {
+      "path": "preliminary/verification/output.log.gz",
+      "raw_sha256": "3e859ee6b7ef2fcc46ddf00f57329345de6050780e596f6541ce8a731d450f97",
+      "gzip_sha256": "e6db29cafd0f039ac532db4a29a291c84c2c64f063fa8786bf404388807f73e9"
+    },
+    {
+      "path": "preliminary/verification/owned-result-product.json.gz",
+      "raw_sha256": "ee7e57fcc4569fe6581037e9943bd7bc19c01db15bd8c0a1df7fb010c5e2010d",
+      "gzip_sha256": "d483f4a7c91dc7703c132f0149cc9b1d3ff1d2f9f2e57337c34cad90b4972271"
+    },
+    {
+      "path": "preliminary/verification-final/verification.json.gz",
+      "raw_sha256": "175757b8670b97f4eb6de29bfb6b00858e9962f867c310f6c0364240b6cfa33e",
+      "gzip_sha256": "9b2a5190fc8b45da77beba81d6f03351da432eb1fc1599441deb15d3571ef147"
+    },
+    {
+      "path": "preliminary/verification-final/workspace-tests.log.gz",
+      "raw_sha256": "f7bd9fa67b85527e5351c2ec563c079e88206096b98dbc82570fd29edea7841a",
+      "gzip_sha256": "4ce8a10d317021f2d1eb677ac14e8b7648c5d00b05dca3a095bc71462050d16e"
+    },
+    {
+      "path": "preliminary/verification-final/clippy.log.gz",
+      "raw_sha256": "3cea046831a48294624aa54965710e3447694defacd9e3fbca2e3abfe43d8c39",
+      "gzip_sha256": "af9849daa7f7a6bf2b2293bb42b4105b1890d81512f38a3a9848ef08c7ccaf97"
+    },
+    {
+      "path": "preliminary/verification-final/build.log.gz",
+      "raw_sha256": "ea4fcfd9989acb19d9623bcb68a3c57415b33845c633d56065992eb75ea1d987",
+      "gzip_sha256": "815214cdc73a4d1abf44c9f61912f9949aa02c0cf93199ad6340f4d7f31f28bb"
+    },
+    {
+      "path": "preliminary/verification-final/owned-result-product.log.gz",
+      "raw_sha256": "d7b066a471320f83e97c1fd91ac662ce568544d2b74d2115f9f92de9fd555093",
+      "gzip_sha256": "3db83803f95cb3ed37c87e7fe5fdfe809f9de0f4fbbcb5332932c737a02b0078"
+    },
+    {
+      "path": "preliminary/verification-final/output.log.gz",
+      "raw_sha256": "eb1a6089eb7bdd7a005d7de27510fd7a7660f242399a66f115de0a4d38737b8f",
+      "gzip_sha256": "c817ff32bc6b9d5dbcabb84e0ec90cb60a660cda1c60a9061fa1f23b03009511"
+    },
+    {
+      "path": "preliminary/verification-final/owned-result-product.json.gz",
+      "raw_sha256": "ab5c6404b16ad8f1182bbbc2dc0bd0fa89878e1cfa4c3a8c447f9f823cda543f",
+      "gzip_sha256": "6bb6f4b205ea75efd29df837f04ee6d0f8b4234dd9f210cf877b6c93f6e6372e"
+    },
+    {
+      "path": "preliminary/verification-accepted/verification.json.gz",
+      "raw_sha256": "48adaf64e0adffb67b58e0c491a6e3923c210bc2689b975e4653b3053e61b257",
+      "gzip_sha256": "66a039bbb12a5f4edc7f5de04ed7794e40744e3c695ab8fa53ead609cfd5d630"
+    },
+    {
+      "path": "preliminary/verification-accepted/workspace-tests.log.gz",
+      "raw_sha256": "4ce0fca22d537597c445c0f96b56aa96460e6eda75c774be40917d50ca958aae",
+      "gzip_sha256": "51d5634843967fbbb7eb8bdf78b85b5696e67cecdbcc1b470cdb0367a89edc8e"
+    },
+    {
+      "path": "preliminary/verification-accepted/clippy.log.gz",
+      "raw_sha256": "61fd66f168b2393ae5764ae711e37ce5878df51b6a3f620f8c001e5010a7b459",
+      "gzip_sha256": "8a93e0c4d0105ad4bd23594e0c866b5ff7e0d154697577971dd7de04dc2db23b"
+    },
+    {
+      "path": "preliminary/verification-accepted/build.log.gz",
+      "raw_sha256": "6ddb85be9cd2d75e64078920a8b119758c3947b224981638ecd00efc621c2058",
+      "gzip_sha256": "4999dc923a7a781055bf28a1a76a81430b0274e339b031bcfa43caedf2767584"
+    },
+    {
+      "path": "preliminary/verification-accepted/owned-result-product.log.gz",
+      "raw_sha256": "d7b066a471320f83e97c1fd91ac662ce568544d2b74d2115f9f92de9fd555093",
+      "gzip_sha256": "3db83803f95cb3ed37c87e7fe5fdfe809f9de0f4fbbcb5332932c737a02b0078"
+    },
+    {
+      "path": "preliminary/verification-accepted/output.log.gz",
+      "raw_sha256": "eb1a6089eb7bdd7a005d7de27510fd7a7660f242399a66f115de0a4d38737b8f",
+      "gzip_sha256": "c817ff32bc6b9d5dbcabb84e0ec90cb60a660cda1c60a9061fa1f23b03009511"
+    },
+    {
+      "path": "preliminary/verification-accepted/owned-result-product.json.gz",
+      "raw_sha256": "2b1f008c86090055fc7e063b850478fdfcaff3806990cc4913ebd381670762f3",
+      "gzip_sha256": "93bab2d3a8a8de85d3ee0453801cd0eaaaf763032dbd909d7e81f40ff40474da"
+    },
+    {
+      "path": "preliminary/verification-complete/verification.json.gz",
+      "raw_sha256": "b203c3cb993bd83a3ba19f8bffd40d7a5e73e76606d6b6afabb26a3c89c88fd6",
+      "gzip_sha256": "fc09db4f9cc7ff35623ff42f4efcbf37b5daec123bc346ffcd3d3b87b2978919"
+    },
+    {
+      "path": "preliminary/verification-complete/workspace-tests.log.gz",
+      "raw_sha256": "05e956ba5b2bc31566d87b5b6efdf9705ff3c78fac3b9d5f66ea789d07dd1427",
+      "gzip_sha256": "d045954cdb2fa24ca3289941cf3f91da0ce0c4ef35ec6eb095b47850aa09870b"
+    },
+    {
+      "path": "preliminary/verification-complete/clippy.log.gz",
+      "raw_sha256": "2ddb5bad8f824e19afd78c96607226300ecb25678f7dcf8af13f80ce378c6898",
+      "gzip_sha256": "f977cf1e96e8cc981a20004511d2cf1e20fecba05ad6ddee08fbf9cba787881c"
+    },
+    {
+      "path": "preliminary/verification-complete/build.log.gz",
+      "raw_sha256": "c70d7345be6940ea19b939dcf0fe5f126e2a51f0cac81157b4becacf06cad34a",
+      "gzip_sha256": "27af05152fc4cd894f427d0a245b775e6fe74f913792c2d867f7de120960ea2f"
+    },
+    {
+      "path": "preliminary/verification-complete/owned-result-product.log.gz",
+      "raw_sha256": "0036ddc08830dd2a033468bf010671113d2373cdac086663b08fff3a8dbdc18b",
+      "gzip_sha256": "d6edadbf4a470de2604a970b5e25421e5b62b19d40d4bef8cc7f5c39441cd889"
+    },
+    {
+      "path": "preliminary/verification-complete/output.log.gz",
+      "raw_sha256": "eb1a6089eb7bdd7a005d7de27510fd7a7660f242399a66f115de0a4d38737b8f",
+      "gzip_sha256": "c817ff32bc6b9d5dbcabb84e0ec90cb60a660cda1c60a9061fa1f23b03009511"
+    },
+    {
+      "path": "preliminary/verification-complete/owned-result-product.json.gz",
+      "raw_sha256": "1b8a9f5bf816fefa2ab3448d07ac8484decdbc54db2837fae13a89fd2522e4b5",
+      "gzip_sha256": "da3af44a07b765ca1e365e299902e05389cefcc8fd2d2ac15c06b0fcefb010da"
+    },
+    {
+      "path": "preliminary/verification-delivery/verification.json.gz",
+      "raw_sha256": "74f8b1421260acd3871f1d4778808dfd504eb0af47c3dff33f4665d9c3bddb9a",
+      "gzip_sha256": "331d66e294c15dc5c3483f96f46dddcae1295ddcd887b974d5d0fc534f11b435"
+    },
+    {
+      "path": "preliminary/verification-delivery/workspace-tests.log.gz",
+      "raw_sha256": "e032fd4205ad6765f81c6b185d8fd3aafa7fa4076a58cebdf686d586373e94ac",
+      "gzip_sha256": "f8df509b0ebe97cb069f4a80686be4f204843ee67b8684f17afbca1ea9855d09"
+    },
+    {
+      "path": "preliminary/verification-delivery/clippy.log.gz",
+      "raw_sha256": "312846cba240292070c188cbb318d4e1204223604ec1447ded5c4db9d9aedc95",
+      "gzip_sha256": "c167bb1fc40e7765e725c571e62b7a80259830dbdf74fdccb6620dbc57e70d6f"
+    },
+    {
+      "path": "preliminary/verification-delivery/build.log.gz",
+      "raw_sha256": "37d97214aafd35eea270e3dedb8763b44ef084f6ee6ad023b8c92b7fc0600b35",
+      "gzip_sha256": "f00e4df8a6ef404e03702a3f040e060e19645ec4fe12d63c4bf8d43617871b32"
+    },
+    {
+      "path": "preliminary/verification-delivery/owned-result-product.log.gz",
+      "raw_sha256": "0036ddc08830dd2a033468bf010671113d2373cdac086663b08fff3a8dbdc18b",
+      "gzip_sha256": "d6edadbf4a470de2604a970b5e25421e5b62b19d40d4bef8cc7f5c39441cd889"
+    },
+    {
+      "path": "preliminary/verification-delivery/output.log.gz",
+      "raw_sha256": "eb1a6089eb7bdd7a005d7de27510fd7a7660f242399a66f115de0a4d38737b8f",
+      "gzip_sha256": "c817ff32bc6b9d5dbcabb84e0ec90cb60a660cda1c60a9061fa1f23b03009511"
+    },
+    {
+      "path": "preliminary/verification-delivery/owned-result-product.json.gz",
+      "raw_sha256": "087d99f0b5735c9a9c6cbc6e202ec8ba954b2bb9ed22971d621fda801f70959c",
+      "gzip_sha256": "a791077dd3b72a861e2ef955f523457c1b4d6ecfca79d55b68d81abb10826074"
+    },
+    {
+      "path": "preliminary/verification-versioned/verification.json.gz",
+      "raw_sha256": "97b62f7a770eb857c07e3d6d9ed6b21f696f72ff7bd8ea835406d7022dd9b4b7",
+      "gzip_sha256": "5c47939f03135eb607aa9363491e9227347e04ad5d13aad0662aad520ac1359a"
+    },
+    {
+      "path": "preliminary/verification-versioned/workspace-tests.log.gz",
+      "raw_sha256": "73c13451543fbb080c3ca5436eabc7a2ee47bef5c61c718a9ec0a7d36b99dedc",
+      "gzip_sha256": "6d64ff4e2912c93c9d2c2b701b579a949b3e0bad9da97e6413db5fc143607d8b"
+    },
+    {
+      "path": "preliminary/verification-versioned/clippy.log.gz",
+      "raw_sha256": "6ff92059d0049324d481fb30ff66388556ae8a37b5cdf0904b48bf67a25f7a12",
+      "gzip_sha256": "56a2a52d0f70a8c8026f373056a9cf60441b82128bcf68bd2b566e6c38e671f0"
+    },
+    {
+      "path": "preliminary/verification-versioned/build.log.gz",
+      "raw_sha256": "9341c7a81819acdfb1e41a4c9b0a9d244cb64be46a3da25b351136d5b7908f81",
+      "gzip_sha256": "f96655adb664052cfa3a254e91a7c112209cafcd79e58aff24b6bf84d72736b9"
+    },
+    {
+      "path": "preliminary/verification-versioned/owned-result-product.log.gz",
+      "raw_sha256": "0036ddc08830dd2a033468bf010671113d2373cdac086663b08fff3a8dbdc18b",
+      "gzip_sha256": "d6edadbf4a470de2604a970b5e25421e5b62b19d40d4bef8cc7f5c39441cd889"
+    },
+    {
+      "path": "preliminary/verification-versioned/output.log.gz",
+      "raw_sha256": "eb1a6089eb7bdd7a005d7de27510fd7a7660f242399a66f115de0a4d38737b8f",
+      "gzip_sha256": "c817ff32bc6b9d5dbcabb84e0ec90cb60a660cda1c60a9061fa1f23b03009511"
+    },
+    {
+      "path": "preliminary/verification-versioned/owned-result-product.json.gz",
+      "raw_sha256": "934bce4a24d7793b054026255a9d72565b58993e7a6a8178cd6de3464ddf2777",
+      "gzip_sha256": "33cc1dc822bfa945ba9b8d17d034cf1159732b7f35455e204293c3d8b6771966"
+    },
+    {
+      "path": "preliminary/verification-final-api/verification.json.gz",
+      "raw_sha256": "68a6f9570b9f11314f9f96a5b54feb32a4b45025aff61acbf8f57278a879ef34",
+      "gzip_sha256": "db6beea2dba3fd4e3a76505a1b3ac7a63d68296d3ef9b3df0d646e8405f28c5f"
+    },
+    {
+      "path": "preliminary/verification-final-api/workspace-tests.log.gz",
+      "raw_sha256": "3bf907cc02f5dcc3e6a8a90eb10c69e295f15182b8e80b5c447d6b991731e468",
+      "gzip_sha256": "031f55adf2eb08576ad1c73d1210d4a516f4539efbeb35d51774882d56dfbd18"
+    },
+    {
+      "path": "preliminary/verification-final-api/clippy.log.gz",
+      "raw_sha256": "807041a43f2a8e4b0f7dcdd6882dd8a8446231cdbd5143aa43ae5a8fe3ca8f69",
+      "gzip_sha256": "3aba0496876e4756aff1f01dbf87e7afbb6124fbec03b2c4895da7614539cec7"
+    },
+    {
+      "path": "preliminary/verification-final-api/build.log.gz",
+      "raw_sha256": "1375d3efc2566b53f5d90c72bcc8d268325fcd34aacb075f95efaf2611aedb00",
+      "gzip_sha256": "1f002e79d4cf3f2e04120dcca5e7d641352fca63bbf3e80f5f1324291de0d12f"
+    },
+    {
+      "path": "preliminary/verification-final-api/owned-result-product.log.gz",
+      "raw_sha256": "0036ddc08830dd2a033468bf010671113d2373cdac086663b08fff3a8dbdc18b",
+      "gzip_sha256": "d6edadbf4a470de2604a970b5e25421e5b62b19d40d4bef8cc7f5c39441cd889"
+    },
+    {
+      "path": "preliminary/verification-final-api/output.log.gz",
+      "raw_sha256": "eb1a6089eb7bdd7a005d7de27510fd7a7660f242399a66f115de0a4d38737b8f",
+      "gzip_sha256": "c817ff32bc6b9d5dbcabb84e0ec90cb60a660cda1c60a9061fa1f23b03009511"
+    },
+    {
+      "path": "preliminary/verification-final-api/owned-result-product.json.gz",
+      "raw_sha256": "1ae730930b5f8c5d858de4031f0686f9eda4735ac88fd5c84e4e445f6a72ff03",
+      "gzip_sha256": "d77c1199d0b653fc276c2281f6270963e4263ab233d719717a22f280ff9510a8"
+    },
+    {
+      "path": "preliminary/verification-frozen-final/verification.json.gz",
+      "raw_sha256": "7a8ad0469d29991c0acfdf70a767c17208e4db10abd772736d4d3dcc7e6a8b1e",
+      "gzip_sha256": "528a757e207c01ffa2d98d2c0893345b0e38a1f5afa8425db15f7ef55c8549b0"
+    },
+    {
+      "path": "preliminary/verification-frozen-final/workspace-tests.log.gz",
+      "raw_sha256": "2b121692351885db6306061e4c8ba10e3bfa529e8b6e34e887c85fe1c208e61a",
+      "gzip_sha256": "2c522b68d610e6530c1a11ce29ad69fad44904c954e3e3a4cfc1eca00e9e1bfd"
+    },
+    {
+      "path": "preliminary/verification-frozen-final/clippy.log.gz",
+      "raw_sha256": "a7a9fa7052fa864a3e42a8740ce54eeed60d9062f8ff2694f5abe3271bb09a5e",
+      "gzip_sha256": "07d8362613012f1c8373f5c183e185b378def81bc6d4d5998a683a5e19cfc0d9"
+    },
+    {
+      "path": "preliminary/verification-frozen-final/build.log.gz",
+      "raw_sha256": "f366e905d57bfe354e82390ad88be6e7118f9219257d99332302ab615f8c7e10",
+      "gzip_sha256": "6d29cb146717e012f237be8413d95074ee5800d0555a3acae7bb90f2962a460e"
+    },
+    {
+      "path": "preliminary/verification-frozen-final/owned-result-product.log.gz",
+      "raw_sha256": "3deaf41904270995ba3d5707fec3893d9e55ad8f0e3cd065b6cd4b293209d97c",
+      "gzip_sha256": "c9c42b5a605cebdb65221a32f405c573da585a3316bf2e422c91772148ea8b65"
+    },
+    {
+      "path": "preliminary/verification-frozen-final/output.log.gz",
+      "raw_sha256": "eb1a6089eb7bdd7a005d7de27510fd7a7660f242399a66f115de0a4d38737b8f",
+      "gzip_sha256": "c817ff32bc6b9d5dbcabb84e0ec90cb60a660cda1c60a9061fa1f23b03009511"
+    },
+    {
+      "path": "preliminary/verification-frozen-final/owned-result-product.json.gz",
+      "raw_sha256": "479992bae5e70e66c64ff48812142208e8d063843415de5b02e3ac1a54b56587",
+      "gzip_sha256": "63fb8caafed740e43a9396a1b0c37ac39e4650d2b689bfb580dbd2e1a2308af9"
+    },
+    {
+      "path": "preliminary/verification-final-bounded/verification.json.gz",
+      "raw_sha256": "3cc1e3e44d9ffb30bb6347c77790842a8fa56a8f747fb5ad593d0c01c9b562a2",
+      "gzip_sha256": "aa62703bbd661b8fea26af4519e69e5c9398c3840f496d00528dba95e4e2688f"
+    },
+    {
+      "path": "preliminary/verification-final-bounded/workspace-tests.log.gz",
+      "raw_sha256": "421fd3165a2331acaac8c6df678e19355c815278ecc5af77c4a11af5e3bb862a",
+      "gzip_sha256": "1b290cfac651465d088a410a0d13b1efd0305aac9543b869d39ff4b69a8b1fb3"
+    },
+    {
+      "path": "preliminary/verification-final-bounded/clippy.log.gz",
+      "raw_sha256": "2718811a5ff9a08eafc8abaa15db86b08b1b3248c0f0e3e734eba2e64c85181a",
+      "gzip_sha256": "eb5b179fa43d153c53613fd6a7e5b098ce3ee5eea54305c393d549820f1c1ea5"
+    },
+    {
+      "path": "preliminary/verification-final-bounded/build.log.gz",
+      "raw_sha256": "ff21238d3c5be1f2f1311336c7e9a6443583cbdbae34c9879979d90222ef2f91",
+      "gzip_sha256": "e4a905aedbf527b12ab87271304ce9605f626edaa7d00f9ac6890aaf95ebea46"
+    },
+    {
+      "path": "preliminary/verification-final-bounded/owned-result-product.log.gz",
+      "raw_sha256": "5364dbe8eb1cc9ceee0c9448976f1fd0af5bf42797baa38048d2716f21c06bfc",
+      "gzip_sha256": "8125807a4bf171e267d5c1af4d8e91f8040d8ba2a8a45e4dde82809e50ba667a"
+    },
+    {
+      "path": "preliminary/verification-final-bounded/output.log.gz",
+      "raw_sha256": "eb1a6089eb7bdd7a005d7de27510fd7a7660f242399a66f115de0a4d38737b8f",
+      "gzip_sha256": "c817ff32bc6b9d5dbcabb84e0ec90cb60a660cda1c60a9061fa1f23b03009511"
+    },
+    {
+      "path": "preliminary/verification-final-bounded/owned-result-product.json.gz",
+      "raw_sha256": "3ba109efd0fa57c646c5e05ef695123d2c22b4da01c38da3a6da2527a5a861b4",
+      "gzip_sha256": "6860ba3e9d556236d6116651808b0c35f2adc9d3a3c85af9caadcad2d05de098"
+    },
+    {
+      "path": "preliminary/verification-final-bounded/product-rerun-verification.json.gz",
+      "raw_sha256": "a0f33199818fccffad0cb05f0a94ac236f419b53122c8b3045d362965b6420a9",
+      "gzip_sha256": "ee63293ab0b8c223696a29ead3f7207f8462c9f8637341b43c72fac3aeb2d406"
+    },
+    {
+      "path": "preliminary/verification-final-bounded/owned-result-product-rerun.log.gz",
+      "raw_sha256": "9951395e0d377d2ffbbd33f40e8ec402a903e7d2e313c297f9f2708eefb94b4b",
+      "gzip_sha256": "c99243a847d7003c08848829cd226bcd9e8e9cbc0be856998718c1608f2d4c0a"
+    },
+    {
+      "path": "preliminary/check-initial.log.gz",
+      "raw_sha256": "efc06fd2908aeeaf07113b5d94b8e475cf75d755255fade5b3e2ccfc90177ee5",
+      "gzip_sha256": "05643a7b6e2c680ef5b40b817c447b6d9f8fe4d1153b29cd69245593a1338c1e"
+    },
+    {
+      "path": "preliminary/tests-core-initial.log.gz",
+      "raw_sha256": "39083e1ef0666becd2c904aa4eb42a8fbc470584ff791f235638b8b7438df524",
+      "gzip_sha256": "36b7ade0d10a57f0c45f636afd6b6b57634a8a687f377c01e3508b8f4c2dac6d"
+    },
+    {
+      "path": "preliminary/tests-core.log.gz",
+      "raw_sha256": "9b86d5b8b51662f903f5b6d2e778305971579fd9efc8b520c0e27360e290dcd2",
+      "gzip_sha256": "3cbac695f6c48f7870a7f2ab22f90d3a55bad97fc0f1d4b3a3f0312b0d2adb4c"
+    },
+    {
+      "path": "preliminary/tests-core-second.log.gz",
+      "raw_sha256": "2cff9403ac1dd8140cb11965e36f50597a5d70d0c46139a85c6cf33c7aa4885b",
+      "gzip_sha256": "4118f1ea90a0c01a4348af1a4f1719d96da732fdbba0dfd140ab10dd4c949e60"
+    },
+    {
+      "path": "preliminary/product-initial.log.gz",
+      "raw_sha256": "d1f8e2cd28eb54b72d6dedb362cd1ef89ecf7f27c645933550054b93605af77c",
+      "gzip_sha256": "070dba7bb73823bed1c28e2c42c20b9ad81ded29beb8cda7a0b0de0c98dae412"
+    },
+    {
+      "path": "preliminary/product-initial.json.gz",
+      "raw_sha256": "6788b32645fe719bccfab9abd7161c539349f0d1be736bf3aa35aa46f520fda8",
+      "gzip_sha256": "f539a7d3e8d7f41878372de095599fc170d1a221ba3852b453b021b4e9910fde"
+    },
+    {
+      "path": "preliminary/product-second.log.gz",
+      "raw_sha256": "168ba460968359e07307a013dedff9b7dbf373ff3695d0c62b4e88cb24ab8acb",
+      "gzip_sha256": "5cdc32be9c2dfd1a412bf20c2a6b4678297e3192aa737eef6920d72e01aa2a33"
+    },
+    {
+      "path": "preliminary/product-second.json.gz",
+      "raw_sha256": "a4b5462b408e515a0fd04a9ad506444eedae23b4a35801f75b1b58cc0973f1ed",
+      "gzip_sha256": "d1f9343a6b59324f5a89dceda2cc1d52ff54b45014b87e395c242447d5079f00"
+    },
+    {
+      "path": "preliminary/fake-solver-rerun.log.gz",
+      "raw_sha256": "bd176f946aebffc600748bf88be733deaeea481c0f89c840675fb597760123c9",
+      "gzip_sha256": "731c7fcf50b2b2bc713ef99ef828bb2209ba4c2906ddd4dd71a06d3428d99bf8"
+    },
+    {
+      "path": "preliminary/check-version-boundary.log.gz",
+      "raw_sha256": "5909960b4c06147551b55c952095f15d52d9ce47f3a52fb29fa997200dd1fb08",
+      "gzip_sha256": "7458990ff7802a406f5bff974e1e622d547011400c29b5ca556f83828aa1be8e"
+    },
+    {
+      "path": "preliminary/version-boundary-tests.log.gz",
+      "raw_sha256": "d640067cede438fcc47e532e68d0cba5630aee73fc0f5481371262f292849576",
+      "gzip_sha256": "ff9e20d1a0416504705a5294ed93b1dd778cb2c8ae758aa6321b786c838c1c25"
+    },
+    {
+      "path": "preliminary/version-boundary-tests-final.log.gz",
+      "raw_sha256": "7defbd9a1cb0c89853dcfcb1705b1eb45fb4d44f1cc0e120bce61581526701b9",
+      "gzip_sha256": "10fa82072a59b5506962e6f592006f86fb0195db333673651b548e13e18cd02e"
+    }
+  ],
+  "preliminary_findings": [
+    "A preliminary bounded matrix product failed because the over-nesting expected return-statement span omitted its final newline. That expectation was corrected and the final complete matrix passed. A copied-error assignment path was also completed and covered by a real source fixture before the final run.",
+    "Initial checker compile failed until the v2 overlap helper visibility was corrected.",
+    "Internal engine test construction needed borrowed arena/session/evidence references after the single-session refactor.",
+    "Test expectations were corrected for complete block spans, parser CGS106 negative-budget rejection, a dynamic-budget byte span, and checked integer arithmetic wording.",
+    "The first outer harness incorrectly applied its log file-size cap to compiler artifacts (SIGXFSZ); it now monitors logs directly. Its RUSTC wrapper was incompatible with Clippy and was replaced by a linker RUSTFLAGS setting.",
+    "A copied security policy fixture accidentally used schema 2; the fixture was restored to supported policy schema 1. No host policy changed.",
+    "A package no_gc rejection expectation changed from CGM001 to CGT080 because ordinary copied-result guards now select the authenticated profile. Explicit Unit/effects legacy admission remains on its original path.",
+    "One workspace attempt hit the pre-existing fake-solver test: MalformedResponse rather than Unsat. Isolated rerun and subsequent complete workspace runs passed without verifier changes.",
+    "Sandbox startup failed with EDQUOT before commands. The first read-only escalation review timed out; retry succeeded. Final commands ran outside that unavailable sandbox, using private build/temp directories and offline dependencies.",
+    "A later disk-quota failure prevented a new matrix log from opening. Only this task incremental cache was removed; no source truncation was found. The attempted guard-only legacy body retained its original CGM001 rejection, not a guard-entry success.",
+    "The explicit version separation initially left one internal engine test using the v1 model; it was switched to compile_source_v2 and the compatibility tests passed."
+  ],
+  "root_lock_reconciliation": {
+    "required": false,
+    "dependency_additions": [],
+    "root_manifest_changed": false,
+    "root_lock_changed": false,
+    "root_lock_sha256": "ea7678242cb40c8425c2b9875215f7024071c684cab59399d1d8a74a96750e3a",
+    "head_root_lock_sha256": "ea7678242cb40c8425c2b9875215f7024071c684cab59399d1d8a74a96750e3a",
+    "root_manifest_sha256": "9400b7dfbc400f91b3d648265dbd18001ec96157eb202fe88e3b95a312c9ffd7"
+  },
+  "base_commit": "4113edee943b9ac389c5037904a016d7dba7f73c",
+  "recorded_at_utc": "2026-10-24T05:24:52.118737+00:00",
+  "toolchain": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "compiler_binary_sha256": {
+    "cgx2": "b1583cecc3f1f722fa1f5cd95172bae9dd54497ada3b2baa8a708cf69d515e59",
+    "cgx2c": "ae09e419e7c427f0cee4be14c88b7884b88790ee8bba0fa8b1128f2590688311"
+  },
+  "external_gates": {
+    "leak_enabled_acceptance": "unrun; existing host-blocked gate remains open",
+    "independent_safety_audit": "unrun",
+    "performance_and_external_release_gates": "unrun",
+    "ordinary_memory_checkpoint_complete": false,
+    "release_complete": false
+  },
+  "acceptance_counts": {
+    "new_product": 584,
+    "ordinary_owned": 256,
+    "workspace_passed": 1229,
+    "workspace_ignored": 6,
+    "workspace_suites": 265,
+    "new_profile_fixtures": 20,
+    "static_negative_fixtures": 19,
+    "legacy_graph": 99,
+    "native_guards": 518,
+    "report_layouts": 265,
+    "foundation_runners": {
+      "foundation": 159,
+      "semantic": 278,
+      "specialization": 207,
+      "visibility": 118,
+      "binders": 88,
+      "output_bounds": 31,
+      "emitters": 104
+    }
+  },
+  "source_file_sha256": {
+    "crates/cgx2-cli/src/ordinary_owned.rs": "ff4543848e47743d9d75718fa80b39f942e0a4ac55692d15179f19262d065a4f",
+    "crates/cgx2-emit-python/tests/package.rs": "f775efeb7612d6473a354b16dac7264e1939b3aca1688149c739b880ac33e716",
+    "crates/cgx2-emit-rust/src/lib.rs": "fe1f966a4c7dc80b9a1cf7a77322c484d779158ff5d3cf7ae1472885781da1d5",
+    "crates/cgx2-emit-rust/src/ordinary_owned.rs": "12ce66200b4fe46683dd4f69ee7848d04efd1324e6e74c051ec3e6d956272184",
+    "crates/cgx2-ownership/ADAPTER.md": "a9a36f94e8dfd5398b9ced21b63623b192b2bab03a8a300ee95c95c9570799af",
+    "crates/cgx2-ownership/src/lib.rs": "6a75876b56d80db92b6cfe22a7b70c7c0aaed6171aebd23736a2ebe2c6bf741e",
+    "crates/cgx2-ownership/src/v2/analysis.rs": "caf83a6822f363f1e427e4310eab1f84cee13f0113885e270ecec67d96775bd4",
+    "crates/cgx2-ownership/src/v2/compatibility.rs": "f6ed63e0072c42e26ea5add18b83e63150e89aa142ea8ba62a37a264599e89a3",
+    "crates/cgx2-ownership/src/v2/mod.rs": "a8d846d0337df50735416f16b7a63e53264239cb4866b0170892c52b3daff613",
+    "crates/cgx2-ownership/src/v2/model.rs": "f3509654baaa4382a9eabb86bc6312d16bbb6061bfb1f087e9eb2527400b7d19",
+    "crates/cgx2-ownership/tests/conditional_function_analysis.rs": "7d39ee59de9203455fc0b36a8ccf1eee71326cbb24ce666bf0dcfdb7146a3c49",
+    "crates/cgx2-runtime/README.md": "318311ef4affabcc6da5366e13f5cc6879a447f241fa72e28e3e5335d4f9097c",
+    "crates/cgx2-runtime/src/budget.rs": "7bd562dae680c6102598a68d139042fba758ae3b3cb8c0d937778c0f0f13e0e4",
+    "crates/cgx2-runtime/src/lib.rs": "1002a5bc1b347ac383ff903d7ea1f79fca3f55284f2af1f6d0ea8f195720c9c6",
+    "crates/cgx2-runtime/tests/owned_result_observation.rs": "b0c9e7c2441fb65a51b1a8cf4343daf3c907335c50e36fd7d9b525e0b9327aae",
+    "crates/cgx2-sema/src/ordinary_owned.rs": "3f232aefba8f31f02b84c038a13f7a8bbdaf91f359393097da5526ebcd6cc246",
+    "crates/cgx2-sema/src/ordinary_owned/engine.rs": "75fd635e7d6a67033029d2b7c7d2e00d95486f987d8b49411e4df406b61bd503",
+    "crates/cgx2-sema/src/ordinary_owned/lower.rs": "0bfad816c29a19bbc5fd05d44eec9334a1c7d27e658b12cc15568d574904fb5d",
+    "crates/cgx2-sema/src/ordinary_owned/model.rs": "47202a7bc484f3e2cb685a3576a3b7f23124eeaea2b9c8da45685d9b4e6918e2",
+    "crates/cgx2-sema/src/ordinary_owned/model_v2.rs": "c35f4ab7ec2178b049d2c2cdbdd12a4545872653f08a9bbbd3eaa4a7e8f61e66",
+    "crates/cgx2-sema/tests/owned_result.rs": "4ab5d57eaca4962ce4de45947604bc2a129af175f7718a2747260b58899fa374",
+    "crates/cgx2-sema/tests/owned_result_api_compatibility.rs": "58cea6462d439684d06bb4b979a652e43e6e095cc4674d4ca5f8c2bb224fb791",
+    "crates/cgx2-syntax/S2B-ORDINARY-OWNED.md": "32a81a3f2d49e2d2768dc8015dbf48a755df6be6b416e662c02eb26110c3950a",
+    "crates/cgx2-syntax/S2B-OWNED-RESULT.md": "0ecfc564670e3fb9411a9667bca9a868929237190943d69250bd46f0df330db8",
+    "crates/cgx2-syntax/owned-result-evidence/README.md": "1c266301b0477e6c49ea8192b7518d5e0ef2c44acc71d62a15ceb5e3b8b5fc04",
+    "crates/cgx2-syntax/owned-result-evidence/expected.json": "36169398cae0b0cf7ce26a94437b8c7d8dc144823e7e5bcf64808cf47cc46d49",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/after-arm.cg": "946c55a9e39e175ccf13b9f911c51ddaf80c814fc80f731e9f654cac522c29fb",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/argument-failure.cg": "552418d46575489aabdefda92741d69e70cc3a6ca873ce1b596ca211b62e9273",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/arm-failure.cg": "e1b73d8b1e6d366e41d005ea477ca508ae25840f9015c96ac3d8d26c7ca79975",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/bool-budget.cg": "3adb9b28d8fd7cd69d665552ea00b887ceec9c2111f430e69aef323356ea4ead",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/conditional-move.cg": "889c05613e70cbe1094f4d380be94bd987bdf7e992238f2fbbd5fe8c37d99f31",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/constructor-order.cg": "4c0422c7f3d5735016a9ec35144bdcd5631f99fc2d3f3a0b59d887f777ccb196",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/constructor.cg": "ed852aaaa596e77ef836011e01c6f7306a043920c9b99e4159991ed58435a451",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/copied-error.cg": "c35c1cc3278119733c1a155fa7cf97d6f8ece3c46467135c55ff34aaf24cb68f",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/cumulative.cg": "fdbd7ab6da286fe35173ac1fe7627335da36a00fc98ae1a89e3f8e2fbf27cf0c",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/dynamic-budget.cg": "8571b3ff28efe8c7f3dbd073efffa1d9527e1fe14e666012a5e2897f27cc9c39",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/err-sees-ok.cg": "6b8111574200b89772f7cac399f90f9dce621636180d51b45e63808ac55642d4",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/exact.cg": "d144c84456555bebd9eecbe90a46503b68b9209b393ce0b1c8a376c97f1bcd9c",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/guard-0.cg": "bd50a5100fcd8ca74d3a1e706b75884ff9a3f69647357b2f5d0773d3e31309b6",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/guard-31.cg": "387ec645fe203fce17703aadeff9bbef9c58e12e8eca796b985ca7a312ebaab5",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/guard-32.cg": "c32c6fbb4adea4f5354886b7ace04ecc8f62dd1a6f67ea40444408082205ce22",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/host-recovery.cg": "d144c84456555bebd9eecbe90a46503b68b9209b393ce0b1c8a376c97f1bcd9c",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/loan-to-result.cg": "4d47f586aae1eecceab10a5279281b602f5184951617c6a6ee9c6af9ed885916",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/match-twice.cg": "8a2e288a1036f27a043e226ba325c6f4cc334b1c0e7e6cf932556484a0a3a7c0",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/max-nesting.cg": "a92b5a17b61f2493262a98517c85264c9e085df6a64ed7c1564231debf704829",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/mixed.cg": "0cf4dd23e63b88d0b1ca3208d12308100d476f6adcb5afa59d097f56b86a40a4",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/negative-budget.cg": "fce5fe5739299ba699760113d1299aea58509ed6303ef55e5bf7d7717e92a9e6",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/nested-71.cg": "f3a199af582bd72b519f094ff573967ea9beec1603e945eac2afd6925505e6ed",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/nested-72.cg": "be92ac5ceb1b76506a2b7561899f51257552e34418717054edf7755d7691aeef",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/nonexhaustive-error.cg": "7c1bb78d8f2f428b2cbf8c3449d11f38331307b2583ff2f8470485109c782377",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/nonexhaustive-result.cg": "df840f945e9a131ab80049a31bc86b2d3d85231ea21b581acb75727598ef25a9",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/one-under.cg": "6237f9f994a826c33e7c643359e7572e9607c7bbb1e7623818a040cdc0780a04",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/ordinary-symbol.cg": "1ebed98ca3296d5405abba4842d54a68894e5fb523f33f5c46f5388dfa26eea8",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/over-nesting.cg": "d5b047c11a13056cbe0fcd9e45d1e86d336bf5bc412b4d456ace3e360f366a4a",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/overflow-budget.cg": "b7a7c70a9c1e8e15ce1ad6c7f554769355e38be1a7a40d9dff713dcda1a652f5",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/payload-twice.cg": "6585e24df00b95ce6a5161ed62216dc8b454d70c2a1c184a178c326260399b82",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/prior.cg": "bf83cb1313397065cde304e3a3765984f5f7fb2abe15a7d31ba754b245341594",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/reborrow.cg": "1d59dcaeedb9688c662341db5df49061f2aa9c8e7a62465fec17e93e1378ced7",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/recover.cg": "e72b7b558bf5f41d5ebf266726d386c35b5fe5c312f4d601addd93bf5e8a8fd8",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/shadow-builtin.cg": "ecf093780ce97109549849081e2bd69241fbf2a527cbb8cde7c62b2b550917e4",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/success.cg": "664ea6223c82bc3e3d9e8d37cd523f01089add12e9e749b4c6d8b60ee1afb168",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/sum-twice.cg": "b0b725573c566f0875e085e81584d2c171e2b2ec4683e0b3b7e26024fb605868",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/tail-match-ok.cg": "34d01c1aa0697a6885320231d74ac3c79c76ef3c0057170d79e6df95f04f6f60",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/tail-match.cg": "a6d5ecadbd16166e90f0a8c2531d5419494635c081fcdc2061d7c5b290852ee3",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/wrong-call.cg": "10ca10c4c5ad48225c13a403f3de5cc7ac8e58138c74f36f57dfb354d88a032c",
+    "crates/cgx2-syntax/owned-result-evidence/fixtures/wrong-pattern.cg": "74f52ce2308ab3ca63d8de5b9b1d382b9a7c81a17ac3f6e127a6d2fe9075f1f3",
+    "crates/cgx2-syntax/owned-result-evidence/positive.json": "6e4d7c383f2ad158a08723062323635de142b5d7ed2c4fe70738af46c787bf47",
+    "crates/cgx2-syntax/owned-result-evidence/run.py": "ef91a3bb207110d774d3c850d5e417f31df36aa4fb666e30f4fb96d2ce69005e",
+    "crates/cgx2-syntax/owned-result-evidence/verify.py": "8391f515ab45e85519ace46708519c5f351dac5e0a032ccfb512d4f97a3b51e5",
+    "crates/cgx2-syntax/src/ordinary_owned.rs": "8a642f76995fb127a3f2dc507f7887b7e70d90496ff1337af0f0676d476c5baa",
+    "crates/cgx2-syntax/tests/owned_result_admission.rs": "4de352bf954188fe1f847dfc2afc35c468774542690bb4d4b8aa819a57c6c8bf",
+    "crates/cgx2c/src/lib.rs": "1e8633cb79f8f14feadcf592ba686ff121bed499254ba398655dcff9e3d8b08a"
+  }
+}

@@ -4,7 +4,7 @@ mod data;
 mod memory;
 mod ordinary_owned;
 mod variants;
-pub use ordinary_owned::emit_owned_rust;
+pub use ordinary_owned::{emit_owned_result_rust, emit_owned_rust};
 use variants::{emit_variants, syntax_type};
 
 pub use memory::is_memory_script;

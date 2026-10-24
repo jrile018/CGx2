@@ -166,3 +166,38 @@ evidence remain unrun here: invoke the repository's release evidence pipeline on
 the integrated compiler/runtime revision with the required runner/artifacts. No
 source borrowing, leak-freedom, solver, real foreign runtime or benchmark claim is
 based on these in-process library fixtures.
+
+## Conditional owned sums, v2 additive source adapter
+
+`cgx2_ownership::v2::analyze_function` retains the complete bounded worklist,
+UTF-8 validation, regions, loans, origins, foreign lifetime checks and defaults
+of v1. V1 remains unchanged. V2 `Storage::ConditionalOwned` and
+`ParameterMode::OwnedResult` describe a live affine discriminated sum, not a
+physical owner on every path. `TryCreate` initializes its potential fresh Ok
+provenance. `MoveResult`, `DropResult`, `CallResult::OwnedResult` and
+`ReturnValue::OwnedResult` consume the whole sum. No scalar read, projection,
+borrow or ordinary owner operation is valid on a conditional slot.
+
+`Terminator::MatchResult { from, payload, ok, err }` consumes `from` on both
+edges, preserving its potential Ok origins before consumption. Only the Ok
+successor initializes the independently typed owned `payload` slot. The Err
+edge initializes no owner. The iterative worklist joins definite liveness by
+intersection and possible liveness/origins by union, including zero-trip and
+loop paths. All successors and operations, even unreachable input, undergo
+preflight shape/span checks. There is no exponential arm enumeration.
+`ResultMode::OwnedResult { from_parameter }` authenticates exactly one sum
+parameter's potential Ok provenance or independent fresh allocation. Calls
+capture origins before consuming mixed owned/borrowed/conditional arguments.
+Wrong storage, stale provenance, repeated matching or Err-edge payload use
+fails closed. The source producer separately authenticates layouts, effects,
+source bodies, complete callee summaries and arm bindings; this library does
+not authorize a hand-authored summary as a checked source body.
+
+`Function::as_v1` / `FunctionSummary::as_v1` are lossless projections only for
+old shapes, returning None for conditional modes/operations/terminators. They
+never erase Err to Unit or manufacture an unconditional v1 owner. The actual
+source integration is `cgx2-sema/src/ordinary_owned/{model,lower,engine}.rs`;
+OwnedProgramV2 rechecks all representations before executing or emitting them.
+The v2 regression suite runs all inherited v1 cases plus conditional arm,
+consumption, provenance, malformed-CFG and resource-limit negatives. V1
+parameter bounds and all existing public exhaustive enums are preserved.

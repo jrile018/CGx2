@@ -1,0 +1,23 @@
+record R:
+    x: i64
+fn allocate(value: R) -> Result<owned<R>, AllocationError>:
+    try_owned(value)
+fn main() -> i64:
+    let input = R(x: 42)
+    no_gc(budget: 0):
+        let result = allocate(input)
+        match result:
+            Result.Ok(value):
+                return value.x
+            Result.Err(error):
+                match error:
+                    AllocationError.BudgetExceeded():
+                        return input.x
+                    AllocationError.RegionLimit():
+                        return 2
+                    AllocationError.HostAllocation():
+                        return 3
+                    AllocationError.InvalidRegion():
+                        return 4
+                    AllocationError.ShapeLimit():
+                        return 5

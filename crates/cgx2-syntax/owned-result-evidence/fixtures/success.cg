@@ -1,0 +1,17 @@
+record R:
+    x: i64
+fn allocate(n: i64) -> Result<owned<R>, AllocationError>:
+    try_owned(R(x: n))
+fn pass(a: i64, q: Result<owned<R>, AllocationError>, b: owned<R>, c: i64) -> Result<owned<R>, AllocationError>:
+    if a > c:
+        return q
+    else:
+        return q
+fn main() -> i64:
+    let extra = owned(R(x: 2))
+    let result = pass(8, allocate(42), extra, 3)
+    match result:
+        Result.Ok(value):
+            return value.x
+        Result.Err(error):
+            return 0

@@ -1,0 +1,10 @@
+# π
+record R:
+    x: i64
+record S:
+    x: i64
+fn take(q: Result<owned<S>, AllocationError>) -> Unit:
+    return
+fn main() -> i64:
+    take(try_owned(R(x: 1)))
+    0
