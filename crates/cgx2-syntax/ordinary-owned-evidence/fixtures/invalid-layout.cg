@@ -1,0 +1,5 @@
+record R:
+    x: String
+fn main() -> i64:
+    let p = owned(R(x: "x"))
+    0

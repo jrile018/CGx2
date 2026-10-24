@@ -1,0 +1,8 @@
+# UTF-8 π: spans are bytes
+record R:
+    x: i64
+fn main() -> i64:
+    let p = owned(R(x: 1))
+    let a = borrow(p)
+    let b = borrow_mut(p)
+    b.x

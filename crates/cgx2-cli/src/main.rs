@@ -135,7 +135,7 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
                     HELP.into(),
                     path.to_string(),
                     None,
-                )])
+                )]);
             }
         };
         #[cfg(target_os = "linux")]
@@ -188,7 +188,15 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
     match command {
         Command::Compile { .. } => unreachable!("compiler command handled before source read"),
         Command::Check { path } => {
-            check_source(&source).map_err(|errors| {
+            let ordinary = parse_module(&source)
+                .ok()
+                .is_some_and(|m| cgx2_syntax::ordinary_owned_span(&m).is_some());
+            (if ordinary {
+                cgx2_cli::validate_owned_source(&source)
+            } else {
+                check_source(&source).map(|_| ())
+            })
+            .map_err(|errors| {
                 errors
                     .into_iter()
                     .map(|error| CliDiagnostic::from_check(&path, error))
@@ -276,7 +284,7 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
                     "failure report requires memory script".into(),
                     path,
                     None,
-                )])
+                )]);
             }
             Err(failures) => {
                 let mut diagnostics = Vec::new();
@@ -493,7 +501,7 @@ fn parse_compile(args: &[String]) -> Result<Command, String> {
             Some(target) => {
                 return Err(format!(
                     "unsupported emission target `{target}`; expected rust or python"
-                ))
+                ));
             }
             None => return Err(usage()),
         }

@@ -772,7 +772,9 @@ fn new_session(
                     code: "CGNK009",
                     message: format!(
                         "cell {} has a forward dependency on {}; dependency cycles and forward references are unsupported at 0..{}",
-                        cell.id, read.strip_prefix("type:").unwrap_or(read), cell.source.len()
+                        cell.id,
+                        read.strip_prefix("type:").unwrap_or(read),
+                        cell.source.len()
                     ),
                     cell_id: Some(cell.id.clone()),
                 });
@@ -922,8 +924,23 @@ pub fn facts_for_source(source: &str) -> Result<CellFacts, KernelError> {
             ),
         )
     })?;
+    if let Some(span) = cgx2_syntax::ordinary_owned_span(&module) {
+        return Err(error(
+            "CGNK026",
+            format!(
+                "ordinary ownership notebook semantics are unsupported at {}..{}",
+                span.start, span.end
+            ),
+        ));
+    }
     if let Some(span) = cgx2_syntax::s2a_feature_span(&module) {
-        return Err(error("CGNK026",format!("S2a variant/generic/collection/loop-contract notebook execution is deferred to S3-N at {}..{}",span.start,span.end)));
+        return Err(error(
+            "CGNK026",
+            format!(
+                "S2a variant/generic/collection/loop-contract notebook execution is deferred to S3-N at {}..{}",
+                span.start, span.end
+            ),
+        ));
     }
     if module.name.is_some() {
         return Err(error(
@@ -1003,7 +1020,7 @@ pub fn facts_for_source(source: &str) -> Result<CellFacts, KernelError> {
                 return Err(error(
                     "CGNK001",
                     "top-level conditional cells are unsupported; use a pure function body",
-                ))
+                ));
             }
             StmtKind::Let {
                 mutable: false,
@@ -1026,7 +1043,7 @@ pub fn facts_for_source(source: &str) -> Result<CellFacts, KernelError> {
                         "only immutable let bindings and pure expressions supported at {}..{}",
                         statement.span.start, statement.span.end
                     ),
-                ))
+                ));
             }
         }
     }
@@ -1060,7 +1077,13 @@ fn validate_function(function: &Function, facts: &mut CellFacts) -> Result<(), K
             .as_ref()
             .is_some_and(|decl| !decl.names.is_empty())
     {
-        return Err(error("CGNK011", format!("notebook functions allow only verified local Mutate and no capabilities or foreign bindings at {}..{}", function.span.start, function.span.end)));
+        return Err(error(
+            "CGNK011",
+            format!(
+                "notebook functions allow only verified local Mutate and no capabilities or foreign bindings at {}..{}",
+                function.span.start, function.span.end
+            ),
+        ));
     }
     if function.parameters.len() > MAX_FUNCTION_PARAMETERS {
         return Err(error("CGNK006", "too many pure function parameters"));
@@ -1164,7 +1187,7 @@ fn collect_function_block(
                         "unsupported local computation statement at {}..{}",
                         statement.span.start, statement.span.end
                     ),
-                ))
+                ));
             }
         }
     }
@@ -1297,7 +1320,7 @@ fn collect_expression(
                     "S2a expression execution requires S3-N at {}..{}",
                     expression.span.start, expression.span.end
                 ),
-            ))
+            ));
         }
         ExprKind::Name(path) => {
             let name = simple_name(path)?;
@@ -1768,7 +1791,7 @@ impl RetainedExecutor {
             );
             let actual = match &value {
                 Value::Variant { .. } | Value::Sequence { .. } => {
-                    return Err("CGNK026: variant worker output requires S3-N".into())
+                    return Err("CGNK026: variant worker output requires S3-N".into());
                 }
                 Value::Record { name, .. } => name.as_str(),
                 Value::I64(_) => "i64",
@@ -1777,7 +1800,10 @@ impl RetainedExecutor {
                 Value::Unit => "Unit",
             };
             if actual != expected {
-                return Err(format!("CGNK010: worker result type {actual} does not match checked type {expected} at {}..{}", statement.span.start, statement.span.end));
+                return Err(format!(
+                    "CGNK010: worker result type {actual} does not match checked type {expected} at {}..{}",
+                    statement.span.start, statement.span.end
+                ));
             }
             self.validate_record_value(&value, &module)?;
             if let Some(name) = defined {
@@ -2202,7 +2228,7 @@ fn value_size(value: &Value) -> usize {
 fn append_value(script: &mut String, value: &Value) -> Result<(), String> {
     match value {
         Value::Variant { .. } | Value::Sequence { .. } => {
-            return Err("CGNK026: retained variant execution requires S3-N".into())
+            return Err("CGNK026: retained variant execution requires S3-N".into());
         }
         Value::I64(number) if *number == i64::MIN => script.push_str("0 - 9223372036854775807 - 1"),
         Value::I64(number) if *number < 0 => {

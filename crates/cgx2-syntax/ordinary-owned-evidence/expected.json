@@ -1,0 +1,107 @@
+{
+  "use-after-move": {
+    "code": "CGO101",
+    "span": {
+      "start": 112,
+      "end": 115
+    }
+  },
+  "argument-move-order": {
+    "code": "CGO101",
+    "span": {
+      "start": 149,
+      "end": 152
+    }
+  },
+  "conflicting-loans": {
+    "code": "CGO102",
+    "span": {
+      "start": 128,
+      "end": 141
+    }
+  },
+  "move-with-live-loan": {
+    "code": "CGO102",
+    "span": {
+      "start": 162,
+      "end": 163
+    }
+  },
+  "escaped-local": {
+    "code": "CGO103",
+    "span": {
+      "start": 122,
+      "end": 131
+    }
+  },
+  "invalid-field": {
+    "code": "CGT081",
+    "span": {
+      "start": 98,
+      "end": 107
+    }
+  },
+  "invalid-parameter": {
+    "code": "CGT081",
+    "span": {
+      "start": 140,
+      "end": 149
+    }
+  },
+  "invalid-result": {
+    "code": "CGT081",
+    "span": {
+      "start": 81,
+      "end": 82
+    }
+  },
+  "ambiguous-result": {
+    "code": "CGT081",
+    "span": {
+      "start": 93,
+      "end": 102
+    }
+  },
+  "unsupported-reborrow": {
+    "code": "CGT083",
+    "span": {
+      "start": 177,
+      "end": 178
+    }
+  },
+  "exclusive-alias": {
+    "code": "CGT083",
+    "span": {
+      "start": 136,
+      "end": 137
+    }
+  },
+  "reserved-shadow": {
+    "code": "CGT082",
+    "span": {
+      "start": 98,
+      "end": 113
+    }
+  },
+  "shared-write": {
+    "code": "CGT081",
+    "span": {
+      "start": 83,
+      "end": 86
+    }
+  },
+  "owner-result-as-loan": {
+    "code": "CGO103",
+    "span": {
+      "start": 105,
+      "end": 114
+    }
+  },
+  "invalid-layout": {
+    "code": "CGT081",
+    "span": {
+      "start": 17,
+      "end": 23
+    }
+  }
+}

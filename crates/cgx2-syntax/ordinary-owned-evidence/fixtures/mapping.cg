@@ -1,0 +1,21 @@
+record R:
+    x: i64
+record Other:
+    flag: Bool
+
+fn choose(a: i64, p: owned<R>, b: Bool, q: owned<R>, c: i64) -> owned<R>:
+    q
+
+fn lend(n: i64, unrelated: owned<Other>, flag: Bool, p: shared<R>) -> shared<R>:
+    p
+
+fn relay(n: i64, unrelated: owned<Other>, flag: Bool, p: shared<R>) -> shared<R>:
+    lend(n, unrelated, flag, p)
+
+fn main() -> i64:
+    let p = owned(R(x: 11))
+    let q = owned(R(x: 22))
+    let chosen = choose(0, p, true, q, 0)
+    let unrelated = owned(Other(flag: false))
+    let reader = relay(0, unrelated, false, borrow(chosen))
+    reader.x

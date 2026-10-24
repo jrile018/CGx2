@@ -3,7 +3,9 @@
 mod ast;
 mod format;
 mod lexer;
+mod ordinary_owned;
 mod parser;
+pub use ordinary_owned::ordinary_owned_span;
 
 pub use ast::{
     AssignOp, BinaryOp, CallArg, Declaration, DeclaredName, Expr, ExprKind, ForeignBinding,

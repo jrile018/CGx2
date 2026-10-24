@@ -2,7 +2,9 @@
 
 mod data;
 mod memory;
+mod ordinary_owned;
 mod variants;
+pub use ordinary_owned::emit_owned_rust;
 use variants::{emit_variants, syntax_type};
 
 pub use memory::is_memory_script;
@@ -356,6 +358,13 @@ impl EmitDiagnostic {
 
 /// Emit a standalone Rust 2024 program from a checked scalar module.
 pub fn emit_rust(module: &Module, checked: &TypedModule) -> Result<String, Vec<EmitDiagnostic>> {
+    if let Some(span) = cgx2_syntax::ordinary_owned_span(module) {
+        return Err(vec![EmitDiagnostic::new(
+            "CGT080",
+            "ordinary ownership requires emit_owned_rust with an authenticated source program",
+            span,
+        )]);
+    }
     if checked.finite_values {
         return data::emit(module, checked);
     }

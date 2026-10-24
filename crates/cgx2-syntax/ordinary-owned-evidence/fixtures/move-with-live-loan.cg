@@ -1,0 +1,9 @@
+# UTF-8 π: spans are bytes
+record R:
+    x: i64
+fn take(p: owned<R>) -> i64:
+    p.x
+fn main() -> i64:
+    let p = owned(R(x: 1))
+    let a = borrow(p)
+    take(p)

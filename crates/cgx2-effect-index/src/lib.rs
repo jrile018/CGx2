@@ -116,6 +116,15 @@ pub fn index_source(source: &str, syntax_only: bool) -> Result<Index, Vec<Diagno
             })
             .collect::<Vec<_>>()
     })?;
+    if let Some(span) = cgx2_syntax::ordinary_owned_span(&module) {
+        return Err(vec![Diagnostic {
+            stage: "admission",
+            code: "CGI006".into(),
+            message: "ordinary ownership analysis is unsupported; no copied-value summary claimed"
+                .into(),
+            span,
+        }]);
+    }
     if let Some(span) = cgx2_syntax::s2a_feature_span(&module) {
         return Err(vec![Diagnostic {
             stage: "admission",
@@ -632,11 +641,21 @@ fn entry_json(entry: &Entry) -> String {
         })
         .collect::<Vec<_>>()
         .join(",");
-    format!("{{\"name\":{},\"span\":{},\"public\":{},\"parameters\":[{}],\"return_type\":{},\"calls\":[{}],\"direct_effects\":{},\"transitive_effects\":{},\"recursive\":{}}}",
-        json_string(&entry.name), span_json(entry.span), entry.public, parameters,
-        entry.return_type.as_deref().map_or("null".to_owned(), json_string), calls,
+    format!(
+        "{{\"name\":{},\"span\":{},\"public\":{},\"parameters\":[{}],\"return_type\":{},\"calls\":[{}],\"direct_effects\":{},\"transitive_effects\":{},\"recursive\":{}}}",
+        json_string(&entry.name),
+        span_json(entry.span),
+        entry.public,
+        parameters,
+        entry
+            .return_type
+            .as_deref()
+            .map_or("null".to_owned(), json_string),
+        calls,
         strings_json(entry.direct_effects.iter().map(|e| e.as_str())),
-        strings_json(entry.transitive_effects.iter().map(|e| e.as_str())), entry.recursive)
+        strings_json(entry.transitive_effects.iter().map(|e| e.as_str())),
+        entry.recursive
+    )
 }
 
 impl Index {
@@ -653,9 +672,17 @@ impl Index {
             .map(|cycle| strings_json(cycle.iter().map(String::as_str)))
             .collect::<Vec<_>>()
             .join(",");
-        format!("{{\"schema_version\":{},\"span_unit\":\"utf8_byte_offset\",\"module\":{},\"check_mode\":{},\"functions\":[{}],\"top_level\":{},\"cycles\":[{}]}}",
-            self.schema_version, self.module.as_deref().map_or("null".to_owned(), json_string),
-            json_string(self.check_mode), functions, entry_json(&self.top_level), cycles)
+        format!(
+            "{{\"schema_version\":{},\"span_unit\":\"utf8_byte_offset\",\"module\":{},\"check_mode\":{},\"functions\":[{}],\"top_level\":{},\"cycles\":[{}]}}",
+            self.schema_version,
+            self.module
+                .as_deref()
+                .map_or("null".to_owned(), json_string),
+            json_string(self.check_mode),
+            functions,
+            entry_json(&self.top_level),
+            cycles
+        )
     }
 
     pub fn to_text(&self) -> String {
