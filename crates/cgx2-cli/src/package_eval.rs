@@ -139,7 +139,7 @@ pub(crate) fn run(
             .as_ref()
             .map(|p| p.segments.join("."))
             .unwrap_or_default();
-        let merged = cgx2_sema::merge_modules(
+        let mut merged = cgx2_sema::merge_modules(
             &package
                 .modules()
                 .iter()
@@ -147,6 +147,9 @@ pub(crate) fn run(
                 .collect::<Vec<_>>(),
             &name,
         );
+        // Final-value diagnostics belong to the entry source, as in standalone
+        // execution, rather than whichever dependency is merged first.
+        merged.span = entry.syntax().span;
         let origins = package
             .modules()
             .iter()

@@ -9,6 +9,7 @@ use cgx2_syntax::{
 
 const STEP_LIMIT: usize = 1_000_000;
 const DEPTH_LIMIT: usize = 64;
+const OUTPUT_BYTE_LIMIT: usize = 1_048_576;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Value {
@@ -222,10 +223,26 @@ fn run_module_inner(module: &Module, args: &[String]) -> Result<RunResult, RunEr
             [first, ..] => return Err(error("CGR008", "ambiguous main definitions", first.span)),
         }
     };
-    check_value_bound(&value, module.span)?;
-    if value.to_string().len() > 1048576 {
-        return Err(error("CGR010", "output exceeds 1048576 bytes", module.span));
+    finalize_value(value, module.span)
+}
+
+// Exercise the real formatter without allocating its output. Stop at the first
+// write that would exceed the cap, including names and aggregate punctuation.
+fn check_output_bound(value: &Value, span: Span) -> Result<(), RunError> {
+    struct ByteBudget(usize);
+    impl fmt::Write for ByteBudget {
+        fn write_str(&mut self, text: &str) -> fmt::Result {
+            self.0 = self.0.checked_sub(text.len()).ok_or(fmt::Error)?;
+            Ok(())
+        }
     }
+    fmt::write(&mut ByteBudget(OUTPUT_BYTE_LIMIT), format_args!("{value}"))
+        .map_err(|_| error("CGR010", "output exceeds 1048576 bytes", span))
+}
+
+fn finalize_value(value: Value, span: Span) -> Result<RunResult, RunError> {
+    check_value_bound(&value, span)?;
+    check_output_bound(&value, span)?;
     Ok(RunResult { value })
 }
 
@@ -270,7 +287,7 @@ pub(crate) fn run_package_module(
     let result = if let Some(main) = module.functions.iter().find(|f| f.name == "main") {
         evaluator
             .call_function(main, vec![], main.span)
-            .map(|value| RunResult { value })
+            .and_then(|value| finalize_value(value, module.span))
     } else {
         Err(error("CGR008", "package requires main", module.span))
     };
@@ -1155,3 +1172,7 @@ fn decode_string(raw: &str, span: Span) -> Result<String, RunError> {
 }
 
 include!("data_eval.rs");
+
+#[cfg(test)]
+#[path = "output_tests.rs"]
+mod output_tests;

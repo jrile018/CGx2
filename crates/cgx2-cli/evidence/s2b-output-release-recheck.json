@@ -1,0 +1,90 @@
+{
+  "base": "b595724e1b086c604220cc5b165c141e65a0531f",
+  "fixture_sha256": "f9c42ee3032cbb862f011d52b6d5188908683d8daadd9084d9a4a0ef3b300004",
+  "limits": {
+    "execution_address_space_mib": 512,
+    "execution_cpu_seconds": 15,
+    "execution_wall_seconds": 20,
+    "build_address_space_mib": 4096,
+    "build_cpu_seconds": 60,
+    "build_wall_seconds": 120,
+    "file_bytes": 16777216
+  },
+  "toolchain": "1.98.1",
+  "release_only": true,
+  "checks": [
+    {
+      "label": "reviewed-package:build-True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/a94c/lang/target/release-interpreter-output/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/a94c/lang/crates/cgx2-cli/tests/fixtures/output-bound/package",
+        "--out",
+        "/home/john-riley/.codex/worktrees/a94c/lang/target/tmp-interpreter-output/cgx2-output-product-abzookeu/reviewed-package-release",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/a94c/lang/target/tmp-interpreter-output/cgx2-output-product-abzookeu/rustc-bounded-linker",
+        "--release"
+      ],
+      "status": "passed",
+      "independent_target": true,
+      "returncode": 0,
+      "stdout_bytes": 574,
+      "stdout_sha256": "559699f8b7739bf4fe212d8c2a244ffa120b4ffcc391fc2d1eafae4960ab1e56",
+      "stderr_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "label": "reviewed-package:native-True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/a94c/lang/target/tmp-interpreter-output/cgx2-output-product-abzookeu/reviewed-package-release"
+      ],
+      "status": "passed",
+      "independent_target": true,
+      "returncode": 1,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 30,
+      "stderr": "CGR010: output limit exceeded\n"
+    },
+    {
+      "label": "reviewed-standalone:build-True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/a94c/lang/target/release-interpreter-output/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/a94c/lang/target/tmp-interpreter-output/cgx2-output-product-abzookeu/reviewed.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/a94c/lang/target/tmp-interpreter-output/cgx2-output-product-abzookeu/reviewed-standalone-release",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/a94c/lang/target/tmp-interpreter-output/cgx2-output-product-abzookeu/rustc-bounded-linker",
+        "--release"
+      ],
+      "status": "passed",
+      "independent_target": true,
+      "returncode": 0,
+      "stdout_bytes": 483,
+      "stdout_sha256": "8a8eef70c50debe49fdde290cde9d2fdc2349d9fc6930e52071a30a112aefc9c",
+      "stderr_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "label": "reviewed-standalone:native-True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/a94c/lang/target/tmp-interpreter-output/cgx2-output-product-abzookeu/reviewed-standalone-release"
+      ],
+      "status": "passed",
+      "independent_target": true,
+      "returncode": 1,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 30,
+      "stderr": "CGR010: output limit exceeded\n"
+    }
+  ],
+  "native_compiler": {
+    "path": "/home/john-riley/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/bin/rustc",
+    "flags": [
+      "-Awarnings",
+      "-Clink-arg=-Wl,--threads=2"
+    ]
+  }
+}
