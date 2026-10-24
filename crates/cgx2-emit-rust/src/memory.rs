@@ -360,19 +360,19 @@ fn emit_block(
                             size_expr(args[1], parameters)?
                         )
                     }
-                    "alloc_object" => {
+                    "alloc_object" | "alloc_graph" => {
                         let args = positional(args, 3, value.span)?;
                         format!(
-                            "alloc_object(session, &mut bindings, {dest}, {}, {}, {}, {span})?;",
+                            "{op}(session, &mut bindings, {dest}, {}, {}, {}, {span})?;",
                             quote_rust(bound_name(args[0], names)?),
                             size(args[1])?,
                             size(args[2])?
                         )
                     }
-                    "reference" => {
+                    "reference" | "graph_reference" => {
                         let args = positional(args, 2, value.span)?;
                         format!(
-                            "reference(session, &mut bindings, {dest}, {}, {}, {span})?;",
+                            "{op}(session, &mut bindings, {dest}, {}, {}, {span})?;",
                             quote_rust(bound_name(args[0], names)?),
                             size(args[1])?
                         )
@@ -428,18 +428,45 @@ fn emit_block(
                     )
                 } else {
                     let (op, args) = call(expr)?;
-                    if op == "set_reference" || op == "clear_reference" {
-                        let args =
-                            positional(args, if op == "set_reference" { 3 } else { 2 }, expr.span)?;
+                    if matches!(
+                        op,
+                        "set_reference"
+                            | "clear_reference"
+                            | "set_graph_reference"
+                            | "clear_graph_reference"
+                    ) {
+                        let args = positional(
+                            args,
+                            if op.starts_with("set_") { 3 } else { 2 },
+                            expr.span,
+                        )?;
                         let owner = quote_rust(bound_name(args[0], names)?);
                         let index = size(args[1])?;
-                        let target = if op == "set_reference" {
+                        let target = if op.starts_with("set_") {
                             format!("Some({})", quote_rust(bound_name(args[2], names)?))
                         } else {
                             "None".to_owned()
                         };
+                        let helper = if op.contains("graph") {
+                            "set_graph_reference"
+                        } else {
+                            "set_reference"
+                        };
                         format!(
-                            "set_reference(session, &bindings, {owner}, {index}, {target}, {span})?;"
+                            "{helper}(session, &bindings, {owner}, {index}, {target}, {span})?;"
+                        )
+                    } else if matches!(
+                        op,
+                        "write_byte" | "expect_byte" | "write_graph_byte" | "expect_graph_byte"
+                    ) {
+                        let args = positional(args, 3, expr.span)?;
+                        format!(
+                            "memory_byte(session, &bindings, {}, {}, {}, {}, {}, {span})?;",
+                            quote_rust(bound_name(args[0], names)?),
+                            size(args[1])?,
+                            size(args[2])?,
+                            op.starts_with("write_"),
+                            op.contains("graph")
                         )
                     } else {
                         let args = positional(args, 1, expr.span)?;
@@ -503,6 +530,10 @@ pub(crate) fn emit_memory_rust(
         .map(|(index, function)| (function.name.as_str(), (index, function.parameters.len())))
         .collect();
     let mut out = String::from("// Generated CGx2 native memory program. Requires cgx2-runtime.\n");
+    out.push_str(&format!(
+        "const CGX2_GRAPH_PROFILE: bool = {};\n",
+        cgx2_sema::graph_memory_profile(module)
+    ));
     out.push_str(include_str!("memory_runtime.rs.txt"));
     out.push_str(include_str!("memory_report.rs.txt"));
     for (index, function) in module.functions.iter().enumerate() {
@@ -530,7 +561,7 @@ pub(crate) fn emit_memory_rust(
         .map_err(|error| vec![error])?;
         out.push_str("        Ok(())\n    })();\n    let mut cleanup_error = None;\n    for value in bindings.into_values() {\n        if let Binding::Managed(handle) = value {\n            if let Err(failure) = session.unroot(handle) {\n                CGX2_CLEANUP_ERRORS.with(|value| value.borrow_mut().push(format!(\"{failure:?}\")));\n                cleanup_error.get_or_insert_with(|| runtime(failure, call_span));\n            }\n        }\n    }\n    result?;\n    if let Some(failure) = cleanup_error { return Err(failure); }\n    Ok(())\n}\n");
     }
-    out.push_str("\nfn main() {\n    let report_path = match cgx2_report_path() {\n        Ok(path) => path,\n        Err(message) => { eprintln!(\"{message}\"); std::process::exit(1); }\n    };\n    CGX2_OBSERVE.with(|value| value.set(report_path.is_some()));\n    let mut session = Session::new();\n    #[cfg(feature = \"fault-injection\")]\n    session.inject_host_failure_at_reserve(option_env!(\"CGX2_TEST_FAIL_RESERVE\").expect(\"test fault index\").parse().expect(\"valid test fault index\"));\n    let mut bindings: HashMap<&'static str, Binding> = HashMap::new();\n    let mut steps = 0;\n    let mut iterations = 0;\n    let result = (|| -> Result<(), String> {\n        let session = &mut session;\n        let steps = &mut steps;\n        let iterations = &mut iterations;\n");
+    out.push_str("\nfn main() {\n    let report_path = match cgx2_report_path() {\n        Ok(path) => path,\n        Err(message) => { eprintln!(\"{message}\"); std::process::exit(1); }\n    };\n    CGX2_OBSERVE.with(|value| value.set(report_path.is_some()));\n    let mut session = if CGX2_GRAPH_PROFILE { match Session::try_new() { Ok(session) => session, Err(e) => { eprintln!(\"CGR013: session entry failed: {e:?}\"); std::process::exit(1); } } } else { Session::new() };\n    #[cfg(feature = \"fault-injection\")]\n    session.inject_host_failure_at_reserve(option_env!(\"CGX2_TEST_FAIL_RESERVE\").expect(\"test fault index\").parse().expect(\"valid test fault index\"));\n    let mut bindings: HashMap<&'static str, Binding> = HashMap::new();\n    let mut steps = 0;\n    let mut iterations = 0;\n    let result = (|| -> Result<(), String> {\n        let session = &mut session;\n        let steps = &mut steps;\n        let iterations = &mut iterations;\n");
     if module.functions.is_empty() {
         emit_block(
             &module.statements,

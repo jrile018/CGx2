@@ -55,7 +55,9 @@ fn graph_snapshot(session: &Session, bindings: &HashMap<&'static str, Binding>) 
         let Binding::Managed(handle) = binding else { continue };
         let live = session.read_bytes(*handle).is_ok();
         let mut references = Vec::new();
-        if live {
+        if live && session.graph_shape(*handle).is_ok() {
+            session.visit_graph_references(*handle, |_, child| references.push(child)).ok()?;
+        } else if live {
             for index in 0..=1024 {
                 match session.reference(*handle, index) {
                     Ok(reference) if index < 1024 => references.push(reference),
@@ -256,4 +258,43 @@ fn collect(session: &mut Session, bindings: &HashMap<&'static str, Binding>, reg
 fn close(session: &mut Session, bindings: &HashMap<&'static str, Binding>, region_name: &'static str, span: (usize, usize)) -> Result<(), String> {
     let id = region(bindings, region_name, span)?;
     session.close_region(id).map_err(|e| runtime(e, span))
+}
+
+fn graph_error(error: cgx2_runtime::GraphError, span: (usize, usize)) -> String {
+    match error {
+        cgx2_runtime::GraphError::Memory(MemoryError::Allocation(e)) => allocation(e, span),
+        cgx2_runtime::GraphError::Memory(e) => runtime(e, span),
+        e => format!("CGR014 at {}..{}: {e:?}", span.0, span.1),
+    }
+}
+fn alloc_graph(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, region_name: &'static str, payload: usize, slots: usize, span: (usize, usize)) -> Result<(), String> {
+    let id = region(bindings, region_name, span)?;
+    let handle = session.alloc_zeroed_graph(id, payload, slots).map_err(|e| graph_error(e, span))?;
+    session.root(handle).map_err(|e| runtime(e, span))?;
+    bindings.insert(name, Binding::Managed(handle));
+    Ok(())
+}
+fn set_graph_reference(session: &mut Session, bindings: &HashMap<&'static str, Binding>, owner: &'static str, index: usize, target: Option<&'static str>, span: (usize, usize)) -> Result<(), String> {
+    let owner = managed(bindings, owner, span, "owner")?;
+    let target = target.map(|name| managed(bindings, name, span, "target")).transpose()?;
+    session.set_graph_reference(owner, index, target).map_err(|e| graph_error(e, span))
+}
+fn graph_reference(session: &Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, owner: &'static str, index: usize, span: (usize, usize)) -> Result<(), String> {
+    let owner = managed(bindings, owner, span, "owner")?;
+    let handle = session.graph_reference(owner, index).map_err(|e| graph_error(e, span))?;
+    bindings.insert(name, Binding::Reference(handle));
+    Ok(())
+}
+fn memory_byte(session: &mut Session, bindings: &HashMap<&'static str, Binding>, owner: &'static str, offset: usize, value: u8, write: bool, graph: bool, span: (usize, usize)) -> Result<(), String> {
+    let handle = managed(bindings, owner, span, "owner")?;
+    if write {
+        if graph { session.write_graph_bytes(handle, offset, &[value]).map_err(|e| graph_error(e, span))?; }
+        else { session.write_bytes(handle, offset, &[value]).map_err(|e| format!("CGR014 at {}..{}: {e:?}", span.0, span.1))?; }
+    } else {
+        let mut actual = [0];
+        if graph { session.read_graph_bytes(handle, offset, &mut actual).map_err(|e| graph_error(e, span))?; }
+        else { actual[0] = *session.read_bytes(handle).map_err(|e| runtime(e, span))?.get(offset).ok_or_else(|| format!("CGR014 at {}..{}: invalid byte offset", span.0, span.1))?; }
+        if actual[0] != value { return Err(format!("CGR015 at {}..{}: memory byte expectation failed", span.0, span.1)); }
+    }
+    Ok(())
 }

@@ -3,6 +3,7 @@
 
 mod budget;
 mod fault;
+mod graph;
 mod heap;
 mod owned;
 mod region;
@@ -16,6 +17,9 @@ use budget::Budget;
 pub use budget::NoGcGuard;
 use fault::FaultInjection;
 pub use fault::{ReserveSite, ReserveSiteV2};
+pub use graph::{
+    GraphError, GraphShape, PayloadError, MAX_GRAPH_PAYLOAD_BYTES, MAX_GRAPH_REFERENCES,
+};
 use heap::{Object, Region};
 pub use owned::{OwnedBytes, OWNED_METADATA_BYTES};
 pub use region::{

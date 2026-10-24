@@ -198,3 +198,65 @@ Wave 10 adds focused allocation failure tests and seeded regression traces for t
 ## Wave 23 pressure model
 
 `tests/automatic_pressure_wave23.rs` runs the shared independent graph/pressure oracle in normal and fault-feature builds. See [the Wave 23 evidence report](../cgx2-memory-conformance/release-gate-wave23.md) for seed replay, reserve ordering, measured coverage, and instrumentation limits.
+
+## Checked payloads and chunked graphs (S2b supporting implementation)
+
+This is supporting storage and explicit memory-script integration, **not ordinary
+function ownership/default-value acceptance**. No existing public enum or API is
+removed or reinterpreted. Default auto trigger/limit remain 1 MiB/64 MiB.
+
+- `Session::write_bytes(handle, offset, bytes) -> Result<(), PayloadError>` checks
+  the live session/region/generation handle and `offset + bytes.len()` before
+  mutating. `PayloadError::{Memory(MemoryError), OutOfBounds}` is a separate
+  additive envelope. It performs no reserve or collection, and rejected writes
+  preserve every byte. Empty writes at the payload end succeed. Layout typing
+  remains the compiler's responsibility.
+- `ScopedRoots::root_many(handles: &[Option<Handle>])` validates all evaluated
+  children, reserves the root table once, and registers every nonempty entry,
+  including duplicates. Invalid handles leave registrations unchanged;
+  counter overflow rolls back newly acquired registrations. Successful reserves
+  remain charged to every active no_gc budget even if registration fails.
+- `Session::alloc_initialized_object(region, payload, references)` initializes
+  checked object bytes and slots after rooting all children before any
+  allocating safepoint. The old 1 MiB/256-slot per-object bounds remain.
+- `Session::alloc_graph(region, payload, references)` and
+  `alloc_zeroed_graph(region, payload_bytes, references)` admit up to 1,048,576
+  logical payload bytes and 65,536 logical reference slots. The zeroed entry
+  allocates no temporary host payload/reference arrays. Both return
+  `Result<Handle, GraphError>` and initially unrooted handles. Callers must root
+  results before subsequent allocating safepoints. Evaluators must also root
+  earlier children while evaluating later children; construction cannot repair
+  a child that was already invalidated before entry.
+- `graph_shape`, `graph_reference`, `set_graph_reference`, `read_graph_bytes`,
+  `write_graph_bytes` and `visit_graph_references` validate the complete bounded
+  chain before access. The visitor calls `(logical_index, Option<Handle>)` in
+  source order without runtime allocation. Updates support same-region sharing
+  and cycles. Cross-region/session edges reject. Payload reads/writes validate
+  the complete range before the first output/storage mutation. Malformed or
+  cyclic internal chunk links reject; logical graph cycles are allowed.
+
+The version-1 graph layout uses runtime objects only. Each chunk has a 24-byte
+header: `CGG1`, then little-endian u32 total reference count, total payload bytes,
+chunk reference count, chunk payload bytes, and a reserved zero u32. Slot 0
+links the next chunk. Slots 1..255 are logical children. Each chunk carries at
+most 1,048,552 payload bytes. Counts and expected links are checked, so 65,536
+references use 258 chunks and a 1 MiB string payload crosses two payload chunks.
+No host side table stores CGx2 graph content. Headers, chunk links, reserved
+payload/slot capacities and slot metadata count against region limits and
+active guards using the existing runtime accounting. Root tables are charged
+to active guard budgets, outside region committed bytes.
+
+`GraphError::{Memory(MemoryError), ShapeLimit, InvalidLayout, OutOfBounds}` keeps
+existing exhaustive error enums compatible. Construction errors preserve
+borrowed input buffers/handles. Previously successful chunk allocations may
+remain unreachable and committed until permitted collection; there is no
+rollback/refund promise. Temporary roots use `ScopedRoots::finish`; the primary
+error wins over any cleanup error. Safe public operations cannot corrupt
+protected root registrations. Cleanup never collects or closes a region.
+
+`tests/graph_storage.rs` covers maximum dimensions, pressure-rooting, byte/layout
+bounds, shared children/cycles, region/session identity, exact and exhausted
+budgets, bulk-root counts and injected reserve failures. The independent logical
+slot oracle is `../cgx2-memory-conformance/tests/graph_storage_model.rs`. The
+ASan/LSan runner now includes both suites. Use the existing leak-enabled runner
+first; non-leak ASan is separately labeled and never closes leak acceptance.

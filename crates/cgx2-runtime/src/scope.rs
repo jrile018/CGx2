@@ -46,12 +46,23 @@ impl ScopedRoots<'_> {
             .roots
             .checked_add(1)
             .ok_or(MemoryError::InvalidHandle)?;
-        if self.roots.len() == self.roots.capacity() {
-            let needed = self
-                .roots
-                .len()
-                .checked_add(1)
-                .ok_or(MemoryError::Allocation(AllocationError::HostAllocation))?;
+        self.root_many(&[Some(handle)])
+    }
+
+    /// Registers a complete evaluated child list before an allocating safepoint.
+    /// Invalid handles and counter overflow leave registrations unchanged. A
+    /// successful table reserve remains charged even if registration fails.
+    pub fn root_many(&mut self, handles: &[Option<Handle>]) -> Result<(), MemoryError> {
+        let count = handles.iter().flatten().count();
+        for handle in handles.iter().flatten() {
+            self.session.read_bytes(*handle)?;
+        }
+        let needed = self
+            .roots
+            .len()
+            .checked_add(count)
+            .ok_or(MemoryError::Allocation(AllocationError::HostAllocation))?;
+        if needed > self.roots.capacity() {
             let bytes = needed
                 .checked_mul(std::mem::size_of::<Handle>())
                 .ok_or(MemoryError::Allocation(AllocationError::HostAllocation))?;
@@ -62,7 +73,7 @@ impl ScopedRoots<'_> {
                 .fault
                 .before_reserve_v2(ReserveSiteV2::ScopedRoots)
                 .map_err(|_| MemoryError::Allocation(AllocationError::HostAllocation))?;
-            let mut replacement = Vec::new();
+            let mut replacement: Vec<Handle> = Vec::new();
             replacement
                 .try_reserve_exact(needed)
                 .map_err(|_| MemoryError::Allocation(AllocationError::HostAllocation))?;
@@ -77,10 +88,22 @@ impl ScopedRoots<'_> {
             replacement.extend_from_slice(&self.roots);
             self.roots = replacement;
         }
-        let object = self.session.object_mut(handle)?;
-        object.roots += 1;
-        object.scoped_roots += 1;
-        self.roots.push(handle);
+        let previous = self.roots.len();
+        for handle in handles.iter().flatten().copied() {
+            let object = self.session.object_mut(handle)?;
+            let Some(roots) = object.roots.checked_add(1) else {
+                while self.roots.len() > previous {
+                    let registered = self.roots.pop().expect("new registration");
+                    let object = self.session.object_mut(registered)?;
+                    object.roots -= 1;
+                    object.scoped_roots -= 1;
+                }
+                return Err(MemoryError::InvalidHandle);
+            };
+            object.roots = roots;
+            object.scoped_roots += 1;
+            self.roots.push(handle);
+        }
         Ok(())
     }
 

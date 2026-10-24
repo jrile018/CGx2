@@ -1,0 +1,2705 @@
+   Compiling cgx2-bind v0.1.0 (/home/john-riley/.codex/worktrees/fba5/lang/crates/cgx2-bind)
+   Compiling cgx2-security v0.1.0 (/home/john-riley/.codex/worktrees/fba5/lang/crates/cgx2-security)
+   Compiling cgx2-ffi-native v0.1.0 (/home/john-riley/.codex/worktrees/fba5/lang/crates/cgx2-ffi-native)
+   Compiling cgx2-libtorch v0.1.0 (/home/john-riley/.codex/worktrees/fba5/lang/crates/cgx2-libtorch)
+   Compiling cgx2-cli v0.1.0 (/home/john-riley/.codex/worktrees/fba5/lang/crates/cgx2-cli)
+   Compiling cgx2-memory-conformance v0.1.0 (/home/john-riley/.codex/worktrees/fba5/lang/crates/cgx2-memory-conformance)
+   Compiling cgx2-notebook-kernel v0.1.0 (/home/john-riley/.codex/worktrees/fba5/lang/crates/cgx2-notebook-kernel)
+   Compiling cgx2-notebook-ui v0.1.0 (/home/john-riley/.codex/worktrees/fba5/lang/crates/cgx2-notebook-ui)
+   Compiling cgx2-notebook-cli v0.1.0 (/home/john-riley/.codex/worktrees/fba5/lang/crates/cgx2-notebook-cli)
+   Compiling cgx2c v0.1.0 (/home/john-riley/.codex/worktrees/fba5/lang/crates/cgx2c)
+   Compiling cgx2-emit-rust v0.1.0 (/home/john-riley/.codex/worktrees/fba5/lang/crates/cgx2-emit-rust)
+   Compiling cgx2-emit-python v0.1.0 (/home/john-riley/.codex/worktrees/fba5/lang/crates/cgx2-emit-python)
+   Compiling cgx2-verify-cli v0.1.0 (/home/john-riley/.codex/worktrees/fba5/lang/crates/cgx2-verify-cli)
+   Compiling cgx2-effect-index v0.1.0 (/home/john-riley/.codex/worktrees/fba5/lang/crates/cgx2-effect-index)
+   Compiling cgx2-runtime v0.1.0 (/home/john-riley/.codex/worktrees/fba5/lang/crates/cgx2-runtime)
+   Compiling cgx2-package v0.1.0 (/home/john-riley/.codex/worktrees/fba5/lang/crates/cgx2-package)
+   Compiling cgx2-api-index v0.1.0 (/home/john-riley/.codex/worktrees/fba5/lang/crates/cgx2-api-index)
+   Compiling cgx2-sema v0.1.0 (/home/john-riley/.codex/worktrees/fba5/lang/crates/cgx2-sema)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 9.23s
+     Running unittests src/lib.rs (target/release-s2b-memory/debug/deps/cgx2_api_index-9094bddda1410869)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/imported_effects.rs (target/release-s2b-memory/debug/deps/imported_effects-22e2b862710e2461)
+
+running 1 test
+test fresh_import_checks_reject_stale_typed_indexes_and_incomplete_evidence ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/index.rs (target/release-s2b-memory/debug/deps/index-a72a3e5ed4b77f2d)
+
+running 10 tests
+test native_api_index_exposes_unsafe_binding_and_source_span ... ok
+test private_only_module_has_empty_public_api ... ok
+test lookup_is_exact_and_spans_count_utf8_bytes ... ok
+test public_python_binding_exposes_route_target_and_runtime ... ok
+test rejects_stale_or_mutated_semantic_summaries ... ok
+test json_round_trips_escapes_controls_and_unicode ... ok
+test extracts_only_public_source_signatures ... ok
+test stable_text_and_json_schema ... ok
+test indexes_explicit_declarations_and_runtime_checked_contracts ... ok
+test empty_public_api_renders_deterministically ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/memory_functions.rs (target/release-s2b-memory/debug/deps/memory_functions-754e259dd68f72f4)
+
+running 2 tests
+test indexes_public_memory_function_as_unit_with_declared_effects ... ok
+test indexes_public_scalar_signature_and_transitive_memory_capability ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/object_references.rs (target/release-s2b-memory/debug/deps/object_references-84de3b697a534719)
+
+running 2 tests
+test rejects_invalid_graph_even_with_previously_checked_summary ... ok
+test indexes_checked_public_graph_function ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/records.rs (target/release-s2b-memory/debug/deps/records-2d8a503006d2de00)
+
+running 1 test
+test record_declarations_and_field_types_are_indexed ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s2a.rs (target/release-s2b-memory/debug/deps/s2a-9478a75ffd91e529)
+
+running 3 tests
+test next_stage_array_and_loop_contract_metadata_remains_unchecked ... ok
+test syntax_only_api_reports_constraints_without_claiming_semantics ... ok
+test schema_six_preserves_public_qualified_identities_arguments_and_spans ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s2b.rs (target/release-s2b-memory/debug/deps/s2b-4c1455df328dade7)
+
+running 2 tests
+test field_type_strings_do_not_capture_same_spelled_nominal_names ... ok
+test schema_seven_records_deterministic_checked_instantiations ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s2bf_visibility.rs (target/release-s2b-memory/debug/deps/s2bf_visibility-6d054da59b19afc1)
+
+running 7 tests
+test invalid_or_changed_modules_are_rejected_before_projection ... ok
+test reviewed_private_owner_and_callee_do_not_enter_public_api ... ok
+test unnamed_private_owners_are_filtered ... ok
+test imported_signature_identities_are_checked_beyond_type_arguments ... ok
+test imported_public_identities_and_owner_binders_are_retained ... ok
+test every_container_and_nominal_argument_obeys_visibility ... ok
+test public_projection_preserves_internal_calls_and_complete_public_types ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/tensor.rs (target/release-s2b-memory/debug/deps/tensor-3545bad5b0487d50)
+
+running 1 test
+test tensor_api_index_names_unsafe_bounded_profile ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/text.rs (target/release-s2b-memory/debug/deps/text-301650a3829ccdaf)
+
+running 5 tests
+test text_uses_stored_statuses_and_preserves_an_unannotated_result ... ok
+test syntax_only_foreign_output_uses_the_stored_unsafe_flag_without_a_binding_id ... ok
+test contracts_distinguish_checked_and_syntax_only_for_the_same_source ... ok
+test syntax_text_preserves_generics_nested_types_loop_annotations_and_unchecked_statuses ... ok
+test checked_text_preserves_nominal_identities_and_effect_statuses ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/release-s2b-memory/debug/deps/cgx2_bind-8f050a9e620096ec)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin/cgx2-bind.rs (target/release-s2b-memory/debug/deps/cgx2_bind-7a7a7b281f6fe912)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/preflight.rs (target/release-s2b-memory/debug/deps/preflight-777b33097a9eba70)
+
+running 13 tests
+test unavailable_libtorch_is_reported_without_fallback ... ok
+test rejects_lock_schema_and_lock_symlink_escape ... ok
+test rejects_traversal_and_symlink_escape ... ok
+test rejects_contract_platform_and_unknown_fields ... ok
+test rejects_excessive_binding_and_symbol_counts_before_inspection ... ok
+test c_fixture_passes_and_cli_outputs_stable_json ... ok
+test rejects_hash_identity_symbol_and_missing_artifact ... ok
+test opt_in_trace_preserves_success_and_first_failure_report ... ok
+test mock_facade_preflight_rejects_missing_export ... ok
+test mock_facade_preflight_pins_exact_bytes_and_c_signatures_without_loading ... ok
+test float32_matrix_preflight_requires_exact_v3_exports ... ok
+test matrix_preflight_requires_exact_v2_exports_and_keeps_v1_valid ... ok
+test inference_v4_requires_schema3_exact_exports_and_a_closure ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running unittests src/lib.rs (target/release-s2b-memory/debug/deps/cgx2_cli-b937a556264e086d)
+
+running 8 tests
+test memory::tests::failed_promotion_retains_sole_owned_binding_and_does_not_collect ... ok
+test memory::tests::failed_nested_guard_keeps_zero_collection_delta ... ok
+test memory::tests::copied_owned_buffer_has_distinct_storage_from_managed_source ... ok
+test memory::tests::failed_object_allocation_keeps_prior_reference_and_region_state ... ok
+test memory::tests::runtime_census_counts_duplicate_registrations_beyond_source_bindings ... ok
+test eval::output_tests::output_byte_boundary_keeps_values_intact_and_does_not_charge_print_newline ... ok
+test eval::output_tests::output_budget_counts_names_type_arguments_fields_and_nested_punctuation ... ok
+test eval::output_tests::finalization_retains_positive_finite_value_depth_node_and_string_bounds ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/release-s2b-memory/debug/deps/cgx2-525141fdb408bd7b)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin/cgx2-native.rs (target/release-s2b-memory/debug/deps/cgx2_native-9657fd15947fbad0)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/check.rs (target/release-s2b-memory/debug/deps/check-160a7d788e17428f)
+
+running 9 tests
+test check_source_preserves_codes_and_byte_spans ... ok
+test check_source_accepts_scalar_script_and_module ... ok
+test help_states_check_scope ... ok
+test json_escapes_file_and_message_and_preserves_code_origins ... ok
+test contract_failure_is_json_source_located_after_unicode ... ok
+test check_and_run_gate_static_errors ... ok
+test json_lines_report_every_type_error_with_byte_spans ... ok
+test memory_check_fmt_and_run_share_checked_contract ... ok
+test run_preserves_arguments_and_admits_collection_functions ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/cli.rs (target/release-s2b-memory/debug/deps/cli-1529763cc6046108)
+
+running 7 tests
+test fmt_prints_canonical_text_without_rewriting ... ok
+test invalid_commands_and_missing_delimiter_fail ... ok
+test delimiter_forwards_spaced_unicode_arguments ... ok
+test run_and_shortcut_print_tail_value ... ok
+test file_and_runtime_errors_are_nonzero_without_success_output ... ok
+test memory_report_has_no_success_output_on_failure ... ok
+test memory_report_text_and_json_reflect_runtime_counters ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/conditional_memory.rs (target/release-s2b-memory/debug/deps/conditional_memory-4b99d936697e04bc)
+
+running 3 tests
+test nested_failure_census_precedes_local_and_function_cleanup ... ok
+test chosen_allocations_names_and_post_join_root_release ... ok
+test all_comparison_guards_choose_once_using_i64_parameters ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/conditionals.rs (target/release-s2b-memory/debug/deps/conditionals-6625544dbf299bfe)
+
+running 3 tests
+test nested_record_returns_and_untaken_failure ... ok
+test taken_failure_has_exact_utf8_span_and_source_order ... ok
+test selected_branch_nested_scopes_outer_mutation_and_unit_fallthrough ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/failure_report.rs (target/release-s2b-memory/debug/deps/failure_report-4b91172c1ffd1c17)
+
+running 1 test
+test opt_in_failure_report_preserves_primary_diagnostic_and_success_output ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/foreign.rs (target/release-s2b-memory/debug/deps/foreign-7fc655c146a755eb)
+
+running 11 tests
+test low_level_source_runner_checks_foreign_declarations_before_execution ... ok
+test unknown_module_and_foreign_main_fail_static_check ... ok
+test static_foreign_gate_rejects_type_arity_effect_capability_and_torch ... ok
+test native_scalar_execution_never_discovers_python ... ok
+test missing_worker_keeps_first_error_and_utf8_call_span ... ok
+test conditional_guard_calls_isolated_worker_exactly_once ... ok
+test cli_json_reports_utf8_foreign_call_span ... ok
+test worker_error_frames_preserve_all_runtime_classes_and_first_call_span ... ok
+test requires_precedes_python_and_ensures_follows_typed_return ... ok
+test python_errors_and_wrong_return_keep_call_span ... ok
+test declared_stdlib_call_returns_checked_scalar ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests/graph_storage.rs (target/release-s2b-memory/debug/deps/graph_storage-2aa46e38f255b20a)
+
+running 5 tests
+test session_guard_rejects_transitively_collecting_graph_callees ... ok
+test graph_and_payload_layout_errors_reject_at_real_source_spans ... ok
+test source_failure_preserves_primary_error_and_releases_graph_roots ... ok
+test injected_source_failures_leave_no_graph_roots_or_manual_collections ... ok
+test real_source_graphs_reclaim_cycles_and_preserve_nested_session_guards ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+     Running tests/memory.rs (target/release-s2b-memory/debug/deps/memory-0c8f8ec7e55a5712)
+
+running 6 tests
+test manual_region_collects_only_explicitly_and_move_is_unique ... ok
+test promotion_survives_collection_and_copy_outlives_managed_region ... ok
+test invalid_memory_operations_fail_static_gate_before_runtime ... ok
+test conversion_failures_return_errors_without_success_report ... ok
+test nested_no_gc_charges_each_guard_across_regions_without_collection ... ok
+test auto_collects_at_allocation_safepoint_and_regions_are_isolated ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/memory_functions.rs (target/release-s2b-memory/debug/deps/memory_functions-7bdf54298e1f0f38)
+
+running 2 tests
+test no_gc_budget_failure_inside_call_has_operation_span ... ok
+test local_calls_share_manual_region_session_and_conversion_state ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/memory_range_loops.rs (target/release-s2b-memory/debug/deps/memory_range_loops-b0c76434ebe492bb)
+
+running 6 tests
+test signed_boundaries_zero_one_many_and_fresh_sibling_scopes ... ok
+test cumulative_budget_and_repeated_manual_pressure_have_precleanup_census ... ok
+test lexical_nested_indices_conditionals_and_no_gc_guards_restore_scopes ... ok
+test reserve_faults_keep_first_error_and_unwind_every_iteration_scope ... ok
+test exact_threshold_is_shared_through_nesting_calls_and_branches ... ok
+test statement_steps_remain_a_separate_limit_with_first_failure_snapshot ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.37s
+
+     Running tests/native.rs (target/release-s2b-memory/debug/deps/native-92a1fd8881f7c4bd)
+
+running 6 tests
+test standalone_native_source_requires_package ... ok
+test missing_export_version_assertion_and_stale_source_fail_before_execution ... ok
+test static_check_does_not_run_library_constructors ... ok
+test declaration_and_lock_rejections_are_source_located ... ok
+test checked_source_calls_pinned_fixed_c_adapter_without_python ... ok
+test distinct_verified_libraries_do_not_alias_reused_fd_paths ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests/object_references.rs (target/release-s2b-memory/debug/deps/object_references-e5e4e95fffa60a39)
+
+running 5 tests
+test source_graph_matches_direct_runtime_after_link_clear_and_collection ... ok
+test local_graph_function_runs_with_one_session ... ok
+test cycles_and_nested_no_gc_match_direct_runtime ... ok
+test stale_reference_and_budget_failure_keep_runtime_diagnostics ... ok
+test cli_check_run_json_fmt_and_failure_output_agree ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/output_bounds.rs (target/release-s2b-memory/debug/deps/output_bounds-51511ea95c8f9169)
+
+running 4 tests
+test nested_variant_record_array_and_show_preserve_display_and_scalar_semantics ... ok
+test show_rejects_oversized_display_before_string_materialization ... ok
+test cli_rejects_before_publishing_and_json_points_to_entry ... ok
+test module_and_package_render_below_at_and_above_utf8_byte_cap ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.20s
+
+     Running tests/package_records.rs (target/release-s2b-memory/debug/deps/package_records-d3663379a1a4f4e8)
+
+running 3 tests
+test cli_package_route_executes_pure_records ... ok
+test explicit_pure_import_diamond_runs_through_library_and_cli ... ok
+test checked_package_interpreter_keeps_identity_and_defining_error_file ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/range_loops.rs (target/release-s2b-memory/debug/deps/range_loops-140af1cb74a0bd4b)
+
+running 1 test
+test check_and_run_bounded_range_loops ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/records.rs (target/release-s2b-memory/debug/deps/records-f894494985b95fb9)
+
+running 2 tests
+test first_field_error_follows_source_order ... ok
+test records_copy_values_and_evaluate_reordered_fields_in_source_order ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/release_core.rs (target/release-s2b-memory/debug/deps/release_core-9471c9828b49f838)
+
+running 6 tests
+test unicode_diagnostics_use_source_bytes_and_package_relative_paths ... ok
+test outputs_never_overwrite_sources_links_manifests_or_directories ... ok
+test parse_type_target_and_compiler_failures_preserve_existing_artifact ... ok
+test relative_package_revalidation_diagnostics_stay_relative_and_preserve_output ... ok
+test installed_product_build_emit_and_api_work_outside_checkout_without_helpers ... ok
+test checked_package_targets_are_deterministic_and_match_existing_execution ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.26s
+
+     Running tests/reusable_memory_functions.rs (target/release-s2b-memory/debug/deps/reusable_memory_functions-0c930054da92ba96)
+
+running 2 tests
+test checked_scalar_memory_calls_run_and_expose_public_api_json ... ok
+test dynamic_size_failures_have_source_spans_in_cli ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/run.rs (target/release-s2b-memory/debug/deps/run-e2a423f67ddd3ee7)
+
+running 12 tests
+test syntax_errors_keep_cgs_code ... ok
+test let_and_mutable_add_assign ... ok
+test low_level_run_source_checks_memory_before_interpreting ... ok
+test function_call_return_and_local_scope ... ok
+test script_and_function_module_entry ... ok
+test checked_division_overflow_and_function_return_type ... ok
+test literal_tail_values_and_precedence ... ok
+test argument_builtins_and_function_arity ... ok
+test bounded_source_contracts_gate_body_and_return ... ok
+test annotations_and_unsupported_items_are_explicit ... ok
+test errors_have_stable_codes_and_spans ... ok
+test pure_contract_calls_execute_with_existing_step_limit ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.77s
+
+     Running tests/s2a.rs (target/release-s2b-memory/debug/deps/s2a-3b388e9025dc8e8c)
+
+running 7 tests
+test new_contextual_words_preserve_existing_scalar_names ... ok
+test pattern_scope_shadows_outer_binding_without_leaking ... ok
+test result_error_and_option_none_are_typed_and_runnable ... ok
+test imported_collisions_keep_nominal_identity_and_api_is_deterministic ... ok
+test nested_concrete_types_and_selected_arms_execute ... ok
+test portable_python_executes_variants ... ok
+test scrutinee_is_evaluated_once_and_unselected_arm_is_not_evaluated ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+
+     Running tests/s2a_match_control_flow.rs (target/release-s2b-memory/debug/deps/s2a_match_control_flow-8740d2737affeb5c)
+
+running 2 tests
+test product_check_run_and_emit_reject_before_publishing ... ok
+test match_flow_interpretation_preserves_values_and_rejects_bad_inference ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/tensor.rs (target/release-s2b-memory/debug/deps/tensor-30247fb26ad380e7)
+
+running 13 tests
+test real_pinned_float32_matrix_source_when_available ... ok
+test real_pinned_matrix_source_when_available ... ok
+test checked_cg_source_runs_mock_cpu_facade_without_python ... ok
+test direct_float64_and_float32_cli_never_discovers_python ... ok
+test float32_source_rejects_missing_export_before_dispatch ... ok
+test checked_float32_matrix_source_runs_mock_v3_facade_repeatedly ... ok
+test checked_matrix_source_runs_pinned_v2_facade_repeatedly ... ok
+test matrix_profile_rejects_missing_and_multiple_source_packages ... ok
+test float32_source_rejects_layout_version_dtype_and_nonfinite_results ... ok
+test matrix_source_and_binding_errors_are_located_before_loading ... ok
+test nonfinite_result_is_rejected_after_foreign_copy ... ok
+test matrix_runtime_rejects_nonfinite_output_and_missing_artifact ... ok
+test source_rejections_and_artifact_errors_are_located ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.53s
+
+     Running unittests src/lib.rs (target/release-s2b-memory/debug/deps/cgx2_effect_index-4041739d9d9f42e3)
+
+running 1 test
+test imported_record_tests::imported_constructor_keeps_argument_call_dependencies ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/release-s2b-memory/debug/deps/cgx2_effect_index-46a0c3e4c90e3713)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/command.rs (target/release-s2b-memory/debug/deps/command-145413e7b75855f0)
+
+running 2 tests
+test command_reports_check_failure_and_explicit_fallback ... ok
+test json_command_is_byte_identical_across_runs ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/contracts.rs (target/release-s2b-memory/debug/deps/contracts-e83504d191b40b21)
+
+running 5 tests
+test qualified_contract_calls_stay_unresolved_and_shadowed_foreign_roots_stay_unknown ... ok
+test result_binding_exists_only_in_postconditions ... ok
+test parameters_and_body_locals_shadow_helpers_in_their_own_scopes ... ok
+test contract_edges_propagate_effects_and_cycles_without_duplicate_sites ... ok
+test checked_contract_calls_keep_nested_repeated_utf8_sites_and_exclude_body_bindings ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/index.rs (target/release-s2b-memory/debug/deps/index-c578173668305d08)
+
+running 9 tests
+test imported_namespace_cannot_be_assumed_builtin ... ok
+test checked_errors_have_distinct_kinds_and_byte_spans ... ok
+test memory_and_mutation_include_top_level_effects ... ok
+test owned_managed_conversions_have_explicit_effects ... ok
+test mutual_recursion_terminates_and_json_is_deterministic ... ok
+test read_args_and_shadowed_callee_are_conservative ... ok
+test unknown_and_foreign_calls_propagate_in_syntax_only_mode ... ok
+test pure_nested_chain_and_top_level_are_indexed ... ok
+test generated_large_cycle_propagates_monotonically ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/package.rs (target/release-s2b-memory/debug/deps/package-4afbc8a08546d2c2)
+
+running 13 tests
+test checked_native_declaration_effect_and_capability_propagate_without_execution ... ok
+test canonical_source_retarget_rejects_even_identical_bytes ... ok
+test manifest_drift_is_rejected_when_rendering_snapshot ... ok
+test checked_contract_scalar_bindings_remain_unknown_without_foreign_capabilities ... ok
+test imported_record_constructor_and_comparison_are_checked_pure ... ok
+test inactive_branch_empty_loop_and_forwarding_preserve_effects_and_caps ... ok
+test mutation_rejected_on_entry_and_serialization ... ok
+test computed_shadowed_calls_and_duplicate_modules_do_not_receive_trusted_edges ... ok
+test pure_wrappers_use_checked_public_edges_and_body_derived_effects ... ok
+test command_supports_checked_package_and_rejects_unchecked_package ... ok
+test dishonest_private_unimported_duplicate_and_unknown_reject ... ok
+test contract_graph_does_not_admit_effectful_recursive_or_imported_contract_calls ... ok
+test public_contract_graph_resolves_same_named_local_helpers_and_preserves_sites ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/records.rs (target/release-s2b-memory/debug/deps/records-9fa6596f7c4d4b07)
+
+running 2 tests
+test checked_record_construction_is_pure ... ok
+test conditionals_index_guard_and_both_branches_with_separate_scopes ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s2a.rs (target/release-s2b-memory/debug/deps/s2a-19bd67e62a6b63bd)
+
+running 1 test
+test source_and_package_analysis_reject_profile_before_traversal ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/release-s2b-memory/debug/deps/cgx2_emit_python-fdea39a72f78d66c)
+
+running 1 test
+test emit::record_tests::package_record_class_is_emitted_with_checked_metadata ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/differential.rs (target/release-s2b-memory/debug/deps/differential-9532bfee46f72fdf)
+
+running 5 tests
+test argument_indexing_matches_cli ... ok
+test scripts_match_cli ... ok
+test function_modules_match_cli ... ok
+test checked_errors_fail_on_both_targets ... ok
+test scalar_contracts_match_cli_outcome_order_and_result ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.26s
+
+     Running tests/emit.rs (target/release-s2b-memory/debug/deps/emit-c93f571b31a40f4f)
+
+running 13 tests
+test invalid_string_escape_has_literal_diagnostic ... ok
+test checked_memory_source_is_not_emitted_as_python ... ok
+test stale_summary_and_out_of_range_literals_are_rejected ... ok
+test manually_mixed_items_are_not_silently_dropped ... ok
+test undeclared_effect_fails_static_check_before_emission ... ok
+test source_python_foreign_binding_is_not_silently_emitted ... ok
+test unsupported_effect_and_capability_declarations_have_name_spans ... ok
+test rejects_unsupported_constructs_at_their_spans ... ok
+test emits_script_with_mutation_and_checked_arithmetic ... ok
+test emits_function_calls_and_tail_returns ... ok
+test escaped_unicode_and_keyword_helper_names_survive ... ok
+test arguments_and_boolean_display_keep_cgx2_values ... ok
+test checked_i64_boundaries_and_division ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.23s
+
+     Running tests/package.rs (target/release-s2b-memory/debug/deps/package-34575d1c24a24f9f)
+
+running 14 tests
+test manifest_symlink_substitution_is_rejected ... ok
+test no_gc_package_is_rejected_with_source_location ... ok
+test traversal_existing_output_and_symlink_parent_are_rejected ... ok
+test stale_source_cycle_and_bad_import_are_rejected ... ok
+test malformed_range_bounds_keep_source_locations ... ok
+test imported_collection_public_signature_is_admitted ... ok
+test conditional_package_imports_lower_guard_and_both_scoped_branches ... ok
+test range_loops_preserve_scopes_calls_and_integer_bounds ... ok
+test bool_and_string_entries_match_native_output ... ok
+test package_call_depth_matches_native_limit ... ok
+test overflow_and_contract_failure_match_native_exit_and_error_code ... ok
+test range_loop_overflow_and_budget_fail_explicitly ... ok
+test range_loop_step_boundary_matches_native ... ok
+test two_and_three_module_python_match_native_output_and_exit ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.33s
+
+     Running tests/package_records.rs (target/release-s2b-memory/debug/deps/package_records-7d15ab6b9a5663ed)
+
+running 3 tests
+test same_basename_unicode_and_generated_looking_names_do_not_collide ... ok
+test explicit_pure_import_diamond_emits_and_preserves_runtime_errors_and_snapshot ... ok
+test public_record_package_is_standalone_and_checks_nominal_inputs_results ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+
+     Running tests/records.rs (target/release-s2b-memory/debug/deps/records-e5e9a53520660e39)
+
+running 10 tests
+test mutable_record_binding_is_rejected ... ok
+test invalid_record_fields_stop_before_emission ... ok
+test finite_record_shapes_are_admitted_and_ownership_remains_unavailable ... ok
+test generated_record_instances_are_immutable ... ok
+test defining_module_identity_is_preserved_for_standalone_records ... ok
+test record_field_names_do_not_collide_with_python_receiver_or_slots ... ok
+test field_reads_and_shadowed_loop_binding_match_run ... ok
+test reordered_fields_and_record_function_result_match_run ... ok
+test constructor_preserves_first_checked_arithmetic_error ... ok
+test conditionals_preserve_branch_scope_unit_and_first_failure ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+     Running tests/s2b_repair.rs (target/release-s2b-memory/debug/deps/s2b_repair-d194797e493599c0)
+
+running 4 tests
+test invalid_imported_literal_retains_file_span_and_existing_package_output ... ok
+test invalid_escapes_reject_with_literal_spans_before_emission ... ok
+test finite_strings_use_cgx2_escape_and_unicode_semantics ... ok
+test local_specialization_types_include_nested_data_and_contracts_in_both_orders ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.68s
+
+     Running tests/s2b_snapshot.rs (target/release-s2b-memory/debug/deps/s2b_snapshot-ed1b797292325f3e)
+
+running 1 test
+test changed_generic_source_invalidates_the_python_snapshot ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/release-s2b-memory/debug/deps/cgx2_emit_rust-275fc4c148514d2b)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/differential.rs (target/release-s2b-memory/debug/deps/differential-a9d9d6f33f313a31)
+
+running 9 tests
+test unsupported_and_stale_sources_have_spans ... ok
+test malformed_literals_and_recursive_calls_are_rejected ... ok
+test source_python_foreign_binding_is_not_silently_emitted ... ok
+test unsupported_pure_contract_call_has_source_span ... ok
+test scalar_scripts_and_mutation_match_cli ... ok
+test native_contracts_match_cli_and_preserve_error_order ... ok
+test functions_tail_returns_arguments_and_names_match_cli ... ok
+test conditionals_preserve_branch_scope_unit_and_first_failure ... ok
+test checked_arithmetic_and_argument_errors_match_cli ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.25s
+
+     Running tests/native_constructors.rs (target/release-s2b-memory/debug/deps/native_constructors-c1cf46bec933f0ce)
+
+running 5 tests
+test every_intrinsic_spelling_can_construct_a_record ... ok
+test record_returning_functions_and_real_intrinsics_still_dispatch ... ok
+test qualified_and_imported_constructors_keep_defining_identity ... ok
+test constructor_arguments_keep_source_order_and_single_evaluation ... ok
+test generic_constructors_in_generic_bodies_keep_concrete_types ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.33s
+
+     Running tests/native_memory.rs (target/release-s2b-memory/debug/deps/native_memory-a096cde24fe6893b)
+
+running 5 tests
+test invalid_borrow_and_nonliteral_size_are_rejected_before_native_output ... ok
+test all_parameter_comparisons_select_only_the_budgeted_allocation ... ok
+test existing_fixture_and_conversion_match_cli ... ok
+test conditional_scoped_names_and_nested_parameter_calls_match_cli ... ok
+test auto_and_manual_collection_and_budget_failure_match_cli ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.67s
+
+     Running tests/package_records.rs (target/release-s2b-memory/debug/deps/package_records-8316fa3b0a2fd051)
+
+running 2 tests
+test same_basename_unicode_and_generated_looking_names_do_not_collide ... ok
+test public_record_package_debug_release_and_selected_failure ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.20s
+
+     Running tests/s2a_record_identities.rs (target/release-s2b-memory/debug/deps/s2a_record_identities-f1fc3f5e7e55987a)
+
+running 1 test
+test package_record_fields_preserve_complete_nominal_identities ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests/s2b_snapshot.rs (target/release-s2b-memory/debug/deps/s2b_snapshot-3bdddd0fe2b335a0)
+
+running 1 test
+test changed_generic_source_invalidates_the_native_snapshot ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/release-s2b-memory/debug/deps/cgx2_execution_policy-d8f5d3a0e9da2b67)
+
+running 5 tests
+test tests::mock_gpu_cost_never_enables_execution ... ok
+test tests::cancellation_after_launch_wins_over_worker_failures ... ok
+test tests::injected_failures_never_return_partial_output ... ok
+test tests::all_workers_join_and_first_failed_chunk_wins ... ok
+test tests::both_primitives_cancel_after_computation_and_join_on_spawn_refusal ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin/calibrate.rs (target/release-s2b-memory/debug/deps/calibrate-4c9f00616d0580b5)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin/calibrate_owned.rs (target/release-s2b-memory/debug/deps/calibrate_owned-c9b1168f3d6786a3)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin/calibrate_zip.rs (target/release-s2b-memory/debug/deps/calibrate_zip-305b38381b9bd8a4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin/profile.rs (target/release-s2b-memory/debug/deps/profile-72e7c744bde299be)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/map.rs (target/release-s2b-memory/debug/deps/map-519c3cbe883b16f8)
+
+running 2 tests
+test first_overflow_is_in_source_order ... ok
+test scalar_parallel_equivalence_on_sizes_and_workers ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/owned_v1.rs (target/release-s2b-memory/debug/deps/owned_v1-17fb098e46a3a9a7)
+
+running 6 tests
+test all_owned_backends_validate_before_cancellation_and_never_publish_partial_output ... ok
+test borrowed_cancellable_scalar_api_preserves_validation_and_values ... ok
+test uncertain_or_borrowed_evidence_cannot_enable_owned_auto ... ok
+test requested_buffers_are_bounded_and_latency_violations_are_observations ... ok
+test profile_evidence_is_opaque_operation_specific_and_revalidated_per_dispatch ... ok
+test owned_maps_match_checked_reference_at_integer_and_chunk_boundaries ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/policy.rs (target/release-s2b-memory/debug/deps/policy-ad7c8eb0af9fd423)
+
+running 6 tests
+test defaults_and_conservative_selection ... ok
+test measured_costs_and_threshold ... ok
+test stale_or_out_of_range_measurement_falls_back ... ok
+test overlapping_intervals_do_not_enable_auto_parallelism ... ok
+test unsafe_work_is_excluded_even_when_parallel_is_faster ... ok
+test explicit_parallel_runs_the_reviewed_map_and_gpu_fails ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/profile.rs (target/release-s2b-memory/debug/deps/profile-1b687d5875c053c3)
+
+running 4 tests
+test missing_noisy_and_malformed_samples_are_rejected ... ok
+test intervals_are_deterministic_and_conservative ... ok
+test profile_loader_checks_provenance_expiry_workers_range_and_hash ... ok
+test loaded_auto_matches_both_backends_and_preserves_first_overflow ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/zip_map.rs (target/release-s2b-memory/debug/deps/zip_map-84d23411447dd697)
+
+running 5 tests
+test requested_cancellation_and_validation_precedence ... ok
+test uncalibrated_auto_is_sequential_and_gpu_is_unsupported ... ok
+test mismatches_workers_and_first_error_are_deterministic ... ok
+test exact_chunk_boundaries_and_both_pure_maps_match ... ok
+test bounded_seeded_corpus_matches_every_backend ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/zip_profile.rs (target/release-s2b-memory/debug/deps/zip_profile-418c8fe92e002061)
+
+running 2 tests
+test exact_zip_identity_and_validated_holdout_enable_auto ... ok
+test noisy_incomplete_mismatched_and_tampered_profiles_fail_closed ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/release-s2b-memory/debug/deps/cgx2_ffi_core-a6739251d2d734b6)
+
+running 3 tests
+test tests::declaration_and_session_reference_fail_closed ... ok
+test tests::rust_facade_catches_before_returning_across_c_and_cleans_up ... ok
+test tests::portable_values_and_global_limits ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/release-s2b-memory/debug/deps/cgx2_ffi_native-68f352d298287cb5)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/native.rs (target/release-s2b-memory/debug/deps/native-4217093744e05257)
+
+running 3 tests
+test checked_scalar_bytes_and_errors ... ok
+test invalid_declarations_fail_before_call ... ok
+test handle_release_and_failure_cleanup ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/sdk_v2.rs (target/release-s2b-memory/debug/deps/sdk_v2-019f4cc7f0fef6bc)
+
+running 4 tests
+test changed_inode_is_rejected_even_when_hash_still_matches ... ok
+test copied_outputs_bounds_utf8_and_exception ... ok
+test unique_shared_error_cleanup_and_unwind ... ok
+test preflight_and_runtime_identity_reject_before_calls ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.82s
+
+     Running unittests src/lib.rs (target/release-s2b-memory/debug/deps/cgx2_foreign-13629d523f56a712)
+
+running 3 tests
+test worker::tests::provenance_rejects_wrong_implementation_version_and_prefix ... ok
+test worker::tests::every_error_class_requires_complete_bounded_frame ... ok
+test worker::tests::decoder_rejects_all_truncations_trailing_bytes_tags_utf8_identity_and_budgets ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/call.rs (target/release-s2b-memory/debug/deps/call-0ac7375c271237cd)
+
+running 5 tests
+test blocked_and_invalid_arguments_do_not_import_or_call ... ok
+test return_mismatch_does_not_claim_rollback ... ok
+test returned_handle_clone_and_drop_keep_python_references ... ok
+test scalar_keyword_and_structured_stdlib_calls ... ok
+test lookup_exception_and_conversion_are_distinct ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/declaration.rs (target/release-s2b-memory/debug/deps/declaration-f6a50eff924e9e9a)
+
+running 3 tests
+test metadata_round_trip_needs_no_python_host ... ok
+test malformed_declarations_fail_closed ... ok
+test valid_declaration_is_canonical_and_does_not_import ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/numeric_arrays.rs (target/release-s2b-memory/debug/deps/numeric_arrays-fab73be16d5767ae)
+
+running 2 tests
+test allowlisted_stdlib_array_roundtrip_and_lifetimes ... ok
+test failed_return_and_exception_release_python_objects ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/package_v1.rs (target/release-s2b-memory/debug/deps/package_v1-63e24b3fe90cb4bc)
+
+running 3 tests
+test sha256_and_stdlib_tree_are_deterministic_and_fail_closed ... ok
+test isolated_startup_preflight_has_no_site_hooks ... ok
+test pinned_package_preflight_copy_failures_and_cleanup ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 11.60s
+
+     Running tests/worker.rs (target/release-s2b-memory/debug/deps/worker-c7a7e42bec8f2ece)
+
+running 10 tests
+test missing_worker_interpreter_and_invalid_deadline_are_diagnosed ... ok
+test argument_and_declaration_checks_precede_discovery_and_spawn ... ok
+test valid_frame_followed_by_crash_is_never_published ... ok
+test module_stdout_and_raw_fd_writes_are_separate_from_protocol ... ok
+test worker_preserves_host_error_categories_for_existing_source_subset ... ok
+test real_worker_scalars_checked_boundaries_and_provenance ... ok
+test audited_worker_rejects_malformed_requests_before_import ... ok
+test maximum_string_round_trip_and_shape_errors ... ok
+test deadline_covers_a_child_that_never_reads_its_request ... ok
+test crash_timeout_oversize_and_recovery_reap_child ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.58s
+
+     Running unittests src/lib.rs (target/release-s2b-memory/debug/deps/cgx2_interop_worker-a133f97ece1ff83e)
+
+running 2 tests
+test v1::tests::nested_empty_lists_do_not_hide_type_conflicts ... ok
+test v1::tests::value_budget_types_and_session_handles ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin/cgx2-worker-fixture.rs (target/release-s2b-memory/debug/deps/cgx2_worker_fixture-3710c3909f3fac9f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/protocol.rs (target/release-s2b-memory/debug/deps/protocol-ca4f54b3b44b88a3)
+
+running 3 tests
+test copied_types_round_trip_without_nan_json_or_raw_addresses ... ok
+test unknown_fields_kinds_versions_duplicate_keys_utf8_and_nesting_reject ... ok
+test golden_big_endian_json_vector_and_all_truncations ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/transport.rs (target/release-s2b-memory/debug/deps/transport-e8ffa26d770d4480)
+
+running 11 tests
+test inherited_descriptors_and_oversized_requests_do_not_cross_boundary ... ok
+test retained_state_and_no_replay_of_write_effect ... ok
+test restricted_host_enforces_real_readonly_filesystem_and_network_or_reports_unavailable ... ok
+test duplicated_terminal_frame_is_never_accepted_for_next_request ... ok
+test events_foreign_failure_and_predispatch_validation ... ok
+test a_child_that_stops_reading_cannot_block_dispatch_past_deadline ... ok
+test limits_and_handshake_deadline_are_checked ... ok
+test uncertain_effects_are_never_retried_after_crash_timeout_or_cancel ... ok
+test pins_authentication_and_actual_confinement_fail_closed ... ok
+test shutdown_drop_and_timeout_kill_child_process_group ... ok
+test malformed_oversized_truncated_unsolicited_and_state_frames_poison ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.16s
+
+     Running unittests src/lib.rs (target/release-s2b-memory/debug/deps/cgx2_libtorch-2bc7544b14f72cfc)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/closure.rs (target/release-s2b-memory/debug/deps/closure-7512a099b864947e)
+
+running 6 tests
+test real_pinned_libtorch_when_installed ... ignored, requires a reviewed schema-2 package and exact compatible LibTorch installation
+test real_pinned_matrix_when_installed ... ignored, requires a reviewed schema-2 matrix package and exact compatible LibTorch installation
+test changed_dependency_after_preflight_is_rejected_before_loading ... ok
+test closure_accepts_and_rejects_changed_version_and_loader_substitution ... ok
+test mock_package_preparation_is_repeatable_and_rejects_ambiguous_needed ... ok
+test same_inode_same_size_restored_mtime_is_rehashed_and_retry_succeeds ... ok
+
+test result: ok. 4 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 0.64s
+
+     Running tests/inference.rs (target/release-s2b-memory/debug/deps/inference-ca6d92914f54316c)
+
+running 3 tests
+test real_pinned_two_layer_inference_no_python ... ignored, requires a prepared real v4 CPU package; set CGX2_LIBTORCH_REAL_PACKAGE
+test mock_two_layer_inference_and_lifetimes ... ok
+test rejects_inference_version_and_missing_export ... ok
+
+test result: ok. 2 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/matrix_f32.rs (target/release-s2b-memory/debug/deps/matrix_f32-a9b881130e9f0486)
+
+running 4 tests
+test real_pinned_float32_reference_and_cycles ... ignored, requires CGX2_LIBTORCH_REAL_PACKAGE with a pinned CPU float32 v3 facade
+test mock_float32_rejects_invalid_inputs_and_facade_faults ... ok
+test mock_float32_math_and_repeated_lifecycle ... ok
+test mock_float32_rejects_wrong_version_and_missing_symbol ... ok
+
+test result: ok. 3 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/matrix_lifetime.rs (target/release-s2b-memory/debug/deps/matrix_lifetime-57b25ae56e630291)
+
+running 3 tests
+test real_pinned_matrix_element_boundaries ... ignored, requires a reviewed schema-2 pinned real LibTorch matrix package
+test mock_matrix_repeated_lifecycle_and_exact_fault_classes ... ok
+test mock_matrix_version_and_export_rejection ... ok
+
+test result: ok. 2 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/route.rs (target/release-s2b-memory/debug/deps/route-c583ad72c85c88ef)
+
+running 11 tests
+test real_libtorch_cpu_when_installed ... ignored, requires CGX2_LIBTORCH_FACADE and CGX2_LIBTORCH_VERSION for a real LibTorch artifact
+test static_route_contains_no_python_link ... ok
+test mock_facade_failed_create_cleans_handle_and_never_publishes_values ... ok
+test mock_facade_cpu_contract_and_raii ... ok
+test mock_matrix_non_square_math_copy_and_lifetimes ... ok
+test mock_facade_rejects_bad_shape_profile_and_cross_adapter_handle ... ok
+test aliased_output_never_releases_an_existing_handle ... ok
+test aliased_add_and_release_error_keep_single_owner ... ok
+test mock_facade_c_copy_checks_capacity_before_writing ... ok
+test mock_matrix_rejects_invalid_shapes_aliases_partial_errors_and_bad_exports ... ok
+test mock_facade_rejects_wrong_metadata_and_missing_export ... ok
+
+test result: ok. 10 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+     Running unittests src/lib.rs (target/release-s2b-memory/debug/deps/cgx2_memory_conformance-d7c0ba70337b17cb)
+
+running 3 tests
+test tests::model_tracks_roots_collection_isolation_and_close ... ok
+test tests::v2_model_promotion_moves_owner_and_copy_leaves_managed_root ... ok
+test tests::fixed_seeds_cover_modes_and_open_closed_states ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/release-s2b-memory/debug/deps/cgx2_memory_conformance-cdd37eb8df4bef39)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/automatic_collection_faults.rs (target/release-s2b-memory/debug/deps/automatic_collection_faults-12cfba29b2be8a43)
+
+running 4 tests
+test failed_edge_growth_is_atomic_across_the_next_auto_collection ... ok
+test nested_no_gc_defers_each_auto_region_without_collecting_manual_region ... ok
+test object_reserve_faults_precede_auto_safepoint_but_byte_fault_follows_it ... ok
+test promotion_preserves_frozen_no_safepoint_contract_and_owned_value_on_failure ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/automatic_collection_model.rs (target/release-s2b-memory/debug/deps/automatic_collection_model-89e3d6efae1c9a8a)
+
+running 1 test
+test automatic_collection_state_model_corpus ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.30s
+
+     Running tests/automatic_pressure_wave23.rs (target/release-s2b-memory/debug/deps/automatic_pressure_wave23-cc4c103e59cdbcd8)
+
+running 6 tests
+test automatic_pressure::corrupted_oracle_is_rejected ... ok
+test automatic_pressure::non_safepoint_reserve_sites_preserve_graph_and_first_failure ... ok
+test automatic_pressure::reserve_failures_before_and_after_collection ... ok
+test automatic_pressure::both_nested_budget_orders_and_exit_retry ... ok
+test automatic_pressure::rooted_region_limit_failure_can_follow_collection ... ok
+test automatic_pressure::pressure_corpus ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/conditional_source.rs (target/release-s2b-memory/debug/deps/conditional_source-2138f258d841afd7)
+
+running 1 test
+test selected_paths_charge_cumulatively_across_regions_at_budget_boundary ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/conformance.rs (target/release-s2b-memory/debug/deps/conformance-7bb370b6124a4a93)
+
+running 4 tests
+test region_limit_is_dynamic_and_returns_no_success_report ... ok
+test nested_budget_failure_preserves_prior_allocation_without_collection ... ok
+test one_operation_mutations_are_rejected_with_exact_diagnostics ... ok
+test fixed_corpus_is_deterministic_bounded_and_matches_runtime ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/failure_regressions.rs (target/release-s2b-memory/debug/deps/failure_regressions-ddd0db4dfaba0672)
+
+running 2 tests
+test capacity_pressure_reclaims_below_trigger_and_failure_keeps_rooted_handle ... ok
+test preflight_failures_preserve_auto_state_until_a_valid_safepoint ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/fallible_lifetime_model.rs (target/release-s2b-memory/debug/deps/fallible_lifetime_model-47aad414dc13411d)
+
+running 1 test
+test replay_entry_root_cleanup_and_exit_transitions ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/fault_injection.rs (target/release-s2b-memory/debug/deps/fault_injection-fb29c9a2669da025)
+
+running 5 tests
+test auto_safepoint_before_failed_slot_reserve_is_reported ... ok
+test conversion_and_edge_reserves_retain_ownership_and_references ... ok
+test logical_manual_region_limit_precedes_injected_host_failure ... ok
+test every_managed_reserve_can_fail_without_committing_graph_state ... ok
+test region_table_failure_and_nested_no_gc_failure_preserve_counters ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/faulted_state_model.rs (target/release-s2b-memory/debug/deps/faulted_state_model-0cb5625ecd45a89f)
+
+running 4 tests
+test duplicate_roots_protect_cycle_until_final_release ... ok
+test owned_buffer_promotion_fault_preserves_value_and_model ... ok
+test replay_one_based_host_reserve_failures ... ok
+test bounded_root_graph_and_region_state_replay ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/graph.rs (target/release-s2b-memory/debug/deps/graph-d439b4bcebf28053)
+
+running 1 test
+test deterministic_graph_state_machine_matches_regions_and_reports ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/graph_failure_model.rs (target/release-s2b-memory/debug/deps/graph_failure_model-8725ae65f0f9f3a8)
+
+running 1 test
+test seeded_failure_graph_model_preserves_reachability_and_reports ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/graph_storage_model.rs (target/release-s2b-memory/debug/deps/graph_storage_model-1a0de6d6cbd013d7)
+
+running 1 test
+test bounded_graph_slot_model_checks_boundaries_aliases_cycles_and_reclamation ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.67s
+
+     Running tests/region_graph_wave22.rs (target/release-s2b-memory/debug/deps/region_graph_wave22-ba968b9d91ffdf5c)
+
+running 4 tests
+test nested_guard_exhaustion_retry_and_failed_link_then_close ... ok
+test injected_oracle_mismatch_is_detected ... ok
+test reserve_failures_at_each_allocation_site_preserve_both_regions ... ok
+test deterministic_region_graph_replay ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/release_cleanup.rs (target/release-s2b-memory/debug/deps/release_cleanup-b1f5115ed941c7b2)
+
+running 1 test
+test unwind_and_returned_error_release_nested_guards_without_implicit_collection ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/release_faults.rs (target/release-s2b-memory/debug/deps/release_faults-19baa99d856f1231)
+
+running 3 tests
+test fixed_point_collection_needs_no_host_worklist_reservation ... ok
+test legacy_edge_reservation_is_atomic_and_known_manual_limit_precedes_fault ... ok
+test object_slot_reservation_failure_rolls_back_and_releases_once ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/release_graph_audit.rs (target/release-s2b-memory/debug/deps/release_graph_audit-3a7327a64b8cc3ab)
+
+running 1 test
+test bounded_graph_release_corpus ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/root_census_cleanup.rs (target/release-s2b-memory/debug/deps/root_census_cleanup-926c85f1feac3982)
+
+running 1 test
+test failed_nested_scope_and_source_like_cleanup_leave_no_registrations ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/transfer_assurance.rs (target/release-s2b-memory/debug/deps/transfer_assurance-13e3c131c396d2ab)
+
+running 1 test
+test checked_cross_region_reference_and_copy_survive_both_close_orders ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/v2.rs (target/release-s2b-memory/debug/deps/v2-7916ed68dc771a7f)
+
+running 5 tests
+test invalid_source_operations_have_exact_diagnostic_families_and_spans ... ok
+test v2_model_rejects_a_deliberately_mismatched_report ... ok
+test v2_generation_is_deterministic_and_bounded ... ok
+test failed_promotions_return_dynamic_errors_without_success_reports ... ok
+test both_fixed_corpora_replay_twice_with_identical_sources_and_counters ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests/v3.rs (target/release-s2b-memory/debug/deps/v3-c43b99f077b21b86)
+
+running 4 tests
+test faulty_model_is_replayable_and_shrinks ... ok
+test auto_safepoint_and_region_isolation_follow_model ... ok
+test deterministic_and_bounded ... ok
+test fixed_manifest_passes ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+
+     Running tests/v4.rs (target/release-s2b-memory/debug/deps/v4-48cdc6d057cb3d84)
+
+running 4 tests
+test replay_and_shrink_keep_a_real_per_step_mismatch ... ok
+test named_adversarial_families_and_errors_are_observed ... ok
+test manifest_and_generator_are_exact_and_bounded ... ok
+test fixed_corpus_passes_twice_with_identical_summary ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.70s
+
+     Running tests/v5.rs (target/release-s2b-memory/debug/deps/v5-c3fcbf0d667c3763)
+
+running 5 tests
+test v5_trace_has_bounded_fixed_prefix_and_replayable_ops ... ok
+test unwinding_nested_guards_restores_collection_permission ... ok
+test independent_preflight_and_reclaim_transitions ... ok
+test reducer_replays_a_real_step_mismatch_in_a_fresh_session ... ok
+test deterministic_v5_corpus_checks_every_state ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running unittests src/main.rs (target/release-s2b-memory/debug/deps/cgx2_notebook-620b6da0d06e35bf)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/command.rs (target/release-s2b-memory/debug/deps/command-c959071362b205a4)
+
+running 30 tests
+test inspect_is_read_only_and_does_not_execute ... ok
+test failed_cells_and_io_errors_leave_no_successful_output ... ok
+test invalid_inputs_and_unknown_commands_fail ... ok
+test collisions_require_force_and_failure_preserves_prior_output ... ok
+test run_saves_fresh_reopenable_output_without_touching_input ... ok
+test pure_function_fixture_runs_and_inspects_cached_status ... ok
+test delete_function_cell_keeps_unrelated_cached_output ... ok
+test pure_record_fixture_runs_and_reopens_with_cached_provenance ... ok
+test restart_roundtrip_preserves_saved_revision_as_stale_without_running ... ok
+test sweep_rejects_symlink_input_and_destination ... ok
+test sweep_rejects_invalid_values_effects_and_output_paths_before_publication ... ok
+test project_option_runs_checked_two_module_example ... ok
+test edited_run_saves_output_and_preserves_independent_execution_revision ... ok
+test unsupported_cell_and_missing_asset_fail_without_replacing_output ... ok
+test same_path_needs_force_and_can_be_replaced_after_success ... ok
+test edited_function_reruns_only_its_cli_readers ... ok
+test portable_file_inspects_and_runs_without_sidecars_or_source_mutation ... ok
+test portable_export_import_preserves_provenance_and_rejects_corrupt_record ... ok
+test rejected_import_preserves_existing_notebook_and_sidecars ... ok
+test sweep_accepts_bool_and_string_literals_and_rejects_collisions ... ok
+test valid_stale_asset_is_checked_then_dropped_from_clean_code_output ... ok
+test imported_contract_cli_uses_checked_predicates_and_sweep_provenance ... ok
+test two_cell_fixture_runs_edits_saves_exports_and_reopens_without_execution ... ok
+test sweep_saves_independent_trials_and_reopens_failure_provenance ... ok
+test sweep_embeds_two_markdown_images_in_success_and_failed_trials ... ok
+test runtime_contract_cli_run_sweep_failure_save_reopen_and_export ... ok
+test record_functions_run_inspect_and_clean_sweep_agree ... ok
+test local_loop_cli_edit_save_reopen_sweep_and_export_recompute_locals ... ok
+test public_record_package_cli_run_rerun_inspect_restart_export_and_clean_sweep ... ok
+test transitive_import_closure_cli_restart_edit_sweep_and_external_export ... ok
+
+test result: ok. 30 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.36s
+
+     Running unittests src/lib.rs (target/release-s2b-memory/debug/deps/cgx2_notebook_format-1e8e8ecd0bc8c183)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/assets.rs (target/release-s2b-memory/debug/deps/assets-4e4f89ac1d939582)
+
+running 5 tests
+test notebook_bytes_and_asset_size_limits_are_enforced ... ok
+test invalid_and_corrupt_digests_are_rejected ... ok
+test png_asset_is_content_addressed_and_deduplicated ... ok
+test missing_assets_and_mismatched_embedded_data_fail ... ok
+test export_import_reopens_without_original_sidecar ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/markdown_images.rs (target/release-s2b-memory/debug/deps/markdown_images-3de984c2bc104996)
+
+running 4 tests
+test only_image_signatures_are_accepted_and_limits_apply ... ok
+test symlinked_sidecar_and_asset_are_rejected ... ok
+test malformed_missing_extra_and_corrupt_images_fail ... ok
+test two_markdown_images_roundtrip_without_original_sidecar ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests/portable.rs (target/release-s2b-memory/debug/deps/portable-a8461d185a378825)
+
+running 4 tests
+test active_asset_mime_and_symlink_escapes_are_rejected ... ok
+test corrupt_portable_assets_fail_before_creating_destination ... ok
+test portable_document_reopens_without_sidecar_and_keeps_exact_observations ... ok
+test total_and_single_asset_limits_apply_before_encoding ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.48s
+
+     Running tests/roundtrip.rs (target/release-s2b-memory/debug/deps/roundtrip-1c930f24e3a7c36b)
+
+running 9 tests
+test bad_fixtures_have_typed_errors ... ok
+test fixture_round_trips_cells_and_text_output ... ok
+test unfinished_header_at_eof_is_rejected ... ok
+test no_final_newline_and_leading_markers_survive_multiple_cells ... ok
+test captured_text_is_plain_utf8_and_bounded_on_read_and_write ... ok
+test malformed_mime_is_rejected ... ok
+test writer_rejects_duplicate_ids_and_markdown_outputs ... ok
+test provenance_rejects_duplicate_bad_digest_and_output_ordinal ... ok
+test provenance_roundtrips_exact_unicode_and_escaped_marker_bytes ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/release-s2b-memory/debug/deps/cgx2_notebook_kernel-029d2394a3f9365b)
+
+running 13 tests
+test cost::tests::nested_costs_count_setup_iteration_branches_and_callees ... ok
+test qualified_record_protocol_tests::qualified_identity_preserves_unicode_and_exact_scalar_values ... ok
+test project::closure_tests::deterministic_diamond_discovery_uses_topology_and_deduplicates_roots ... ok
+test record_protocol_tests::record_protocol_preserves_source_unicode_identifiers ... ok
+test cost::tests::contracts_charge_each_invocation_and_replayed_binding_at_exact_boundary ... ok
+test cost::tests::exact_step_boundary_includes_invocation_and_generated_result ... ok
+test cost::tests::empty_bodies_still_resolve_calls_and_check_recursion_and_depth ... ok
+test record_protocol_tests::record_roundtrip_and_malformed_payloads ... ok
+test cost::tests::contract_calls_resolve_even_when_unreached_and_include_cached_depth ... ok
+test project::closure_tests::metadata_validation_and_exact_graph_bound ... ok
+test cost::tests::pending_and_retained_record_replay_are_charged_for_every_invocation ... ok
+test project::closure_tests::source_growth_is_checked_before_editing_or_appending ... ok
+test worker_io_tests::full_stdin_pipe_does_not_block_worker_timeout ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running unittests src/bin/cgx2-notebook-scalar-worker.rs (target/release-s2b-memory/debug/deps/cgx2_notebook_scalar_worker-1b9c866ddc2f07b6)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/contracts.rs (target/release-s2b-memory/debug/deps/contracts-859758aee258c816)
+
+running 12 tests
+test contract_cost_overrun_rejects_before_worker_and_before_definition_publication ... ok
+test imported_functions_keep_their_frozen_contract_and_effect_rejection_profile ... ok
+test contract_forward_references_and_hidden_unknown_effects_fail_closed ... ok
+test checker_rejects_non_boolean_contracts_result_misuse_and_effectful_helpers ... ok
+test contracts_precede_body_and_postconditions_check_explicit_return ... ok
+test contract_diagnostics_use_source_spans_and_match_direct_and_worker ... ok
+test contracts_obey_deadlines_and_recover_without_partial_bindings ... ok
+test parameter_result_and_multiple_conditions_use_checked_scalar_semantics ... ok
+test contract_only_dependencies_drive_edits_deletion_and_saved_staleness ... ok
+test contracted_accumulators_run_rerun_restart_and_reopen_in_both_modes ... ok
+test imported_contract_predicates_lower_and_carry_transitive_provenance ... ok
+test failed_false_or_overflowing_contracts_publish_no_partial_values ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/import_closure.rs (target/release-s2b-memory/debug/deps/import_closure-049e889feebfe694)
+
+running 13 tests
+test unnamed_single_source_package_remains_valid_project_context ... ok
+test transitive_missing_unlisted_private_cycle_and_reserved_names_fail_closed ... ok
+test annotation_only_and_unused_import_edges_have_complete_provenance ... ok
+test unused_declared_and_inactive_dependencies_are_checked_and_tracked ... ok
+test combined_function_budget_counts_shared_descendants_once ... ok
+test canonical_module_provenance_roundtrips_and_legacy_captures_stale ... ok
+test unicode_transitive_nominal_names_and_parameter_evaluation_order ... ok
+test internal_modules_are_not_source_imports_but_inferred_records_are_retained ... ok
+test transitive_worker_record_identity_field_validation_is_transactional ... ok
+test failure_cancel_timeout_and_import_removal_preserve_valid_observations ... ok
+test transitive_snapshot_edits_selectively_discard_live_and_saved_state ... ok
+test closure_module_and_depth_boundary_and_combined_source_bound ... ok
+test chain_diamond_shared_roots_records_and_persistence ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.23s
+
+     Running tests/kernel.rs (target/release-s2b-memory/debug/deps/kernel-c38db0e438fa1098)
+
+running 41 tests
+test facts_ignore_escaped_string_contents_and_collect_expression_reads ... ok
+test calls_with_file_network_or_foreign_names_fail_before_execution ... ok
+test forward_dependency_cycle_is_reported_before_execution ... ok
+test notebook_limits_are_checked_before_execution ... ok
+test escaped_string_is_evaluated_by_cgx2 ... ok
+test duplicate_definition_and_unsupported_forms_are_rejected ... ok
+test failed_rerun_never_leaves_old_result_current ... ok
+test failing_cell_does_not_commit_partially_checked_bindings ... ok
+test failed_cell_does_not_enter_replay_prefix ... ok
+test pure_bool_and_string_signatures_use_cli_scalar_semantics ... ok
+test deleting_a_function_cell_preserves_independent_output_across_reopen ... ok
+test edited_prerequisite_requires_explicit_rerun_and_preserves_old_cache ... ok
+test record_boundary_diagnostics_have_cell_context ... ok
+test edit_stales_transitive_readers_and_restart_recomputes ... ok
+test changed_function_stales_transitive_function_callers ... ok
+test reopen_preserves_observation_and_prefix_edit_is_stale ... ok
+test repeated_runs_advance_execution_and_legacy_output_ordinals ... ok
+test rerun_and_out_of_order_are_explicit_errors ... ok
+test record_definition_and_value_in_one_cell_are_atomic ... ok
+test pure_functions_reject_effects_capture_recursion_and_main ... ok
+test deleting_record_definition_stales_only_dependent_cells_after_reopen ... ok
+test restart_failure_retains_stale_old_outputs ... ok
+test saved_unsupported_effect_and_later_output_reopen_stale_without_execution ... ok
+test pure_functions_keep_live_definitions_and_selective_revisions ... ok
+test sequential_cells_share_scalar_binding_and_roundtrip ... ok
+test rerun_affected_leaves_an_independent_edited_branch_stale ... ok
+test restart_marks_saved_observations_stale_and_reopen_never_executes ... ok
+test retained_scalars_keep_cli_arithmetic_and_string_behavior ... ok
+test record_fields_display_in_declaration_order_and_arguments_run_in_source_order ... ok
+test selective_edit_reruns_only_transitive_reader_and_reopens_with_dependency_digest ... ok
+test selected_rerun_uses_retained_prefix_and_stales_transitive_readers ... ok
+test unicode_record_names_survive_worker_and_retained_replay ... ok
+test record_definition_edit_stales_dependents_and_reruns_selected_cells ... ok
+test retained_records_cross_cells_and_reopen_cleanly ... ok
+test interrupted_or_invalid_definition_never_publishes_a_function ... ok
+test interrupt_during_pure_call_leaves_failed_observation ... ok
+test effect_boundary_fixture_tracks_edit_interrupt_restart_and_passive_reopen ... ok
+test record_worker_and_failure_preserve_valid_earlier_cells ... ok
+test stalled_worker_is_killed_and_later_rerun_has_clean_bindings ... ok
+test rerun_evaluation_budget_is_cumulative_and_failure_is_noncurrent ... ok
+test evaluation_budget_stops_a_long_sequence ... ok
+
+test result: ok. 41 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests/local_loops.rs (target/release-s2b-memory/debug/deps/local_loops-6a6b6d4e168f89ba)
+
+running 16 tests
+test static_loop_call_and_replay_bounds_reject_before_worker_or_definitions ... ok
+test imported_functions_keep_the_wave27_profile ... ok
+test annotations_inside_empty_loops_remain_schema_dependencies ... ok
+test empty_loops_inactive_branches_and_assignment_rhs_remain_dependencies ... ok
+test lexical_shadowing_preserves_nearest_mutability_and_scope ... ok
+test mutation_propagates_through_calls_but_cannot_enter_a_range_body ... ok
+test forbidden_mutation_types_effects_iterators_and_operations_fail_closed ... ok
+test interrupt_during_loop_worker_keeps_prior_cells_and_recovers ... ok
+test checked_set_arithmetic_overflow_does_not_publish_a_definition_or_value ... ok
+test interrupted_deadline_and_bad_worker_leave_no_partial_bindings ... ok
+test overflow_failure_is_transactional_and_locals_recover_cleanly ... ok
+test nested_local_computation_runs_direct_and_worker_and_reinitializes ... ok
+test exact_static_boundary_executes_in_both_paths ... ok
+test literal_ranges_cover_empty_negative_and_integer_boundaries ... ok
+test malformed_and_wrong_type_loop_worker_frames_never_publish ... ok
+test imported_pure_helpers_inside_loops_keep_dependency_and_nominal_rules ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests/public_records.rs (target/release-s2b-memory/debug/deps/public_records-731900b31fdfe909)
+
+running 13 tests
+test qualified_annotations_constructors_unknown_private_and_ambiguous_roots ... ok
+test annotation_and_inactive_branch_edges_preserve_independent_outputs ... ok
+test diagnostics_refer_to_original_cell_bytes_after_qualified_names_expand ... ok
+test removing_imports_and_effect_failures_do_not_replay_hidden_work ... ok
+test older_package_capture_without_root_is_readable_but_stale_and_duplicate_roots_reject ... ok
+test same_bytes_at_a_changed_canonical_module_target_invalidate_before_replay ... ok
+test changed_package_root_manifest_visibility_delete_and_stale_live_metadata_fail_closed ... ok
+test imported_constructor_order_checked_arithmetic_and_failure_recovery ... ok
+test unicode_module_record_fields_and_generated_name_collisions ... ok
+test wrong_nominal_arguments_fail_atomically_and_can_recover ... ok
+test worker_tampering_cannot_publish_a_different_valid_nominal_record ... ok
+test live_module_changes_discard_only_affected_definitions_before_replay ... ok
+test imported_local_and_same_named_module_records_survive_workers_replay_and_export ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+
+     Running tests/pure_imports.rs (target/release-s2b-memory/debug/deps/pure_imports-3d9af835c103bc5f)
+
+running 10 tests
+test imported_record_function_is_rejected_at_cell_boundary ... ok
+test local_function_cannot_use_a_private_imported_record_annotation ... ok
+test malformed_manifest_cycle_and_mutation_after_open_fail_closed ... ok
+test bool_parameter_and_return_execute_through_scalar_interpreter ... ok
+test notebook_pure_function_can_call_directly_imported_module ... ok
+test changed_source_stales_only_dependents_and_missing_project_fails ... ok
+test imported_public_records_execute_at_the_cell_boundary ... ok
+test conditional_imports_lower_both_branches_and_track_inactive_module_dependencies ... ok
+test rejects_nonpublic_effectful_duplicate_calls_and_accepts_checked_transitive_calls ... ok
+test two_modules_selective_rerun_and_saved_provenance ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/record_functions.rs (target/release-s2b-memory/debug/deps/record_functions-39a5ea5beac61be9)
+
+running 13 tests
+test conditional_dependencies_keep_sibling_and_nested_scopes_separate ... ok
+test unknown_future_qualified_and_generic_annotations_fail_with_cell_spans ... ok
+test value_shadowing_cannot_hide_a_record_annotation_dependency ... ok
+test unsupported_record_shapes_effects_contracts_and_captures_stay_rejected ... ok
+test unused_annotations_are_dependencies_even_when_a_parameter_shadows_the_type ... ok
+test nominal_mismatch_and_failed_cells_never_publish_pending_values_or_definitions ... ok
+test selected_record_function_execution_never_replays_an_effect_cell ... ok
+test cancellation_and_static_function_and_step_limits_still_apply ... ok
+test unicode_same_cell_records_and_exact_scalar_fields_survive_replay ... ok
+test record_functions_keep_source_argument_order_and_checked_arithmetic ... ok
+test record_functions_have_worker_selected_rerun_and_reopen_parity ... ok
+test conditional_inactive_dependencies_worker_reopen_and_failure_recovery ... ok
+test cumulative_replay_budget_and_zero_deadline_fail_without_publishing ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+     Running tests/s2a.rs (target/release-s2b-memory/debug/deps/s2a-9f791c1bf2cf70c0)
+
+running 1 test
+test notebook_variants_and_deferred_expressions_are_source_located_rejections ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/release-s2b-memory/debug/deps/cgx2_notebook_session-664ac6dfaaa9e0e1)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/session.rs (target/release-s2b-memory/debug/deps/session-9c94a370e6d17d94)
+
+running 16 tests
+test constructs_cached_code_and_never_run_markdown ... ok
+test executor_output_over_byte_limit_fails_without_committing_display ... ok
+test rejects_inconsistent_ids_and_facts ... ok
+test failure_keeps_cached_output_visible_but_not_current ... ok
+test changed_definition_stales_transitive_dependents_and_preserves_cache ... ok
+test opaque_edit_stales_all_later_code_without_a_symbol_edge ... ok
+test reset_failure_reports_error_and_does_not_replay_cells ... ok
+test later_cell_and_selected_rerun_execute_only_the_requested_cell ... ok
+test restart_stops_on_failure_and_leaves_later_cached_outputs_stale ... ok
+test rerunning_definition_stales_later_reader_without_replaying_it ... ok
+test restart_runs_code_in_order_with_fresh_executor_and_new_ordinals ... ok
+test silent_success_clears_old_output_and_ordinal_overflow_is_checked ... ok
+test runs_one_cell_persistently_and_replaces_only_its_output ... ok
+test replacement_uses_old_and_new_definitions_for_invalidation ... ok
+test later_shadowed_definition_blocks_invalidation_and_dependency_digest_change ... ok
+test reopening_opaque_effect_never_presents_its_or_later_output_as_current_cache ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests src/lib.rs (target/release-s2b-memory/debug/deps/cgx2_notebook_ui-fe837dfcfd25daea)
+
+running 1 test
+test project_tests::project_startup_runs_and_reopens_two_module_notebook ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests src/main.rs (target/release-s2b-memory/debug/deps/cgx2_notebook_ui-fa9a89109e48bca4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/http.rs (target/release-s2b-memory/debug/deps/http-59fe2034a87fb318)
+
+running 24 tests
+test code_result_with_html_is_json_escaped_and_page_uses_local_scripts ... ok
+test pure_function_status_tracks_selective_ui_rerun ... ok
+test edit_run_restart_save_reopen_and_input_is_unchanged ... ok
+test failed_cell_is_reported_and_saved_text_is_not_current ... ok
+test cached_and_current_provenance_are_exposed_after_save_and_reopen ... ok
+test deleting_pure_function_exposes_stale_output_and_missing_definition ... ok
+test selected_rerun_route_rejects_bad_ids_and_missing_guards ... ok
+test rejects_cross_origin_token_size_method_json_cell_and_paths_without_mutation ... ok
+test overwrite_save_after_deleting_image_replaces_stale_sidecar ... ok
+test selective_ui_rerun_preserves_independent_revision_and_exposes_output_digest ... ok
+test record_definition_edit_marks_saved_values_stale_and_reruns_in_ui ... ok
+test conditional_inactive_dependency_stales_http_users_and_survives_save_restart ... ok
+test selected_rerun_edit_save_reopen_and_clean_restart ... ok
+test cached_asset_reference_is_valid_after_save_as ... ok
+test portable_open_serves_bounded_image_and_exports_without_sidecars ... ok
+test record_function_annotations_drive_http_rerun_and_saved_provenance ... ok
+test overwrite_save_keeps_only_still_referenced_images ... ok
+test markdown_image_route_save_and_export_use_verified_asset ... ok
+test slow_client_does_not_hold_up_interrupt_request ... ok
+test interrupt_stops_active_worker_and_saved_output_is_not_current ... ok
+test local_loop_http_rerun_save_export_and_restart_recompute_locals ... ok
+test public_imported_records_cross_http_rerun_save_export_and_reopen ... ok
+test transitive_import_closure_http_rerun_save_export_reopen ... ok
+test runtime_contract_http_failures_dependencies_and_persistence_match_worker ... ok
+
+test result: ok. 24 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+     Running unittests src/lib.rs (target/release-s2b-memory/debug/deps/cgx2_ownership-e70e65b438a55dd6)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/function_analysis.rs (target/release-s2b-memory/debug/deps/function_analysis-13fdb4f4d1253856)
+
+running 31 tests
+test input_limits_are_explicit_and_rejection_is_deterministic ... ok
+test borrowed_parameters_cannot_be_consumed_or_strengthened ... ok
+test local_borrow_cannot_be_returned_under_parameter_contract ... ok
+test diagnostic_includes_valid_related_loan_span ... ok
+test calls_check_simultaneous_argument_aliases_before_consumption ... ok
+test caller_region_ownership_and_loans_can_be_returned_but_region_cannot_close ... ok
+test dynamic_index_conflicts_and_cannot_transfer_unknown_element ... ok
+test local_regions_require_cleanup_and_cannot_escape ... ok
+test exclusive_result_can_be_written_but_blocks_direct_access ... ok
+test cfg_join_preserves_partial_moves_on_both_arms ... ok
+test known_siblings_are_disjoint_and_prefixes_conflict ... ok
+test foreign_owner_retains_argument_until_explicit_release ... ok
+test cfg_join_preserves_possible_moves_and_possible_loans ... ok
+test cfg_join_cannot_invent_a_definite_loan ... ok
+test loop_fixed_point_handles_reinitialized_locals_and_balanced_loans ... ok
+test loop_carried_invalid_loans_and_second_iteration_moves_reject ... ok
+test malformed_cfg_summary_and_unreachable_unsupported_are_rejected ... ok
+test no_implicit_cross_region_move_or_call_result ... ok
+test owned_parameter_result_provenance_survives_moves ... ok
+test ordinary_borrowed_calls_release_temporary_loans ... ok
+test owned_call_consumes_argument_and_preserves_result ... ok
+test partial_move_forbids_parent_child_and_repeated_move ... ok
+test partial_move_keeps_sibling_available_and_allows_remainder_cleanup ... ok
+test returned_loan_must_match_projection_and_kind ... ok
+test parameter_result_loans_are_checked_in_body_and_caller ... ok
+test possible_regional_value_still_blocks_close_after_join ... ok
+test shared_loans_coexist_and_writes_through_them_reject ... ok
+test step_and_state_budgets_stop_with_incomplete_rejection ... ok
+test utf8_spans_are_preserved_and_malformed_spans_fail_closed ... ok
+test retained_owners_cannot_escape_or_be_released_twice ... ok
+test unknown_foreign_contract_and_missing_retention_owner_reject ... ok
+
+test result: ok. 31 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/ownership.rs (target/release-s2b-memory/debug/deps/ownership-d656b47e74ffc970)
+
+running 23 tests
+test diagnostics_are_deterministic ... ok
+test duplicate_name_and_unknown_value_have_op_spans ... ok
+test double_move_is_rejected ... ok
+test drop_consumes_value ... ok
+test create_and_use_owned ... ok
+test managed_handles_cannot_be_moved_or_promoted_as_owned ... ok
+test move_consumes_source_but_keeps_destination_live ... ok
+test move_drop_and_promote_while_borrowed_fail ... ok
+test nested_no_gc_forbids_collection_until_all_guards_exit ... ok
+test mutable_borrow_is_exclusive ... ok
+test borrow_must_end_in_its_branch ... ok
+test maybe_live_managed_handle_still_blocks_region_close ... ok
+test copy_from_managed_keeps_source_live_and_creates_unique_owned_value ... ok
+test close_requires_no_live_handle_and_regions_are_isolated ... ok
+test branch_local_move_invalidates_source_at_join ... ok
+test balanced_branches_join_and_allow_later_use ... ok
+test loop_backedge_is_semantic_outer_equality_with_zero_trip_join ... ok
+test shared_borrows_coexist_and_end_independently ... ok
+test promote_requires_open_region_and_consumes_owned_source ... ok
+test unbalanced_branch_state_is_explicit_error ... ok
+test unknown_and_duplicate_borrow_tokens_fail ... ok
+test unmatched_no_gc_exit_and_open_guard_are_diagnosed ... ok
+test unsupported_loop_and_foreign_alias_are_reported ... ok
+
+test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/release-s2b-memory/debug/deps/cgx2_package-9262c6077a8be0be)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin/cgx2-package.rs (target/release-s2b-memory/debug/deps/cgx2_package-fabd53ba44e041df)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/binders.rs (target/release-s2b-memory/debug/deps/binders-df7f3b6798ed8dc6)
+
+running 8 tests
+test generic_type_visibility_remains_checked ... ok
+test imported_variant_binder_shadows_same_named_local_variant ... ok
+test imported_record_binder_shadows_same_named_local_record ... ok
+test imported_generic_constraints_remain_required ... ok
+test distinct_modules_keep_colliding_generic_identities ... ok
+test imported_binders_still_require_the_declared_argument_types ... ok
+test nested_binders_and_qualified_and_unshadowed_nominals_coexist ... ok
+test changed_generic_dependency_invalidates_snapshot_and_effect_admission ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/bindings.rs (target/release-s2b-memory/debug/deps/bindings-bf410d510d31edb2)
+
+running 1 test
+test scalar_v1_and_explicit_binding_v2_manifests ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/package.rs (target/release-s2b-memory/debug/deps/package-e370882d37b0b6a4)
+
+running 25 tests
+test outside_symlink_is_rejected_before_source_read ... ok
+test cycle_trace_is_stable_and_points_at_closing_import ... ok
+test importing_memory_script_is_explicitly_unsupported ... ok
+test dishonest_dependencies_never_publish_empty_summaries ... ok
+test committed_example_matches_expected_index ... ok
+test imported_list_signature_is_admitted ... ok
+test checked_snapshot_rejects_manifest_and_source_mutations ... ok
+test invalid_utf8_and_missing_entry_are_reported ... ok
+test manifest_rejects_missing_duplicate_unknown_and_malformed_values ... ok
+test paths_cannot_escape_and_aliases_cannot_duplicate_sources ... ok
+test imported_local_assignment_retains_mutate_classification ... ok
+test two_module_public_call_checks_from_manifest_entry ... ok
+test size_limits_and_missing_file_are_explicit ... ok
+test source_errors_and_duplicate_module_names_keep_source_locations ... ok
+test two_modules_have_sorted_public_api_and_stable_rendering ... ok
+test three_module_fixture_checks_calls_and_dependency_order ... ok
+test public_imported_record_construction_requires_direct_defining_imports ... ok
+test inactive_branches_empty_loops_and_constructor_arguments_keep_effects ... ok
+test private_unimported_unknown_and_prefix_matches_cannot_borrow_checked_effects ... ok
+test transitive_argument_effects_capabilities_and_public_upper_bounds_are_truthful ... ok
+test import_failures_are_distinct_and_source_located ... ok
+test checked_pure_diamond_keeps_nominal_records_and_explicit_index_statuses ... ok
+test public_records_keep_defining_identity_and_visibility ... ok
+test transitive_foreign_and_native_capabilities_are_checked_without_execution ... ok
+test check_command_emits_json_and_fails_on_errors ... ok
+
+test result: ok. 25 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s2a.rs (target/release-s2b-memory/debug/deps/s2a-c26d9538b34b01ab)
+
+running 1 test
+test imported_private_unknown_and_unrelated_types_have_source_diagnostics ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests src/lib.rs (target/release-s2b-memory/debug/deps/cgx2_python_bridge-0f32f449032291fb)
+
+running 13 tests
+test tensor::tests::matmul_rejects_output_overflow_before_calling_python ... ok
+test tensor::tests::importing_a_named_torch_module_is_not_a_capability_proof ... ok
+test tensor::tests::tensor_creation_rejects_unrepresentable_dimension_before_importing_torch ... ok
+test tensor::tests::mul_rejects_broadcast_shapes_before_calling_python ... ok
+test tensor::tests::real_torch_rectangular_math_and_zero_sizes_or_explicit_skip ... ok
+test host::tests::python_failure_caps_unicode_message_without_losing_class ... ok
+test tensor::tests::matmul_rejects_rank_and_inner_dimension_before_calling_python ... ok
+test tensor::tests::mul_rejects_element_count_above_signed_python_limit ... ok
+test tensor::tests::mul_rejects_input_element_count_overflow_before_calling_python ... ok
+test tensor::tests::typed_ops_reject_wrong_dtype_and_device_before_calling_python ... ok
+test host::tests::incomplete_imported_torch_is_broken_with_reported_version ... ok
+test tensor::tests::typed_python_exception_keeps_class_message_and_traceback ... ok
+test package_host_v1::tests::snapshot_loader_rejects_caches_and_restores_host_state ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/numeric_arrays.rs (target/release-s2b-memory/debug/deps/numeric_arrays-c704812ee6af076d)
+
+running 3 tests
+test invalid_buffers_have_stable_conversion_class ... ok
+test stdlib_array_copy_and_bounds ... ok
+test numpy_optional_native_and_foreign_endian ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests/stdlib.rs (target/release-s2b-memory/debug/deps/stdlib-f163a9b95d41e7f0)
+
+running 6 tests
+test imports_and_calls_math_sqrt ... ok
+test missing_module_and_attribute_are_distinct ... ok
+test unsupported_python_objects_remain_handles ... ok
+test primitive_round_trip_and_integer_overflow_is_conversion_error ... ok
+test invalid_call_and_python_exception_keep_diagnostics ... ok
+test cloned_and_dropped_handles_keep_a_stable_python_refcount ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/torch_optional.rs (target/release-s2b-memory/debug/deps/torch_optional-5f43a7888566d9be)
+
+running 3 tests
+test torch_probe_reports_real_capability_or_missing_package ... ok
+test shape_is_checked_before_a_foreign_allocation ... ok
+test real_torch_cpu_round_trip_or_explicit_skip ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/values.rs (target/release-s2b-memory/debug/deps/values-798d2dd090f830cf)
+
+running 5 tests
+test nested_values_and_bytes_copy_both_directions ... ok
+test keyword_errors_are_conversion_errors_before_call ... ok
+test cycles_fall_back_to_handles_and_limits_are_errors ... ok
+test stdlib_keywords_are_forwarded_in_sorted_order ... ok
+test cloned_handles_alias_and_outlive_original_and_exceptions_are_distinct ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests src/lib.rs (target/release-s2b-memory/debug/deps/cgx2_runtime-ccf4fa121a8ff7f7)
+
+running 5 tests
+test report::tests::pause_histogram_bounds_and_saturating_units ... ok
+test root_census_tests::registration_sum_overflow_is_reported ... ok
+test scope::tests::overflow_and_invalid_handles_leave_scope_empty ... ok
+test scope::tests::identifier_exhaustion_is_fallible_and_does_not_wrap ... ok
+test scope::tests::cleanup_continues_after_corruption_and_preserves_primary_error ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/assurance.rs (target/release-s2b-memory/debug/deps/assurance-1a77282fde1e08d7)
+
+running 4 tests
+test conversion_handles_obey_cross_region_edges_roots_and_close ... ok
+test failed_near_limit_promotion_is_atomic_and_other_region_stays_untouched ... ok
+test failed_nested_promotion_and_copy_do_not_collect_or_consume_source ... ok
+test zero_length_conversion_charges_metadata_and_stales_only_after_collection ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/audit.rs (target/release-s2b-memory/debug/deps/audit-878bbb60659495ed)
+
+running 2 tests
+test closed_region_id_and_handles_remain_stale_after_new_region_is_created ... ok
+test unwinding_nested_guards_does_not_collect_or_leave_a_budget_active ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/automatic_pressure_wave23.rs (target/release-s2b-memory/debug/deps/automatic_pressure_wave23-89370fe0a7f777fd)
+
+running 6 tests
+test automatic_pressure::corrupted_oracle_is_rejected ... ok
+test automatic_pressure::non_safepoint_reserve_sites_preserve_graph_and_first_failure ... ok
+test automatic_pressure::rooted_region_limit_failure_can_follow_collection ... ok
+test automatic_pressure::both_nested_budget_orders_and_exit_retry ... ok
+test automatic_pressure::reserve_failures_before_and_after_collection ... ok
+test automatic_pressure::pressure_corpus ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/failure_paths.rs (target/release-s2b-memory/debug/deps/failure_paths-8092326a1a09b7d6)
+
+running 7 tests
+test host_capacity_overflow_fails_before_auto_collection ... ok
+test auto_collection_cannot_make_rooted_capacity_available ... ok
+test auto_reclaims_on_capacity_pressure_below_trigger ... ok
+test manual_failure_waits_for_explicit_collection ... ok
+test invalid_and_closed_regions_cannot_collect_or_change_other_regions ... ok
+test nested_guards_exhaust_budget_without_collecting_any_region ... ok
+test overflow_and_intrinsically_oversized_requests_fail_before_auto_collection ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/fallible_lifetimes.rs (target/release-s2b-memory/debug/deps/fallible_lifetimes-93a485a6e370ba58)
+
+running 6 tests
+test failed_guard_entry_preserves_outer_budget_and_collection_prohibition ... ok
+test entry_and_root_reserve_faults_are_atomic_and_retryable ... ok
+test root_bookkeeping_budget_failure_preserves_existing_roots ... ok
+test root_bookkeeping_charges_each_guard_and_cleanup_does_not_refund ... ok
+test scoped_roots_own_duplicates_without_consuming_manual_registrations ... ok
+test nested_cleanup_on_early_return_and_unwind_is_region_local ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/graph_storage.rs (target/release-s2b-memory/debug/deps/graph_storage-9084607720b82ba6)
+
+running 10 tests
+test bulk_roots_count_duplicates_and_validate_all_children_before_registration ... ok
+test exact_graph_budget_includes_temporary_root_bookkeeping ... ok
+test initialized_children_survive_pressure_before_parent_allocation ... ok
+test invalid_regions_children_and_shapes_fail_before_allocation ... ok
+test payload_writes_are_checked_atomic_and_do_not_allocate ... ok
+test malformed_headers_links_and_bounds_reject_without_output_or_payload_mutation ... ok
+test nested_no_gc_budgets_charge_roots_and_chunks_across_regions_without_collection ... ok
+test zeroed_graphs_have_exact_shapes_and_allow_aliases_and_cycles ... ok
+test every_constructor_reserve_failure_cleans_temporary_roots_and_preserves_children ... ok
+test maximum_collection_and_string_use_traced_chunks_without_reducing_bounds ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+
+     Running tests/objects.rs (target/release-s2b-memory/debug/deps/objects-a157e8a8937dd600)
+
+running 5 tests
+test closing_one_region_does_not_touch_another_and_invalidates_handles ... ok
+test checked_slots_trace_shared_children_and_reclaim_cycles_after_clear ... ok
+test legacy_links_and_checked_slots_are_both_strong ... ok
+test bad_updates_and_shape_failures_leave_graph_and_charge_unchanged ... ok
+test nested_guard_fails_atomically_and_never_collects_any_region ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/owned.rs (target/release-s2b-memory/debug/deps/owned-2b488eef99476f2b)
+
+running 13 tests
+test copying_stale_handle_returns_invalid_handle ... ok
+test impossible_owned_allocation_fails_without_panicking ... ok
+test invalid_region_failure_returns_unchanged_owned_bytes ... ok
+test nested_guards_charge_owned_allocations_without_collection ... ok
+test nested_budget_failure_does_not_commit_promotion_or_collect ... ok
+test owned_allocation_is_zero_filled_and_can_be_mutated ... ok
+test managed_copy_is_independent_and_preserves_source_handle ... ok
+test managed_copy_budget_failure_keeps_source_valid ... ok
+test promotion_moves_bytes_into_region_and_obeys_roots ... ok
+test region_limit_failure_returns_unchanged_owned_bytes ... ok
+test zero_length_managed_copy_has_empty_owned_payload ... ok
+test zero_length_owned_allocation_is_valid ... ok
+test owned_allocation_charges_active_guard_without_collecting ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/region_graph_wave22.rs (target/release-s2b-memory/debug/deps/region_graph_wave22-84610a12df035af3)
+
+running 4 tests
+test region_graph_wave22::nested_guard_exhaustion_retry_and_failed_link_then_close ... ok
+test region_graph_wave22::injected_oracle_mismatch_is_detected ... ok
+test region_graph_wave22::reserve_failures_at_each_allocation_site_preserve_both_regions ... ok
+test region_graph_wave22::deterministic_region_graph_replay ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/regions.rs (target/release-s2b-memory/debug/deps/regions-4aec7236554ee247)
+
+running 20 tests
+test allocation_charges_payload_and_slot_metadata ... ok
+test auto_collects_at_next_allocation_safepoint_after_trigger ... ok
+test creating_region_inside_guard_charges_global_budget ... ok
+test budget_failure_is_before_commit_and_preserves_existing_object ... ok
+test default_region_uses_auto_limit_and_trigger ... ok
+test cross_region_edges_are_rejected_without_mutation ... ok
+test explicit_collection_is_forbidden_in_guard_even_for_other_region ... ok
+test duplicate_link_needs_no_budget_or_region_headroom ... ok
+test guard_drop_after_error_restores_collection ... ok
+test growing_edges_inside_guard_charges_full_new_buffer_allocation ... ok
+test impossible_allocation_counts_as_failure_without_collection ... ok
+test limit_failure_does_not_commit_or_damage_previous_allocation ... ok
+test manual_region_never_collects_during_allocation ... ok
+test named_regions_preserve_mode_and_limit ... ok
+test nested_budgets_charge_each_guard_and_first_exhausted_fails ... ok
+test one_guard_suppresses_two_auto_regions_until_their_next_safepoints ... ok
+test reclaimed_handle_cannot_alias_reused_slot ... ok
+test rooted_cycle_survives_and_unrooted_cycle_is_reclaimed ... ok
+test rooted_region_cannot_close_and_other_region_survives_close ... ok
+test deterministic_graph_operations_preserve_reachability_and_handle_validity ... ok
+
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/report.rs (target/release-s2b-memory/debug/deps/report-62ccab7be1dcc13a)
+
+running 5 tests
+test collection_pauses_record_only_completed_cycles ... ok
+test limit_failure_and_closed_region_leave_terminal_report_without_aliasing ... ok
+test nested_guards_keep_two_regions_and_pause_counts_stable_on_failure ... ok
+test report_has_stable_order_totals_and_terminal_rows ... ok
+test report_rendering_has_a_versioned_stable_schema ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/root_census.rs (target/release-s2b-memory/debug/deps/root_census-8eab0a08e85c5393)
+
+running 2 tests
+test duplicate_registrations_and_failed_unroot_preserve_counts ... ok
+test cycle_collection_close_and_stale_handles_follow_live_slots ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/transfer_replay.rs (target/release-s2b-memory/debug/deps/transfer_replay-4f01fbf723930f2a)
+
+running 2 tests
+test nested_no_gc_copy_failures_preserve_regions_guards_and_first_error ... ok
+test replay_copy_alias_edge_and_both_close_orders ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/unwind_replay.rs (target/release-s2b-memory/debug/deps/unwind_replay-65ff5f625d5a0619)
+
+running 1 test
+test fixed_host_unwind_corpus ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/release-s2b-memory/debug/deps/cgx2_security-338dcf54805d60ed)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/release-s2b-memory/debug/deps/cgx2_security-2068267332751525)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/audit.rs (target/release-s2b-memory/debug/deps/audit-75a589403b7996db)
+
+running 6 tests
+test policy_and_source_size_are_bounded ... ok
+test conversion_effects_and_policy_validation ... ok
+test direct_transitive_allowed_and_imported_effects ... ok
+test taint_binding_local_call_clean_literal_and_unknown_alias ... ok
+test conditional_taint_joins_assignments_returns_and_keeps_locals_separate ... ok
+test deterministic_json_and_sarif_unicode_locations ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/command.rs (target/release-s2b-memory/debug/deps/command-ef078bd72cb94fc6)
+
+running 2 tests
+test sarif_command_is_deterministic_and_parseable ... ok
+test exit_codes_distinguish_clean_findings_and_bad_input ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/package.rs (target/release-s2b-memory/debug/deps/package-026b0bc86ec1ed59)
+
+running 14 tests
+test loop_carried_values_unknown_even_when_iteration_count_is_zero ... ok
+test shipped_source_example_is_checked_and_advisory_only ... ok
+test source_in_imported_body_forwarded_to_local_sink ... ok
+test package_policy_checks_hidden_effects_and_capabilities_at_call_and_declaration ... ok
+test transitive_taint_reaches_checked_foreign_sink_with_cross_file_origin_and_declaration ... ok
+test clean_literal_is_not_tainted_but_unknown_public_parameters_remain_advisory ... ok
+test unknown_contract_calls_have_distinct_source_located_policy_findings ... ok
+test report_and_input_reject_mutated_provenance ... ok
+test schema2_policy_and_command_are_additive ... ok
+test inactive_branches_and_branch_shadowing_are_conservative_and_scoped ... ok
+test pure_imported_wrappers_are_clean_and_cli_distinguishes_invalid_packages ... ok
+test stable_json_sarif_utf8_columns_and_relative_paths ... ok
+test contract_only_helpers_reach_public_security_graph_without_inventing_findings ... ok
+test recursive_calls_and_global_step_depth_budgets_are_explicit_unknowns ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s2a.rs (target/release-s2b-memory/debug/deps/s2a-30378008c81597f5)
+
+running 1 test
+test security_reports_unsupported_admission_instead_of_empty_analysis ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/release-s2b-memory/debug/deps/cgx2_sema-2012f345a0e560e3)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/check.rs (target/release-s2b-memory/debug/deps/check-895369a5ca97a4ba)
+
+running 6 tests
+test standalone_check_rejects_import_execution_at_import_span ... ok
+test expressions_and_mutation ... ok
+test contracts_require_pure_bool_scalar_expressions ... ok
+test scoped_names_and_type_table ... ok
+test calls_and_returns ... ok
+test explicit_effects_and_capabilities_gate_direct_and_transitive_calls ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/conditional_memory.rs (target/release-s2b-memory/debug/deps/conditional_memory-f92f2e4585f26ee2)
+
+running 7 tests
+test ancestor_temporary_can_be_explicitly_released_in_both_nested_arms ... ok
+test independent_arm_names_nested_lifetimes_and_outer_environment ... ok
+test conditional_call_graph_collection_and_region_closure_walkers_recurse ... ok
+test possible_path_transitions_and_inactive_operations_are_checked ... ok
+test branch_locals_require_explicit_release_on_every_successful_path ... ok
+test unsupported_inactive_declarations_shadowing_and_escapes_stay_rejected ... ok
+test only_exact_bounded_guards_are_admitted_in_both_paths ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/conditionals.rs (target/release-s2b-memory/debug/deps/conditionals-374ed8b7df9cc9bf)
+
+running 2 tests
+test both_branches_are_checked_and_scopes_do_not_escape ... ok
+test explicit_returns_infer_and_join_but_branch_tails_are_unit ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/foreign.rs (target/release-s2b-memory/debug/deps/foreign-a03d79455bcc9c30)
+
+running 1 test
+test foreign_signatures_and_utf8_call_spans_are_checked ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/imported_effects.rs (target/release-s2b-memory/debug/deps/imported_effects-e727319987a263a4)
+
+running 5 tests
+test unicode_qualified_identities_do_not_share_same_named_function_evidence ... ok
+test local_recursive_fixed_point_keeps_pure_and_argument_read_summaries ... ok
+test checked_imports_do_not_supply_contract_termination_or_range_bound_proofs ... ok
+test signatures_annotations_and_partial_evidence_cannot_prove_purity ... ok
+test changed_declarations_or_dependency_bodies_invalidate_older_evidence ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/match_control_flow.rs (target/release-s2b-memory/debug/deps/match_control_flow-bed110a4d4c942cb)
+
+running 6 tests
+test empty_arm_has_unit_value_in_existing_ast_contract ... ok
+test loop_return_policy_coverage_and_unreachable_arms_are_preserved ... ok
+test explicit_and_fallthrough_types_are_checked_at_their_source_spans ... ok
+test list_loop_match_returns_are_inferred_but_loop_fallthrough_is_required ... ok
+test inferred_nested_returns_and_no_value_fallthrough_remain_sound ... ok
+test match_values_and_explicit_returns_have_separate_contexts ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/memory.rs (target/release-s2b-memory/debug/deps/memory-6015c2500931ffbf)
+
+running 5 tests
+test checks_bounded_memory_script ... ok
+test validates_literal_budgets_and_named_intrinsics ... ok
+test rejects_unmodeled_values_and_calls ... ok
+test ownership_failures_retain_source_spans ... ok
+test checks_direct_promotion_and_copy_with_precise_conversion_errors ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/memory_functions.rs (target/release-s2b-memory/debug/deps/memory_functions-8ac5a6db9fe9fc8c)
+
+running 5 tests
+test accepts_local_memory_functions_and_conversions ... ok
+test requires_declared_memory_effects_and_capability ... ok
+test rejects_recursion_and_collect_through_no_gc_call ... ok
+test scalar_parameters_are_checked_at_calls_and_only_admitted_as_byte_sizes ... ok
+test rejects_cross_boundary_handles_and_dynamic_sizes ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/memory_range_loops.rs (target/release-s2b-memory/debug/deps/memory_range_loops-ea74a9078f2a1889)
+
+running 5 tests
+test ranges_scopes_conversions_and_borrows ... ok
+test outer_borrows_and_local_names_cannot_escape_or_be_consumed ... ok
+test local_call_walkers_keep_scope_recursion_collection_and_closure_rules ... ok
+test restricted_endpoints_and_immutable_indices ... ok
+test zero_trip_backedge_and_all_paths_are_checked ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/object_references.rs (target/release-s2b-memory/debug/deps/object_references-4dc396090a530f0c)
+
+running 3 tests
+test accepts_bounded_same_region_graphs ... ok
+test rejects_unbounded_shapes_slots_and_cross_region_edges ... ok
+test rejects_dropped_or_escaping_handles_and_hidden_collect ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/range_loops.rs (target/release-s2b-memory/debug/deps/range_loops-dd3fcecf9c766b40)
+
+running 1 test
+test range_loop_keeps_local_mutation_effect_and_checks_bounds ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/records.rs (target/release-s2b-memory/debug/deps/records-4f18ce0b02e15e3a)
+
+running 5 tests
+test public_record_crossing_is_rejected_for_package_imports ... ok
+test nominal_fields_and_nested_function_results_type_check ... ok
+test imported_record_constructors_retain_argument_effects_and_capabilities ... ok
+test local_field_and_qualified_module_call_coexist_and_ambiguity_is_reported ... ok
+test record_diagnostics_have_source_spans ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s2a.rs (target/release-s2b-memory/debug/deps/s2a-d4409d6cc0e5ab92)
+
+running 6 tests
+test new_diagnostics_preserve_utf8_payload_and_binding_spans ... ok
+test unrelated_nominal_types_never_match_even_with_same_cases ... ok
+test private_types_cannot_leak_through_public_aggregates_or_applications ... ok
+test recursive_shapes_and_generic_arity_fail_closed ... ok
+test generic_data_declarations_are_admitted_and_loop_contracts_remain_deferred ... ok
+test rejects_invalid_coverage_payloads_scopes_and_arm_types ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s2b.rs (target/release-s2b-memory/debug/deps/s2b-53ddc56d9b3be07d)
+
+running 9 tests
+test intrinsic_shadowing_still_propagates_real_user_effects ... ok
+test binders_signatures_and_instantiations_keep_canonical_identity ... ok
+test contextual_inference_uses_later_arguments_and_nested_nonempty_literals ... ok
+test changed_generic_variant_declarations_invalidate_checked_effects ... ok
+test symbolic_constraints_govern_bodies_not_only_observed_instantiations ... ok
+test inference_arity_nominal_arguments_and_ambiguity ... ok
+test new_data_fixtures_are_semantically_checked ... ok
+test expansive_recursion_and_recursive_shapes_reject_before_output ... ok
+test distinct_specializations_have_a_total_count_budget ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+     Running tests/semantic_resolution.rs (target/release-s2b-memory/debug/deps/semantic_resolution-f723de361f61932c)
+
+running 8 tests
+test nested_symbolic_bodies_reject_even_without_a_concrete_instantiation ... ok
+test checked_import_evidence_rejects_a_binder_constructor_body ... ok
+test function_binders_shadow_record_and_variant_constructor_heads ... ok
+test lowering_does_not_turn_record_returning_functions_into_constructors ... ok
+test qualified_nominal_head_is_available_beside_a_binder ... ok
+test declaration_binders_do_not_shadow_their_own_nominal_head ... ok
+test qualified_imported_intrinsic_names_keep_nominal_identity ... ok
+test every_data_name_can_still_construct_a_record ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/specialization.rs (target/release-s2b-memory/debug/deps/specialization-39fb9118791a5425)
+
+running 7 tests
+test original_public_privacy_and_effects_still_reject_before_lowering ... ok
+test same_named_module_nominal_and_binder_keep_distinct_identities ... ok
+test qualified_concrete_fields_payloads_and_containers_recheck ... ok
+test public_concrete_interfaces_keep_source_exports_separate_from_lowered_aggregates ... ok
+test checked_public_templates_generate_internal_functions_and_aggregates ... ok
+test imported_generic_private_arguments_keep_provenance_and_source_admission ... ok
+test integrated_visibility_and_public_source_fixtures_recheck ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/tensor_f32.rs (target/release-s2b-memory/debug/deps/tensor_f32-4671969a801f5b7d)
+
+running 2 tests
+test float32_overflow_underflow_and_shape_errors_are_located ... ok
+test checked_float32_literals_round_and_preserve_subnormals ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/release-s2b-memory/debug/deps/cgx2_syntax-ba9763dc6979dbf1)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/conditionals.rs (target/release-s2b-memory/debug/deps/conditionals-08fdb4f168ecda54)
+
+running 2 tests
+test nested_unicode_conditionals_round_trip ... ok
+test malformed_branches_are_source_located_errors ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/memory_functions.rs (target/release-s2b-memory/debug/deps/memory_functions-e4f154550a50b2c3)
+
+running 1 test
+test parses_and_formats_local_memory_calls_with_nested_guard ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/object_references.rs (target/release-s2b-memory/debug/deps/object_references-769fd8ae926ef71a)
+
+running 2 tests
+test object_intrinsics_round_trip_through_formatter ... ok
+test nested_no_gc_object_intrinsics_format_stably ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/records.rs (target/release-s2b-memory/debug/deps/records-08f89f1be503f0c6)
+
+running 3 tests
+test public_unicode_records_format_and_keep_utf8_spans ... ok
+test record_field_count_indent_and_duplicate_are_diagnosed ... ok
+test record_round_trip_keeps_fields_and_source_spans ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s2b.rs (target/release-s2b-memory/debug/deps/s2b-2fd3c737f9cc7260)
+
+running 1 test
+test generic_calls_collections_and_patterns_round_trip ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s2bf_specialization.rs (target/release-s2b-memory/debug/deps/s2bf_specialization-f3d6d21ffe17b5dd)
+
+running 3 tests
+test qualified_paths_in_both_representations_are_idempotent_recursively ... ok
+test lowered_constructor_names_do_not_gain_another_module_prefix ... ok
+test local_names_qualify_once_and_binders_keep_their_scope ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/syntax.rs (target/release-s2b-memory/debug/deps/syntax-49c06f171c66ed86)
+
+running 29 tests
+test ignore_comment_only_indentation ... ok
+test lex_nested_indentation ... ok
+test lex_simple_function ... ok
+test parse_top_level_script ... ok
+test parse_call_and_arithmetic_precedence ... ok
+test parse_nested_for_blocks ... ok
+test negative_range_loop_formatter_round_trips ... ok
+test parse_specification_functions ... ok
+test format_four_spaces_and_blank_lines ... ok
+test invalid_or_duplicate_declarations_are_source_located ... ok
+test legacy_requires_names_remain_ordinary_expressions ... ok
+test python_foreign_declaration_round_trips_with_source_spans ... ok
+test foreign_route_and_duplicate_declarations_are_diagnosed ... ok
+test named_arguments_and_nested_guards_keep_byte_spans ... ok
+test imports_have_utf8_byte_spans_and_round_trip_in_source_order ... ok
+test contract_header_and_prelude_round_trip ... ok
+test missing_colon_has_source_diagnostic ... ok
+test reject_duplicate_labels_and_positional_after_named ... ok
+test reject_mixed_script_and_function_items ... ok
+test reject_tab_indentation ... ok
+test unexpected_dedent_has_source_diagnostic ... ok
+test unsafe_native_declaration_round_trips_and_marks_boundary ... ok
+test formatting_is_idempotent ... ok
+test s2a_invalid_pattern_syntax_and_deep_applications_are_bounded ... ok
+test formatting_preserves_ast_structure ... ok
+test s2a_new_shapes_round_trip_without_losing_children ... ok
+test reject_tab_on_continuation_line ... ok
+test retain_unicode_byte_spans ... ok
+test rejects_duplicate_late_and_nested_imports ... ok
+
+test result: ok. 29 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/tensor.rs (target/release-s2b-memory/debug/deps/tensor-11133e93f348d76e)
+
+running 2 tests
+test matrix_source_has_one_canonical_parse_and_format ... ok
+test direct_tensor_source_has_one_canonical_parse_and_format ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/release-s2b-memory/debug/deps/cgx2_verify-65a74579d4090894)
+
+running 4 tests
+test source::tests::original_source_oracle_detects_deleted_unused_division_failure ... ok
+test source::tests::original_source_replay_and_oracle_reject_unconditional_branch_definedness ... ok
+test source::tests::original_source_oracle_rejects_corrupted_lowering_and_encoding ... ok
+test source::tests::library_only_accumulator_lowering_has_original_ast_parity_without_source_admission ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/command.rs (target/release-s2b-memory/debug/deps/command-7f7d824e4afb6e03)
+
+running 9 tests
+test finite_proof_scope_and_stable_json ... ok
+test json_conditionals_are_typed_and_select_only_one_branch ... ok
+test malformed_oversized_and_invalid_domains_are_rejected ... ok
+test false_inconsistent_cap_and_foreign_call ... ok
+test named_solver_stub_rejects_partial_protocol ... ok
+test fake_solver_is_protocol_evidence_only ... ok
+test solver_statuses_are_untrusted_observations ... ok
+test source_nested_division_is_compact_audited_and_stops_before_solver_at_limit ... ok
+test solver_timeout_large_and_stalled_output_are_bounded ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+
+     Running tests/source_contracts.rs (target/release-s2b-memory/debug/deps/source_contracts-cc6af268e11fb2b2)
+
+running 24 tests
+test live_solver_boolean_crosscheck_when_configured ... ok
+test boolean_parameter_is_enumerated_without_domain_flag ... ok
+test inactive_accumulators_share_the_expansion_budget_before_solver_startup ... ok
+test checked_body_overflow_is_a_failure_even_without_result_in_ensures ... ok
+test conditional_contract_reports_a_replayable_false_branch ... ok
+test s2a_variants_are_unsupported_and_never_proved ... ok
+test accumulator_source_is_explicitly_blocked_by_shared_effect_contract ... ok
+test incomplete_paths_and_source_logical_syntax_remain_parser_rejections ... ok
+test source_and_smt_parity_covers_i64_max_body_overflow ... ok
+test inconsistent_and_undefined_preconditions_remain_unknown ... ok
+test selected_finite_result_does_not_cover_unsupported_sibling ... ok
+test finite_proof_and_re_evaluated_counterexample ... ok
+test source_artifact_names_obligations_and_rejects_unchecked_assert ... ok
+test unsupported_calls_effects_and_foreign_declarations_have_source_spans ... ok
+test nested_trees_and_both_result_sorts_have_independent_encoding_parity ... ok
+test domains_and_function_selection_are_explicit ... ok
+test only_selected_branch_and_guard_overflow_are_violations ... ok
+test out_of_profile_branches_reject_before_solver_even_when_inactive ... ok
+test solver_version_spoof_with_canned_statuses_cannot_prove ... ok
+test changed_source_changes_digest ... ok
+test useful_scalar_profile_source_core_and_smt_parity ... ok
+test conditional_sat_transport_replays_selected_overflow_against_source ... ok
+test fixture_spoof_without_pin_and_stale_model_remain_untrusted ... ok
+test conditional_depth_and_node_caps_cover_inactive_subtrees ... ok
+
+test result: ok. 24 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running unittests src/lib.rs (target/release-s2b-memory/debug/deps/cgx2_verify_core-ce620b4bb894bceb)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/conditionals.rs (target/release-s2b-memory/debug/deps/conditionals-85f1ed87da08e281)
+
+running 3 tests
+test sorts_and_uninterpreted_walkers_examine_both_branches ... ok
+test evaluation_checks_guard_and_only_selected_branch ... ok
+test smt_definedness_and_witness_replay_follow_selected_branch ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/contracts.rs (target/release-s2b-memory/debug/deps/contracts-d253661b9b6d62ab)
+
+running 9 tests
+test checked_addition_and_subtraction_reject_overflow ... ok
+test boolean_parameters_are_exhaustively_enumerated ... ok
+test empty_domain_and_case_cap_are_unknown ... ok
+test checked_overflow_is_a_failure_with_a_witness ... ok
+test impossible_precondition_is_not_a_proof ... ok
+test rejects_sort_mismatch_and_unknown_variable ... ok
+test proves_only_the_named_finite_range ... ok
+test evaluates_boolean_and_checked_integer_expressions ... ok
+test returns_smallest_validated_counterexample ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/encoding_audit.rs (target/release-s2b-memory/debug/deps/encoding_audit-a2736e10f90e3fdd)
+
+running 3 tests
+test malformed_and_mismatched_formulas_fail_closed ... ok
+test signed_boundaries_include_requires_and_substituted_body_overflow ... ok
+test every_tuple_and_each_named_obligation_are_checked ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/scalar_v2.rs (target/release-s2b-memory/debug/deps/scalar_v2-eb2fbefd521597e7)
+
+running 5 tests
+test new_arithmetic_witnesses_are_replayed ... ok
+test corruption_of_new_operators_or_binding_is_detected ... ok
+test bindings_are_eager_lexical_and_conditionals_remain_lazy ... ok
+test expansion_has_explicit_preallocation_bound_and_independent_loop_parity ... ok
+test boundary_grid_matches_checked_rust_and_independent_smt_interpreter ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/scalar_v2_size.rs (target/release-s2b-memory/debug/deps/scalar_v2_size-33a1ab77ecc5aa30)
+
+running 8 tests
+test uninterpreted_range_assumptions_and_local_rejection_are_preserved ... ok
+test exact_node_depth_and_output_budgets_apply_to_main_and_witness ... ok
+test fresh_symbols_preserve_shadowing_initializer_scope_and_non_capture ... ok
+test corrupted_definitions_forward_references_sorts_and_obligations_are_rejected ... ok
+test inactive_undefined_chains_and_eager_boolean_and_local_failures_match ... ok
+test nested_division_has_measured_bounded_growth_and_real_term_parity ... ok
+test output_and_identifier_caps_cover_large_names_before_expansion ... ok
+test default_node_and_depth_ceilings_reject_before_recursive_work ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/smtlib.rs (target/release-s2b-memory/debug/deps/smtlib-d57090575980343f)
+
+running 6 tests
+test protocol_rejects_unknown_timeout_missing_and_malformed ... ok
+test protocol_requires_valid_precondition_and_unsat_negation ... ok
+test emits_i64_bounds_overflow_guards_and_three_checks ... ok
+test symbol_encoding_cannot_inject_smtlib ... ok
+test uninterpreted_calls_keep_argument_sorts_and_disclose_i64_bounds ... ok
+test fake_solver_command_covers_success_missing_and_timeout ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/solver_proof.rs (target/release-s2b-memory/debug/deps/solver_proof-c3edc6bfa0cc4c5c)
+
+running 3 tests
+test statuses_reject_contradictions_and_extra_output ... ok
+test verification_conditions_have_fixed_order_and_distinct_safety_query ... ok
+test model_is_only_a_counterexample_after_checked_reevaluation ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/release-s2b-memory/debug/deps/cgx2c-df9f25938b5e7bea)
+
+running 1 test
+test python_archive::tests::crc_and_archive_limits ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/release-s2b-memory/debug/deps/cgx2c-29850a1cc414d080)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/checked_effects.rs (target/release-s2b-memory/debug/deps/checked_effects-42a0aad409292fd3)
+
+running 1 test
+test checked_diamond_matches_interpreter_rust_native_profiles_and_atomic_rejection ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.54s
+
+     Running tests/command.rs (target/release-s2b-memory/debug/deps/command-87fe9c1b18ede316)
+
+running 8 tests
+test package_build_does_not_replace_declared_binding_lock ... ok
+test parsing_and_artifact_errors_are_distinct ... ok
+test diagnostics_and_failing_compiler_do_not_replace_output ... ok
+test emit_is_deterministic_and_preserves_existing_output ... ok
+test native_memory_build_runs_existing_fixture_and_preserves_failure ... ok
+test scalar_binary_matches_checked_cli_on_debug_and_release ... ok
+test memory_runtime_and_program_use_requested_profile_and_match_cli ... ok
+test moved_compiler_builds_memory_without_its_source_checkout ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.72s
+
+     Running tests/execution_consumer.rs (target/release-s2b-memory/debug/deps/execution_consumer-b3f379b5c58c32af)
+
+running 1 test
+test checked_owned_input_map_zip_consumer_contract ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/failure_report_parity.rs (target/release-s2b-memory/debug/deps/failure_report_parity-ee4e53302076807b)
+
+running 8 tests
+test statically_rejected_graph_failures_remain_source_located_and_unbuilt ... ok
+test invalid_empty_loop_is_rejected_before_native_output_publication ... ok
+test report_write_failure_keeps_primary_runtime_diagnostic ... ok
+test fault_option_is_explicit_and_absent_from_ordinary_release_build ... ok
+test conditional_byte_scope_failures_and_injected_reserves_match_native_profiles ... ok
+test range_failures_limits_and_faults_match_native_profiles ... ok
+test source_runtime_failures_match_native_debug_and_release ... ok
+test conditional_selected_allocation_and_semantic_region_reports_match_native_profiles ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 9.84s
+
+     Running tests/memory_release_parity.rs (target/release-s2b-memory/debug/deps/memory_release_parity-1b5a528499deb791)
+
+running 3 tests
+test explicit_cross_region_copy_matches_native_and_escape_is_rejected ... ok
+test normal_and_nested_no_gc_match_native_profiles ... ok
+test budget_and_host_reserve_failures_preserve_first_error_and_unwind_roots ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.94s
+
+     Running tests/native_memory_functions.rs (target/release-s2b-memory/debug/deps/native_memory_functions-c9521547a9e56145)
+
+running 2 tests
+test invalid_memory_functions_keep_existing_output_and_report_source_spans ... ok
+test checked_memory_functions_match_interpreter_in_debug_and_release ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.68s
+
+     Running tests/native_memory_reports.rs (target/release-s2b-memory/debug/deps/native_memory_reports-92bb832219dc7a7f)
+
+running 3 tests
+test invalid_report_paths_leave_binary_and_existing_output_intact ... ok
+test source_graph_reports_match_interpreter_in_debug_and_release ... ok
+test native_reports_match_interpreter_and_failure_counters_in_both_profiles ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.85s
+
+     Running tests/package_command.rs (target/release-s2b-memory/debug/deps/package_command-04a76175a409d3b0)
+
+running 9 tests
+test occupied_or_input_output_and_failed_compiler_preserve_files ... ok
+test private_missing_typed_cycle_and_memory_fail_before_rustc ... ok
+test source_changed_during_compilation_is_rejected_before_install ... ok
+test package_call_depth_uses_standalone_limit ... ok
+test three_module_package_runs_in_debug_and_release_and_emits_deterministically ... ok
+test conditional_calls_in_both_package_branches_build_in_debug_and_release ... ok
+test package_contracts_run_before_and_after_body_or_fail_with_span ... ok
+test package_entry_scalar_results_and_argument_error ... ok
+test dotted_names_keywords_and_runtime_errors_are_preserved ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.38s
+
+     Running tests/range_loops.rs (target/release-s2b-memory/debug/deps/range_loops-bebb7f16552d7916)
+
+running 4 tests
+test build_rejects_malformed_ranges_before_writing_binary ... ok
+test range_failures_preserve_first_code_and_span ... ok
+test conditional_native_debug_release_parity ... ok
+test scalar_ranges_match_interpreter_in_debug_and_release ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.42s
+
+     Running tests/record_parity.rs (target/release-s2b-memory/debug/deps/record_parity-d902667e57dc926b)
+
+running 2 tests
+test public_package_records_build_in_both_profiles_and_fail_atomically ... ok
+test package_debug_release_matches_source_result_and_error_class ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.34s
+
+     Running tests/s2a_match_control_flow.rs (target/release-s2b-memory/debug/deps/s2a_match_control_flow-5648cae91d33bcef)
+
+running 2 tests
+test inconsistent_match_returns_fail_before_backend_publication ... ok
+test match_flow_matches_source_in_native_debug_and_release ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.86s
+
+     Running tests/s2a_package_record_parity.rs (target/release-s2b-memory/debug/deps/s2a_package_record_parity-000e08d3ea2d49d0)
+
+running 3 tests
+test invalid_nominal_and_unknown_field_types_reject_before_publication ... ok
+test nullary_and_alternate_option_result_branches_match_source ... ok
+test canonical_package_aggregate_fields_match_source_in_debug_and_release ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.13s
+
+     Running tests/s2a_parity.rs (target/release-s2b-memory/debug/deps/s2a_parity-a5c1e9a1539ed803)
+
+running 3 tests
+test colliding_imported_variant_and_record_identities_match_native ... ok
+test nullary_cases_none_error_branch_and_one_scrutinee_evaluation_match_native ... ok
+test nested_variants_contracts_and_checked_errors_match_native_debug_and_release ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.38s
+
+     Running tests/source_graph_commands.rs (target/release-s2b-memory/debug/deps/source_graph_commands-a00b0b710c3fef0e)
+
+running 3 tests
+test package_entry_rejects_checked_graph_source_for_build_and_emit ... ok
+test injected_graph_allocation_failure_has_source_span_and_no_collection ... ok
+test emitted_graph_source_runs_and_rejects_dangling_edges_in_both_profiles ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.03s
+
+   Doc-tests cgx2_api_index
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_bind
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_cli
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_effect_index
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_emit_python
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_emit_rust
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_execution_policy
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_ffi_core
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_ffi_native
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_foreign
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_interop_worker
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_libtorch
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_memory_conformance
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_notebook_format
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_notebook_kernel
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_notebook_session
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_notebook_ui
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_ownership
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_package
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_python_bridge
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_runtime
+
+running 1 test
+test crates/cgx2-runtime/src/owned.rs - owned::OwnedBytes (line 11) - compile fail ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+   Doc-tests cgx2_security
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_sema
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_syntax
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_verify_core
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2c
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

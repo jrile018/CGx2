@@ -1,0 +1,18 @@
+fn build(n: i64) -> Unit effects(ManagedAlloc, Mutate):
+    let a = memory.region(mode: auto, limit: 2097152)
+    let b = memory.region(mode: manual, limit: 2097152)
+    no_gc(budget: 65536):
+        let graph = memory.alloc_graph(a, 8, 257)
+        memory.set_graph_reference(graph, 256, graph)
+        no_gc(budget: 16384):
+            let other = memory.alloc_graph(b, 8, 257)
+            memory.write_graph_byte(other, 0, 42)
+            memory.expect_graph_byte(other, 0, 42)
+            memory.drop(other)
+        memory.drop(graph)
+    memory.close(a)
+    memory.close(b)
+
+fn main() -> Unit effects(ManagedAlloc, Mutate):
+    build(1)
+    build(2)

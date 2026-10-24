@@ -1,0 +1,14 @@
+
+running 10 tests
+test bulk_roots_count_duplicates_and_validate_all_children_before_registration ... ok
+test every_constructor_reserve_failure_cleans_temporary_roots_and_preserves_children ... ok
+test exact_graph_budget_includes_temporary_root_bookkeeping ... ok
+test initialized_children_survive_pressure_before_parent_allocation ... ok
+test invalid_regions_children_and_shapes_fail_before_allocation ... ok
+test malformed_headers_links_and_bounds_reject_without_output_or_payload_mutation ... ok
+test maximum_collection_and_string_use_traced_chunks_without_reducing_bounds ... ok
+test nested_no_gc_budgets_charge_roots_and_chunks_across_regions_without_collection ... ok
+test payload_writes_are_checked_atomic_and_do_not_allocate ... ok
+test zeroed_graphs_have_exact_shapes_and_allow_aliases_and_cycles ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s

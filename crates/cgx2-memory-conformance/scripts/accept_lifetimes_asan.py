@@ -32,7 +32,7 @@ def main():
     env = dict(os.environ, RUSTUP_TOOLCHAIN=args.toolchain, RUSTC_BOOTSTRAP="1",
                ASAN_OPTIONS=":".join(options), TMPDIR=str(out))
     report = {
-        "schema_version": 1, "status": "unrun", "scope": "Rust library lifetime corpus",
+        "schema_version": 1, "status": "unrun", "scope": "Rust library lifetime and graph storage corpus",
         "started_utc": datetime.now(timezone.utc).isoformat(),
         "leak_acceptance": args.detect_leaks == "1", "toolchain": args.toolchain,
         "asan_options": env["ASAN_OPTIONS"], "inherited_asan_options": inherited,
@@ -83,6 +83,8 @@ def main():
     library = out / "libcgx2_runtime.rlib"
     sources = [root / "crates/cgx2-runtime/src/lib.rs",
                root / "crates/cgx2-runtime/tests/fallible_lifetimes.rs",
+               root / "crates/cgx2-runtime/tests/graph_storage.rs",
+               root / "crates/cgx2-memory-conformance/tests/graph_storage_model.rs",
                root / "crates/cgx2-memory-conformance/tests/fallible_lifetime_model.rs"]
     provenance = list((root / "crates/cgx2-runtime/src").glob("*.rs")) + sources[1:] + [
         root / "crates/cgx2-memory-conformance/corpus/release-lifetimes.csv", Path(__file__).resolve()]

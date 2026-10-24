@@ -1,0 +1,13 @@
+fn bytes() -> Unit effects(ManagedAlloc, Mutate, Collect) caps(MemoryCollect):
+    let r = memory.region(mode: manual, limit: 1024)
+    let value = memory.alloc_object(r, 2, 0)
+    memory.expect_byte(value, 0, 0)
+    memory.write_byte(value, 0, 42)
+    memory.expect_byte(value, 0, 42)
+    memory.drop(value)
+    memory.collect(r)
+    memory.close(r)
+
+fn main() -> Unit effects(ManagedAlloc, Mutate, Collect) caps(MemoryCollect):
+    bytes()
+    bytes()

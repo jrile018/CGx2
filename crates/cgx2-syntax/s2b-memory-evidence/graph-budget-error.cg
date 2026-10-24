@@ -1,0 +1,5 @@
+let r = memory.region(mode: manual, limit: 1024)
+no_gc(budget: 0):
+    let graph = memory.alloc_graph(r, 0, 1)
+    memory.drop(graph)
+memory.close(r)

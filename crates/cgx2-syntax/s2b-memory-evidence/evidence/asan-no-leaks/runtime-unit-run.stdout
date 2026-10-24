@@ -1,0 +1,9 @@
+
+running 5 tests
+test report::tests::pause_histogram_bounds_and_saturating_units ... ok
+test root_census_tests::registration_sum_overflow_is_reported ... ok
+test scope::tests::cleanup_continues_after_corruption_and_preserves_primary_error ... ok
+test scope::tests::identifier_exhaustion_is_fallible_and_does_not_wrap ... ok
+test scope::tests::overflow_and_invalid_handles_leave_scope_empty ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
