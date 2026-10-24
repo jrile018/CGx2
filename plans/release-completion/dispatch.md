@@ -138,3 +138,7 @@ Native guard and report provenance deliveries passed independent review and comb
 ## Ordinary-owned reviewed; recoverable source allocation ready
 
 All three preceding chats are reviewed bounded deliveries. Ordinary-owned006d267 integrated asb84a24a plus lock reconciliation d87d8c8. Combined1179Rust/2123product checks pass, with build/Clippy/fmt. See s2b-memory-review/evidence/ordinary-owned-accepted/acceptance.json. Next dependency-ready task is s2b-owned-result/plan.md; actual setup outcome follows. Full memory/release gate stays open.
+
+## Recoverable owned allocation running
+
+Reviewed base 4113edee943b9ac389c5037904a016d7dba7f73c. Chat 01a16c01-762e-7df1-893e-28bac3bce872 (CGx2 recoverable owned allocation), worktree /home/john-riley/.codex/worktrees/b047/lang, is active via read_thread/wait_threads; worktree HEAD matches the base. Queued client ID/cursor saved in thread-state.json. list_threads omitted the new agent-created chat; read-only exact local metadata plus app reads verified identity. No duplicate. One shared source/analyzer/runtime producer is the current dependency frontier; consumers wait for its reviewed interface.
