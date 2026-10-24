@@ -1,0 +1,192 @@
+[
+  {
+    "case": "constructor",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "check",
+      "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/plans/release-completion/s2b-review/evidence/constructor-shadow.cg"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "case": "constructor",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "run",
+      "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/plans/release-completion/s2b-review/evidence/constructor-shadow.cg"
+    ],
+    "exit": 0,
+    "stdout": "42\n",
+    "stderr": ""
+  },
+  {
+    "case": "constructor",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "emit",
+      "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/plans/release-completion/s2b-review/evidence/constructor-shadow.cg",
+      "--target",
+      "rust",
+      "--out",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-round2/constructor.rs",
+      "--force"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "case": "public",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "check",
+      "/home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public.cg"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "case": "public",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "run",
+      "/home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public.cg"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "CGR009: /home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public.cg:118..119: unknown, unavailable or private type `public_api.public_api.Value`\n"
+  },
+  {
+    "case": "public",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "emit",
+      "/home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public.cg",
+      "--target",
+      "rust",
+      "--out",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-round2/public.rs",
+      "--force"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "CGT002: /home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public.cg:118..119: unknown, unavailable or private type `public_api.public_api.Value`\n"
+  },
+  {
+    "case": "private",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "check",
+      "/home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "case": "private",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "run",
+      "/home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "CGR009: /home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg:226..286: public signature exposes a private nominal type\n"
+  },
+  {
+    "case": "private",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "emit",
+      "/home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg",
+      "--target",
+      "rust",
+      "--out",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-round2/private.rs",
+      "--force"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "CGT022: /home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg:226..286: public signature exposes a private nominal type\n"
+  },
+  {
+    "case": "package",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "check",
+      "/home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-api-index/tests/fixtures/s2bf-package"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "case": "package",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "run",
+      "/home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-api-index/tests/fixtures/s2bf-package"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "CGR009: src/main.cg:119..179: public signature exposes a private nominal type\n"
+  },
+  {
+    "case": "package",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "emit",
+      "/home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-api-index/tests/fixtures/s2bf-package",
+      "--target",
+      "rust",
+      "--out",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-round2/package.rs",
+      "--force"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "CGT022: src/main.cg:119..179: public signature exposes a private nominal type\n"
+  },
+  {
+    "case": "qualified",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "check",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-round2/qualified.cg"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "case": "qualified",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "run",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-round2/qualified.cg"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "CGR009: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-round2/qualified.cg:56..66: unknown, unavailable or private type `out.main.out.main.Long`\n"
+  },
+  {
+    "case": "qualified",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "emit",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-round2/qualified.cg",
+      "--target",
+      "rust",
+      "--out",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-round2/qualified.rs",
+      "--force"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "CGT002: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-round2/qualified.cg:56..66: unknown, unavailable or private type `out.main.out.main.Long`\n"
+  }
+]

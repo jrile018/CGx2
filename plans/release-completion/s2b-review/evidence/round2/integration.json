@@ -1,0 +1,101 @@
+{
+  "commit": "507feaf85e6994018455d15c9137dc0b47dca0fb",
+  "workspace": {
+    "passed": 1126,
+    "failed": 0,
+    "ignored": 6,
+    "suites": 248
+  },
+  "gates": [
+    {
+      "name": "tests",
+      "command": [
+        "cargo",
+        "test",
+        "--workspace",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--no-fail-fast"
+      ],
+      "exit": 0,
+      "log": "/home/john-riley/projects/lang/target/s2bf-repairs-tests.log"
+    },
+    {
+      "name": "clippy",
+      "command": [
+        "cargo",
+        "clippy",
+        "--workspace",
+        "--all-targets",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit": 0,
+      "log": "/home/john-riley/projects/lang/target/s2bf-repairs-clippy.log"
+    },
+    {
+      "name": "fmt",
+      "command": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--",
+        "--check"
+      ],
+      "exit": 0,
+      "log": "/home/john-riley/projects/lang/target/s2bf-repairs-fmt.log"
+    },
+    {
+      "name": "build",
+      "command": [
+        "cargo",
+        "build",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2c",
+        "--offline",
+        "--locked"
+      ],
+      "exit": 0,
+      "log": "/home/john-riley/projects/lang/target/s2bf-repairs-build.log"
+    }
+  ],
+  "foundation_product": {
+    "passed": 159,
+    "failed": 0
+  },
+  "foundation_acceptance": "failed: three remaining concrete defects",
+  "logs": {
+    "tests": {
+      "path": "/home/john-riley/projects/lang/target/s2bf-repairs-tests.log",
+      "sha256": "288868cc0e2c7725f5b6bac64c15989c66132544e6d3ab1dfec541580a7a1ed1"
+    },
+    "clippy": {
+      "path": "/home/john-riley/projects/lang/target/s2bf-repairs-clippy.log",
+      "sha256": "905e9675678ef6f713879630a832b209b1ac8a9469b5aa6248c29c012e9666a8"
+    },
+    "fmt": {
+      "path": "/home/john-riley/projects/lang/target/s2bf-repairs-fmt.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build": {
+      "path": "/home/john-riley/projects/lang/target/s2bf-repairs-build.log",
+      "sha256": "3a6d4a233d14789ab95e8404d0699dd584eb94fc0a0670e2afcc5b4373a1fa76"
+    },
+    "product": {
+      "path": "/home/john-riley/projects/lang/target/s2bf-repairs-product.log",
+      "sha256": "f634b7009753eb489e2cf64fc776a808b4dd6fd89ff05eed2972865d0b730b49"
+    },
+    "product-rechecked": {
+      "path": "/home/john-riley/projects/lang/target/s2bf-repairs-product-rechecked.log",
+      "sha256": "91adaa26ac56b550d1e84483cc1229283a3b9f7a60e70bc9e0ab8fb7d7f26e63"
+    }
+  },
+  "product_reconciliation": "Initial runner failed obsolete private-instantiation assertion; corrected to assert private calls omitted and full public calls retained deterministically. Original failure log preserved; rerun159 passes. No failure waiver."
+}

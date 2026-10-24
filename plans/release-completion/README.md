@@ -1,6 +1,6 @@
 # CGx2 finite completion plan
 
-Status: all twelve Stage 1 deliveries and three repairs reviewed as bounded deliveries; S2a and all three repairs reviewed as bounded deliveries; S2b foundation reviewed repair-required with five disjoint repair lanes; remaining S2b integrations and S3 still gated. See [current review](s1-review/README.md). Updated 2026-10-24. Coordinator branch: `riley/release-completion-plan`. This replaces open-ended two-lane continuation after Wave 28. It does not change the release contract or claim release readiness.
+Status: all twelve Stage 1 deliveries and three repairs reviewed as bounded deliveries; S2a and all three repairs reviewed as bounded deliveries; five S2b foundation repairs reviewed and integrated; three residual defects assigned to two follow-up repair lanes; remaining S2b integrations and S3 still gated. See [current review](s1-review/README.md). Updated 2026-10-24. Coordinator branch: `riley/release-completion-plan`. This replaces open-ended two-lane continuation after Wave 28. It does not change the release contract or claim release readiness.
 
 ## Answer to “how many more waves?”
 

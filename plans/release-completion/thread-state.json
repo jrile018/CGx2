@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24T01:10:30.237Z",
+  "checked_at": "2026-10-24T01:30:30.426Z",
   "original_chats": [
     {
       "lane": "core",
@@ -230,8 +230,10 @@
       "hostId": "local",
       "worktree": "/home/john-riley/.codex/worktrees/0e24/lang",
       "base": "b595724e1b086c604220cc5b165c141e65a0531f",
-      "status": "running",
-      "afterCursor": "d31a8b2b-f6ab-4099-b92f-668a4c462715:1"
+      "status": "reviewed-bounded-repair",
+      "afterCursor": "d31a8b2b-f6ab-4099-b92f-668a4c462715:2",
+      "commit": "559c390c9c53c15cf2c456572b64cc3c91e342d1",
+      "integrated_commit": "5c5557ee8abfcb7872c150de56e92e31416041b5"
     },
     {
       "lane": "package-binders",
@@ -241,8 +243,10 @@
       "hostId": "local",
       "worktree": "/home/john-riley/.codex/worktrees/b9e0/lang",
       "base": "b595724e1b086c604220cc5b165c141e65a0531f",
-      "status": "running",
-      "afterCursor": "f9aa21db-ee5a-4a38-bea6-4b692754ecbc:1"
+      "status": "reviewed-bounded-repair",
+      "afterCursor": "f9aa21db-ee5a-4a38-bea6-4b692754ecbc:2",
+      "commit": "24129749260670c12de741cf6db058568f113eba",
+      "integrated_commit": "546a06393e10612dd40e2c9ebc291d4035b792a4"
     },
     {
       "lane": "emitted-targets",
@@ -252,8 +256,10 @@
       "hostId": "local",
       "worktree": "/home/john-riley/.codex/worktrees/a9fe/lang",
       "base": "b595724e1b086c604220cc5b165c141e65a0531f",
-      "status": "running",
-      "afterCursor": "fc381fe9-b50c-4a32-84d6-d090d2370879:1"
+      "status": "reviewed-bounded-repair",
+      "afterCursor": "fc381fe9-b50c-4a32-84d6-d090d2370879:2",
+      "commit": "c0dabf519243a6db243f44fa77fd2c4b392714f8",
+      "integrated_commit": "323574eab30caf8935041ae537dfb8b4d0547a3b"
     },
     {
       "lane": "interpreter-output",
@@ -263,8 +269,10 @@
       "hostId": "local",
       "worktree": "/home/john-riley/.codex/worktrees/a94c/lang",
       "base": "b595724e1b086c604220cc5b165c141e65a0531f",
-      "status": "running",
-      "afterCursor": "aef97539-67ac-457b-870c-b3dc7d2dd511:1"
+      "status": "reviewed-bounded-repair",
+      "afterCursor": "aef97539-67ac-457b-870c-b3dc7d2dd511:2",
+      "commit": "65a94484f4f33a6095a32453aba6bd102d695667",
+      "integrated_commit": "5dfb0c7aa8583d5df5bef7f5b3b5eb918c98631a"
     },
     {
       "lane": "api-visibility",
@@ -274,8 +282,22 @@
       "hostId": "local",
       "worktree": "/home/john-riley/.codex/worktrees/19b9/lang",
       "base": "b595724e1b086c604220cc5b165c141e65a0531f",
-      "status": "running",
-      "afterCursor": "542379e9-0feb-4feb-8b47-99b120d89b8a:1"
+      "status": "reviewed-bounded-repair",
+      "afterCursor": "542379e9-0feb-4feb-8b47-99b120d89b8a:5",
+      "commit": "762d9ccb43d8b5b22ffa38532abbaf7ac88a3819",
+      "integrated_commit": "507feaf85e6994018455d15c9137dc0b47dca0fb"
+    }
+  ],
+  "s2b_followup_repairs": [
+    {
+      "lane": "source-specialization",
+      "title": "CGx2 S2b source specialization repair",
+      "status": "planned"
+    },
+    {
+      "lane": "native-constructors",
+      "title": "CGx2 S2b native constructor dispatch repair",
+      "status": "planned"
     }
   ]
 }

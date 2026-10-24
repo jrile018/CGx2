@@ -1,0 +1,5 @@
+module out.main
+record Long:
+    x: String
+fn main() -> List<Long>:
+    [Long(x: "é")]

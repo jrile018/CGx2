@@ -136,8 +136,22 @@ def main():
         two = subprocess.run([str(binary), 'api', '--json', str(source)], cwd=scratch, capture_output=True, check=True).stdout
         assert one == two
         api = json.loads(one)
-        assert any(m['api'].get('instantiations') for m in api['modules'])
-        records.append({'name': 'checked-api-deterministic-instantiations', 'passed': True})
+        # The original fixture calls generics only from private main. Public
+        # metadata must omit those calls without removing internal evidence.
+        assert all(not m['api'].get('instantiations') for m in api['modules'])
+        public_package = scratch / 'public-api-package'
+        shutil.copytree(source, public_package)
+        public_entry = public_package / 'src/main.cg'
+        public_entry.write_text(public_entry.read_text().replace('fn main()', 'pub fn main()'))
+        public_one = subprocess.run([str(binary), 'api', '--json', str(public_package)], cwd=scratch, capture_output=True, check=True).stdout
+        public_two = subprocess.run([str(binary), 'api', '--json', str(public_package)], cwd=scratch, capture_output=True, check=True).stdout
+        assert public_one == public_two
+        public_api = json.loads(public_one)
+        instances = [i for m in public_api['modules'] for i in m['api'].get('instantiations', [])]
+        assert {i['callee'] for i in instances} == {'foundation.left.identity', 'foundation.left.equal'}
+        assert all(i['owner'] == 'foundation.main.main' for i in instances)
+        assert all(i['type_arguments'] == ['foundation.left.Box<i64>'] for i in instances)
+        records.append({'name': 'checked-api-deterministic-public-instantiations', 'passed': True})
         syntax = subprocess.run([str(binary), 'api', '--json', '--syntax-only', str(HERE / 'package/src/left.cg')], cwd=scratch, capture_output=True, check=True).stdout
         data = json.loads(syntax)
         assert data['semantics_status'] == 'syntax-only'

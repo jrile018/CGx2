@@ -55,3 +55,7 @@ The three fixes pass independent review and combined 1078 Rust tests (six ignore
 ## S2b foundation review
 
 Foundation delivery 414c71f is staged repair-required. Verified worker evidence reports 1092 passing Rust tests and 159 product checks, but coordinator reproductions found seven defects in semantic resolution, package binder qualification, emitted targets, package output bounds and API visibility. Five disjoint bounded repairs are ready; see [review](release-completion/s2b-review/README.md). No R02/R10 closure or release percentage; remaining S2b and external evidence stay open.
+
+## S2b first repairs integrated
+
+Five bounded fixes are reviewed and integrated. Combined1126 Rust tests (six ignored), Clippy, formatting, binaries and159 foundation product checks pass. Expanded tests still reproduce native constructor dispatch and two source-specialization defects; two exclusive repair plans address them. R02/R10 foundation acceptance remains failed, with the full remaining S2b, S3 and external evidence ledger preserved. See [review](release-completion/s2b-review/README.md).

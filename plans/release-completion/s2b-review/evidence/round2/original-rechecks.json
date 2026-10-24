@@ -1,0 +1,47 @@
+[
+  {
+    "name": "binder",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "run",
+      "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/plans/release-completion/s2b-review/evidence/binder-package"
+    ],
+    "exit": 0,
+    "stdout": "42\n",
+    "stderr": ""
+  },
+  {
+    "name": "bad-constructor",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "check",
+      "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/plans/release-completion/s2b-review/evidence/binder-constructor.cg"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "CGT002: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/plans/release-completion/s2b-review/evidence/binder-constructor.cg:64..65: type parameter `T` cannot be used as a constructor\n"
+  },
+  {
+    "name": "output",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "run",
+      "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/plans/release-completion/s2b-review/evidence/output-package"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "CGR010: src/main.cg:0..7893: output exceeds 1048576 bytes\n"
+  },
+  {
+    "name": "private-api",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "api",
+      "--json",
+      "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/plans/release-completion/s2b-review/evidence/private-api.cg"
+    ],
+    "exit": 0,
+    "stdout": "{\"schema_version\":7,\"module\":\"api\",\"instantiations\":[],\"functions\":[{\"name\":\"run\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":73,\"end\":100},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":89,\"end\":92}},\"effects\":[],\"effects_status\":\"inferred\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[],\"semantics_status\":\"checked\",\"variants\":[]}\n",
+    "stderr": ""
+  }
+]

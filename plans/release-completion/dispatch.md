@@ -95,3 +95,7 @@ Common repair base: b595724e1b086c604220cc5b165c141e65a0531f. All five worktree 
 | emitted-targets | 01a16b7d-56dc-7a61-b57e-02c4a2f091d1 | /home/john-riley/.codex/worktrees/a9fe/lang | running |
 | interpreter-output | 01a16b7d-6ef8-77e3-984d-b2d4aad4af1a | /home/john-riley/.codex/worktrees/a94c/lang | running |
 | api-visibility | 01a16b7d-83a2-7e63-88c4-b64d9d6d4c16 | /home/john-riley/.codex/worktrees/19b9/lang | running |
+
+## First S2b repair wave reviewed; two follow-up repairs ready
+
+All five preceding repair chats are reviewed-bounded-repair; historical running table superseded. Combined 1126 tests and159 foundation product checks pass, but three reproduced residual defects keep foundation acceptance failed. Plans: s2b-review/source-specialization/plan.md and native-constructors/plan.md. No shared interface changes or downstream feature dispatch. Actual new chat identities follow.

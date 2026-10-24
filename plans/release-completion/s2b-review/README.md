@@ -25,3 +25,19 @@ Five disjoint repair plans preserve existing shared shapes. Emitters share a str
 ## Release gates
 
 R02/R10 foundation acceptance is failed pending repair. All remaining S2b memory/foreign/execution/installed-command requirements and all 15 master R rows remain mandatory. Trusted live solvers, leak-enabled memory/FFI, scored isolation, quiet-host performance, independent review and genuine paired human/model studies remain open. No release percentage, S2b completion, main merge or publication.
+
+## Five repairs reviewed and integrated — 2026-10-24 01:30 UTC
+
+All five owned patches accepted as bounded repairs; foundation remains repair-required. Original/integrated commits: semantic 559c390/5c5557e, package 2412974/546a063, emitted c0dabf5/323574e, output 65a9448/5dfb0c7, API 762d9cc/507feaf. Source ownership inspected; no shared representation, dependency or root-lock change. Three independent read-only reviewers accepted semantic/package, emitters and output; coordinator reviewed API projection and its tests.
+
+Combined workspace: **1126 passed, 0 failed, 6 ignored**, 248 suites. All-target/all-feature Clippy -D warnings, fmt and default binaries pass. Foundation product runner: **159 passed** after updating its obsolete expectation of private call metadata to check both private-call omission and complete public-call retention. Original runner failure retained in log, not relabeled as a product pass. Evidence: evidence/round2/integration.json and foundation-product.json.
+
+Coordinator rechecked imported binder returns 42, binder-shadowed constructor rejects CGT002, package output rejects CGR010 with no stdout and private API emits no instantiations. New emitter regression tests actually compile/execute multiple local Option/Result specializations and validate escaped literals.
+
+### Remaining concrete blockers
+
+1. Native finite emitter still dispatches record constructors by intrinsic spelling: original length record checks/interprets 42 but emitted Rust fails E0277/E0308. Semantic worker retained 33 native failures across original plus 10 names; the concurrent target repair addressed different emitter defects.
+2. Named standalone concrete types acquire doubled prefixes during lowering: public_api.public_api.Value and out.main.out.main.Long. Source check succeeds but execution/emission rejects.
+3. Valid public generic calls with caller-private type arguments fail internal specialization rechecking with CGT022; genuine source public-signature privacy must still reject.
+
+The last two share the source-specialization owner; the first belongs to native-constructors. Both bounded plans preserve shared layouts and use the integrated base. Actual dispatch outcomes are in ../dispatch.md and ../thread-state.json. No consumer feature fan-out or additional busywork; remaining S2b/R02/R10 and all external gates stay open. Full final acceptance including docs/bench/readiness still follows successful defect closure.
