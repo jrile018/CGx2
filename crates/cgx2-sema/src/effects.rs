@@ -229,6 +229,16 @@ pub(crate) fn analyze_with_imports(
             capabilities_explicit: function.capabilities.is_some(),
             ..EffectSummary::default()
         };
+        // These names are emitted only by the ordinary-memory producer, which
+        // rejects compiler-internal identities in original source/AST inputs.
+        // Seed the resolved function itself so requirements survive transitive
+        // closure, generic lowering and user declarations named managed.*.
+        if function.name.starts_with("$cgx2$ordinary_memory$alloc$") {
+            summary.effects.insert("ManagedAlloc".into());
+        } else if function.name.starts_with("$cgx2$ordinary_memory$collect$") {
+            summary.effects.insert("Collect".into());
+            summary.capabilities.insert("MemoryCollect".into());
+        }
         if function.foreign.is_some() {
             summary.effects.insert("Foreign".into());
             summary.capabilities.insert(

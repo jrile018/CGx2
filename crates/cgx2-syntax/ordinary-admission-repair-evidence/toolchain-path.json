@@ -1,0 +1,35 @@
+{
+  "argv": [
+    "rustup",
+    "which",
+    "rustc"
+  ],
+  "cwd": "/home/john-riley/.codex/worktrees/a9af/lang",
+  "environment": {
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/a9af/lang/target/release-ordinary-core-admission",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/a9af/lang/target/tmp-ordinary-core-admission",
+    "CARGO_BUILD_JOBS": "2",
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "bounds": {
+    "wall_seconds": 1800,
+    "cpu_seconds": 1200,
+    "address_space_bytes": 8589934592,
+    "file_size_bytes": 536870912,
+    "retained_bytes_per_stream": 2097152,
+    "aggregate_isolation": false
+  },
+  "exit": 0,
+  "reason": "exit",
+  "signal": null,
+  "overflow_stream": null,
+  "duration_seconds": 0.003,
+  "stdout_bytes": 78,
+  "stdout_sha256": "66af87d7f5dc56db4094d4257d2ebfd67b77bb8e36e37ef58d69a87d2016117c",
+  "stdout": "/home/john-riley/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/bin/rustc\n",
+  "stderr_bytes": 0,
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr": ""
+}

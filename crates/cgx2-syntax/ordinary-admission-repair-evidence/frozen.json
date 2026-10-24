@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "source_directory": "/home/john-riley/.codex/worktrees/a9af/lang/target/release-ordinary-core-admission/debug",
+  "binary_directory": "/home/john-riley/.codex/worktrees/a9af/lang/target/ordinary-core-admission-freeze/bin",
+  "checks_after_cargo": true,
+  "binary_sha256": {
+    "cgx2": "47473d5e671ec86797908824035010c2c0cac5f684b9a05a38a92f6bf7ca4810",
+    "cgx2-native": "198755083aacda853e342fd80e472274d1326fc0c5c271f022a0a8889e9f0c1b",
+    "cgx2c": "2d3c23097d3d92063a2592caea4fdd260be9ec760f7b6dda80358e6866e98ff1",
+    "cgx2-effect-index": "7655b425ff20ba384fb65b8c9ceafd6b0a814022e7c2bb622bc10b565a3ba017",
+    "cgx2-security": "e2f7a294bfe79ef4963b8d887d4e6f7c86d57fd0b3345f6ed8508713bf7b6832",
+    "cgx2-verify": "5d7d13796b9e66f2617af8db273be6eed327ed371864d31d022cf25060ac6a7a",
+    "cgx2-notebook": "fa2171aa9d08480719678cb52cfcfe54f7e522ca3d4bf1844b87bd2c61be7606"
+  },
+  "probe_library_sha256": {
+    "libcgx2_cli.rlib": "4a20d474d2d6fefdfa5c0b6e2e85a1b6526761a40106de303df8c7ade2bf0214",
+    "libcgx2_sema.rlib": "4cdfa0a343c5bbca3d647fd277d05cd0f2d3fa298daf90b8267372ea36bcca63",
+    "libcgx2_package.rlib": "bc380406058fdac6dd68a2a6f298eb77ee0590d101bef91214c1cd53c43dc6b8",
+    "libcgx2_emit_rust.rlib": "dcba24bae3d90527ded7f0950463a647d27b4ea8f0af17fdc1a277204596f756"
+  }
+}

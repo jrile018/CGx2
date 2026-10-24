@@ -1,0 +1,41 @@
+{
+  "argv": [
+    "cargo",
+    "test",
+    "-p",
+    "cgx2-sema",
+    "--test",
+    "ordinary_admission_repair",
+    "--all-features",
+    "--offline",
+    "--locked"
+  ],
+  "cwd": "/home/john-riley/.codex/worktrees/a9af/lang",
+  "environment": {
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/a9af/lang/target/release-ordinary-core-admission",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/a9af/lang/target/tmp-ordinary-core-admission",
+    "CARGO_BUILD_JOBS": "2",
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "bounds": {
+    "wall_seconds": 1800,
+    "cpu_seconds": 1200,
+    "address_space_bytes": 8589934592,
+    "file_size_bytes": 536870912,
+    "retained_bytes_per_stream": 2097152,
+    "aggregate_isolation": false
+  },
+  "exit": 101,
+  "reason": "exit",
+  "signal": null,
+  "overflow_stream": null,
+  "duration_seconds": 0.868,
+  "stdout_bytes": 1896,
+  "stdout_sha256": "c83b53305452ac4743a5e1f67f04a8e1e740714772b55d18ddde9ed2f0eb7542",
+  "stdout": "\nrunning 11 tests\ntest user_err_escape_is_rejected_at_exact_utf8_return_span ... FAILED\ntest malformed_ast_bounds_reject_without_panicking ... ok\ntest legacy_budgets_and_assignment_tags_are_not_expression_indices ... FAILED\ntest user_borrow_reproduction_retains_call_semantics ... ok\ntest shadowed_managed_templates_cannot_erase_region_requirements ... ok\ntest user_err_whole_graph_survives_fields_and_builtin_results ... ok\ntest imported_shadows_preserve_intrinsic_effect_and_capability_closure ... ok\ntest user_managed_names_keep_their_resolved_effects ... ok\ntest imported_borrow_and_real_region_borrow_both_work ... ok\ntest user_err_inside_region_and_builtin_scalar_error_are_valid ... ok\ntest all_allocating_markers_require_managed_alloc_through_callers ... ok\n\nfailures:\n\n---- user_err_escape_is_rejected_at_exact_utf8_return_span stdout ----\n\nthread 'user_err_escape_is_rejected_at_exact_utf8_return_span' (292) panicked at crates/cgx2-sema/tests/ordinary_admission_repair.rs:116:5:\nassertion `left == right` failed\n  left: Span { start: 371, end: 383 }\n right: Span { start: 371, end: 382 }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n\n---- legacy_budgets_and_assignment_tags_are_not_expression_indices stdout ----\n\nthread 'legacy_budgets_and_assignment_tags_are_not_expression_indices' (288) panicked at crates/cgx2-sema/tests/ordinary_admission_repair.rs:9:42:\ncalled `Result::unwrap()` on an `Err` value: [TypeDiagnostic { code: \"CGT080\", message: \"ordinary ownership requires the authenticated OwnedProgram v1 source path; this copied-value/package consumer is unsupported\", span: Span { start: 219, end: 318 } }]\n\n\nfailures:\n    legacy_budgets_and_assignment_tags_are_not_expression_indices\n    user_err_escape_is_rejected_at_exact_utf8_return_span\n\ntest result: FAILED. 9 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n",
+  "stderr_bytes": 391,
+  "stderr_sha256": "5cb49a0692c63869828458e76fba3fb1ee0fe90d0a7d0380f51dc0336f0cdd08",
+  "stderr": "   Compiling cgx2-sema v0.1.0 (/home/john-riley/.codex/worktrees/a9af/lang/crates/cgx2-sema)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.84s\n     Running tests/ordinary_admission_repair.rs (target/release-ordinary-core-admission/debug/deps/ordinary_admission_repair-33b0dbf1a2798ca2)\nerror: test failed, to rerun pass `-p cgx2-sema --test ordinary_admission_repair`\n"
+}

@@ -1,0 +1,41 @@
+{
+  "argv": [
+    "cargo",
+    "test",
+    "-p",
+    "cgx2-sema",
+    "--test",
+    "ordinary_admission_repair",
+    "--all-features",
+    "--offline",
+    "--locked"
+  ],
+  "cwd": "/home/john-riley/.codex/worktrees/a9af/lang",
+  "environment": {
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/a9af/lang/target/release-ordinary-core-admission",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/a9af/lang/target/tmp-ordinary-core-admission",
+    "CARGO_BUILD_JOBS": "2",
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "bounds": {
+    "wall_seconds": 1800,
+    "cpu_seconds": 1200,
+    "address_space_bytes": 8589934592,
+    "file_size_bytes": 536870912,
+    "retained_bytes_per_stream": 2097152,
+    "aggregate_isolation": false
+  },
+  "exit": 0,
+  "reason": "exit",
+  "signal": null,
+  "overflow_stream": null,
+  "duration_seconds": 0.23,
+  "stdout_bytes": 855,
+  "stdout_sha256": "cbe43f44e3880307686edd70b0542d334ab3fb9ca5316c117392efdde9529728",
+  "stdout": "\nrunning 11 tests\ntest user_err_escape_is_rejected_at_exact_utf8_return_span ... ok\ntest malformed_ast_bounds_reject_without_panicking ... ok\ntest user_borrow_reproduction_retains_call_semantics ... ok\ntest shadowed_managed_templates_cannot_erase_region_requirements ... ok\ntest user_managed_names_keep_their_resolved_effects ... ok\ntest user_err_whole_graph_survives_fields_and_builtin_results ... ok\ntest imported_shadows_preserve_intrinsic_effect_and_capability_closure ... ok\ntest imported_borrow_and_real_region_borrow_both_work ... ok\ntest user_err_inside_region_and_builtin_scalar_error_are_valid ... ok\ntest all_allocating_markers_require_managed_alloc_through_callers ... ok\ntest legacy_budgets_and_assignment_tags_are_not_expression_indices ... ok\n\ntest result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n",
+  "stderr_bytes": 309,
+  "stderr_sha256": "24b293fc7e51fb8bff4601cccb56b1c4c2c175764e7977c385e7180090ec2e3d",
+  "stderr": "   Compiling cgx2-sema v0.1.0 (/home/john-riley/.codex/worktrees/a9af/lang/crates/cgx2-sema)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.20s\n     Running tests/ordinary_admission_repair.rs (target/release-ordinary-core-admission/debug/deps/ordinary_admission_repair-33b0dbf1a2798ca2)\n"
+}

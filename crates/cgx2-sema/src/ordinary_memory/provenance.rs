@@ -11,7 +11,7 @@ enum Value {
         borrowed: bool,
     },
 }
-fn local_name<'a>(module: &'a Module, name: &str) -> Option<&'a str> {
+pub(super) fn local_name<'a>(module: &'a Module, name: &str) -> Option<&'a str> {
     module
         .functions
         .iter()
@@ -305,7 +305,7 @@ impl Analyzer<'_> {
                     )),
                 };
             }
-            if name == "borrow" && args.len() == 1 {
+            if name == "borrow" && local_name(self.module, &name).is_none() && args.len() == 1 {
                 return match self.expr(&args[0].value, context)? {
                     Value::Capability {
                         region: Some(r), ..
@@ -690,6 +690,13 @@ impl Analyzer<'_> {
                     } else {
                         self.expr(scrutinee, DEFAULT)?
                     };
+                    // Only a resolved builtin Result with an actually copied
+                    // error payload can drop the successful graph's brand.
+                    // User variants named Err and Result<_, heap> retain it.
+                    let scalar_error = scoped
+                        || matches!(self.ty(scrutinee), Some(Type::Variant { name, arguments })
+                            if name == "cgx2.core.Result"
+                                && arguments.get(1).is_some_and(|t| !is_heap(t)));
                     let brand = format!(
                         "region@{}:{}..{}",
                         self.function.name, scrutinee.span.start, scrutinee.span.end
@@ -713,7 +720,7 @@ impl Analyzer<'_> {
                                         },
                                         borrowed: false,
                                     }
-                                } else if case == "Err" {
+                                } else if case == "Err" && scalar_error {
                                     Value::Scalar
                                 } else {
                                     value.clone()

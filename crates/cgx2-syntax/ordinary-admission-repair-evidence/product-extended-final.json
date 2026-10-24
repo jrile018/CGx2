@@ -1,0 +1,38 @@
+{
+  "argv": [
+    "python3",
+    "crates/cgx2-syntax/ordinary-admission-repair-evidence/run.py",
+    "--binary-dir",
+    "target/ordinary-core-admission-freeze/bin",
+    "--output-dir",
+    "target/ordinary-core-admission-product-extended-final"
+  ],
+  "cwd": "/home/john-riley/.codex/worktrees/a9af/lang",
+  "environment": {
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/a9af/lang/target/release-ordinary-core-admission",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/a9af/lang/target/tmp-ordinary-core-admission",
+    "CARGO_BUILD_JOBS": "2",
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "bounds": {
+    "wall_seconds": 1800,
+    "cpu_seconds": 1200,
+    "address_space_bytes": 8589934592,
+    "file_size_bytes": 536870912,
+    "retained_bytes_per_stream": 2097152,
+    "aggregate_isolation": false
+  },
+  "exit": 1,
+  "reason": "exit",
+  "signal": null,
+  "overflow_stream": null,
+  "duration_seconds": 30.356,
+  "stdout_bytes": 514,
+  "stdout_sha256": "05a8e655e310795a7cbd81b3105bf7b363dad8f5d4fea730df9c33dfb0b61ad0",
+  "stdout": "valid user-borrow\nvalid legacy-guard\nvalid nested-assignment\nvalid user-err-local\nvalid copy\nvalid session-shadow\nvalid shadow-package\nvalid borrow-package\nvalid user-effects-package\ninvalid user-err-escape\ninvalid field-err-escape\ninvalid builtin-result-heap-error\ninvalid region-effects\ninvalid guard-effects\ninvalid session-effects\ninvalid try-in-effects\ninvalid copy-effects\ninvalid collect-effect\ninvalid collect-capability\ninvalid region-transitive\ninvalid user-effects-retained\n{\"passed\": 191, \"failed\": 5}\n",
+  "stderr_bytes": 0,
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr": ""
+}
