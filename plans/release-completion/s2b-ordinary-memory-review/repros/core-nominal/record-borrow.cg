@@ -1,0 +1,9 @@
+record borrow:
+    value: i64
+fn main() -> i64 effects(ManagedAlloc):
+    match memory.try_region(mode: memory.Mode.Manual, limit: 4096):
+        Result.Ok(r):
+            let x = borrow(value: 42)
+            x.value
+        Result.Err(error):
+            -1

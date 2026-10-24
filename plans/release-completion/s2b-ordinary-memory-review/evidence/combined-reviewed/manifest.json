@@ -1,0 +1,2844 @@
+[
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs/tests.log.gz",
+    "retained": "first-workspace/tests.log.gz",
+    "raw_sha256": "a126348b9f3ddd07e357b33ee36fb8ebf62b83b12629dd90bbd9d717b8fd749b",
+    "raw_bytes": 32787,
+    "retained_sha256": "a126348b9f3ddd07e357b33ee36fb8ebf62b83b12629dd90bbd9d717b8fd749b"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs/verification.json",
+    "retained": "first-workspace/verification.json.gz",
+    "raw_sha256": "e16d8ead16f818ba61d6dfd7857ffe1c3e235c9f00ac6e6317eadc853a619eb9",
+    "raw_bytes": 961,
+    "retained_sha256": "7e77af3f4a3e46ad16310c900a6a40ef963932da7bf42b39d6d7e0f5d1b789ac"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/admission.log.gz",
+    "retained": "combined/admission.log.gz",
+    "raw_sha256": "311f59fa84512c9c640375ac21220dfc65fb1ebebbefa0c51f403e6e0171beb0",
+    "raw_bytes": 230,
+    "retained_sha256": "311f59fa84512c9c640375ac21220dfc65fb1ebebbefa0c51f403e6e0171beb0"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/api/report.json",
+    "retained": "combined/api/report.json.gz",
+    "raw_sha256": "2f98ca1905198c703d553fde3eef172437e27f195c98c389703f5976b3e4e1ec",
+    "raw_bytes": 49063,
+    "retained_sha256": "978260d33decb0e4c0aa08a15439fe305c871bd5cceb3ffa1b2f130e19e96175"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/api/sources/invalid-generic.cg",
+    "retained": "combined/api/sources/invalid-generic.cg.gz",
+    "raw_sha256": "b8dd378e3ddda3fa36ad29f07a467410387de871a1c0cd83e97fd327f9d35f5e",
+    "raw_bytes": 582,
+    "retained_sha256": "90493acfdf82602d417341b664f26664f580548447c86d05b07458f56050b4a2"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/api/sources/invalid.cg",
+    "retained": "combined/api/sources/invalid.cg.gz",
+    "raw_sha256": "289e419d3489a96ba739899459b7d144cd3b0607e6be4d95831185badde42c8f",
+    "raw_bytes": 575,
+    "retained_sha256": "761f0cd1f046c827f0ec0025b21bd79ef1ddde93f1344485c079f76fd54e1766"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/api/sources/om08.cg",
+    "retained": "combined/api/sources/om08.cg.gz",
+    "raw_sha256": "b8ecb78eedcfdb71efd29326ba76a9cebc633ade6615836b33080e93be27b46d",
+    "raw_bytes": 269,
+    "retained_sha256": "0932e0971fa889f6d10bb22404922f816dbbe37d8369d37cd7234609db364468"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/api/sources/ordinary-package/cgx2.toml",
+    "retained": "combined/api/sources/ordinary-package/cgx2.toml.gz",
+    "raw_sha256": "427c6885f22ff6e31d2bc74aff42b2dc529412a41e2fe59800cff6176e37367e",
+    "raw_bytes": 82,
+    "retained_sha256": "af37de403cd0652b9c27c958f0180ac426b773c691b7fe263a6f8f9cb23af4da"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/api/sources/ordinary-package/lib.cg",
+    "retained": "combined/api/sources/ordinary-package/lib.cg.gz",
+    "raw_sha256": "801d0d63326a6f704efd246d807629b6bf46d4c5b0adb6a2cf2dc14e1e35f453",
+    "raw_bytes": 554,
+    "retained_sha256": "b69961e6e51fb072e1ddbca5d73830ee79c3ae79a9c5ded80179c10283f304d1"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/api/sources/ordinary-package/main.cg",
+    "retained": "combined/api/sources/ordinary-package/main.cg.gz",
+    "raw_sha256": "fe29c97a61fcc512451ad2d6995e730af3754706b92148e7112ffcac49acac74",
+    "raw_bytes": 591,
+    "retained_sha256": "9d0ef5c6dbe27f9c716b49a81fee23cdf07258a1e4370e98d6f089b4c2a4e42b"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/api/sources/ordinary.cg",
+    "retained": "combined/api/sources/ordinary.cg.gz",
+    "raw_sha256": "61149421ce280bdac5ed0ca11167677e1cf51c3cf30cd3461c63222ac53411b5",
+    "raw_bytes": 544,
+    "retained_sha256": "274995a65c5143982b10ecc8505aad44a7e3e15a02b6897d9d0a9c04bb1228b8"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/api/sources/region.cg",
+    "retained": "combined/api/sources/region.cg.gz",
+    "raw_sha256": "a9da7873631196cbbdb58f019de0112db650c518b2bbe6bb7e4dac985acf4b40",
+    "raw_bytes": 501,
+    "retained_sha256": "f91184468bd634ee40b7bed5b0d28b8f1637e45dee5c1e0a75ee698c2f16b6a1"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/api/sources/scalar-package/cgx2.toml",
+    "retained": "combined/api/sources/scalar-package/cgx2.toml.gz",
+    "raw_sha256": "427c6885f22ff6e31d2bc74aff42b2dc529412a41e2fe59800cff6176e37367e",
+    "raw_bytes": 82,
+    "retained_sha256": "af37de403cd0652b9c27c958f0180ac426b773c691b7fe263a6f8f9cb23af4da"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/api/sources/scalar-package/lib.cg",
+    "retained": "combined/api/sources/scalar-package/lib.cg.gz",
+    "raw_sha256": "ad16939d3f6d61b978dc2ed11996321c0b4ccaaef59ed0a89728ea92f9321252",
+    "raw_bytes": 300,
+    "retained_sha256": "971ad75beda77fe4d0514d01d279ab3a31af9e8c7800655e41927c6d52172a5d"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/api/sources/scalar-package/main.cg",
+    "retained": "combined/api/sources/scalar-package/main.cg.gz",
+    "raw_sha256": "1a19a1a047ce45c350f2c60586c2b4044c0d0e54462eed5051c9373964a9260c",
+    "raw_bytes": 72,
+    "retained_sha256": "14625f9fef07c8748c3d23a758face82e116ce68acf44e9dadf7e96b1716a7cb"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/api/sources/scalar.cg",
+    "retained": "combined/api/sources/scalar.cg.gz",
+    "raw_sha256": "3ab2f061c7a80b58a231dbbb25aabcd881bd4f1c5c13725fbef8e8c40453c92f",
+    "raw_bytes": 333,
+    "retained_sha256": "e0518456409ee0ccbdd67f7aba2f27b9a5727db85a8a325a60c20d6c97fa09a6"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/api.log.gz",
+    "retained": "combined/api.log.gz",
+    "raw_sha256": "17e4054119adfcaf0334828a38467a5b8376ca1387a5eda78048f13331e3675d",
+    "raw_bytes": 54,
+    "retained_sha256": "17e4054119adfcaf0334828a38467a5b8376ca1387a5eda78048f13331e3675d"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/auto/auto-guard.cg",
+    "retained": "combined/auto/auto-guard.cg.gz",
+    "raw_sha256": "7c7cc9a80e1fc8000d8f23f68477f6f4a5c639931001ff36e02d16a0b31fd9f6",
+    "raw_bytes": 1011,
+    "retained_sha256": "788092719ac12dba9c91ac939692fe22dba479d30c4cce8da467f4976d32d54c"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/auto/report.json",
+    "retained": "combined/auto/report.json.gz",
+    "raw_sha256": "191ddf6137ef4648ebdafd55f4d41687a51648c657492392d6325e751d1152a0",
+    "raw_bytes": 24780,
+    "retained_sha256": "847795c73673f1b2af4f6cd51b49aeffb8f9b6a8fc0136570d361dfeeac9a41c"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/auto/rustc-two-threads",
+    "retained": "combined/auto/rustc-two-threads.gz",
+    "raw_sha256": "69678aa162e6d524b32b68f569c9b45ae5dfde59997a9a143713d18e74e06ce2",
+    "raw_bytes": 54,
+    "retained_sha256": "016b43c331612d50545b67c8331d542a4c4364b5ee73e4ff6f912202699fd742"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/auto.log.gz",
+    "retained": "combined/auto.log.gz",
+    "raw_sha256": "db642375378ff461d50e87f804bf5bd835443f84189fa9e453a45ab622210cf2",
+    "raw_bytes": 168,
+    "retained_sha256": "db642375378ff461d50e87f804bf5bd835443f84189fa9e453a45ab622210cf2"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/build.log.gz",
+    "retained": "combined/build.log.gz",
+    "raw_sha256": "b8de9b33a59352f771db2b40adb1bd3ab77486eaa0599dc620c251e2174df9f3",
+    "raw_bytes": 91,
+    "retained_sha256": "b8de9b33a59352f771db2b40adb1bd3ab77486eaa0599dc620c251e2174df9f3"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/clippy.log.gz",
+    "retained": "combined/clippy.log.gz",
+    "raw_sha256": "79d572978cf7ff747a84794b8ee058f32f449111c81592962d8d3440fc66db5a",
+    "raw_bytes": 356,
+    "retained_sha256": "79d572978cf7ff747a84794b8ee058f32f449111c81592962d8d3440fc66db5a"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/coordinator-audit.json",
+    "retained": "combined/coordinator-audit.json.gz",
+    "raw_sha256": "9b47aab094128423f3a3bd2b9cdb47e640687caa30f7256604397d4e7363b1a7",
+    "raw_bytes": 1671,
+    "retained_sha256": "eae3f5121dcfbea677fd2d2bd3f9060ed61924640b66996680f599aa77290b3c"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/copy-budget-reconciliation/probe.diff",
+    "retained": "combined/copy-budget-reconciliation/probe.diff.gz",
+    "raw_sha256": "b8bf4e0aae092787c0edf165233d2899fb3ebb62c17f740017033f7d1e5d40db",
+    "raw_bytes": 916,
+    "retained_sha256": "05eb5f0c771d287661d6ed07f3a185a9147a2a4763af3e90ac53f2a249d89b39"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/copy-budget-reconciliation/report.json",
+    "retained": "combined/copy-budget-reconciliation/report.json.gz",
+    "raw_sha256": "f9d302c83e60c0604a0ebdbb0a42a0af97695a04903c01a2af17bc9b3a121659",
+    "raw_bytes": 23027,
+    "retained_sha256": "c26669825b375626b271fece6921343991613953f692007ae2c96abdbfbc833a"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/copy-budget-reconciliation/runtime_probe.rs",
+    "retained": "combined/copy-budget-reconciliation/runtime_probe.rs.gz",
+    "raw_sha256": "4317d5b6a9572aecb82c29261d25243a34c44935b362b6c93b60ccde29569274",
+    "raw_bytes": 9315,
+    "retained_sha256": "1c781f8a90e05e32f87bb1d90273463895aa5fa9e0c97341950419f2f7e2620e"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/diff.log.gz",
+    "retained": "combined/diff.log.gz",
+    "raw_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
+    "raw_bytes": 20,
+    "retained_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/fmt.log.gz",
+    "retained": "combined/fmt.log.gz",
+    "raw_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
+    "raw_bytes": 20,
+    "retained_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/frozen/manifest.json",
+    "retained": "combined/frozen/manifest.json.gz",
+    "raw_sha256": "8641a976bf7ef06a460ff067a28bba22a189f7d366e6b53847601fe2fd4410bc",
+    "raw_bytes": 131330,
+    "retained_sha256": "ecd656925b3b75bacd57d2ef0a89e56b5bf63cd5e413e4d07ddb327ca34828d4"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/frozen.json",
+    "retained": "combined/frozen.json.gz",
+    "raw_sha256": "12e11048f7e1f2c1889fcdd7751cc2fd98cc4f4081077967afb45f0c5922e1f4",
+    "raw_bytes": 1141,
+    "retained_sha256": "03b1e148a5fcbd100a4c4d6f5831d011039096237340e503eac017e2b3d4b726"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical/report.json",
+    "retained": "combined/historical/report.json.gz",
+    "raw_sha256": "324171ee796e65e01220553bd0b5933633af2a40855bdd6d5bb4519cc255a72a",
+    "raw_bytes": 1952,
+    "retained_sha256": "9ffb8cefddf59b38ec1b615e13eaf5e8529dbc96432223b5ade18699c90bf786"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/copy-cycle.py",
+    "retained": "combined/historical-retry/product/copy-cycle.py.gz",
+    "raw_sha256": "f084e50f3d84cfc3a71cad0a4c2610fe42c87b5c78de5ff50bba3ac7c1b16ab8",
+    "raw_bytes": 18,
+    "retained_sha256": "394a8fd5b468f2c1ae0cedf13fe94e941817d2af31c37b2aa77368573fb97841"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/entry-probe.rs",
+    "retained": "combined/historical-retry/product/entry-probe.rs.gz",
+    "raw_sha256": "629d7ffb34152f42faddade4c3a33ffc7361322cf67d71c62ac1b25aab3d49b6",
+    "raw_bytes": 376,
+    "retained_sha256": "badae45cfaead9123de27d29d275a4c3781994070eebee18cb1f987fc73385cc"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/fixtures-snapshot/copy-cycle.cg",
+    "retained": "combined/historical-retry/product/fixtures-snapshot/copy-cycle.cg.gz",
+    "raw_sha256": "86187fa24adbfed1ac27d2092b160545a705ecd4a7ba7674c68d4ebf9ef776d9",
+    "raw_bytes": 1620,
+    "retained_sha256": "b4503abc0f9d26c76e30fb7654c463ff705aabb3d0e077f8ee8649ee9c63f56e"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/fixtures-snapshot/cross-region.cg",
+    "retained": "combined/historical-retry/product/fixtures-snapshot/cross-region.cg.gz",
+    "raw_sha256": "a9f8f88e06b806555b7fd386f8493c89e3cc5c9639377daf8d8c499c49943544",
+    "raw_bytes": 364,
+    "retained_sha256": "ef4f4e45347de1f7195d4ef67ebcecc5a63efcce8bf748a43497f2ee966ed202"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/fixtures-snapshot/fallback-resource.cg",
+    "retained": "combined/historical-retry/product/fixtures-snapshot/fallback-resource.cg.gz",
+    "raw_sha256": "27128b34df603a62be7e9e5f6c6a510295ea28cb94b28a795dea763e3c8c0102",
+    "raw_bytes": 247,
+    "retained_sha256": "b16fd02ba8e65ff5981334d6147071ee8f2d2ed4fb84289ea1392c67eb057ca3"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/fixtures-snapshot/guard.cg",
+    "retained": "combined/historical-retry/product/fixtures-snapshot/guard.cg.gz",
+    "raw_sha256": "5c8c238b7f94962230c0ba38ff53f3093b35e73a81afc988609dc4ea1ddc638b",
+    "raw_bytes": 543,
+    "retained_sha256": "475f3d7d2f26f229b6928f7e82c88e9058d17b4050710bdef6ff9c200d42a219"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/fixtures-snapshot/nested-guards.cg",
+    "retained": "combined/historical-retry/product/fixtures-snapshot/nested-guards.cg.gz",
+    "raw_sha256": "8c05226df1feba43565bf9bd5a0731897e599be705da58a7cfcb5bf3fdc449a8",
+    "raw_bytes": 1305,
+    "retained_sha256": "1bbd816898f497f570831c41770de7bfd68b9f80293ab0535f614e9863cc7a74"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/fixtures-snapshot/region.cg",
+    "retained": "combined/historical-retry/product/fixtures-snapshot/region.cg.gz",
+    "raw_sha256": "c23bcd5d82cfe85d4233e4c1ac87a615b9e14977dd31f636855e0813719379d0",
+    "raw_bytes": 497,
+    "retained_sha256": "cbe766a985bb51bc99ed362276678b1e94913590c2f71ad2b34afe3ac0126128"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/fixtures-snapshot/session.cg",
+    "retained": "combined/historical-retry/product/fixtures-snapshot/session.cg.gz",
+    "raw_sha256": "7d85ab43f44852490cd52b226b515fa6484125346be5eb79659bc3ed7e409695",
+    "raw_bytes": 479,
+    "retained_sha256": "faa7d643916528cd6af1b08aa09f0277caad1e9091a500b5698c9b1c0d657fa7"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/guard.py",
+    "retained": "combined/historical-retry/product/guard.py.gz",
+    "raw_sha256": "f084e50f3d84cfc3a71cad0a4c2610fe42c87b5c78de5ff50bba3ac7c1b16ab8",
+    "raw_bytes": 18,
+    "retained_sha256": "394a8fd5b468f2c1ae0cedf13fe94e941817d2af31c37b2aa77368573fb97841"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/nested-guards.py",
+    "retained": "combined/historical-retry/product/nested-guards.py.gz",
+    "raw_sha256": "f084e50f3d84cfc3a71cad0a4c2610fe42c87b5c78de5ff50bba3ac7c1b16ab8",
+    "raw_bytes": 18,
+    "retained_sha256": "394a8fd5b468f2c1ae0cedf13fe94e941817d2af31c37b2aa77368573fb97841"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/outside/copy-cycle.rs",
+    "retained": "combined/historical-retry/product/outside/copy-cycle.rs.gz",
+    "raw_sha256": "4ac6b1a481966cb8e5685c8727556ffaee914b299561d96c6ba81ffc9c5c4fef",
+    "raw_bytes": 246725,
+    "retained_sha256": "49be4b9ce028dbea0658f93ada9d9732acf2a23223a6e947b15ae1830addf394"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/outside/guard.rs",
+    "retained": "combined/historical-retry/product/outside/guard.rs.gz",
+    "raw_sha256": "cc317c7486576e0636cf16e41d9f8884d1aeaa274555b3b15696c72ba54600ec",
+    "raw_bytes": 238809,
+    "retained_sha256": "6820b0b795fac4c34feb3485b350a18726d642e8ed9b856c29eb23757514ca01"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/outside/nested-guards.rs",
+    "retained": "combined/historical-retry/product/outside/nested-guards.rs.gz",
+    "raw_sha256": "98ef2367b3274a16de8affe949d2356d401cbbc030b641784df6772a398f4fe8",
+    "raw_bytes": 247538,
+    "retained_sha256": "0df601a112709d5f19d1396624693b29faf6bd23abc45cebc4f45a1307d0f1fb"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/outside/package.rs",
+    "retained": "combined/historical-retry/product/outside/package.rs.gz",
+    "raw_sha256": "875e2e5d0b193f9e11a9a110a79f0b677155d729660d4de74fcc776441dd0423",
+    "raw_bytes": 241398,
+    "retained_sha256": "866e8fab3deca6e4d438782d5f49f57d323a2d5d42fedfc6347408bad9941c4b"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/outside/region.rs",
+    "retained": "combined/historical-retry/product/outside/region.rs.gz",
+    "raw_sha256": "33927e4391cbe432d948d7fe7b532a5324416737dc5c6ffdcd5537e73b9466cd",
+    "raw_bytes": 240859,
+    "retained_sha256": "17f0659cbaf129ac8d8d1f80d915c1116518c1e6939cef9bf8a0a04464bc86ab"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/outside/session.rs",
+    "retained": "combined/historical-retry/product/outside/session.rs.gz",
+    "raw_sha256": "99b570b97f340c22aa15042ea754cb4689c9efb1932ff7c461d6992565b417fc",
+    "raw_bytes": 239656,
+    "retained_sha256": "69d05b3d8448b92ef5473b2c8a7fdc9fb9ac1850af92525215042f92547e100a"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/package/cgx2.toml",
+    "retained": "combined/historical-retry/product/package/cgx2.toml.gz",
+    "raw_sha256": "1e17310fc9fc1cacf4a071f3852d62317d71c5c73edcb77496b33403b89b6199",
+    "raw_bytes": 85,
+    "retained_sha256": "afe2b26cb596602d46ee6da5ac27f3fb14548b3bdaa3a35308154f901877ef20"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/package/lib.cg",
+    "retained": "combined/historical-retry/product/package/lib.cg.gz",
+    "raw_sha256": "3d588ff7569450b492e4a7b947f3e0aeb4f922f39fdcbfaec8d73557faa20298",
+    "raw_bytes": 215,
+    "retained_sha256": "e91b3b9ee830ded456be2b4f5af4544f088ada3e1e3c943c72827d901d72f49e"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/package/main.cg",
+    "retained": "combined/historical-retry/product/package/main.cg.gz",
+    "raw_sha256": "eb40f04f87a978fe733bf6f51649e88dbe1c4196245cb35dddd59fd9ced0be83",
+    "raw_bytes": 394,
+    "retained_sha256": "66dcf25f11a117cc47f946a335e3b4a0fb3e271fe252615dfe5c8c1e98903273"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/package-snapshot/cgx2.toml",
+    "retained": "combined/historical-retry/product/package-snapshot/cgx2.toml.gz",
+    "raw_sha256": "1e17310fc9fc1cacf4a071f3852d62317d71c5c73edcb77496b33403b89b6199",
+    "raw_bytes": 85,
+    "retained_sha256": "afe2b26cb596602d46ee6da5ac27f3fb14548b3bdaa3a35308154f901877ef20"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/package-snapshot/lib.cg",
+    "retained": "combined/historical-retry/product/package-snapshot/lib.cg.gz",
+    "raw_sha256": "f82eb55a0a4d6d67788f339fecd6dbaae5f8ff1cc49166ddd3dd1994136204eb",
+    "raw_bytes": 188,
+    "retained_sha256": "076f904bb53b50d28aa83524f2d1a6542d0fe712f4216621650dfc2621fe63f3"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/package-snapshot/main.cg",
+    "retained": "combined/historical-retry/product/package-snapshot/main.cg.gz",
+    "raw_sha256": "eb40f04f87a978fe733bf6f51649e88dbe1c4196245cb35dddd59fd9ced0be83",
+    "raw_bytes": 394,
+    "retained_sha256": "66dcf25f11a117cc47f946a335e3b4a0fb3e271fe252615dfe5c8c1e98903273"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/product.json",
+    "retained": "combined/historical-retry/product/product.json.gz",
+    "raw_sha256": "aca883821c00b90b90efaa875153b4dd4dece23cc45beaa5fb0cefb32e66c45e",
+    "raw_bytes": 164170,
+    "retained_sha256": "11d1150826eb7a574bbc5f1d3f27c51ff01308b869193b05ef3bdf9e83aeab0b"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/region.py",
+    "retained": "combined/historical-retry/product/region.py.gz",
+    "raw_sha256": "f084e50f3d84cfc3a71cad0a4c2610fe42c87b5c78de5ff50bba3ac7c1b16ab8",
+    "raw_bytes": 18,
+    "retained_sha256": "394a8fd5b468f2c1ae0cedf13fe94e941817d2af31c37b2aa77368573fb97841"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/binders/binders.json",
+    "retained": "combined/historical-retry/product/regressions/binders/binders.json.gz",
+    "raw_sha256": "1016f58c6140f720ced83c56aa3dc35a3bdef26f81a95b1c58f600fab4b14ec6",
+    "raw_bytes": 61351,
+    "retained_sha256": "8147e91a53f6f150149aa1435200be3cd8de1b6ef861914fd44b3edd36e9d49c"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/core-product/product.json",
+    "retained": "combined/historical-retry/product/regressions/core-product/product.json.gz",
+    "raw_sha256": "3867cf86348bbea28b844cc8d9bbb72bbb5edd5c439327073ef0aa27f296f3f3",
+    "raw_bytes": 109157,
+    "retained_sha256": "55b6881753f7f1e26961d5a885f259950c4718484c28bf8292833046e2ae5aa9"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/emitters/emitters.json",
+    "retained": "combined/historical-retry/product/regressions/emitters/emitters.json.gz",
+    "raw_sha256": "7784672c366127c9f387b94c69eb12b7ffaf8eb39278c5eaa8e40449dbc7ac03",
+    "raw_bytes": 59702,
+    "retained_sha256": "8c0bb08ba171d97c063446678c6fee7eae34769cfd9af14a2eb311d06b43b628"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/equality-product/product.json",
+    "retained": "combined/historical-retry/product/regressions/equality-product/product.json.gz",
+    "raw_sha256": "89d7e0db3445ce8f374be7d6d7b0aa352c259e805a84b9690d4e4d80f3800771",
+    "raw_bytes": 68341,
+    "retained_sha256": "1fb2ab8032bacca827ba0945fea6bc0bda1b8c0c55fbd72257cc212549a7d626"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/foundation/foundation.json",
+    "retained": "combined/historical-retry/product/regressions/foundation/foundation.json.gz",
+    "raw_sha256": "05c5d7568bafb8d14de578eb82f2bf7b8f9e67adca0ce49506699dc82b44ffee",
+    "raw_bytes": 32622,
+    "retained_sha256": "ef7d96451cf196efa78b131c3c23626a8772215dba243331dc30bfdfe5c8e16a"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/graph99/graph99.json",
+    "retained": "combined/historical-retry/product/regressions/graph99/graph99.json.gz",
+    "raw_sha256": "ac3b915145ee5631e467d2e01106e943c3f7eb80a18ce5617f5aa6b676503c55",
+    "raw_bytes": 107583,
+    "retained_sha256": "224350cc5d138a05bb05753207f26b5874da6e07f916d35e2d81101e08e96e2f"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/guards518/guards518.json",
+    "retained": "combined/historical-retry/product/regressions/guards518/guards518.json.gz",
+    "raw_sha256": "98692df6af20effd1ab916785bd979622d6bd33bcd91283d1ae047d6af1ccc7e",
+    "raw_bytes": 1110798,
+    "retained_sha256": "8862f69ec4005a492541e0a9a115a21a2ca1261a046acf4f98f4b48a7522b28d"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/elements.cg.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/elements.cg.gz",
+    "raw_sha256": "915f06201d7d3281abd834c9ef93e444eaf22e23df8d739712902f2a1c088dfe",
+    "raw_bytes": 220,
+    "retained_sha256": "915f06201d7d3281abd834c9ef93e444eaf22e23df8d739712902f2a1c088dfe"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/nodes.cg.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/nodes.cg.gz",
+    "raw_sha256": "384131bb12e4671ff299c2c141b773dcea69e1164d2c8084d0ccd7d54001e7e8",
+    "raw_bytes": 427,
+    "retained_sha256": "384131bb12e4671ff299c2c141b773dcea69e1164d2c8084d0ccd7d54001e7e8"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/product.json",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/product.json.gz",
+    "raw_sha256": "b332d625137715d688eacc2edda4ded63cc2e604c3bd5c980173b382f1165467",
+    "raw_bytes": 374908,
+    "retained_sha256": "371a9512e05a9aac6359dcfc56cd0ef644570f87c1887375997ddb5d619e6eaa"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/repair.json",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/repair.json.gz",
+    "raw_sha256": "292036f983af1f88811b1d76c1fd8c495307553666081ebefc9f92a9d206b27d",
+    "raw_bytes": 2106790,
+    "retained_sha256": "95d5d78590e52ca9b9f62dc666521e587f77636c6e025b929714d1922d455ec5"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/runner.py.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/runner.py.gz",
+    "raw_sha256": "a78e511ceda011a52f57d016d7192bc1adc8ff67d263e36c5af4b66bbe1f2da9",
+    "raw_bytes": 6272,
+    "retained_sha256": "a78e511ceda011a52f57d016d7192bc1adc8ff67d263e36c5af4b66bbe1f2da9"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/arg-negative.cg.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/arg-negative.cg.gz",
+    "raw_sha256": "09caee19974d7f26d0217ac479e526408d9bdea762b1f904807858d4c9e88fe3",
+    "raw_bytes": 80,
+    "retained_sha256": "09caee19974d7f26d0217ac479e526408d9bdea762b1f904807858d4c9e88fe3"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/arithmetic.cg.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/arithmetic.cg.gz",
+    "raw_sha256": "fd05317e954ecb9372ff1b047cac8c764dcbd7f3504d83501d5b65b952deb4df",
+    "raw_bytes": 100,
+    "retained_sha256": "fd05317e954ecb9372ff1b047cac8c764dcbd7f3504d83501d5b65b952deb4df"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/collect-guard-reject.cg.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/collect-guard-reject.cg.gz",
+    "raw_sha256": "4f411d8179a6ddab53bd092c12e558a4db91b9e223bfd6e864bebdd5706cdabf",
+    "raw_bytes": 129,
+    "retained_sha256": "4f411d8179a6ddab53bd092c12e558a4db91b9e223bfd6e864bebdd5706cdabf"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/contract.cg.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/contract.cg.gz",
+    "raw_sha256": "3633524dfbdedb413f02bc22ecbb6a707cd936ca7633cec3edb2d16dd5bf07f6",
+    "raw_bytes": 128,
+    "retained_sha256": "3633524dfbdedb413f02bc22ecbb6a707cd936ca7633cec3edb2d16dd5bf07f6"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/dishonest-package/cgx2.toml.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/dishonest-package/cgx2.toml.gz",
+    "raw_sha256": "a6ca12241e088d137bfbe4e225c3b080ccdbb962625a8a97abe0ccbd9ce5dd77",
+    "raw_bytes": 106,
+    "retained_sha256": "a6ca12241e088d137bfbe4e225c3b080ccdbb962625a8a97abe0ccbd9ce5dd77"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/dishonest-package/src/lib.cg.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/dishonest-package/src/lib.cg.gz",
+    "raw_sha256": "6bf39d48801f42a57ac1c81931070660e5ae71c961b7fad047160d9f3922820a",
+    "raw_bytes": 102,
+    "retained_sha256": "6bf39d48801f42a57ac1c81931070660e5ae71c961b7fad047160d9f3922820a"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/dishonest-package/src/main.cg.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/dishonest-package/src/main.cg.gz",
+    "raw_sha256": "e981db433fc92ab38c1e5a2dcdcfc873199bc20f351daac63445068e6825648e",
+    "raw_bytes": 180,
+    "retained_sha256": "e981db433fc92ab38c1e5a2dcdcfc873199bc20f351daac63445068e6825648e"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/failed-arguments.cg.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/failed-arguments.cg.gz",
+    "raw_sha256": "9101a454d82598273218b0745251f663f149300a7c5d1dce8216affc59c6ec4b",
+    "raw_bytes": 172,
+    "retained_sha256": "9101a454d82598273218b0745251f663f149300a7c5d1dce8216affc59c6ec4b"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/fault_driver.rs.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/fault_driver.rs.gz",
+    "raw_sha256": "3ffa4e12710eef2937d2fd6758d87c4362cd8bd990258a98a0dd8453a1eb9d04",
+    "raw_bytes": 430,
+    "retained_sha256": "3ffa4e12710eef2937d2fd6758d87c4362cd8bd990258a98a0dd8453a1eb9d04"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/ref-output-reject.cg.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/ref-output-reject.cg.gz",
+    "raw_sha256": "7a7e0fb1b6c6421d473d5ae6b8213a89b72da50ff51c4f9540a4985224f1df31",
+    "raw_bytes": 79,
+    "retained_sha256": "7a7e0fb1b6c6421d473d5ae6b8213a89b72da50ff51c4f9540a4985224f1df31"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/alloc-0.cg.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/alloc-0.cg.gz",
+    "raw_sha256": "4827e57ffb554b2416c7036b6654ff8d4d65f938d6be9f770800a5229d6670d4",
+    "raw_bytes": 259,
+    "retained_sha256": "4827e57ffb554b2416c7036b6654ff8d4d65f938d6be9f770800a5229d6670d4"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/alloc-225.cg.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/alloc-225.cg.gz",
+    "raw_sha256": "afc844fe6708ec1d30e7a103d17dfaef6de7c382995668c69e8b5ab8685f98a4",
+    "raw_bytes": 261,
+    "retained_sha256": "afc844fe6708ec1d30e7a103d17dfaef6de7c382995668c69e8b5ab8685f98a4"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/alloc-226.cg.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/alloc-226.cg.gz",
+    "raw_sha256": "46275a0e4a5e69c9f0d4924205d05e10a5d5189fa4606503d826c72f042f4623",
+    "raw_bytes": 261,
+    "retained_sha256": "46275a0e4a5e69c9f0d4924205d05e10a5d5189fa4606503d826c72f042f4623"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/fault-graph-root.cg.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/fault-graph-root.cg.gz",
+    "raw_sha256": "87a3b8b87a09db51731b40631cbf6a907b43a141bdf6e4bf6fcb0db14b41deec",
+    "raw_bytes": 230,
+    "retained_sha256": "87a3b8b87a09db51731b40631cbf6a907b43a141bdf6e4bf6fcb0db14b41deec"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/fault-guard.cg.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/fault-guard.cg.gz",
+    "raw_sha256": "00c9f18758291ac6859838d69fea10d9d18e6e7e0742cb4589e90053025357bf",
+    "raw_bytes": 250,
+    "retained_sha256": "00c9f18758291ac6859838d69fea10d9d18e6e7e0742cb4589e90053025357bf"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-package/cgx2.toml.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-package/cgx2.toml.gz",
+    "raw_sha256": "c9cb1dd9089b5f1b1c6fb04ea58616391919b3d6cf2e6a3a2ff7a8c9cee0bcd2",
+    "raw_bytes": 102,
+    "retained_sha256": "c9cb1dd9089b5f1b1c6fb04ea58616391919b3d6cf2e6a3a2ff7a8c9cee0bcd2"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-package/src/lib.cg.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-package/src/lib.cg.gz",
+    "raw_sha256": "01bc27d06a8d5487a1b9976024f5ccf091637a60c401d5ae34a10360fd3eeaff",
+    "raw_bytes": 86,
+    "retained_sha256": "01bc27d06a8d5487a1b9976024f5ccf091637a60c401d5ae34a10360fd3eeaff"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-package/src/main.cg.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-package/src/main.cg.gz",
+    "raw_sha256": "92e4fdec4167a100dc8b742a4323bea51438738dafcfba5f627a7bdc3e748ac9",
+    "raw_bytes": 263,
+    "retained_sha256": "92e4fdec4167a100dc8b742a4323bea51438738dafcfba5f627a7bdc3e748ac9"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-scalar.cg.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-scalar.cg.gz",
+    "raw_sha256": "735cf87adabfc7a61ad364a9e3038a4d877527b59a8231ecc54cdb3240f48baa",
+    "raw_bytes": 272,
+    "retained_sha256": "735cf87adabfc7a61ad364a9e3038a4d877527b59a8231ecc54cdb3240f48baa"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/nested-257.cg.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/nested-257.cg.gz",
+    "raw_sha256": "42f4471dcd5b24b04124e1bb66713ce4175327a98027805b1b71a10a04853ac5",
+    "raw_bytes": 268,
+    "retained_sha256": "42f4471dcd5b24b04124e1bb66713ce4175327a98027805b1b71a10a04853ac5"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/nested-258.cg.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/nested-258.cg.gz",
+    "raw_sha256": "75cfd7b4ddd2902927e7daa792186f29bb61496f46a466cbb141cadb683860aa",
+    "raw_bytes": 268,
+    "retained_sha256": "75cfd7b4ddd2902927e7daa792186f29bb61496f46a466cbb141cadb683860aa"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/nonrefund-451.cg.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/nonrefund-451.cg.gz",
+    "raw_sha256": "d37896e94b65fdd7e339c624aa96a8d7c94517d2d03356d77075df72bed4d51d",
+    "raw_bytes": 266,
+    "retained_sha256": "d37896e94b65fdd7e339c624aa96a8d7c94517d2d03356d77075df72bed4d51d"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/ref-output-utf8.cg.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/ref-output-utf8.cg.gz",
+    "raw_sha256": "50eb4b3170d8876d031ad212756228a2bca00c34d2cf3ca3ca321f076a1fcc73",
+    "raw_bytes": 105,
+    "retained_sha256": "50eb4b3170d8876d031ad212756228a2bca00c34d2cf3ca3ca321f076a1fcc73"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/roots-0.cg.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/roots-0.cg.gz",
+    "raw_sha256": "74ae1be5767268078fc3db4594c568026ab4cb10a4b6f4962fdf457985cc7049",
+    "raw_bytes": 128,
+    "retained_sha256": "74ae1be5767268078fc3db4594c568026ab4cb10a4b6f4962fdf457985cc7049"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/roots-63.cg.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/roots-63.cg.gz",
+    "raw_sha256": "de9e1b69f8747982f04971ff806940af916338d436b6bfda6e5aff72c9317489",
+    "raw_bytes": 129,
+    "retained_sha256": "de9e1b69f8747982f04971ff806940af916338d436b6bfda6e5aff72c9317489"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/roots-64.cg.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/roots-64.cg.gz",
+    "raw_sha256": "7c2d59cfea02c591a783b004a75349c9da57f450ef17a7187644d4c18630187b",
+    "raw_bytes": 129,
+    "retained_sha256": "7c2d59cfea02c591a783b004a75349c9da57f450ef17a7187644d4c18630187b"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/managed-product/managed-product/wide.cg.gz",
+    "retained": "combined/historical-retry/product/regressions/managed-product/managed-product/wide.cg.gz",
+    "raw_sha256": "1c7cab4affab6a3e3891e77298788829e76ac74ce3c330af308f0a83f40f8224",
+    "raw_bytes": 113,
+    "retained_sha256": "1c7cab4affab6a3e3891e77298788829e76ac74ce3c330af308f0a83f40f8224"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/ordinary256/ordinary256.json",
+    "retained": "combined/historical-retry/product/regressions/ordinary256/ordinary256.json.gz",
+    "raw_sha256": "42c25971d9ff8ba43f2dfe479ba9d713bf89ae0b2e70a14f47faa4903c005bf8",
+    "raw_bytes": 134276,
+    "retained_sha256": "006879d836f06288a97cb7e83938aa756c67fd166c176a196c17cb8842afe920"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/output/output.json",
+    "retained": "combined/historical-retry/product/regressions/output/output.json.gz",
+    "raw_sha256": "f2d36b21527ecc7b666af461bf2ec964c7aa337ecc75fbff73177dba939640a5",
+    "raw_bytes": 23726,
+    "retained_sha256": "ce07e8965eaffbe93f0b1141709fc5cb2fbab0b7624e4aa595fa8fc005b4707c"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/owned-result-original/owned-result-original.json",
+    "retained": "combined/historical-retry/product/regressions/owned-result-original/owned-result-original.json.gz",
+    "raw_sha256": "254b6680e4385d4543ab219e7a78f47f2bb7368859c457caafe393b8f5f0f998",
+    "raw_bytes": 392407,
+    "retained_sha256": "2e92383bee70ceaf05a0aa34bd8113a22281eaaead92d8ea750110f350a1894c"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/owned-result-reconciled/reconciled/reconciled-product.json",
+    "retained": "combined/historical-retry/product/regressions/owned-result-reconciled/reconciled/reconciled-product.json.gz",
+    "raw_sha256": "bb4ddf1495ed174c3db0257dbae4375310dc4418b6cbe1e0b8c1636366c92094",
+    "raw_bytes": 452109,
+    "retained_sha256": "641446496354ed3a188eb702b995ab1d24ad861b8d903e2c6719ff71c61f0b17"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/owned-result-reconciled/reconciled/restored-shadow.json",
+    "retained": "combined/historical-retry/product/regressions/owned-result-reconciled/reconciled/restored-shadow.json.gz",
+    "raw_sha256": "161fb8b2d4c89cfffe6301cc5075f75a0ceefd6d2f6e9964b59d51f29f0cd14e",
+    "raw_bytes": 14172,
+    "retained_sha256": "051ff6bff172b69bd7aff3a99dddbb4f6304002c4abcf71c6e89480dadbf4914"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/owned-symbol195/owned-symbol195.json",
+    "retained": "combined/historical-retry/product/regressions/owned-symbol195/owned-symbol195.json.gz",
+    "raw_sha256": "51b56a76f0adafad3898dd428bc894385fc820f61684f7c43620256a9e5e8818",
+    "raw_bytes": 128796,
+    "retained_sha256": "d1e17dc8b5d105524def69edbd6bb7ff759329a1b1e93e45eeabe7bb62f96d79"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/reports265/reports265.json",
+    "retained": "combined/historical-retry/product/regressions/reports265/reports265.json.gz",
+    "raw_sha256": "505d79d828b774f062ac7e8bdb01e542d21b80a8144ec5b2d6bca7d09dac9ed0",
+    "raw_bytes": 344562,
+    "retained_sha256": "9c886c7c656438df88d60b71c8b62633e5fcd92643e9ca03358aee15a460b492"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/semantic/semantic.json",
+    "retained": "combined/historical-retry/product/regressions/semantic/semantic.json.gz",
+    "raw_sha256": "c9962cf49eb81d3faaa27913229bf4fcfa5dc48c8ee410fc199b3090fa045d91",
+    "raw_bytes": 166517,
+    "retained_sha256": "3b15c981cf0a5a538a8c249130c1c4dce635718b2dd88c9f8e836975937e6b1f"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/collisions.cg",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/collisions.cg.gz",
+    "raw_sha256": "d68b597eddf4063f468f1f356d5639a3047cf8f5dd30c5db831a248fd2d552a0",
+    "raw_bytes": 151,
+    "retained_sha256": "5cb8730b632cf93684e6bdc483f26064ebe176edb18c464907715e0de48fa5a1"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/collisions.py",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/collisions.py.gz",
+    "raw_sha256": "b01d1d08d99a9273e9103e57095552532e63d9fd4abb96a8516fad566c4da6f6",
+    "raw_bytes": 7642,
+    "retained_sha256": "fcd39fdd77af763418cecae6ca71f8e81b27ecc6be9628a3f32be6c5d80569db"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/collisions.rs",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/collisions.rs.gz",
+    "raw_sha256": "492e0b5b3915461a91b741642317fb07baef559fe19c7f3c5189f2aa2cc9e09a",
+    "raw_bytes": 237259,
+    "retained_sha256": "77372530320467d567ff17a9f722dd7238929d08beca58e024e25e50e133db1e"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/dishonest-import/cgx2.toml",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/dishonest-import/cgx2.toml.gz",
+    "raw_sha256": "5a148ec83693e95cf9f09a85ca50dc757f1ccdb8c71b1bb1741b793860fa92bb",
+    "raw_bytes": 105,
+    "retained_sha256": "725c47abaafe683bf69189700028fd5cc2fce1354ea78b9da0f20046737c11da"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/dishonest-import/src/dep.cg",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/dishonest-import/src/dep.cg.gz",
+    "raw_sha256": "54b1be9d3d83104a92395b0a4eb5109b51059f5f898f21b1742e15d105205e0f",
+    "raw_bytes": 496,
+    "retained_sha256": "fc629e46d668c79304709611741be35cefe78541d30118439ca54b12f492aeb7"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/dishonest-import/src/main.cg",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/dishonest-import/src/main.cg.gz",
+    "raw_sha256": "60e80564f338ccce0988d7a4d3057aef7e4332e3abd06cee9ac9f3371b9559ad",
+    "raw_bytes": 355,
+    "retained_sha256": "2c321992492fde95ac44882a287f71732e77ac3aac85dea05e6f90e5a23f59a8"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/dishonest.cg",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/dishonest.cg.gz",
+    "raw_sha256": "a8f41ad1e58630838b4000c5ce8165a4ec4e8ec4de995ae89059d1abdf3a7273",
+    "raw_bytes": 107,
+    "retained_sha256": "4212579780b8bfcba47d9a85db44318d0b27aa114d7dfcb554d57a39d5c28c6f"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/import-private/cgx2.toml",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/import-private/cgx2.toml.gz",
+    "raw_sha256": "5a148ec83693e95cf9f09a85ca50dc757f1ccdb8c71b1bb1741b793860fa92bb",
+    "raw_bytes": 105,
+    "retained_sha256": "725c47abaafe683bf69189700028fd5cc2fce1354ea78b9da0f20046737c11da"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/import-private/src/dep.cg",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/import-private/src/dep.cg.gz",
+    "raw_sha256": "d79c30bb9b272e494dbea7c0ab903c8916e47118b60c217132a56787a4bba33e",
+    "raw_bytes": 467,
+    "retained_sha256": "a76620dca7066e291fb84441254d789ba5e12bfa5779bdb46fce667685d789e0"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/import-private/src/main.cg",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/import-private/src/main.cg.gz",
+    "raw_sha256": "a1edf7c21c2a4f3fbd873a6adb366fd3ae4ada58b0054329ab22148a6f15f621",
+    "raw_bytes": 99,
+    "retained_sha256": "a2b55a6ebea6e9caf88bf73424fcc8e50e11220b38fd039d8f626422c484ac87"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/import-unknown/cgx2.toml",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/import-unknown/cgx2.toml.gz",
+    "raw_sha256": "5a148ec83693e95cf9f09a85ca50dc757f1ccdb8c71b1bb1741b793860fa92bb",
+    "raw_bytes": 105,
+    "retained_sha256": "725c47abaafe683bf69189700028fd5cc2fce1354ea78b9da0f20046737c11da"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/import-unknown/src/dep.cg",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/import-unknown/src/dep.cg.gz",
+    "raw_sha256": "d79c30bb9b272e494dbea7c0ab903c8916e47118b60c217132a56787a4bba33e",
+    "raw_bytes": 467,
+    "retained_sha256": "a76620dca7066e291fb84441254d789ba5e12bfa5779bdb46fce667685d789e0"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/import-unknown/src/main.cg",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/import-unknown/src/main.cg.gz",
+    "raw_sha256": "664a8b8cf79ce4bd9d49ed42ba663f25413aaf2f8fef68eab5a7228551ba9bf2",
+    "raw_bytes": 99,
+    "retained_sha256": "9a26debcfb0affbc0ec90d4a9ecf78f11284e5226a4ccafd535af2e5b9f5148e"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/nested-private.py",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/nested-private.py.gz",
+    "raw_sha256": "ccbd93646841b983f4d787da1dc2cedbf81b3950d3bdc21743e97d3ec9629b32",
+    "raw_bytes": 8216,
+    "retained_sha256": "ba6b2abe201dda062b44b08f65504795e4b508d9a273bc941e5fdc8677682e14"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/nested-private.rs",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/nested-private.rs.gz",
+    "raw_sha256": "ac8eb0ec51c860f2b6fde1ed7210d90b90575c06094d15b8cbc41ba2f156ef9b",
+    "raw_bytes": 238628,
+    "retained_sha256": "bc656576600a57850b5e57e45a9e0216733a5538363ae4dcfcc2199d78ddf999"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/package-private.rs",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/package-private.rs.gz",
+    "raw_sha256": "fc72ce3d7025f113793fc4870e14436fac75b1359ff890b336e4ebeb78fadba2",
+    "raw_bytes": 243918,
+    "retained_sha256": "41385348b69ff1a08adb60a6d23c2fcc76e9a9a8a1f59ba45a83acc96e76d453"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/public-function.cg",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/public-function.cg.gz",
+    "raw_sha256": "671fd9e0b1a3b62619f3d7b149bd0a1c3c59972e5590141f000e6b677e560f3c",
+    "raw_bytes": 83,
+    "retained_sha256": "dd95a03ae256f95a2f1a2b07220c6d9058d2aa653a166fcbf56451dc48a29fad"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/public-interfaces.py",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/public-interfaces.py.gz",
+    "raw_sha256": "5f83d7e17d9cb3889467bf3797ef8f58ad881278ce3aea38b15a4cd3ecbf306a",
+    "raw_bytes": 8187,
+    "retained_sha256": "faa770918996fae0a8c12d9cea14101c0dc71e9449b01900b2f77556a90ecdcd"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/public-interfaces.rs",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/public-interfaces.rs.gz",
+    "raw_sha256": "8882edc8c5e913d052eac8875e534ace210fb8b54fc7554ed87e7f2cc95307c5",
+    "raw_bytes": 238914,
+    "retained_sha256": "adef004c490547d0fdc359fbed6e9ab8cad8070b5b8a05a4bd6ab8de19c7c2b9"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/public-package.rs",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/public-package.rs.gz",
+    "raw_sha256": "dc0829fd1066cfa1eafb8237b6766ebff94536c9ff564a6e4c8484ff99b7e236",
+    "raw_bytes": 242430,
+    "retained_sha256": "445d38d08cb80820c4e3554f3f92b817b1a23762585e0692315215c389fb21a7"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/public-record.cg",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/public-record.cg.gz",
+    "raw_sha256": "7bf5d373429f57dc8094fe5a37a2f2968daf449e1a25cc1685ffb6ddd34d7a0e",
+    "raw_bytes": 68,
+    "retained_sha256": "eeba8005171229547f7117fb93bb1840f42b8590d2b1da5d42997bc6d48d708e"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/public-source.py",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/public-source.py.gz",
+    "raw_sha256": "0c2bd5648f7d3cef70338f602c34dc1a0ad2fb7778694e99fc12134ad85a0010",
+    "raw_bytes": 9405,
+    "retained_sha256": "a0fd8bc5dee21d03ed7ce1cbd3c396a5c73b289d645d42fd7691586d532226e3"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/public-source.rs",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/public-source.rs.gz",
+    "raw_sha256": "5db5f2b8de07f8826a13481054b818d87d182c7af2f04419a7cdd593705c1071",
+    "raw_bytes": 241512,
+    "retained_sha256": "dc67364b0bfdbc1bb0f604a75206c8b247a13c01f764772a4150403582696643"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/public-values.py",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/public-values.py.gz",
+    "raw_sha256": "a8847fc861e3c199d52806298bbdddc8b366d2e3ec44da9429acbac157808086",
+    "raw_bytes": 8676,
+    "retained_sha256": "c21f1ef5dc90ae8c2cecbdb4f4ebc28cb4f6628230a1846dd92efb26949dd154"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/public-values.rs",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/public-values.rs.gz",
+    "raw_sha256": "61376139b94d2bf6101e0474f17cbfa24af6735d46036789addebec1617e95c9",
+    "raw_bytes": 239856,
+    "retained_sha256": "2a4e72d002b6ae0a55585cba8c004ec72274d3e2b57fc5014c80ddf743cd994d"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/public-variant.cg",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/public-variant.cg.gz",
+    "raw_sha256": "8ba8aac907ca519a754fcd00c8c3e5f3f33e38a27b32cc96de481b07e048f0d8",
+    "raw_bytes": 69,
+    "retained_sha256": "597162c33210b5fd737e6904027fb94078fb48284668fd0b71e29c2123700ef1"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/qualified.py",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/qualified.py.gz",
+    "raw_sha256": "5b9fc5ad6abc47c9078f124cd1ccc624deeda49240c9983e4ca27c54a7f0302a",
+    "raw_bytes": 7098,
+    "retained_sha256": "c85a03b32148d17c41f3b2b0681a86fa02dc57684c8daebc3c175038fd543699"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/qualified.rs",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/qualified.rs.gz",
+    "raw_sha256": "8b0200fbfdcb88cfe0fc0a465efdb296e067e84a97f5c6b60737da4d65d441b9",
+    "raw_bytes": 235788,
+    "retained_sha256": "04d7a25b3ef6ef4e6a5a25777cfc18938a623bea04159636719651ed39ace86e"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/report.json",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/report.json.gz",
+    "raw_sha256": "00a073bcc69e6d7af1fc4369d1598c29146a08cd258e3be3f35e44fb0edb7e28",
+    "raw_bytes": 164901,
+    "retained_sha256": "c29861ecc3b4352d4e804dae668c702e134b31d8f4b1272d82639e32db805c27"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/visibility-package.rs",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/visibility-package.rs.gz",
+    "raw_sha256": "403a8b521d80e0590ca820141ea03743fa8fc52cac517128000c4c40b1b17d1b",
+    "raw_bytes": 247425,
+    "retained_sha256": "ed6afc12f18a1ee5ea66bb36ec60ffad113e09a9e2f868cf938f735067ac256b"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/visibility-source.py",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/visibility-source.py.gz",
+    "raw_sha256": "3d46ab59a9bcc55693cc17e4070c857a07365ad0152e2fc861b6b4ca89a1cf4a",
+    "raw_bytes": 12074,
+    "retained_sha256": "c95d276c84616187d505af428654a6732d5086d3fcc022ef83bd0ad4863bbc97"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/specialization/specialization/visibility-source.rs",
+    "retained": "combined/historical-retry/product/regressions/specialization/specialization/visibility-source.rs.gz",
+    "raw_sha256": "2391d84711a271b57c109f6621cb07bbcd46ff6fa4e4f8c7dd93a5ae48de9e66",
+    "raw_bytes": 248569,
+    "retained_sha256": "06fdea877cda1c7aa548fe2d16872f4c19107ca45961858079afecc60920d8b4"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/visibility/visibility/package.rs",
+    "retained": "combined/historical-retry/product/regressions/visibility/visibility/package.rs.gz",
+    "raw_sha256": "403a8b521d80e0590ca820141ea03743fa8fc52cac517128000c4c40b1b17d1b",
+    "raw_bytes": 247425,
+    "retained_sha256": "ed6afc12f18a1ee5ea66bb36ec60ffad113e09a9e2f868cf938f735067ac256b"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/visibility/visibility/private-callee/cgx2.toml",
+    "retained": "combined/historical-retry/product/regressions/visibility/visibility/private-callee/cgx2.toml.gz",
+    "raw_sha256": "0f2e30397aac6de87ed9401fadf1c9291d525184762782f645269741002cdc9f",
+    "raw_bytes": 101,
+    "retained_sha256": "13e7162339a336300f4a59cc3512602b00cd4df13042f2ca9eab227db9855d5e"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/visibility/visibility/private-callee/src/dep.cg",
+    "retained": "combined/historical-retry/product/regressions/visibility/visibility/private-callee/src/dep.cg.gz",
+    "raw_sha256": "244c1262cd73a352775d5ca81d0ea9941367c008facbd6c2a97e7b3e6e062276",
+    "raw_bytes": 398,
+    "retained_sha256": "0e350a4b74b47df5a90e324215d10c72886f3a01f5314328d6aad68b81eca53c"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/visibility/visibility/private-callee/src/main.cg",
+    "retained": "combined/historical-retry/product/regressions/visibility/visibility/private-callee/src/main.cg.gz",
+    "raw_sha256": "ed1b684e2433ffd1e66b048d6d6d141bbcb0fecaa74df4867588bbf36b4010ec",
+    "raw_bytes": 91,
+    "retained_sha256": "1c8cc3856455412af19d9a7ee098ee3831f45e5da0542bbb67dc6f332c2e93bf"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/visibility/visibility/private-type/cgx2.toml",
+    "retained": "combined/historical-retry/product/regressions/visibility/visibility/private-type/cgx2.toml.gz",
+    "raw_sha256": "0f2e30397aac6de87ed9401fadf1c9291d525184762782f645269741002cdc9f",
+    "raw_bytes": 101,
+    "retained_sha256": "13e7162339a336300f4a59cc3512602b00cd4df13042f2ca9eab227db9855d5e"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/visibility/visibility/private-type/src/dep.cg",
+    "retained": "combined/historical-retry/product/regressions/visibility/visibility/private-type/src/dep.cg.gz",
+    "raw_sha256": "244c1262cd73a352775d5ca81d0ea9941367c008facbd6c2a97e7b3e6e062276",
+    "raw_bytes": 398,
+    "retained_sha256": "0e350a4b74b47df5a90e324215d10c72886f3a01f5314328d6aad68b81eca53c"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/visibility/visibility/private-type/src/main.cg",
+    "retained": "combined/historical-retry/product/regressions/visibility/visibility/private-type/src/main.cg.gz",
+    "raw_sha256": "8eca106f771736c9442941c1684e7eb4d522e6a9924ab82695f1cc75d72fd965",
+    "raw_bytes": 115,
+    "retained_sha256": "1979a2d1b9577ef956ff0eff6567944ed6b38ec3ecc72b43acaf37137fcfd575"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/visibility/visibility/public-package.rs",
+    "retained": "combined/historical-retry/product/regressions/visibility/visibility/public-package.rs.gz",
+    "raw_sha256": "dc0829fd1066cfa1eafb8237b6766ebff94536c9ff564a6e4c8484ff99b7e236",
+    "raw_bytes": 242430,
+    "retained_sha256": "445d38d08cb80820c4e3554f3f92b817b1a23762585e0692315215c389fb21a7"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/visibility/visibility/public-source.py",
+    "retained": "combined/historical-retry/product/regressions/visibility/visibility/public-source.py.gz",
+    "raw_sha256": "0c2bd5648f7d3cef70338f602c34dc1a0ad2fb7778694e99fc12134ad85a0010",
+    "raw_bytes": 9405,
+    "retained_sha256": "a0fd8bc5dee21d03ed7ce1cbd3c396a5c73b289d645d42fd7691586d532226e3"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/visibility/visibility/public-source.rs",
+    "retained": "combined/historical-retry/product/regressions/visibility/visibility/public-source.rs.gz",
+    "raw_sha256": "5db5f2b8de07f8826a13481054b818d87d182c7af2f04419a7cdd593705c1071",
+    "raw_bytes": 241512,
+    "retained_sha256": "dc67364b0bfdbc1bb0f604a75206c8b247a13c01f764772a4150403582696643"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/visibility/visibility/public-values.py",
+    "retained": "combined/historical-retry/product/regressions/visibility/visibility/public-values.py.gz",
+    "raw_sha256": "a8847fc861e3c199d52806298bbdddc8b366d2e3ec44da9429acbac157808086",
+    "raw_bytes": 8676,
+    "retained_sha256": "c21f1ef5dc90ae8c2cecbdb4f4ebc28cb4f6628230a1846dd92efb26949dd154"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/visibility/visibility/public-values.rs",
+    "retained": "combined/historical-retry/product/regressions/visibility/visibility/public-values.rs.gz",
+    "raw_sha256": "61376139b94d2bf6101e0474f17cbfa24af6735d46036789addebec1617e95c9",
+    "raw_bytes": 239856,
+    "retained_sha256": "2a4e72d002b6ae0a55585cba8c004ec72274d3e2b57fc5014c80ddf743cd994d"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/visibility/visibility/report.json",
+    "retained": "combined/historical-retry/product/regressions/visibility/visibility/report.json.gz",
+    "raw_sha256": "c5f833c5adaa771f8281c90f375751a6d7fa4a4f070fd7a41bedf291d4461bf5",
+    "raw_bytes": 105429,
+    "retained_sha256": "98da0458808588ab50aba8996255410359ab9b034cfe1c3f98c9e7bf932c570f"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/visibility/visibility/source.py",
+    "retained": "combined/historical-retry/product/regressions/visibility/visibility/source.py.gz",
+    "raw_sha256": "3d46ab59a9bcc55693cc17e4070c857a07365ad0152e2fc861b6b4ca89a1cf4a",
+    "raw_bytes": 12074,
+    "retained_sha256": "c95d276c84616187d505af428654a6732d5086d3fcc022ef83bd0ad4863bbc97"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/regressions/visibility/visibility/source.rs",
+    "retained": "combined/historical-retry/product/regressions/visibility/visibility/source.rs.gz",
+    "raw_sha256": "2391d84711a271b57c109f6621cb07bbcd46ff6fa4e4f8c7dd93a5ae48de9e66",
+    "raw_bytes": 248569,
+    "retained_sha256": "06fdea877cda1c7aa548fe2d16872f4c19107ca45961858079afecc60920d8b4"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/runner-snapshot.py",
+    "retained": "combined/historical-retry/product/runner-snapshot.py.gz",
+    "raw_sha256": "fa7206950b2672b4f67f05830272ea3cea039455c063b88d69b16d812d8b8ba2",
+    "raw_bytes": 17241,
+    "retained_sha256": "f50548c28daf6a271570915338c529d4fd1db03c16cc13ad61ca21ac3e3ad533"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/rustc-two-threads",
+    "retained": "combined/historical-retry/product/rustc-two-threads.gz",
+    "raw_sha256": "69678aa162e6d524b32b68f569c9b45ae5dfde59997a9a143713d18e74e06ce2",
+    "raw_bytes": 54,
+    "retained_sha256": "016b43c331612d50545b67c8331d542a4c4364b5ee73e4ff6f912202699fd742"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/product/session.py",
+    "retained": "combined/historical-retry/product/session.py.gz",
+    "raw_sha256": "f084e50f3d84cfc3a71cad0a4c2610fe42c87b5c78de5ff50bba3ac7c1b16ab8",
+    "raw_bytes": 18,
+    "retained_sha256": "394a8fd5b468f2c1ae0cedf13fe94e941817d2af31c37b2aa77368573fb97841"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry/report.json",
+    "retained": "combined/historical-retry/report.json.gz",
+    "raw_sha256": "b45b92f2efb2fd8b6b6b191fd7d675a6c5e63a8d5ae5663be1be19f469029358",
+    "raw_bytes": 2354,
+    "retained_sha256": "2103b1837db614e2a1abd5c51b963866600c6099f31c915b902a31d1bd7a67b3"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical-retry.log.gz",
+    "retained": "combined/historical-retry.log.gz",
+    "raw_sha256": "b04eb32f5a123ed8a04e141fbbecf16a09ca7c75a38ff845f08f2ad4bb95a28b",
+    "raw_bytes": 101,
+    "retained_sha256": "b04eb32f5a123ed8a04e141fbbecf16a09ca7c75a38ff845f08f2ad4bb95a28b"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/historical.log.gz",
+    "retained": "combined/historical.log.gz",
+    "raw_sha256": "87057a1afd864b189752af4d0b1e8a1897832d3c425d4a9074d3b0e201911f66",
+    "raw_bytes": 109,
+    "retained_sha256": "87057a1afd864b189752af4d0b1e8a1897832d3c425d4a9074d3b0e201911f66"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/fixtures/allocation.cg",
+    "retained": "combined/matrix/fixtures/allocation.cg.gz",
+    "raw_sha256": "9f4e639395430306b18866e88c72624310bd92758a42629befbd57c283654d49",
+    "raw_bytes": 772,
+    "retained_sha256": "5cdecdf934d63320350e74c802f53a85f4481dd3e2acd49c2ca2518a914f9fd5"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/fixtures/arithmetic.cg",
+    "retained": "combined/matrix/fixtures/arithmetic.cg.gz",
+    "raw_sha256": "441aa4e1622ce56c77d5e10cb89de4bcdfc57888ec7ad532896d27215ff9da07",
+    "raw_bytes": 595,
+    "retained_sha256": "511457924744be093077f99d28abfb8661a66787611b720d3cf9195e5af50764"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/fixtures/auto-guard.cg",
+    "retained": "combined/matrix/fixtures/auto-guard.cg.gz",
+    "raw_sha256": "7c7cc9a80e1fc8000d8f23f68477f6f4a5c639931001ff36e02d16a0b31fd9f6",
+    "raw_bytes": 1011,
+    "retained_sha256": "788092719ac12dba9c91ac939692fe22dba479d30c4cce8da467f4976d32d54c"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/fixtures/contract.cg",
+    "retained": "combined/matrix/fixtures/contract.cg.gz",
+    "raw_sha256": "f8b423277b241373ba19fc1192a8f821c3eb8295aa59dfb9125c2ae5d54b72a1",
+    "raw_bytes": 646,
+    "retained_sha256": "d8d33fce51ee59bb56217d5d6ed85b5746907b89a1874034ee5449f25ffa7562"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/fixtures/copy-cycle.cg",
+    "retained": "combined/matrix/fixtures/copy-cycle.cg.gz",
+    "raw_sha256": "86187fa24adbfed1ac27d2092b160545a705ecd4a7ba7674c68d4ebf9ef776d9",
+    "raw_bytes": 1620,
+    "retained_sha256": "b4503abc0f9d26c76e30fb7654c463ff705aabb3d0e077f8ee8649ee9c63f56e"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/fixtures/cross-region-utf8.cg",
+    "retained": "combined/matrix/fixtures/cross-region-utf8.cg.gz",
+    "raw_sha256": "891e1fb3331b89e77d4ecd8bcbc6c039a6fa692990ad2b91d904b3949a2bd998",
+    "raw_bytes": 377,
+    "retained_sha256": "9a3e1d30a18eb93885d77f66b00f96a0d8df01fc1be31140f2d70f1696211fee"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/fixtures/cross-region.cg",
+    "retained": "combined/matrix/fixtures/cross-region.cg.gz",
+    "raw_sha256": "a9f8f88e06b806555b7fd386f8493c89e3cc5c9639377daf8d8c499c49943544",
+    "raw_bytes": 364,
+    "retained_sha256": "ef4f4e45347de1f7195d4ef67ebcecc5a63efcce8bf748a43497f2ee966ed202"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/fixtures/failed-argument.cg",
+    "retained": "combined/matrix/fixtures/failed-argument.cg.gz",
+    "raw_sha256": "d9ec3a20e21b163bd0741d25400e1dad1cfdb0ad6a28dc84cf67c22c1eb5a6f5",
+    "raw_bytes": 678,
+    "retained_sha256": "318111b4810b1526f4a04bdfac96b0be1f88064a26e74b3199686df5c346b0d2"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/fixtures/fallback-resource.cg",
+    "retained": "combined/matrix/fixtures/fallback-resource.cg.gz",
+    "raw_sha256": "27128b34df603a62be7e9e5f6c6a510295ea28cb94b28a795dea763e3c8c0102",
+    "raw_bytes": 247,
+    "retained_sha256": "b16fd02ba8e65ff5981334d6147071ee8f2d2ed4fb84289ea1392c67eb057ca3"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/fixtures/guard.cg",
+    "retained": "combined/matrix/fixtures/guard.cg.gz",
+    "raw_sha256": "5c8c238b7f94962230c0ba38ff53f3093b35e73a81afc988609dc4ea1ddc638b",
+    "raw_bytes": 543,
+    "retained_sha256": "475f3d7d2f26f229b6928f7e82c88e9058d17b4050710bdef6ff9c200d42a219"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/fixtures/nested-guards.cg",
+    "retained": "combined/matrix/fixtures/nested-guards.cg.gz",
+    "raw_sha256": "8c05226df1feba43565bf9bd5a0731897e599be705da58a7cfcb5bf3fdc449a8",
+    "raw_bytes": 1305,
+    "retained_sha256": "1bbd816898f497f570831c41770de7bfd68b9f80293ab0535f614e9863cc7a74"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/fixtures/normal.cg",
+    "retained": "combined/matrix/fixtures/normal.cg.gz",
+    "raw_sha256": "6cdd77e0d3ce8909b0acbc5f7f0759f04ab1c326f37fcf7fd81ca8193f31df56",
+    "raw_bytes": 590,
+    "retained_sha256": "9ad8ded9f5cc5a5574028788c815d8763c15920bef367e42517d4e5f1363aacb"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/fixtures/packages/runtime-error/cgx2.toml",
+    "retained": "combined/matrix/fixtures/packages/runtime-error/cgx2.toml.gz",
+    "raw_sha256": "4edfc51922f79ad75b4ad8ac5c3de3129af0193a8bd11445ad9b80e0027340df",
+    "raw_bytes": 91,
+    "retained_sha256": "111fd0834c53b0d2214fdbb926edadbc37e2aee6f58c38b6b88fa6f1240fc121"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/fixtures/packages/runtime-error/lib.cg",
+    "retained": "combined/matrix/fixtures/packages/runtime-error/lib.cg.gz",
+    "raw_sha256": "357ede5c4affeb093be20fd5ade2a47ede0ae3dd696b5d530a0ca71332e9d60a",
+    "raw_bytes": 120,
+    "retained_sha256": "8a784155dd9a53ce0a961dbbcd2447aa3fab5e6ed18edfa14edb633b5d29479b"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/fixtures/packages/runtime-error/main.cg",
+    "retained": "combined/matrix/fixtures/packages/runtime-error/main.cg.gz",
+    "raw_sha256": "1c08d3b237de6d0fd674932b315595106a754ae075d1bc9327d33262d8f53112",
+    "raw_bytes": 230,
+    "retained_sha256": "e7f14399c0a8578fe52c637764aab99a3e15813732337f83f5a0fbc068ffd8e0"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/fixtures/region.cg",
+    "retained": "combined/matrix/fixtures/region.cg.gz",
+    "raw_sha256": "c23bcd5d82cfe85d4233e4c1ac87a615b9e14977dd31f636855e0813719379d0",
+    "raw_bytes": 497,
+    "retained_sha256": "cbe766a985bb51bc99ed362276678b1e94913590c2f71ad2b34afe3ac0126128"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/fixtures/return.cg",
+    "retained": "combined/matrix/fixtures/return.cg.gz",
+    "raw_sha256": "c38b36a693bb72e4c6611e79ddaddd69c8f6269f04b9ee442a7fa99420091bde",
+    "raw_bytes": 597,
+    "retained_sha256": "90b01998befc50052f05684f342975b7f0337d3e681d5c5dcbdd11012706e789"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/fixtures/session.cg",
+    "retained": "combined/matrix/fixtures/session.cg.gz",
+    "raw_sha256": "7d85ab43f44852490cd52b226b515fa6484125346be5eb79659bc3ed7e409695",
+    "raw_bytes": 479,
+    "retained_sha256": "faa7d643916528cd6af1b08aa09f0277caad1e9091a500b5698c9b1c0d657fa7"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/fixtures/sweep.cg",
+    "retained": "combined/matrix/fixtures/sweep.cg.gz",
+    "raw_sha256": "7632d4051995eb368d9c587b7d5301d0046666253530df238ba9720346c524b4",
+    "raw_bytes": 1650,
+    "retained_sha256": "5195ee653927c1a4c27f8d458345aea2681fa25b4e7a1eb17a190fec6fc687f3"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/auto.py",
+    "retained": "combined/matrix/harness-snapshot/auto.py.gz",
+    "raw_sha256": "9b1af0ba5259ab4c7add83e52143a06478fed73cf6edb33e4d689e903b005ff2",
+    "raw_bytes": 3604,
+    "retained_sha256": "ed9e7f60fa9e463692998c539a35fff5d13230c3346735bec2440d687c999ebd"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/auto_probe.rs",
+    "retained": "combined/matrix/harness-snapshot/auto_probe.rs.gz",
+    "raw_sha256": "32813e86d40a49a1e0ee228e83cba52b3328137bd64ceab4528b92d07c02f9cb",
+    "raw_bytes": 1529,
+    "retained_sha256": "8c050c5d675cfd90e3516db19bcfa7a0e31aac6944bede64873dfc7537b88275"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/common.py",
+    "retained": "combined/matrix/harness-snapshot/common.py.gz",
+    "raw_sha256": "89dff26226defcaebdea5eff2df4414d9d885bb08a7bb09993e721bbb610cfcb",
+    "raw_bytes": 5101,
+    "retained_sha256": "175cba466d3664cdd18025f03a3aa14069ae1cf150d95a5e0dd7628baaf3a5f0"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/export.py",
+    "retained": "combined/matrix/harness-snapshot/export.py.gz",
+    "raw_sha256": "c0e0fd3a3619f76a2e8320e48350ae7fbcd9de856ed872cee80c074ebf034aed",
+    "raw_bytes": 3114,
+    "retained_sha256": "7183dde713cfd0401e9890a56e0ab80e757048f0ac68f3748d9adc7db41f3442"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/fixtures/allocation.cg",
+    "retained": "combined/matrix/harness-snapshot/fixtures/allocation.cg.gz",
+    "raw_sha256": "9f4e639395430306b18866e88c72624310bd92758a42629befbd57c283654d49",
+    "raw_bytes": 772,
+    "retained_sha256": "5cdecdf934d63320350e74c802f53a85f4481dd3e2acd49c2ca2518a914f9fd5"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/fixtures/arithmetic.cg",
+    "retained": "combined/matrix/harness-snapshot/fixtures/arithmetic.cg.gz",
+    "raw_sha256": "441aa4e1622ce56c77d5e10cb89de4bcdfc57888ec7ad532896d27215ff9da07",
+    "raw_bytes": 595,
+    "retained_sha256": "511457924744be093077f99d28abfb8661a66787611b720d3cf9195e5af50764"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/fixtures/auto-guard.cg",
+    "retained": "combined/matrix/harness-snapshot/fixtures/auto-guard.cg.gz",
+    "raw_sha256": "7c7cc9a80e1fc8000d8f23f68477f6f4a5c639931001ff36e02d16a0b31fd9f6",
+    "raw_bytes": 1011,
+    "retained_sha256": "788092719ac12dba9c91ac939692fe22dba479d30c4cce8da467f4976d32d54c"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/fixtures/contract.cg",
+    "retained": "combined/matrix/harness-snapshot/fixtures/contract.cg.gz",
+    "raw_sha256": "f8b423277b241373ba19fc1192a8f821c3eb8295aa59dfb9125c2ae5d54b72a1",
+    "raw_bytes": 646,
+    "retained_sha256": "d8d33fce51ee59bb56217d5d6ed85b5746907b89a1874034ee5449f25ffa7562"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/fixtures/copy-cycle.cg",
+    "retained": "combined/matrix/harness-snapshot/fixtures/copy-cycle.cg.gz",
+    "raw_sha256": "86187fa24adbfed1ac27d2092b160545a705ecd4a7ba7674c68d4ebf9ef776d9",
+    "raw_bytes": 1620,
+    "retained_sha256": "b4503abc0f9d26c76e30fb7654c463ff705aabb3d0e077f8ee8649ee9c63f56e"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/fixtures/cross-region-utf8.cg",
+    "retained": "combined/matrix/harness-snapshot/fixtures/cross-region-utf8.cg.gz",
+    "raw_sha256": "891e1fb3331b89e77d4ecd8bcbc6c039a6fa692990ad2b91d904b3949a2bd998",
+    "raw_bytes": 377,
+    "retained_sha256": "9a3e1d30a18eb93885d77f66b00f96a0d8df01fc1be31140f2d70f1696211fee"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/fixtures/cross-region.cg",
+    "retained": "combined/matrix/harness-snapshot/fixtures/cross-region.cg.gz",
+    "raw_sha256": "a9f8f88e06b806555b7fd386f8493c89e3cc5c9639377daf8d8c499c49943544",
+    "raw_bytes": 364,
+    "retained_sha256": "ef4f4e45347de1f7195d4ef67ebcecc5a63efcce8bf748a43497f2ee966ed202"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/fixtures/failed-argument.cg",
+    "retained": "combined/matrix/harness-snapshot/fixtures/failed-argument.cg.gz",
+    "raw_sha256": "d9ec3a20e21b163bd0741d25400e1dad1cfdb0ad6a28dc84cf67c22c1eb5a6f5",
+    "raw_bytes": 678,
+    "retained_sha256": "318111b4810b1526f4a04bdfac96b0be1f88064a26e74b3199686df5c346b0d2"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/fixtures/fallback-resource.cg",
+    "retained": "combined/matrix/harness-snapshot/fixtures/fallback-resource.cg.gz",
+    "raw_sha256": "27128b34df603a62be7e9e5f6c6a510295ea28cb94b28a795dea763e3c8c0102",
+    "raw_bytes": 247,
+    "retained_sha256": "b16fd02ba8e65ff5981334d6147071ee8f2d2ed4fb84289ea1392c67eb057ca3"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/fixtures/guard.cg",
+    "retained": "combined/matrix/harness-snapshot/fixtures/guard.cg.gz",
+    "raw_sha256": "5c8c238b7f94962230c0ba38ff53f3093b35e73a81afc988609dc4ea1ddc638b",
+    "raw_bytes": 543,
+    "retained_sha256": "475f3d7d2f26f229b6928f7e82c88e9058d17b4050710bdef6ff9c200d42a219"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/fixtures/nested-guards.cg",
+    "retained": "combined/matrix/harness-snapshot/fixtures/nested-guards.cg.gz",
+    "raw_sha256": "8c05226df1feba43565bf9bd5a0731897e599be705da58a7cfcb5bf3fdc449a8",
+    "raw_bytes": 1305,
+    "retained_sha256": "1bbd816898f497f570831c41770de7bfd68b9f80293ab0535f614e9863cc7a74"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/fixtures/normal.cg",
+    "retained": "combined/matrix/harness-snapshot/fixtures/normal.cg.gz",
+    "raw_sha256": "6cdd77e0d3ce8909b0acbc5f7f0759f04ab1c326f37fcf7fd81ca8193f31df56",
+    "raw_bytes": 590,
+    "retained_sha256": "9ad8ded9f5cc5a5574028788c815d8763c15920bef367e42517d4e5f1363aacb"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/fixtures/region.cg",
+    "retained": "combined/matrix/harness-snapshot/fixtures/region.cg.gz",
+    "raw_sha256": "c23bcd5d82cfe85d4233e4c1ac87a615b9e14977dd31f636855e0813719379d0",
+    "raw_bytes": 497,
+    "retained_sha256": "cbe766a985bb51bc99ed362276678b1e94913590c2f71ad2b34afe3ac0126128"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/fixtures/return.cg",
+    "retained": "combined/matrix/harness-snapshot/fixtures/return.cg.gz",
+    "raw_sha256": "c38b36a693bb72e4c6611e79ddaddd69c8f6269f04b9ee442a7fa99420091bde",
+    "raw_bytes": 597,
+    "retained_sha256": "90b01998befc50052f05684f342975b7f0337d3e681d5c5dcbdd11012706e789"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/fixtures/session.cg",
+    "retained": "combined/matrix/harness-snapshot/fixtures/session.cg.gz",
+    "raw_sha256": "7d85ab43f44852490cd52b226b515fa6484125346be5eb79659bc3ed7e409695",
+    "raw_bytes": 479,
+    "retained_sha256": "faa7d643916528cd6af1b08aa09f0277caad1e9091a500b5698c9b1c0d657fa7"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/fixtures/sweep.cg",
+    "retained": "combined/matrix/harness-snapshot/fixtures/sweep.cg.gz",
+    "raw_sha256": "7632d4051995eb368d9c587b7d5301d0046666253530df238ba9720346c524b4",
+    "raw_bytes": 1650,
+    "retained_sha256": "5195ee653927c1a4c27f8d458345aea2681fa25b4e7a1eb17a190fec6fc687f3"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/package_parity.py",
+    "retained": "combined/matrix/harness-snapshot/package_parity.py.gz",
+    "raw_sha256": "9d7b0a8af7744c673f079730ea9ce48cc799cf3db2fbc05ef8717f1e191a3546",
+    "raw_bytes": 4026,
+    "retained_sha256": "de701c018a3ed56ceeedbb84da7b6c9eddbd22ced1ede6ffe09658670beffb26"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/quality.py",
+    "retained": "combined/matrix/harness-snapshot/quality.py.gz",
+    "raw_sha256": "97e5d8ffdc017f827c582a44bbcf87b3aa36a62d5943e9af1d8fbc751b5d206d",
+    "raw_bytes": 2038,
+    "retained_sha256": "3f77b247b2dc00d3f41aa156f3bd5f79a3b16b1cd5e28276f68a7f388c9f3f2b"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/replay.py",
+    "retained": "combined/matrix/harness-snapshot/replay.py.gz",
+    "raw_sha256": "803a11a495f81919723bb55cbb7bd7ff84375ad76c9f7fe96d1562ae3cfe9f31",
+    "raw_bytes": 1537,
+    "retained_sha256": "250464743352c4bfa2a1c1073db30929fe6393591a9ef09ef2ef37b8db5233f3"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/review.py",
+    "retained": "combined/matrix/harness-snapshot/review.py.gz",
+    "raw_sha256": "5bb04b88ecf9e887a2cac29bbde5f538932a66a92afc2dd658271c0c21b6a3ad",
+    "raw_bytes": 2719,
+    "retained_sha256": "e7253a337993d2b5bdb7ea373878f5a1256eef3ad92439921d85e493c1feaec6"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/run.py",
+    "retained": "combined/matrix/harness-snapshot/run.py.gz",
+    "raw_sha256": "6938b0ecc8bb526dd159553d3c6212445ebaa0b9b1a4026f800e2311849ee2b6",
+    "raw_bytes": 15419,
+    "retained_sha256": "e125bf1c9c91c484ff74588afdba6cfb9b34710305b7bf82effbad8fb727c6d6"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/runtime_probe.rs",
+    "retained": "combined/matrix/harness-snapshot/runtime_probe.rs.gz",
+    "raw_sha256": "cbf31cd646d0b3feef2c049fb1d27fb1333dcdbaf72dfcdbc5eca767f1903286",
+    "raw_bytes": 9315,
+    "retained_sha256": "fb63e8d249daa73aa6a4b47fdfe0f08be05153fa2f35e9b78a24fe0c4df9a263"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/source_probe.rs",
+    "retained": "combined/matrix/harness-snapshot/source_probe.rs.gz",
+    "raw_sha256": "a0cd939a5a6d27799b206a211f4010908bb73ee54851bfe1c68eac879860cceb",
+    "raw_bytes": 677,
+    "retained_sha256": "b87541ede2139d9a8df1eb97191a5a4362f91271df7e4c7964e99d45f3f2eb57"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/test_harness.py",
+    "retained": "combined/matrix/harness-snapshot/test_harness.py.gz",
+    "raw_sha256": "fd1d6bab02f005c2799258d3bd7c36adf47bb2437795ba087b727ac39411046f",
+    "raw_bytes": 6955,
+    "retained_sha256": "4c6848850e5e54595086ba1d265cb4bd39cfefc1b92fff9b1dc281b710256936"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/harness-snapshot/verify.py",
+    "retained": "combined/matrix/harness-snapshot/verify.py.gz",
+    "raw_sha256": "cb4857d32456583772c8cdc943056d728fe2ea3ea137538414051f995c44d28a",
+    "raw_bytes": 3080,
+    "retained_sha256": "b9d178a112234552db1c00a9ab9bc42600bfab6de65964f105564ee1b22eaed3"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/report.json",
+    "retained": "combined/matrix/report.json.gz",
+    "raw_sha256": "035fcfabe4fc775375656c2488b3f9e9a68f93b7566378938a49166a2a698e35",
+    "raw_bytes": 8179,
+    "retained_sha256": "1bd13fcdd27107f3a5241631c30acc94b31d6bad0277bb173ce307bdbec0eb8a"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix/rustc-two-threads",
+    "retained": "combined/matrix/rustc-two-threads.gz",
+    "raw_sha256": "69678aa162e6d524b32b68f569c9b45ae5dfde59997a9a143713d18e74e06ce2",
+    "raw_bytes": 54,
+    "retained_sha256": "016b43c331612d50545b67c8331d542a4c4364b5ee73e4ff6f912202699fd742"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/dependency-negative/cgx2.toml",
+    "retained": "combined/matrix-retry/dependency-negative/cgx2.toml.gz",
+    "raw_sha256": "6aa11a318045e36091528184e29785cc744b0f49171a944145379cfdbd703390",
+    "raw_bytes": 87,
+    "retained_sha256": "f0a3590102dc46783f86b949f1bc3eaab1759446ae3d829d764e280a3b3a6ab9"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/dependency-negative/lib.cg",
+    "retained": "combined/matrix-retry/dependency-negative/lib.cg.gz",
+    "raw_sha256": "ff158e7979656fb8d4dd9d31c6d302fd8d48886589be4a9b60d1791053085572",
+    "raw_bytes": 396,
+    "retained_sha256": "fd6a002ba04e6f44a9381487cd35565064bd72415e178109be50420a17c2edc6"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/dependency-negative/main.cg",
+    "retained": "combined/matrix-retry/dependency-negative/main.cg.gz",
+    "raw_sha256": "ad875081c8b6154a0173607aeab1232134190fe29e3e326d39d3fa3a457c9bd7",
+    "raw_bytes": 90,
+    "retained_sha256": "7cdddcbdda89e35f55cf9c18d68223463afcb4d8cb756c6b010bdd165e9c5cc2"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/fixtures/allocation.cg",
+    "retained": "combined/matrix-retry/fixtures/allocation.cg.gz",
+    "raw_sha256": "9f4e639395430306b18866e88c72624310bd92758a42629befbd57c283654d49",
+    "raw_bytes": 772,
+    "retained_sha256": "5cdecdf934d63320350e74c802f53a85f4481dd3e2acd49c2ca2518a914f9fd5"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/fixtures/arithmetic.cg",
+    "retained": "combined/matrix-retry/fixtures/arithmetic.cg.gz",
+    "raw_sha256": "441aa4e1622ce56c77d5e10cb89de4bcdfc57888ec7ad532896d27215ff9da07",
+    "raw_bytes": 595,
+    "retained_sha256": "511457924744be093077f99d28abfb8661a66787611b720d3cf9195e5af50764"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/fixtures/auto-guard.cg",
+    "retained": "combined/matrix-retry/fixtures/auto-guard.cg.gz",
+    "raw_sha256": "7c7cc9a80e1fc8000d8f23f68477f6f4a5c639931001ff36e02d16a0b31fd9f6",
+    "raw_bytes": 1011,
+    "retained_sha256": "788092719ac12dba9c91ac939692fe22dba479d30c4cce8da467f4976d32d54c"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/fixtures/contract.cg",
+    "retained": "combined/matrix-retry/fixtures/contract.cg.gz",
+    "raw_sha256": "f8b423277b241373ba19fc1192a8f821c3eb8295aa59dfb9125c2ae5d54b72a1",
+    "raw_bytes": 646,
+    "retained_sha256": "d8d33fce51ee59bb56217d5d6ed85b5746907b89a1874034ee5449f25ffa7562"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/fixtures/copy-cycle.cg",
+    "retained": "combined/matrix-retry/fixtures/copy-cycle.cg.gz",
+    "raw_sha256": "86187fa24adbfed1ac27d2092b160545a705ecd4a7ba7674c68d4ebf9ef776d9",
+    "raw_bytes": 1620,
+    "retained_sha256": "b4503abc0f9d26c76e30fb7654c463ff705aabb3d0e077f8ee8649ee9c63f56e"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/fixtures/cross-region-utf8.cg",
+    "retained": "combined/matrix-retry/fixtures/cross-region-utf8.cg.gz",
+    "raw_sha256": "891e1fb3331b89e77d4ecd8bcbc6c039a6fa692990ad2b91d904b3949a2bd998",
+    "raw_bytes": 377,
+    "retained_sha256": "9a3e1d30a18eb93885d77f66b00f96a0d8df01fc1be31140f2d70f1696211fee"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/fixtures/cross-region.cg",
+    "retained": "combined/matrix-retry/fixtures/cross-region.cg.gz",
+    "raw_sha256": "a9f8f88e06b806555b7fd386f8493c89e3cc5c9639377daf8d8c499c49943544",
+    "raw_bytes": 364,
+    "retained_sha256": "ef4f4e45347de1f7195d4ef67ebcecc5a63efcce8bf748a43497f2ee966ed202"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/fixtures/failed-argument.cg",
+    "retained": "combined/matrix-retry/fixtures/failed-argument.cg.gz",
+    "raw_sha256": "d9ec3a20e21b163bd0741d25400e1dad1cfdb0ad6a28dc84cf67c22c1eb5a6f5",
+    "raw_bytes": 678,
+    "retained_sha256": "318111b4810b1526f4a04bdfac96b0be1f88064a26e74b3199686df5c346b0d2"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/fixtures/fallback-resource.cg",
+    "retained": "combined/matrix-retry/fixtures/fallback-resource.cg.gz",
+    "raw_sha256": "27128b34df603a62be7e9e5f6c6a510295ea28cb94b28a795dea763e3c8c0102",
+    "raw_bytes": 247,
+    "retained_sha256": "b16fd02ba8e65ff5981334d6147071ee8f2d2ed4fb84289ea1392c67eb057ca3"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/fixtures/guard.cg",
+    "retained": "combined/matrix-retry/fixtures/guard.cg.gz",
+    "raw_sha256": "5c8c238b7f94962230c0ba38ff53f3093b35e73a81afc988609dc4ea1ddc638b",
+    "raw_bytes": 543,
+    "retained_sha256": "475f3d7d2f26f229b6928f7e82c88e9058d17b4050710bdef6ff9c200d42a219"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/fixtures/nested-guards.cg",
+    "retained": "combined/matrix-retry/fixtures/nested-guards.cg.gz",
+    "raw_sha256": "8c05226df1feba43565bf9bd5a0731897e599be705da58a7cfcb5bf3fdc449a8",
+    "raw_bytes": 1305,
+    "retained_sha256": "1bbd816898f497f570831c41770de7bfd68b9f80293ab0535f614e9863cc7a74"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/fixtures/normal.cg",
+    "retained": "combined/matrix-retry/fixtures/normal.cg.gz",
+    "raw_sha256": "6cdd77e0d3ce8909b0acbc5f7f0759f04ab1c326f37fcf7fd81ca8193f31df56",
+    "raw_bytes": 590,
+    "retained_sha256": "9ad8ded9f5cc5a5574028788c815d8763c15920bef367e42517d4e5f1363aacb"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/fixtures/packages/runtime-error/cgx2.toml",
+    "retained": "combined/matrix-retry/fixtures/packages/runtime-error/cgx2.toml.gz",
+    "raw_sha256": "4edfc51922f79ad75b4ad8ac5c3de3129af0193a8bd11445ad9b80e0027340df",
+    "raw_bytes": 91,
+    "retained_sha256": "111fd0834c53b0d2214fdbb926edadbc37e2aee6f58c38b6b88fa6f1240fc121"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/fixtures/packages/runtime-error/lib.cg",
+    "retained": "combined/matrix-retry/fixtures/packages/runtime-error/lib.cg.gz",
+    "raw_sha256": "357ede5c4affeb093be20fd5ade2a47ede0ae3dd696b5d530a0ca71332e9d60a",
+    "raw_bytes": 120,
+    "retained_sha256": "8a784155dd9a53ce0a961dbbcd2447aa3fab5e6ed18edfa14edb633b5d29479b"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/fixtures/packages/runtime-error/main.cg",
+    "retained": "combined/matrix-retry/fixtures/packages/runtime-error/main.cg.gz",
+    "raw_sha256": "1c08d3b237de6d0fd674932b315595106a754ae075d1bc9327d33262d8f53112",
+    "raw_bytes": 230,
+    "retained_sha256": "e7f14399c0a8578fe52c637764aab99a3e15813732337f83f5a0fbc068ffd8e0"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/fixtures/region.cg",
+    "retained": "combined/matrix-retry/fixtures/region.cg.gz",
+    "raw_sha256": "c23bcd5d82cfe85d4233e4c1ac87a615b9e14977dd31f636855e0813719379d0",
+    "raw_bytes": 497,
+    "retained_sha256": "cbe766a985bb51bc99ed362276678b1e94913590c2f71ad2b34afe3ac0126128"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/fixtures/return.cg",
+    "retained": "combined/matrix-retry/fixtures/return.cg.gz",
+    "raw_sha256": "c38b36a693bb72e4c6611e79ddaddd69c8f6269f04b9ee442a7fa99420091bde",
+    "raw_bytes": 597,
+    "retained_sha256": "90b01998befc50052f05684f342975b7f0337d3e681d5c5dcbdd11012706e789"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/fixtures/session.cg",
+    "retained": "combined/matrix-retry/fixtures/session.cg.gz",
+    "raw_sha256": "7d85ab43f44852490cd52b226b515fa6484125346be5eb79659bc3ed7e409695",
+    "raw_bytes": 479,
+    "retained_sha256": "faa7d643916528cd6af1b08aa09f0277caad1e9091a500b5698c9b1c0d657fa7"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/fixtures/sweep.cg",
+    "retained": "combined/matrix-retry/fixtures/sweep.cg.gz",
+    "raw_sha256": "7632d4051995eb368d9c587b7d5301d0046666253530df238ba9720346c524b4",
+    "raw_bytes": 1650,
+    "retained_sha256": "5195ee653927c1a4c27f8d458345aea2681fa25b4e7a1eb17a190fec6fc687f3"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/auto.py",
+    "retained": "combined/matrix-retry/harness-snapshot/auto.py.gz",
+    "raw_sha256": "9b1af0ba5259ab4c7add83e52143a06478fed73cf6edb33e4d689e903b005ff2",
+    "raw_bytes": 3604,
+    "retained_sha256": "ed9e7f60fa9e463692998c539a35fff5d13230c3346735bec2440d687c999ebd"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/auto_probe.rs",
+    "retained": "combined/matrix-retry/harness-snapshot/auto_probe.rs.gz",
+    "raw_sha256": "32813e86d40a49a1e0ee228e83cba52b3328137bd64ceab4528b92d07c02f9cb",
+    "raw_bytes": 1529,
+    "retained_sha256": "8c050c5d675cfd90e3516db19bcfa7a0e31aac6944bede64873dfc7537b88275"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/common.py",
+    "retained": "combined/matrix-retry/harness-snapshot/common.py.gz",
+    "raw_sha256": "89dff26226defcaebdea5eff2df4414d9d885bb08a7bb09993e721bbb610cfcb",
+    "raw_bytes": 5101,
+    "retained_sha256": "175cba466d3664cdd18025f03a3aa14069ae1cf150d95a5e0dd7628baaf3a5f0"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/export.py",
+    "retained": "combined/matrix-retry/harness-snapshot/export.py.gz",
+    "raw_sha256": "c0e0fd3a3619f76a2e8320e48350ae7fbcd9de856ed872cee80c074ebf034aed",
+    "raw_bytes": 3114,
+    "retained_sha256": "7183dde713cfd0401e9890a56e0ab80e757048f0ac68f3748d9adc7db41f3442"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/fixtures/allocation.cg",
+    "retained": "combined/matrix-retry/harness-snapshot/fixtures/allocation.cg.gz",
+    "raw_sha256": "9f4e639395430306b18866e88c72624310bd92758a42629befbd57c283654d49",
+    "raw_bytes": 772,
+    "retained_sha256": "5cdecdf934d63320350e74c802f53a85f4481dd3e2acd49c2ca2518a914f9fd5"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/fixtures/arithmetic.cg",
+    "retained": "combined/matrix-retry/harness-snapshot/fixtures/arithmetic.cg.gz",
+    "raw_sha256": "441aa4e1622ce56c77d5e10cb89de4bcdfc57888ec7ad532896d27215ff9da07",
+    "raw_bytes": 595,
+    "retained_sha256": "511457924744be093077f99d28abfb8661a66787611b720d3cf9195e5af50764"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/fixtures/auto-guard.cg",
+    "retained": "combined/matrix-retry/harness-snapshot/fixtures/auto-guard.cg.gz",
+    "raw_sha256": "7c7cc9a80e1fc8000d8f23f68477f6f4a5c639931001ff36e02d16a0b31fd9f6",
+    "raw_bytes": 1011,
+    "retained_sha256": "788092719ac12dba9c91ac939692fe22dba479d30c4cce8da467f4976d32d54c"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/fixtures/contract.cg",
+    "retained": "combined/matrix-retry/harness-snapshot/fixtures/contract.cg.gz",
+    "raw_sha256": "f8b423277b241373ba19fc1192a8f821c3eb8295aa59dfb9125c2ae5d54b72a1",
+    "raw_bytes": 646,
+    "retained_sha256": "d8d33fce51ee59bb56217d5d6ed85b5746907b89a1874034ee5449f25ffa7562"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/fixtures/copy-cycle.cg",
+    "retained": "combined/matrix-retry/harness-snapshot/fixtures/copy-cycle.cg.gz",
+    "raw_sha256": "86187fa24adbfed1ac27d2092b160545a705ecd4a7ba7674c68d4ebf9ef776d9",
+    "raw_bytes": 1620,
+    "retained_sha256": "b4503abc0f9d26c76e30fb7654c463ff705aabb3d0e077f8ee8649ee9c63f56e"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/fixtures/cross-region-utf8.cg",
+    "retained": "combined/matrix-retry/harness-snapshot/fixtures/cross-region-utf8.cg.gz",
+    "raw_sha256": "891e1fb3331b89e77d4ecd8bcbc6c039a6fa692990ad2b91d904b3949a2bd998",
+    "raw_bytes": 377,
+    "retained_sha256": "9a3e1d30a18eb93885d77f66b00f96a0d8df01fc1be31140f2d70f1696211fee"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/fixtures/cross-region.cg",
+    "retained": "combined/matrix-retry/harness-snapshot/fixtures/cross-region.cg.gz",
+    "raw_sha256": "a9f8f88e06b806555b7fd386f8493c89e3cc5c9639377daf8d8c499c49943544",
+    "raw_bytes": 364,
+    "retained_sha256": "ef4f4e45347de1f7195d4ef67ebcecc5a63efcce8bf748a43497f2ee966ed202"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/fixtures/failed-argument.cg",
+    "retained": "combined/matrix-retry/harness-snapshot/fixtures/failed-argument.cg.gz",
+    "raw_sha256": "d9ec3a20e21b163bd0741d25400e1dad1cfdb0ad6a28dc84cf67c22c1eb5a6f5",
+    "raw_bytes": 678,
+    "retained_sha256": "318111b4810b1526f4a04bdfac96b0be1f88064a26e74b3199686df5c346b0d2"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/fixtures/fallback-resource.cg",
+    "retained": "combined/matrix-retry/harness-snapshot/fixtures/fallback-resource.cg.gz",
+    "raw_sha256": "27128b34df603a62be7e9e5f6c6a510295ea28cb94b28a795dea763e3c8c0102",
+    "raw_bytes": 247,
+    "retained_sha256": "b16fd02ba8e65ff5981334d6147071ee8f2d2ed4fb84289ea1392c67eb057ca3"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/fixtures/guard.cg",
+    "retained": "combined/matrix-retry/harness-snapshot/fixtures/guard.cg.gz",
+    "raw_sha256": "5c8c238b7f94962230c0ba38ff53f3093b35e73a81afc988609dc4ea1ddc638b",
+    "raw_bytes": 543,
+    "retained_sha256": "475f3d7d2f26f229b6928f7e82c88e9058d17b4050710bdef6ff9c200d42a219"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/fixtures/nested-guards.cg",
+    "retained": "combined/matrix-retry/harness-snapshot/fixtures/nested-guards.cg.gz",
+    "raw_sha256": "8c05226df1feba43565bf9bd5a0731897e599be705da58a7cfcb5bf3fdc449a8",
+    "raw_bytes": 1305,
+    "retained_sha256": "1bbd816898f497f570831c41770de7bfd68b9f80293ab0535f614e9863cc7a74"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/fixtures/normal.cg",
+    "retained": "combined/matrix-retry/harness-snapshot/fixtures/normal.cg.gz",
+    "raw_sha256": "6cdd77e0d3ce8909b0acbc5f7f0759f04ab1c326f37fcf7fd81ca8193f31df56",
+    "raw_bytes": 590,
+    "retained_sha256": "9ad8ded9f5cc5a5574028788c815d8763c15920bef367e42517d4e5f1363aacb"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/fixtures/region.cg",
+    "retained": "combined/matrix-retry/harness-snapshot/fixtures/region.cg.gz",
+    "raw_sha256": "c23bcd5d82cfe85d4233e4c1ac87a615b9e14977dd31f636855e0813719379d0",
+    "raw_bytes": 497,
+    "retained_sha256": "cbe766a985bb51bc99ed362276678b1e94913590c2f71ad2b34afe3ac0126128"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/fixtures/return.cg",
+    "retained": "combined/matrix-retry/harness-snapshot/fixtures/return.cg.gz",
+    "raw_sha256": "c38b36a693bb72e4c6611e79ddaddd69c8f6269f04b9ee442a7fa99420091bde",
+    "raw_bytes": 597,
+    "retained_sha256": "90b01998befc50052f05684f342975b7f0337d3e681d5c5dcbdd11012706e789"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/fixtures/session.cg",
+    "retained": "combined/matrix-retry/harness-snapshot/fixtures/session.cg.gz",
+    "raw_sha256": "7d85ab43f44852490cd52b226b515fa6484125346be5eb79659bc3ed7e409695",
+    "raw_bytes": 479,
+    "retained_sha256": "faa7d643916528cd6af1b08aa09f0277caad1e9091a500b5698c9b1c0d657fa7"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/fixtures/sweep.cg",
+    "retained": "combined/matrix-retry/harness-snapshot/fixtures/sweep.cg.gz",
+    "raw_sha256": "7632d4051995eb368d9c587b7d5301d0046666253530df238ba9720346c524b4",
+    "raw_bytes": 1650,
+    "retained_sha256": "5195ee653927c1a4c27f8d458345aea2681fa25b4e7a1eb17a190fec6fc687f3"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/package_parity.py",
+    "retained": "combined/matrix-retry/harness-snapshot/package_parity.py.gz",
+    "raw_sha256": "9d7b0a8af7744c673f079730ea9ce48cc799cf3db2fbc05ef8717f1e191a3546",
+    "raw_bytes": 4026,
+    "retained_sha256": "de701c018a3ed56ceeedbb84da7b6c9eddbd22ced1ede6ffe09658670beffb26"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/quality.py",
+    "retained": "combined/matrix-retry/harness-snapshot/quality.py.gz",
+    "raw_sha256": "97e5d8ffdc017f827c582a44bbcf87b3aa36a62d5943e9af1d8fbc751b5d206d",
+    "raw_bytes": 2038,
+    "retained_sha256": "3f77b247b2dc00d3f41aa156f3bd5f79a3b16b1cd5e28276f68a7f388c9f3f2b"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/replay.py",
+    "retained": "combined/matrix-retry/harness-snapshot/replay.py.gz",
+    "raw_sha256": "803a11a495f81919723bb55cbb7bd7ff84375ad76c9f7fe96d1562ae3cfe9f31",
+    "raw_bytes": 1537,
+    "retained_sha256": "250464743352c4bfa2a1c1073db30929fe6393591a9ef09ef2ef37b8db5233f3"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/review.py",
+    "retained": "combined/matrix-retry/harness-snapshot/review.py.gz",
+    "raw_sha256": "5bb04b88ecf9e887a2cac29bbde5f538932a66a92afc2dd658271c0c21b6a3ad",
+    "raw_bytes": 2719,
+    "retained_sha256": "e7253a337993d2b5bdb7ea373878f5a1256eef3ad92439921d85e493c1feaec6"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/run.py",
+    "retained": "combined/matrix-retry/harness-snapshot/run.py.gz",
+    "raw_sha256": "6938b0ecc8bb526dd159553d3c6212445ebaa0b9b1a4026f800e2311849ee2b6",
+    "raw_bytes": 15419,
+    "retained_sha256": "e125bf1c9c91c484ff74588afdba6cfb9b34710305b7bf82effbad8fb727c6d6"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/runtime_probe.rs",
+    "retained": "combined/matrix-retry/harness-snapshot/runtime_probe.rs.gz",
+    "raw_sha256": "cbf31cd646d0b3feef2c049fb1d27fb1333dcdbaf72dfcdbc5eca767f1903286",
+    "raw_bytes": 9315,
+    "retained_sha256": "fb63e8d249daa73aa6a4b47fdfe0f08be05153fa2f35e9b78a24fe0c4df9a263"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/source_probe.rs",
+    "retained": "combined/matrix-retry/harness-snapshot/source_probe.rs.gz",
+    "raw_sha256": "a0cd939a5a6d27799b206a211f4010908bb73ee54851bfe1c68eac879860cceb",
+    "raw_bytes": 677,
+    "retained_sha256": "b87541ede2139d9a8df1eb97191a5a4362f91271df7e4c7964e99d45f3f2eb57"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/test_harness.py",
+    "retained": "combined/matrix-retry/harness-snapshot/test_harness.py.gz",
+    "raw_sha256": "fd1d6bab02f005c2799258d3bd7c36adf47bb2437795ba087b727ac39411046f",
+    "raw_bytes": 6955,
+    "retained_sha256": "4c6848850e5e54595086ba1d265cb4bd39cfefc1b92fff9b1dc281b710256936"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/harness-snapshot/verify.py",
+    "retained": "combined/matrix-retry/harness-snapshot/verify.py.gz",
+    "raw_sha256": "cb4857d32456583772c8cdc943056d728fe2ea3ea137538414051f995c44d28a",
+    "raw_bytes": 3080,
+    "retained_sha256": "b9d178a112234552db1c00a9ab9bc42600bfab6de65964f105564ee1b22eaed3"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/report.json",
+    "retained": "combined/matrix-retry/report.json.gz",
+    "raw_sha256": "4497b1d77d4957cbcf094be5cd633aa8b73bc2126d3a6ab6593253488c811036",
+    "raw_bytes": 2000305,
+    "retained_sha256": "e86400f852c9f0594e6d9e566fb9ba7b76a08a885983d91dd23fab83fa11a773"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry/rustc-two-threads",
+    "retained": "combined/matrix-retry/rustc-two-threads.gz",
+    "raw_sha256": "69678aa162e6d524b32b68f569c9b45ae5dfde59997a9a143713d18e74e06ce2",
+    "raw_bytes": 54,
+    "retained_sha256": "016b43c331612d50545b67c8331d542a4c4364b5ee73e4ff6f912202699fd742"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix-retry.log.gz",
+    "retained": "combined/matrix-retry.log.gz",
+    "raw_sha256": "85f6042453424719456109bba4469374d027bff56487f8593f5ad4a97bf8b1a4",
+    "raw_bytes": 1397,
+    "retained_sha256": "85f6042453424719456109bba4469374d027bff56487f8593f5ad4a97bf8b1a4"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/matrix.log.gz",
+    "retained": "combined/matrix.log.gz",
+    "raw_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
+    "raw_bytes": 20,
+    "retained_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/package/report.json",
+    "retained": "combined/package/report.json.gz",
+    "raw_sha256": "e0efbdf5e4381cf7750d50b626010c67726a22e658cd7d1f70dd5355f3a8f62a",
+    "raw_bytes": 4744,
+    "retained_sha256": "fe72913ed958ebea7c89861ef64b8acf88d8043e57d880ea6ce275aa6633b733"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/package/rustc-two-threads",
+    "retained": "combined/package/rustc-two-threads.gz",
+    "raw_sha256": "69678aa162e6d524b32b68f569c9b45ae5dfde59997a9a143713d18e74e06ce2",
+    "raw_bytes": 54,
+    "retained_sha256": "016b43c331612d50545b67c8331d542a4c4364b5ee73e4ff6f912202699fd742"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/package-retry/package-error/cgx2.toml",
+    "retained": "combined/package-retry/package-error/cgx2.toml.gz",
+    "raw_sha256": "4edfc51922f79ad75b4ad8ac5c3de3129af0193a8bd11445ad9b80e0027340df",
+    "raw_bytes": 91,
+    "retained_sha256": "111fd0834c53b0d2214fdbb926edadbc37e2aee6f58c38b6b88fa6f1240fc121"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/package-retry/package-error/lib.cg",
+    "retained": "combined/package-retry/package-error/lib.cg.gz",
+    "raw_sha256": "357ede5c4affeb093be20fd5ade2a47ede0ae3dd696b5d530a0ca71332e9d60a",
+    "raw_bytes": 120,
+    "retained_sha256": "8a784155dd9a53ce0a961dbbcd2447aa3fab5e6ed18edfa14edb633b5d29479b"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/package-retry/package-error/main.cg",
+    "retained": "combined/package-retry/package-error/main.cg.gz",
+    "raw_sha256": "1c08d3b237de6d0fd674932b315595106a754ae075d1bc9327d33262d8f53112",
+    "raw_bytes": 230,
+    "retained_sha256": "e7f14399c0a8578fe52c637764aab99a3e15813732337f83f5a0fbc068ffd8e0"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/package-retry/package-error.py",
+    "retained": "combined/package-retry/package-error.py.gz",
+    "raw_sha256": "d4aa2db9f91b000557b5868dc1a3fc4d9ceec662ae627e065f068d1ccfc5c36a",
+    "raw_bytes": 15,
+    "retained_sha256": "2a4cb7c2aef0f40ff0dcf391ba250c7fb4570bc269bab0259a98e2a9d1748f91"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/package-retry/package-value/cgx2.toml",
+    "retained": "combined/package-retry/package-value/cgx2.toml.gz",
+    "raw_sha256": "1e17310fc9fc1cacf4a071f3852d62317d71c5c73edcb77496b33403b89b6199",
+    "raw_bytes": 85,
+    "retained_sha256": "afe2b26cb596602d46ee6da5ac27f3fb14548b3bdaa3a35308154f901877ef20"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/package-retry/package-value/lib.cg",
+    "retained": "combined/package-retry/package-value/lib.cg.gz",
+    "raw_sha256": "3d588ff7569450b492e4a7b947f3e0aeb4f922f39fdcbfaec8d73557faa20298",
+    "raw_bytes": 215,
+    "retained_sha256": "e91b3b9ee830ded456be2b4f5af4544f088ada3e1e3c943c72827d901d72f49e"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/package-retry/package-value/main.cg",
+    "retained": "combined/package-retry/package-value/main.cg.gz",
+    "raw_sha256": "eb40f04f87a978fe733bf6f51649e88dbe1c4196245cb35dddd59fd9ced0be83",
+    "raw_bytes": 394,
+    "retained_sha256": "66dcf25f11a117cc47f946a335e3b4a0fb3e271fe252615dfe5c8c1e98903273"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/package-retry/package-value.py",
+    "retained": "combined/package-retry/package-value.py.gz",
+    "raw_sha256": "d4aa2db9f91b000557b5868dc1a3fc4d9ceec662ae627e065f068d1ccfc5c36a",
+    "raw_bytes": 15,
+    "retained_sha256": "2a4cb7c2aef0f40ff0dcf391ba250c7fb4570bc269bab0259a98e2a9d1748f91"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/package-retry/report.json",
+    "retained": "combined/package-retry/report.json.gz",
+    "raw_sha256": "1a3d7b62adcb663f1bc0c0bafef651f64f6127346621b9149e48031ae6779bfe",
+    "raw_bytes": 88691,
+    "retained_sha256": "2ca4199109eabf06b5319035e1347aaf762ea99cedbe319072cd7c79a04b78d6"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/package-retry/rustc-two-threads",
+    "retained": "combined/package-retry/rustc-two-threads.gz",
+    "raw_sha256": "69678aa162e6d524b32b68f569c9b45ae5dfde59997a9a143713d18e74e06ce2",
+    "raw_bytes": 54,
+    "retained_sha256": "016b43c331612d50545b67c8331d542a4c4364b5ee73e4ff6f912202699fd742"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/package-retry.log.gz",
+    "retained": "combined/package-retry.log.gz",
+    "raw_sha256": "b4c0cb85ede2f53722057d17d14c94bd9f9756228f17038654b6d2a490d51328",
+    "raw_bytes": 214,
+    "retained_sha256": "b4c0cb85ede2f53722057d17d14c94bd9f9756228f17038654b6d2a490d51328"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/package.log.gz",
+    "retained": "combined/package.log.gz",
+    "raw_sha256": "b8edf3226b11c1b030c1c8f58574fe0d17f3df953283281560936bb969f7345c",
+    "raw_bytes": 77,
+    "retained_sha256": "b8edf3226b11c1b030c1c8f58574fe0d17f3df953283281560936bb969f7345c"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/product-retry-verification.json",
+    "retained": "combined/product-retry-verification.json.gz",
+    "raw_sha256": "5e238924787f5f8a1dae9cbdab88f4875718dd2e8eea26993dda037c30151888",
+    "raw_bytes": 4972,
+    "retained_sha256": "4b32c93f2bec2498470e81aa05f4493fcfe68e210b010f7728e4fc0a58068ef0"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/product-verification.json",
+    "retained": "combined/product-verification.json.gz",
+    "raw_sha256": "21a34090c8181b3cdbf3c9cb7d8fa55f47cbedc9dd33a9dd686bb70e111ca2e5",
+    "raw_bytes": 8686,
+    "retained_sha256": "846d6180169f85f76995e9695bc0a231692a2453945721ff26d67112a44b2a8d"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review/report.json",
+    "retained": "combined/review/report.json.gz",
+    "raw_sha256": "0b04caa19d9a8fc7cec68edbf20a6db8985a09dc7ffb91eb008a1469ce620fea",
+    "raw_bytes": 31609,
+    "retained_sha256": "18b8e0844a3da5a3b8ae92fb526f3f9e0a4d636bff5959dd05202b2f4fde7981"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review/repros/additional-reproductions.json",
+    "retained": "combined/review/repros/additional-reproductions.json.gz",
+    "raw_sha256": "e3a347f0c5c9589d70287aee52695c4c25e14031770ae8577394c7e95c340118",
+    "raw_bytes": 10129,
+    "retained_sha256": "b64571a10d6849905547874f2aba54f43e728dca424e98292f580f493ea5580c"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review/repros/api-private.cg",
+    "retained": "combined/review/repros/api-private.cg.gz",
+    "raw_sha256": "b8ecb78eedcfdb71efd29326ba76a9cebc633ade6615836b33080e93be27b46d",
+    "raw_bytes": 269,
+    "retained_sha256": "0932e0971fa889f6d10bb22404922f816dbbe37d8369d37cd7234609db364468"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review/repros/copy-root-reproduction.json",
+    "retained": "combined/review/repros/copy-root-reproduction.json.gz",
+    "raw_sha256": "b10ff45325e9b6daa62984c416097b685defa36a42783786a770409167e96ef6",
+    "raw_bytes": 1019,
+    "retained_sha256": "24c651bfbaeb2a5dab18dcf1d24973e26318dcb0565a8345f91bebce19241d86"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review/repros/copy-root.rs",
+    "retained": "combined/review/repros/copy-root.rs.gz",
+    "raw_sha256": "d8fb01287b0bd701ec17be92517807e7efc0598739cb0bfbbb729d20da8f382d",
+    "raw_bytes": 599,
+    "retained_sha256": "83bfda22872d49bbf3bdc391b0ae8eda6a0e5cce6b318dedb88c0ab18bb6f9b2"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review/repros/core-nominal/record-borrow.cg",
+    "retained": "combined/review/repros/core-nominal/record-borrow.cg.gz",
+    "raw_sha256": "4715ebd0a2c073bdf9b5c81787996638daff4b57852ba5682eb11cf8095e3849",
+    "raw_bytes": 260,
+    "retained_sha256": "0e56396541714433ec4aac60150d80b85f58707108afc0ae49c24b263d144037"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review/repros/core-nominal/reproduction.json",
+    "retained": "combined/review/repros/core-nominal/reproduction.json.gz",
+    "raw_sha256": "c078e4b1d27d59a69a4e3a09aaed58975781e49fedb37c586f1f40f9ca760278",
+    "raw_bytes": 1235,
+    "retained_sha256": "fc66b4b5815e7a5409a9aed34bc868c667e01e9b2f3fb1ecf6c6e03eafd66973"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review/repros/legacy-guard-panic.cg",
+    "retained": "combined/review/repros/legacy-guard-panic.cg.gz",
+    "raw_sha256": "40582a9cd0e65f295c1573c3b03e077618d8913a682e9f9cf989ac7c346f837f",
+    "raw_bytes": 245,
+    "retained_sha256": "04e9116199f123197e16908140b536d343f7c4ddc41b9ba27364fa314a05c826"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review/repros/outer-root-assignment.cg",
+    "retained": "combined/review/repros/outer-root-assignment.cg.gz",
+    "raw_sha256": "3ae14d4cbfd538a3ea8ca417563bce6d24e900d5a35504fef47efc8d9ed5dfb6",
+    "raw_bytes": 250,
+    "retained_sha256": "b7aaa272624351edb1e15b0ea4be4ab13af76591a859417f6cbcc29c9de34a15"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review/repros/reproductions.json",
+    "retained": "combined/review/repros/reproductions.json.gz",
+    "raw_sha256": "6bfc857f66f38da5ea8ad0773d5ce8994b61c36f52b821488c95a5fcc68a2c0e",
+    "raw_bytes": 7364,
+    "retained_sha256": "229fd2359dac62531b53a04324fe434e4b7990c5d15f4197584050fa5d294282"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review/repros/shadow-collect/cgx2.toml",
+    "retained": "combined/review/repros/shadow-collect/cgx2.toml.gz",
+    "raw_sha256": "74fb9bc0ed767af1d9bf1980b7c07b49540edd16ac1b35fe1244c72b99b3aa17",
+    "raw_bytes": 93,
+    "retained_sha256": "a6abac47c356718951055ffcb9e6cb459ec830ea185d090a1bd3ab42f81a3864"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review/repros/shadow-collect/lib.cg",
+    "retained": "combined/review/repros/shadow-collect/lib.cg.gz",
+    "raw_sha256": "5bc25340be65dff0eca0bba53fbf98dc46ec1ed061bc76381e5ef71848faf4c0",
+    "raw_bytes": 113,
+    "retained_sha256": "a84a5817080951ed06c1008c80da937e9c29630b2da4bc0b8c56167f516b1a1e"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review/repros/shadow-collect/main.cg",
+    "retained": "combined/review/repros/shadow-collect/main.cg.gz",
+    "raw_sha256": "804942c7b3480ecbe21701272d22d2887221b83b62c2d873cbddb80a537d5d16",
+    "raw_bytes": 246,
+    "retained_sha256": "f8123ffc5bdbe468c91ed5ed72f213741192bcf291fe51261e63c1946204d0cc"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review/repros/user-borrow.cg",
+    "retained": "combined/review/repros/user-borrow.cg.gz",
+    "raw_sha256": "235c6222b8028276a8c5966e5b8e456e50583785d6cd1696b9a226ba4c13f3c0",
+    "raw_bytes": 249,
+    "retained_sha256": "52f6611c0c7055b98026e491985820589e30a31511e472b8eaf3e0c9c1128776"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review/repros/user-err-region-escape.cg",
+    "retained": "combined/review/repros/user-err-region-escape.cg.gz",
+    "raw_sha256": "d929db1715a29b68d4d6beafacbb179d81432ac3bb6a2f4dd1f3a7a174f96e51",
+    "raw_bytes": 581,
+    "retained_sha256": "7d438ed70d6e0b14b9931bbcfb0aaf712664cdfab1debd9307fb9a24b2c2bdc1"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review-retry/report.json",
+    "retained": "combined/review-retry/report.json.gz",
+    "raw_sha256": "b50658ca1c73064405a5c9250026b5cb86f6ae184d398d6a19650f6d9fffd95f",
+    "raw_bytes": 53150,
+    "retained_sha256": "8ddf1934797f041c8f220a8450d2feff999d1e597a0467a6e85af015415d29e3"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review-retry/repros/additional-reproductions.json",
+    "retained": "combined/review-retry/repros/additional-reproductions.json.gz",
+    "raw_sha256": "e3a347f0c5c9589d70287aee52695c4c25e14031770ae8577394c7e95c340118",
+    "raw_bytes": 10129,
+    "retained_sha256": "b64571a10d6849905547874f2aba54f43e728dca424e98292f580f493ea5580c"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review-retry/repros/api-private.cg",
+    "retained": "combined/review-retry/repros/api-private.cg.gz",
+    "raw_sha256": "b8ecb78eedcfdb71efd29326ba76a9cebc633ade6615836b33080e93be27b46d",
+    "raw_bytes": 269,
+    "retained_sha256": "0932e0971fa889f6d10bb22404922f816dbbe37d8369d37cd7234609db364468"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review-retry/repros/copy-root-reproduction.json",
+    "retained": "combined/review-retry/repros/copy-root-reproduction.json.gz",
+    "raw_sha256": "b10ff45325e9b6daa62984c416097b685defa36a42783786a770409167e96ef6",
+    "raw_bytes": 1019,
+    "retained_sha256": "24c651bfbaeb2a5dab18dcf1d24973e26318dcb0565a8345f91bebce19241d86"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review-retry/repros/copy-root.rs",
+    "retained": "combined/review-retry/repros/copy-root.rs.gz",
+    "raw_sha256": "d8fb01287b0bd701ec17be92517807e7efc0598739cb0bfbbb729d20da8f382d",
+    "raw_bytes": 599,
+    "retained_sha256": "83bfda22872d49bbf3bdc391b0ae8eda6a0e5cce6b318dedb88c0ab18bb6f9b2"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review-retry/repros/core-nominal/record-borrow.cg",
+    "retained": "combined/review-retry/repros/core-nominal/record-borrow.cg.gz",
+    "raw_sha256": "4715ebd0a2c073bdf9b5c81787996638daff4b57852ba5682eb11cf8095e3849",
+    "raw_bytes": 260,
+    "retained_sha256": "0e56396541714433ec4aac60150d80b85f58707108afc0ae49c24b263d144037"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review-retry/repros/core-nominal/reproduction.json",
+    "retained": "combined/review-retry/repros/core-nominal/reproduction.json.gz",
+    "raw_sha256": "c078e4b1d27d59a69a4e3a09aaed58975781e49fedb37c586f1f40f9ca760278",
+    "raw_bytes": 1235,
+    "retained_sha256": "fc66b4b5815e7a5409a9aed34bc868c667e01e9b2f3fb1ecf6c6e03eafd66973"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review-retry/repros/legacy-guard-panic.cg",
+    "retained": "combined/review-retry/repros/legacy-guard-panic.cg.gz",
+    "raw_sha256": "40582a9cd0e65f295c1573c3b03e077618d8913a682e9f9cf989ac7c346f837f",
+    "raw_bytes": 245,
+    "retained_sha256": "04e9116199f123197e16908140b536d343f7c4ddc41b9ba27364fa314a05c826"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review-retry/repros/outer-root-assignment.cg",
+    "retained": "combined/review-retry/repros/outer-root-assignment.cg.gz",
+    "raw_sha256": "3ae14d4cbfd538a3ea8ca417563bce6d24e900d5a35504fef47efc8d9ed5dfb6",
+    "raw_bytes": 250,
+    "retained_sha256": "b7aaa272624351edb1e15b0ea4be4ab13af76591a859417f6cbcc29c9de34a15"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review-retry/repros/reproductions.json",
+    "retained": "combined/review-retry/repros/reproductions.json.gz",
+    "raw_sha256": "6bfc857f66f38da5ea8ad0773d5ce8994b61c36f52b821488c95a5fcc68a2c0e",
+    "raw_bytes": 7364,
+    "retained_sha256": "229fd2359dac62531b53a04324fe434e4b7990c5d15f4197584050fa5d294282"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review-retry/repros/shadow-collect/cgx2.toml",
+    "retained": "combined/review-retry/repros/shadow-collect/cgx2.toml.gz",
+    "raw_sha256": "74fb9bc0ed767af1d9bf1980b7c07b49540edd16ac1b35fe1244c72b99b3aa17",
+    "raw_bytes": 93,
+    "retained_sha256": "a6abac47c356718951055ffcb9e6cb459ec830ea185d090a1bd3ab42f81a3864"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review-retry/repros/shadow-collect/lib.cg",
+    "retained": "combined/review-retry/repros/shadow-collect/lib.cg.gz",
+    "raw_sha256": "5bc25340be65dff0eca0bba53fbf98dc46ec1ed061bc76381e5ef71848faf4c0",
+    "raw_bytes": 113,
+    "retained_sha256": "a84a5817080951ed06c1008c80da937e9c29630b2da4bc0b8c56167f516b1a1e"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review-retry/repros/shadow-collect/main.cg",
+    "retained": "combined/review-retry/repros/shadow-collect/main.cg.gz",
+    "raw_sha256": "804942c7b3480ecbe21701272d22d2887221b83b62c2d873cbddb80a537d5d16",
+    "raw_bytes": 246,
+    "retained_sha256": "f8123ffc5bdbe468c91ed5ed72f213741192bcf291fe51261e63c1946204d0cc"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review-retry/repros/user-borrow.cg",
+    "retained": "combined/review-retry/repros/user-borrow.cg.gz",
+    "raw_sha256": "235c6222b8028276a8c5966e5b8e456e50583785d6cd1696b9a226ba4c13f3c0",
+    "raw_bytes": 249,
+    "retained_sha256": "52f6611c0c7055b98026e491985820589e30a31511e472b8eaf3e0c9c1128776"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review-retry/repros/user-err-region-escape.cg",
+    "retained": "combined/review-retry/repros/user-err-region-escape.cg.gz",
+    "raw_sha256": "d929db1715a29b68d4d6beafacbb179d81432ac3bb6a2f4dd1f3a7a174f96e51",
+    "raw_bytes": 581,
+    "retained_sha256": "7d438ed70d6e0b14b9931bbcfb0aaf712664cdfab1debd9307fb9a24b2c2bdc1"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review-retry.log.gz",
+    "retained": "combined/review-retry.log.gz",
+    "raw_sha256": "4bf2968f46c78f793b9c60e3e0fb1aa90518e6420ee9e8bd935d225ecfaf437b",
+    "raw_bytes": 108,
+    "retained_sha256": "4bf2968f46c78f793b9c60e3e0fb1aa90518e6420ee9e8bd935d225ecfaf437b"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/review.log.gz",
+    "retained": "combined/review.log.gz",
+    "raw_sha256": "4bf2968f46c78f793b9c60e3e0fb1aa90518e6420ee9e8bd935d225ecfaf437b",
+    "raw_bytes": 108,
+    "retained_sha256": "4bf2968f46c78f793b9c60e3e0fb1aa90518e6420ee9e8bd935d225ecfaf437b"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/selftests.log.gz",
+    "retained": "combined/selftests.log.gz",
+    "raw_sha256": "5e3378cc707757042b12a6a81f89e32e2fdf80a1e1e2074b93c92b4d290c9625",
+    "raw_bytes": 55,
+    "retained_sha256": "5e3378cc707757042b12a6a81f89e32e2fdf80a1e1e2074b93c92b4d290c9625"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/source.json",
+    "retained": "combined/source.json.gz",
+    "raw_sha256": "7e6952ee1518d6456bf061aacca305b7eb4dc21533629bae51a43b4c58ebfd7b",
+    "raw_bytes": 128009,
+    "retained_sha256": "7d9864b7881479c693eb13c8094356ac5b2ecf3ed6e7bac6029d30859f78a708"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/tests.log.gz",
+    "retained": "combined/tests.log.gz",
+    "raw_sha256": "3f3901d684af954d8d42ec394dbbd2ae1fbf27e71477b823f04b9ae62df3bf80",
+    "raw_bytes": 34056,
+    "retained_sha256": "3f3901d684af954d8d42ec394dbbd2ae1fbf27e71477b823f04b9ae62df3bf80"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-combined-review-20261024/all-repairs-rerun/verification.json",
+    "retained": "combined/verification.json.gz",
+    "raw_sha256": "87fbd32c03ffdc80e096d5356490463d46e8b4151462a3abdc9ce7098dca35ea",
+    "raw_bytes": 188753,
+    "retained_sha256": "c69985d2ccbec32323f20236db2a7328cfa3f53cc04adf5b92c08481d2b69e8b"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/borrow-package.py",
+    "retained": "external/admission/borrow-package.py.gz",
+    "raw_sha256": "aaa96dbd10ef2129ec925bf2fcf5ab9c2857b512b78218c5ba07292b4640375c",
+    "raw_bytes": 25,
+    "retained_sha256": "70843027d433e2ec33c7b1d310cd100526529e137501ed9cfbb15b2b5f9502fb"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/copy.py",
+    "retained": "external/admission/copy.py.gz",
+    "raw_sha256": "aaa96dbd10ef2129ec925bf2fcf5ab9c2857b512b78218c5ba07292b4640375c",
+    "raw_bytes": 25,
+    "retained_sha256": "70843027d433e2ec33c7b1d310cd100526529e137501ed9cfbb15b2b5f9502fb"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/borrow-package/cgx2.toml",
+    "retained": "external/admission/fixtures/borrow-package/cgx2.toml.gz",
+    "raw_sha256": "43444e9e7515707f0d80e90b0c677d3c490ca6ae3e75409fa2f464e4ddc25353",
+    "raw_bytes": 89,
+    "retained_sha256": "831b6c4869815fadd6aa20de87084d40ee667afc83dc90292c7e351585499657"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/borrow-package/main.cg",
+    "retained": "external/admission/fixtures/borrow-package/main.cg.gz",
+    "raw_sha256": "2a62090d212f6991c1c06fe6943a85e2ba7c3473da045c8eaf2502800578f6fe",
+    "raw_bytes": 396,
+    "retained_sha256": "9ee98b2e1f5695a9ae57ca5886911c4b7ebacb0445622944ecd50bc052d1b028"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/borrow-package/util.cg",
+    "retained": "external/admission/fixtures/borrow-package/util.cg.gz",
+    "raw_sha256": "ad06f13ad23b939f3e72107eaef8ddde5d92222e7b332bd049f79472645418b7",
+    "raw_bytes": 70,
+    "retained_sha256": "0a78dc238914a8eed090b4f3b33a6adb4c8816470c1487e67dcd36ff2a2e46bb"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/builtin-result-heap-error.cg",
+    "retained": "external/admission/fixtures/builtin-result-heap-error.cg.gz",
+    "raw_sha256": "96ee638bfe7dfbcb1b690b92f06e758a0e74eae0682cabc30cb30d875d98422a",
+    "raw_bytes": 637,
+    "retained_sha256": "e8b1e9e0324f14fa9c3e6e67814a4bc5710e1fd1735cfce4136a062b301da7b8"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/collect-capability/cgx2.toml",
+    "retained": "external/admission/fixtures/collect-capability/cgx2.toml.gz",
+    "raw_sha256": "abf5fc4929a4e6999d4da9b154152abadf858c9b632b1aa09e098156982d9f62",
+    "raw_bytes": 92,
+    "retained_sha256": "7057adfea02bebc4433d4fa775c6bde16ea73902fe6f3a91e5c12880f0feb26b"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/collect-capability/main.cg",
+    "retained": "external/admission/fixtures/collect-capability/main.cg.gz",
+    "raw_sha256": "739c4da882a9d3aba019c5cf1365a3b9f2feda98623d60f4a642298ed4675b68",
+    "raw_bytes": 152,
+    "retained_sha256": "4450fbd1074bc69a04919d1dad2ef0a871be01eae6c3d90af0c09c7311874170"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/collect-capability/managed.cg",
+    "retained": "external/admission/fixtures/collect-capability/managed.cg.gz",
+    "raw_sha256": "a612efc6fbb0d968f6519eecab546e49564410f08c154e9012416cdf8cff43c4",
+    "raw_bytes": 145,
+    "retained_sha256": "8377e7722b034befb22ca84cfba3ed4bb1ed55956a09e58f96b72458c7d7a884"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/collect-effect/cgx2.toml",
+    "retained": "external/admission/fixtures/collect-effect/cgx2.toml.gz",
+    "raw_sha256": "abf5fc4929a4e6999d4da9b154152abadf858c9b632b1aa09e098156982d9f62",
+    "raw_bytes": 92,
+    "retained_sha256": "7057adfea02bebc4433d4fa775c6bde16ea73902fe6f3a91e5c12880f0feb26b"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/collect-effect/main.cg",
+    "retained": "external/admission/fixtures/collect-effect/main.cg.gz",
+    "raw_sha256": "67c0b6d5096bffec59a54df2c1d14fdcf8756662f8344512734420ff5520c5e5",
+    "raw_bytes": 170,
+    "retained_sha256": "b68d8bb358809a7717be13767f3d97c0b68dd002d5bddfbf5233c658b49b79f0"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/collect-effect/managed.cg",
+    "retained": "external/admission/fixtures/collect-effect/managed.cg.gz",
+    "raw_sha256": "a612efc6fbb0d968f6519eecab546e49564410f08c154e9012416cdf8cff43c4",
+    "raw_bytes": 145,
+    "retained_sha256": "8377e7722b034befb22ca84cfba3ed4bb1ed55956a09e58f96b72458c7d7a884"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/copy-effects.cg",
+    "retained": "external/admission/fixtures/copy-effects.cg.gz",
+    "raw_sha256": "e0d065c22a03d4a44ddc48959b32734022d055cf2c70359f9b3ae445f28b5ba1",
+    "raw_bytes": 227,
+    "retained_sha256": "a8a10af0242cf18561910a27eb760bea7789074fc3d79918c9b1acb80f5ce13f"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/copy.cg",
+    "retained": "external/admission/fixtures/copy.cg.gz",
+    "raw_sha256": "fea5fd46b8ea587c6543da36afd64711fdd2050a2dde91a8202f551b074f105a",
+    "raw_bytes": 543,
+    "retained_sha256": "eb0489b9172349def94db16e6b4cc4f517b0aadf75f295ad6a29e36f8787f204"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/field-err-escape.cg",
+    "retained": "external/admission/fixtures/field-err-escape.cg.gz",
+    "raw_sha256": "9ecd1767c62ffd40d3e80c69769256c5d1af7685bbf6c983293b20700d59576d",
+    "raw_bytes": 621,
+    "retained_sha256": "ffbaa541d8dac9525cd8e39f9f243c0330388f02961cc277eebe76739b5a3e14"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/guard-effects.cg",
+    "retained": "external/admission/fixtures/guard-effects.cg.gz",
+    "raw_sha256": "cb6de3183e86d5db21ded53e457ad1619d3f9a71e80ab0f50098b1dffdf39de6",
+    "raw_bytes": 214,
+    "retained_sha256": "b76753d83a276d675e82928035ab64a2e1abd3525157d7fb7211a53e4461d697"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/legacy-guard.cg",
+    "retained": "external/admission/fixtures/legacy-guard.cg.gz",
+    "raw_sha256": "40582a9cd0e65f295c1573c3b03e077618d8913a682e9f9cf989ac7c346f837f",
+    "raw_bytes": 245,
+    "retained_sha256": "04e9116199f123197e16908140b536d343f7c4ddc41b9ba27364fa314a05c826"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/nested-assignment.cg",
+    "retained": "external/admission/fixtures/nested-assignment.cg.gz",
+    "raw_sha256": "4f6c4b73e3b2923e887026df7140280cc9e78c69da21aa201a40301132cae775",
+    "raw_bytes": 446,
+    "retained_sha256": "d8d790b853273e071ac8b8e41be1e029b77c91de07065be3402fe5606bd4f179"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/region-effects.cg",
+    "retained": "external/admission/fixtures/region-effects.cg.gz",
+    "raw_sha256": "ee37e812852b62af2f322a93f05f3f58414b2e1ccc183021983cbf94fe586496",
+    "raw_bytes": 236,
+    "retained_sha256": "a16710c03a150565a932d02da762080f61f2f26de9d7e7db33870f028e7964b9"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/region-transitive/cgx2.toml",
+    "retained": "external/admission/fixtures/region-transitive/cgx2.toml.gz",
+    "raw_sha256": "abf5fc4929a4e6999d4da9b154152abadf858c9b632b1aa09e098156982d9f62",
+    "raw_bytes": 92,
+    "retained_sha256": "7057adfea02bebc4433d4fa775c6bde16ea73902fe6f3a91e5c12880f0feb26b"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/region-transitive/main.cg",
+    "retained": "external/admission/fixtures/region-transitive/main.cg.gz",
+    "raw_sha256": "fd6fe8537242072630356ba5de48b10024507b8430363b66f454baaab9a37ec2",
+    "raw_bytes": 237,
+    "retained_sha256": "be7d1795c6304de64c4f1d4053b691a622cedbe33afc02f3173d21ab891c5b44"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/region-transitive/managed.cg",
+    "retained": "external/admission/fixtures/region-transitive/managed.cg.gz",
+    "raw_sha256": "a612efc6fbb0d968f6519eecab546e49564410f08c154e9012416cdf8cff43c4",
+    "raw_bytes": 145,
+    "retained_sha256": "8377e7722b034befb22ca84cfba3ed4bb1ed55956a09e58f96b72458c7d7a884"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/session-effects.cg",
+    "retained": "external/admission/fixtures/session-effects.cg.gz",
+    "raw_sha256": "64ec23621a7c3ad10b24be0f0b3e3231944adce72175c5d01b1e0914ab84216e",
+    "raw_bytes": 204,
+    "retained_sha256": "4e17a36688af64be41d50167d96839ce5188605aee371df1bdb681f092187302"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/session-shadow.cg",
+    "retained": "external/admission/fixtures/session-shadow.cg.gz",
+    "raw_sha256": "7d169aedc890c29f8b029f20a892f4802fc00bf0e76a257095a01ba5b16d3a93",
+    "raw_bytes": 297,
+    "retained_sha256": "5d60108a030671f50a4a1fd24801a82d87dc463b885adedb37a09bcb9aa2641a"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/shadow-package/cgx2.toml",
+    "retained": "external/admission/fixtures/shadow-package/cgx2.toml.gz",
+    "raw_sha256": "abf5fc4929a4e6999d4da9b154152abadf858c9b632b1aa09e098156982d9f62",
+    "raw_bytes": 92,
+    "retained_sha256": "7057adfea02bebc4433d4fa775c6bde16ea73902fe6f3a91e5c12880f0feb26b"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/shadow-package/main.cg",
+    "retained": "external/admission/fixtures/shadow-package/main.cg.gz",
+    "raw_sha256": "952b8af45c8283433da616028a71c0eac7c8651dabb27a32d2bf22970f006483",
+    "raw_bytes": 324,
+    "retained_sha256": "f09e6a82a99d7285d3f3d0678a884846c40466bdcca95c60517050cd3892e6aa"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/shadow-package/managed.cg",
+    "retained": "external/admission/fixtures/shadow-package/managed.cg.gz",
+    "raw_sha256": "a612efc6fbb0d968f6519eecab546e49564410f08c154e9012416cdf8cff43c4",
+    "raw_bytes": 145,
+    "retained_sha256": "8377e7722b034befb22ca84cfba3ed4bb1ed55956a09e58f96b72458c7d7a884"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/try-in-effects.cg",
+    "retained": "external/admission/fixtures/try-in-effects.cg.gz",
+    "raw_sha256": "e2016f7fe07e99c8da1f33e96cbb00497f2297933f0bbea0cefc27bc6b54e997",
+    "raw_bytes": 226,
+    "retained_sha256": "0910fece7203ff266a0f2e4ef40d1e3ca5c7daacccfee8ab19eb721a05a57ced"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/user-borrow.cg",
+    "retained": "external/admission/fixtures/user-borrow.cg.gz",
+    "raw_sha256": "235c6222b8028276a8c5966e5b8e456e50583785d6cd1696b9a226ba4c13f3c0",
+    "raw_bytes": 249,
+    "retained_sha256": "52f6611c0c7055b98026e491985820589e30a31511e472b8eaf3e0c9c1128776"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/user-effects-package/cgx2.toml",
+    "retained": "external/admission/fixtures/user-effects-package/cgx2.toml.gz",
+    "raw_sha256": "abf5fc4929a4e6999d4da9b154152abadf858c9b632b1aa09e098156982d9f62",
+    "raw_bytes": 92,
+    "retained_sha256": "7057adfea02bebc4433d4fa775c6bde16ea73902fe6f3a91e5c12880f0feb26b"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/user-effects-package/main.cg",
+    "retained": "external/admission/fixtures/user-effects-package/main.cg.gz",
+    "raw_sha256": "934e35ab156be5ba04f762d92192ab2fe47a44c14c73ec98c5535ca2c48cb6e5",
+    "raw_bytes": 275,
+    "retained_sha256": "3f5febe6f0a5d3fe912ac373072b53cb43146be9e32af42e2de0f67591ee3e18"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/user-effects-package/managed.cg",
+    "retained": "external/admission/fixtures/user-effects-package/managed.cg.gz",
+    "raw_sha256": "3af05a376c847d9bb4af711ed880a6347fbafd727fa44acd1f96af6688c44241",
+    "raw_bytes": 169,
+    "retained_sha256": "e442cac5d099541aa4004aa1b5b992890dd6e13301ae00ea2219c4ed6f6690f5"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/user-effects-retained/cgx2.toml",
+    "retained": "external/admission/fixtures/user-effects-retained/cgx2.toml.gz",
+    "raw_sha256": "abf5fc4929a4e6999d4da9b154152abadf858c9b632b1aa09e098156982d9f62",
+    "raw_bytes": 92,
+    "retained_sha256": "7057adfea02bebc4433d4fa775c6bde16ea73902fe6f3a91e5c12880f0feb26b"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/user-effects-retained/main.cg",
+    "retained": "external/admission/fixtures/user-effects-retained/main.cg.gz",
+    "raw_sha256": "a1bbbdd525c97b6945499d9d959414d84c9a1784dab4476cb75b91701cf75434",
+    "raw_bytes": 257,
+    "retained_sha256": "ebaa32b206dfd080ab5de2a5e3afad04e9cad28b0e9777296dc246c69855d7ce"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/user-effects-retained/managed.cg",
+    "retained": "external/admission/fixtures/user-effects-retained/managed.cg.gz",
+    "raw_sha256": "3af05a376c847d9bb4af711ed880a6347fbafd727fa44acd1f96af6688c44241",
+    "raw_bytes": 169,
+    "retained_sha256": "e442cac5d099541aa4004aa1b5b992890dd6e13301ae00ea2219c4ed6f6690f5"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/user-err-escape.cg",
+    "retained": "external/admission/fixtures/user-err-escape.cg.gz",
+    "raw_sha256": "d427f43fe1cfc0c95eed01ae2b283b9374fd74c0531e4c190387aab218dcf11a",
+    "raw_bytes": 581,
+    "retained_sha256": "ba22177655878ef4e3afc64dbb92cf183c8ed04b6e264ca50f44c72bdc8b5946"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/fixtures/user-err-local.cg",
+    "retained": "external/admission/fixtures/user-err-local.cg.gz",
+    "raw_sha256": "bbcfe6633a6071cb196fa5dacafa45432831692b5f7488a1f5d705a9b7210a26",
+    "raw_bytes": 520,
+    "retained_sha256": "a65c4ef7a918be5b98fb8df31dd915c6c46515da44775647ae3a0ad6f1116f9e"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/legacy-guard.py",
+    "retained": "external/admission/legacy-guard.py.gz",
+    "raw_sha256": "aaa96dbd10ef2129ec925bf2fcf5ab9c2857b512b78218c5ba07292b4640375c",
+    "raw_bytes": 25,
+    "retained_sha256": "70843027d433e2ec33c7b1d310cd100526529e137501ed9cfbb15b2b5f9502fb"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/nested-assignment.py",
+    "retained": "external/admission/nested-assignment.py.gz",
+    "raw_sha256": "aaa96dbd10ef2129ec925bf2fcf5ab9c2857b512b78218c5ba07292b4640375c",
+    "raw_bytes": 25,
+    "retained_sha256": "70843027d433e2ec33c7b1d310cd100526529e137501ed9cfbb15b2b5f9502fb"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/outside/borrow-package.rs",
+    "retained": "external/admission/outside/borrow-package.rs.gz",
+    "raw_sha256": "219150705c34687d7f4ad24cd9e7f24e9af452b3c2178e483a7d277a5f7f6c72",
+    "raw_bytes": 241516,
+    "retained_sha256": "3551efb5f0dcf4190a9bf4442b00d90429227c32623e24ec921c04784f7a023b"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/outside/copy.rs",
+    "retained": "external/admission/outside/copy.rs.gz",
+    "raw_sha256": "3fdc3bb8ca0d24e21ce651bb0fe48ee3784902762816a908c59e9deb82066b9f",
+    "raw_bytes": 242589,
+    "retained_sha256": "cc17ffc7d467b14f4dc2dfd4bd0b3b2d8a2c9ca6ba468d49582ffbce36c214eb"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/outside/legacy-guard.rs",
+    "retained": "external/admission/outside/legacy-guard.rs.gz",
+    "raw_sha256": "b0856d691a5291b7d40623a945ea58d417bb25b675807e127841d34173fccd3b",
+    "raw_bytes": 237906,
+    "retained_sha256": "79bb21787bbfb3dc824273691386cc7bc71294def373a72bc6a8e3884da6079d"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/outside/nested-assignment.rs",
+    "retained": "external/admission/outside/nested-assignment.rs.gz",
+    "raw_sha256": "6f05422f15c6ec276002d7388eeea4d1a360ec8faf8ae42ba2203d5eab4134c5",
+    "raw_bytes": 238743,
+    "retained_sha256": "92f0ddca65ea35a30703ae36b31f18996ff7fbbff219dc2a1aaa75032d0eb61d"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/outside/session-shadow.rs",
+    "retained": "external/admission/outside/session-shadow.rs.gz",
+    "raw_sha256": "b5298e04163976d2758519dd503b728774561ac0e550a8021db2aa95d66af6fc",
+    "raw_bytes": 238659,
+    "retained_sha256": "4ab2f2bc1d6a3f42f07e02bdefa2e67db6ff4714efc530b377cebc1b928fe0b3"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/outside/shadow-package.rs",
+    "retained": "external/admission/outside/shadow-package.rs.gz",
+    "raw_sha256": "9ff11faf827cfa754f8b08d268225a73cdcbb10c2053828fb00a660721aa97a8",
+    "raw_bytes": 240952,
+    "retained_sha256": "5ff43db5c0e43b50120288c48e39d7086f96d584cccec3e1fcd576c1647b02b1"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/outside/user-borrow.rs",
+    "retained": "external/admission/outside/user-borrow.rs.gz",
+    "raw_sha256": "242e78110b54a06f6dca65f050958cbb4f68b9a00fdcebf7b3e4e726f353ab99",
+    "raw_bytes": 238798,
+    "retained_sha256": "6914108102dc60bf596fc5cb5d9dd502ecde4e9d9c447c7aa6525793944423d7"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/outside/user-effects-package.rs",
+    "retained": "external/admission/outside/user-effects-package.rs.gz",
+    "raw_sha256": "a8c5654d386acb1b01abe36a4c714f7b13a5452b71efdd373c0215a605716f0c",
+    "raw_bytes": 239765,
+    "retained_sha256": "21f4b55a215b47e5adbc378773b7627be14ea267c86505c9b68bde7237c0a059"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/outside/user-err-local.rs",
+    "retained": "external/admission/outside/user-err-local.rs.gz",
+    "raw_sha256": "1113e6285a6b03ac2f074ca3d1c37aacb531f8202e54bf5f81be8a23b94f3e92",
+    "raw_bytes": 240636,
+    "retained_sha256": "a870813bf89888ef443a063282b6353d88f6cc6978f34ee3452439f20168290d"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/report.json",
+    "retained": "external/admission/report.json.gz",
+    "raw_sha256": "4fda7da245f31b81afd211eb1ca12815a023c7adc7999730e4d4362674174d19",
+    "raw_bytes": 203961,
+    "retained_sha256": "6d39fbf7dd5882abc0a148d46f3961b3e344aeaa25004073f8b4c451eff7be6b"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/runner-snapshot.py",
+    "retained": "external/admission/runner-snapshot.py.gz",
+    "raw_sha256": "3d2dccc749853f27d73f6ca802d6ec4d6c800cec8ad8901af627bf601406c32a",
+    "raw_bytes": 14814,
+    "retained_sha256": "e47e33ecb10356bc674a189282c2870cf116e241f5a875ab99b4d60c54388074"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/rustc-two-threads",
+    "retained": "external/admission/rustc-two-threads.gz",
+    "raw_sha256": "69678aa162e6d524b32b68f569c9b45ae5dfde59997a9a143713d18e74e06ce2",
+    "raw_bytes": 54,
+    "retained_sha256": "016b43c331612d50545b67c8331d542a4c4364b5ee73e4ff6f912202699fd742"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/session-shadow.py",
+    "retained": "external/admission/session-shadow.py.gz",
+    "raw_sha256": "aaa96dbd10ef2129ec925bf2fcf5ab9c2857b512b78218c5ba07292b4640375c",
+    "raw_bytes": 25,
+    "retained_sha256": "70843027d433e2ec33c7b1d310cd100526529e137501ed9cfbb15b2b5f9502fb"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/shadow-package.py",
+    "retained": "external/admission/shadow-package.py.gz",
+    "raw_sha256": "aaa96dbd10ef2129ec925bf2fcf5ab9c2857b512b78218c5ba07292b4640375c",
+    "raw_bytes": 25,
+    "retained_sha256": "70843027d433e2ec33c7b1d310cd100526529e137501ed9cfbb15b2b5f9502fb"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/user-borrow.py",
+    "retained": "external/admission/user-borrow.py.gz",
+    "raw_sha256": "aaa96dbd10ef2129ec925bf2fcf5ab9c2857b512b78218c5ba07292b4640375c",
+    "raw_bytes": 25,
+    "retained_sha256": "70843027d433e2ec33c7b1d310cd100526529e137501ed9cfbb15b2b5f9502fb"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/user-effects-package.py",
+    "retained": "external/admission/user-effects-package.py.gz",
+    "raw_sha256": "aaa96dbd10ef2129ec925bf2fcf5ab9c2857b512b78218c5ba07292b4640375c",
+    "raw_bytes": 25,
+    "retained_sha256": "70843027d433e2ec33c7b1d310cd100526529e137501ed9cfbb15b2b5f9502fb"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/admission/user-err-local.py",
+    "retained": "external/admission/user-err-local.py.gz",
+    "raw_sha256": "aaa96dbd10ef2129ec925bf2fcf5ab9c2857b512b78218c5ba07292b4640375c",
+    "raw_bytes": 25,
+    "retained_sha256": "70843027d433e2ec33c7b1d310cd100526529e137501ed9cfbb15b2b5f9502fb"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/auto/auto.rs",
+    "retained": "external/auto/auto.rs.gz",
+    "raw_sha256": "2531a188d2cce3bbec52783f9340f6adb9cbd301eae4e0307e834502864b97b0",
+    "raw_bytes": 246194,
+    "retained_sha256": "6fc70cb54db6356c78cf8e457aca900c072b95d51ad492b3741c3d354595046f"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/allocation-standalone.rs",
+    "retained": "external/matrix-retry/allocation-standalone.rs.gz",
+    "raw_sha256": "88202e414ca99a48d6264f5ae5d02cfe5bffdee7744285dcbac7f292af145966",
+    "raw_bytes": 241070,
+    "retained_sha256": "59f2839718604530e3a89c8e5902fce6501cab191d4d745346141936488e8547"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/arithmetic-standalone.rs",
+    "retained": "external/matrix-retry/arithmetic-standalone.rs.gz",
+    "raw_sha256": "8de6107b746aa10a3fadb073ef52c99dbdeaf211865eb225f86a9996f36b9be5",
+    "raw_bytes": 242429,
+    "retained_sha256": "9b5e65d4a3e523fc0b4b68c313c81758be3a79ae7472894250b288899ac7e55c"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/contract-standalone.rs",
+    "retained": "external/matrix-retry/contract-standalone.rs.gz",
+    "raw_sha256": "8d7f9b7c442faa416a5c0d54a4e9331dd79f2871b4e1e80000f85885c67e068e",
+    "raw_bytes": 242849,
+    "retained_sha256": "f0a3b0c9ad8f521137df89437818fcc6a2139b5a62fee33e8ab3071848d9628f"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/copy-cycle-standalone.rs",
+    "retained": "external/matrix-retry/copy-cycle-standalone.rs.gz",
+    "raw_sha256": "4ac6b1a481966cb8e5685c8727556ffaee914b299561d96c6ba81ffc9c5c4fef",
+    "raw_bytes": 246725,
+    "retained_sha256": "49be4b9ce028dbea0658f93ada9d9732acf2a23223a6e947b15ae1830addf394"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/failed-argument-standalone.rs",
+    "retained": "external/matrix-retry/failed-argument-standalone.rs.gz",
+    "raw_sha256": "63a7a46033ed9c3e64b412d0e7666176688e1f368a81a1739d4d466a5583af24",
+    "raw_bytes": 244346,
+    "retained_sha256": "e72fd91c6a2e84a32ca41affe050c201d6f2814bbac519558bb47ab3056ab4b1"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/guard-standalone.rs",
+    "retained": "external/matrix-retry/guard-standalone.rs.gz",
+    "raw_sha256": "cc317c7486576e0636cf16e41d9f8884d1aeaa274555b3b15696c72ba54600ec",
+    "raw_bytes": 238809,
+    "retained_sha256": "6820b0b795fac4c34feb3485b350a18726d642e8ed9b856c29eb23757514ca01"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/nested-guards-standalone.rs",
+    "retained": "external/matrix-retry/nested-guards-standalone.rs.gz",
+    "raw_sha256": "98ef2367b3274a16de8affe949d2356d401cbbc030b641784df6772a398f4fe8",
+    "raw_bytes": 247538,
+    "retained_sha256": "0df601a112709d5f19d1396624693b29faf6bd23abc45cebc4f45a1307d0f1fb"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/normal-standalone.rs",
+    "retained": "external/matrix-retry/normal-standalone.rs.gz",
+    "raw_sha256": "3db375cd148d5b67e48cf28ddd301bf150c8f1d4d54098d3a0125ec70d18f0c6",
+    "raw_bytes": 242079,
+    "retained_sha256": "41f95e6914cd3566d49b8257b067a08872d306fb3a52596a81f46c40eb7bfd54"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/region-standalone.rs",
+    "retained": "external/matrix-retry/region-standalone.rs.gz",
+    "raw_sha256": "33927e4391cbe432d948d7fe7b532a5324416737dc5c6ffdcd5537e73b9466cd",
+    "raw_bytes": 240859,
+    "retained_sha256": "17f0659cbaf129ac8d8d1f80d915c1116518c1e6939cef9bf8a0a04464bc86ab"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/return-standalone.rs",
+    "retained": "external/matrix-retry/return-standalone.rs.gz",
+    "raw_sha256": "0acc759c47d25c0c8bb97d54e21bbdd5defe3df6b385c696e0af047c67eac1c5",
+    "raw_bytes": 242087,
+    "retained_sha256": "d3bc6bffa352cff9abf18be0346de84bddce29c328406deee1100ed65b4c7f36"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/session-standalone.rs",
+    "retained": "external/matrix-retry/session-standalone.rs.gz",
+    "raw_sha256": "99b570b97f340c22aa15042ea754cb4689c9efb1932ff7c461d6992565b417fc",
+    "raw_bytes": 239656,
+    "retained_sha256": "69d05b3d8448b92ef5473b2c8a7fdc9fb9ac1850af92525215042f92547e100a"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/source-fault-1-standalone.rs",
+    "retained": "external/matrix-retry/source-fault-1-standalone.rs.gz",
+    "raw_sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+    "raw_bytes": 250362,
+    "retained_sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/source-fault-10-standalone.rs",
+    "retained": "external/matrix-retry/source-fault-10-standalone.rs.gz",
+    "raw_sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+    "raw_bytes": 250362,
+    "retained_sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/source-fault-11-standalone.rs",
+    "retained": "external/matrix-retry/source-fault-11-standalone.rs.gz",
+    "raw_sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+    "raw_bytes": 250362,
+    "retained_sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/source-fault-12-standalone.rs",
+    "retained": "external/matrix-retry/source-fault-12-standalone.rs.gz",
+    "raw_sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+    "raw_bytes": 250362,
+    "retained_sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/source-fault-13-standalone.rs",
+    "retained": "external/matrix-retry/source-fault-13-standalone.rs.gz",
+    "raw_sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+    "raw_bytes": 250362,
+    "retained_sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/source-fault-14-standalone.rs",
+    "retained": "external/matrix-retry/source-fault-14-standalone.rs.gz",
+    "raw_sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+    "raw_bytes": 250362,
+    "retained_sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/source-fault-15-standalone.rs",
+    "retained": "external/matrix-retry/source-fault-15-standalone.rs.gz",
+    "raw_sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+    "raw_bytes": 250362,
+    "retained_sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/source-fault-16-standalone.rs",
+    "retained": "external/matrix-retry/source-fault-16-standalone.rs.gz",
+    "raw_sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+    "raw_bytes": 250362,
+    "retained_sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/source-fault-17-standalone.rs",
+    "retained": "external/matrix-retry/source-fault-17-standalone.rs.gz",
+    "raw_sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+    "raw_bytes": 250362,
+    "retained_sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/source-fault-18-standalone.rs",
+    "retained": "external/matrix-retry/source-fault-18-standalone.rs.gz",
+    "raw_sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+    "raw_bytes": 250362,
+    "retained_sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/source-fault-19-standalone.rs",
+    "retained": "external/matrix-retry/source-fault-19-standalone.rs.gz",
+    "raw_sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+    "raw_bytes": 250362,
+    "retained_sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/source-fault-2-standalone.rs",
+    "retained": "external/matrix-retry/source-fault-2-standalone.rs.gz",
+    "raw_sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+    "raw_bytes": 250362,
+    "retained_sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/source-fault-20-standalone.rs",
+    "retained": "external/matrix-retry/source-fault-20-standalone.rs.gz",
+    "raw_sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+    "raw_bytes": 250362,
+    "retained_sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/source-fault-21-standalone.rs",
+    "retained": "external/matrix-retry/source-fault-21-standalone.rs.gz",
+    "raw_sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+    "raw_bytes": 250362,
+    "retained_sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/source-fault-22-standalone.rs",
+    "retained": "external/matrix-retry/source-fault-22-standalone.rs.gz",
+    "raw_sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+    "raw_bytes": 250362,
+    "retained_sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/source-fault-3-standalone.rs",
+    "retained": "external/matrix-retry/source-fault-3-standalone.rs.gz",
+    "raw_sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+    "raw_bytes": 250362,
+    "retained_sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/source-fault-4-standalone.rs",
+    "retained": "external/matrix-retry/source-fault-4-standalone.rs.gz",
+    "raw_sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+    "raw_bytes": 250362,
+    "retained_sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/source-fault-5-standalone.rs",
+    "retained": "external/matrix-retry/source-fault-5-standalone.rs.gz",
+    "raw_sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+    "raw_bytes": 250362,
+    "retained_sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/source-fault-6-standalone.rs",
+    "retained": "external/matrix-retry/source-fault-6-standalone.rs.gz",
+    "raw_sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+    "raw_bytes": 250362,
+    "retained_sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/source-fault-7-standalone.rs",
+    "retained": "external/matrix-retry/source-fault-7-standalone.rs.gz",
+    "raw_sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+    "raw_bytes": 250362,
+    "retained_sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/source-fault-8-standalone.rs",
+    "retained": "external/matrix-retry/source-fault-8-standalone.rs.gz",
+    "raw_sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+    "raw_bytes": 250362,
+    "retained_sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/matrix-retry/source-fault-9-standalone.rs",
+    "retained": "external/matrix-retry/source-fault-9-standalone.rs.gz",
+    "raw_sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+    "raw_bytes": 250362,
+    "retained_sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/package-retry/package-error.rs",
+    "retained": "external/package-retry/package-error.rs.gz",
+    "raw_sha256": "dc1541628059e26aca04d9f6a7fd0a5d7db9ac95f89a32edb67f83acc7be1889",
+    "raw_bytes": 238382,
+    "retained_sha256": "34b33cb6d38278baaeb8060929728e65623b7cc2eb8b5b20cb7cec960bd9f007"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-combined-20261024/package-retry/package-value.rs",
+    "retained": "external/package-retry/package-value.rs.gz",
+    "raw_sha256": "0df605e991187e4e19c2a5d318535a01e6f96de9fa575f5959a3d1cad100c4fa",
+    "raw_bytes": 241398,
+    "retained_sha256": "f5e0d1062ba41fa36e3e1ed7d4d69cc81ff2b907c093b48443c01c78a8dc1ba4"
+  }
+]

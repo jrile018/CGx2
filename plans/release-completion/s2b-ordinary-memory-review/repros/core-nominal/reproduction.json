@@ -1,0 +1,27 @@
+{
+  "delivery": "93303003ceececb2705b929265ea585415710380",
+  "source_sha256": "4715ebd0a2c073bdf9b5c81787996638daff4b57852ba5682eb11cf8095e3849",
+  "binary_sha256": "47473d5e671ec86797908824035010c2c0cac5f684b9a05a38a92f6bf7ca4810",
+  "commands": [
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/a9af/lang/target/ordinary-core-admission-freeze/bin/cgx2",
+        "check",
+        "/home/john-riley/projects/lang/target/ordinary-admission-review-20261024/9330300/repros/record-borrow.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT095: /home/john-riley/projects/lang/target/ordinary-admission-review-20261024/9330300/repros/record-borrow.cg:180..197: borrow requires a region capability\n"
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/a9af/lang/target/ordinary-core-admission-freeze/bin/cgx2",
+        "run",
+        "/home/john-riley/projects/lang/target/ordinary-admission-review-20261024/9330300/repros/record-borrow.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT095: /home/john-riley/projects/lang/target/ordinary-admission-review-20261024/9330300/repros/record-borrow.cg:180..197: borrow requires a region capability\n"
+    }
+  ]
+}

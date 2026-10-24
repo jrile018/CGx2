@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24T15:26:21.775802+00:00",
+  "checked_at": "2026-10-24T15:57:01.522569+00:00",
   "original_chats": [
     {
       "lane": "core",
@@ -502,13 +502,15 @@
       "clientThreadId": "client-new-thread:b6941a14-a874-4643-816b-e8818df32f4d",
       "hostId": "local",
       "base": "7bb7a480119826693db67ed503caaf7f23f6abb2",
-      "status": "delivered-reviewing",
+      "status": "reviewed-incomplete",
       "plan": "plans/release-completion/s2b-ordinary-memory-review/core-admission/plan.md",
       "threadId": "01a16e6c-b9bf-76c3-8096-5aafc5441506",
       "worktree": "/home/john-riley/.codex/worktrees/a9af/lang",
       "afterCursor": "9aa16c60-ecc2-44a0-9fe3-12fc5a04ddd7:4",
       "setup_verified": "Exact worktree HEAD matches common base; app read_thread and wait_threads confirm active. list_threads omitted agent-created chats; read-only metadata plus app reads resolved IDs without duplication.",
-      "commit": "93303003ceececb2705b929265ea585415710380"
+      "commit": "93303003ceececb2705b929265ea585415710380",
+      "integrated_commit": "1d331776ad632e71583a05e6b53d587fafcedfde",
+      "acceptance_note": "OM01\u201303 and user function borrow fixed. Nominal record borrow still CGT095; bounded follow-up required. Original196 standalone rows were inside repository; coordinator combined unchanged196 now passes actual external cwd. Core361Rust/196product and combined1360Rust retained."
     },
     {
       "lane": "runtime-roots",
@@ -516,12 +518,15 @@
       "clientThreadId": "client-new-thread:06dfa984-9ab5-4c23-af64-701bc19d78ec",
       "hostId": "local",
       "base": "7bb7a480119826693db67ed503caaf7f23f6abb2",
-      "status": "running",
+      "status": "reviewed-bounded-repair",
       "plan": "plans/release-completion/s2b-ordinary-memory-review/runtime-roots/plan.md",
       "threadId": "01a16e6c-b9bf-76c3-8096-5a9f6fbac892",
       "worktree": "/home/john-riley/.codex/worktrees/c0c1/lang",
-      "afterCursor": "5f07147a-53ff-4ac6-816f-210c9dd90697:4",
-      "setup_verified": "Exact worktree HEAD matches common base; app read_thread and wait_threads confirm active. list_threads omitted agent-created chats; read-only metadata plus app reads resolved IDs without duplication."
+      "afterCursor": "5f07147a-53ff-4ac6-816f-210c9dd90697:5",
+      "setup_verified": "Exact worktree HEAD matches common base; app read_thread and wait_threads confirm active. list_threads omitted agent-created chats; read-only metadata plus app reads resolved IDs without duplication.",
+      "commit": "f255dfe1c9ebdd4444b581a0083af4c002a751f8",
+      "integrated_commit": "da4828448dfd2ff8d99263441f5edb15c9acc89e",
+      "acceptance_note": "OM05\u201307 reviewed/accepted. Independent scope assignment3/3, copy-cycle26/26 and safe same-region source lifetime probes pass. Combined matrix closes former59 root/lifetime failures. Separate reserve10/11 recovery defects require bounded runtime follow-up; full memory remains open."
     },
     {
       "lane": "api-visibility",
@@ -545,12 +550,15 @@
       "clientThreadId": "client-new-thread:5f836cce-17a3-426e-9115-9c039294e7b1",
       "hostId": "local",
       "base": "7bb7a480119826693db67ed503caaf7f23f6abb2",
-      "status": "running",
+      "status": "reviewed-incomplete",
       "plan": "plans/release-completion/s2b-ordinary-memory-review/evidence-parity/plan.md",
       "threadId": "01a16e6c-e179-79f0-bdff-73791dd80661",
       "worktree": "/home/john-riley/.codex/worktrees/e7e8/lang",
-      "afterCursor": "095f0dcc-7958-450d-bbab-529482f0d2ec:4",
-      "setup_verified": "Exact worktree HEAD matches common base; app read_thread and wait_threads confirm active. list_threads omitted agent-created chats; read-only metadata plus app reads resolved IDs without duplication."
+      "afterCursor": "095f0dcc-7958-450d-bbab-529482f0d2ec:6",
+      "setup_verified": "Exact worktree HEAD matches common base; app read_thread and wait_threads confirm active. list_threads omitted agent-created chats; read-only metadata plus app reads resolved IDs without duplication.",
+      "commit": "80bd0372773a9d44ba74d2a926cfe750e7ffd54c",
+      "integrated_commit": "0acc3278a3ba6dbf9d36e39e7a6dffc553ab2632",
+      "acceptance_note": "Truthful baseline staged;390 archives/4980 streams independently verified. Missing strict root fields/direct required rows and artifact/sentinel/missing-target selftests block harness acceptance. New hardened plan includes derived copy budget439/guard total455 versus obsolete375 expectation. Preserve902/75 original and new combined attempts separately."
     }
   ]
 }

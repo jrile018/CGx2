@@ -1,0 +1,49 @@
+# Bounded ordinary-memory recoverable-result root repair
+
+## Evidence and acceptance boundary
+Coordinator combined matrix: 965 passed / 13 failed. Ten failures are source reserve indices 10 and 11 across interpreted/native routes. Historical index 21 now passes and remains a regression, not a current defect. The separate exact-copy budget, dependency filename, and frozen-manifest rows belong to other owners. Do not accept CGR090 as an alternative successful recovery.
+
+Current source sites in sweep.cg:
+- reserve10: after memory.try_in(borrow(a), [20,22]) succeeds, SMatch registers its inline Ok payload a second time; this fallible growth is outside TryIn. Default error location becomes work function span0..1306.
+- reserve11: memory.copy_to(borrow(b), xs) reads xs at661..663 via expr, which acquires a temporary root before the CopyTo recovery match. Its '?' propagates HostAllocation.
+- historical21: xs at790..792 in length(xs) had the same fresh temporary registration pattern. Keep coverage after changed reserve ordering.
+
+## Exclusive paths
+- crates/cgx2-runtime/src/graph.rs
+- crates/cgx2-runtime/src/scope.rs only if a private transfer helper is necessary; do not change public ScopedRoots registration semantics
+- new crates/cgx2-runtime/tests/ordinary_recovery_roots.rs
+- new crates/cgx2-sema/tests/ordinary_recovery_roots.rs (source/runtime tests only)
+- new crates/cgx2-syntax/ordinary-recovery-roots-evidence/**
+- new crates/cgx2-syntax/S2B-ORDINARY-RECOVERY-ROOTS.md
+No sema implementation, ordinary_memory/mod.rs, provenance.rs, public memory model, compiler interfaces, CLI/emitter, old evidence, workspace manifest, or coordinator plans. Disjoint from borrow-nominal. No public signature/schema change is needed.
+
+## Required runtime behavior and strategy
+1. Machine::block SMatch: transfer the registration of an inline single-payload carrier into its bound payload when the carrier and payload use the exact same heap handle. Identify the inline representation (Value.depth), not arbitrary user variant names. Do not acquire another registration and then release the old one. Only skip the scrutinee release after ownership successfully passes to the binding. env.pop owns its eventual release. Preserve cleanup if binding, arm execution, or pattern preparation fails. A carrier without a binding still releases its scrutinee. General heap aggregate extraction must keep parent/child protection and cannot use this shortcut merely because it has one field.
+2. Machine::memory_expr CopyTo and Machine::expr: cover argument evaluation and final result root publication with the operation's recoverable allocation boundary. A value-evaluation AllocationAt must produce the same inline memory allocation Err as a copy allocation failure. Maintain current diagnostic errors that are not allocation failures. Count recovery accurately. Evaluate once, preserve allocation_region context, and release temporary argument/result roots on every exit. The catch must end before executing any user match arm: never convert arbitrary body errors to an intrinsic Err.
+3. Audit return/alias interactions around Env::pop, bind, release, block, and call_in_default_context. After transfer, returning the payload or returning an error carrier containing it must keep a distinct returned ownership obligation until its caller takes it; do not consume the transferred binding registration twice. Existing expr result-root acquisition can preserve this obligation; do not remove it globally.
+4. Do not replace contains_since(checkpoint,h) with global contains(h), suppress NotRooted, postpone all releases until Session exit, enlarge budgets to hide faults, or catch failures around the whole surrounding match. These lose ownership or broaden recovery semantics.
+5. An optional private borrowed-ELocal path for CopyTo may avoid acquiring a redundant source-expression root, provided the lexical Env registration remains live throughout snapshot/publication and no generic release consumes that borrowed registration. Keep the public safe copy API's source protection for unrooted inputs. This optimization is not required if the allocation is correctly recovered.
+6. Keep prior OM05 shared table, OM06 source protection, and OM07 registration evidence repairs intact. No obligation to redesign general root leasing or unfinished ownership-v3.
+
+## Behavior tests and verification
+- Original nested-session/guards/two-region sweep must return only its documented scalar results (-10,0,-1,-2,-3,-4,-5,42); normal baseline42. The source IdentifierExhausted branch returns-11 but deterministic HostAllocation injection cannot exercise it; do not expand the accepted fault-sweep outcomes or claim identifier-exhaustion acceptance. No primary CGR090 from any deterministic injected reserve.
+- Recompute actual reached reserve indices from an unaffected execution; inject every reached index and verify the unaffected tail. Keep historical10,11,21 named regressions but do not assume numbering remains stable.
+- Match inline Ok payload: scalar arm, repeated read, returned heap alias, nested return, binding reassignment, failure after binding, error carrier holding heap payload where admitted. Verify balanced registration/release deltas, zero cleanup errors and final baseline root census.
+- Multiple aliases and outer managed bindings across nested named regions/no_gc guards; preserve source lifetime during Auto trigger1 copy and scalar use. Retain same/different region, source externally rooted/unrooted safe API, cycle/alias topology and destination rollback tests.
+- Non-allocation primary error inside an arm retains its diagnostic; allocation inside a separate arm body does not get attributed to the preceding intrinsic.
+- Copy argument evaluation failures recover via CopyTo Err; failed copy leaves source usable, destination unpublished, roots/guards balanced and charged bytes nonrefunded.
+- Run runtime/sema/memory-conformance offline all-feature tests, corresponding all-target/all-feature Clippy -D warnings, fmt/diff, previous runtime-root tests and unchanged product regressions.
+- Freeze final canonical binaries/libraries; run interpreter, native debug/release, relocated standalone (actual cwd outside every repository), every reached reserve, and no-GC boundary tests. No Cargo rebuild during frozen verification; retain all attempts, argv/exit/signal, source/artifact/runtime hashes and independent route assertions.
+- Report all remaining unrelated failed rows. Commit owned files and stop for review.
+
+## Separate harness owner: exact-copy charge correction
+runtime_probe.rs currently uses copy=4*size_of::<Handle>()+3*(size_of::<(Handle,u32)>()+1)+12+8+32+alloc. Safe source retention now makes publication reserve a second simultaneous ScopedRoots slot. Its replacement table charges the full2*Handle bytes, including overlap with old storage, per existing scope.rs reserve contract. On pinned64bit: old375, new439; outside operation guard metadata adds16, total observation455. New formula uses6*root. Observed failed375 spent351 equals16+439-72(payload/slot)-32(staging root); it fails before payload commitment. Preserve historical failing row, document rationale, and rerun independent zero/exact439/one-under438 assertions for source validity, rollback, final census and exact charge. Do not change runtime charging or restore unsafe early source release to preserve the stale number.
+
+## Required workflow and private verification environment
+Start only from the exact committed common base in your creation prompt. Read AGENTS.md, docs/language-design.md, docs/validation-plan.md, plans/roadmap.md, plans/wave28/{README,REVIEW}.md, release-completion/{README,contracts,worker-rules,dispatch}.md, s2b-ordinary-memory/plan.md, the review README and this plan. MegaMemory overview/query/record and Serena initial instructions before coding.
+
+Use CARGO_TARGET_DIR=$PWD/target/release-ordinary-recovery-roots, TMPDIR=$PWD/target/tmp-ordinary-recovery-roots, CARGO_BUILD_JOBS=2, RUSTUP_TOOLCHAIN=1.98.1, PYTHONDONTWRITEBYTECODE=1 and existing LIBRARY_PATH=/tmp/cgx2-wave22-lib; create directories, dependencies offline/locked. Preserve bounded wall/CPU/address-space/file/output supervision and incremental raw invocation/result evidence. Run the assigned tests/quality/build before freezing canonical libraries/binaries; no Cargo after freeze. Use distinct private outside-repository standalone scratch with recorded resolved cwd and source/binary/toolchain hashes. Do not delete other tasks' scratch.
+
+Replay unchanged ordinary-memory117 plus its18 regressions/19 assertions (136 total), ordinary-admission196 and ordinary-API84; retain all genuine failures and expected historical-negative reconciliation. For admission use an external output directory so output/outside is actually outside every Git checkout. Re-run the existing runtime root lifetime/accounting tests and the new fault recovery parity with every observed reserve index in interpreter, native debug/release and standalone; the concurrent harness lane owns existing ordinary-parity-repair-evidence/**, which stays read-only here. Use dedicated new evidence paths for this lane. A corrected-copy-budget probe may be retained as a separate explicitly derived comparison in new evidence, without altering old fixtures or claiming the stale375 expectation passed.
+
+Record all changed files, actual verification counts, raw evidence paths/hashes, limitations and commit. No delegation/other chats, follow-on work, merges, package installation, paid APIs, external contact, host security changes or release performance measurements. Commit and stop for review. General aggregate ownership, source copy_owned/promote same-owner recovery, complete authenticated v3 summaries, static dependency-file attribution, external assurance and full release remain open.

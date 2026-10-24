@@ -1,0 +1,92 @@
+{
+  "source_commit": "0acc3278a3ba6dbf9d36e39e7a6dffc553ab2632",
+  "disposition": "reviewed repair base only",
+  "ordinary_memory_accepted": false,
+  "release_accepted": false,
+  "bounded_accepted": [
+    "OM05",
+    "OM06",
+    "OM07",
+    "OM08"
+  ],
+  "incomplete": [
+    "OM04 nominal constructor resolution",
+    "source allocation recovery at current reserve10/11",
+    "harness completeness",
+    "precise dependency filename",
+    "remaining full ordinary ownership/transfer/v3"
+  ],
+  "rust": {
+    "passed": 1360,
+    "failed": 0,
+    "ignored": 6
+  },
+  "quality": [
+    "workspace clippy all-targets all-features -D warnings",
+    "fmt",
+    "diff",
+    "workspace build"
+  ],
+  "products": {
+    "API": {
+      "passed": 84,
+      "failed": 0
+    },
+    "admission_external": {
+      "passed": 196,
+      "failed": 0
+    },
+    "auto": {
+      "passed": 29,
+      "failed": 0
+    },
+    "historical": {
+      "passed": 136,
+      "failed": 0,
+      "regression_commands": 18
+    },
+    "package": {
+      "passed": 40,
+      "failed": 0
+    },
+    "review": {
+      "passed": 15,
+      "failed": 0
+    },
+    "selftests": {
+      "passed": 21,
+      "failed": 0
+    },
+    "main_raw": {
+      "passed": 965,
+      "failed": 13
+    },
+    "copy_budget_derived_probe": {
+      "passed": 50,
+      "failed": 0
+    }
+  },
+  "main_raw_failure_categories": {
+    "source_recovery": 10,
+    "dependency_filename": 1,
+    "stale_copy_budget": 1,
+    "coordinator_manifest_layout": 1
+  },
+  "frozen_artifacts_unchanged": true,
+  "dependencies_unchanged": true,
+  "source_inputs_unchanged": true,
+  "release_requirement_rows_preserved": true,
+  "release_requirement_count": 15,
+  "attempt_notes": [
+    "First workspace failed fake solver protocol test; raw1302/1/6 preserved. Complete repeat1360/0/6 passed.",
+    "Initial product matrix missing frozen.json and nested supervisor CPU-limit setup errors retained. Fresh attempts used identical frozen code.",
+    "Raw manifest assertion saw extra API-index library and manifest metadata. Separate audit verifies all13 initial artifact hashes plus dependencies/source unchanged.",
+    "Raw375-byte copy-budget assertion retained; independent bookkeeping derivation439+guard16=455 passes zero/exact/one-under with unchanged libraries. No runtime charge exemption.",
+    "Old core inside-checkout standalone parity not relabeled; combined admission replay genuinely used external cwd."
+  ],
+  "plans": [
+    "borrow-nominal",
+    "recovery-roots",
+    "harness-hardening"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "accepted": false,
+  "worker_commit": "93303003ceececb2705b929265ea585415710380",
+  "integrated_commit": "1d331776ad632e71583a05e6b53d587fafcedfde",
+  "rust_passed": 361,
+  "product_passed": 196,
+  "blockers": [
+    "OM04 record borrow constructor incorrectly rejected CGT095",
+    "Prior standalone rows executed inside checkout; emitted Rust parity only"
+  ],
+  "followup": "../../borrow-nominal/plan.md"
+}

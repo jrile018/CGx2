@@ -222,3 +222,7 @@ Common reviewed repair base7bb7a480119826693db67ed503caaf7f23f6abb2 matches allf
 ## Ordinary public API repair accepted; admission repair reviewing
 
 OM08 delivery21452c2 accepted/integrated64a71e7 after independent source/evidence review plus coordinator175Rust/84product passes and quality checks. Frozen/source hashes verified; worker118visibility/207specialization replays verified. Core9330300 has delivered and is under review; runtime roots and evidence remain active. No combined acceptance or new consumer frontier. See s2b-ordinary-memory-review/evidence/api-reviewed/.
+
+## Four ordinary-memory repairs reviewed; bounded follow-ups prepared
+
+API21452c2 and runtime f255dfe1 accepted for their assigned OM08/OM05–07 repairs. Core9330300 and harness80bd037 reviewed incomplete; staging commits and final stopped-chat cursors are saved in thread-state.json. Combined1360Rust and quality gates pass; first fake-solver failure and all setup attempts retained. Source nominal constructor, reserve10/11 recovery, and harness completeness are actionable independent repairs. Existing source/type/runtime public interfaces remain frozen. Three plans are reviewed with exclusive paths under s2b-ordinary-memory-review/{borrow-nominal,recovery-roots,harness-hardening}. Full release ledger remains required; no S3 consumers/main merge/publication. Final historical136/0, all18 regressions, package40/0 and review15/0 pass. Complete retained attempts and hash audit: s2b-ordinary-memory-review/evidence/combined-reviewed/. Actual creation outcomes follow.
