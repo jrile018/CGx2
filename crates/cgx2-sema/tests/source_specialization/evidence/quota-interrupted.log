@@ -1,0 +1,31 @@
+Traceback (most recent call last):
+  File "/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-api-index/tests/verify_visibility_cli.py", line 136, in main
+    case("invalid-public-signature", lambda: reject_case("invalid", fixtures / "s2bf-invalid.cg", "CGT022"))
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-api-index/tests/verify_visibility_cli.py", line 46, in case
+    action()
+    ~~~~~~^^
+  File "/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-api-index/tests/verify_visibility_cli.py", line 136, in <lambda>
+    case("invalid-public-signature", lambda: reject_case("invalid", fixtures / "s2bf-invalid.cg", "CGT022"))
+                                             ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-api-index/tests/verify_visibility_cli.py", line 120, in reject_case
+    artifact.write_bytes(sentinel)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 797, in write_bytes
+    with self.open(mode='wb') as f:
+         ~~~~~~~~~^^^^^^^^^^^
+OSError: [Errno 122] Disk quota exceeded
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-api-index/tests/verify_visibility_cli.py", line 160, in <module>
+    main()
+    ~~~~^^
+  File "/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-api-index/tests/verify_visibility_cli.py", line 154, in main
+    (output / "report.json").write_text(json.dumps(report, indent=2) + "\n")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 811, in write_text
+    return f.write(data)
+           ~~~~~~~^^^^^^
+OSError: [Errno 122] Disk quota exceeded

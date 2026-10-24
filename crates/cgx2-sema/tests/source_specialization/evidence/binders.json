@@ -1,0 +1,1206 @@
+{
+  "schema_version": 1,
+  "scope": "S2b package exported binder repair only",
+  "reviewed_base": "b595724e1b086c604220cc5b165c141e65a0531f",
+  "release_complete": false,
+  "passed": 88,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "binder-record:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-package/fixtures/binder-record"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_stdout": "",
+      "expected_error": null
+    },
+    {
+      "name": "binder-record:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-package/fixtures/binder-record"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "stderr": "",
+      "expected_stdout": "42\n",
+      "expected_error": null
+    },
+    {
+      "name": "binder-record:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-package/fixtures/binder-record",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/binder-record-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: package_manifest_sha256=f05c40ff508fbb0a6c061196880c8bde4d61eef907b74327f8e36f862156203b package_sources_sha256=[\"src/main.cg:1586a6177dbdd542d45c96200719be431b6bb3a54bdb518abfe033bd3f64584e\", \"src/dep.cg:2df7d85aaa97292e5c336bd5a88462915a720e7d2b581197251ba367fec3ab13\"] rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug output=/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/binder-record-debug\n",
+      "stderr": "",
+      "expected_stdout": null,
+      "expected_error": null
+    },
+    {
+      "name": "binder-record:native-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/binder-record-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "stderr": "",
+      "expected_stdout": "42\n",
+      "expected_error": null
+    },
+    {
+      "name": "binder-record:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-package/fixtures/binder-record",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/binder-record-release",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: package_manifest_sha256=f05c40ff508fbb0a6c061196880c8bde4d61eef907b74327f8e36f862156203b package_sources_sha256=[\"src/main.cg:1586a6177dbdd542d45c96200719be431b6bb3a54bdb518abfe033bd3f64584e\", \"src/dep.cg:2df7d85aaa97292e5c336bd5a88462915a720e7d2b581197251ba367fec3ab13\"] rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release output=/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/binder-record-release\n",
+      "stderr": "",
+      "expected_stdout": null,
+      "expected_error": null
+    },
+    {
+      "name": "binder-record:native-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/binder-record-release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "stderr": "",
+      "expected_stdout": "42\n",
+      "expected_error": null
+    },
+    {
+      "name": "binder-record:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-package/fixtures/binder-record",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/binder-record.pyz"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_stdout": "",
+      "expected_error": null
+    },
+    {
+      "name": "binder-record:python",
+      "command": [
+        "/usr/bin/python3",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/binder-record.pyz"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "stderr": "",
+      "expected_stdout": "42\n",
+      "expected_error": null
+    },
+    {
+      "name": "binder-variant:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-package/fixtures/binder-variant"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_stdout": "",
+      "expected_error": null
+    },
+    {
+      "name": "binder-variant:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-package/fixtures/binder-variant"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "stderr": "",
+      "expected_stdout": "42\n",
+      "expected_error": null
+    },
+    {
+      "name": "binder-variant:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-package/fixtures/binder-variant",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/binder-variant-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: package_manifest_sha256=f05c40ff508fbb0a6c061196880c8bde4d61eef907b74327f8e36f862156203b package_sources_sha256=[\"src/main.cg:c610ef52a8d854f9268ea6295d08cabb9f95c50d7f6ad4d12f1ecb097f62efaf\", \"src/dep.cg:8f10c3b98e80ddf474e9f3ffa75102bf44b7e6cc2d0d6a5312796ab357e79ae0\"] rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug output=/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/binder-variant-debug\n",
+      "stderr": "",
+      "expected_stdout": null,
+      "expected_error": null
+    },
+    {
+      "name": "binder-variant:native-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/binder-variant-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "stderr": "",
+      "expected_stdout": "42\n",
+      "expected_error": null
+    },
+    {
+      "name": "binder-variant:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-package/fixtures/binder-variant",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/binder-variant-release",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: package_manifest_sha256=f05c40ff508fbb0a6c061196880c8bde4d61eef907b74327f8e36f862156203b package_sources_sha256=[\"src/main.cg:c610ef52a8d854f9268ea6295d08cabb9f95c50d7f6ad4d12f1ecb097f62efaf\", \"src/dep.cg:8f10c3b98e80ddf474e9f3ffa75102bf44b7e6cc2d0d6a5312796ab357e79ae0\"] rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release output=/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/binder-variant-release\n",
+      "stderr": "",
+      "expected_stdout": null,
+      "expected_error": null
+    },
+    {
+      "name": "binder-variant:native-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/binder-variant-release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "stderr": "",
+      "expected_stdout": "42\n",
+      "expected_error": null
+    },
+    {
+      "name": "binder-variant:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-package/fixtures/binder-variant",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/binder-variant.pyz"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_stdout": "",
+      "expected_error": null
+    },
+    {
+      "name": "binder-variant:python",
+      "command": [
+        "/usr/bin/python3",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/binder-variant.pyz"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "stderr": "",
+      "expected_stdout": "42\n",
+      "expected_error": null
+    },
+    {
+      "name": "binder-nested:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-package/fixtures/binder-nested"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_stdout": "",
+      "expected_error": null
+    },
+    {
+      "name": "binder-nested:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-package/fixtures/binder-nested"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "stderr": "",
+      "expected_stdout": "42\n",
+      "expected_error": null
+    },
+    {
+      "name": "binder-nested:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-package/fixtures/binder-nested",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/binder-nested-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: package_manifest_sha256=7884bf448a18d22fff97668ddc341f19fb8ac11a58db8ac67fd8fae99e3245b2 package_sources_sha256=[\"src/main.cg:0111422f5d906a5c4a41a27e4ffef966bd57420f58e73656769c516c822d873b\", \"src/left.cg:406cb75bf6f3b1124b9b82e21015687c6edf91caed92ba565a783c14a9d0477f\", \"src/right.cg:611ddb747c80502b225f764d4c913c7bf011c85c3234a33f76f865ec507e8c63\"] rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug output=/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/binder-nested-debug\n",
+      "stderr": "",
+      "expected_stdout": null,
+      "expected_error": null
+    },
+    {
+      "name": "binder-nested:native-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/binder-nested-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "stderr": "",
+      "expected_stdout": "42\n",
+      "expected_error": null
+    },
+    {
+      "name": "binder-nested:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-package/fixtures/binder-nested",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/binder-nested-release",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: package_manifest_sha256=7884bf448a18d22fff97668ddc341f19fb8ac11a58db8ac67fd8fae99e3245b2 package_sources_sha256=[\"src/main.cg:0111422f5d906a5c4a41a27e4ffef966bd57420f58e73656769c516c822d873b\", \"src/left.cg:406cb75bf6f3b1124b9b82e21015687c6edf91caed92ba565a783c14a9d0477f\", \"src/right.cg:611ddb747c80502b225f764d4c913c7bf011c85c3234a33f76f865ec507e8c63\"] rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release output=/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/binder-nested-release\n",
+      "stderr": "",
+      "expected_stdout": null,
+      "expected_error": null
+    },
+    {
+      "name": "binder-nested:native-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/binder-nested-release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "stderr": "",
+      "expected_stdout": "42\n",
+      "expected_error": null
+    },
+    {
+      "name": "binder-nested:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-package/fixtures/binder-nested",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/binder-nested.pyz"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_stdout": "",
+      "expected_error": null
+    },
+    {
+      "name": "binder-nested:python",
+      "command": [
+        "/usr/bin/python3",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/binder-nested.pyz"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "stderr": "",
+      "expected_stdout": "42\n",
+      "expected_error": null
+    },
+    {
+      "name": "reviewed-repro:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/plans/release-completion/s2b-review/evidence/binder-package"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_stdout": "",
+      "expected_error": null
+    },
+    {
+      "name": "reviewed-repro:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/plans/release-completion/s2b-review/evidence/binder-package"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "stderr": "",
+      "expected_stdout": "42\n",
+      "expected_error": null
+    },
+    {
+      "name": "reviewed-repro:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/plans/release-completion/s2b-review/evidence/binder-package",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/reviewed-repro-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: package_manifest_sha256=f05c40ff508fbb0a6c061196880c8bde4d61eef907b74327f8e36f862156203b package_sources_sha256=[\"src/main.cg:1586a6177dbdd542d45c96200719be431b6bb3a54bdb518abfe033bd3f64584e\", \"src/dep.cg:2df7d85aaa97292e5c336bd5a88462915a720e7d2b581197251ba367fec3ab13\"] rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug output=/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/reviewed-repro-debug\n",
+      "stderr": "",
+      "expected_stdout": null,
+      "expected_error": null
+    },
+    {
+      "name": "reviewed-repro:native-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/reviewed-repro-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "stderr": "",
+      "expected_stdout": "42\n",
+      "expected_error": null
+    },
+    {
+      "name": "reviewed-repro:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/plans/release-completion/s2b-review/evidence/binder-package",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/reviewed-repro-release",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: package_manifest_sha256=f05c40ff508fbb0a6c061196880c8bde4d61eef907b74327f8e36f862156203b package_sources_sha256=[\"src/main.cg:1586a6177dbdd542d45c96200719be431b6bb3a54bdb518abfe033bd3f64584e\", \"src/dep.cg:2df7d85aaa97292e5c336bd5a88462915a720e7d2b581197251ba367fec3ab13\"] rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release output=/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/reviewed-repro-release\n",
+      "stderr": "",
+      "expected_stdout": null,
+      "expected_error": null
+    },
+    {
+      "name": "reviewed-repro:native-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/reviewed-repro-release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "stderr": "",
+      "expected_stdout": "42\n",
+      "expected_error": null
+    },
+    {
+      "name": "reviewed-repro:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/plans/release-completion/s2b-review/evidence/binder-package",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/reviewed-repro.pyz"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_stdout": "",
+      "expected_error": null
+    },
+    {
+      "name": "reviewed-repro:python",
+      "command": [
+        "/usr/bin/python3",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/reviewed-repro.pyz"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "stderr": "",
+      "expected_stdout": "42\n",
+      "expected_error": null
+    },
+    {
+      "name": "record-argument:reject-check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/record-argument"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT003: /home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/record-argument/src/main.cg:85..89: expected i64, found Bool\n",
+      "expected_stdout": null,
+      "expected_error": "CGT003"
+    },
+    {
+      "name": "record-argument:reject-native",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/record-argument",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/record-argument-native.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT003: src/main.cg:85..89: expected i64, found Bool\n",
+      "expected_stdout": null,
+      "expected_error": "CGT003"
+    },
+    {
+      "name": "record-argument:preserve-native",
+      "passed": true
+    },
+    {
+      "name": "record-argument:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/record-argument",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/record-argument-rust.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT003: src/main.cg:85..89: expected i64, found Bool\n",
+      "expected_stdout": null,
+      "expected_error": "CGT003"
+    },
+    {
+      "name": "record-argument:preserve-rust",
+      "passed": true
+    },
+    {
+      "name": "record-argument:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/record-argument",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/record-argument-python.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT003: src/main.cg:85..89: expected i64, found Bool\n",
+      "expected_stdout": null,
+      "expected_error": "CGT003"
+    },
+    {
+      "name": "record-argument:preserve-python",
+      "passed": true
+    },
+    {
+      "name": "variant-argument:reject-check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/variant-argument"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT003: /home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/variant-argument/src/main.cg:92..96: expected i64, found Bool\n",
+      "expected_stdout": null,
+      "expected_error": "CGT003"
+    },
+    {
+      "name": "variant-argument:reject-native",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/variant-argument",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/variant-argument-native.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT003: src/main.cg:92..96: expected i64, found Bool\n",
+      "expected_stdout": null,
+      "expected_error": "CGT003"
+    },
+    {
+      "name": "variant-argument:preserve-native",
+      "passed": true
+    },
+    {
+      "name": "variant-argument:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/variant-argument",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/variant-argument-rust.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT003: src/main.cg:92..96: expected i64, found Bool\n",
+      "expected_stdout": null,
+      "expected_error": "CGT003"
+    },
+    {
+      "name": "variant-argument:preserve-rust",
+      "passed": true
+    },
+    {
+      "name": "variant-argument:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/variant-argument",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/variant-argument-python.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT003: src/main.cg:92..96: expected i64, found Bool\n",
+      "expected_stdout": null,
+      "expected_error": "CGT003"
+    },
+    {
+      "name": "variant-argument:preserve-python",
+      "passed": true
+    },
+    {
+      "name": "nested-argument:reject-check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/nested-argument"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT003: /home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/nested-argument/src/main.cg:254..258: expected i64, found Bool\n",
+      "expected_stdout": null,
+      "expected_error": "CGT003"
+    },
+    {
+      "name": "nested-argument:reject-native",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/nested-argument",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/nested-argument-native.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT003: src/main.cg:254..258: expected i64, found Bool\n",
+      "expected_stdout": null,
+      "expected_error": "CGT003"
+    },
+    {
+      "name": "nested-argument:preserve-native",
+      "passed": true
+    },
+    {
+      "name": "nested-argument:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/nested-argument",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/nested-argument-rust.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT003: src/main.cg:254..258: expected i64, found Bool\n",
+      "expected_stdout": null,
+      "expected_error": "CGT003"
+    },
+    {
+      "name": "nested-argument:preserve-rust",
+      "passed": true
+    },
+    {
+      "name": "nested-argument:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/nested-argument",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/nested-argument-python.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT003: src/main.cg:254..258: expected i64, found Bool\n",
+      "expected_stdout": null,
+      "expected_error": "CGT003"
+    },
+    {
+      "name": "nested-argument:preserve-python",
+      "passed": true
+    },
+    {
+      "name": "qualified-nominal:reject-check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/qualified-nominal"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT003: /home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/qualified-nominal/src/main.cg:414..421: expected app.left.T, found app.right.T\nCGT003: /home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/qualified-nominal/src/main.cg:493..500: expected app.left.T, found app.right.T\n",
+      "expected_stdout": null,
+      "expected_error": "CGT003"
+    },
+    {
+      "name": "qualified-nominal:reject-native",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/qualified-nominal",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/qualified-nominal-native.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT003: src/main.cg:414..421: expected app.left.T, found app.right.T\n",
+      "expected_stdout": null,
+      "expected_error": "CGT003"
+    },
+    {
+      "name": "qualified-nominal:preserve-native",
+      "passed": true
+    },
+    {
+      "name": "qualified-nominal:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/qualified-nominal",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/qualified-nominal-rust.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT003: src/main.cg:414..421: expected app.left.T, found app.right.T\n",
+      "expected_stdout": null,
+      "expected_error": "CGT003"
+    },
+    {
+      "name": "qualified-nominal:preserve-rust",
+      "passed": true
+    },
+    {
+      "name": "qualified-nominal:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/qualified-nominal",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/qualified-nominal-python.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT003: src/main.cg:414..421: expected app.left.T, found app.right.T\n",
+      "expected_stdout": null,
+      "expected_error": "CGT003"
+    },
+    {
+      "name": "qualified-nominal:preserve-python",
+      "passed": true
+    },
+    {
+      "name": "module-identity:reject-check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/module-identity"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT003: /home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/module-identity/src/main.cg:146..185: expected app.right.Box<T>, found app.left.Box<i64>\nCGT003: /home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/module-identity/src/main.cg:146..185: expected app.left.Box<i64>, found app.right.Box<i64>\nCGT039: /home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/module-identity/src/main.cg:266..284: unsupported array operand or missing constraint\nCGT003: /home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/module-identity/src/main.cg:565..576: expected List<T>, found i64\n",
+      "expected_stdout": null,
+      "expected_error": "CGT003"
+    },
+    {
+      "name": "module-identity:reject-native",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/module-identity",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/module-identity-native.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT003: src/main.cg:146..185: expected app.right.Box<T>, found app.left.Box<i64>\n",
+      "expected_stdout": null,
+      "expected_error": "CGT003"
+    },
+    {
+      "name": "module-identity:preserve-native",
+      "passed": true
+    },
+    {
+      "name": "module-identity:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/module-identity",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/module-identity-rust.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT003: src/main.cg:146..185: expected app.right.Box<T>, found app.left.Box<i64>\n",
+      "expected_stdout": null,
+      "expected_error": "CGT003"
+    },
+    {
+      "name": "module-identity:preserve-rust",
+      "passed": true
+    },
+    {
+      "name": "module-identity:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/module-identity",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/module-identity-python.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT003: src/main.cg:146..185: expected app.right.Box<T>, found app.left.Box<i64>\n",
+      "expected_stdout": null,
+      "expected_error": "CGT003"
+    },
+    {
+      "name": "module-identity:preserve-python",
+      "passed": true
+    },
+    {
+      "name": "constraint:reject-check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/constraint"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT039: /home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/constraint/src/main.cg:96..123: `U` does not satisfy `Eq`\nCGT039: /home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/constraint/src/main.cg:96..123: `U` does not satisfy `Show`\n",
+      "expected_stdout": null,
+      "expected_error": "CGT039"
+    },
+    {
+      "name": "constraint:reject-native",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/constraint",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/constraint-native.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT039: src/main.cg:96..123: `U` does not satisfy `Eq`\n",
+      "expected_stdout": null,
+      "expected_error": "CGT039"
+    },
+    {
+      "name": "constraint:preserve-native",
+      "passed": true
+    },
+    {
+      "name": "constraint:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/constraint",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/constraint-rust.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT039: src/main.cg:96..123: `U` does not satisfy `Eq`\n",
+      "expected_stdout": null,
+      "expected_error": "CGT039"
+    },
+    {
+      "name": "constraint:preserve-rust",
+      "passed": true
+    },
+    {
+      "name": "constraint:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/constraint",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/constraint-python.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT039: src/main.cg:96..123: `U` does not satisfy `Eq`\n",
+      "expected_stdout": null,
+      "expected_error": "CGT039"
+    },
+    {
+      "name": "constraint:preserve-python",
+      "passed": true
+    },
+    {
+      "name": "private:reject-check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/private"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/private/src/main.cg:61..88: unknown, unavailable or private type `app.dep.Box`\nCGT001: /home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/private/src/main.cg:93..100: unknown name `b.value`\n",
+      "expected_stdout": null,
+      "expected_error": "CGT022"
+    },
+    {
+      "name": "private:reject-native",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/private",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/private-native.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: src/main.cg:61..88: unknown, unavailable or private type `app.dep.Box`\n",
+      "expected_stdout": null,
+      "expected_error": "CGT022"
+    },
+    {
+      "name": "private:preserve-native",
+      "passed": true
+    },
+    {
+      "name": "private:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/private",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/private-rust.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: src/main.cg:61..88: unknown, unavailable or private type `app.dep.Box`\n",
+      "expected_stdout": null,
+      "expected_error": "CGT022"
+    },
+    {
+      "name": "private:preserve-rust",
+      "passed": true
+    },
+    {
+      "name": "private:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/private",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/private-python.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: src/main.cg:61..88: unknown, unavailable or private type `app.dep.Box`\n",
+      "expected_stdout": null,
+      "expected_error": "CGT022"
+    },
+    {
+      "name": "private:preserve-python",
+      "passed": true
+    },
+    {
+      "name": "hidden-effect:reject-check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/hidden-effect"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT012: /home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/hidden-effect/src/left.cg:398..409: effect `ReadArgs` is not permitted by explicit declaration by call to `arg_count`\nCGT013: /home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/hidden-effect/src/left.cg:398..409: capability `ArgsRead` is required by call to `arg_count`\n",
+      "expected_stdout": null,
+      "expected_error": "CGT012"
+    },
+    {
+      "name": "hidden-effect:reject-native",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/hidden-effect",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/hidden-effect-native.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT012: src/left.cg:398..409: effect `ReadArgs` is not permitted by explicit declaration by call to `arg_count`\n",
+      "expected_stdout": null,
+      "expected_error": "CGT012"
+    },
+    {
+      "name": "hidden-effect:preserve-native",
+      "passed": true
+    },
+    {
+      "name": "hidden-effect:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/hidden-effect",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/hidden-effect-rust.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT012: src/left.cg:398..409: effect `ReadArgs` is not permitted by explicit declaration by call to `arg_count`\n",
+      "expected_stdout": null,
+      "expected_error": "CGT012"
+    },
+    {
+      "name": "hidden-effect:preserve-rust",
+      "passed": true
+    },
+    {
+      "name": "hidden-effect:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/release-source-specialization/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/hidden-effect",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b/hidden-effect-python.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/c9ae/lang/target/tmp-source-specialization/product-binders-ge4qlm7b",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT012: src/left.cg:398..409: effect `ReadArgs` is not permitted by explicit declaration by call to `arg_count`\n",
+      "expected_stdout": null,
+      "expected_error": "CGT012"
+    },
+    {
+      "name": "hidden-effect:preserve-python",
+      "passed": true
+    }
+  ],
+  "fixture_sha256": {
+    "crates/cgx2-package/fixtures/binder-record/cgx2.toml": "f05c40ff508fbb0a6c061196880c8bde4d61eef907b74327f8e36f862156203b",
+    "crates/cgx2-package/fixtures/binder-record/src/dep.cg": "2df7d85aaa97292e5c336bd5a88462915a720e7d2b581197251ba367fec3ab13",
+    "crates/cgx2-package/fixtures/binder-record/src/main.cg": "1586a6177dbdd542d45c96200719be431b6bb3a54bdb518abfe033bd3f64584e",
+    "crates/cgx2-package/fixtures/binder-variant/cgx2.toml": "f05c40ff508fbb0a6c061196880c8bde4d61eef907b74327f8e36f862156203b",
+    "crates/cgx2-package/fixtures/binder-variant/src/dep.cg": "8f10c3b98e80ddf474e9f3ffa75102bf44b7e6cc2d0d6a5312796ab357e79ae0",
+    "crates/cgx2-package/fixtures/binder-variant/src/main.cg": "c610ef52a8d854f9268ea6295d08cabb9f95c50d7f6ad4d12f1ecb097f62efaf",
+    "crates/cgx2-package/fixtures/binder-nested/cgx2.toml": "7884bf448a18d22fff97668ddc341f19fb8ac11a58db8ac67fd8fae99e3245b2",
+    "crates/cgx2-package/fixtures/binder-nested/src/left.cg": "406cb75bf6f3b1124b9b82e21015687c6edf91caed92ba565a783c14a9d0477f",
+    "crates/cgx2-package/fixtures/binder-nested/src/main.cg": "0111422f5d906a5c4a41a27e4ffef966bd57420f58e73656769c516c822d873b",
+    "crates/cgx2-package/fixtures/binder-nested/src/right.cg": "611ddb747c80502b225f764d4c913c7bf011c85c3234a33f76f865ec507e8c63",
+    "plans/release-completion/s2b-review/evidence/binder-package/cgx2.toml": "f05c40ff508fbb0a6c061196880c8bde4d61eef907b74327f8e36f862156203b",
+    "plans/release-completion/s2b-review/evidence/binder-package/src/dep.cg": "2df7d85aaa97292e5c336bd5a88462915a720e7d2b581197251ba367fec3ab13",
+    "plans/release-completion/s2b-review/evidence/binder-package/src/main.cg": "1586a6177dbdd542d45c96200719be431b6bb3a54bdb518abfe033bd3f64584e"
+  },
+  "implementation_sha256": {
+    "crates/cgx2-package/src/lib.rs": "be6c7d9e612f643f47f80d6b202890ae3206ef5be4bcfdc0cf77296de24886a4",
+    "crates/cgx2-package/tests/binders.rs": "89625216f0c29f04491ed89916cf1e855e1f2a049caa3e10569c67caaecc7333",
+    "crates/cgx2-package/scripts/verify_binders.py": "3699c96b6bfaeb53885fbe6d5afa7f23630e03a324d4e864aab6dcbc75a90e63"
+  }
+}
