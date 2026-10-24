@@ -1,0 +1,24 @@
+module dep
+
+pub record Value:
+    number: i64
+
+pub variant Choice<T>:
+    Value(T)
+
+record DepSecret:
+    number: i64
+
+pub fn id<T: Eq + Show>(x: T) -> T effects() caps():
+    x
+
+fn dep_private<T>(x: T) -> T:
+    x
+
+fn dep_hidden() -> i64:
+    id<i64>(1)
+
+pub fn value() -> i64:
+    let private_callee = dep_private<i64>(1)
+    let private_type = id<DepSecret>(DepSecret(number: 2))
+    id<i64>(7)

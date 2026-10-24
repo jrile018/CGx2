@@ -71,3 +71,27 @@ These human-format changes do not alter JSON bytes, schema selection, public
 model shapes, or semantic admission. Older JSON versions continue to omit
 fields outside their schema. Golden JSON fixtures in `tests/fixtures/text-*.json`
 were captured from the repair baseline before changing the text renderer.
+
+## Schema 7 public instantiation visibility
+
+Checked generic-call metadata is a public projection, separate from the complete
+`TypedModule.calls` specialization evidence. Include an instantiation only when
+its local owner and resolved callee are public functions, and every type argument,
+instantiated parameter and instantiated result is publicly visible. Imported
+callees must occur in `ImportedSignatures.public_functions` with `public = true`.
+Visibility is declaration-based, independent of whether an owner is reachable.
+
+Primitive types and core Option/Result are public. A nominal record/variant must
+be a public local declaration or an explicitly supplied public imported
+declaration of the same canonical identity. Check every nested List/Array,
+record/variant application and Option/Result argument recursively. A type
+parameter must exactly match a binder from the public owner's checked signature;
+its qualified identity is retained, including in nested generic calls. Unknown
+identities fail this projection. Omit the entire instantiation when any check
+fails; never erase an argument or shorten a signature to hide a private type.
+
+Filtering preserves the checked call map's deterministic owner/span order,
+complete public types, constraints, spans, checked/unchecked statuses and schema
+selection. Syntax-only schema 6 still reports unchecked declarations and no
+instantiations. See [the bounded repair report](REPAIR-S2BF.md) for reproducible
+product checks and outstanding source-execution failures outside this crate.

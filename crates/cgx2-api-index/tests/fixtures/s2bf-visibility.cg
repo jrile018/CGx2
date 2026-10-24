@@ -1,0 +1,42 @@
+module api
+
+record Secret:
+    value: i64
+
+variant SecretChoice:
+    Value(i64)
+
+record SecretBox<T>:
+    value: T
+
+pub record Visible:
+    value: i64
+
+pub record Wrapper<T>:
+    value: T
+
+pub variant Choice<T>:
+    Value(T)
+
+pub fn id<T: Eq + Show>(x: T) -> T effects() caps():
+    x
+
+fn private_id<T>(x: T) -> T:
+    x
+
+fn hidden() -> i64:
+    id<i64>(1)
+
+pub fn nested<U: Eq + Show>(x: List<U>) -> List<U> effects() caps():
+    id<List<U>>(x)
+
+pub fn main() -> i64:
+    let private_callee = private_id<i64>(1)
+    let private_record = id<Secret>(Secret(value: 2))
+    let private_variant = id<SecretChoice>(SecretChoice.Value(3))
+    let private_generic = id<SecretBox<i64>>(SecretBox<i64>(value: 4))
+    let private_nested = id<Option<Result<List<Array<Secret>>, Bool>>>(Option.None())
+    let public_nested = id<Option<Result<List<Array<Visible>>, Bool>>>(Option.None())
+    let public_generic = id<Wrapper<Choice<Visible>>>(Wrapper<Choice<Visible>>(value: Choice<Visible>.Value(Visible(value: 5))))
+    let public_owner = nested<i64>([6, 7])
+    id<i64>(7)

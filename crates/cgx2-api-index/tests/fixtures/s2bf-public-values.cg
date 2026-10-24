@@ -1,0 +1,13 @@
+module public_values
+
+pub fn id<T: Eq + Show>(x: T) -> T effects() caps():
+    x
+
+pub fn nested<U: Eq + Show>(x: List<U>) -> List<U> effects() caps():
+    id<List<U>>(x)
+
+pub fn main() -> i64:
+    let complete: Option<Result<List<Array<i64>>, Bool>> = Option.None()
+    let checked = id(complete)
+    let values = nested<i64>([4, 5])
+    id<i64>(7)

@@ -1,0 +1,7 @@
+module api
+fn id<T>(x: T) -> T:
+    x
+fn hidden() -> i64:
+    id<i64>(1)
+pub fn run() -> i64:
+    0

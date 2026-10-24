@@ -1,0 +1,183 @@
+{
+  "base": "b595724e1b086c604220cc5b165c141e65a0531f",
+  "owned_source_sha256": "9fd5dcd931f1a6315086e8368ee3f213bfdfc1c008640ef8ab6523f8568fc45b",
+  "commands": [
+    {
+      "command": "cargo test -p cgx2-api-index --all-features --offline --locked",
+      "exit": 0,
+      "output": "   Compiling cgx2-api-index v0.1.0 (/home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-api-index)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.47s\n     Running unittests src/lib.rs (target/release-api-visibility/debug/deps/cgx2_api_index-9094bddda1410869)\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n     Running tests/imported_effects.rs (target/release-api-visibility/debug/deps/imported_effects-22e2b862710e2461)\n\nrunning 1 test\ntest fresh_import_checks_reject_stale_typed_indexes_and_incomplete_evidence ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n     Running tests/index.rs (target/release-api-visibility/debug/deps/index-a72a3e5ed4b77f2d)\n\nrunning 10 tests\ntest native_api_index_exposes_unsafe_binding_and_source_span ... ok\ntest rejects_stale_or_mutated_semantic_summaries ... ok\ntest lookup_is_exact_and_spans_count_utf8_bytes ... ok\ntest public_python_binding_exposes_route_target_and_runtime ... ok\ntest private_only_module_has_empty_public_api ... ok\ntest json_round_trips_escapes_controls_and_unicode ... ok\ntest empty_public_api_renders_deterministically ... ok\ntest indexes_explicit_declarations_and_runtime_checked_contracts ... ok\ntest stable_text_and_json_schema ... ok\ntest extracts_only_public_source_signatures ... ok\n\ntest result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n     Running tests/memory_functions.rs (target/release-api-visibility/debug/deps/memory_functions-754e259dd68f72f4)\n\nrunning 2 tests\ntest indexes_public_memory_function_as_unit_with_declared_effects ... ok\ntest indexes_public_scalar_signature_and_transitive_memory_capability ... ok\n\ntest result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n     Running tests/object_references.rs (target/release-api-visibility/debug/deps/object_references-84de3b697a534719)\n\nrunning 2 tests\ntest rejects_invalid_graph_even_with_previously_checked_summary ... ok\ntest indexes_checked_public_graph_function ... ok\n\ntest result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n     Running tests/records.rs (target/release-api-visibility/debug/deps/records-2d8a503006d2de00)\n\nrunning 1 test\ntest record_declarations_and_field_types_are_indexed ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n     Running tests/s2a.rs (target/release-api-visibility/debug/deps/s2a-9478a75ffd91e529)\n\nrunning 3 tests\ntest next_stage_array_and_loop_contract_metadata_remains_unchecked ... ok\ntest syntax_only_api_reports_constraints_without_claiming_semantics ... ok\ntest schema_six_preserves_public_qualified_identities_arguments_and_spans ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n     Running tests/s2b.rs (target/release-api-visibility/debug/deps/s2b-4c1455df328dade7)\n\nrunning 2 tests\ntest field_type_strings_do_not_capture_same_spelled_nominal_names ... ok\ntest schema_seven_records_deterministic_checked_instantiations ... ok\n\ntest result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n     Running tests/s2bf_visibility.rs (target/release-api-visibility/debug/deps/s2bf_visibility-6d054da59b19afc1)\n\nrunning 7 tests\ntest invalid_or_changed_modules_are_rejected_before_projection ... ok\ntest unnamed_private_owners_are_filtered ... ok\ntest imported_signature_identities_are_checked_beyond_type_arguments ... ok\ntest reviewed_private_owner_and_callee_do_not_enter_public_api ... ok\ntest imported_public_identities_and_owner_binders_are_retained ... ok\ntest every_container_and_nominal_argument_obeys_visibility ... ok\ntest public_projection_preserves_internal_calls_and_complete_public_types ... ok\n\ntest result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n     Running tests/tensor.rs (target/release-api-visibility/debug/deps/tensor-3545bad5b0487d50)\n\nrunning 1 test\ntest tensor_api_index_names_unsafe_bounded_profile ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n     Running tests/text.rs (target/release-api-visibility/debug/deps/text-301650a3829ccdaf)\n\nrunning 5 tests\ntest text_uses_stored_statuses_and_preserves_an_unannotated_result ... ok\ntest syntax_only_foreign_output_uses_the_stored_unsafe_flag_without_a_binding_id ... ok\ntest contracts_distinguish_checked_and_syntax_only_for_the_same_source ... ok\ntest syntax_text_preserves_generics_nested_types_loop_annotations_and_unchecked_statuses ... ok\ntest checked_text_preserves_nominal_identities_and_effect_statuses ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Doc-tests cgx2_api_index\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n"
+    },
+    {
+      "command": "cargo clippy -p cgx2-api-index --all-targets --all-features --offline --locked -- -D warnings",
+      "exit": 0,
+      "output": "    Checking cgx2-syntax v0.1.0 (/home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-syntax)\n    Checking cgx2-ownership v0.1.0 (/home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-ownership)\n    Checking cgx2-sema v0.1.0 (/home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-sema)\n    Checking cgx2-api-index v0.1.0 (/home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-api-index)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.71s\n"
+    },
+    {
+      "command": "cargo build -p cgx2-cli -p cgx2c --offline --locked",
+      "exit": 0,
+      "output": "   Compiling cgx2-package v0.1.0 (/home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-package)\n   Compiling cgx2-emit-python v0.1.0 (/home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-emit-python)\n   Compiling cgx2-bind v0.1.0 (/home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-bind)\n   Compiling cgx2-emit-rust v0.1.0 (/home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-emit-rust)\n   Compiling cgx2c v0.1.0 (/home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2c)\n   Compiling cgx2-ffi-native v0.1.0 (/home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-ffi-native)\n   Compiling cgx2-libtorch v0.1.0 (/home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-libtorch)\n   Compiling cgx2-cli v0.1.0 (/home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-cli)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.85s\n"
+    },
+    {
+      "command": [
+        "cargo",
+        "fmt",
+        "-p",
+        "cgx2-api-index",
+        "--",
+        "--check"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "baseline_reproduction": [
+    {
+      "label": "baseline-visibility-tests",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "cgx2-api-index",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--test",
+        "s2bf_visibility"
+      ],
+      "exit": 101
+    },
+    {
+      "label": "baseline-cli-build",
+      "command": [
+        "cargo",
+        "build",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2c",
+        "--offline",
+        "--locked"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "baseline-product",
+      "command": [
+        "python3",
+        "crates/cgx2-api-index/tests/verify_visibility_cli.py",
+        "--binary",
+        "target/release-api-visibility/debug/cgx2",
+        "--output-dir",
+        "target/release-api-visibility/product-base"
+      ],
+      "exit": 1
+    }
+  ],
+  "baseline_visibility_test_output": "\nrunning 7 tests\ntest unnamed_private_owners_are_filtered ... FAILED\ntest every_container_and_nominal_argument_obeys_visibility ... FAILED\ntest imported_signature_identities_are_checked_beyond_type_arguments ... FAILED\ntest imported_public_identities_and_owner_binders_are_retained ... FAILED\ntest invalid_or_changed_modules_are_rejected_before_projection ... ok\ntest reviewed_private_owner_and_callee_do_not_enter_public_api ... FAILED\ntest public_projection_preserves_internal_calls_and_complete_public_types ... FAILED\n\nfailures:\n\n---- unnamed_private_owners_are_filtered stdout ----\n\nthread 'unnamed_private_owners_are_filtered' (187) panicked at crates/cgx2-api-index/tests/s2bf_visibility.rs:86:5:\nassertion `left == right` failed\n  left: 2\n right: 1\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n\n---- every_container_and_nominal_argument_obeys_visibility stdout ----\n\nthread 'every_container_and_nominal_argument_obeys_visibility' (181) panicked at crates/cgx2-api-index/tests/s2bf_visibility.rs:107:9:\nSecret\n\n---- imported_signature_identities_are_checked_beyond_type_arguments stdout ----\n\nthread 'imported_signature_identities_are_checked_beyond_type_arguments' (183) panicked at crates/cgx2-api-index/tests/s2bf_visibility.rs:182:9:\nassertion failed: index.instantiations.is_empty()\n\n---- imported_public_identities_and_owner_binders_are_retained stdout ----\n\nthread 'imported_public_identities_and_owner_binders_are_retained' (182) panicked at crates/cgx2-api-index/tests/s2bf_visibility.rs:139:5:\nassertion `left == right` failed\n  left: 3\n right: 2\n\n---- reviewed_private_owner_and_callee_do_not_enter_public_api stdout ----\n\nthread 'reviewed_private_owner_and_callee_do_not_enter_public_api' (186) panicked at crates/cgx2-api-index/tests/s2bf_visibility.rs:75:5:\nassertion failed: index.instantiations.is_empty()\n\n---- public_projection_preserves_internal_calls_and_complete_public_types stdout ----\n\nthread 'public_projection_preserves_internal_calls_and_complete_public_types' (185) panicked at crates/cgx2-api-index/tests/s2bf_visibility.rs:23:5:\nassertion `left == right` failed\n  left: 11\n right: 5\n\n\nfailures:\n    every_container_and_nominal_argument_obeys_visibility\n    imported_public_identities_and_owner_binders_are_retained\n    imported_signature_identities_are_checked_beyond_type_arguments\n    public_projection_preserves_internal_calls_and_complete_public_types\n    reviewed_private_owner_and_callee_do_not_enter_public_api\n    unnamed_private_owners_are_filtered\n\ntest result: FAILED. 1 passed; 6 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling cgx2-api-index v0.1.0 (/home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-api-index)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.19s\n     Running tests/s2bf_visibility.rs (target/release-api-visibility/debug/deps/s2bf_visibility-6d054da59b19afc1)\nerror: test failed, to rerun pass `-p cgx2-api-index --test s2bf_visibility`\n",
+  "baseline_failed_product_comparison": [
+    {
+      "label": "source:interpreter",
+      "identical_baseline_failure": true,
+      "exit_code": 1,
+      "stderr": "CGR009: /home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg:226..286: public signature exposes a private nominal type\n"
+    },
+    {
+      "label": "source:build-debug",
+      "identical_baseline_failure": true,
+      "exit_code": 1,
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg:226..286: public signature exposes a private nominal type\n"
+    },
+    {
+      "label": "source:build-release",
+      "identical_baseline_failure": true,
+      "exit_code": 1,
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg:226..286: public signature exposes a private nominal type\n"
+    },
+    {
+      "label": "source:emit-python",
+      "identical_baseline_failure": true,
+      "exit_code": 1,
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg:226..286: public signature exposes a private nominal type\n"
+    },
+    {
+      "label": "source:emit-rust",
+      "identical_baseline_failure": true,
+      "exit_code": 1,
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg:226..286: public signature exposes a private nominal type\n"
+    },
+    {
+      "label": "package:interpreter",
+      "identical_baseline_failure": true,
+      "exit_code": 1,
+      "stderr": "CGR009: src/main.cg:119..179: public signature exposes a private nominal type\n"
+    },
+    {
+      "label": "package:build-debug",
+      "identical_baseline_failure": true,
+      "exit_code": 1,
+      "stderr": "CGT022: src/main.cg:119..179: public signature exposes a private nominal type\n"
+    },
+    {
+      "label": "package:build-release",
+      "identical_baseline_failure": true,
+      "exit_code": 1,
+      "stderr": "CGT022: src/main.cg:119..179: public signature exposes a private nominal type\n"
+    },
+    {
+      "label": "package:emit-python",
+      "identical_baseline_failure": true,
+      "exit_code": 1,
+      "stderr": "CGT022: src/main.cg:119..179: public signature exposes a private nominal type\n"
+    },
+    {
+      "label": "package:emit-rust",
+      "identical_baseline_failure": true,
+      "exit_code": 1,
+      "stderr": "CGT022: src/main.cg:119..179: public signature exposes a private nominal type\n"
+    },
+    {
+      "label": "public-source:interpreter",
+      "identical_baseline_failure": true,
+      "exit_code": 1,
+      "stderr": "CGR009: /home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public.cg:118..119: unknown, unavailable or private type `public_api.public_api.Value`\n"
+    },
+    {
+      "label": "public-source:build-debug",
+      "identical_baseline_failure": true,
+      "exit_code": 1,
+      "stderr": "CGT002: /home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public.cg:118..119: unknown, unavailable or private type `public_api.public_api.Value`\n"
+    },
+    {
+      "label": "public-source:build-release",
+      "identical_baseline_failure": true,
+      "exit_code": 1,
+      "stderr": "CGT002: /home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public.cg:118..119: unknown, unavailable or private type `public_api.public_api.Value`\n"
+    },
+    {
+      "label": "public-source:emit-python",
+      "identical_baseline_failure": true,
+      "exit_code": 1,
+      "stderr": "CGT002: /home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public.cg:118..119: unknown, unavailable or private type `public_api.public_api.Value`\n"
+    },
+    {
+      "label": "public-source:emit-rust",
+      "identical_baseline_failure": true,
+      "exit_code": 1,
+      "stderr": "CGT002: /home/john-riley/.codex/worktrees/19b9/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public.cg:118..119: unknown, unavailable or private type `public_api.public_api.Value`\n"
+    }
+  ],
+  "repaired_product_runner_exit": 1,
+  "s2a_product_runner_exit": 0,
+  "limits": "All 15 product failures remain failures, identical to the production baseline. Full combined workspace, other lane repairs and external acceptance remain coordinator work."
+}

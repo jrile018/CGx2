@@ -1,0 +1,7 @@
+module invalid
+
+record Secret:
+    value: i64
+
+pub fn leak<T>(x: T) -> List<Secret>:
+    []

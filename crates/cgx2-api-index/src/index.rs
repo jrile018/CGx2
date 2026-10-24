@@ -262,11 +262,26 @@ fn build_index_checked(
         .calls
         .iter()
         .filter_map(|((owner, start, end), call)| {
+            // Calls remain complete in TypedModule; the public index is only a
+            // projection of evidence whose identities are all publicly visible.
+            let owner_signature = checked.functions.get(owner).filter(|sig| sig.public)?;
             let sig = checked
                 .functions
                 .get(&call.callee)
-                .or_else(|| imports.public_functions.get(&call.callee))?;
+                .or_else(|| imports.public_functions.get(&call.callee))
+                .filter(|sig| sig.public)?;
             let instantiated = cgx2_sema::instantiate_signature(sig, &call.arguments);
+            if !call
+                .arguments
+                .iter()
+                .chain(&instantiated.parameters)
+                .chain(std::iter::once(&instantiated.return_type))
+                .all(|ty| {
+                    public_instantiation_type(ty, module, imports, &owner_signature.type_parameters)
+                })
+            {
+                return None;
+            }
             Some(ApiInstantiation {
                 owner: identity(module, owner),
                 callee: if checked.functions.contains_key(&call.callee) {
@@ -335,6 +350,49 @@ fn build_index_checked(
         functions,
         records: records(module),
     })
+}
+
+/// Check resolved identities, including every nested argument. Only the public
+/// owner's own binders may appear in a still-generic instantiation signature.
+fn public_instantiation_type(
+    ty: &cgx2_sema::Type,
+    module: &Module,
+    imports: &ImportedSignatures,
+    owner_parameters: &[cgx2_sema::Type],
+) -> bool {
+    use cgx2_sema::Type;
+    let public_record = |name: &str| {
+        module
+            .records
+            .iter()
+            .find(|r| identity(module, &r.name) == name)
+            .map_or_else(
+                || imports.public_records.get(name).is_some_and(|r| r.public),
+                |r| r.public,
+            )
+    };
+    let public_variant = |name: &str| {
+        matches!(name, "cgx2.core.Option" | "cgx2.core.Result")
+            || module
+                .variants
+                .iter()
+                .find(|v| identity(module, &v.name) == name)
+                .map_or_else(
+                    || imports.public_variants.get(name).is_some_and(|v| v.public),
+                    |v| v.public,
+                )
+    };
+    let public = |ty| public_instantiation_type(ty, module, imports, owner_parameters);
+    match ty {
+        Type::I64 | Type::Bool | Type::String | Type::Unit => true,
+        Type::Parameter { .. } => owner_parameters.contains(ty),
+        Type::List(inner) | Type::Array(inner) => public(inner),
+        Type::Record(name) => public_record(name),
+        Type::AppliedRecord { name, arguments } => {
+            public_record(name) && arguments.iter().all(public)
+        }
+        Type::Variant { name, arguments } => public_variant(name) && arguments.iter().all(public),
+    }
 }
 
 impl ApiIndex {
