@@ -1,0 +1,275 @@
+{
+  "schema_version": 1,
+  "checkpoint_complete": false,
+  "release_complete": false,
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/home/john-riley/projects/lang/target/release-plan-review",
+    "TMPDIR": "/home/john-riley/projects/lang/target/cgx2-wave21-tmp",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "checks": [
+    {
+      "name": "build",
+      "command": [
+        "cargo",
+        "build",
+        "--workspace",
+        "--all-features",
+        "--offline",
+        "--locked"
+      ],
+      "exit": 0,
+      "log": "build.log",
+      "log_sha256": "6906beb03b5f92c30097e7f2c23814b7e6f57cd8b08dc1632e53a9df6706a2a0",
+      "duration_seconds": 18.07
+    },
+    {
+      "name": "owned-result-product",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/owned-result-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug",
+        "--output",
+        "/home/john-riley/projects/lang/target/owned-result-review-20261024/owned-result-product.json"
+      ],
+      "exit": 0,
+      "log": "owned-result-product.log",
+      "log_sha256": "299903edb8247103f30434a7df01f56ff0bc7272ec326240cd6e55376bebc92c",
+      "duration_seconds": 27.538
+    },
+    {
+      "name": "ordinary-product",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/ordinary-owned-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug",
+        "--output",
+        "/home/john-riley/projects/lang/target/owned-result-review-20261024/ordinary-product.json"
+      ],
+      "exit": 0,
+      "log": "ordinary-product.log",
+      "log_sha256": "eac7a823e60dc4922bb955dde1af4379e8b81184461e3f67d3fb8dc4c578d82c",
+      "duration_seconds": 8.466
+    },
+    {
+      "name": "workspace-tests",
+      "command": [
+        "cargo",
+        "test",
+        "--workspace",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--no-fail-fast"
+      ],
+      "exit": 0,
+      "log": "workspace-tests.log",
+      "log_sha256": "6d414ea8db57229ace66c96a588956aadfe690500312207a34fac1201624f8f5",
+      "duration_seconds": 103.523,
+      "suites": 265,
+      "passed": 1229,
+      "failed": 0,
+      "ignored": 6
+    },
+    {
+      "name": "clippy",
+      "command": [
+        "cargo",
+        "clippy",
+        "--workspace",
+        "--all-targets",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit": 0,
+      "log": "clippy.log",
+      "log_sha256": "b914ae03df9f203e179a8fde55841c6000e528abcf45a518ae3f369ac7e88465",
+      "duration_seconds": 7.816
+    },
+    {
+      "name": "format",
+      "command": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--check"
+      ],
+      "exit": 0,
+      "log": "format.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.665
+    },
+    {
+      "name": "diff",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit": 0,
+      "log": "diff.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.016
+    },
+    {
+      "name": "foundation",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/s2b-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug",
+        "--output",
+        "/home/john-riley/projects/lang/target/owned-result-review-20261024/foundation.json"
+      ],
+      "exit": 0,
+      "log": "foundation.log",
+      "log_sha256": "91adaa26ac56b550d1e84483cc1229283a3b9f7a60e70bc9e0ab8fb7d7f26e63",
+      "duration_seconds": 5.615
+    },
+    {
+      "name": "semantic",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-sema/tests/semantic_resolution/run.py",
+        "--binary",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "--output",
+        "/home/john-riley/projects/lang/target/owned-result-review-20261024/semantic.json"
+      ],
+      "exit": 0,
+      "log": "semantic.log",
+      "log_sha256": "e4db6ae5c0ec9375767e16c4779338b9a11ef6a05ed0e58e10b42d064c87b578",
+      "duration_seconds": 5.502
+    },
+    {
+      "name": "specialization",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-sema/tests/source_specialization/run.py",
+        "--binary",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "--output-dir",
+        "/home/john-riley/projects/lang/target/owned-result-review-20261024/specialization"
+      ],
+      "exit": 0,
+      "log": "specialization.log",
+      "log_sha256": "c727497e41be718a60be0db3ecb9d8954f06543d2a7934cce2cdf459da11feb7",
+      "duration_seconds": 3.966
+    },
+    {
+      "name": "visibility",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-api-index/tests/verify_visibility_cli.py",
+        "--binary",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "--output-dir",
+        "/home/john-riley/projects/lang/target/owned-result-review-20261024/visibility"
+      ],
+      "exit": 0,
+      "log": "visibility.log",
+      "log_sha256": "a56220d8ce27cb3be3cd5d8c4227085a353a962e36d1761b1b1e4bba47b5c38a",
+      "duration_seconds": 2.365
+    },
+    {
+      "name": "binders",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-package/scripts/verify_binders.py",
+        "--binary-dir",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug",
+        "--output",
+        "/home/john-riley/projects/lang/target/owned-result-review-20261024/binders.json"
+      ],
+      "exit": 0,
+      "log": "binders.log",
+      "log_sha256": "c1982d054eb71e2e7750230ae71f800a398f6c29d26dc2c00f35ef554fde0bd5",
+      "duration_seconds": 1.115
+    },
+    {
+      "name": "output",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-cli/scripts/verify_output_bounds.py",
+        "--binary",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "--output",
+        "/home/john-riley/projects/lang/target/owned-result-review-20261024/output.json",
+        "--build-address-space-mib",
+        "4096"
+      ],
+      "exit": 0,
+      "log": "output.log",
+      "log_sha256": "eb1a6089eb7bdd7a005d7de27510fd7a7660f242399a66f115de0a4d38737b8f",
+      "duration_seconds": 147.14
+    },
+    {
+      "name": "emitters",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-emit-python/tests/s2b_product.py",
+        "--binary-dir",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug",
+        "--output",
+        "/home/john-riley/projects/lang/target/owned-result-review-20261024/emitters.json"
+      ],
+      "exit": 0,
+      "log": "emitters.log",
+      "log_sha256": "2620de15c25b6017d1e70477b0c9b9468613eaba3b3a94d83c34c36017f42eb2",
+      "duration_seconds": 4.165
+    },
+    {
+      "name": "legacy-graph99",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/s2b-memory-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug",
+        "--output",
+        "/home/john-riley/projects/lang/target/owned-result-review-20261024/legacy-graph99.json"
+      ],
+      "exit": 0,
+      "log": "legacy-graph99.log",
+      "log_sha256": "eaebe02018663dcbc7102520a5625f5e793a240fdc477c1b6afa9f0cee1ab3f8",
+      "duration_seconds": 6.065
+    },
+    {
+      "name": "native-guards518",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-emit-rust/tests/graph_guard_parity/run.py",
+        "--binary-dir",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug",
+        "--output",
+        "/home/john-riley/projects/lang/target/owned-result-review-20261024/native-guards518.json"
+      ],
+      "exit": 0,
+      "log": "native-guards518.log",
+      "log_sha256": "88de176cf1b58a8fbe70fe536d7ac1e75a8436000b3e74e62eafaeb26a2c0f01",
+      "duration_seconds": 19.318
+    },
+    {
+      "name": "report-layouts265",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-cli/tests/memory_report_layout/run.py",
+        "--binary",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "--output",
+        "/home/john-riley/projects/lang/target/owned-result-review-20261024/report-layouts265.json"
+      ],
+      "exit": 0,
+      "log": "report-layouts265.log",
+      "log_sha256": "97d9f2f87c2438386b802a2194219c86a50571065aa3603720f3e87314d1d9fc",
+      "duration_seconds": 10.917
+    }
+  ]
+}

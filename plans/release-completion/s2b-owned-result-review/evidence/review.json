@@ -1,0 +1,512 @@
+{
+  "status": "repair-required",
+  "worker_commit": "d88b57acd14cd299b029a46b197259bb2ec32079",
+  "integrated_commit": "d8253431a9ab5ab571b9e7e8841242f7667b0a28",
+  "workspace": {
+    "passed": 1229,
+    "failed": 0,
+    "ignored": 6,
+    "suites": 265
+  },
+  "product_counts": {
+    "owned-result-product": 584,
+    "ordinary-product": 256,
+    "foundation": 159,
+    "semantic": 278,
+    "binders": 88,
+    "emitters": 104,
+    "legacy-graph99": 99,
+    "native-guards518": 518,
+    "report-layouts265": 265,
+    "specialization": 207,
+    "visibility": 118,
+    "output": 31
+  },
+  "total_product_checks": 2707,
+  "commands": [
+    {
+      "name": "build",
+      "command": [
+        "cargo",
+        "build",
+        "--workspace",
+        "--all-features",
+        "--offline",
+        "--locked"
+      ],
+      "exit": 0,
+      "log": "build.log",
+      "log_sha256": "6906beb03b5f92c30097e7f2c23814b7e6f57cd8b08dc1632e53a9df6706a2a0",
+      "duration_seconds": 18.07
+    },
+    {
+      "name": "owned-result-product",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/owned-result-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug",
+        "--output",
+        "/home/john-riley/projects/lang/target/owned-result-review-20261024/owned-result-product.json"
+      ],
+      "exit": 0,
+      "log": "owned-result-product.log",
+      "log_sha256": "299903edb8247103f30434a7df01f56ff0bc7272ec326240cd6e55376bebc92c",
+      "duration_seconds": 27.538
+    },
+    {
+      "name": "ordinary-product",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/ordinary-owned-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug",
+        "--output",
+        "/home/john-riley/projects/lang/target/owned-result-review-20261024/ordinary-product.json"
+      ],
+      "exit": 0,
+      "log": "ordinary-product.log",
+      "log_sha256": "eac7a823e60dc4922bb955dde1af4379e8b81184461e3f67d3fb8dc4c578d82c",
+      "duration_seconds": 8.466
+    },
+    {
+      "name": "workspace-tests",
+      "command": [
+        "cargo",
+        "test",
+        "--workspace",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--no-fail-fast"
+      ],
+      "exit": 0,
+      "log": "workspace-tests.log",
+      "log_sha256": "6d414ea8db57229ace66c96a588956aadfe690500312207a34fac1201624f8f5",
+      "duration_seconds": 103.523,
+      "suites": 265,
+      "passed": 1229,
+      "failed": 0,
+      "ignored": 6
+    },
+    {
+      "name": "clippy",
+      "command": [
+        "cargo",
+        "clippy",
+        "--workspace",
+        "--all-targets",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit": 0,
+      "log": "clippy.log",
+      "log_sha256": "b914ae03df9f203e179a8fde55841c6000e528abcf45a518ae3f369ac7e88465",
+      "duration_seconds": 7.816
+    },
+    {
+      "name": "format",
+      "command": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--check"
+      ],
+      "exit": 0,
+      "log": "format.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.665
+    },
+    {
+      "name": "diff",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit": 0,
+      "log": "diff.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.016
+    },
+    {
+      "name": "foundation",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/s2b-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug",
+        "--output",
+        "/home/john-riley/projects/lang/target/owned-result-review-20261024/foundation.json"
+      ],
+      "exit": 0,
+      "log": "foundation.log",
+      "log_sha256": "91adaa26ac56b550d1e84483cc1229283a3b9f7a60e70bc9e0ab8fb7d7f26e63",
+      "duration_seconds": 5.615
+    },
+    {
+      "name": "semantic",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-sema/tests/semantic_resolution/run.py",
+        "--binary",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "--output",
+        "/home/john-riley/projects/lang/target/owned-result-review-20261024/semantic.json"
+      ],
+      "exit": 0,
+      "log": "semantic.log",
+      "log_sha256": "e4db6ae5c0ec9375767e16c4779338b9a11ef6a05ed0e58e10b42d064c87b578",
+      "duration_seconds": 5.502
+    },
+    {
+      "name": "specialization",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-sema/tests/source_specialization/run.py",
+        "--binary",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "--output-dir",
+        "/home/john-riley/projects/lang/target/owned-result-review-20261024/specialization"
+      ],
+      "exit": 0,
+      "log": "specialization.log",
+      "log_sha256": "c727497e41be718a60be0db3ecb9d8954f06543d2a7934cce2cdf459da11feb7",
+      "duration_seconds": 3.966
+    },
+    {
+      "name": "visibility",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-api-index/tests/verify_visibility_cli.py",
+        "--binary",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "--output-dir",
+        "/home/john-riley/projects/lang/target/owned-result-review-20261024/visibility"
+      ],
+      "exit": 0,
+      "log": "visibility.log",
+      "log_sha256": "a56220d8ce27cb3be3cd5d8c4227085a353a962e36d1761b1b1e4bba47b5c38a",
+      "duration_seconds": 2.365
+    },
+    {
+      "name": "binders",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-package/scripts/verify_binders.py",
+        "--binary-dir",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug",
+        "--output",
+        "/home/john-riley/projects/lang/target/owned-result-review-20261024/binders.json"
+      ],
+      "exit": 0,
+      "log": "binders.log",
+      "log_sha256": "c1982d054eb71e2e7750230ae71f800a398f6c29d26dc2c00f35ef554fde0bd5",
+      "duration_seconds": 1.115
+    },
+    {
+      "name": "output",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-cli/scripts/verify_output_bounds.py",
+        "--binary",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "--output",
+        "/home/john-riley/projects/lang/target/owned-result-review-20261024/output.json",
+        "--build-address-space-mib",
+        "4096"
+      ],
+      "exit": 0,
+      "log": "output.log",
+      "log_sha256": "eb1a6089eb7bdd7a005d7de27510fd7a7660f242399a66f115de0a4d38737b8f",
+      "duration_seconds": 147.14
+    },
+    {
+      "name": "emitters",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-emit-python/tests/s2b_product.py",
+        "--binary-dir",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug",
+        "--output",
+        "/home/john-riley/projects/lang/target/owned-result-review-20261024/emitters.json"
+      ],
+      "exit": 0,
+      "log": "emitters.log",
+      "log_sha256": "2620de15c25b6017d1e70477b0c9b9468613eaba3b3a94d83c34c36017f42eb2",
+      "duration_seconds": 4.165
+    },
+    {
+      "name": "legacy-graph99",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/s2b-memory-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug",
+        "--output",
+        "/home/john-riley/projects/lang/target/owned-result-review-20261024/legacy-graph99.json"
+      ],
+      "exit": 0,
+      "log": "legacy-graph99.log",
+      "log_sha256": "eaebe02018663dcbc7102520a5625f5e793a240fdc477c1b6afa9f0cee1ab3f8",
+      "duration_seconds": 6.065
+    },
+    {
+      "name": "native-guards518",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-emit-rust/tests/graph_guard_parity/run.py",
+        "--binary-dir",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug",
+        "--output",
+        "/home/john-riley/projects/lang/target/owned-result-review-20261024/native-guards518.json"
+      ],
+      "exit": 0,
+      "log": "native-guards518.log",
+      "log_sha256": "88de176cf1b58a8fbe70fe536d7ac1e75a8436000b3e74e62eafaeb26a2c0f01",
+      "duration_seconds": 19.318
+    },
+    {
+      "name": "report-layouts265",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-cli/tests/memory_report_layout/run.py",
+        "--binary",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "--output",
+        "/home/john-riley/projects/lang/target/owned-result-review-20261024/report-layouts265.json"
+      ],
+      "exit": 0,
+      "log": "report-layouts265.log",
+      "log_sha256": "97d9f2f87c2438386b802a2194219c86a50571065aa3603720f3e87314d1d9fc",
+      "duration_seconds": 10.917
+    }
+  ],
+  "files": {
+    "binders.json": {
+      "sha256": "7b82809091ba80287286ce8731a049733f3d78ab5b74622524fd18b4f3e002d7",
+      "original_sha256": "7b82809091ba80287286ce8731a049733f3d78ab5b74622524fd18b4f3e002d7"
+    },
+    "binders.log.gz": {
+      "sha256": "e2ff056a1e10ee18b748f6e0b0e1cf2eab2fdfc4abde3fd7928d82206d5ad383",
+      "original_sha256": "c1982d054eb71e2e7750230ae71f800a398f6c29d26dc2c00f35ef554fde0bd5"
+    },
+    "build.log.gz": {
+      "sha256": "3ab3e854eac5c9a48160d29735d1529a03bbdff47a83c2ffb0b21075f5563d81",
+      "original_sha256": "6906beb03b5f92c30097e7f2c23814b7e6f57cd8b08dc1632e53a9df6706a2a0"
+    },
+    "clippy.log.gz": {
+      "sha256": "d864b1ad5bb375231a4b0341eb75aa34ee31823c8e3236687a834b2ec7bb7639",
+      "original_sha256": "b914ae03df9f203e179a8fde55841c6000e528abcf45a518ae3f369ac7e88465"
+    },
+    "compatibility/local-name.cg": {
+      "sha256": "8b1e0751a4e383d3561a460ca1ec9e4b7180883aa07ad407ede411323f0d9e6a",
+      "original_sha256": "8b1e0751a4e383d3561a460ca1ec9e4b7180883aa07ad407ede411323f0d9e6a"
+    },
+    "compatibility/nominal-error.cg": {
+      "sha256": "4b4bb924ce1fdf35862649376c89ba0cab9c255708ae119abc455983f1782ab0",
+      "original_sha256": "4b4bb924ce1fdf35862649376c89ba0cab9c255708ae119abc455983f1782ab0"
+    },
+    "compatibility/nominal-result.cg": {
+      "sha256": "9c6746e3a355009e1ecaef683c444b9dbbd842fe88d52cbc86952de5e292db2e",
+      "original_sha256": "9c6746e3a355009e1ecaef683c444b9dbbd842fe88d52cbc86952de5e292db2e"
+    },
+    "compatibility/reproduction.json": {
+      "sha256": "89fe7babc3d245b72ac03ea55b5f9d4839b922c13fd16676ff6b5ea0f6980e8d",
+      "original_sha256": "89fe7babc3d245b72ac03ea55b5f9d4839b922c13fd16676ff6b5ea0f6980e8d"
+    },
+    "compatibility/user-function.cg": {
+      "sha256": "47560c627f482999a224d8e869d425acbdc7d2f2b29d8c38d470164e9f9550c1",
+      "original_sha256": "47560c627f482999a224d8e869d425acbdc7d2f2b29d8c38d470164e9f9550c1"
+    },
+    "diff.log.gz": {
+      "sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "emitters.json": {
+      "sha256": "bddcc09c4ad695d3560a33bf0b47b7068fe6c527952945afaeb7e994837977d9",
+      "original_sha256": "bddcc09c4ad695d3560a33bf0b47b7068fe6c527952945afaeb7e994837977d9"
+    },
+    "emitters.log.gz": {
+      "sha256": "d40f10baca099082fcbd79170a02b1b845c38e75d3516c4db8d55403f8561692",
+      "original_sha256": "2620de15c25b6017d1e70477b0c9b9468613eaba3b3a94d83c34c36017f42eb2"
+    },
+    "format.log.gz": {
+      "sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "foundation.json": {
+      "sha256": "c91ef9fbec5f732a71b7c00e617d84b99c56f58cb23d0447942ccc85f5d72a82",
+      "original_sha256": "c91ef9fbec5f732a71b7c00e617d84b99c56f58cb23d0447942ccc85f5d72a82"
+    },
+    "foundation.log.gz": {
+      "sha256": "9ea86ca6a70025064959d27305485fcb43283676da6757abb79e9ec74dad7634",
+      "original_sha256": "91adaa26ac56b550d1e84483cc1229283a3b9f7a60e70bc9e0ab8fb7d7f26e63"
+    },
+    "legacy-graph99.json": {
+      "sha256": "c7bc62433ad40f8411796305528b91a37c182b59d07c5fd1aea15c2790fd3efb",
+      "original_sha256": "c7bc62433ad40f8411796305528b91a37c182b59d07c5fd1aea15c2790fd3efb"
+    },
+    "legacy-graph99.log.gz": {
+      "sha256": "3ff241b602cad1dea43103748b75ba361f24fc01c45830ed628e19e561f70832",
+      "original_sha256": "eaebe02018663dcbc7102520a5625f5e793a240fdc477c1b6afa9f0cee1ab3f8"
+    },
+    "native-guards518.json": {
+      "sha256": "62c1e033c79ac72ea5d82dc252641c2833d73c0daa14114df6cd46b7cfcbf841",
+      "original_sha256": "62c1e033c79ac72ea5d82dc252641c2833d73c0daa14114df6cd46b7cfcbf841"
+    },
+    "native-guards518.log.gz": {
+      "sha256": "0893c84cf05fad22682c00d4be406a025d1c90dab8c43712d894842b0b707715",
+      "original_sha256": "88de176cf1b58a8fbe70fe536d7ac1e75a8436000b3e74e62eafaeb26a2c0f01"
+    },
+    "ordinary-product.json": {
+      "sha256": "8df870454e4f541558741cd6ee6fed902ff2b887bd3ce44ab1b20ad19f89b95a",
+      "original_sha256": "8df870454e4f541558741cd6ee6fed902ff2b887bd3ce44ab1b20ad19f89b95a"
+    },
+    "ordinary-product.log.gz": {
+      "sha256": "94c5a645f05957a5b93c5bf345f43bd62e7d3df70889b6e9293fda0036437f24",
+      "original_sha256": "eac7a823e60dc4922bb955dde1af4379e8b81184461e3f67d3fb8dc4c578d82c"
+    },
+    "output.json": {
+      "sha256": "41e519682ba8b67c2b7b0db56bfb8880172f7368103191df7b203687f9792017",
+      "original_sha256": "41e519682ba8b67c2b7b0db56bfb8880172f7368103191df7b203687f9792017"
+    },
+    "output.log.gz": {
+      "sha256": "c817ff32bc6b9d5dbcabb84e0ec90cb60a660cda1c60a9061fa1f23b03009511",
+      "original_sha256": "eb1a6089eb7bdd7a005d7de27510fd7a7660f242399a66f115de0a4d38737b8f"
+    },
+    "owned-result-product.json": {
+      "sha256": "6008fd2de9efb11c3a51436a4c6b158486c4cfc0baea2c209217271e185de3f1",
+      "original_sha256": "6008fd2de9efb11c3a51436a4c6b158486c4cfc0baea2c209217271e185de3f1"
+    },
+    "owned-result-product.log.gz": {
+      "sha256": "c198987a32eff801cffed15a8015250102fb4e3accc32078f03de0298e0ac0d8",
+      "original_sha256": "299903edb8247103f30434a7df01f56ff0bc7272ec326240cd6e55376bebc92c"
+    },
+    "report-layouts265.json": {
+      "sha256": "a3c78721bcbdd507e4bb3934973fef795d09dc7b1f86ce8bcd01f38247bb2a5e",
+      "original_sha256": "a3c78721bcbdd507e4bb3934973fef795d09dc7b1f86ce8bcd01f38247bb2a5e"
+    },
+    "report-layouts265.log.gz": {
+      "sha256": "e31b411199bb70442fdb5414a5f795400a6f72788eb984768f1787a9c5853e38",
+      "original_sha256": "97d9f2f87c2438386b802a2194219c86a50571065aa3603720f3e87314d1d9fc"
+    },
+    "semantic.json": {
+      "sha256": "3da164b5635d24b5f78d4a634b6ad7f1d3dd2824e90f6b880deb142b7bacf0bb",
+      "original_sha256": "3da164b5635d24b5f78d4a634b6ad7f1d3dd2824e90f6b880deb142b7bacf0bb"
+    },
+    "semantic.log.gz": {
+      "sha256": "3b520fc16eba43c3eff7239e9733977981cbcbf05ac7a62bb2b11fed54f9913a",
+      "original_sha256": "e4db6ae5c0ec9375767e16c4779338b9a11ef6a05ed0e58e10b42d064c87b578"
+    },
+    "specialization/collisions.cg": {
+      "sha256": "d68b597eddf4063f468f1f356d5639a3047cf8f5dd30c5db831a248fd2d552a0",
+      "original_sha256": "d68b597eddf4063f468f1f356d5639a3047cf8f5dd30c5db831a248fd2d552a0"
+    },
+    "specialization/dishonest-import/src/dep.cg": {
+      "sha256": "54b1be9d3d83104a92395b0a4eb5109b51059f5f898f21b1742e15d105205e0f",
+      "original_sha256": "54b1be9d3d83104a92395b0a4eb5109b51059f5f898f21b1742e15d105205e0f"
+    },
+    "specialization/dishonest-import/src/main.cg": {
+      "sha256": "60e80564f338ccce0988d7a4d3057aef7e4332e3abd06cee9ac9f3371b9559ad",
+      "original_sha256": "60e80564f338ccce0988d7a4d3057aef7e4332e3abd06cee9ac9f3371b9559ad"
+    },
+    "specialization/dishonest.cg": {
+      "sha256": "a8f41ad1e58630838b4000c5ce8165a4ec4e8ec4de995ae89059d1abdf3a7273",
+      "original_sha256": "a8f41ad1e58630838b4000c5ce8165a4ec4e8ec4de995ae89059d1abdf3a7273"
+    },
+    "specialization/import-private/src/dep.cg": {
+      "sha256": "d79c30bb9b272e494dbea7c0ab903c8916e47118b60c217132a56787a4bba33e",
+      "original_sha256": "d79c30bb9b272e494dbea7c0ab903c8916e47118b60c217132a56787a4bba33e"
+    },
+    "specialization/import-private/src/main.cg": {
+      "sha256": "a1edf7c21c2a4f3fbd873a6adb366fd3ae4ada58b0054329ab22148a6f15f621",
+      "original_sha256": "a1edf7c21c2a4f3fbd873a6adb366fd3ae4ada58b0054329ab22148a6f15f621"
+    },
+    "specialization/import-unknown/src/dep.cg": {
+      "sha256": "d79c30bb9b272e494dbea7c0ab903c8916e47118b60c217132a56787a4bba33e",
+      "original_sha256": "d79c30bb9b272e494dbea7c0ab903c8916e47118b60c217132a56787a4bba33e"
+    },
+    "specialization/import-unknown/src/main.cg": {
+      "sha256": "664a8b8cf79ce4bd9d49ed42ba663f25413aaf2f8fef68eab5a7228551ba9bf2",
+      "original_sha256": "664a8b8cf79ce4bd9d49ed42ba663f25413aaf2f8fef68eab5a7228551ba9bf2"
+    },
+    "specialization/public-function.cg": {
+      "sha256": "671fd9e0b1a3b62619f3d7b149bd0a1c3c59972e5590141f000e6b677e560f3c",
+      "original_sha256": "671fd9e0b1a3b62619f3d7b149bd0a1c3c59972e5590141f000e6b677e560f3c"
+    },
+    "specialization/public-record.cg": {
+      "sha256": "7bf5d373429f57dc8094fe5a37a2f2968daf449e1a25cc1685ffb6ddd34d7a0e",
+      "original_sha256": "7bf5d373429f57dc8094fe5a37a2f2968daf449e1a25cc1685ffb6ddd34d7a0e"
+    },
+    "specialization/public-variant.cg": {
+      "sha256": "8ba8aac907ca519a754fcd00c8c3e5f3f33e38a27b32cc96de481b07e048f0d8",
+      "original_sha256": "8ba8aac907ca519a754fcd00c8c3e5f3f33e38a27b32cc96de481b07e048f0d8"
+    },
+    "specialization/report.json": {
+      "sha256": "69c37254fe6e844865426eed63044a41c751cbb77581c62911c74fa7a26d74aa",
+      "original_sha256": "69c37254fe6e844865426eed63044a41c751cbb77581c62911c74fa7a26d74aa"
+    },
+    "specialization.log.gz": {
+      "sha256": "6af744d7525183b8bd6ca526cf7e9f5814f06a4d3e03b4724c8bc549657b327f",
+      "original_sha256": "c727497e41be718a60be0db3ecb9d8954f06543d2a7934cce2cdf459da11feb7"
+    },
+    "verification.json": {
+      "sha256": "c204e2f595785bec33d3fed015dc7a3f5404f6ae6e2ba33046791823143d9fb2",
+      "original_sha256": "c204e2f595785bec33d3fed015dc7a3f5404f6ae6e2ba33046791823143d9fb2"
+    },
+    "visibility/private-callee/src/dep.cg": {
+      "sha256": "244c1262cd73a352775d5ca81d0ea9941367c008facbd6c2a97e7b3e6e062276",
+      "original_sha256": "244c1262cd73a352775d5ca81d0ea9941367c008facbd6c2a97e7b3e6e062276"
+    },
+    "visibility/private-callee/src/main.cg": {
+      "sha256": "ed1b684e2433ffd1e66b048d6d6d141bbcb0fecaa74df4867588bbf36b4010ec",
+      "original_sha256": "ed1b684e2433ffd1e66b048d6d6d141bbcb0fecaa74df4867588bbf36b4010ec"
+    },
+    "visibility/private-type/src/dep.cg": {
+      "sha256": "244c1262cd73a352775d5ca81d0ea9941367c008facbd6c2a97e7b3e6e062276",
+      "original_sha256": "244c1262cd73a352775d5ca81d0ea9941367c008facbd6c2a97e7b3e6e062276"
+    },
+    "visibility/private-type/src/main.cg": {
+      "sha256": "8eca106f771736c9442941c1684e7eb4d522e6a9924ab82695f1cc75d72fd965",
+      "original_sha256": "8eca106f771736c9442941c1684e7eb4d522e6a9924ab82695f1cc75d72fd965"
+    },
+    "visibility/report.json": {
+      "sha256": "282cb06b365007ead826ceb9bd9b2472b23102187aaa6b1514ba37c708db09f3",
+      "original_sha256": "282cb06b365007ead826ceb9bd9b2472b23102187aaa6b1514ba37c708db09f3"
+    },
+    "visibility.log.gz": {
+      "sha256": "638ea0b6a4fdd0e89330ca7ff2f55b799f97fbf971ab83f2cd2400d90897d517",
+      "original_sha256": "a56220d8ce27cb3be3cd5d8c4227085a353a962e36d1761b1b1e4bba47b5c38a"
+    },
+    "workspace-tests.log.gz": {
+      "sha256": "8b04f2922cd9b4a2ac4ec40cfb0b69af2f13fc7ce1bb7e7632596712173998d8",
+      "original_sha256": "6d414ea8db57229ace66c96a588956aadfe690500312207a34fac1201624f8f5"
+    }
+  },
+  "reviewers": {
+    "core": "confirmed symbol-compatibility regression",
+    "runtime": "bounded runtime/backend review passes",
+    "consumers": "consumer/dependency/path review passes; live output limit gap"
+  },
+  "failures": [
+    {
+      "id": "owned-symbol-compatibility",
+      "status": "failed",
+      "evidence": "compatibility/reproduction.json",
+      "detail": "Four previously accepted owned source programs print42 at base, now CGT082; unconditional new symbol reservations/type/call resolution."
+    },
+    {
+      "id": "owned-runner-output",
+      "status": "failed",
+      "detail": "run.py checks 1MiB capture only after child wait; bound must be enforced during execution."
+    }
+  ],
+  "ordinary_memory_complete": false,
+  "release_complete": false,
+  "remaining": "All full ordinary-memory, typed foreign/execution/commands, R01-R15, S3/S4 and genuine external gates remain mandatory."
+}

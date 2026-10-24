@@ -1,0 +1,2631 @@
+{
+  "schema_version": 1,
+  "checkpoint_complete": false,
+  "release_complete": false,
+  "scope": "first executable local ordinary-owned function slice",
+  "commands": [
+    {
+      "label": "pinned-rustc",
+      "command": [
+        "rustup",
+        "which",
+        "rustc"
+      ],
+      "exit": 0,
+      "stdout": "/home/john-riley/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/bin/rustc\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "standalone-runtime",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker",
+        "--edition=2021",
+        "--crate-name",
+        "cgx2_runtime",
+        "--crate-type",
+        "rlib",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/runtime/lib.rs",
+        "-o",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/libcgx2_runtime.rlib"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "functions:check",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/functions.cg"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "functions:interpreter",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/functions.cg"
+      ],
+      "exit": 0,
+      "stdout": "37\n",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":4,\"releases\":4,\"live_bytes\":0,\"allocated_bytes\":36,\"released_bytes\":36,\"peak_live_bytes\":18,\"reads\":14,\"writes\":17}\n",
+      "passed": true
+    },
+    {
+      "label": "functions:source-storage",
+      "passed": true
+    },
+    {
+      "label": "functions:value",
+      "passed": true
+    },
+    {
+      "label": "functions-debug:build",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/functions.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/functions-debug",
+        "--rustc",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=81331537f821f68e3643db7581f66312290a1b09bbc0e503f3fa9b5cf0d73188 rustc=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/functions-debug\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "functions-debug:execute",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/functions-debug"
+      ],
+      "exit": 0,
+      "stdout": "37\n",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":4,\"releases\":4,\"live_bytes\":0,\"allocated_bytes\":36,\"released_bytes\":36,\"peak_live_bytes\":18,\"reads\":14,\"writes\":17}\n",
+      "passed": true
+    },
+    {
+      "label": "functions-debug:parity",
+      "passed": true
+    },
+    {
+      "label": "functions-release:build",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/functions.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/functions-release",
+        "--rustc",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker",
+        "--release"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=81331537f821f68e3643db7581f66312290a1b09bbc0e503f3fa9b5cf0d73188 rustc=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/functions-release\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "functions-release:execute",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/functions-release"
+      ],
+      "exit": 0,
+      "stdout": "37\n",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":4,\"releases\":4,\"live_bytes\":0,\"allocated_bytes\":36,\"released_bytes\":36,\"peak_live_bytes\":18,\"reads\":14,\"writes\":17}\n",
+      "passed": true
+    },
+    {
+      "label": "functions-release:parity",
+      "passed": true
+    },
+    {
+      "label": "functions:emit-rust",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/functions.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/functions.rs"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "functions:standalone-compile",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker",
+        "--edition=2024",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/functions.rs",
+        "--extern",
+        "cgx2_runtime=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/libcgx2_runtime.rlib",
+        "-o",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/functions-standalone"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "functions:standalone-run",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/functions-standalone"
+      ],
+      "exit": 0,
+      "stdout": "37\n",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":4,\"releases\":4,\"live_bytes\":0,\"allocated_bytes\":36,\"released_bytes\":36,\"peak_live_bytes\":18,\"reads\":14,\"writes\":17}\n",
+      "passed": true
+    },
+    {
+      "label": "functions:standalone-parity",
+      "passed": true
+    },
+    {
+      "label": "functions:python-rejection",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/functions.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/functions.py",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGE006: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/functions.cg:86..100: ordinary owned storage and loans are outside the Python target\n",
+      "passed": true
+    },
+    {
+      "label": "functions:python-preserved",
+      "passed": true
+    },
+    {
+      "label": "mapping:check",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/mapping.cg"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "mapping:interpreter",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/mapping.cg"
+      ],
+      "exit": 0,
+      "stdout": "22\n",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":3,\"releases\":3,\"live_bytes\":0,\"allocated_bytes\":17,\"released_bytes\":17,\"peak_live_bytes\":16,\"reads\":1,\"writes\":3}\n",
+      "passed": true
+    },
+    {
+      "label": "mapping:source-storage",
+      "passed": true
+    },
+    {
+      "label": "mapping:value",
+      "passed": true
+    },
+    {
+      "label": "mapping-debug:build",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/mapping.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/mapping-debug",
+        "--rustc",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=ca2a4069fd9bffb4277f8e93e9f27674edf038f21698c1bda7a3ad1678aecf13 rustc=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/mapping-debug\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "mapping-debug:execute",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/mapping-debug"
+      ],
+      "exit": 0,
+      "stdout": "22\n",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":3,\"releases\":3,\"live_bytes\":0,\"allocated_bytes\":17,\"released_bytes\":17,\"peak_live_bytes\":16,\"reads\":1,\"writes\":3}\n",
+      "passed": true
+    },
+    {
+      "label": "mapping-debug:parity",
+      "passed": true
+    },
+    {
+      "label": "mapping-release:build",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/mapping.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/mapping-release",
+        "--rustc",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker",
+        "--release"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=ca2a4069fd9bffb4277f8e93e9f27674edf038f21698c1bda7a3ad1678aecf13 rustc=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/mapping-release\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "mapping-release:execute",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/mapping-release"
+      ],
+      "exit": 0,
+      "stdout": "22\n",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":3,\"releases\":3,\"live_bytes\":0,\"allocated_bytes\":17,\"released_bytes\":17,\"peak_live_bytes\":16,\"reads\":1,\"writes\":3}\n",
+      "passed": true
+    },
+    {
+      "label": "mapping-release:parity",
+      "passed": true
+    },
+    {
+      "label": "mapping:emit-rust",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/mapping.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/mapping.rs"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "mapping:standalone-compile",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker",
+        "--edition=2024",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/mapping.rs",
+        "--extern",
+        "cgx2_runtime=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/libcgx2_runtime.rlib",
+        "-o",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/mapping-standalone"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "mapping:standalone-run",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/mapping-standalone"
+      ],
+      "exit": 0,
+      "stdout": "22\n",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":3,\"releases\":3,\"live_bytes\":0,\"allocated_bytes\":17,\"released_bytes\":17,\"peak_live_bytes\":16,\"reads\":1,\"writes\":3}\n",
+      "passed": true
+    },
+    {
+      "label": "mapping:standalone-parity",
+      "passed": true
+    },
+    {
+      "label": "mapping:python-rejection",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/mapping.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/mapping.py",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGE006: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/mapping.cg:72..80: ordinary owned storage and loans are outside the Python target\n",
+      "passed": true
+    },
+    {
+      "label": "mapping:python-preserved",
+      "passed": true
+    },
+    {
+      "label": "copied-record:check",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/copied-record.cg"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "copied-record:interpreter",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/copied-record.cg"
+      ],
+      "exit": 0,
+      "stdout": "R(x: 3, yes: true)\n",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":9,\"released_bytes\":9,\"peak_live_bytes\":9,\"reads\":1,\"writes\":2}\n",
+      "passed": true
+    },
+    {
+      "label": "copied-record:source-storage",
+      "passed": true
+    },
+    {
+      "label": "copied-record:value",
+      "passed": true
+    },
+    {
+      "label": "copied-record-debug:build",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/copied-record.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/copied-record-debug",
+        "--rustc",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=b74b0a8763acfafa622020d5517866e41fcf987047f118a2eb8b259037eb58e6 rustc=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/copied-record-debug\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "copied-record-debug:execute",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/copied-record-debug"
+      ],
+      "exit": 0,
+      "stdout": "R(x: 3, yes: true)\n",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":9,\"released_bytes\":9,\"peak_live_bytes\":9,\"reads\":1,\"writes\":2}\n",
+      "passed": true
+    },
+    {
+      "label": "copied-record-debug:parity",
+      "passed": true
+    },
+    {
+      "label": "copied-record-release:build",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/copied-record.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/copied-record-release",
+        "--rustc",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker",
+        "--release"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=b74b0a8763acfafa622020d5517866e41fcf987047f118a2eb8b259037eb58e6 rustc=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/copied-record-release\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "copied-record-release:execute",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/copied-record-release"
+      ],
+      "exit": 0,
+      "stdout": "R(x: 3, yes: true)\n",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":9,\"released_bytes\":9,\"peak_live_bytes\":9,\"reads\":1,\"writes\":2}\n",
+      "passed": true
+    },
+    {
+      "label": "copied-record-release:parity",
+      "passed": true
+    },
+    {
+      "label": "copied-record:emit-rust",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/copied-record.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/copied-record.rs"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "copied-record:standalone-compile",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker",
+        "--edition=2024",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/copied-record.rs",
+        "--extern",
+        "cgx2_runtime=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/libcgx2_runtime.rlib",
+        "-o",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/copied-record-standalone"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "copied-record:standalone-run",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/copied-record-standalone"
+      ],
+      "exit": 0,
+      "stdout": "R(x: 3, yes: true)\n",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":9,\"released_bytes\":9,\"peak_live_bytes\":9,\"reads\":1,\"writes\":2}\n",
+      "passed": true
+    },
+    {
+      "label": "copied-record:standalone-parity",
+      "passed": true
+    },
+    {
+      "label": "copied-record:python-rejection",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/copied-record.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/copied-record.py",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGE006: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/copied-record.cg:59..67: ordinary owned storage and loans are outside the Python target\n",
+      "passed": true
+    },
+    {
+      "label": "copied-record:python-preserved",
+      "passed": true
+    },
+    {
+      "label": "exclusive-result:check",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/exclusive-result.cg"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "exclusive-result:interpreter",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/exclusive-result.cg"
+      ],
+      "exit": 0,
+      "stdout": "42\n",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":2}\n",
+      "passed": true
+    },
+    {
+      "label": "exclusive-result:source-storage",
+      "passed": true
+    },
+    {
+      "label": "exclusive-result:value",
+      "passed": true
+    },
+    {
+      "label": "exclusive-result-debug:build",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/exclusive-result.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/exclusive-result-debug",
+        "--rustc",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=f9c1454df042a50f84461063634c39a3972646305e02919203788ed9d3d2233e rustc=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/exclusive-result-debug\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "exclusive-result-debug:execute",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/exclusive-result-debug"
+      ],
+      "exit": 0,
+      "stdout": "42\n",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":2}\n",
+      "passed": true
+    },
+    {
+      "label": "exclusive-result-debug:parity",
+      "passed": true
+    },
+    {
+      "label": "exclusive-result-release:build",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/exclusive-result.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/exclusive-result-release",
+        "--rustc",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker",
+        "--release"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=f9c1454df042a50f84461063634c39a3972646305e02919203788ed9d3d2233e rustc=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/exclusive-result-release\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "exclusive-result-release:execute",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/exclusive-result-release"
+      ],
+      "exit": 0,
+      "stdout": "42\n",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":2}\n",
+      "passed": true
+    },
+    {
+      "label": "exclusive-result-release:parity",
+      "passed": true
+    },
+    {
+      "label": "exclusive-result:emit-rust",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/exclusive-result.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/exclusive-result.rs"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "exclusive-result:standalone-compile",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker",
+        "--edition=2024",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/exclusive-result.rs",
+        "--extern",
+        "cgx2_runtime=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/libcgx2_runtime.rlib",
+        "-o",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/exclusive-result-standalone"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "exclusive-result:standalone-run",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/exclusive-result-standalone"
+      ],
+      "exit": 0,
+      "stdout": "42\n",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":2}\n",
+      "passed": true
+    },
+    {
+      "label": "exclusive-result:standalone-parity",
+      "passed": true
+    },
+    {
+      "label": "exclusive-result:python-rejection",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/exclusive-result.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/exclusive-result.py",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGE006: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/exclusive-result.cg:41..53: ordinary owned storage and loans are outside the Python target\n",
+      "passed": true
+    },
+    {
+      "label": "exclusive-result:python-preserved",
+      "passed": true
+    },
+    {
+      "label": "repeated:check",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/repeated.cg"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "repeated:interpreter",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/repeated.cg"
+      ],
+      "exit": 0,
+      "stdout": "99\n",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":100,\"releases\":100,\"live_bytes\":0,\"allocated_bytes\":800,\"released_bytes\":800,\"peak_live_bytes\":8,\"reads\":100,\"writes\":100}\n",
+      "passed": true
+    },
+    {
+      "label": "repeated:source-storage",
+      "passed": true
+    },
+    {
+      "label": "repeated:value",
+      "passed": true
+    },
+    {
+      "label": "repeated-debug:build",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/repeated.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/repeated-debug",
+        "--rustc",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=a3e07c4251063ae643eeced9cd9c0a9c9c580b663046ae0fcc815cc51c377de6 rustc=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/repeated-debug\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "repeated-debug:execute",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/repeated-debug"
+      ],
+      "exit": 0,
+      "stdout": "99\n",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":100,\"releases\":100,\"live_bytes\":0,\"allocated_bytes\":800,\"released_bytes\":800,\"peak_live_bytes\":8,\"reads\":100,\"writes\":100}\n",
+      "passed": true
+    },
+    {
+      "label": "repeated-debug:parity",
+      "passed": true
+    },
+    {
+      "label": "repeated-release:build",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/repeated.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/repeated-release",
+        "--rustc",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker",
+        "--release"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=a3e07c4251063ae643eeced9cd9c0a9c9c580b663046ae0fcc815cc51c377de6 rustc=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/repeated-release\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "repeated-release:execute",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/repeated-release"
+      ],
+      "exit": 0,
+      "stdout": "99\n",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":100,\"releases\":100,\"live_bytes\":0,\"allocated_bytes\":800,\"released_bytes\":800,\"peak_live_bytes\":8,\"reads\":100,\"writes\":100}\n",
+      "passed": true
+    },
+    {
+      "label": "repeated-release:parity",
+      "passed": true
+    },
+    {
+      "label": "repeated:emit-rust",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/repeated.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/repeated.rs"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "repeated:standalone-compile",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker",
+        "--edition=2024",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/repeated.rs",
+        "--extern",
+        "cgx2_runtime=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/libcgx2_runtime.rlib",
+        "-o",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/repeated-standalone"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "repeated:standalone-run",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/repeated-standalone"
+      ],
+      "exit": 0,
+      "stdout": "99\n",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":100,\"releases\":100,\"live_bytes\":0,\"allocated_bytes\":800,\"released_bytes\":800,\"peak_live_bytes\":8,\"reads\":100,\"writes\":100}\n",
+      "passed": true
+    },
+    {
+      "label": "repeated:standalone-parity",
+      "passed": true
+    },
+    {
+      "label": "repeated:python-rejection",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/repeated.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/repeated.py",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGE006: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/repeated.cg:57..71: ordinary owned storage and loans are outside the Python target\n",
+      "passed": true
+    },
+    {
+      "label": "repeated:python-preserved",
+      "passed": true
+    },
+    {
+      "label": "arithmetic-failure:check",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/arithmetic-failure.cg"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "arithmetic-failure:interpreter",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/arithmetic-failure.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":2,\"releases\":2,\"live_bytes\":0,\"allocated_bytes\":18,\"released_bytes\":18,\"peak_live_bytes\":18,\"reads\":1,\"writes\":4}\nCGR080: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/arithmetic-failure.cg:142..149: checked integer arithmetic failed\n",
+      "passed": true
+    },
+    {
+      "label": "arithmetic-failure:source-storage",
+      "passed": true
+    },
+    {
+      "label": "arithmetic-failure:failure-span",
+      "passed": true
+    },
+    {
+      "label": "arithmetic-failure-debug:build",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/arithmetic-failure.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/arithmetic-failure-debug",
+        "--rustc",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=a3c3b51275e0485a3a31857f8d3211bbdfe473ed8627ea3fe5fe189ff0fd1047 rustc=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/arithmetic-failure-debug\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "arithmetic-failure-debug:execute",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/arithmetic-failure-debug"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":2,\"releases\":2,\"live_bytes\":0,\"allocated_bytes\":18,\"released_bytes\":18,\"peak_live_bytes\":18,\"reads\":1,\"writes\":4}\nCGR080: checked integer arithmetic failed at 142..149\n",
+      "passed": true
+    },
+    {
+      "label": "arithmetic-failure-debug:parity",
+      "passed": true
+    },
+    {
+      "label": "arithmetic-failure-release:build",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/arithmetic-failure.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/arithmetic-failure-release",
+        "--rustc",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker",
+        "--release"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=a3c3b51275e0485a3a31857f8d3211bbdfe473ed8627ea3fe5fe189ff0fd1047 rustc=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/arithmetic-failure-release\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "arithmetic-failure-release:execute",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/arithmetic-failure-release"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":2,\"releases\":2,\"live_bytes\":0,\"allocated_bytes\":18,\"released_bytes\":18,\"peak_live_bytes\":18,\"reads\":1,\"writes\":4}\nCGR080: checked integer arithmetic failed at 142..149\n",
+      "passed": true
+    },
+    {
+      "label": "arithmetic-failure-release:parity",
+      "passed": true
+    },
+    {
+      "label": "arithmetic-failure:emit-rust",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/arithmetic-failure.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/arithmetic-failure.rs"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "arithmetic-failure:standalone-compile",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker",
+        "--edition=2024",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/arithmetic-failure.rs",
+        "--extern",
+        "cgx2_runtime=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/libcgx2_runtime.rlib",
+        "-o",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/arithmetic-failure-standalone"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "arithmetic-failure:standalone-run",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/arithmetic-failure-standalone"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":2,\"releases\":2,\"live_bytes\":0,\"allocated_bytes\":18,\"released_bytes\":18,\"peak_live_bytes\":18,\"reads\":1,\"writes\":4}\nCGR080: checked integer arithmetic failed at 142..149\n",
+      "passed": true
+    },
+    {
+      "label": "arithmetic-failure:standalone-parity",
+      "passed": true
+    },
+    {
+      "label": "arithmetic-failure:python-rejection",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/arithmetic-failure.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/arithmetic-failure.py",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGE006: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/arithmetic-failure.cg:54..67: ordinary owned storage and loans are outside the Python target\n",
+      "passed": true
+    },
+    {
+      "label": "arithmetic-failure:python-preserved",
+      "passed": true
+    },
+    {
+      "label": "constructor-order:check",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/constructor-order.cg"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "constructor-order:interpreter",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/constructor-order.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":0,\"releases\":0,\"live_bytes\":0,\"allocated_bytes\":0,\"released_bytes\":0,\"peak_live_bytes\":0,\"reads\":0,\"writes\":0}\nCGR080: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/constructor-order.cg:88..93: checked integer arithmetic failed\n",
+      "passed": true
+    },
+    {
+      "label": "constructor-order:source-storage",
+      "passed": true
+    },
+    {
+      "label": "constructor-order:failure-span",
+      "passed": true
+    },
+    {
+      "label": "constructor-order-debug:build",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/constructor-order.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/constructor-order-debug",
+        "--rustc",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=cc9f6e7e7058255d36cf668cd9b42c089a1cabb40dd3e55cb6d6b4b8b586bab0 rustc=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/constructor-order-debug\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "constructor-order-debug:execute",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/constructor-order-debug"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":0,\"releases\":0,\"live_bytes\":0,\"allocated_bytes\":0,\"released_bytes\":0,\"peak_live_bytes\":0,\"reads\":0,\"writes\":0}\nCGR080: checked integer arithmetic failed at 88..93\n",
+      "passed": true
+    },
+    {
+      "label": "constructor-order-debug:parity",
+      "passed": true
+    },
+    {
+      "label": "constructor-order-release:build",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/constructor-order.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/constructor-order-release",
+        "--rustc",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker",
+        "--release"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=cc9f6e7e7058255d36cf668cd9b42c089a1cabb40dd3e55cb6d6b4b8b586bab0 rustc=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/constructor-order-release\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "constructor-order-release:execute",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/constructor-order-release"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":0,\"releases\":0,\"live_bytes\":0,\"allocated_bytes\":0,\"released_bytes\":0,\"peak_live_bytes\":0,\"reads\":0,\"writes\":0}\nCGR080: checked integer arithmetic failed at 88..93\n",
+      "passed": true
+    },
+    {
+      "label": "constructor-order-release:parity",
+      "passed": true
+    },
+    {
+      "label": "constructor-order:emit-rust",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/constructor-order.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/constructor-order.rs"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "constructor-order:standalone-compile",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/rustc-bounded-linker",
+        "--edition=2024",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/constructor-order.rs",
+        "--extern",
+        "cgx2_runtime=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/libcgx2_runtime.rlib",
+        "-o",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/constructor-order-standalone"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "constructor-order:standalone-run",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/constructor-order-standalone"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":0,\"releases\":0,\"live_bytes\":0,\"allocated_bytes\":0,\"released_bytes\":0,\"peak_live_bytes\":0,\"reads\":0,\"writes\":0}\nCGR080: checked integer arithmetic failed at 88..93\n",
+      "passed": true
+    },
+    {
+      "label": "constructor-order:standalone-parity",
+      "passed": true
+    },
+    {
+      "label": "constructor-order:python-rejection",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/constructor-order.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/constructor-order.py",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGE006: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/constructor-order.cg:72..127: ordinary owned storage and loans are outside the Python target\n",
+      "passed": true
+    },
+    {
+      "label": "constructor-order:python-preserved",
+      "passed": true
+    },
+    {
+      "label": "use-after-move:reject",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/use-after-move.cg",
+        "--diagnostic-format=json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "{\"code\":\"CGO101\",\"severity\":\"error\",\"message\":\"place 'Place { local: \\\"v1\\\", projection: [Field(\\\"x\\\")] }' is uninitialized, moved, or only possibly live\",\"file\":\"/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/use-after-move.cg\",\"span\":{\"start\":112,\"end\":115}}\n",
+      "passed": true
+    },
+    {
+      "label": "use-after-move:exact-utf8-span",
+      "passed": true
+    },
+    {
+      "label": "use-after-move:reject-run",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/use-after-move.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGO101: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/use-after-move.cg:112..115: place 'Place { local: \"v1\", projection: [Field(\"x\")] }' is uninitialized, moved, or only possibly live\n",
+      "passed": true
+    },
+    {
+      "label": "use-after-move:reject-rust",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/use-after-move.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/use-after-move.rust",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGO101: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/use-after-move.cg:112..115: place 'Place { local: \"v1\", projection: [Field(\"x\")] }' is uninitialized, moved, or only possibly live\n",
+      "passed": true
+    },
+    {
+      "label": "use-after-move:preserved-rust",
+      "passed": true
+    },
+    {
+      "label": "use-after-move:reject-python",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/use-after-move.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/use-after-move.python",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGO101: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/use-after-move.cg:112..115: place 'Place { local: \"v1\", projection: [Field(\"x\")] }' is uninitialized, moved, or only possibly live\n",
+      "passed": true
+    },
+    {
+      "label": "use-after-move:preserved-python",
+      "passed": true
+    },
+    {
+      "label": "use-after-move:reject-binary",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/use-after-move.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/use-after-move.binary",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGO101: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/use-after-move.cg:112..115: place 'Place { local: \"v1\", projection: [Field(\"x\")] }' is uninitialized, moved, or only possibly live\n",
+      "passed": true
+    },
+    {
+      "label": "use-after-move:preserved-binary",
+      "passed": true
+    },
+    {
+      "label": "argument-move-order:reject",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/argument-move-order.cg",
+        "--diagnostic-format=json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "{\"code\":\"CGO101\",\"severity\":\"error\",\"message\":\"place 'Place { local: \\\"v1\\\", projection: [Field(\\\"x\\\")] }' is uninitialized, moved, or only possibly live\",\"file\":\"/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/argument-move-order.cg\",\"span\":{\"start\":149,\"end\":152}}\n",
+      "passed": true
+    },
+    {
+      "label": "argument-move-order:exact-utf8-span",
+      "passed": true
+    },
+    {
+      "label": "argument-move-order:reject-run",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/argument-move-order.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGO101: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/argument-move-order.cg:149..152: place 'Place { local: \"v1\", projection: [Field(\"x\")] }' is uninitialized, moved, or only possibly live\n",
+      "passed": true
+    },
+    {
+      "label": "argument-move-order:reject-rust",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/argument-move-order.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/argument-move-order.rust",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGO101: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/argument-move-order.cg:149..152: place 'Place { local: \"v1\", projection: [Field(\"x\")] }' is uninitialized, moved, or only possibly live\n",
+      "passed": true
+    },
+    {
+      "label": "argument-move-order:preserved-rust",
+      "passed": true
+    },
+    {
+      "label": "argument-move-order:reject-python",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/argument-move-order.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/argument-move-order.python",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGO101: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/argument-move-order.cg:149..152: place 'Place { local: \"v1\", projection: [Field(\"x\")] }' is uninitialized, moved, or only possibly live\n",
+      "passed": true
+    },
+    {
+      "label": "argument-move-order:preserved-python",
+      "passed": true
+    },
+    {
+      "label": "argument-move-order:reject-binary",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/argument-move-order.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/argument-move-order.binary",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGO101: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/argument-move-order.cg:149..152: place 'Place { local: \"v1\", projection: [Field(\"x\")] }' is uninitialized, moved, or only possibly live\n",
+      "passed": true
+    },
+    {
+      "label": "argument-move-order:preserved-binary",
+      "passed": true
+    },
+    {
+      "label": "conflicting-loans:reject",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/conflicting-loans.cg",
+        "--diagnostic-format=json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "{\"code\":\"CGO102\",\"severity\":\"error\",\"message\":\"conflicting access to 'Place { local: \\\"v1\\\", projection: [] }'\",\"file\":\"/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/conflicting-loans.cg\",\"span\":{\"start\":128,\"end\":141}}\n",
+      "passed": true
+    },
+    {
+      "label": "conflicting-loans:exact-utf8-span",
+      "passed": true
+    },
+    {
+      "label": "conflicting-loans:reject-run",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/conflicting-loans.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGO102: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/conflicting-loans.cg:128..141: conflicting access to 'Place { local: \"v1\", projection: [] }'\n",
+      "passed": true
+    },
+    {
+      "label": "conflicting-loans:reject-rust",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/conflicting-loans.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/conflicting-loans.rust",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGO102: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/conflicting-loans.cg:128..141: conflicting access to 'Place { local: \"v1\", projection: [] }'\n",
+      "passed": true
+    },
+    {
+      "label": "conflicting-loans:preserved-rust",
+      "passed": true
+    },
+    {
+      "label": "conflicting-loans:reject-python",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/conflicting-loans.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/conflicting-loans.python",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGO102: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/conflicting-loans.cg:128..141: conflicting access to 'Place { local: \"v1\", projection: [] }'\n",
+      "passed": true
+    },
+    {
+      "label": "conflicting-loans:preserved-python",
+      "passed": true
+    },
+    {
+      "label": "conflicting-loans:reject-binary",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/conflicting-loans.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/conflicting-loans.binary",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGO102: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/conflicting-loans.cg:128..141: conflicting access to 'Place { local: \"v1\", projection: [] }'\n",
+      "passed": true
+    },
+    {
+      "label": "conflicting-loans:preserved-binary",
+      "passed": true
+    },
+    {
+      "label": "move-with-live-loan:reject",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/move-with-live-loan.cg",
+        "--diagnostic-format=json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "{\"code\":\"CGO102\",\"severity\":\"error\",\"message\":\"conflicting access to 'Place { local: \\\"v1\\\", projection: [] }'\",\"file\":\"/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/move-with-live-loan.cg\",\"span\":{\"start\":162,\"end\":163}}\n",
+      "passed": true
+    },
+    {
+      "label": "move-with-live-loan:exact-utf8-span",
+      "passed": true
+    },
+    {
+      "label": "move-with-live-loan:reject-run",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/move-with-live-loan.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGO102: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/move-with-live-loan.cg:162..163: conflicting access to 'Place { local: \"v1\", projection: [] }'\n",
+      "passed": true
+    },
+    {
+      "label": "move-with-live-loan:reject-rust",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/move-with-live-loan.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/move-with-live-loan.rust",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGO102: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/move-with-live-loan.cg:162..163: conflicting access to 'Place { local: \"v1\", projection: [] }'\n",
+      "passed": true
+    },
+    {
+      "label": "move-with-live-loan:preserved-rust",
+      "passed": true
+    },
+    {
+      "label": "move-with-live-loan:reject-python",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/move-with-live-loan.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/move-with-live-loan.python",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGO102: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/move-with-live-loan.cg:162..163: conflicting access to 'Place { local: \"v1\", projection: [] }'\n",
+      "passed": true
+    },
+    {
+      "label": "move-with-live-loan:preserved-python",
+      "passed": true
+    },
+    {
+      "label": "move-with-live-loan:reject-binary",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/move-with-live-loan.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/move-with-live-loan.binary",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGO102: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/move-with-live-loan.cg:162..163: conflicting access to 'Place { local: \"v1\", projection: [] }'\n",
+      "passed": true
+    },
+    {
+      "label": "move-with-live-loan:preserved-binary",
+      "passed": true
+    },
+    {
+      "label": "escaped-local:reject",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/escaped-local.cg",
+        "--diagnostic-format=json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "{\"code\":\"CGO103\",\"severity\":\"error\",\"message\":\"returned loan escapes a local or mismatches parameter/result relationship\",\"file\":\"/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/escaped-local.cg\",\"span\":{\"start\":122,\"end\":131}}\n",
+      "passed": true
+    },
+    {
+      "label": "escaped-local:exact-utf8-span",
+      "passed": true
+    },
+    {
+      "label": "escaped-local:reject-run",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/escaped-local.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGO103: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/escaped-local.cg:122..131: returned loan escapes a local or mismatches parameter/result relationship\n",
+      "passed": true
+    },
+    {
+      "label": "escaped-local:reject-rust",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/escaped-local.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/escaped-local.rust",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGO103: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/escaped-local.cg:122..131: returned loan escapes a local or mismatches parameter/result relationship\n",
+      "passed": true
+    },
+    {
+      "label": "escaped-local:preserved-rust",
+      "passed": true
+    },
+    {
+      "label": "escaped-local:reject-python",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/escaped-local.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/escaped-local.python",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGO103: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/escaped-local.cg:122..131: returned loan escapes a local or mismatches parameter/result relationship\n",
+      "passed": true
+    },
+    {
+      "label": "escaped-local:preserved-python",
+      "passed": true
+    },
+    {
+      "label": "escaped-local:reject-binary",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/escaped-local.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/escaped-local.binary",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGO103: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/escaped-local.cg:122..131: returned loan escapes a local or mismatches parameter/result relationship\n",
+      "passed": true
+    },
+    {
+      "label": "escaped-local:preserved-binary",
+      "passed": true
+    },
+    {
+      "label": "invalid-field:reject",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-field.cg",
+        "--diagnostic-format=json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "{\"code\":\"CGT081\",\"severity\":\"error\",\"message\":\"unknown field 'missing' in 'R'\",\"file\":\"/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-field.cg\",\"span\":{\"start\":98,\"end\":107}}\n",
+      "passed": true
+    },
+    {
+      "label": "invalid-field:exact-utf8-span",
+      "passed": true
+    },
+    {
+      "label": "invalid-field:reject-run",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-field.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT081: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-field.cg:98..107: unknown field 'missing' in 'R'\n",
+      "passed": true
+    },
+    {
+      "label": "invalid-field:reject-rust",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-field.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/invalid-field.rust",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT081: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-field.cg:98..107: unknown field 'missing' in 'R'\n",
+      "passed": true
+    },
+    {
+      "label": "invalid-field:preserved-rust",
+      "passed": true
+    },
+    {
+      "label": "invalid-field:reject-python",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-field.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/invalid-field.python",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT081: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-field.cg:98..107: unknown field 'missing' in 'R'\n",
+      "passed": true
+    },
+    {
+      "label": "invalid-field:preserved-python",
+      "passed": true
+    },
+    {
+      "label": "invalid-field:reject-binary",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-field.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/invalid-field.binary",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT081: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-field.cg:98..107: unknown field 'missing' in 'R'\n",
+      "passed": true
+    },
+    {
+      "label": "invalid-field:preserved-binary",
+      "passed": true
+    },
+    {
+      "label": "invalid-parameter:reject",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-parameter.cg",
+        "--diagnostic-format=json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "{\"code\":\"CGT081\",\"severity\":\"error\",\"message\":\"function parameter type/provenance mismatch\",\"file\":\"/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-parameter.cg\",\"span\":{\"start\":140,\"end\":149}}\n",
+      "passed": true
+    },
+    {
+      "label": "invalid-parameter:exact-utf8-span",
+      "passed": true
+    },
+    {
+      "label": "invalid-parameter:reject-run",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-parameter.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT081: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-parameter.cg:140..149: function parameter type/provenance mismatch\n",
+      "passed": true
+    },
+    {
+      "label": "invalid-parameter:reject-rust",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-parameter.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/invalid-parameter.rust",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT081: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-parameter.cg:140..149: function parameter type/provenance mismatch\n",
+      "passed": true
+    },
+    {
+      "label": "invalid-parameter:preserved-rust",
+      "passed": true
+    },
+    {
+      "label": "invalid-parameter:reject-python",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-parameter.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/invalid-parameter.python",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT081: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-parameter.cg:140..149: function parameter type/provenance mismatch\n",
+      "passed": true
+    },
+    {
+      "label": "invalid-parameter:preserved-python",
+      "passed": true
+    },
+    {
+      "label": "invalid-parameter:reject-binary",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-parameter.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/invalid-parameter.binary",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT081: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-parameter.cg:140..149: function parameter type/provenance mismatch\n",
+      "passed": true
+    },
+    {
+      "label": "invalid-parameter:preserved-binary",
+      "passed": true
+    },
+    {
+      "label": "invalid-result:reject",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-result.cg",
+        "--diagnostic-format=json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "{\"code\":\"CGT081\",\"severity\":\"error\",\"message\":\"function result type/provenance mismatch\",\"file\":\"/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-result.cg\",\"span\":{\"start\":81,\"end\":82}}\n",
+      "passed": true
+    },
+    {
+      "label": "invalid-result:exact-utf8-span",
+      "passed": true
+    },
+    {
+      "label": "invalid-result:reject-run",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-result.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT081: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-result.cg:81..82: function result type/provenance mismatch\n",
+      "passed": true
+    },
+    {
+      "label": "invalid-result:reject-rust",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-result.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/invalid-result.rust",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT081: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-result.cg:81..82: function result type/provenance mismatch\n",
+      "passed": true
+    },
+    {
+      "label": "invalid-result:preserved-rust",
+      "passed": true
+    },
+    {
+      "label": "invalid-result:reject-python",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-result.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/invalid-result.python",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT081: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-result.cg:81..82: function result type/provenance mismatch\n",
+      "passed": true
+    },
+    {
+      "label": "invalid-result:preserved-python",
+      "passed": true
+    },
+    {
+      "label": "invalid-result:reject-binary",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-result.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/invalid-result.binary",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT081: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-result.cg:81..82: function result type/provenance mismatch\n",
+      "passed": true
+    },
+    {
+      "label": "invalid-result:preserved-binary",
+      "passed": true
+    },
+    {
+      "label": "ambiguous-result:reject",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/ambiguous-result.cg",
+        "--diagnostic-format=json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "{\"code\":\"CGT081\",\"severity\":\"error\",\"message\":\"borrowed result requires exactly one eligible borrowed input\",\"file\":\"/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/ambiguous-result.cg\",\"span\":{\"start\":93,\"end\":102}}\n",
+      "passed": true
+    },
+    {
+      "label": "ambiguous-result:exact-utf8-span",
+      "passed": true
+    },
+    {
+      "label": "ambiguous-result:reject-run",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/ambiguous-result.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT081: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/ambiguous-result.cg:93..102: borrowed result requires exactly one eligible borrowed input\n",
+      "passed": true
+    },
+    {
+      "label": "ambiguous-result:reject-rust",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/ambiguous-result.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/ambiguous-result.rust",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT081: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/ambiguous-result.cg:93..102: borrowed result requires exactly one eligible borrowed input\n",
+      "passed": true
+    },
+    {
+      "label": "ambiguous-result:preserved-rust",
+      "passed": true
+    },
+    {
+      "label": "ambiguous-result:reject-python",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/ambiguous-result.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/ambiguous-result.python",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT081: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/ambiguous-result.cg:93..102: borrowed result requires exactly one eligible borrowed input\n",
+      "passed": true
+    },
+    {
+      "label": "ambiguous-result:preserved-python",
+      "passed": true
+    },
+    {
+      "label": "ambiguous-result:reject-binary",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/ambiguous-result.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/ambiguous-result.binary",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT081: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/ambiguous-result.cg:93..102: borrowed result requires exactly one eligible borrowed input\n",
+      "passed": true
+    },
+    {
+      "label": "ambiguous-result:preserved-binary",
+      "passed": true
+    },
+    {
+      "label": "unsupported-reborrow:reject",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/unsupported-reborrow.cg",
+        "--diagnostic-format=json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "{\"code\":\"CGT083\",\"severity\":\"error\",\"message\":\"forwarding an existing exclusive loan requires unsupported reborrow semantics\",\"file\":\"/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/unsupported-reborrow.cg\",\"span\":{\"start\":177,\"end\":178}}\n",
+      "passed": true
+    },
+    {
+      "label": "unsupported-reborrow:exact-utf8-span",
+      "passed": true
+    },
+    {
+      "label": "unsupported-reborrow:reject-run",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/unsupported-reborrow.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT083: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/unsupported-reborrow.cg:177..178: forwarding an existing exclusive loan requires unsupported reborrow semantics\n",
+      "passed": true
+    },
+    {
+      "label": "unsupported-reborrow:reject-rust",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/unsupported-reborrow.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/unsupported-reborrow.rust",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT083: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/unsupported-reborrow.cg:177..178: forwarding an existing exclusive loan requires unsupported reborrow semantics\n",
+      "passed": true
+    },
+    {
+      "label": "unsupported-reborrow:preserved-rust",
+      "passed": true
+    },
+    {
+      "label": "unsupported-reborrow:reject-python",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/unsupported-reborrow.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/unsupported-reborrow.python",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT083: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/unsupported-reborrow.cg:177..178: forwarding an existing exclusive loan requires unsupported reborrow semantics\n",
+      "passed": true
+    },
+    {
+      "label": "unsupported-reborrow:preserved-python",
+      "passed": true
+    },
+    {
+      "label": "unsupported-reborrow:reject-binary",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/unsupported-reborrow.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/unsupported-reborrow.binary",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT083: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/unsupported-reborrow.cg:177..178: forwarding an existing exclusive loan requires unsupported reborrow semantics\n",
+      "passed": true
+    },
+    {
+      "label": "unsupported-reborrow:preserved-binary",
+      "passed": true
+    },
+    {
+      "label": "exclusive-alias:reject",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/exclusive-alias.cg",
+        "--diagnostic-format=json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "{\"code\":\"CGT083\",\"severity\":\"error\",\"message\":\"aliasing an existing exclusive loan requires unsupported reborrow semantics\",\"file\":\"/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/exclusive-alias.cg\",\"span\":{\"start\":136,\"end\":137}}\n",
+      "passed": true
+    },
+    {
+      "label": "exclusive-alias:exact-utf8-span",
+      "passed": true
+    },
+    {
+      "label": "exclusive-alias:reject-run",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/exclusive-alias.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT083: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/exclusive-alias.cg:136..137: aliasing an existing exclusive loan requires unsupported reborrow semantics\n",
+      "passed": true
+    },
+    {
+      "label": "exclusive-alias:reject-rust",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/exclusive-alias.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/exclusive-alias.rust",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT083: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/exclusive-alias.cg:136..137: aliasing an existing exclusive loan requires unsupported reborrow semantics\n",
+      "passed": true
+    },
+    {
+      "label": "exclusive-alias:preserved-rust",
+      "passed": true
+    },
+    {
+      "label": "exclusive-alias:reject-python",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/exclusive-alias.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/exclusive-alias.python",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT083: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/exclusive-alias.cg:136..137: aliasing an existing exclusive loan requires unsupported reborrow semantics\n",
+      "passed": true
+    },
+    {
+      "label": "exclusive-alias:preserved-python",
+      "passed": true
+    },
+    {
+      "label": "exclusive-alias:reject-binary",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/exclusive-alias.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/exclusive-alias.binary",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT083: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/exclusive-alias.cg:136..137: aliasing an existing exclusive loan requires unsupported reborrow semantics\n",
+      "passed": true
+    },
+    {
+      "label": "exclusive-alias:preserved-binary",
+      "passed": true
+    },
+    {
+      "label": "reserved-shadow:reject",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/reserved-shadow.cg",
+        "--diagnostic-format=json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "{\"code\":\"CGT082\",\"severity\":\"error\",\"message\":\"reserved ownership symbol 'borrow' cannot be declared or shadowed in this profile\",\"file\":\"/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/reserved-shadow.cg\",\"span\":{\"start\":98,\"end\":113}}\n",
+      "passed": true
+    },
+    {
+      "label": "reserved-shadow:exact-utf8-span",
+      "passed": true
+    },
+    {
+      "label": "reserved-shadow:reject-run",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/reserved-shadow.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT082: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/reserved-shadow.cg:98..113: reserved ownership symbol 'borrow' cannot be declared or shadowed in this profile\n",
+      "passed": true
+    },
+    {
+      "label": "reserved-shadow:reject-rust",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/reserved-shadow.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/reserved-shadow.rust",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT082: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/reserved-shadow.cg:98..113: reserved ownership symbol 'borrow' cannot be declared or shadowed in this profile\n",
+      "passed": true
+    },
+    {
+      "label": "reserved-shadow:preserved-rust",
+      "passed": true
+    },
+    {
+      "label": "reserved-shadow:reject-python",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/reserved-shadow.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/reserved-shadow.python",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT082: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/reserved-shadow.cg:98..113: reserved ownership symbol 'borrow' cannot be declared or shadowed in this profile\n",
+      "passed": true
+    },
+    {
+      "label": "reserved-shadow:preserved-python",
+      "passed": true
+    },
+    {
+      "label": "reserved-shadow:reject-binary",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/reserved-shadow.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/reserved-shadow.binary",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT082: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/reserved-shadow.cg:98..113: reserved ownership symbol 'borrow' cannot be declared or shadowed in this profile\n",
+      "passed": true
+    },
+    {
+      "label": "reserved-shadow:preserved-binary",
+      "passed": true
+    },
+    {
+      "label": "shared-write:reject",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/shared-write.cg",
+        "--diagnostic-format=json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "{\"code\":\"CGT081\",\"severity\":\"error\",\"message\":\"field write requires exclusive access\",\"file\":\"/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/shared-write.cg\",\"span\":{\"start\":83,\"end\":86}}\n",
+      "passed": true
+    },
+    {
+      "label": "shared-write:exact-utf8-span",
+      "passed": true
+    },
+    {
+      "label": "shared-write:reject-run",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/shared-write.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT081: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/shared-write.cg:83..86: field write requires exclusive access\n",
+      "passed": true
+    },
+    {
+      "label": "shared-write:reject-rust",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/shared-write.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/shared-write.rust",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT081: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/shared-write.cg:83..86: field write requires exclusive access\n",
+      "passed": true
+    },
+    {
+      "label": "shared-write:preserved-rust",
+      "passed": true
+    },
+    {
+      "label": "shared-write:reject-python",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/shared-write.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/shared-write.python",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT081: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/shared-write.cg:83..86: field write requires exclusive access\n",
+      "passed": true
+    },
+    {
+      "label": "shared-write:preserved-python",
+      "passed": true
+    },
+    {
+      "label": "shared-write:reject-binary",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/shared-write.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/shared-write.binary",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT081: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/shared-write.cg:83..86: field write requires exclusive access\n",
+      "passed": true
+    },
+    {
+      "label": "shared-write:preserved-binary",
+      "passed": true
+    },
+    {
+      "label": "owner-result-as-loan:reject",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/owner-result-as-loan.cg",
+        "--diagnostic-format=json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "{\"code\":\"CGO103\",\"severity\":\"error\",\"message\":\"returned loan escapes a local or mismatches parameter/result relationship\",\"file\":\"/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/owner-result-as-loan.cg\",\"span\":{\"start\":105,\"end\":114}}\n",
+      "passed": true
+    },
+    {
+      "label": "owner-result-as-loan:exact-utf8-span",
+      "passed": true
+    },
+    {
+      "label": "owner-result-as-loan:reject-run",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/owner-result-as-loan.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGO103: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/owner-result-as-loan.cg:105..114: returned loan escapes a local or mismatches parameter/result relationship\n",
+      "passed": true
+    },
+    {
+      "label": "owner-result-as-loan:reject-rust",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/owner-result-as-loan.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/owner-result-as-loan.rust",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGO103: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/owner-result-as-loan.cg:105..114: returned loan escapes a local or mismatches parameter/result relationship\n",
+      "passed": true
+    },
+    {
+      "label": "owner-result-as-loan:preserved-rust",
+      "passed": true
+    },
+    {
+      "label": "owner-result-as-loan:reject-python",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/owner-result-as-loan.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/owner-result-as-loan.python",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGO103: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/owner-result-as-loan.cg:105..114: returned loan escapes a local or mismatches parameter/result relationship\n",
+      "passed": true
+    },
+    {
+      "label": "owner-result-as-loan:preserved-python",
+      "passed": true
+    },
+    {
+      "label": "owner-result-as-loan:reject-binary",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/owner-result-as-loan.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/owner-result-as-loan.binary",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGO103: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/owner-result-as-loan.cg:105..114: returned loan escapes a local or mismatches parameter/result relationship\n",
+      "passed": true
+    },
+    {
+      "label": "owner-result-as-loan:preserved-binary",
+      "passed": true
+    },
+    {
+      "label": "invalid-layout:reject",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-layout.cg",
+        "--diagnostic-format=json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "{\"code\":\"CGT081\",\"severity\":\"error\",\"message\":\"unknown ordinary-owned type\",\"file\":\"/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-layout.cg\",\"span\":{\"start\":17,\"end\":23}}\n",
+      "passed": true
+    },
+    {
+      "label": "invalid-layout:exact-utf8-span",
+      "passed": true
+    },
+    {
+      "label": "invalid-layout:reject-run",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-layout.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT081: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-layout.cg:17..23: unknown ordinary-owned type\n",
+      "passed": true
+    },
+    {
+      "label": "invalid-layout:reject-rust",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-layout.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/invalid-layout.rust",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT081: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-layout.cg:17..23: unknown ordinary-owned type\n",
+      "passed": true
+    },
+    {
+      "label": "invalid-layout:preserved-rust",
+      "passed": true
+    },
+    {
+      "label": "invalid-layout:reject-python",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-layout.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/invalid-layout.python",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT081: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-layout.cg:17..23: unknown ordinary-owned type\n",
+      "passed": true
+    },
+    {
+      "label": "invalid-layout:preserved-python",
+      "passed": true
+    },
+    {
+      "label": "invalid-layout:reject-binary",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-layout.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/invalid-layout.binary",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT081: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-layout.cg:17..23: unknown ordinary-owned type\n",
+      "passed": true
+    },
+    {
+      "label": "invalid-layout:preserved-binary",
+      "passed": true
+    },
+    {
+      "label": "api-reject",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/functions.cg",
+        "--json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT080: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/functions.cg:86..100: ordinary ownership requires the authenticated OwnedProgram v1 source path; this copied-value/package consumer is unsupported\n",
+      "passed": true
+    },
+    {
+      "label": "effects-reject",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2-effect-index",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/functions.cg",
+        "--syntax-only"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGI006 admission /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/functions.cg:7:25 [86..100): ordinary ownership analysis is unsupported; no copied-value summary claimed\n",
+      "passed": true
+    },
+    {
+      "label": "proof-unknown",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2-verify",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/functions.cg",
+        "--format",
+        "json"
+      ],
+      "exit": 0,
+      "stdout": "{\"bounded_solver_result\":{\"kind\":\"unrun\",\"reason\":\"source_subset_unsupported\",\"source_parity\":false},\"input_sha256\":\"81331537f821f68e3643db7581f66312290a1b09bbc0e503f3fa9b5cf0d73188\",\"proof\":{\"kind\":\"unknown\",\"meaning\":\"no_trusted_solver_proof\",\"reason\":\"source_subset_unsupported\",\"scope\":{\"function\":null,\"input_sha256\":\"81331537f821f68e3643db7581f66312290a1b09bbc0e503f3fa9b5cf0d73188\",\"kind\":\"requested_source_function\",\"unsupported_span\":{\"end\":100,\"start\":86}},\"state\":\"unsupported\"},\"schema_version\":3,\"source\":{\"function\":null,\"path\":\"/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/functions.cg\",\"span\":{\"end\":100,\"start\":86}},\"unsupported_obligations\":[{\"code\":\"CGV001\",\"message\":\"ordinary ownership proof semantics are unsupported; no proof claimed\",\"span\":{\"end\":100,\"start\":86}}],\"verdict\":{\"diagnostic\":{\"code\":\"CGV001\",\"message\":\"ordinary ownership proof semantics are unsupported; no proof claimed\",\"span\":{\"end\":100,\"start\":86}},\"kind\":\"unknown\",\"meaning\":\"source_subset_unsupported\",\"scope\":{\"max_cases\":100000,\"requested_domains\":[]}}}\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "no-false-proof",
+      "passed": true
+    },
+    {
+      "label": "security-reject",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2-security",
+        "audit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/functions.cg",
+        "--policy",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/policy.json"
+      ],
+      "exit": 2,
+      "stdout": "",
+      "stderr": "CGSEC-INPUT /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/functions.cg: CGI006 admission [86..100): ordinary ownership analysis is unsupported; no copied-value summary claimed\n",
+      "passed": true
+    },
+    {
+      "label": "notebook-reject",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2-notebook",
+        "run",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/owned.cgnb",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/out.cgnb"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "cell execution error: CGNK008 in cell owned: CGNK026: ordinary ownership notebook semantics are unsupported at 68..82\n",
+      "passed": true
+    },
+    {
+      "label": "package-reject",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "check",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/package"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT080: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/ordinary-owned-n2uethbq/package/main.cg:86..100: ordinary ownership requires the authenticated OwnedProgram v1 source path; this copied-value/package consumer is unsupported\n",
+      "passed": true
+    }
+  ],
+  "fixture_sha256": {
+    "ambiguous-result.cg": "641176c7f24927a67f88b5dcb73b7a9fef1cb1853bfd202aabcd7c57f88a3ebd",
+    "argument-move-order.cg": "d9089982da22ddbf7ee90de0c0548b99c7beb497766dbfff0b74328b7f64ab3e",
+    "arithmetic-failure.cg": "a3c3b51275e0485a3a31857f8d3211bbdfe473ed8627ea3fe5fe189ff0fd1047",
+    "conflicting-loans.cg": "dcb2cbd00965f900802829902f8e75a9dff2c9504e0f01a28782941feefd1257",
+    "constructor-order.cg": "cc9f6e7e7058255d36cf668cd9b42c089a1cabb40dd3e55cb6d6b4b8b586bab0",
+    "copied-record.cg": "b74b0a8763acfafa622020d5517866e41fcf987047f118a2eb8b259037eb58e6",
+    "escaped-local.cg": "9b5e6cdcab1ffde8aaff424d5ee384076275135d7078296523c0867009b43d2d",
+    "exclusive-alias.cg": "fb3fa35f36bca04e4bf9c43ffaf2f68f3b1ed7b739244c304259528428685857",
+    "exclusive-result.cg": "f9c1454df042a50f84461063634c39a3972646305e02919203788ed9d3d2233e",
+    "functions.cg": "81331537f821f68e3643db7581f66312290a1b09bbc0e503f3fa9b5cf0d73188",
+    "invalid-field.cg": "8469905deac72ea7494984a39cfabc17fb0f5c9e6c781870f3e91bfd7115977f",
+    "invalid-layout.cg": "f20ddf981a5610b7a11b3d73bf38676dbd22752404c3b7e9235c9f7c53e326f0",
+    "invalid-parameter.cg": "a0aa337739e467cd294b02d176ee52bc0244ec4bfa94de75803cbfcdac5d7951",
+    "invalid-result.cg": "63be31b584fbbc9cb9b02a8c289359bd3a2aa96834a74e4e877475552cf8a068",
+    "mapping.cg": "ca2a4069fd9bffb4277f8e93e9f27674edf038f21698c1bda7a3ad1678aecf13",
+    "move-with-live-loan.cg": "5b28a524eb1590d1bdbcb99abfc579db5118eee0a7f1ecc40ee3b6f80e7ba85c",
+    "owner-result-as-loan.cg": "49ff76b930834fde58a4fa135e02bf2d9a7ee99d469f6fc592768589f598f2cd",
+    "repeated.cg": "a3e07c4251063ae643eeced9cd9c0a9c9c580b663046ae0fcc815cc51c377de6",
+    "reserved-shadow.cg": "7cf86652a6fdfdbd386cb3e742f8e11861bd75ccbceb5931aea203d395e99973",
+    "shared-write.cg": "45060260f06f4e1a5767366ffdeee64722be542335ec5b04705d1a1ab90e4ef7",
+    "unsupported-reborrow.cg": "d0d270bf8d54470a520992ba6311ec64ee54a610341f63d17ac84d3a070c195b",
+    "use-after-move.cg": "2c9ca6f8dd80bbbc83a66d6f0c10358cfd4e1da6a4cb853357d89eb3ce09e72f"
+  },
+  "compiler": {
+    "path": "/home/john-riley/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/bin/rustc",
+    "linker_threads": 2
+  },
+  "runtime_inventory_sha256": {
+    "lib.rs": "1002a5bc1b347ac383ff903d7ea1f79fca3f55284f2af1f6d0ea8f195720c9c6",
+    "budget.rs": "7bd562dae680c6102598a68d139042fba758ae3b3cb8c0d937778c0f0f13e0e4",
+    "heap.rs": "f167f13b46866d9999aa3c8f4329f3a7ad5e59e534d9f5b7b789208296351a8f",
+    "graph.rs": "325444702e5ac590fd07c57c9ca66ec8dcea2ed9ab05477dcd3d0cd1b11b181a",
+    "scope.rs": "bee9e5fc5b2dece62914b1623c7317e4c3a2bbcd4a51375ee08e5640bff62764",
+    "fault.rs": "bc4652355ca094d8e1daca99b76d38e194c35fcc852c25b071593a4dbe9dc252",
+    "owned.rs": "08b8c47b10ff55c9174467c623127136f034e314f8b5f2d49010e9c21547c197",
+    "region.rs": "50362a5df6c4469bfb5f03e9a93a3a351853a97d6fc505a322ce6bc5bb9f6077",
+    "report.rs": "4569e7848983a5179c60abdb4cd779f3707512eaae5e614214a50cf8d39ba9aa"
+  },
+  "passed": 256,
+  "failed": 0
+}

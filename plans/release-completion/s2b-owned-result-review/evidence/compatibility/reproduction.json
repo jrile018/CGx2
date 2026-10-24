@@ -1,0 +1,210 @@
+[
+  {
+    "fixture": "nominal-result",
+    "version": "base",
+    "command": [
+      "/home/john-riley/.codex/worktrees/bd1f/lang/target/release-ordinary-owned/debug/cgx2",
+      "check",
+      "/home/john-riley/projects/lang/target/owned-result-review-20261024/compatibility/nominal-result.cg",
+      "--diagnostic-format=json"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "fixture": "nominal-result",
+    "version": "base",
+    "command": [
+      "/home/john-riley/.codex/worktrees/bd1f/lang/target/release-ordinary-owned/debug/cgx2",
+      "run",
+      "/home/john-riley/projects/lang/target/owned-result-review-20261024/compatibility/nominal-result.cg",
+      "--diagnostic-format=json"
+    ],
+    "exit": 0,
+    "stdout": "42\n",
+    "stderr": ""
+  },
+  {
+    "fixture": "nominal-result",
+    "version": "current",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "check",
+      "/home/john-riley/projects/lang/target/owned-result-review-20261024/compatibility/nominal-result.cg",
+      "--diagnostic-format=json"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "{\"code\":\"CGT082\",\"severity\":\"error\",\"message\":\"reserved ownership symbol 'Result' cannot be declared or shadowed in this profile\",\"file\":\"/home/john-riley/projects/lang/target/owned-result-review-20261024/compatibility/nominal-result.cg\",\"span\":{\"start\":0,\"end\":26}}\n"
+  },
+  {
+    "fixture": "nominal-result",
+    "version": "current",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "run",
+      "/home/john-riley/projects/lang/target/owned-result-review-20261024/compatibility/nominal-result.cg",
+      "--diagnostic-format=json"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "{\"code\":\"CGT082\",\"severity\":\"error\",\"message\":\"reserved ownership symbol 'Result' cannot be declared or shadowed in this profile\",\"file\":\"/home/john-riley/projects/lang/target/owned-result-review-20261024/compatibility/nominal-result.cg\",\"span\":{\"start\":0,\"end\":26}}\n"
+  },
+  {
+    "fixture": "nominal-error",
+    "version": "base",
+    "command": [
+      "/home/john-riley/.codex/worktrees/bd1f/lang/target/release-ordinary-owned/debug/cgx2",
+      "check",
+      "/home/john-riley/projects/lang/target/owned-result-review-20261024/compatibility/nominal-error.cg",
+      "--diagnostic-format=json"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "fixture": "nominal-error",
+    "version": "base",
+    "command": [
+      "/home/john-riley/.codex/worktrees/bd1f/lang/target/release-ordinary-owned/debug/cgx2",
+      "run",
+      "/home/john-riley/projects/lang/target/owned-result-review-20261024/compatibility/nominal-error.cg",
+      "--diagnostic-format=json"
+    ],
+    "exit": 0,
+    "stdout": "42\n",
+    "stderr": ""
+  },
+  {
+    "fixture": "nominal-error",
+    "version": "current",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "check",
+      "/home/john-riley/projects/lang/target/owned-result-review-20261024/compatibility/nominal-error.cg",
+      "--diagnostic-format=json"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "{\"code\":\"CGT082\",\"severity\":\"error\",\"message\":\"reserved ownership symbol 'AllocationError' cannot be declared or shadowed in this profile\",\"file\":\"/home/john-riley/projects/lang/target/owned-result-review-20261024/compatibility/nominal-error.cg\",\"span\":{\"start\":0,\"end\":35}}\n"
+  },
+  {
+    "fixture": "nominal-error",
+    "version": "current",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "run",
+      "/home/john-riley/projects/lang/target/owned-result-review-20261024/compatibility/nominal-error.cg",
+      "--diagnostic-format=json"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "{\"code\":\"CGT082\",\"severity\":\"error\",\"message\":\"reserved ownership symbol 'AllocationError' cannot be declared or shadowed in this profile\",\"file\":\"/home/john-riley/projects/lang/target/owned-result-review-20261024/compatibility/nominal-error.cg\",\"span\":{\"start\":0,\"end\":35}}\n"
+  },
+  {
+    "fixture": "user-function",
+    "version": "base",
+    "command": [
+      "/home/john-riley/.codex/worktrees/bd1f/lang/target/release-ordinary-owned/debug/cgx2",
+      "check",
+      "/home/john-riley/projects/lang/target/owned-result-review-20261024/compatibility/user-function.cg",
+      "--diagnostic-format=json"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "fixture": "user-function",
+    "version": "base",
+    "command": [
+      "/home/john-riley/.codex/worktrees/bd1f/lang/target/release-ordinary-owned/debug/cgx2",
+      "run",
+      "/home/john-riley/projects/lang/target/owned-result-review-20261024/compatibility/user-function.cg",
+      "--diagnostic-format=json"
+    ],
+    "exit": 0,
+    "stdout": "42\n",
+    "stderr": ""
+  },
+  {
+    "fixture": "user-function",
+    "version": "current",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "check",
+      "/home/john-riley/projects/lang/target/owned-result-review-20261024/compatibility/user-function.cg",
+      "--diagnostic-format=json"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "{\"code\":\"CGT082\",\"severity\":\"error\",\"message\":\"reserved ownership symbol 'try_owned' cannot be declared or shadowed in this profile\",\"file\":\"/home/john-riley/projects/lang/target/owned-result-review-20261024/compatibility/user-function.cg\",\"span\":{\"start\":21,\"end\":60}}\n"
+  },
+  {
+    "fixture": "user-function",
+    "version": "current",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "run",
+      "/home/john-riley/projects/lang/target/owned-result-review-20261024/compatibility/user-function.cg",
+      "--diagnostic-format=json"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "{\"code\":\"CGT082\",\"severity\":\"error\",\"message\":\"reserved ownership symbol 'try_owned' cannot be declared or shadowed in this profile\",\"file\":\"/home/john-riley/projects/lang/target/owned-result-review-20261024/compatibility/user-function.cg\",\"span\":{\"start\":21,\"end\":60}}\n"
+  },
+  {
+    "fixture": "local-name",
+    "version": "base",
+    "command": [
+      "/home/john-riley/.codex/worktrees/bd1f/lang/target/release-ordinary-owned/debug/cgx2",
+      "check",
+      "/home/john-riley/projects/lang/target/owned-result-review-20261024/compatibility/local-name.cg",
+      "--diagnostic-format=json"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "fixture": "local-name",
+    "version": "base",
+    "command": [
+      "/home/john-riley/.codex/worktrees/bd1f/lang/target/release-ordinary-owned/debug/cgx2",
+      "run",
+      "/home/john-riley/projects/lang/target/owned-result-review-20261024/compatibility/local-name.cg",
+      "--diagnostic-format=json"
+    ],
+    "exit": 0,
+    "stdout": "42\n",
+    "stderr": ""
+  },
+  {
+    "fixture": "local-name",
+    "version": "current",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "check",
+      "/home/john-riley/projects/lang/target/owned-result-review-20261024/compatibility/local-name.cg",
+      "--diagnostic-format=json"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "{\"code\":\"CGT082\",\"severity\":\"error\",\"message\":\"reserved ownership symbol 'try_owned' cannot be declared or shadowed in this profile\",\"file\":\"/home/john-riley/projects/lang/target/owned-result-review-20261024/compatibility/local-name.cg\",\"span\":{\"start\":71,\"end\":91}}\n"
+  },
+  {
+    "fixture": "local-name",
+    "version": "current",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "run",
+      "/home/john-riley/projects/lang/target/owned-result-review-20261024/compatibility/local-name.cg",
+      "--diagnostic-format=json"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "{\"code\":\"CGT082\",\"severity\":\"error\",\"message\":\"reserved ownership symbol 'try_owned' cannot be declared or shadowed in this profile\",\"file\":\"/home/john-riley/projects/lang/target/owned-result-review-20261024/compatibility/local-name.cg\",\"span\":{\"start\":71,\"end\":91}}\n"
+  }
+]

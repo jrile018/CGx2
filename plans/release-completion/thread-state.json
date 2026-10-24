@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24T03:30:30.481Z",
+  "checked_at": "2026-10-24T05:50:30.540Z",
   "original_chats": [
     {
       "lane": "core",
@@ -203,9 +203,12 @@
       "hostId": "local",
       "worktree": "/home/john-riley/.codex/worktrees/b047/lang",
       "base": "4113edee943b9ac389c5037904a016d7dba7f73c",
-      "status": "running",
+      "status": "reviewed-repair-required",
       "clientThreadId": "client-new-thread:ef58bbfd-73ea-4c00-b916-27bc924d969d",
-      "afterCursor": "b23d62ef-94c5-431b-907c-d42dd89be031:1"
+      "afterCursor": "b23d62ef-94c5-431b-907c-d42dd89be031:8",
+      "commit": "d88b57acd14cd299b029a46b197259bb2ec32079",
+      "integrated_commit": "d8253431a9ab5ab571b9e7e8841242f7667b0a28",
+      "acceptance": "Existing2707product/1229Rust pass; four schema1 name regressions and live runner output bound require repair"
     }
   ],
   "s2a_repairs": [

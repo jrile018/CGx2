@@ -1,6 +1,6 @@
 # CGx2 finite completion plan
 
-Status: all twelve S1 deliveries, S2a and S2b foundation including repairs reviewed as bounded deliveries. Graph/payload support, both legacy repairs and the first ordinary-owned source slice are reviewed; recoverable allocation is the next executable memory task, while full ordinary memory remains incomplete; foreign/execution/command integration and S3 remain gated. See [foundation acceptance](s2b-review/README.md). Updated 2026-10-24. Coordinator branch: riley/release-completion-plan. Full release capabilities and evidence remain required.
+Status: all twelve S1 deliveries, S2a and S2b foundation including repairs reviewed as bounded deliveries. Graph/payload support, both legacy repairs and the first ordinary-owned source slice are reviewed; recoverable allocation delivery is reviewed repair-required (schema1 symbol compatibility and evidence-runner output bounds), while full ordinary memory remains incomplete; foreign/execution/command integration and S3 remain gated. See [foundation acceptance](s2b-review/README.md). Updated 2026-10-24. Coordinator branch: riley/release-completion-plan. Full release capabilities and evidence remain required.
 
 ## Answer to “how many more waves?”
 
@@ -128,3 +128,7 @@ External capacity/runtime/package availability, independent review and human/mod
 See [dispatch.md](dispatch.md) for actual chat creation outcomes. Stage 1 is “planned/queued/running/delivered/reviewed”, distinct from R-row closure. The coordinator records each delivered commit, checks ownership, integrates on a review branch and updates the gate ledger. Workers stop after their bounded delivery. Starting a new dependency stage requires its reviewed contract/base, not merely a “done” message.
 
 The user subsequently authorized a 20-minute heartbeat to review completed work and launch dependency-ready follow-on chats. Coordinator dispatch may proceed after review gates; workers still commit one bounded task and stop. No merge to main, publication, external paid studies or worker-to-worker messaging is authorized.
+
+## Owned Result review update
+
+The recoverable allocation delivery is staged and existing integration checks pass, but source compatibility and runner output bounds fail review. See [review and repair plans](s2b-owned-result-review/README.md). R03/R04 and the full release requirement ledger remain open; implementation and acceptance are tracked separately.

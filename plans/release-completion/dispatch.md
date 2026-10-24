@@ -142,3 +142,7 @@ All three preceding chats are reviewed bounded deliveries. Ordinary-owned006d267
 ## Recoverable owned allocation running
 
 Reviewed base 4113edee943b9ac389c5037904a016d7dba7f73c. Chat 01a16c01-762e-7df1-893e-28bac3bce872 (CGx2 recoverable owned allocation), worktree /home/john-riley/.codex/worktrees/b047/lang, is active via read_thread/wait_threads; worktree HEAD matches the base. Queued client ID/cursor saved in thread-state.json. list_threads omitted the new agent-created chat; read-only exact local metadata plus app reads verified identity. No duplicate. One shared source/analyzer/runtime producer is the current dependency frontier; consumers wait for its reviewed interface.
+
+## Recoverable allocation reviewed; two disjoint repairs ready
+
+Worker d88b57a staged as d825343. Three independent reviews and coordinator1229Rust/2707product checks completed; full existing matrix passes. Four reproduced schema1 symbol regressions and live evidence-runner output-bound gap keep acceptance failed. See s2b-owned-result-review/README.md. Symbol repair owns sema/admission/contracts/new tests; runner repair owns two Python scripts/new harness evidence. No new language consumer dispatch. Actual chat setup outcomes follow.

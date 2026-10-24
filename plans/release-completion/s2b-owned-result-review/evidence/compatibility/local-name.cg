@@ -1,0 +1,6 @@
+record R:
+    x: i64
+fn main() -> i64:
+    let p = owned(R(x: 42))
+    let try_owned = p.x
+    try_owned
