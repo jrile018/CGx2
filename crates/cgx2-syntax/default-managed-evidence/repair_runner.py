@@ -30,6 +30,15 @@ def digest(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def cli_library(binary_dir):
+    """Use the final Cargo/frozen library, never a stale feature-profile guess."""
+    canonical = Path(binary_dir) / 'libcgx2_cli.rlib'
+    if canonical.is_file():
+        return canonical
+    candidates = sorted((Path(binary_dir) / 'deps').glob('libcgx2_cli-*.rlib'))
+    return candidates[0] if len(candidates) == 1 else None
+
+
 def limits():
     for kind, value in ((resource.RLIMIT_AS, LIMITS['address_space_bytes_per_process']),
                         (resource.RLIMIT_CPU, LIMITS['cpu_seconds_per_process']),
@@ -262,13 +271,14 @@ class Runner:
         self.source(source)
         driver = self.work / 'fault-driver'
         deps = self.binary.parent / 'deps'
-        libraries = list(deps.glob('libcgx2_cli-*.rlib'))
-        if len(libraries) != 1:
-            self.check('fault-driver:unambiguous-feature-library', False, libraries=[str(p) for p in libraries])
+        library = cli_library(self.binary.parent)
+        if library is None:
+            self.check('fault-driver:unambiguous-feature-library', False,
+                       libraries=[str(p) for p in sorted(deps.glob('libcgx2_cli-*.rlib'))])
             return None
-        self.artifact(libraries[0])
+        self.artifact(library)
         record = self.command('fault-driver:compile', [self.wrapper, '--edition=2021', source,
-                              '--extern', 'cgx2_cli=' + str(libraries[0]), '-L', 'dependency=' + str(deps), '-o', driver])
+                              '--extern', 'cgx2_cli=' + str(library), '-L', 'dependency=' + str(deps), '-o', driver])
         self.artifact(driver)
         return driver if normal_exit(record) else None
 

@@ -12,6 +12,27 @@ import repair_runner as runner
 
 
 class AcceptanceTests(unittest.TestCase):
+    def test_canonical_library_wins_over_stale_profiles(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / 'deps').mkdir()
+            for name in ['libcgx2_cli-old.rlib', 'libcgx2_cli-other.rlib']:
+                (root / 'deps' / name).write_bytes(b'stale')
+            canonical = root / 'libcgx2_cli.rlib'
+            canonical.write_bytes(b'frozen-final')
+            self.assertEqual(runner.cli_library(root), canonical)
+
+    def test_library_fallback_requires_exactly_one_candidate(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / 'deps').mkdir()
+            self.assertIsNone(runner.cli_library(root))
+            first = root / 'deps' / 'libcgx2_cli-one.rlib'
+            first.write_bytes(b'one')
+            self.assertEqual(runner.cli_library(root), first)
+            (root / 'deps' / 'libcgx2_cli-two.rlib').write_bytes(b'two')
+            self.assertIsNone(runner.cli_library(root))
+
     def record(self, exit=1, reason='exit', signal=None, stderr=''):
         return dict(exit=exit, reason=reason, signal=signal, stderr=stderr, stdout='')
 
