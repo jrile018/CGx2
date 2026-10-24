@@ -1,5 +1,5 @@
 # CGx2 finite completion plan
-Status: ordinary-memory API and bounded runtime-root repairs reviewed; source admission and evidence harness remain incomplete. Combined1360Rust and quality gates pass. Three disjoint repairs target nominal borrow resolution, recoverable runtime rooting and strict evidence validation. Full ordinary ownership/transfer/v3, foreign/execution/commands, S3/S4 and real acceptance gates remain open. Main unmerged. See [current review](s2b-ordinary-memory-review/README.md).
+Status: ordinary-memory API, admission including nominal constructor resolution, and bounded runtime-root repairs reviewed. Runtime allocation recovery and evidence-harness hardening chats remain active. Prior combined1360Rust and quality gates pass; full integration of these follow-ups awaits their deliveries. Full ordinary ownership/transfer/v3, foreign/execution/commands, S3/S4 and real acceptance gates remain open. Main unmerged. See [current review](s2b-ordinary-memory-review/README.md).
 
 ## Answer to “how many more waves?”
 

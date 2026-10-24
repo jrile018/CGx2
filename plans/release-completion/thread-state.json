@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24T16:32:42.491822+00:00",
+  "checked_at": "2026-10-24T16:33:11.355022+00:00",
   "original_chats": [
     {
       "lane": "core",
@@ -502,7 +502,7 @@
       "clientThreadId": "client-new-thread:b6941a14-a874-4643-816b-e8818df32f4d",
       "hostId": "local",
       "base": "7bb7a480119826693db67ed503caaf7f23f6abb2",
-      "status": "reviewed-incomplete",
+      "status": "reviewed-bounded-repair",
       "plan": "plans/release-completion/s2b-ordinary-memory-review/core-admission/plan.md",
       "threadId": "01a16e6c-b9bf-76c3-8096-5aafc5441506",
       "worktree": "/home/john-riley/.codex/worktrees/a9af/lang",
@@ -510,7 +510,7 @@
       "setup_verified": "Exact worktree HEAD matches common base; app read_thread and wait_threads confirm active. list_threads omitted agent-created chats; read-only metadata plus app reads resolved IDs without duplication.",
       "commit": "93303003ceececb2705b929265ea585415710380",
       "integrated_commit": "1d331776ad632e71583a05e6b53d587fafcedfde",
-      "acceptance_note": "OM01\u201303 and user function borrow fixed. Nominal record borrow still CGT095; bounded follow-up required. Original196 standalone rows were inside repository; coordinator combined unchanged196 now passes actual external cwd. Core361Rust/196product and combined1360Rust retained."
+      "acceptance_note": "OM01\u201303 and user function borrow fixes reviewed in9330300/1d33177; remaining OM04 nominal constructor and external evidence gaps subsequently closed by35a8618/6ffbf16. Coordinator243 parity replay and two independent follow-up reviews accepted. Full ordinary-memory/transfer/v3 remains open."
     },
     {
       "lane": "runtime-roots",
@@ -588,7 +588,7 @@
       "threadId": "01a16ea8-81b2-7323-a1ed-602c72630fe9",
       "worktree": "/home/john-riley/.codex/worktrees/2b95/lang",
       "status": "running",
-      "afterCursor": "6aeabcc6-9be3-4965-94f9-251878fe752c:4",
+      "afterCursor": "6aeabcc6-9be3-4965-94f9-251878fe752c:5",
       "setup_verified": "Worktree HEAD equals89464a76c9bd84a3b090ec58a14ca6be0043c6ea; app read_thread and compact wait confirm active. list_threads omitted agent-created chats; exact read-only local metadata and app reads resolved identities. No duplicates."
     },
     {
@@ -601,7 +601,7 @@
       "threadId": "01a16ea8-bbf7-7381-8599-5953d15d1757",
       "worktree": "/home/john-riley/.codex/worktrees/97d1/lang",
       "status": "running",
-      "afterCursor": "ea5db0ca-9d6e-48d2-845e-748bfe81768a:4",
+      "afterCursor": "ea5db0ca-9d6e-48d2-845e-748bfe81768a:5",
       "setup_verified": "Worktree HEAD equals89464a76c9bd84a3b090ec58a14ca6be0043c6ea; app read_thread and compact wait confirm active. list_threads omitted agent-created chats; exact read-only local metadata and app reads resolved identities. No duplicates."
     }
   ]
