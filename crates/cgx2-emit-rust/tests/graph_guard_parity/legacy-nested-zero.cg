@@ -1,0 +1,5 @@
+let value = memory.owned_bytes(0)
+no_gc(budget: 0):
+    no_gc(budget: 0):
+        memory.use(value)
+memory.drop(value)

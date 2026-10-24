@@ -1,0 +1,20 @@
+{
+  "encoding": "UTF-8",
+  "original_sha256": "9e04e8e3e234829f6ccac06a93d0079b64544f4aefa7bec000315d600853c2bb",
+  "combined_output_lines": [
+    "   Compiling cgx2-runtime v0.1.0 (/home/john-riley/.codex/worktrees/58d1/lang/crates/cgx2-runtime)\n",
+    "    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s\n",
+    "     Running tests/fallible_lifetimes.rs (target/release-native-guards/debug/deps/fallible_lifetimes-93a485a6e370ba58)\n",
+    "\n",
+    "running 6 tests\n",
+    "test entry_and_root_reserve_faults_are_atomic_and_retryable ... ok\n",
+    "test failed_guard_entry_preserves_outer_budget_and_collection_prohibition ... ok\n",
+    "test root_bookkeeping_budget_failure_preserves_existing_roots ... ok\n",
+    "test nested_cleanup_on_early_return_and_unwind_is_region_local ... ok\n",
+    "test scoped_roots_own_duplicates_without_consuming_manual_registrations ... ok\n",
+    "test root_bookkeeping_charges_each_guard_and_cleanup_does_not_refund ... ok\n",
+    "\n",
+    "test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n",
+    "\n"
+  ]
+}

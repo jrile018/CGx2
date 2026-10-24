@@ -1,0 +1,9 @@
+{
+  "encoding": "UTF-8",
+  "original_sha256": "1962a33349cb70843fa53f80c7944a22ac6498838ba2774d5f184af6788bc1be",
+  "combined_output_lines": [
+    "   Compiling cgx2c v0.1.0 (/home/john-riley/.codex/worktrees/58d1/lang/crates/cgx2c)\n",
+    "   Compiling cgx2-cli v0.1.0 (/home/john-riley/.codex/worktrees/58d1/lang/crates/cgx2-cli)\n",
+    "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.21s\n"
+  ]
+}

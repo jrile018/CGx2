@@ -1,0 +1,59 @@
+
+#[test]
+fn synthetic_guard_budget_reserve_failures() {
+    use cgx2_runtime::ReserveSiteV2;
+    let mut guard_spans = std::collections::BTreeSet::new();
+    let mut reached_success = false;
+    for index in 1..=32 {
+        CGX2_OBSERVE.with(|value| value.set(true));
+        CGX2_FAILURE.with(|value| *value.borrow_mut() = None);
+        CGX2_ROLLBACK.with(|value| value.set(None));
+        CGX2_CLEANUP_ERRORS.with(|value| value.borrow_mut().clear());
+        let mut session = Session::try_new().unwrap();
+        session.inject_host_failure_at_reserve(index);
+        let result = cgx2_memory_function_0(&mut session, &mut 0, &mut 0, (0, 0));
+        if session.last_host_failure_site_v2() == Some(ReserveSiteV2::GuardBudgets) {
+            let error = result.unwrap_err();
+            assert!(error.starts_with("CGR013 at "), "{error}");
+            assert!(error.ends_with("memory allocation failed: HostAllocation"), "{error}");
+            println!("synthetic GuardBudgets reserve {index}: {error}");
+            guard_spans.insert(error);
+            assert_eq!(session.host_reserve_attempts(), index);
+            assert_eq!(session.root_census().unwrap().root_registrations, 0);
+            assert_eq!(session.memory_report().totals.collection_count, 0);
+            CGX2_FAILURE.with(|value| {
+                let value = value.borrow();
+                let failure = value.as_ref().unwrap();
+                assert_eq!(failure.handles.len(), 1);
+                assert_eq!(failure.runtime_root_registrations, Some(1));
+                assert!(failure.observable);
+            });
+            CGX2_ROLLBACK.with(|value| assert_eq!(value.get(), Some(true)));
+            CGX2_CLEANUP_ERRORS.with(|value| assert!(value.borrow().is_empty()));
+            // No guard leaked when the generated call unwound; retry can enter.
+            session.collect(session.default_region()).unwrap();
+            assert!(session.try_no_gc(0).is_ok());
+        } else if result.is_ok() {
+            reached_success = true;
+            break;
+        }
+    }
+    assert!(reached_success, "reserve sweep never reached an unfaulted execution");
+    assert_eq!(guard_spans.len(), 3, "first, second and third entry must all be fallible");
+    let expected: std::collections::BTreeSet<_> = EXPECTED_GUARD_SPANS.iter().map(|(start, end)|
+        format!("CGR013 at {start}..{end}: memory allocation failed: HostAllocation")).collect();
+    assert_eq!(guard_spans, expected);
+    println!("3 GuardBudgets failures checked with exact source spans and clean unwind");
+
+    // Supported runtime hook also proves a failed nested entry preserves the
+    // existing guard and collection prohibition, independently of call cleanup.
+    let mut session = Session::try_new().unwrap();
+    let region = session.default_region();
+    let mut outer = session.try_no_gc(32).unwrap();
+    outer.inject_host_failure_at_reserve(1);
+    assert!(matches!(outer.try_no_gc(0), Err(AllocationError::HostAllocation)));
+    assert_eq!(outer.last_host_failure_site_v2(), Some(ReserveSiteV2::GuardBudgets));
+    assert_eq!(outer.collect(region), Err(MemoryError::CollectionForbidden));
+    // Reserve failure did not charge the outer 32-byte budget.
+    assert!(outer.try_no_gc(0).is_ok());
+}

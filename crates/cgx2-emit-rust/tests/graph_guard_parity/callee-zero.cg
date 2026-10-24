@@ -1,0 +1,12 @@
+fn scalar(n: i64) -> Unit effects(ManagedAlloc, Mutate):
+    no_gc(budget: 0):
+        no_gc(budget: 0):
+            let value = memory.owned_bytes(n)
+            memory.drop(value)
+
+fn main() -> Unit effects(ManagedAlloc, Mutate):
+    scalar(0)
+    let r = memory.region(mode: manual, limit: 1048576)
+    let graph = memory.alloc_graph(r, 1, 0)
+    memory.drop(graph)
+    memory.close(r)
