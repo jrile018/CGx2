@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24T12:37:00.702Z",
+  "checked_at": "2026-10-24T12:57:00.707Z",
   "original_chats": [
     {
       "lane": "core",
@@ -235,10 +235,10 @@
       "worktree": "/home/john-riley/.codex/worktrees/4836/lang",
       "base": "0d321d3d1b0341121b8363a5a87eeaf674c20eec",
       "status": "running",
-      "afterCursor": "9a64eb13-4087-480b-808c-6ba54eb87c2d:6",
+      "afterCursor": "9a64eb13-4087-480b-808c-6ba54eb87c2d:7",
       "plan": "plans/release-completion/s2b-ordinary-memory/plan.md",
       "setup_verified": "worktree HEAD equals reviewed base; read_thread and wait_threads active; list_threads omitted agent-created chat, exact read-only local metadata resolved without duplication",
-      "progress_note": "Active, uncommitted. Worker reports owned-symbol/ordinary-owned/foundation/semantic/binder replay passing and historical negative preserved. Worker reproduced and is repairing fallback admission of memory.default_region() in failed-Session arm. No reviewed acceptance or delivered commit."
+      "progress_note": "Active, uncommitted. Worker reports fallback repair passes direct/transitive helper cases with exact UTF-8 spans and11 focused source tests. Broader verification rerunning before freeze/product replay. No delivered commit or reviewed acceptance."
     }
   ],
   "s2a_repairs": [
