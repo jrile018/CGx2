@@ -147,6 +147,29 @@ impl ScopedRoots<'_> {
         for handle in handles.iter().flatten() {
             self.session.read_bytes(*handle)?;
         }
+        self.reserve_root_slots_v1(count)?;
+        let initial = self.roots.len();
+        for handle in handles.iter().flatten().copied() {
+            let object = self.session.object_mut(handle)?;
+            let Some(next) = object.roots.checked_add(1) else {
+                while self.roots.len() > initial {
+                    let registered = self.roots.pop().expect("new registration");
+                    let object = self.session.object_mut(registered)?;
+                    object.roots -= 1;
+                    object.scoped_roots -= 1;
+                }
+                return Err(MemoryError::InvalidHandle);
+            };
+            object.roots = next;
+            object.scoped_roots += 1;
+            self.roots.push(handle);
+        }
+        Ok(())
+    }
+
+    /// Prepare publication before an irreversible graph transfer. Reservations
+    /// remain charged even if later payload preparation fails.
+    pub(crate) fn reserve_root_slots_v1(&mut self, count: usize) -> Result<(), MemoryError> {
         let needed = self
             .roots
             .len()
@@ -177,22 +200,6 @@ impl ScopedRoots<'_> {
             self.session.charge_budgets(charge);
             replacement.extend_from_slice(&self.roots);
             self.roots = replacement;
-        }
-        let previous = self.roots.len();
-        for handle in handles.iter().flatten().copied() {
-            let object = self.session.object_mut(handle)?;
-            let Some(roots) = object.roots.checked_add(1) else {
-                while self.roots.len() > previous {
-                    let registered = self.roots.pop().expect("new registration");
-                    let object = self.session.object_mut(registered)?;
-                    object.roots -= 1;
-                    object.scoped_roots -= 1;
-                }
-                return Err(MemoryError::InvalidHandle);
-            };
-            object.roots = roots;
-            object.scoped_roots += 1;
-            self.roots.push(handle);
         }
         Ok(())
     }

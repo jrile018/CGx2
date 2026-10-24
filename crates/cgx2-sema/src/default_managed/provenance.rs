@@ -85,6 +85,21 @@ pub fn compile_source_bundle_v1(
     sources: &[(String, String)],
     entry: &str,
 ) -> Result<ManagedProgramV1, Vec<TypeDiagnostic>> {
+    let merged = source_bundle_module(sources, entry, |module, _| Ok(module.clone()))?;
+    super::compile(
+        &merged,
+        ManagedProvenanceV1::SourceBundle {
+            sources: sources.into(),
+            entry: entry.into(),
+        },
+    )
+}
+
+pub(crate) fn source_bundle_module(
+    sources: &[(String, String)],
+    entry: &str,
+    prepare: impl Fn(&Module, &[Module]) -> Result<Module, Vec<TypeDiagnostic>>,
+) -> Result<Module, Vec<TypeDiagnostic>> {
     let zero = Span { start: 0, end: 0 };
     let fail = |message| vec![diagnostic(message, zero)];
     if sources.is_empty() || sources.len() > 128 {
@@ -112,6 +127,11 @@ pub fn compile_source_bundle_v1(
         modules.push(module);
     }
     let entry_index = entry_index.ok_or_else(|| fail("missing managed entry source"))?;
+    let original_modules = modules;
+    let modules = original_modules
+        .iter()
+        .map(|module| prepare(module, &original_modules))
+        .collect::<Result<Vec<_>, _>>()?;
     let mut imported = ImportedSignatures::default();
     imported.modules.extend(names.keys().cloned());
     for module in &modules {
@@ -193,7 +213,7 @@ pub fn compile_source_bundle_v1(
             return Err(fail("cyclic managed source dependencies"));
         }
     }
-    let entry_module = &modules[entry_index];
+    let entry_module = &original_modules[entry_index];
     let entry_name = entry_module
         .name
         .as_ref()
@@ -202,14 +222,8 @@ pub fn compile_source_bundle_v1(
     let mut merged = if modules.len() == 1 && entry_module.name.is_none() {
         entry_module.clone()
     } else {
-        crate::merge_modules(&modules.iter().collect::<Vec<_>>(), &entry_name)
+        crate::merge_modules(&original_modules.iter().collect::<Vec<_>>(), &entry_name)
     };
     merged.span = entry_module.span;
-    super::compile(
-        &merged,
-        ManagedProvenanceV1::SourceBundle {
-            sources: sources.into(),
-            entry: entry.into(),
-        },
-    )
+    Ok(merged)
 }

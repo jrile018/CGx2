@@ -1,5 +1,7 @@
 //! Candidate CGx2 indentation syntax.
 
+mod ordinary_memory;
+pub use ordinary_memory::{ordinary_memory_builtin, ordinary_memory_span};
 mod ast;
 mod format;
 mod lexer;

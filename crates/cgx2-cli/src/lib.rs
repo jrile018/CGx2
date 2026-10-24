@@ -5,6 +5,7 @@ mod eval;
 mod memory;
 mod native;
 mod native_eval;
+mod ordinary_memory;
 mod ordinary_owned;
 pub use ordinary_owned::validate_owned_source;
 
@@ -31,6 +32,9 @@ fn checked_package(root: &Path) -> Result<cgx2_package::CheckedPackage, Vec<Nati
 }
 
 pub fn check_native_package(root: &Path) -> Result<(), Vec<NativeDiagnostic>> {
+    if memory_package(root)?.is_some() {
+        return Ok(());
+    }
     let package = checked_package(root)?;
     if package
         .modules()
@@ -48,6 +52,49 @@ pub fn run_native_package(
     root: &Path,
     args: &[String],
 ) -> Result<RunResult, Vec<NativeDiagnostic>> {
+    if let Some(package) = memory_package(root)? {
+        let program = package.memory_program_v1().map_err(package_diagnostics)?;
+        let execution = program.execute(args).map_err(|ds| {
+            ds.into_iter()
+                .map(|d| NativeDiagnostic {
+                    code: d.code.into(),
+                    message: d.message,
+                    file: package.entry().to_path_buf(),
+                    span: Some(d.span),
+                })
+                .collect::<Vec<_>>()
+        })?;
+        if std::env::var_os("CGX2_MEMORY_EVIDENCE").is_some() {
+            match (&execution.evidence, &execution.memory) {
+                (Some(e), Some(m)) => eprintln!("CGX2_MEMORY_EVIDENCE {}", e.json(m)),
+                _ => {
+                    eprintln!("CGX2_MEMORY_EVIDENCE {{\"session_entered\":false,\"metrics\":null}}")
+                }
+            }
+        }
+        let model = &program.runtime().program;
+        let result = execution.result.map_err(|e| {
+            let file = e
+                .function
+                .and_then(|i| model.functions.get(i))
+                .and_then(|f| package.source_for_function(&model.strings[f.name]))
+                .unwrap_or(package.entry())
+                .to_path_buf();
+            vec![NativeDiagnostic {
+                code: e.code.into(),
+                message: e.message,
+                file,
+                span: Some(cgx2_syntax::Span {
+                    start: e.loc.start,
+                    end: e.loc.end,
+                }),
+            }]
+        })?;
+        let ty = &program.types()[model.functions[model.entry].result];
+        return Ok(RunResult {
+            value: ordinary_memory::copy(result, ty, &program),
+        });
+    }
     let package = checked_package(root)?;
     if !package
         .modules()
@@ -62,6 +109,23 @@ pub fn run_native_package(
             native::NativeValue::Tensor(value) => Value::String(value),
         },
     })
+}
+
+fn package_diagnostics(errors: Vec<cgx2_package::PackageDiagnostic>) -> Vec<NativeDiagnostic> {
+    errors
+        .into_iter()
+        .map(|d| NativeDiagnostic {
+            code: d.code.into(),
+            message: d.message,
+            file: d.file,
+            span: d.span,
+        })
+        .collect()
+}
+fn memory_package(
+    root: &Path,
+) -> Result<Option<cgx2_package::CheckedMemoryPackageV1>, Vec<NativeDiagnostic>> {
+    cgx2_package::try_load_checked_memory_package_v1(root).map_err(package_diagnostics)
 }
 
 use cgx2_syntax::parse_module;
@@ -118,6 +182,21 @@ fn execute_with_failure(
                 .into(),
             span: Some(function.span),
         })]);
+    }
+    if cgx2_sema::ordinary_memory::profile(&module) {
+        let program = cgx2_sema::ordinary_memory::compile_source(source).map_err(|ds| {
+            ds.into_iter()
+                .map(|d| {
+                    no_report(RunError {
+                        code: d.code,
+                        message: d.message,
+                        span: Some(d.span),
+                    })
+                })
+                .collect::<Vec<_>>()
+        })?;
+        return ordinary_memory::run(&program, args, host_fail_reserve)
+            .map_err(|ds| ds.into_iter().map(no_report).collect());
     }
     if cgx2_sema::default_managed::hybrid::is_hybrid(&module) {
         let program = cgx2_sema::default_managed::hybrid::compile_source(source).map_err(|ds| {

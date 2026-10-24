@@ -21,6 +21,19 @@ pub fn check_source(source: &str) -> Result<TypedModule, Vec<CheckDiagnostic>> {
             })
             .collect::<Vec<_>>()
     })?;
+    if cgx2_sema::ordinary_memory::profile(&module) {
+        return cgx2_sema::ordinary_memory::compile_source(source)
+            .map(|p| p.typed().clone())
+            .map_err(|ds| {
+                ds.into_iter()
+                    .map(|d| CheckDiagnostic {
+                        code: d.code.into(),
+                        message: d.message,
+                        span: d.span,
+                    })
+                    .collect()
+            });
+    }
     let typed = check_module(&module).map_err(|errors| {
         errors
             .into_iter()

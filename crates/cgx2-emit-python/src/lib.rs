@@ -11,6 +11,15 @@ pub use error::EmitDiagnostic;
 pub use package::{emit_package_python, write_package_python, PackageEmitDiagnostic};
 
 pub fn emit_python(module: &Module, typed: &TypedModule) -> Result<String, Vec<EmitDiagnostic>> {
+    if let Some(span) = cgx2_syntax::ordinary_memory_span(module) {
+        return Err(vec![EmitDiagnostic {
+            code: "CGE006",
+            message: "Python does not support ordinary memory ownership, regions or entry recovery"
+                .into(),
+            span,
+        }]);
+    }
+
     if cgx2_sema::default_managed::resolved_explicit(module, typed) {
         cgx2_sema::default_managed::compile_ast(module).map_err(|ds| {
             ds.into_iter()

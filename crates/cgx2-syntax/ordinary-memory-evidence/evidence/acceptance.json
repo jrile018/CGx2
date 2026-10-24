@@ -1,0 +1,644 @@
+{
+  "schema_version": 1,
+  "status": "incomplete-ordinary-memory-checkpoint",
+  "reviewed_base": "0d321d3d1b0341121b8363a5a87eeaf674c20eec",
+  "ordinary_memory_complete": false,
+  "release_complete": false,
+  "consumer_fanout_authorized": false,
+  "workspace": {
+    "passed": 1327,
+    "failed": 0,
+    "ignored": 6
+  },
+  "quality_commands": [
+    {
+      "name": "workspace",
+      "argv": [
+        "cargo",
+        "test",
+        "--workspace",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--no-fail-fast"
+      ],
+      "exit": 0,
+      "signal": null,
+      "log": "workspace.log",
+      "bytes": 153644,
+      "sha256": "5a40f44e56648f4ae4b4d266dd3e5ed7bdfbd692b4ebcd5d633e31ecfc002027",
+      "duration_seconds_for_test_supervision": 189.9191052300157
+    },
+    {
+      "name": "clippy",
+      "argv": [
+        "cargo",
+        "clippy",
+        "--workspace",
+        "--all-targets",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit": 0,
+      "signal": null,
+      "log": "clippy.log",
+      "bytes": 1819,
+      "sha256": "cbccb94d0cce0c13556d2608611d590cdddb4a4a4d543daa89b82c74a0119db0",
+      "duration_seconds_for_test_supervision": 2.7297174150007777
+    },
+    {
+      "name": "fmt",
+      "argv": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--check"
+      ],
+      "exit": 0,
+      "signal": null,
+      "log": "fmt.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds_for_test_supervision": 0.7062946110090706
+    },
+    {
+      "name": "diff",
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit": 0,
+      "signal": null,
+      "log": "diff.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds_for_test_supervision": 0.07826723798643798
+    },
+    {
+      "name": "evidence-selftests",
+      "argv": [
+        "/usr/bin/python3",
+        "/home/john-riley/.codex/worktrees/4836/lang/crates/cgx2-syntax/ordinary-memory-evidence/test_run.py"
+      ],
+      "exit": 0,
+      "signal": null,
+      "log": "evidence-selftests.log",
+      "bytes": 106,
+      "sha256": "f8f7b0ac7f2b53ac4e96000f166430c488f2c37e059ad5502b09d60f29d363b8",
+      "duration_seconds_for_test_supervision": 0.03103676001774147
+    },
+    {
+      "name": "build",
+      "argv": [
+        "cargo",
+        "build",
+        "--workspace",
+        "--all-features",
+        "--offline",
+        "--locked"
+      ],
+      "exit": 0,
+      "signal": null,
+      "log": "build.log",
+      "bytes": 72,
+      "sha256": "736e2582f563605dd272e5fb977840b0c0767377d27b6940c440caf75eec7157",
+      "duration_seconds_for_test_supervision": 0.04433707398129627
+    },
+    {
+      "name": "freeze",
+      "argv": [
+        "/usr/bin/python3",
+        "/home/john-riley/.codex/worktrees/4836/lang/crates/cgx2-syntax/managed-core-repair-evidence/freeze.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/release-ordinary-memory/debug",
+        "--output-dir",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/verification-final-7/frozen",
+        "--manifest",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/verification-final-7/frozen.json"
+      ],
+      "exit": 0,
+      "signal": null,
+      "log": "freeze.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds_for_test_supervision": 1.072595892008394
+    }
+  ],
+  "products": {
+    "new_and_regressions": {
+      "passed": 136,
+      "failed": 0
+    },
+    "bounded_product": {
+      "passed": 117,
+      "failed": 0
+    },
+    "regression_replay": {
+      "checks_passed": 19,
+      "checks_failed": 0,
+      "commands": 18,
+      "validated": true,
+      "report": "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/product-final-7/product.json",
+      "sha256": "bb23fb1df1f41fdc6c87f94f4c327c433bc1c04658a860dc619ba173923b810a",
+      "reused_same_artifacts": true,
+      "parent_report_failed_checks_preserved": 6
+    },
+    "outside_repository_standalone": {
+      "passed": 22,
+      "failed": 0,
+      "working_directory": "/tmp/cgx2-ordinary-memory-standalone-p70bywln"
+    }
+  },
+  "regression_commands": [
+    {
+      "name": "regression-owned-symbol195",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/owned-symbol-compatibility-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/verification-final-7/frozen",
+        "--output",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/product-final-7/regressions/owned-symbol195/owned-symbol195.json"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/4836/lang",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 31.535,
+      "stdout_bytes": 43,
+      "stdout_sha256": "eff8f315c5f8b9bd5ad972f538f931d1ccd7dedc85c8ca6bd08cc483bdfc6552",
+      "stdout": "symbol compatibility: 195 passed, 0 failed\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "name": "regression-owned-result-original",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/owned-result-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/verification-final-7/frozen",
+        "--output",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/product-final-7/regressions/owned-result-original/owned-result-original.json"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/4836/lang",
+      "extra_env": {},
+      "exit": 1,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 51.944,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 821,
+      "stderr_sha256": "12f005f481da66c323ef87e6f3a9cc44706906903e0635b470db7f27ef8fc142",
+      "stderr": "Traceback (most recent call last):\n  File \"/home/john-riley/.codex/worktrees/4836/lang/crates/cgx2-syntax/owned-result-evidence/run.py\", line 186, in <module>\n    main()\n    ~~~~^^\n  File \"/home/john-riley/.codex/worktrees/4836/lang/crates/cgx2-syntax/owned-result-evidence/run.py\", line 150, in main\n    _, err = run(name + \":reject\", [binaries / \"cgx2\", \"check\", source, \"--diagnostic-format=json\"], rc=1, code=expected[\"code\"])\n             ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/john-riley/.codex/worktrees/4836/lang/crates/cgx2-syntax/owned-result-evidence/run.py\", line 57, in run\n    assert passed, (label, result[\"reason\"], actual, out, err)\n           ^^^^^^\nAssertionError: ('shadow-builtin:reject', 'exit', 0, '', '')\n"
+    },
+    {
+      "name": "regression-owned-result-reconciled",
+      "argv": [
+        "/usr/bin/python3",
+        "plans/release-completion/s2b-owned-result-review/reconcile.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/verification-final-7/frozen",
+        "--output-dir",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/product-final-7/regressions/owned-result-reconciled/reconciled"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/4836/lang",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 54.423,
+      "stdout_bytes": 76,
+      "stdout_sha256": "f068225e5a8b86e77b1a4ed650448558b912d103000ba06de2fbee05393de6df",
+      "stdout": "owned-result: 593 passed; checkpoint_complete=false; release_complete=false\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "name": "regression-ordinary256",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/ordinary-owned-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/verification-final-7/frozen",
+        "--output",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/product-final-7/regressions/ordinary256/ordinary256.json"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/4836/lang",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 16.949,
+      "stdout_bytes": 78,
+      "stdout_sha256": "eac7a823e60dc4922bb955dde1af4379e8b81184461e3f67d3fb8dc4c578d82c",
+      "stdout": "ordinary-owned: 256 passed; checkpoint_complete=false; release_complete=false\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "name": "regression-foundation",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/s2b-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/verification-final-7/frozen",
+        "--output",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/product-final-7/regressions/foundation/foundation.json"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/4836/lang",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 50.864,
+      "stdout_bytes": 35,
+      "stdout_sha256": "91adaa26ac56b550d1e84483cc1229283a3b9f7a60e70bc9e0ab8fb7d7f26e63",
+      "stdout": "159 checks passed; foundation only\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "name": "regression-semantic",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-sema/tests/semantic_resolution/run.py",
+        "--binary",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/verification-final-7/frozen/cgx2",
+        "--output",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/product-final-7/regressions/semantic/semantic.json"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/4836/lang",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 77.397,
+      "stdout_bytes": 29,
+      "stdout_sha256": "e4db6ae5c0ec9375767e16c4779338b9a11ef6a05ed0e58e10b42d064c87b578",
+      "stdout": "{\"passed\": 278, \"failed\": 0}\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "name": "regression-specialization",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-sema/tests/source_specialization/run.py",
+        "--binary",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/verification-final-7/frozen/cgx2",
+        "--output-dir",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/product-final-7/regressions/specialization/specialization"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/4836/lang",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 30.128,
+      "stdout_bytes": 27,
+      "stdout_sha256": "c727497e41be718a60be0db3ecb9d8954f06543d2a7934cce2cdf459da11feb7",
+      "stdout": "207/207 passed; 0 failures\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "name": "regression-visibility",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-api-index/tests/verify_visibility_cli.py",
+        "--binary",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/verification-final-7/frozen/cgx2",
+        "--output-dir",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/product-final-7/regressions/visibility/visibility"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/4836/lang",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 14.35,
+      "stdout_bytes": 172,
+      "stdout_sha256": "b61c1fd0e6f9529bf81adc6c347a0e591426e89298a5581c1b72d022977f393f",
+      "stdout": "118/118 checks passed; 0 failed cases; /home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/product-final-7/regressions/visibility/visibility/report.json\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "name": "regression-binders",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-package/scripts/verify_binders.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/verification-final-7/frozen",
+        "--output",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/product-final-7/regressions/binders/binders.json"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/4836/lang",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 6.082,
+      "stdout_bytes": 141,
+      "stdout_sha256": "677d528487e13698021f35c1e17df42bdb4c60605c92a91612372496f6008187",
+      "stdout": "88 passed; 0 failed; /home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/product-final-7/regressions/binders/binders.json\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "name": "regression-output",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-cli/scripts/verify_output_bounds.py",
+        "--binary",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/verification-final-7/frozen/cgx2",
+        "--output",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/product-final-7/regressions/output/output.json",
+        "--build-address-space-mib",
+        "4096"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/4836/lang",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 18.143,
+      "stdout_bytes": 1103,
+      "stdout_sha256": "eb1a6089eb7bdd7a005d7de27510fd7a7660f242399a66f115de0a4d38737b8f",
+      "stdout": "passed: reviewed-package:interpreter\npassed: reviewed-package:build-False\npassed: reviewed-package:native-False\npassed: reviewed-package:build-True\npassed: reviewed-package:native-True\npassed: reviewed-package:emit-python\npassed: reviewed-package:python\npassed: reviewed-standalone:interpreter\npassed: reviewed-standalone:build-False\npassed: reviewed-standalone:native-False\npassed: reviewed-standalone:build-True\npassed: reviewed-standalone:native-True\npassed: reviewed-standalone:emit-python\npassed: reviewed-standalone:python\npassed: standalone-1048575:interpreter\npassed: standalone-1048576:interpreter\npassed: standalone-1048577:interpreter\npassed: package-1048575:interpreter\npassed: package-1048576:interpreter\npassed: package-1048577:interpreter\npassed: unicode-nested:interpreter\npassed: unicode-nested:build-False\npassed: unicode-nested:native-False\npassed: unicode-nested:build-True\npassed: unicode-nested:native-True\npassed: unicode-nested:emit-python\npassed: unicode-nested:python\npassed: qualified-standalone-admission\npassed: rejected-native\npassed: rejected-rust\npassed: rejected-python\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "name": "regression-emitters",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-emit-python/tests/s2b_product.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/verification-final-7/frozen",
+        "--output",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/product-final-7/regressions/emitters/emitters.json"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/4836/lang",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 25.684,
+      "stdout_bytes": 26,
+      "stdout_sha256": "2620de15c25b6017d1e70477b0c9b9468613eaba3b3a94d83c34c36017f42eb2",
+      "stdout": "104 product checks passed\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "name": "regression-graph99",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/s2b-memory-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/verification-final-7/frozen",
+        "--output",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/product-final-7/regressions/graph99/graph99.json"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/4836/lang",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 12.244,
+      "stdout_bytes": 396,
+      "stdout_sha256": "31959e06226d598bedf683f9aa404550032f0dce8ec2ec83da358ae9a086a87c",
+      "stdout": "{\"status\": \"passed\", \"checkpoint_complete\": false, \"scope\": \"explicit graph/payload source operations only\", \"ordinary_ownership_lowering\": \"incomplete\", \"ordinary_default_managed_values\": \"incomplete\", \"source_recoverable_transfers\": \"incomplete\", \"runtime_sha256\": \"64cdf0f493fed2fe7240c67e8c011b8d19b448eded401f8808e1c4826aa28b21\", \"source_cases\": 5, \"rejected_source_cases\": 6, \"passed\": 99}\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "name": "regression-guards518",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-emit-rust/tests/graph_guard_parity/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/verification-final-7/frozen",
+        "--output",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/product-final-7/regressions/guards518/guards518.json"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/4836/lang",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 39.107,
+      "stdout_bytes": 44,
+      "stdout_sha256": "88de176cf1b58a8fbe70fe536d7ac1e75a8436000b3e74e62eafaeb26a2c0f01",
+      "stdout": "518 checks passed across 17 source fixtures\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "name": "regression-reports265",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-cli/tests/memory_report_layout/run.py",
+        "--binary",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/verification-final-7/frozen/cgx2",
+        "--output",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/product-final-7/regressions/reports265/reports265.json"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/4836/lang",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 23.443,
+      "stdout_bytes": 235,
+      "stdout_sha256": "97d9f2f87c2438386b802a2194219c86a50571065aa3603720f3e87314d1d9fc",
+      "stdout": "{\"status\": \"passed\", \"scope\": \"legacy explicit source layout reporting\", \"ordinary_memory_checkpoint_complete\": false, \"release_complete\": false, \"source_cases\": 9, \"native_profiles\": [\"debug\", \"release\", \"standalone\"], \"passed\": 265}\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "name": "regression-managed-product",
+      "argv": [
+        "/usr/bin/python3",
+        "/home/john-riley/.codex/worktrees/4836/lang/crates/cgx2-syntax/default-managed-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/verification-final-7/frozen",
+        "--output-dir",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/product-final-7/regressions/managed-product/managed-product"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/4836/lang",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 258.449,
+      "stdout_bytes": 1620,
+      "stdout_sha256": "dbcb9d3999cb8a92cbc6875051a2d0953671f1fa683663bed88f8cdb6ab989a0",
+      "stdout": "budget alloc-0\nbudget alloc-225\nbudget alloc-226\nbudget roots-0\nbudget roots-63\nbudget roots-64\nbudget nested-257\nbudget nested-258\nbudget nonrefund-451\nbudget hidden-scalar\nbudget hidden-package\nsynthetic fault-graph-root-1\nsynthetic fault-graph-root-2\nsynthetic fault-graph-root-3\nsynthetic fault-graph-root-4\nsynthetic fault-graph-root-5\nsynthetic fault-graph-root-6\nsynthetic fault-graph-root-7\nsynthetic fault-graph-root-8\nsynthetic fault-graph-root-9\nsynthetic fault-graph-root-10\nsynthetic fault-graph-root-11\nsynthetic fault-graph-root-12\nsynthetic fault-graph-root-13\nsynthetic fault-graph-root-14\nsynthetic fault-graph-root-15\nsynthetic fault-guard-1\nsynthetic fault-guard-2\nsynthetic fault-guard-3\nsynthetic fault-guard-4\nsynthetic fault-guard-5\nsynthetic fault-guard-6\nsynthetic fault-guard-7\nsynthetic fault-guard-8\nsynthetic fault-guard-9\nsynthetic fault-guard-10\nsynthetic fault-guard-11\nsynthetic fault-guard-12\nsynthetic fault-guard-13\nsynthetic fault-guard-14\nsynthetic fault-guard-15\nreject ref-output-reject\nreject ref-output-utf8\nreject collect-guard-reject\nreject dishonest-package\n{\"passed\": 678, \"failed\": 0, \"checkpoint_complete\": false, \"release_complete\": false}\nstart shapes\nfinish shapes\nstart alias\nfinish alias\nstart cycle\nfinish cycle\nstart pressure\nfinish pressure\nstart unicode\nfinish unicode\nstart recover\nfinish recover\nstart region-limit\nfinish region-limit\nstart hybrid\nfinish hybrid\nstart package\nfinish package\nstart guard-package\nfinish guard-package\nstart namespace-package\nfinish namespace-package\nstart wide\nfinish wide\nstart elements\nfinish elements\nstart nodes\nfinish nodes\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "name": "regression-equality-product",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/managed-equality-repair-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/verification-final-7/frozen",
+        "--output-dir",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/product-final-7/regressions/equality-product"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/4836/lang",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 14.541,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "name": "regression-core-product",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/managed-core-repair-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/verification-final-7/frozen",
+        "--output-dir",
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/product-final-7/regressions/core-product"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/4836/lang",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 24.63,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "name": "regression-repair-selftests",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/default-managed-evidence/test_repair_runner.py"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/4836/lang",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.162,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 115,
+      "stderr_sha256": "6465d9b9957a7c8c799b41891f096a4255fc66f5be585bba1129ad51fcabeec8",
+      "stderr": "................\n----------------------------------------------------------------------\nRan 16 tests in 0.126s\n\nOK\n"
+    }
+  ],
+  "historical_negative": "Unchanged original owned-Result runner523 passed/1 obsolete shadow-builtin failure; reconciled593/restored17 run separately.",
+  "frozen_manifest": {
+    "schema_version": 1,
+    "source_directory": "/home/john-riley/.codex/worktrees/4836/lang/target/release-ordinary-memory/debug",
+    "binary_directory": "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/verification-final-7/frozen",
+    "checks_after_cargo": true,
+    "binary_sha256": {
+      "cgx2": "b96eeec69eeb615d7ba5933cfdc696ff329e6066cca859409ee25ecbffa35353",
+      "cgx2-native": "74d9a5dbca716509de03127bf060f3c3b551dbcd52cd1f23fc750c1cca2b449f",
+      "cgx2c": "17da98ab00b76e2e754a1f47600b3bb97ffab8184f5901880170fe709e80d3de",
+      "cgx2-effect-index": "af07ac7e7c2edf9a5528589ae3f4256100a4d86239ba2ecb007be1420eed8f96",
+      "cgx2-security": "06916f9a600349414b76be1a55e77512989fcbdf520b485b7cd909501335ca61",
+      "cgx2-verify": "c9926bd1ce09f8830cb39ebe43df569658bfbe2dd18da4baeba3f3598a323fb8",
+      "cgx2-notebook": "aaef9d98cee59ee3e791c22ffc2da77e33a93fabdb87fdd8b4ea8701350dda27"
+    },
+    "probe_library_sha256": {
+      "libcgx2_cli.rlib": "e573bed5a6820110e8ca53985b4e7ff3976fa3fb08a550bec7db95dfa9f46497",
+      "libcgx2_sema.rlib": "3563207c7f3454af3e83b17988817887d464679379fb8626b5cf899728f384d8",
+      "libcgx2_package.rlib": "386baad1b0e2f35217a1038034d1e221ae8c624e866e9317860fcd4405a1b421",
+      "libcgx2_emit_rust.rlib": "6eb10f44dae6ff728ed31a8385c486c97a360bea93d2c66bafe4c9d245983f98"
+    }
+  },
+  "frozen_artifacts_changed": [],
+  "compiler_source_sha256": "2d5135b32a0ea58edd68a8c6c10695f3b3a914e5ccd0568cfc1b0c304799d254",
+  "changed_compiler_inputs_since_freeze": [],
+  "root_manifests_unchanged": true,
+  "root_manifest_sha256": {
+    "Cargo.toml": "9400b7dfbc400f91b3d648265dbd18001ec96157eb202fe88e3b95a312c9ffd7",
+    "Cargo.lock": "ea7678242cb40c8425c2b9875215f7024071c684cab59399d1d8a74a96750e3a"
+  },
+  "root_lock_reconciliation_required": false,
+  "harness_selftests": 8,
+  "known_attempts": [
+    "Initial restricted workspace run failed legacy routing and local fixture permissions; all logs retained.",
+    "Exploratory product64/15: missing Mutate fixture declaration, diagnostic stream handling and incoherent probe library snapshot.",
+    "Exploratory product86/25: probe Debug bound and preexec CPU hard-limit setup failure; no false pass counted.",
+    "Candidate2 product111/0 and regressions passed, then audit reproduced forbidden default-region access in failed Session fallback.",
+    "Candidate4 product114/0 and outside-repository standalone19/0 passed before additive interface/package changes.",
+    "Interface attempts retained effect-fixture and imported-name resolution failures; the initial compile failure raw log was overwritten (explicit evidence limitation).",
+    "Standalone8 hit /tmp quota with linker failure; copy startup attempts9/10 failed under the same quota. Superseded generated ELF files were removed; reports/source/frozen compiler files retained. A first cleanup audit write also failed; outside cleanup hashes were saved before deletion.",
+    "Product7 passed all18 regressions but retained six incorrect package-argv failures. Product8 fixes --package against unchanged artifacts; successful same-artifact regression evidence is selected explicitly.",
+    "Verification5 passed tests/Clippy but caught unformatted AST checks; verification6 caught an overbroad rejection of parser comparison helpers. Verification7 supersedes both.",
+    "Current source adds per-function transitive resource effects, AST/source-bundle provenance, v2 API metadata and a distinct checked memory package certificate."
+  ],
+  "missing_required_rows": [
+    "general aggregate ownership source lowering and v3 authentication",
+    "source copy_owned/promote and failed-owner continuation",
+    "complete aggregate ownership package integration and exact static dependency source diagnostics",
+    "complete source/package fault, cleanup, and parity acceptance",
+    "external leak-enabled assurance and independent audit",
+    "complete exploratory evidence retention: first interface-sema failure log was overwritten"
+  ],
+  "exploratory_evidence_limitation": "The first interface-sema compile failure (exit101: undefined rewrite plus dereference errors) was overwritten by the immediate successful rerun before export. Its diagnostics survive in chat tool history, but a complete original raw log and hash are unavailable. It is not counted as a pass or represented as preserved raw evidence. During quota recovery, the first cleanup removed only superseded scratch ELF artifacts but its audit write to /tmp failed, leaving an empty audit file. Reports, source snapshots, all frozen compiler directories and the Cargo target remained intact. A subsequent outside-standalone ELF cleanup saved hashes in cleanup-outside-generated-elf.json before deletion. Standalone attempt8 and attempt10 quota failures are retained; attempt9 startup traceback is only in chat tool history.",
+  "external_gates": "Leak-enabled checks and independent audit unrun; no disabled-leak result is treated as acceptance. Full R01-R15 release requirements remain open.",
+  "evidence_manifest": "manifest.json"
+}

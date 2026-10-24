@@ -1061,11 +1061,11 @@ pub mod default_managed {
             }
         }
     }
-    mod engine {
+    pub(crate) mod engine {
         use super::model::*;
         use crate::{
             AllocationError, CleanupReport, GraphError, Handle, MemoryError, MemoryReport,
-            ScopedRoots, Session,
+            RegionId, ScopedRoots, Session,
         };
         use std::collections::{HashMap, HashSet};
         use std::fmt;
@@ -1082,6 +1082,7 @@ pub mod default_managed {
             Unit,
             Heap(Handle),
             Error(u8),
+            Region(RegionId),
         }
         #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
         struct Carrier {
@@ -1279,6 +1280,8 @@ pub mod default_managed {
             }
         }
         struct Machine<'a> {
+            memory: Option<&'a crate::ordinary_memory::MemoryProgramV1>,
+            allocation_region: Option<RegionId>,
             p: &'a Program,
             args: &'a [String],
             steps: usize,
@@ -1351,6 +1354,317 @@ pub mod default_managed {
                 .map_err(|_| Fault::allocation(AllocationError::HostAllocation))
         }
 
+        #[derive(Clone, Copy)]
+        enum EntryValue {
+            Int(i64),
+            Bool(bool),
+            Unit,
+            Error(crate::SessionEntryError),
+            Site,
+        }
+        struct EntryMachine<'a> {
+            p: &'a Program,
+            steps: usize,
+            depth: usize,
+        }
+        impl EntryMachine<'_> {
+            fn step(&mut self, loc: Loc) -> Fallible<()> {
+                self.steps += 1;
+                if self.steps > STEPS {
+                    Err(primary("CGR010", "execution work budget exceeded", loc))
+                } else {
+                    Ok(())
+                }
+            }
+            fn expr(
+                &mut self,
+                id: usize,
+                env: &[HashMap<usize, EntryValue>],
+            ) -> Fallible<EntryValue> {
+                let e = self
+                    .p
+                    .expressions
+                    .get(id)
+                    .ok_or_else(|| invariant("fallback expression"))?;
+                self.step(e.loc)?;
+                match &e.op {
+                    Op::EInt(n) => Ok(EntryValue::Int(*n)),
+                    Op::EBool(b) => Ok(EntryValue::Bool(*b)),
+                    Op::EUnit => Ok(EntryValue::Unit),
+                    Op::ELocal(n) => env
+                        .iter()
+                        .rev()
+                        .find_map(|s| s.get(n).copied())
+                        .ok_or_else(|| invariant("fallback local")),
+                    Op::EBinary(a, op, b) => {
+                        let a = self.expr(*a, env)?;
+                        let b = self.expr(*b, env)?;
+                        match (a, b) {
+                            (EntryValue::Int(a), EntryValue::Int(b)) => {
+                                if *op <= 4 {
+                                    if *op == 4 && b == 0 {
+                                        return Err(primary("CGR006", "division by zero", e.loc));
+                                    }
+                                    let n = match op {
+                                        1 => a.checked_add(b),
+                                        2 => a.checked_sub(b),
+                                        3 => a.checked_mul(b),
+                                        4 => a.checked_div(b),
+                                        _ => None,
+                                    }
+                                    .ok_or_else(|| {
+                                        primary("CGR005", "i64 arithmetic overflow", e.loc)
+                                    })?;
+                                    Ok(EntryValue::Int(n))
+                                } else {
+                                    Ok(EntryValue::Bool(match op {
+                                        5 => a == b,
+                                        6 => a != b,
+                                        7 => a < b,
+                                        8 => a <= b,
+                                        9 => a > b,
+                                        10 => a >= b,
+                                        _ => return Err(invariant("fallback comparison")),
+                                    }))
+                                }
+                            }
+                            (EntryValue::Bool(a), EntryValue::Bool(b)) if matches!(op, 5 | 6) => {
+                                Ok(EntryValue::Bool(if *op == 5 { a == b } else { a != b }))
+                            }
+                            _ => Err(invariant("fallback scalar operation")),
+                        }
+                    }
+                    Op::ECall(f, args) => {
+                        let mut values = Vec::new();
+                        reserve(&mut values, args.len())?;
+                        for e in args {
+                            values.push(self.expr(*e, env)?);
+                        }
+                        self.call(*f, values)
+                    }
+                    _ => Err(invariant("resource operation before Session entry")),
+                }
+            }
+            fn call(&mut self, id: usize, arguments: Vec<EntryValue>) -> Fallible<EntryValue> {
+                let f = self
+                    .p
+                    .functions
+                    .get(id)
+                    .ok_or_else(|| invariant("fallback callee"))?;
+                if self.depth >= 64 {
+                    return Err(primary("CGR011", "call depth exceeds 64", f.loc));
+                }
+                if f.parameters.len() != arguments.len() {
+                    return Err(primary("CGR012", "function argument count mismatch", f.loc));
+                }
+                self.depth += 1;
+                let mut env = vec![f.parameters.iter().copied().zip(arguments).collect()];
+                let result = (|| {
+                    for c in &f.requires {
+                        if !matches!(self.expr(*c, &env)?, EntryValue::Bool(true)) {
+                            return Err(primary(
+                                "CGR015",
+                                "requires condition failed",
+                                self.p.expressions[*c].loc,
+                            ));
+                        }
+                    }
+                    let (value, _) = self.block(&f.body, &mut env)?;
+                    env[0].insert(f.result_name, value);
+                    for c in &f.ensures {
+                        if !matches!(self.expr(*c, &env)?, EntryValue::Bool(true)) {
+                            return Err(primary(
+                                "CGR016",
+                                "ensures condition failed",
+                                self.p.expressions[*c].loc,
+                            ));
+                        }
+                    }
+                    Ok(value)
+                })();
+                self.depth -= 1;
+                result
+            }
+            fn block(
+                &mut self,
+                body: &[Statement],
+                env: &mut Vec<HashMap<usize, EntryValue>>,
+            ) -> Fallible<(EntryValue, bool)> {
+                let mut value = EntryValue::Unit;
+                for st in body {
+                    self.step(Loc::default())?;
+                    match st {
+                        Statement::SLet(n, e) => {
+                            let v = self.expr(*e, env)?;
+                            env.last_mut()
+                                .ok_or_else(|| invariant("fallback scope"))?
+                                .insert(*n, v);
+                            value = EntryValue::Unit;
+                        }
+                        Statement::SExpr(e) => value = self.expr(*e, env)?,
+                        Statement::SReturn(e) => {
+                            return Ok((
+                                if let Some(e) = e {
+                                    self.expr(*e, env)?
+                                } else {
+                                    EntryValue::Unit
+                                },
+                                true,
+                            ))
+                        }
+                        Statement::SAssign(n, op, e) => {
+                            let mut v = self.expr(*e, env)?;
+                            let old = env
+                                .iter_mut()
+                                .rev()
+                                .find_map(|s| s.get_mut(n))
+                                .ok_or_else(|| invariant("fallback assignment"))?;
+                            if *op == 1 {
+                                let (EntryValue::Int(a), EntryValue::Int(b)) = (*old, v) else {
+                                    return Err(invariant("fallback compound scalar assignment"));
+                                };
+                                v = EntryValue::Int(a.checked_add(b).ok_or_else(|| {
+                                    primary(
+                                        "CGR005",
+                                        "i64 arithmetic overflow",
+                                        self.p.expressions[*e].loc,
+                                    )
+                                })?);
+                            } else if *op != 0 {
+                                return Err(invariant("fallback assignment operator"));
+                            }
+                            *old = v;
+                            value = EntryValue::Unit;
+                        }
+                        Statement::SRange(n, start, end, body) => {
+                            let (EntryValue::Int(start), EntryValue::Int(end)) =
+                                (self.expr(*start, env)?, self.expr(*end, env)?)
+                            else {
+                                return Err(invariant("fallback range bounds"));
+                            };
+                            for i in start..end {
+                                self.step(Loc::default())?;
+                                env.push(HashMap::from([(*n, EntryValue::Int(i))]));
+                                let branch = self.block(body, env);
+                                env.pop();
+                                let (v, returned) = branch?;
+                                if returned {
+                                    return Ok((v, true));
+                                }
+                            }
+                            value = EntryValue::Unit;
+                        }
+                        Statement::SIf(e, a, b) => {
+                            let EntryValue::Bool(condition) = self.expr(*e, env)? else {
+                                return Err(invariant("fallback condition"));
+                            };
+                            env.push(HashMap::new());
+                            let branch = self.block(if condition { a } else { b }, env);
+                            env.pop();
+                            let (v, returned) = branch?;
+                            if returned {
+                                return Ok((v, true));
+                            }
+                            value = v;
+                        }
+                        Statement::SMatch(e, arms) => {
+                            let (case, payload) = match self.expr(*e, env)? {
+                                EntryValue::Error(crate::SessionEntryError::HostAllocation {
+                                    site: crate::ReserveSiteV2::SessionRegions,
+                                }) => (0, Some(EntryValue::Site)),
+                                EntryValue::Error(
+                                    crate::SessionEntryError::IdentifierExhausted,
+                                ) => (1, None),
+                                EntryValue::Site => (0, None),
+                                _ => return Err(invariant("fallback entry error match")),
+                            };
+                            let arm = arms
+                                .iter()
+                                .find(|a| a.case.is_none_or(|c| c == case))
+                                .ok_or_else(|| invariant("fallback nonexhaustive match"))?;
+                            env.push(HashMap::new());
+                            if let (Some(n), Some(v)) = (arm.bindings.first(), payload) {
+                                env.last_mut().unwrap().insert(*n, v);
+                            }
+                            let branch = self.block(&arm.body, env);
+                            env.pop();
+                            let (v, returned) = branch?;
+                            if returned {
+                                return Ok((v, true));
+                            }
+                            value = v;
+                        }
+                        _ => {
+                            return Err(invariant(
+                                "resource or unsupported operation before Session entry",
+                            ))
+                        }
+                    }
+                }
+                Ok((value, false))
+            }
+        }
+        pub(crate) fn entry_failure(
+            memory: &crate::ordinary_memory::MemoryProgramV1,
+            error: crate::SessionEntryError,
+        ) -> Execution {
+            let p = &memory.program;
+            let result = (|| {
+                if memory.entry_policy != crate::ordinary_memory::EntryPolicyV1::Recoverable {
+                    return Err(primary(
+                        "CGR090",
+                        format!("managed session entry failed: {error:?}"),
+                        p.functions.get(p.entry).map_or(p.output_loc, |f| f.loc),
+                    ));
+                }
+                let f = p
+                    .functions
+                    .get(p.entry)
+                    .ok_or_else(|| invariant("fallback entry function"))?;
+                if !f.requires.is_empty() || !f.ensures.is_empty() || f.body.len() != 1 {
+                    return Err(invariant("fallback entry contract"));
+                }
+                let Statement::SMatch(e, arms) = &f.body[0] else {
+                    return Err(invariant("fallback entry policy"));
+                };
+                if !matches!(
+                    memory.operations.get(e),
+                    Some(crate::ordinary_memory::MemoryOpV1::SessionEntry)
+                ) {
+                    return Err(invariant("fallback entry identity"));
+                }
+                let arm = arms
+                    .iter()
+                    .find(|a| a.case == Some(1))
+                    .ok_or_else(|| invariant("missing Session error arm"))?;
+                let mut machine = EntryMachine {
+                    p,
+                    steps: 0,
+                    depth: 1,
+                };
+                let mut env = vec![HashMap::new()];
+                let binding = *arm
+                    .bindings
+                    .first()
+                    .ok_or_else(|| invariant("Session error binding"))?;
+                env[0].insert(binding, EntryValue::Error(error));
+                match machine.block(&arm.body, &mut env)?.0 {
+                    EntryValue::Int(n) => Ok(Snapshot::Integer(n)),
+                    EntryValue::Bool(b) => Ok(Snapshot::Boolean(b)),
+                    EntryValue::Unit => Ok(Snapshot::Unit),
+                    _ => Err(invariant("entry error capability escaped fallback")),
+                }
+            })();
+            Execution {
+                result: result.map_err(|e| failure(e, p.output_loc)),
+                evidence: Evidence::default(),
+                memory: MemoryReport {
+                    schema_version: 1,
+                    regions: vec![],
+                    totals: Default::default(),
+                },
+            }
+        }
         pub fn run(p: &Program, args: &[String]) -> Execution {
             match Session::try_new() {
                 Ok(s) => run_with_session(p, args, s),
@@ -1382,6 +1696,8 @@ pub mod default_managed {
         ) -> Execution {
             let baseline = session.root_census().map_or(0, |r| r.root_registrations);
             let mut m = Machine {
+                memory: None,
+                allocation_region: None,
                 p,
                 args: &[],
                 steps: 0,
@@ -1432,9 +1748,26 @@ pub mod default_managed {
                 memory: session.memory_report(),
             }
         }
-        pub fn run_with_session(p: &Program, args: &[String], mut session: Session) -> Execution {
+        pub fn run_with_session(p: &Program, args: &[String], session: Session) -> Execution {
+            run_configured(p, args, session, None)
+        }
+        pub(crate) fn run_memory_with_session(
+            memory: &crate::ordinary_memory::MemoryProgramV1,
+            args: &[String],
+            session: Session,
+        ) -> Execution {
+            run_configured(&memory.program, args, session, Some(memory))
+        }
+        fn run_configured<'a>(
+            p: &'a Program,
+            args: &[String],
+            mut session: Session,
+            memory: Option<&'a crate::ordinary_memory::MemoryProgramV1>,
+        ) -> Execution {
             let baseline = session.root_census().map_or(0, |r| r.root_registrations);
             let mut m = Machine {
+                memory,
+                allocation_region: None,
                 p,
                 args,
                 steps: 0,
@@ -1501,6 +1834,245 @@ pub mod default_managed {
             }
         }
         impl Machine<'_> {
+            fn memory_error_value(&self, ty: usize, error: AllocationError) -> Fallible<Value> {
+                let error_ty = match &self.p.layouts[ty].shape {
+                    Shape::KVariant(cases) => cases.get(1).and_then(|c| c.1.first()).copied(),
+                    _ => None,
+                }
+                .ok_or_else(|| invariant("ordinary-memory recovery layout"))?;
+                Value::new(error_ty, Atom::Error(error_code(error))).wrap(ty, 1)
+            }
+            fn memory_region(
+                &mut self,
+                id: usize,
+                env: &Env,
+                roots: &mut ScopedRoots<'_>,
+            ) -> Fallible<RegionId> {
+                match self.expr(id, env, roots)?.atom {
+                    Atom::Region(region) => Ok(region),
+                    _ => Err(invariant("expected authenticated region capability")),
+                }
+            }
+            fn memory_expr(
+                &mut self,
+                e: &Expression,
+                operation: &crate::ordinary_memory::MemoryOpV1,
+                env: &Env,
+                roots: &mut ScopedRoots<'_>,
+            ) -> Fallible<Value> {
+                use crate::ordinary_memory::MemoryOpV1 as M;
+                match operation {
+                    M::DefaultRegion => Ok(Value::new(e.ty, Atom::Region(roots.default_region()))),
+                    M::TryIn { region, value } => {
+                        let region = self.memory_region(*region, env, roots)?;
+                        let previous = self.allocation_region.replace(region);
+                        let result = self.expr(*value, env, roots);
+                        self.allocation_region = previous;
+                        match result {
+                            Ok(v) => {
+                                if v.handle().is_some_and(|h| h.region() != region) {
+                                    return Err(invariant(
+                                        "allocation result has a different region",
+                                    ));
+                                }
+                                v.wrap(e.ty, 0)
+                            }
+                            Err(Fault::AllocationAt(error, _, _)) => {
+                                self.evidence.recovered += 1;
+                                self.memory_error_value(e.ty, error)
+                            }
+                            Err(error) => Err(error),
+                        }
+                    }
+                    M::CopyTo { region, value } => {
+                        let destination = self.memory_region(*region, env, roots)?;
+                        let value = self.expr(*value, env, roots)?;
+                        let copied = if let Some(handle) = value.handle() {
+                            roots.copy_graph_to_v1(destination, handle).map(|h| Value {
+                                atom: Atom::Heap(h),
+                                ..value
+                            })
+                        } else {
+                            Ok(value)
+                        };
+                        match copied {
+                            Ok(value) => value.wrap(e.ty, 0),
+                            Err(GraphError::Memory(MemoryError::Allocation(error))) => {
+                                self.memory_error_value(e.ty, error)
+                            }
+                            Err(GraphError::ShapeLimit) => {
+                                self.memory_error_value(e.ty, AllocationError::ShapeLimit)
+                            }
+                            Err(error) => Err(error.into()),
+                        }
+                    }
+                    M::Collect { region } => {
+                        let region = self.memory_region(*region, env, roots)?;
+                        roots.collect(region)?;
+                        Ok(self.unit())
+                    }
+                    _ => Err(invariant("scoped entry must be a direct exhaustive match")),
+                }
+            }
+            fn memory_arm(
+                &mut self,
+                case: usize,
+                payload: Value,
+                arms: &[Arm],
+                env: &mut Env,
+                roots: &mut ScopedRoots<'_>,
+            ) -> Fallible<(Value, bool)> {
+                let arm = arms.iter().find(|a| a.case == Some(case)).ok_or_else(|| {
+                    invariant("ordinary-memory entry requires exhaustive Result arms")
+                })?;
+                if arm.bindings.len() != 1 {
+                    return Err(invariant("entry payload binding count"));
+                }
+                env.0.push(HashMap::new());
+                let result = (|| {
+                    root(roots, payload, &mut self.evidence)?;
+                    self.bind(env, roots, arm.bindings[0], payload)?;
+                    self.block(&arm.body, env, roots, false)
+                })();
+                let popped = env.pop(roots, &mut self.evidence);
+                match result {
+                    Err(e) => Err(e),
+                    Ok(value) => {
+                        popped?;
+                        Ok(value)
+                    }
+                }
+            }
+            fn memory_match(
+                &mut self,
+                expression: usize,
+                operation: &crate::ordinary_memory::MemoryOpV1,
+                arms: &[Arm],
+                env: &mut Env,
+                roots: &mut ScopedRoots<'_>,
+            ) -> Fallible<(Value, bool)> {
+                use crate::ordinary_memory::MemoryOpV1 as M;
+                let e = &self.p.expressions[expression];
+                let (ok_ty, err_ty) = match &self.p.layouts[e.ty].shape {
+                    Shape::KVariant(cases)
+                        if cases.len() == 2 && cases.iter().all(|c| c.1.len() == 1) =>
+                    {
+                        (cases[0].1[0], cases[1].1[0])
+                    }
+                    _ => return Err(invariant("scoped entry Result layout")),
+                };
+                let failure = |error| Value::new(err_ty, Atom::Error(error_code(error)));
+                match operation {
+                    M::SessionEntry => self.memory_arm(0, self.unit(), arms, env, roots),
+                    M::GuardEntry { budget } => {
+                        let budget = integer(self.expr(*budget, env, roots)?)?;
+                        let Ok(budget) = usize::try_from(budget) else {
+                            return self.memory_arm(
+                                1,
+                                failure(AllocationError::ShapeLimit),
+                                arms,
+                                env,
+                                roots,
+                            );
+                        };
+                        let result = roots.with_no_gc(budget, |guard| {
+                            self.evidence.guard_entries += 1;
+                            let result = self.memory_arm(0, self.unit(), arms, env, guard);
+                            self.evidence.guard_exits += 1;
+                            result
+                        });
+                        match result {
+                            Ok(result) => result,
+                            Err(error) => {
+                                self.evidence.guard_entry_failures += 1;
+                                self.memory_arm(1, failure(error), arms, env, roots)
+                            }
+                        }
+                    }
+                    M::RegionEntry {
+                        manual,
+                        arguments,
+                        limit,
+                        trigger,
+                    } => {
+                        let mut values = Vec::new();
+                        reserve(&mut values, arguments.len())?;
+                        for id in arguments {
+                            values.push(integer(self.expr(*id, env, roots)?)?);
+                        }
+                        let limit = values
+                            .get(*limit)
+                            .copied()
+                            .and_then(|v| usize::try_from(v).ok());
+                        let trigger = trigger.map_or(Some(1 << 20), |i| {
+                            values
+                                .get(i)
+                                .copied()
+                                .and_then(|v| usize::try_from(v).ok())
+                                .filter(|n| *n > 0)
+                        });
+                        let result = match (limit, trigger) {
+                            (Some(limit), Some(trigger)) => roots.create_region(
+                                if *manual {
+                                    crate::CollectionMode::Manual
+                                } else {
+                                    crate::CollectionMode::Auto {
+                                        trigger_bytes: trigger,
+                                    }
+                                },
+                                limit,
+                            ),
+                            _ => Err(AllocationError::ShapeLimit),
+                        };
+                        match result {
+                            Err(error) => self.memory_arm(1, failure(error), arms, env, roots),
+                            Ok(region) => {
+                                let result = {
+                                    let mut dependent = roots.scoped_roots();
+                                    let result = self.memory_arm(
+                                        0,
+                                        Value::new(ok_ty, Atom::Region(region)),
+                                        arms,
+                                        env,
+                                        &mut dependent,
+                                    );
+                                    let report = dependent.cleanup();
+                                    cleanup(&mut self.evidence, report);
+                                    result
+                                };
+                                // No allocation or safepoint between releasing inner
+                                // registrations and preserving a surviving outer result.
+                                let result = result.and_then(|(v, returned)| {
+                                    if v.handle().is_some_and(|h| h.region() == region)
+                                        || matches!(v.atom, Atom::Region(r) if r == region)
+                                    {
+                                        return Err(invariant(
+                                            "named region result escaped its scope",
+                                        ));
+                                    }
+                                    root(roots, v, &mut self.evidence)?;
+                                    Ok((v, returned))
+                                });
+                                let closed = roots.close_region(region);
+                                match result {
+                                    Err(error) => {
+                                        if closed.is_err() {
+                                            self.evidence.cleanup_failures += 1;
+                                        }
+                                        Err(error)
+                                    }
+                                    Ok(value) => {
+                                        closed?;
+                                        Ok(value)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    _ => Err(invariant("invalid scoped ordinary-memory entry")),
+                }
+            }
+
             fn validate(&self) -> Fallible<()> {
                 if self.p.schema_version != 1
                     || (self.p.entry >= self.p.functions.len() && self.p.entry != usize::MAX)
@@ -1584,6 +2156,17 @@ pub mod default_managed {
                 release(roots, old, &mut self.evidence)
             }
             fn call(&mut self, id: usize, args: Vec<Value>, s: &mut Session) -> Fallible<Value> {
+                let previous = self.allocation_region.take();
+                let result = self.call_in_default_context(id, args, s);
+                self.allocation_region = previous;
+                result
+            }
+            fn call_in_default_context(
+                &mut self,
+                id: usize,
+                args: Vec<Value>,
+                s: &mut Session,
+            ) -> Fallible<Value> {
                 let f = self
                     .p
                     .functions
@@ -1702,6 +2285,24 @@ pub mod default_managed {
                                 release(roots, v, &mut self.evidence)?;
                             }
                             Statement::SMatch(e, arms) => {
+                                if let Some(operation) =
+                                    self.memory.and_then(|m| m.operations.get(e)).cloned()
+                                {
+                                    if matches!(
+                                        operation,
+                                        crate::ordinary_memory::MemoryOpV1::RegionEntry { .. }
+                                            | crate::ordinary_memory::MemoryOpV1::GuardEntry { .. }
+                                            | crate::ordinary_memory::MemoryOpV1::SessionEntry
+                                    ) {
+                                        let (value, returned) =
+                                            self.memory_match(*e, &operation, arms, env, roots)?;
+                                        if returned {
+                                            return Ok((value, true));
+                                        }
+                                        tail = value;
+                                        continue;
+                                    }
+                                }
                                 let v = self.expr(*e, env, roots)?;
                                 let (case, children) = self.parts(v, roots)?;
                                 let arm = arms
@@ -1827,7 +2428,13 @@ pub mod default_managed {
                     .ok_or_else(|| invariant("expression index"))?;
                 self.step(e.loc)?;
                 let checkpoint = roots.checkpoint();
-                let mut result = self.expr_inner(e, env, roots).and_then(|v| {
+                let operation = self.memory.and_then(|m| m.operations.get(&id)).cloned();
+                let evaluated = if let Some(operation) = operation {
+                    self.memory_expr(e, &operation, env, roots)
+                } else {
+                    self.expr_inner(e, env, roots)
+                };
+                let mut result = evaluated.and_then(|v| {
                     if let Some(h) = v.handle() {
                         if !roots.contains_since(checkpoint, h) {
                             root(roots, v, &mut self.evidence)?;
@@ -1936,7 +2543,17 @@ pub mod default_managed {
                             e.loc
                         };
                         let args = self.children(args, env, roots)?;
-                        self.data(*op, e.ty, args, roots, loc)
+                        let previous = self.allocation_region;
+                        if (1..=9).contains(op) {
+                            if let Some(region) =
+                                args.first().and_then(|v| v.handle()).map(|h| h.region())
+                            {
+                                self.allocation_region = Some(region);
+                            }
+                        }
+                        let result = self.data(*op, e.ty, args, roots, loc);
+                        self.allocation_region = previous;
+                        result
                     }
                     Op::ETry(inner) => {
                         let result = self.child(*inner, env, roots);
@@ -1994,7 +2611,9 @@ pub mod default_managed {
                         Ok(self.unit())
                     }
                     Op::ECollect => {
-                        let region = roots.default_region();
+                        let region = self
+                            .allocation_region
+                            .unwrap_or_else(|| roots.default_region());
                         roots.collect(region)?;
                         Ok(self.unit())
                     }
@@ -2034,6 +2653,9 @@ pub mod default_managed {
                         }
                         Atom::Unit => bytes.push(2),
                         Atom::Heap(_) => bytes.push(3),
+                        Atom::Region(_) => {
+                            return Err(invariant("region capability stored in a graph"))
+                        }
                         Atom::Error(n) => {
                             bytes.push(4);
                             bytes.push(n);
@@ -2102,7 +2724,11 @@ pub mod default_managed {
                 }
                 self.work(count.saturating_sub(1), Loc::default())?;
                 let (bytes, refs) = self.encode(ty, case, values)?;
-                let h = s.alloc_graph(s.default_region(), &bytes, &refs)?;
+                let h = s.alloc_graph(
+                    self.allocation_region.unwrap_or_else(|| s.default_region()),
+                    &bytes,
+                    &refs,
+                )?;
                 self.evidence.allocations += 1;
                 self.evidence.graph_writes += 1;
                 Ok(Value::new(ty, Atom::Heap(h)))
@@ -2111,7 +2737,11 @@ pub mod default_managed {
                 if text.len() > BYTES {
                     return Err(Fault::allocation(AllocationError::ShapeLimit));
                 }
-                let h = s.alloc_graph(s.default_region(), text.as_bytes(), &[])?;
+                let h = s.alloc_graph(
+                    self.allocation_region.unwrap_or_else(|| s.default_region()),
+                    text.as_bytes(),
+                    &[],
+                )?;
                 self.evidence.allocations += 1;
                 self.evidence.graph_writes += 1;
                 Ok(Value::new(ty, Atom::Heap(h)))
@@ -2348,6 +2978,7 @@ pub mod default_managed {
                         Ok(Snapshot::Boolean(b))
                     }
                     Atom::Unit => Ok(Snapshot::Unit),
+                    Atom::Region(_) => Err(invariant("region capability escaped in a snapshot")),
                     Atom::Error(c) => {
                         display_charge(bytes, 23 + ERRORS[c as usize].len() + 3)?;
                         Ok(Snapshot::Variant(
@@ -2728,4 +3359,498 @@ pub mod default_managed {
     pub use engine::{
         run, run_function_borrowed, run_with_session, Evidence, Execution, Failure, Snapshot,
     };
+}
+
+/// Versioned transactional graph transfers for the ordinary-memory producer.
+/// Kept in graph.rs so the frozen standalone runtime inventory stays complete.
+pub mod ordinary_memory {
+    use super::default_managed::model::Program;
+    use super::GraphError;
+    use crate::{
+        AllocationError, Handle, MemoryError, OwnedBytes, RegionId, ReserveSite, ScopedRoots,
+        Session,
+    };
+    use std::collections::{BTreeMap, HashMap};
+    use std::mem::size_of;
+
+    #[derive(Clone, Debug, PartialEq, Eq)]
+    pub enum MemoryOpV1 {
+        DefaultRegion,
+        TryIn {
+            region: usize,
+            value: usize,
+        },
+        CopyTo {
+            region: usize,
+            value: usize,
+        },
+        Collect {
+            region: usize,
+        },
+        RegionEntry {
+            manual: bool,
+            arguments: Vec<usize>,
+            limit: usize,
+            trigger: Option<usize>,
+        },
+        GuardEntry {
+            budget: usize,
+        },
+        SessionEntry,
+    }
+    #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+    pub enum EntryPolicyV1 {
+        #[default]
+        Implicit,
+        Recoverable,
+    }
+    #[derive(Clone, Debug, PartialEq, Eq)]
+    pub struct MemoryProgramV1 {
+        pub program: Program,
+        pub operations: BTreeMap<usize, MemoryOpV1>,
+        pub entry_policy: EntryPolicyV1,
+    }
+    #[derive(Clone, Debug)]
+    pub struct ExecutionV1 {
+        pub result: Result<super::default_managed::Snapshot, super::default_managed::Failure>,
+        pub evidence: Option<super::default_managed::Evidence>,
+        pub memory: Option<crate::MemoryReport>,
+    }
+    fn entered(execution: super::default_managed::Execution) -> ExecutionV1 {
+        ExecutionV1 {
+            result: execution.result,
+            evidence: Some(execution.evidence),
+            memory: Some(execution.memory),
+        }
+    }
+    pub fn run(program: &MemoryProgramV1, args: &[String]) -> ExecutionV1 {
+        match Session::try_new() {
+            Ok(session) => run_with_session(program, args, session),
+            Err(error) => run_with_entry_error_v1(program, error),
+        }
+    }
+    pub fn run_with_session(
+        program: &MemoryProgramV1,
+        args: &[String],
+        session: Session,
+    ) -> ExecutionV1 {
+        entered(super::default_managed::engine::run_memory_with_session(
+            program, args, session,
+        ))
+    }
+    /// Direct pre-Session control for conformance, including identifier exhaustion.
+    pub fn run_with_entry_error_v1(
+        program: &MemoryProgramV1,
+        error: crate::SessionEntryError,
+    ) -> ExecutionV1 {
+        let execution = super::default_managed::engine::entry_failure(program, error);
+        ExecutionV1 {
+            result: execution.result,
+            evidence: None,
+            memory: None,
+        }
+    }
+    #[cfg(feature = "fault-injection")]
+    pub fn run_with_host_failure_v1(
+        program: &MemoryProgramV1,
+        args: &[String],
+        index: usize,
+    ) -> ExecutionV1 {
+        match Session::try_new_with_host_failure_at_reserve(index) {
+            Ok(session) => run_with_session(program, args, session),
+            Err(error) => run_with_entry_error_v1(program, error),
+        }
+    }
+
+    const NODES: usize = 65_537;
+    const BYTES: usize = 64 << 20;
+    const NONE: u32 = u32::MAX;
+
+    /// An independent, accounted graph image. No managed handles or host
+    /// pointers are encoded. Only the runtime can construct a valid image.
+    #[derive(Debug)]
+    pub struct OwnedGraphV1 {
+        storage: OwnedBytes,
+        nodes: usize,
+    }
+    impl OwnedGraphV1 {
+        pub fn node_count(&self) -> usize {
+            self.nodes
+        }
+        pub fn encoded_bytes(&self) -> &[u8] {
+            self.storage.as_slice()
+        }
+        /// Evidence identity; moves and failed promotions preserve this value.
+        pub fn identity_v1(&self) -> usize {
+            self.storage.as_slice().as_ptr() as usize
+        }
+    }
+    #[derive(Debug)]
+    pub struct PromotionFailureV1 {
+        pub error: AllocationError,
+        pub owner: OwnedGraphV1,
+    }
+    #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+    pub struct MemoryEvidenceV1 {
+        pub copied_graphs: usize,
+        pub promoted_graphs: usize,
+        pub failed_promotions: usize,
+        pub rolled_back_nodes: usize,
+    }
+
+    fn allocation(error: AllocationError) -> GraphError {
+        error.into()
+    }
+    fn transfer_error(error: GraphError) -> AllocationError {
+        match error {
+            GraphError::Memory(MemoryError::Allocation(e)) => e,
+            GraphError::ShapeLimit => AllocationError::ShapeLimit,
+            _ => AllocationError::InvalidRegion,
+        }
+    }
+    /// Allocate replacement metadata before commitment and charge its entire
+    /// capacity, including overlap with the old table. This is temporary
+    /// traversal metadata; authoritative graph payloads remain OwnedBytes or
+    /// actual Session objects.
+    fn reserve<T>(s: &mut Session, v: &mut Vec<T>, needed: usize) -> Result<(), GraphError> {
+        if needed <= v.capacity() {
+            return Ok(());
+        }
+        let bytes = needed
+            .checked_mul(size_of::<T>())
+            .ok_or(GraphError::ShapeLimit)?;
+        s.check_budgets(bytes)?;
+        s.fault
+            .before_reserve(ReserveSite::ObjectReferences)
+            .map_err(|_| allocation(AllocationError::HostAllocation))?;
+        let mut replacement = Vec::new();
+        replacement
+            .try_reserve_exact(needed)
+            .map_err(|_| allocation(AllocationError::HostAllocation))?;
+        let charge = replacement
+            .capacity()
+            .checked_mul(size_of::<T>())
+            .ok_or(GraphError::ShapeLimit)?;
+        s.check_budgets(charge)?;
+        s.charge_budgets(charge);
+        replacement.append(v);
+        *v = replacement;
+        Ok(())
+    }
+    fn add_handle(
+        s: &mut Session,
+        nodes: &mut Vec<Handle>,
+        indices: &mut HashMap<Handle, u32>,
+        h: Handle,
+    ) -> Result<(), GraphError> {
+        if indices.contains_key(&h) {
+            return Ok(());
+        }
+        if nodes.len() >= NODES {
+            return Err(GraphError::ShapeLimit);
+        }
+        let needed = nodes.len() + 1;
+        reserve(s, nodes, needed.next_power_of_two().min(NODES))?;
+        if needed > indices.capacity() {
+            // Logical hash-table metadata includes a control byte per bucket;
+            // allocator internals/RSS are outside the runtime byte contract.
+            let count = needed.next_power_of_two().min(NODES);
+            let unit = size_of::<(Handle, u32)>() + 1;
+            s.check_budgets(count.checked_mul(unit).ok_or(GraphError::ShapeLimit)?)?;
+            s.fault
+                .before_reserve(ReserveSite::ObjectReferences)
+                .map_err(|_| allocation(AllocationError::HostAllocation))?;
+            let mut replacement = HashMap::new();
+            replacement
+                .try_reserve(count)
+                .map_err(|_| allocation(AllocationError::HostAllocation))?;
+            let charge = replacement
+                .capacity()
+                .checked_mul(unit)
+                .ok_or(GraphError::ShapeLimit)?;
+            s.check_budgets(charge)?;
+            s.charge_budgets(charge);
+            replacement.extend(indices.drain());
+            *indices = replacement;
+        }
+        indices.insert(h, nodes.len() as u32);
+        nodes.push(h);
+        Ok(())
+    }
+    fn put(out: &mut [u8], at: &mut usize, n: u32) {
+        out[*at..*at + 4].copy_from_slice(&n.to_le_bytes());
+        *at += 4;
+    }
+    fn get(input: &[u8], at: &mut usize) -> Result<u32, GraphError> {
+        let end = at.checked_add(4).ok_or(GraphError::ShapeLimit)?;
+        let n = u32::from_le_bytes(
+            input
+                .get(*at..end)
+                .ok_or(GraphError::ShapeLimit)?
+                .try_into()
+                .map_err(|_| GraphError::ShapeLimit)?,
+        );
+        *at = end;
+        Ok(n)
+    }
+    fn index(indices: &HashMap<Handle, u32>, h: Option<Handle>) -> Result<u32, GraphError> {
+        h.map_or(Ok(NONE), |h| {
+            indices.get(&h).copied().ok_or(GraphError::ShapeLimit)
+        })
+    }
+    struct Node<'a> {
+        bytes: &'a [u8],
+        refs: Option<&'a [u8]>,
+        edges: &'a [u8],
+    }
+    fn take<'a>(input: &'a [u8], at: &mut usize, n: usize) -> Result<&'a [u8], GraphError> {
+        let end = at.checked_add(n).ok_or(GraphError::ShapeLimit)?;
+        let part = input.get(*at..end).ok_or(GraphError::ShapeLimit)?;
+        *at = end;
+        Ok(part)
+    }
+    fn node<'a>(input: &'a [u8], at: &mut usize) -> Result<Node<'a>, GraphError> {
+        let bytes = get(input, at)? as usize;
+        let refs = get(input, at)?;
+        let edges = get(input, at)? as usize;
+        let bytes = take(input, at, bytes)?;
+        let refs = if refs == NONE {
+            None
+        } else {
+            Some(take(
+                input,
+                at,
+                (refs as usize)
+                    .checked_mul(4)
+                    .ok_or(GraphError::ShapeLimit)?,
+            )?)
+        };
+        let edges = take(
+            input,
+            at,
+            edges.checked_mul(4).ok_or(GraphError::ShapeLimit)?,
+        )?;
+        Ok(Node { bytes, refs, edges })
+    }
+    fn target(input: &[u8], handles: &[Handle]) -> Result<Option<Handle>, GraphError> {
+        let n = u32::from_le_bytes(input.try_into().map_err(|_| GraphError::ShapeLimit)?);
+        if n == NONE {
+            Ok(None)
+        } else {
+            handles
+                .get(n as usize)
+                .copied()
+                .map(Some)
+                .ok_or(GraphError::ShapeLimit)
+        }
+    }
+    struct Prepared {
+        handles: Vec<Handle>,
+    }
+    impl Session {
+        fn object_v1(&self, handle: Handle) -> Result<&crate::heap::Object, MemoryError> {
+            self.read_bytes(handle)?;
+            self.region(handle.region())?.slots[handle.slot]
+                .object
+                .as_ref()
+                .ok_or(MemoryError::InvalidHandle)
+        }
+        fn graph_image_v1(&mut self, source: Handle) -> Result<OwnedGraphV1, GraphError> {
+            self.read_bytes(source)?;
+            let mut nodes = Vec::new();
+            let mut indices = HashMap::new();
+            add_handle(self, &mut nodes, &mut indices, source)?;
+            let mut cursor = 0;
+            let mut length = 0usize;
+            let mut work = 0usize;
+            while cursor < nodes.len() {
+                let h = nodes[cursor];
+                let object = self.object_v1(h)?;
+                let references = object.references.as_ref().map_or(0, Vec::len);
+                length = length
+                    .checked_add(12)
+                    .and_then(|n| n.checked_add(object.bytes.len()))
+                    .and_then(|n| n.checked_add(references.checked_mul(4)?))
+                    .and_then(|n| n.checked_add(object.edges.len().checked_mul(4)?))
+                    .filter(|n| *n <= BYTES)
+                    .ok_or(GraphError::ShapeLimit)?;
+                let children = references + object.edges.len();
+                for child in 0..children {
+                    let object = self.object_v1(h)?;
+                    let next = if child < references {
+                        object.references.as_ref().and_then(|r| r[child])
+                    } else {
+                        Some(object.edges[child - references])
+                    };
+                    work = work
+                        .checked_add(1)
+                        .filter(|n| *n <= 1_000_000)
+                        .ok_or(GraphError::ShapeLimit)?;
+                    if let Some(next) = next {
+                        if next.region() != source.region() {
+                            return Err(MemoryError::CrossRegionEdge.into());
+                        }
+                        self.read_bytes(next)?;
+                        add_handle(self, &mut nodes, &mut indices, next)?;
+                    }
+                }
+                cursor += 1;
+            }
+            let mut storage = self.alloc_owned_bytes(length)?;
+            let out = storage.as_mut_slice();
+            let mut at = 0;
+            for h in &nodes {
+                let object = self.object_v1(*h)?;
+                put(out, &mut at, object.bytes.len() as u32);
+                put(
+                    out,
+                    &mut at,
+                    object.references.as_ref().map_or(NONE, |r| r.len() as u32),
+                );
+                put(out, &mut at, object.edges.len() as u32);
+                out[at..at + object.bytes.len()].copy_from_slice(&object.bytes);
+                at += object.bytes.len();
+                if let Some(refs) = &object.references {
+                    for h in refs {
+                        put(out, &mut at, index(&indices, *h)?);
+                    }
+                }
+                for h in &object.edges {
+                    put(out, &mut at, index(&indices, Some(*h))?);
+                }
+            }
+            Ok(OwnedGraphV1 {
+                storage,
+                nodes: nodes.len(),
+            })
+        }
+        fn discard_prepared_v1(&mut self, handles: &[Handle]) {
+            // No reserve, collection or refund. Reverse order also handles a
+            // partially linked cycle because every staged handle is private.
+            for h in handles.iter().rev() {
+                if let Ok(region) = self.region_mut(h.region()) {
+                    if let Some(slot) = region.slots.get_mut(h.slot) {
+                        if slot.generation == h.generation {
+                            if let Some(object) = slot.object.take() {
+                                debug_assert_eq!(object.roots, 0);
+                                region.stats.live_bytes -= object.charge;
+                                region.stats.committed_bytes -= object.charge;
+                                slot.generation = slot.generation.saturating_add(1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        fn prepare_graph_v1(
+            &mut self,
+            destination: RegionId,
+            image: &OwnedGraphV1,
+        ) -> Result<Prepared, GraphError> {
+            self.mode(destination)?;
+            let mut handles = Vec::new();
+            reserve(self, &mut handles, image.nodes)?;
+            let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                let mut roots = self.scoped_roots();
+                let mut at = 0;
+                for _ in 0..image.nodes {
+                    let n = node(image.encoded_bytes(), &mut at)?;
+                    let h = if let Some(refs) = n.refs {
+                        roots.alloc_object(destination, n.bytes.len(), refs.len() / 4)?
+                    } else {
+                        roots.alloc_bytes(destination, n.bytes.len())?
+                    };
+                    handles.push(h); // before the fallible publication reserve
+                    roots.root(h)?;
+                    roots.write_bytes(h, 0, n.bytes).map_err(|e| match e {
+                        super::PayloadError::Memory(e) => GraphError::Memory(e),
+                        _ => GraphError::ShapeLimit,
+                    })?;
+                }
+                if at != image.encoded_bytes().len() {
+                    return Err(GraphError::ShapeLimit);
+                }
+                at = 0;
+                for h in &handles {
+                    let n = node(image.encoded_bytes(), &mut at)?;
+                    if let Some(refs) = n.refs {
+                        for (i, r) in refs.as_chunks::<4>().0.iter().enumerate() {
+                            roots.set_reference(*h, i, target(r, &handles)?)?;
+                        }
+                    }
+                    for edge in n.edges.as_chunks::<4>().0 {
+                        roots.link(*h, target(edge, &handles)?.ok_or(GraphError::ShapeLimit)?)?;
+                    }
+                }
+                Ok(())
+            }));
+            match result {
+                Ok(Ok(())) => Ok(Prepared { handles }),
+                Ok(Err(error)) => {
+                    self.discard_prepared_v1(&handles);
+                    Err(error)
+                }
+                Err(panic) => {
+                    self.discard_prepared_v1(&handles);
+                    std::panic::resume_unwind(panic)
+                }
+            }
+        }
+    }
+    impl ScopedRoots<'_> {
+        /// Independent graph snapshot. Source remains rooted at every safepoint.
+        /// The source producer additionally rejects Ref-bearing owned topology.
+        pub fn copy_owned_graph_v1(&mut self, source: Handle) -> Result<OwnedGraphV1, GraphError> {
+            let checkpoint = self.checkpoint();
+            self.root(source)?;
+            let result = self.graph_image_v1(source);
+            let cleanup = self.finish_since(checkpoint, None);
+            match (result, cleanup.first_error) {
+                (Err(e), _) => Err(e),
+                (Ok(_), Some(e)) => Err(e.into()),
+                (Ok(value), None) => Ok(value),
+            }
+        }
+        fn publish_graph_v1(
+            &mut self,
+            destination: RegionId,
+            image: &OwnedGraphV1,
+        ) -> Result<Handle, GraphError> {
+            // Reserve before preparing payload, so root publication cannot
+            // allocate after source ownership is irreversibly consumed.
+            self.reserve_root_slots_v1(1)?;
+            let prepared = self.prepare_graph_v1(destination, image)?;
+            let root = prepared.handles[0];
+            if let Err(error) = self.root(root) {
+                self.discard_prepared_v1(&prepared.handles);
+                return Err(error.into());
+            }
+            Ok(root)
+        }
+        /// Deep copy preserving raw graph aliases, cycles and checked edges.
+        /// The returned root belongs to this lexical scope.
+        pub fn copy_graph_to_v1(
+            &mut self,
+            destination: RegionId,
+            source: Handle,
+        ) -> Result<Handle, GraphError> {
+            let image = self.copy_owned_graph_v1(source)?;
+            self.publish_graph_v1(destination, &image)
+        }
+        /// Failure returns the single original owner, including failures in
+        /// root-table reservation after earlier graph preparation/charges.
+        pub fn promote_graph_v1(
+            &mut self,
+            destination: RegionId,
+            owner: OwnedGraphV1,
+        ) -> Result<Handle, PromotionFailureV1> {
+            match self.publish_graph_v1(destination, &owner) {
+                Ok(handle) => Ok(handle),
+                Err(error) => Err(PromotionFailureV1 {
+                    error: transfer_error(error),
+                    owner,
+                }),
+            }
+        }
+    }
 }

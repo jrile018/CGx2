@@ -18,6 +18,8 @@ use budget::Budget;
 pub use budget::NoGcGuard;
 use fault::FaultInjection;
 pub use fault::{ReserveSite, ReserveSiteV2};
+/// Additive ordinary-memory graph and transfer APIs.
+pub use graph::ordinary_memory;
 pub use graph::{
     GraphError, GraphShape, PayloadError, MAX_GRAPH_PAYLOAD_BYTES, MAX_GRAPH_REFERENCES,
 };

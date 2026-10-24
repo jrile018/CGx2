@@ -1,6 +1,9 @@
 //! Candidate admission marker; checked resolution remains in sema.
 use crate::{ExprKind, Module, Span, StmtKind, TypeSyntax};
 pub fn managed_feature_span(module: &Module) -> Option<Span> {
+    if let Some(span) = crate::ordinary_memory_span(module) {
+        return Some(span);
+    }
     fn ty(t: &TypeSyntax) -> Option<Span> {
         if matches!(
             t.path.segments.join(".").as_str(),

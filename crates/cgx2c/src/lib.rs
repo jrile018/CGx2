@@ -148,7 +148,23 @@ pub fn run(args: Vec<OsString>) -> Result<(), CliError> {
             d.span.end,
         )
     })?;
-    let hybrid = if cgx2_sema::default_managed::hybrid::is_hybrid(&module) {
+    let memory = if cgx2_sema::ordinary_memory::profile(&module) {
+        Some(
+            cgx2_sema::ordinary_memory::compile_source(&source).map_err(|ds| {
+                let d = &ds[0];
+                source_error(
+                    &options.source,
+                    d.code,
+                    &d.message,
+                    d.span.start,
+                    d.span.end,
+                )
+            })?,
+        )
+    } else {
+        None
+    };
+    let hybrid = if memory.is_none() && cgx2_sema::default_managed::hybrid::is_hybrid(&module) {
         Some(
             cgx2_sema::default_managed::hybrid::compile_source(&source).map_err(|ds| {
                 let d = &ds[0];
@@ -164,27 +180,29 @@ pub fn run(args: Vec<OsString>) -> Result<(), CliError> {
     } else {
         None
     };
-    let managed = if hybrid.is_none() && cgx2_sema::default_managed::profile(&module) {
-        Some(
-            cgx2_sema::default_managed::compile_source(&source).map_err(|ds| {
-                let d = &ds[0];
-                source_error(
-                    &options.source,
-                    if d.code == "CGRS003" && options.mode == Mode::EmitPython {
-                        "CGE003"
-                    } else {
-                        d.code
-                    },
-                    &d.message,
-                    d.span.start,
-                    d.span.end,
-                )
-            })?,
-        )
-    } else {
-        None
-    };
-    let ordinary = if hybrid.is_none()
+    let managed =
+        if memory.is_none() && hybrid.is_none() && cgx2_sema::default_managed::profile(&module) {
+            Some(
+                cgx2_sema::default_managed::compile_source(&source).map_err(|ds| {
+                    let d = &ds[0];
+                    source_error(
+                        &options.source,
+                        if d.code == "CGRS003" && options.mode == Mode::EmitPython {
+                            "CGE003"
+                        } else {
+                            d.code
+                        },
+                        &d.message,
+                        d.span.start,
+                        d.span.end,
+                    )
+                })?,
+            )
+        } else {
+            None
+        };
+    let ordinary = if memory.is_none()
+        && hybrid.is_none()
         && managed.is_none()
         && cgx2_syntax::ordinary_owned_span(&module).is_some()
     {
@@ -203,7 +221,7 @@ pub fn run(args: Vec<OsString>) -> Result<(), CliError> {
     } else {
         None
     };
-    let checked = if ordinary.is_none() && hybrid.is_none() {
+    let checked = if memory.is_none() && ordinary.is_none() && hybrid.is_none() {
         Some(check_module(&module).map_err(|errors| {
             let d = &errors[0];
             source_error(
@@ -217,15 +235,38 @@ pub fn run(args: Vec<OsString>) -> Result<(), CliError> {
     } else {
         None
     };
-    let needs_runtime =
-        hybrid.is_some() || managed.is_some() || ordinary.is_some() || is_memory_script(&module);
+    let needs_runtime = memory.is_some()
+        || hybrid.is_some()
+        || managed.is_some()
+        || ordinary.is_some()
+        || is_memory_script(&module);
     if options.test_fail_reserve.is_some() && !needs_runtime {
         return Err(CliError::new(
             "CGXC001",
             "--test-fail-reserve requires a memory script",
         ));
     }
-    let generated = if let Some(program) = &hybrid {
+    let generated = if let Some(program) = &memory {
+        if options.mode == Mode::EmitPython {
+            return Err(source_error(
+                &options.source,
+                "CGE006",
+                "Python does not support ordinary memory ownership, regions or entry recovery",
+                module.span.start,
+                module.span.end,
+            ));
+        }
+        cgx2_emit_rust::emit_memory_rust(program).map_err(|ds| {
+            let d = &ds[0];
+            source_error(
+                &options.source,
+                d.code,
+                &d.message,
+                d.span.start,
+                d.span.end,
+            )
+        })?
+    } else if let Some(program) = &hybrid {
         if options.mode == Mode::EmitPython {
             return Err(source_error(
                 &options.source,
@@ -435,6 +476,11 @@ fn package_path(root: &Path, file: &Path) -> PathBuf {
 }
 
 fn run_package(options: &Options) -> Result<(), CliError> {
+    if let Some(package) = cgx2_package::try_load_checked_memory_package_v1(&options.source)
+        .map_err(|e| package_error(&options.source, e))?
+    {
+        return run_memory_package(options, &package);
+    }
     let package =
         load_checked_package(&options.source).map_err(|e| package_error(&options.source, e))?;
     validate_package_output(options, &package)?;
@@ -521,11 +567,94 @@ fn run_package(options: &Options) -> Result<(), CliError> {
     Ok(())
 }
 
-fn validate_package_output(options: &Options, package: &CheckedPackage) -> Result<(), CliError> {
-    let Ok(info) = fs::metadata(&options.output) else {
-        return Ok(());
+fn run_memory_package(
+    options: &Options,
+    package: &cgx2_package::CheckedMemoryPackageV1,
+) -> Result<(), CliError> {
+    validate_package_paths(options, package.input_paths())?;
+    if options.mode == Mode::EmitPython {
+        return Err(source_error(
+            package.entry(),
+            "CGE006",
+            "Python target rejects ordinary memory semantics",
+            0,
+            0,
+        ));
+    }
+    let program = package
+        .memory_program_v1()
+        .map_err(|e| package_error(&options.source, e))?;
+    let generated = cgx2_emit_rust::emit_memory_rust(&program).map_err(|ds| {
+        let d = &ds[0];
+        source_error(
+            package.entry(),
+            d.code,
+            &d.message,
+            d.span.start,
+            d.span.end,
+        )
+    })?;
+    if generated.len() > MAX_GENERATED {
+        return Err(CliError::new("CGXC006", "generated source exceeds 32 MiB"));
+    }
+    let parent = options
+        .output
+        .parent()
+        .filter(|p| !p.as_os_str().is_empty())
+        .unwrap_or(Path::new("."));
+    let temporary = PrivateDir::new(parent)?;
+    let generated_path = temporary.path.join("generated.rs");
+    fs::write(&generated_path, generated.as_bytes()).map_err(|e| {
+        CliError::new(
+            "CGXC006",
+            format!("cannot stage memory package source: {e}"),
+        )
+    })?;
+    let staged = if options.mode == Mode::Emit {
+        generated_path.clone()
+    } else {
+        let binary = temporary.path.join("program");
+        compile(
+            &options.rustc,
+            &generated_path,
+            &binary,
+            options.release,
+            None,
+            None,
+            None,
+        )?;
+        if !fs::metadata(&binary).is_ok_and(|m| m.is_file()) {
+            return Err(CliError::new(
+                "CGXC005",
+                "rustc did not produce a regular binary",
+            ));
+        }
+        binary
     };
-    let output = fs::canonicalize(&options.output).ok();
+    package
+        .verify_unchanged()
+        .map_err(|e| package_error(&options.source, e))?;
+    validate_output(options)?;
+    validate_package_paths(options, package.input_paths())?;
+    install(&staged, &options.output, options.force)?;
+    if options.mode != Mode::Emit {
+        let (toolchain, target) = rustc_version(&options.rustc);
+        println!(
+            "cgx2c build metadata: package_manifest_sha256={} package_sources_sha256={:?} memory_analysis_sha256={} rustc={} toolchain={} target={} profile={} output={}",
+            package.manifest_sha256(),
+            package.source_hashes(),
+            program.analysis_sha256(),
+            options.rustc.to_string_lossy(),
+            toolchain,
+            target,
+            if options.release { "release" } else { "debug" },
+            options.output.display()
+        );
+    }
+    Ok(())
+}
+
+fn validate_package_output(options: &Options, package: &CheckedPackage) -> Result<(), CliError> {
     let paths = std::iter::once(package.root().join("cgx2.toml"))
         .chain(package.binding_lock().map(|lock| package.root().join(lock)))
         .chain(
@@ -534,6 +663,17 @@ fn validate_package_output(options: &Options, package: &CheckedPackage) -> Resul
                 .iter()
                 .map(|m| m.canonical_path().to_path_buf()),
         );
+    validate_package_paths(options, paths)
+}
+
+fn validate_package_paths(
+    options: &Options,
+    paths: impl IntoIterator<Item = PathBuf>,
+) -> Result<(), CliError> {
+    let Ok(info) = fs::metadata(&options.output) else {
+        return Ok(());
+    };
+    let output = fs::canonicalize(&options.output).ok();
     for path in paths {
         if output.as_ref().is_some_and(|o| *o == path) {
             return Err(CliError::new("CGXC004", "output is a package input file"));
