@@ -236,7 +236,9 @@ name = "cgx2-sema"
 version = "0.1.0"
 dependencies = [
  "cgx2-ownership",
+ "cgx2-runtime",
  "cgx2-syntax",
+ "sha2",
 ]
 
 [[package]]
