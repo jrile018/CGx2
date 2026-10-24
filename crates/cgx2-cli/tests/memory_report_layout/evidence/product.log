@@ -1,0 +1,1 @@
+{"status": "passed", "scope": "legacy explicit source layout reporting", "ordinary_memory_checkpoint_complete": false, "release_complete": false, "source_cases": 9, "native_profiles": ["debug", "release", "standalone"], "passed": 265}

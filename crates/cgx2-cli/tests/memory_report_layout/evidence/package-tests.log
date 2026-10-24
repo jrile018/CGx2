@@ -1,0 +1,364 @@
+
+running 9 tests
+test memory::tests::failed_promotion_retains_sole_owned_binding_and_does_not_collect ... ok
+test memory::tests::failed_nested_guard_keeps_zero_collection_delta ... ok
+test memory::tests::copied_owned_buffer_has_distinct_storage_from_managed_source ... ok
+test memory::tests::failed_object_allocation_keeps_prior_reference_and_region_state ... ok
+test memory::tests::runtime_census_counts_duplicate_registrations_beyond_source_bindings ... ok
+test eval::output_tests::output_budget_counts_names_type_arguments_fields_and_nested_punctuation ... ok
+test eval::output_tests::output_byte_boundary_keeps_values_intact_and_does_not_charge_print_newline ... ok
+test eval::output_tests::finalization_retains_positive_finite_value_depth_node_and_string_bounds ... ok
+test memory::tests::child_alias_provenance_is_not_inferred_from_payload_or_reference_api ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 9 tests
+test check_source_preserves_codes_and_byte_spans ... ok
+test check_source_accepts_scalar_script_and_module ... ok
+test help_states_check_scope ... ok
+test json_escapes_file_and_message_and_preserves_code_origins ... ok
+test contract_failure_is_json_source_located_after_unicode ... ok
+test check_and_run_gate_static_errors ... ok
+test json_lines_report_every_type_error_with_byte_spans ... ok
+test memory_check_fmt_and_run_share_checked_contract ... ok
+test run_preserves_arguments_and_admits_collection_functions ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 7 tests
+test fmt_prints_canonical_text_without_rewriting ... ok
+test invalid_commands_and_missing_delimiter_fail ... ok
+test delimiter_forwards_spaced_unicode_arguments ... ok
+test run_and_shortcut_print_tail_value ... ok
+test file_and_runtime_errors_are_nonzero_without_success_output ... ok
+test memory_report_has_no_success_output_on_failure ... ok
+test memory_report_text_and_json_reflect_runtime_counters ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 3 tests
+test nested_failure_census_precedes_local_and_function_cleanup ... ok
+test chosen_allocations_names_and_post_join_root_release ... ok
+test all_comparison_guards_choose_once_using_i64_parameters ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 3 tests
+test nested_record_returns_and_untaken_failure ... ok
+test taken_failure_has_exact_utf8_span_and_source_order ... ok
+test selected_branch_nested_scopes_outer_mutation_and_unit_fallthrough ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 1 test
+test opt_in_failure_report_preserves_primary_diagnostic_and_success_output ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 11 tests
+test low_level_source_runner_checks_foreign_declarations_before_execution ... ok
+test unknown_module_and_foreign_main_fail_static_check ... ok
+test static_foreign_gate_rejects_type_arity_effect_capability_and_torch ... ok
+test native_scalar_execution_never_discovers_python ... ok
+test missing_worker_keeps_first_error_and_utf8_call_span ... ok
+test conditional_guard_calls_isolated_worker_exactly_once ... ok
+test cli_json_reports_utf8_foreign_call_span ... ok
+test worker_error_frames_preserve_all_runtime_classes_and_first_call_span ... ok
+test requires_precedes_python_and_ensures_follows_typed_return ... ok
+test declared_stdlib_call_returns_checked_scalar ... ok
+test python_errors_and_wrong_return_keep_call_span ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+
+running 5 tests
+test session_guard_rejects_transitively_collecting_graph_callees ... ok
+test graph_and_payload_layout_errors_reject_at_real_source_spans ... ok
+test source_failure_preserves_primary_error_and_releases_graph_roots ... ok
+test injected_source_failures_leave_no_graph_roots_or_manual_collections ... ok
+test real_source_graphs_reclaim_cycles_and_preserve_nested_session_guards ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+
+running 6 tests
+test manual_region_collects_only_explicitly_and_move_is_unique ... ok
+test promotion_survives_collection_and_copy_outlives_managed_region ... ok
+test invalid_memory_operations_fail_static_gate_before_runtime ... ok
+test conversion_failures_return_errors_without_success_report ... ok
+test nested_no_gc_charges_each_guard_across_regions_without_collection ... ok
+test auto_collects_at_allocation_safepoint_and_regions_are_isolated ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 2 tests
+test no_gc_budget_failure_inside_call_has_operation_span ... ok
+test local_calls_share_manual_region_session_and_conversion_state ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 6 tests
+test signed_boundaries_zero_one_many_and_fresh_sibling_scopes ... ok
+test cumulative_budget_and_repeated_manual_pressure_have_precleanup_census ... ok
+test lexical_nested_indices_conditionals_and_no_gc_guards_restore_scopes ... ok
+test reserve_faults_keep_first_error_and_unwind_every_iteration_scope ... ok
+test exact_threshold_is_shared_through_nesting_calls_and_branches ... ok
+test statement_steps_remain_a_separate_limit_with_first_failure_snapshot ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.49s
+
+
+running 2 tests
+test native_template::returned_alias_keeps_child_layout_and_missing_provenance_is_unknown ... ok
+test source_layout_census_preserves_exact_errors_values_and_cleanup ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+
+running 6 tests
+test standalone_native_source_requires_package ... ok
+test missing_export_version_assertion_and_stale_source_fail_before_execution ... ok
+test static_check_does_not_run_library_constructors ... ok
+test declaration_and_lock_rejections_are_source_located ... ok
+test checked_source_calls_pinned_fixed_c_adapter_without_python ... ok
+test distinct_verified_libraries_do_not_alias_reused_fd_paths ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+
+running 5 tests
+test source_graph_matches_direct_runtime_after_link_clear_and_collection ... ok
+test local_graph_function_runs_with_one_session ... ok
+test cycles_and_nested_no_gc_match_direct_runtime ... ok
+test stale_reference_and_budget_failure_keep_runtime_diagnostics ... ok
+test cli_check_run_json_fmt_and_failure_output_agree ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 4 tests
+test nested_variant_record_array_and_show_preserve_display_and_scalar_semantics ... ok
+test show_rejects_oversized_display_before_string_materialization ... ok
+test cli_rejects_before_publishing_and_json_points_to_entry ... ok
+test module_and_package_render_below_at_and_above_utf8_byte_cap ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.20s
+
+
+running 3 tests
+test cli_package_route_executes_pure_records ... ok
+test explicit_pure_import_diamond_runs_through_library_and_cli ... ok
+test checked_package_interpreter_keeps_identity_and_defining_error_file ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 1 test
+test check_and_run_bounded_range_loops ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+
+running 2 tests
+test first_field_error_follows_source_order ... ok
+test records_copy_values_and_evaluate_reordered_fields_in_source_order ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 6 tests
+test unicode_diagnostics_use_source_bytes_and_package_relative_paths ... ok
+test outputs_never_overwrite_sources_links_manifests_or_directories ... ok
+test parse_type_target_and_compiler_failures_preserve_existing_artifact ... ok
+test relative_package_revalidation_diagnostics_stay_relative_and_preserve_output ... ok
+test installed_product_build_emit_and_api_work_outside_checkout_without_helpers ... ok
+test checked_package_targets_are_deterministic_and_match_existing_execution ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.25s
+
+
+running 2 tests
+test checked_scalar_memory_calls_run_and_expose_public_api_json ... ok
+test dynamic_size_failures_have_source_spans_in_cli ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 12 tests
+test syntax_errors_keep_cgs_code ... ok
+test let_and_mutable_add_assign ... ok
+test low_level_run_source_checks_memory_before_interpreting ... ok
+test function_call_return_and_local_scope ... ok
+test script_and_function_module_entry ... ok
+test checked_division_overflow_and_function_return_type ... ok
+test literal_tail_values_and_precedence ... ok
+test argument_builtins_and_function_arity ... ok
+test annotations_and_unsupported_items_are_explicit ... ok
+test bounded_source_contracts_gate_body_and_return ... ok
+test errors_have_stable_codes_and_spans ... ok
+test pure_contract_calls_execute_with_existing_step_limit ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.77s
+
+
+running 7 tests
+test new_contextual_words_preserve_existing_scalar_names ... ok
+test result_error_and_option_none_are_typed_and_runnable ... ok
+test pattern_scope_shadows_outer_binding_without_leaking ... ok
+test imported_collisions_keep_nominal_identity_and_api_is_deterministic ... ok
+test nested_concrete_types_and_selected_arms_execute ... ok
+test portable_python_executes_variants ... ok
+test scrutinee_is_evaluated_once_and_unselected_arm_is_not_evaluated ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
+
+running 2 tests
+test product_check_run_and_emit_reject_before_publishing ... ok
+test match_flow_interpretation_preserves_values_and_rejects_bad_inference ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 13 tests
+test real_pinned_matrix_source_when_available ... ok
+test real_pinned_float32_matrix_source_when_available ... ok
+test checked_cg_source_runs_mock_cpu_facade_without_python ... ok
+test checked_float32_matrix_source_runs_mock_v3_facade_repeatedly ... ok
+test checked_matrix_source_runs_pinned_v2_facade_repeatedly ... ok
+test direct_float64_and_float32_cli_never_discovers_python ... ok
+test float32_source_rejects_layout_version_dtype_and_nonfinite_results ... ok
+test matrix_profile_rejects_missing_and_multiple_source_packages ... ok
+test matrix_runtime_rejects_nonfinite_output_and_missing_artifact ... ok
+test float32_source_rejects_missing_export_before_dispatch ... ok
+test nonfinite_result_is_rejected_after_foreign_copy ... ok
+test matrix_source_and_binding_errors_are_located_before_loading ... ok
+test source_rejections_and_artifact_errors_are_located ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.76s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 9 tests
+test source_python_foreign_binding_is_not_silently_emitted ... ok
+test malformed_literals_and_recursive_calls_are_rejected ... ok
+test unsupported_pure_contract_call_has_source_span ... ok
+test unsupported_and_stale_sources_have_spans ... ok
+test scalar_scripts_and_mutation_match_cli ... ok
+test native_contracts_match_cli_and_preserve_error_order ... ok
+test functions_tail_returns_arguments_and_names_match_cli ... ok
+test conditionals_preserve_branch_scope_unit_and_first_failure ... ok
+test checked_arithmetic_and_argument_errors_match_cli ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.26s
+
+
+running 5 tests
+test every_intrinsic_spelling_can_construct_a_record ... ok
+test record_returning_functions_and_real_intrinsics_still_dispatch ... ok
+test qualified_and_imported_constructors_keep_defining_identity ... ok
+test constructor_arguments_keep_source_order_and_single_evaluation ... ok
+test generic_constructors_in_generic_bodies_keep_concrete_types ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.33s
+
+
+running 5 tests
+test invalid_borrow_and_nonliteral_size_are_rejected_before_native_output ... ok
+test all_parameter_comparisons_select_only_the_budgeted_allocation ... ok
+test existing_fixture_and_conversion_match_cli ... ok
+test conditional_scoped_names_and_nested_parameter_calls_match_cli ... ok
+test auto_and_manual_collection_and_budget_failure_match_cli ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.73s
+
+
+running 2 tests
+test same_basename_unicode_and_generated_looking_names_do_not_collide ... ok
+test public_record_package_debug_release_and_selected_failure ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+
+
+running 1 test
+test package_record_fields_preserve_complete_nominal_identities ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+
+running 1 test
+test changed_generic_source_invalidates_the_native_snapshot ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Compiling cgx2-emit-rust v0.1.0 (/home/john-riley/.codex/worktrees/b705/lang/crates/cgx2-emit-rust)
+   Compiling cgx2c v0.1.0 (/home/john-riley/.codex/worktrees/b705/lang/crates/cgx2c)
+   Compiling cgx2-cli v0.1.0 (/home/john-riley/.codex/worktrees/b705/lang/crates/cgx2-cli)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.69s
+     Running unittests src/lib.rs (target/release-report-layout/debug/deps/cgx2_cli-cdd736d3a918cbb6)
+     Running unittests src/main.rs (target/release-report-layout/debug/deps/cgx2-be949d57f5351b2d)
+     Running unittests src/bin/cgx2-native.rs (target/release-report-layout/debug/deps/cgx2_native-3532aa858f533517)
+     Running tests/check.rs (target/release-report-layout/debug/deps/check-41f5035794c0d22c)
+     Running tests/cli.rs (target/release-report-layout/debug/deps/cli-000cf3451b66adb3)
+     Running tests/conditional_memory.rs (target/release-report-layout/debug/deps/conditional_memory-577030292439d221)
+     Running tests/conditionals.rs (target/release-report-layout/debug/deps/conditionals-83ea9072065d1682)
+     Running tests/failure_report.rs (target/release-report-layout/debug/deps/failure_report-5861eedb241d7cb7)
+     Running tests/foreign.rs (target/release-report-layout/debug/deps/foreign-81aeda2beb1b1ab3)
+     Running tests/graph_storage.rs (target/release-report-layout/debug/deps/graph_storage-27d3aa2bee6456ec)
+     Running tests/memory.rs (target/release-report-layout/debug/deps/memory-0624845f2bc52158)
+     Running tests/memory_functions.rs (target/release-report-layout/debug/deps/memory_functions-8845c66b2117edb7)
+     Running tests/memory_range_loops.rs (target/release-report-layout/debug/deps/memory_range_loops-3beaeafabda14e3b)
+     Running tests/memory_report_layout.rs (target/release-report-layout/debug/deps/memory_report_layout-3fcd6f34d4893a51)
+     Running tests/native.rs (target/release-report-layout/debug/deps/native-6d5ed6bfb34892e8)
+     Running tests/object_references.rs (target/release-report-layout/debug/deps/object_references-025de5f3bd744bdf)
+     Running tests/output_bounds.rs (target/release-report-layout/debug/deps/output_bounds-2cf6f1e56eb187e1)
+     Running tests/package_records.rs (target/release-report-layout/debug/deps/package_records-24c5d221ae76b872)
+     Running tests/range_loops.rs (target/release-report-layout/debug/deps/range_loops-df85c5195f79435d)
+     Running tests/records.rs (target/release-report-layout/debug/deps/records-5ab8627a6af5174f)
+     Running tests/release_core.rs (target/release-report-layout/debug/deps/release_core-0cdcce52858de332)
+     Running tests/reusable_memory_functions.rs (target/release-report-layout/debug/deps/reusable_memory_functions-3745b986b384d634)
+     Running tests/run.rs (target/release-report-layout/debug/deps/run-78fbf04c35b3309b)
+     Running tests/s2a.rs (target/release-report-layout/debug/deps/s2a-c4b3fa4334bc76d9)
+     Running tests/s2a_match_control_flow.rs (target/release-report-layout/debug/deps/s2a_match_control_flow-07dbbe9f80e67f14)
+     Running tests/tensor.rs (target/release-report-layout/debug/deps/tensor-cdb4bae618ca1e1c)
+     Running unittests src/lib.rs (target/release-report-layout/debug/deps/cgx2_emit_rust-619136178a6a8f02)
+     Running tests/differential.rs (target/release-report-layout/debug/deps/differential-7d1eb44729a953c9)
+     Running tests/native_constructors.rs (target/release-report-layout/debug/deps/native_constructors-e3a743e6df363edf)
+     Running tests/native_memory.rs (target/release-report-layout/debug/deps/native_memory-9118b7e2dc3ae071)
+     Running tests/package_records.rs (target/release-report-layout/debug/deps/package_records-0fa814d44f5c0f9b)
+     Running tests/s2a_record_identities.rs (target/release-report-layout/debug/deps/s2a_record_identities-8bfc993984a5d91c)
+     Running tests/s2b_snapshot.rs (target/release-report-layout/debug/deps/s2b_snapshot-db5d54d625ba42fa)
+   Doc-tests cgx2_cli
+   Doc-tests cgx2_emit_rust

@@ -25,6 +25,18 @@ struct FailureState {
     rollback: Option<bool>,
     operation: Option<FailureObservation>,
     cleanup_errors: Vec<String>,
+    // Reporting metadata only; payloads/edges remain exclusively in Session.
+    // Invocation-wide so dropping a binding or leaving a frame cannot erase
+    // the provenance of a still-reachable child. Handles include session and
+    // generation identity, so slot reuse cannot inherit an old layout.
+    layouts: HashMap<Handle, SourceLayout>,
+}
+
+#[derive(Clone, Copy)]
+enum SourceLayout {
+    Bytes,
+    Object { slots: usize },
+    Graph,
 }
 
 /// Source roots are distinct live managed bindings in active source scopes.
@@ -51,7 +63,11 @@ struct FailureObservation {
 }
 
 impl FailureObservation {
-    fn new(session: &Session, bindings: &HashMap<String, Binding>) -> Self {
+    fn new(
+        session: &Session,
+        bindings: &HashMap<String, Binding>,
+        layouts: &HashMap<Handle, SourceLayout>,
+    ) -> Self {
         let (runtime_rooted_handles, runtime_root_registrations, runtime_root_census_error) =
             match session.root_census() {
                 Ok(census) => (
@@ -70,12 +86,17 @@ impl FailureObservation {
             runtime_root_census_error,
             memory: session.memory_report(),
         };
-        observation.add_roots(session, bindings);
+        observation.add_roots(session, bindings, layouts);
         observation
     }
 
-    fn add_roots(&mut self, session: &Session, bindings: &HashMap<String, Binding>) {
-        let Some(roots) = graph_snapshot(session, bindings) else {
+    fn add_roots(
+        &mut self,
+        session: &Session,
+        bindings: &HashMap<String, Binding>,
+        layouts: &HashMap<Handle, SourceLayout>,
+    ) {
+        let Some(roots) = graph_snapshot(session, bindings, layouts) else {
             self.observable = false;
             return;
         };
@@ -100,7 +121,11 @@ impl FailureObservation {
 
 type GraphSnapshot = Vec<(String, Handle, bool, Vec<Option<Handle>>)>;
 
-fn graph_snapshot(session: &Session, bindings: &HashMap<String, Binding>) -> Option<GraphSnapshot> {
+fn graph_snapshot(
+    session: &Session,
+    bindings: &HashMap<String, Binding>,
+    layouts: &HashMap<Handle, SourceLayout>,
+) -> Option<GraphSnapshot> {
     let mut roots = Vec::new();
     for (name, binding) in bindings {
         let Binding::Managed(handle) = binding else {
@@ -108,19 +133,19 @@ fn graph_snapshot(session: &Session, bindings: &HashMap<String, Binding>) -> Opt
         };
         let live = session.read_bytes(*handle).is_ok();
         let mut references = Vec::new();
-        if live && session.graph_shape(*handle).is_ok() {
-            session
-                .visit_graph_references(*handle, |_, child| references.push(child))
-                .ok()?;
-        } else if live {
-            for index in 0..=1024 {
-                match session.reference(*handle, index) {
-                    Ok(reference) if index < 1024 => references.push(reference),
-                    Ok(_) => return None,
-                    Err(MemoryError::NotObject) if index == 0 => break,
-                    Err(MemoryError::InvalidReferenceSlot) => break,
-                    Err(_) => return None,
+        if live {
+            // Mutable bytes can validate as a graph without having been
+            // allocated as one. Only source construction selects the visitor.
+            match layouts.get(handle)? {
+                SourceLayout::Bytes => (),
+                SourceLayout::Object { slots } => {
+                    for index in 0..*slots {
+                        references.push(session.reference(*handle, index).ok()?);
+                    }
                 }
+                SourceLayout::Graph => session
+                    .visit_graph_references(*handle, |_, child| references.push(child))
+                    .ok()?,
             }
         }
         roots.push((name.clone(), *handle, live, references));
@@ -700,9 +725,13 @@ fn execute_with_functions(
         if *steps >= STEP_LIMIT {
             if observe_rollback {
                 if let Some(snapshot) = failure_state.operation.as_mut() {
-                    snapshot.add_roots(session, bindings);
+                    snapshot.add_roots(session, bindings, &failure_state.layouts);
                 } else {
-                    failure_state.operation = Some(FailureObservation::new(session, bindings));
+                    failure_state.operation = Some(FailureObservation::new(
+                        session,
+                        bindings,
+                        &failure_state.layouts,
+                    ));
                 }
             }
             if observe_rollback {
@@ -716,7 +745,7 @@ fn execute_with_functions(
         }
         *steps += 1;
         let before = observe_rollback
-            .then(|| graph_snapshot(session, bindings))
+            .then(|| graph_snapshot(session, bindings, &failure_state.layouts))
             .flatten();
         let result = (|| -> Result<(), RunError> {
             match op {
@@ -736,9 +765,13 @@ fn execute_with_functions(
                                 failure_state
                                     .operation
                                     .get_or_insert_with(|| {
-                                        FailureObservation::new(session, bindings)
+                                        FailureObservation::new(
+                                            session,
+                                            bindings,
+                                            &failure_state.layouts,
+                                        )
                                     })
-                                    .add_roots(session, bindings);
+                                    .add_roots(session, bindings, &failure_state.layouts);
                                 failure_state.rollback.get_or_insert(true);
                             }
                             return Err(error(
@@ -909,6 +942,9 @@ fn execute_with_functions(
                         }
                     };
                     session.root(handle).map_err(|e| runtime(e, *span))?;
+                    if observe_rollback {
+                        failure_state.layouts.insert(handle, SourceLayout::Bytes);
+                    }
                     bindings.insert(name.clone(), Binding::Managed(handle));
                 }
                 Op::CopyToOwned { name, from } => {
@@ -939,6 +975,9 @@ fn execute_with_functions(
                         .alloc_bytes(id, size)
                         .map_err(|e| allocation(e, failure_span))?;
                     session.root(handle).map_err(|e| runtime(e, *span))?;
+                    if observe_rollback {
+                        failure_state.layouts.insert(handle, SourceLayout::Bytes);
+                    }
                     bindings.insert(name.clone(), Binding::Managed(handle));
                 }
                 Op::AllocObject {
@@ -959,6 +998,16 @@ fn execute_with_functions(
                             .map_err(|e| allocation(e, *span))?
                     };
                     session.root(handle).map_err(|e| runtime(e, *span))?;
+                    if observe_rollback {
+                        failure_state.layouts.insert(
+                            handle,
+                            if *graph {
+                                SourceLayout::Graph
+                            } else {
+                                SourceLayout::Object { slots: *slots }
+                            },
+                        );
+                    }
                     bindings.insert(name.clone(), Binding::Managed(handle));
                 }
                 Op::SetReference {
@@ -1114,14 +1163,18 @@ fn execute_with_functions(
         if let Err(error) = result {
             if observe_rollback {
                 if let Some(snapshot) = failure_state.operation.as_mut() {
-                    snapshot.add_roots(session, bindings);
+                    snapshot.add_roots(session, bindings, &failure_state.layouts);
                 } else {
-                    failure_state.operation = Some(FailureObservation::new(session, bindings));
+                    failure_state.operation = Some(FailureObservation::new(
+                        session,
+                        bindings,
+                        &failure_state.layouts,
+                    ));
                 }
             }
             if observe_rollback && failure_state.rollback.is_none() {
                 failure_state.rollback = before
-                    .zip(graph_snapshot(session, bindings))
+                    .zip(graph_snapshot(session, bindings, &failure_state.layouts))
                     .map(|(a, b)| a == b);
             }
             return Err(error);
@@ -1265,8 +1318,11 @@ pub(crate) fn run_module_with_failure(
                 }
             }
         }
-        let final_unwind = observe_rollback
-            .then(|| Box::new(FailureObservation::new(&session, &HashMap::new()).finish()));
+        let final_unwind = observe_rollback.then(|| {
+            Box::new(
+                FailureObservation::new(&session, &HashMap::new(), &failure_state.layouts).finish(),
+            )
+        });
         return Err(MemoryFailure {
             error,
             report: Some(Box::new(session.memory_report())),
@@ -1284,6 +1340,48 @@ mod tests {
     use super::*;
 
     #[test]
+    fn child_alias_provenance_is_not_inferred_from_payload_or_reference_api() {
+        let mut session = Session::new();
+        let r = session
+            .create_region(CollectionMode::Manual, 8 << 20)
+            .unwrap();
+        let raw = session.alloc_object(r, 24, 1).unwrap();
+        let graph = session.alloc_zeroed_graph(r, 0, 65536).unwrap();
+        session.set_reference(raw, 0, Some(graph)).unwrap();
+        session
+            .set_graph_reference(graph, 65535, Some(raw))
+            .unwrap();
+        let mut layouts = HashMap::from([
+            (raw, SourceLayout::Object { slots: 1 }),
+            (graph, SourceLayout::Graph),
+        ]);
+        for child in [
+            session.reference(raw, 0).unwrap().unwrap(),
+            session.graph_reference(graph, 65535).unwrap().unwrap(),
+        ] {
+            let aliases = HashMap::from([
+                ("alias".to_owned(), Binding::Managed(child)),
+                ("duplicate".to_owned(), Binding::Managed(child)),
+            ]);
+            let snapshot = graph_snapshot(&session, &aliases, &layouts).unwrap();
+            assert_eq!(snapshot[0].3.iter().flatten().count(), 1);
+            let census = FailureObservation::new(&session, &aliases, &layouts).finish();
+            assert_eq!(census.rooted_handles, Some(1));
+            assert_eq!(census.rooted_edges, Some(1));
+            let layout = layouts.remove(&child).unwrap();
+            assert!(graph_snapshot(&session, &aliases, &layouts).is_none());
+            let unknown = FailureObservation::new(&session, &aliases, &layouts).finish();
+            assert_eq!(unknown.rooted_handles, None);
+            assert_eq!(unknown.rooted_edges, None);
+            layouts.insert(child, layout);
+        }
+        session.write_bytes(graph, 0, &[0]).unwrap();
+        let bindings = HashMap::from([("graph".to_owned(), Binding::Managed(graph))]);
+        assert!(graph_snapshot(&session, &bindings, &layouts).is_none());
+        assert_eq!(session.read_bytes(graph).unwrap()[0], 0);
+    }
+
+    #[test]
     fn runtime_census_counts_duplicate_registrations_beyond_source_bindings() {
         let source = "let r = memory.region(mode: manual, limit: 256)\nlet value = memory.alloc_object(r, 8, 0)\n";
         let module = cgx2_syntax::parse_module(source).unwrap();
@@ -1297,7 +1395,12 @@ mod tests {
             panic!("managed value missing")
         };
         session.root(handle).unwrap();
-        let snapshot = FailureObservation::new(&session, &bindings).finish();
+        let snapshot = FailureObservation::new(
+            &session,
+            &bindings,
+            &HashMap::from([(handle, SourceLayout::Object { slots: 0 })]),
+        )
+        .finish();
         assert_eq!(snapshot.rooted_handles, Some(1));
         assert_eq!(snapshot.runtime_rooted_handles, Some(1));
         assert_eq!(snapshot.runtime_root_registrations, Some(2));

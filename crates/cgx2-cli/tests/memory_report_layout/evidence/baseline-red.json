@@ -1,0 +1,18 @@
+{
+  "base": "9fcefbbb201f1f73f387f43672bc9b4f9d23eeb7",
+  "purpose": "Regression sensitivity: original CLI source with the new assertions; source restored in finally block.",
+  "command": [
+    "cargo",
+    "test",
+    "-p",
+    "cgx2-cli",
+    "--test",
+    "memory_report_layout",
+    "source_layout_census_preserves_exact_errors_values_and_cleanup",
+    "--all-features",
+    "--offline"
+  ],
+  "returncode": 101,
+  "stdout": "\nrunning 1 test\ntest source_layout_census_preserves_exact_errors_values_and_cleanup ... FAILED\n\nfailures:\n\n---- source_layout_census_preserves_exact_errors_values_and_cleanup stdout ----\n\nthread 'source_layout_census_preserves_exact_errors_values_and_cleanup' (459) panicked at crates/cgx2-cli/tests/memory_report_layout.rs:36:9:\nassertion `left == right` failed: forged-layout\n  left: Some(0)\n right: Some(1)\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n\n\nfailures:\n    source_layout_census_preserves_exact_errors_values_and_cleanup\n\ntest result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.05s\n\n",
+  "stderr": "   Compiling cgx2-cli v0.1.0 (/home/john-riley/.codex/worktrees/b705/lang/crates/cgx2-cli)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.76s\n     Running tests/memory_report_layout.rs (target/release-report-layout/debug/deps/memory_report_layout-3fcd6f34d4893a51)\nerror: test failed, to rerun pass `-p cgx2-cli --test memory_report_layout`\n"
+}
