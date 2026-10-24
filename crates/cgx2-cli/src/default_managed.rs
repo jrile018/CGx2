@@ -1,8 +1,18 @@
 use crate::{RunError, RunResult, Value};
+
 pub(crate) fn run_hybrid(
     program: &cgx2_sema::default_managed::hybrid::HybridProgramV1,
     fault: Option<usize>,
 ) -> Result<(RunResult, cgx2_runtime::MemoryReport), Vec<RunError>> {
+    program.authenticate().map_err(|ds| {
+        ds.into_iter()
+            .map(|d| RunError {
+                code: d.code,
+                message: d.message,
+                span: Some(d.span),
+            })
+            .collect::<Vec<_>>()
+    })?;
     #[cfg(feature = "failure-injection-test")]
     let execution = if let Some(index) = fault {
         let session =
@@ -10,7 +20,7 @@ pub(crate) fn run_hybrid(
                 vec![RunError {
                     code: "CGR080",
                     message: format!("session allocation failed: {e:?}"),
-                    span: None,
+                    span: Some(program.entry_span()),
                 }]
             })?;
         program.execute_with_session(session)
@@ -77,6 +87,7 @@ pub(crate) fn run(
             })
             .collect::<Vec<_>>()
     };
+    program.authenticate().map_err(failure)?;
     #[cfg(feature = "failure-injection-test")]
     let execution = if let Some(index) = fault {
         let session =
@@ -84,7 +95,7 @@ pub(crate) fn run(
                 vec![RunError {
                     code: "CGR090",
                     message: format!("managed session entry failed: {e:?}"),
-                    span: None,
+                    span: Some(program.entry_span()),
                 }]
             })?;
         program.execute_with_session(args, session)
@@ -214,6 +225,24 @@ pub(crate) fn copy(s: Snapshot, t: &Type, p: &ManagedProgramV1) -> Value {
                     .map(|(i, v)| copy(v, fields.get(i).map_or(&Type::Unit, |t| &p.types()[*t]), p))
                     .collect(),
             }
+        }
+    }
+}
+
+#[cfg(all(test, feature = "failure-injection-test"))]
+mod entry_tests {
+    #[test]
+    fn managed_and_bridge_entry_failures_retain_original_utf8_spans() {
+        for source in [
+            "# café🙂\nfn main() -> i64:\n let xs = [42]\n length(xs)\n",
+            "# café🙂\nrecord R:\n    value: i64\nfn heap() -> i64:\n let xs = [42]\n length(xs)\nfn main() -> i64:\n let old = owned(R(value: 7))\n heap() + old.value\n",
+        ] {
+            let module = cgx2_syntax::parse_module(source).unwrap();
+            let expected = module.functions.iter().find(|f| f.name == "main").unwrap().span;
+            let errors = crate::run_checked_source_with_failure_at_reserve(source, &[], 1).unwrap_err();
+            assert_eq!(errors[0].error.span, Some(expected), "{:?}", errors[0].error);
+            assert!(matches!(errors[0].error.code, "CGR090" | "CGR080"));
+            assert_eq!(&source[expected.start..expected.start+2], "fn");
         }
     }
 }

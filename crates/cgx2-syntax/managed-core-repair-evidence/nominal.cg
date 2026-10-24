@@ -1,0 +1,11 @@
+variant AllocationError<T>:
+    Mine(T)
+
+fn echo(x: AllocationError<i64>) -> AllocationError<i64> effects():
+    x
+
+fn main() -> i64 effects():
+    let value: AllocationError<i64> = AllocationError<i64>.Mine(42)
+    match echo(value):
+        AllocationError<i64>.Mine(x):
+            x

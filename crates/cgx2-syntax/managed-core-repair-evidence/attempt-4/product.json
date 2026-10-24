@@ -1,0 +1,1800 @@
+{
+  "schema_version": 1,
+  "checks": [
+    {
+      "label": "pinned-rustc",
+      "command": [
+        "rustup",
+        "which",
+        "rustc"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.003,
+      "stdout_bytes": 78,
+      "stdout_sha256": "66af87d7f5dc56db4094d4257d2ebfd67b77bb8e36e37ef58d69a87d2016117c",
+      "stdout": "/home/john-riley/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/bin/rustc\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "rustc-version",
+      "command": [
+        "/home/john-riley/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/bin/rustc",
+        "-vV"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.004,
+      "stdout_bytes": 196,
+      "stdout_sha256": "778fbc643a806f0dd123c056e66201d7e8a56a61928ec0a33171be8d6c2d5a37",
+      "stdout": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/nominal-plain.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.003,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1104,
+      "stderr_sha256": "56015e0aaa666c80c3a3edbe23efd9f8f7c3cabff846daa4a2c1b7bd15b493d0",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":1,\"roots_registered\":3,\"roots_released\":3,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":1,\"graph_writes\":1,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":354,\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain:interpreter",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain:emit",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/nominal-plain.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-plain.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.004,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain:source-hash",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain-False:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/nominal-plain.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-plain-False",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.613,
+      "stdout_bytes": 535,
+      "stdout_sha256": "de4b85eca125215bae9f20c66c1f7aff93efbfd0915784df9f3d71307c507b72",
+      "stdout": "cgx2c build metadata: source_sha256=1f8fc46c57543cf755d6c593d823c39bc137c0e5961da176c887d3570a2f45ea rustc=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=62e813a32b2d2b4d5db980a18cc5f8b1121c8a1e992c14f4dcf5e43c353f55c4 output=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-plain-False\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain-False:metadata-source-hash",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain-False:execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-plain-False"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1104,
+      "stderr_sha256": "56015e0aaa666c80c3a3edbe23efd9f8f7c3cabff846daa4a2c1b7bd15b493d0",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":1,\"roots_registered\":3,\"roots_released\":3,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":1,\"graph_writes\":1,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":354,\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain-False:value",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain-True:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/nominal-plain.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-plain-True",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 2.019,
+      "stdout_bytes": 536,
+      "stdout_sha256": "0b31aae9daa43fccccbfa6842c8f5359aed1afcee2d8ff8c5c4bda3484890327",
+      "stdout": "cgx2c build metadata: source_sha256=1f8fc46c57543cf755d6c593d823c39bc137c0e5961da176c887d3570a2f45ea rustc=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=62e813a32b2d2b4d5db980a18cc5f8b1121c8a1e992c14f4dcf5e43c353f55c4 output=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-plain-True\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain-True:metadata-source-hash",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain-True:execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-plain-True"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1104,
+      "stderr_sha256": "56015e0aaa666c80c3a3edbe23efd9f8f7c3cabff846daa4a2c1b7bd15b493d0",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":1,\"roots_registered\":3,\"roots_released\":3,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":1,\"graph_writes\":1,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":354,\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain-True:value",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain:standalone-compile",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker",
+        "--edition=2024",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-plain.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-plain-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.349,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain:standalone-execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-plain-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1104,
+      "stderr_sha256": "56015e0aaa666c80c3a3edbe23efd9f8f7c3cabff846daa4a2c1b7bd15b493d0",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":1,\"roots_registered\":3,\"roots_released\":3,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":1,\"graph_writes\":1,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":354,\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain:standalone-value",
+      "passed": true
+    },
+    {
+      "label": "nominal:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/nominal.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.004,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1104,
+      "stderr_sha256": "cc7ea463d7250e84dbc0ce99ee2881d84c5bd46ef3c83a295cf19e0af128fee1",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":1,\"roots_registered\":5,\"roots_released\":5,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":1,\"graph_writes\":1,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":514,\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nominal:interpreter",
+      "passed": true
+    },
+    {
+      "label": "nominal:emit",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/nominal.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.006,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nominal:source-hash",
+      "passed": true
+    },
+    {
+      "label": "nominal-False:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/nominal.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-False",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.67,
+      "stdout_bytes": 529,
+      "stdout_sha256": "d985a433d3597c907c55089b7867cff3749070f326846cd72c939ae9ff80fde1",
+      "stdout": "cgx2c build metadata: source_sha256=0cdf6e6ca3fa9bdc01ba0c09b38ca06d128406943556491daf5cc45f23951c4d rustc=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=62e813a32b2d2b4d5db980a18cc5f8b1121c8a1e992c14f4dcf5e43c353f55c4 output=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-False\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nominal-False:metadata-source-hash",
+      "passed": true
+    },
+    {
+      "label": "nominal-False:execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-False"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1104,
+      "stderr_sha256": "cc7ea463d7250e84dbc0ce99ee2881d84c5bd46ef3c83a295cf19e0af128fee1",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":1,\"roots_registered\":5,\"roots_released\":5,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":1,\"graph_writes\":1,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":514,\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-False:value",
+      "passed": true
+    },
+    {
+      "label": "nominal-True:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/nominal.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-True",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 2.168,
+      "stdout_bytes": 530,
+      "stdout_sha256": "7a5f41795abb4623af9beb174cedd3c80c372cc4c9243a94a29d7b5a1fd30b5b",
+      "stdout": "cgx2c build metadata: source_sha256=0cdf6e6ca3fa9bdc01ba0c09b38ca06d128406943556491daf5cc45f23951c4d rustc=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=62e813a32b2d2b4d5db980a18cc5f8b1121c8a1e992c14f4dcf5e43c353f55c4 output=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-True\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nominal-True:metadata-source-hash",
+      "passed": true
+    },
+    {
+      "label": "nominal-True:execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-True"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1104,
+      "stderr_sha256": "cc7ea463d7250e84dbc0ce99ee2881d84c5bd46ef3c83a295cf19e0af128fee1",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":1,\"roots_registered\":5,\"roots_released\":5,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":1,\"graph_writes\":1,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":514,\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-True:value",
+      "passed": true
+    },
+    {
+      "label": "nominal:standalone-compile",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker",
+        "--edition=2024",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.33,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nominal:standalone-execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1104,
+      "stderr_sha256": "cc7ea463d7250e84dbc0ce99ee2881d84c5bd46ef3c83a295cf19e0af128fee1",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":1,\"roots_registered\":5,\"roots_released\":5,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":1,\"graph_writes\":1,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":514,\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nominal:standalone-value",
+      "passed": true
+    },
+    {
+      "label": "recovery:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/recovery.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.003,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1106,
+      "stderr_sha256": "f99566734bc5e89e4b50880c44f00be7b176b8ac100e7baa5d630b488ce48b19",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":0,\"roots_registered\":0,\"roots_released\":0,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":0,\"graph_writes\":0,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":0,\"behavioral_effects\":[\"ManagedAlloc\"],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":false,\"may_auto_collect_at_allocation\":false,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":0,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":0,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "recovery:interpreter",
+      "passed": true
+    },
+    {
+      "label": "recovery:emit",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/recovery.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/recovery.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.004,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "recovery:source-hash",
+      "passed": true
+    },
+    {
+      "label": "recovery-False:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/recovery.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/recovery-False",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.639,
+      "stdout_bytes": 530,
+      "stdout_sha256": "4faa6aae4c1ffc74b4716a5d6e97af2beafb26da9c74af50933010d8bec06651",
+      "stdout": "cgx2c build metadata: source_sha256=c5af834d599a45b1b8a036e32cc52c9c61f9cb71482a6c5f572b7e904c8daf41 rustc=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=62e813a32b2d2b4d5db980a18cc5f8b1121c8a1e992c14f4dcf5e43c353f55c4 output=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/recovery-False\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "recovery-False:metadata-source-hash",
+      "passed": true
+    },
+    {
+      "label": "recovery-False:execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/recovery-False"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1106,
+      "stderr_sha256": "f99566734bc5e89e4b50880c44f00be7b176b8ac100e7baa5d630b488ce48b19",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":0,\"roots_registered\":0,\"roots_released\":0,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":0,\"graph_writes\":0,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":0,\"behavioral_effects\":[\"ManagedAlloc\"],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":false,\"may_auto_collect_at_allocation\":false,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":0,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":0,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "recovery-False:value",
+      "passed": true
+    },
+    {
+      "label": "recovery-True:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/recovery.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/recovery-True",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 1.996,
+      "stdout_bytes": 531,
+      "stdout_sha256": "2507db6f84eadf5cf458b502f12f1e26bf5a32341aea1d93b513b9ab98b1e205",
+      "stdout": "cgx2c build metadata: source_sha256=c5af834d599a45b1b8a036e32cc52c9c61f9cb71482a6c5f572b7e904c8daf41 rustc=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=62e813a32b2d2b4d5db980a18cc5f8b1121c8a1e992c14f4dcf5e43c353f55c4 output=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/recovery-True\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "recovery-True:metadata-source-hash",
+      "passed": true
+    },
+    {
+      "label": "recovery-True:execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/recovery-True"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1106,
+      "stderr_sha256": "f99566734bc5e89e4b50880c44f00be7b176b8ac100e7baa5d630b488ce48b19",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":0,\"roots_registered\":0,\"roots_released\":0,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":0,\"graph_writes\":0,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":0,\"behavioral_effects\":[\"ManagedAlloc\"],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":false,\"may_auto_collect_at_allocation\":false,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":0,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":0,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "recovery-True:value",
+      "passed": true
+    },
+    {
+      "label": "recovery:standalone-compile",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker",
+        "--edition=2024",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/recovery.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/recovery-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.3,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "recovery:standalone-execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/recovery-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1106,
+      "stderr_sha256": "f99566734bc5e89e4b50880c44f00be7b176b8ac100e7baa5d630b488ce48b19",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":0,\"roots_registered\":0,\"roots_released\":0,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":0,\"graph_writes\":0,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":0,\"behavioral_effects\":[\"ManagedAlloc\"],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":false,\"may_auto_collect_at_allocation\":false,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":0,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":0,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "recovery:standalone-value",
+      "passed": true
+    },
+    {
+      "label": "nominal-package:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/nominal-package"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.005,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1104,
+      "stderr_sha256": "cc7ea463d7250e84dbc0ce99ee2881d84c5bd46ef3c83a295cf19e0af128fee1",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":1,\"roots_registered\":5,\"roots_released\":5,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":1,\"graph_writes\":1,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":514,\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-package:interpreter",
+      "passed": true
+    },
+    {
+      "label": "nominal-package:emit",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/nominal-package",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-package.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.007,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nominal-package:memory-index",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2",
+        "memory-effects",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/nominal-package"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.005,
+      "stdout_bytes": 926,
+      "stdout_sha256": "0b56346ab864582ccf6097f2e3ee99531da9f26c9b8323972884ca73c9602055",
+      "stdout": "{\"schema_version\":1,\"summary_scope\":\"concrete-specializations\",\"absent_summary\":\"unknown\",\"provenance_schema_version\":1,\"provenance_kind\":\"source-bundle-v1\",\"inputs_sha256\":\"29dffcfe1aa9008716e44fb4522bfbdc5359eb34b86e04f1b63c746b0cb13be3\",\"source_sha256\":null,\"analysis_sha256\":\"beca19c3a8589931eab6e54ae8fb3c0992c84c2d85c34e49ca36ebc2a91bb540\",\"functions\":[{\"name\":\"app.lib.echo\",\"parameters\":[\"app.lib.AllocationError<i64>\"],\"return_type\":\"app.lib.AllocationError<i64>\",\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":false,\"may_auto_collect_at_allocation\":false,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true}},{\"name\":\"main\",\"parameters\":[],\"return_type\":\"i64\",\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true}}]}\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nominal-package:bundle-hash",
+      "passed": true
+    },
+    {
+      "label": "nominal-package-False:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/nominal-package",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-package-False",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.319,
+      "stdout_bytes": 642,
+      "stdout_sha256": "355069433ee63b13c8673ecd47ace7e66fc10359feda6d74596588189ec6bc21",
+      "stdout": "cgx2c build metadata: package_manifest_sha256=7007d1603b414a3f66c5bff69c0f989da48171b4c76af488ca5b814c1456ccf8 package_sources_sha256=[\"main.cg:9f5f785b3a52845894dc0c8841234030596c7cd5da359cd343ea164b78ce1bf6\", \"lib.cg:0a79ea1d81482a67b86fd5db9070f66a0a18b833fcbcd98c015aca863760958d\"] rustc=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug output=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-package-False\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nominal-package-False:metadata-source-hash",
+      "passed": true
+    },
+    {
+      "label": "nominal-package-False:execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-package-False"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1104,
+      "stderr_sha256": "cc7ea463d7250e84dbc0ce99ee2881d84c5bd46ef3c83a295cf19e0af128fee1",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":1,\"roots_registered\":5,\"roots_released\":5,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":1,\"graph_writes\":1,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":514,\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-package-False:value",
+      "passed": true
+    },
+    {
+      "label": "nominal-package-True:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/nominal-package",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-package-True",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.992,
+      "stdout_bytes": 643,
+      "stdout_sha256": "0acc302373d97b39ebe52cda439f7047b1fd9f3b0a3975d2cb01967b22cfaf05",
+      "stdout": "cgx2c build metadata: package_manifest_sha256=7007d1603b414a3f66c5bff69c0f989da48171b4c76af488ca5b814c1456ccf8 package_sources_sha256=[\"main.cg:9f5f785b3a52845894dc0c8841234030596c7cd5da359cd343ea164b78ce1bf6\", \"lib.cg:0a79ea1d81482a67b86fd5db9070f66a0a18b833fcbcd98c015aca863760958d\"] rustc=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release output=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-package-True\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nominal-package-True:metadata-source-hash",
+      "passed": true
+    },
+    {
+      "label": "nominal-package-True:execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-package-True"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1104,
+      "stderr_sha256": "cc7ea463d7250e84dbc0ce99ee2881d84c5bd46ef3c83a295cf19e0af128fee1",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":1,\"roots_registered\":5,\"roots_released\":5,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":1,\"graph_writes\":1,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":514,\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-package-True:value",
+      "passed": true
+    },
+    {
+      "label": "nominal-package:standalone-compile",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker",
+        "--edition=2024",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-package.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-package-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.34,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nominal-package:standalone-execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/nominal-package-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1104,
+      "stderr_sha256": "cc7ea463d7250e84dbc0ce99ee2881d84c5bd46ef3c83a295cf19e0af128fee1",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":1,\"roots_registered\":5,\"roots_released\":5,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":1,\"graph_writes\":1,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":514,\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-package:standalone-value",
+      "passed": true
+    },
+    {
+      "label": "entry-probe:compile",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker",
+        "--edition=2021",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/entry-probe.rs",
+        "--extern",
+        "cgx2_cli=/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/libcgx2_cli.rlib",
+        "-L",
+        "dependency=/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/deps",
+        "-o",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/entry-probe"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.137,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "entry-managed:interpreter-entry",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/entry-probe",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/entry-managed.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.002,
+      "stdout_bytes": 14,
+      "stdout_sha256": "dc16e8b031dd8bca9234b6553208bbe15956e454741c471e53b1d381f8927f6f",
+      "stdout": "CGR090:40..99\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "entry-managed:original-utf8-byte-span",
+      "passed": true
+    },
+    {
+      "label": "entry-managed-False:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2c",
+        "build",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/entry-managed.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/entry-managed-False",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker",
+        "--test-fail-reserve",
+        "1"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.643,
+      "stdout_bytes": 535,
+      "stdout_sha256": "4fab2bbc1b82f7bb68ba773d5419c5d76fa1f8e69d219c8de1cec61140230d3d",
+      "stdout": "cgx2c build metadata: source_sha256=0d5a26efe857231629c11ea418280443c9b8111a2c7baf958fd42c782a0749e4 rustc=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=62e813a32b2d2b4d5db980a18cc5f8b1121c8a1e992c14f4dcf5e43c353f55c4 output=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/entry-managed-False\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "entry-managed-False:failure",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/entry-managed-False"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 1,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 88,
+      "stderr_sha256": "0289b39b16549411be234865f683adde717005cb7beb3d4a754e9f5815149aa5",
+      "stderr": "CGR090: managed session entry failed: HostAllocation { site: SessionRegions } at 40..99\n",
+      "passed": true
+    },
+    {
+      "label": "entry-managed-False:exact-entry-diagnostic",
+      "passed": true
+    },
+    {
+      "label": "entry-managed-True:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2c",
+        "build",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/entry-managed.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/entry-managed-True",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker",
+        "--test-fail-reserve",
+        "1",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 1.948,
+      "stdout_bytes": 536,
+      "stdout_sha256": "29b30367a800c86a47a0213dfa4db391d736fd02a9909bf9249f0d954768ebdd",
+      "stdout": "cgx2c build metadata: source_sha256=0d5a26efe857231629c11ea418280443c9b8111a2c7baf958fd42c782a0749e4 rustc=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=62e813a32b2d2b4d5db980a18cc5f8b1121c8a1e992c14f4dcf5e43c353f55c4 output=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/entry-managed-True\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "entry-managed-True:failure",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/entry-managed-True"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 1,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 88,
+      "stderr_sha256": "0289b39b16549411be234865f683adde717005cb7beb3d4a754e9f5815149aa5",
+      "stderr": "CGR090: managed session entry failed: HostAllocation { site: SessionRegions } at 40..99\n",
+      "passed": true
+    },
+    {
+      "label": "entry-managed-True:exact-entry-diagnostic",
+      "passed": true
+    },
+    {
+      "label": "entry-managed:emit",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/entry-managed.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/entry-managed.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.004,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "entry-managed:standalone-compile",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker",
+        "--edition=2024",
+        "--cfg=feature=\"fault-injection\"",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/entry-managed.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/entry-managed-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {
+        "CGX2_TEST_FAIL_RESERVE": "1"
+      },
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.295,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "entry-managed:standalone-failure",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/entry-managed-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 1,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 88,
+      "stderr_sha256": "0289b39b16549411be234865f683adde717005cb7beb3d4a754e9f5815149aa5",
+      "stderr": "CGR090: managed session entry failed: HostAllocation { site: SessionRegions } at 40..99\n",
+      "passed": true
+    },
+    {
+      "label": "entry-managed:standalone-entry-span",
+      "passed": true
+    },
+    {
+      "label": "entry-hybrid:interpreter-entry",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/entry-probe",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/entry-hybrid.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.003,
+      "stdout_bytes": 16,
+      "stdout_sha256": "508a222e5767153ea38c180779990fb560f44df6c1f7c2afae6ed4175aabe65d",
+      "stdout": "CGR080:126..200\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "entry-hybrid:original-utf8-byte-span",
+      "passed": true
+    },
+    {
+      "label": "entry-hybrid-False:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2c",
+        "build",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/entry-hybrid.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/entry-hybrid-False",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker",
+        "--test-fail-reserve",
+        "1"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.693,
+      "stdout_bytes": 534,
+      "stdout_sha256": "c99aeed54f6cd276817d89424599c8c8612fe110277517f37f465a1501940ebe",
+      "stdout": "cgx2c build metadata: source_sha256=db60e6fc7bf22591d770e2a6a04f7f86952609802ca135b09daf4ab622d29603 rustc=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=62e813a32b2d2b4d5db980a18cc5f8b1121c8a1e992c14f4dcf5e43c353f55c4 output=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/entry-hybrid-False\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "entry-hybrid-False:failure",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/entry-hybrid-False"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 1,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 87,
+      "stderr_sha256": "eb59a942745fa187bbc22040a7fe94c46fc868844126b4b68a927f66a8e8c636",
+      "stderr": "CGR080: session allocation failed: HostAllocation { site: SessionRegions } at 126..200\n",
+      "passed": true
+    },
+    {
+      "label": "entry-hybrid-False:exact-entry-diagnostic",
+      "passed": true
+    },
+    {
+      "label": "entry-hybrid-True:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2c",
+        "build",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/entry-hybrid.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/entry-hybrid-True",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker",
+        "--test-fail-reserve",
+        "1",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 2.093,
+      "stdout_bytes": 535,
+      "stdout_sha256": "fa89ee7ba62f92adda8c62cb6f665dff1cb23c1535e44a3a39768f73cb2c73da",
+      "stdout": "cgx2c build metadata: source_sha256=db60e6fc7bf22591d770e2a6a04f7f86952609802ca135b09daf4ab622d29603 rustc=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=62e813a32b2d2b4d5db980a18cc5f8b1121c8a1e992c14f4dcf5e43c353f55c4 output=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/entry-hybrid-True\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "entry-hybrid-True:failure",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/entry-hybrid-True"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 1,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 87,
+      "stderr_sha256": "eb59a942745fa187bbc22040a7fe94c46fc868844126b4b68a927f66a8e8c636",
+      "stderr": "CGR080: session allocation failed: HostAllocation { site: SessionRegions } at 126..200\n",
+      "passed": true
+    },
+    {
+      "label": "entry-hybrid-True:exact-entry-diagnostic",
+      "passed": true
+    },
+    {
+      "label": "entry-hybrid:emit",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/entry-hybrid.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/entry-hybrid.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.006,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "entry-hybrid:standalone-compile",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker",
+        "--edition=2024",
+        "--cfg=feature=\"fault-injection\"",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/entry-hybrid.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/entry-hybrid-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {
+        "CGX2_TEST_FAIL_RESERVE": "1"
+      },
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.394,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "entry-hybrid:standalone-failure",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/entry-hybrid-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 1,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 87,
+      "stderr_sha256": "eb59a942745fa187bbc22040a7fe94c46fc868844126b4b68a927f66a8e8c636",
+      "stderr": "CGR080: session allocation failed: HostAllocation { site: SessionRegions } at 126..200\n",
+      "passed": true
+    },
+    {
+      "label": "entry-hybrid:standalone-entry-span",
+      "passed": true
+    },
+    {
+      "label": "wrong-error:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2",
+        "--diagnostic-format=json",
+        "check",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/wrong-error.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 1,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 300,
+      "stderr_sha256": "bf2a7655575dce006bdedf91063629a664ac94c73a77a1b8f6a2e02d897ffce0",
+      "stderr": "{\"code\":\"CGT003\",\"severity\":\"error\",\"message\":\"expected cgx2.core.Result<i64, AllocationError>, found cgx2.core.Result<i64, cgx2.core.AllocationError>\",\"file\":\"/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/wrong-error.cg\",\"span\":{\"start\":125,\"end\":146}}\n",
+      "passed": true
+    },
+    {
+      "label": "wrong-error:code-and-span",
+      "passed": true
+    },
+    {
+      "label": "wrong-error:debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/wrong-error.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/sentinel-debug",
+        "--force",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 1,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 229,
+      "stderr_sha256": "0aff79cf7cb1ec17ad793c41b5d55c2513fc84faedd434c82aabfa9f653524a8",
+      "stderr": "CGT003: /home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/wrong-error.cg:125..146: expected cgx2.core.Result<i64, AllocationError>, found cgx2.core.Result<i64, cgx2.core.AllocationError>\n",
+      "passed": true
+    },
+    {
+      "label": "wrong-error:debug:exact-code-and-span",
+      "passed": true
+    },
+    {
+      "label": "wrong-error:debug:artifact-preserved",
+      "passed": true
+    },
+    {
+      "label": "wrong-error:release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/wrong-error.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/sentinel-release",
+        "--force",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 1,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 229,
+      "stderr_sha256": "0aff79cf7cb1ec17ad793c41b5d55c2513fc84faedd434c82aabfa9f653524a8",
+      "stderr": "CGT003: /home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/wrong-error.cg:125..146: expected cgx2.core.Result<i64, AllocationError>, found cgx2.core.Result<i64, cgx2.core.AllocationError>\n",
+      "passed": true
+    },
+    {
+      "label": "wrong-error:release:exact-code-and-span",
+      "passed": true
+    },
+    {
+      "label": "wrong-error:release:artifact-preserved",
+      "passed": true
+    },
+    {
+      "label": "wrong-error:rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/wrong-error.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/sentinel-rust",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 1,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 229,
+      "stderr_sha256": "0aff79cf7cb1ec17ad793c41b5d55c2513fc84faedd434c82aabfa9f653524a8",
+      "stderr": "CGT003: /home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/wrong-error.cg:125..146: expected cgx2.core.Result<i64, AllocationError>, found cgx2.core.Result<i64, cgx2.core.AllocationError>\n",
+      "passed": true
+    },
+    {
+      "label": "wrong-error:rust:exact-code-and-span",
+      "passed": true
+    },
+    {
+      "label": "wrong-error:rust:artifact-preserved",
+      "passed": true
+    },
+    {
+      "label": "wrong-error:python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/wrong-error.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/sentinel-python",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 1,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 229,
+      "stderr_sha256": "0aff79cf7cb1ec17ad793c41b5d55c2513fc84faedd434c82aabfa9f653524a8",
+      "stderr": "CGT003: /home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/wrong-error.cg:125..146: expected cgx2.core.Result<i64, AllocationError>, found cgx2.core.Result<i64, cgx2.core.AllocationError>\n",
+      "passed": true
+    },
+    {
+      "label": "wrong-error:python:exact-code-and-span",
+      "passed": true
+    },
+    {
+      "label": "wrong-error:python:artifact-preserved",
+      "passed": true
+    },
+    {
+      "label": "stale-source-False:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2c",
+        "build",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/drifting.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/stale-False",
+        "--force",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-mutate-source"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 1,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.636,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 178,
+      "stderr_sha256": "27211183daa65460e50fd584ad8d075e27b9c602ec1c576f45cc06ef1e9ff8e3",
+      "stderr": "CGXC009: /home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/drifting.cg: source changed after validation; artifact preserved\n",
+      "passed": true
+    },
+    {
+      "label": "stale-source-False:diagnostic",
+      "passed": true
+    },
+    {
+      "label": "stale-source-False:artifact-preserved",
+      "passed": true
+    },
+    {
+      "label": "stale-source-True:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2c",
+        "build",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/drifting.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/stale-True",
+        "--force",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-mutate-source",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 1,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 1.966,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 178,
+      "stderr_sha256": "27211183daa65460e50fd584ad8d075e27b9c602ec1c576f45cc06ef1e9ff8e3",
+      "stderr": "CGXC009: /home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/drifting.cg: source changed after validation; artifact preserved\n",
+      "passed": true
+    },
+    {
+      "label": "stale-source-True:diagnostic",
+      "passed": true
+    },
+    {
+      "label": "stale-source-True:artifact-preserved",
+      "passed": true
+    },
+    {
+      "label": "stale-package-False:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2c",
+        "build",
+        "--package",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/drifting-package-False",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/stale-package-False",
+        "--force",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-mutate-import"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 1,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.307,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 56,
+      "stderr_sha256": "9edca4fce4c044032f2af0d1d641ff61064b4a9cde8f1603df39c2de27873eb3",
+      "stderr": "CGP018: lib.cg: source changed after package validation\n",
+      "passed": true
+    },
+    {
+      "label": "stale-package-False:diagnostic",
+      "passed": true
+    },
+    {
+      "label": "stale-package-False:artifact-preserved",
+      "passed": true
+    },
+    {
+      "label": "stale-package-True:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/cgx2c",
+        "build",
+        "--package",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/drifting-package-True",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/stale-package-True",
+        "--force",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-mutate-import",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 1,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.941,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 56,
+      "stderr_sha256": "9edca4fce4c044032f2af0d1d641ff61064b4a9cde8f1603df39c2de27873eb3",
+      "stderr": "CGP018: lib.cg: source changed after package validation\n",
+      "passed": true
+    },
+    {
+      "label": "stale-package-True:diagnostic",
+      "passed": true
+    },
+    {
+      "label": "stale-package-True:artifact-preserved",
+      "passed": true
+    },
+    {
+      "label": "migrated-layout-test:compile",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/rustc-bounded-linker",
+        "--test",
+        "--edition=2021",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/record-identities-migrated.rs",
+        "-L",
+        "dependency=/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/deps",
+        "-o",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/record-identities-migrated",
+        "--extern",
+        "cgx2_package=/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/libcgx2_package.rlib",
+        "--extern",
+        "cgx2_sema=/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/libcgx2_sema.rlib",
+        "--extern",
+        "cgx2_emit_rust=/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/debug/libcgx2_emit_rust.rlib"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.118,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "migrated-layout-test:all-original-assertions",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-ygidodin/record-identities-migrated"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-emit-rust",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.135,
+      "stdout_bytes": 183,
+      "stdout_sha256": "839f3412dfedb9a1e5158ce62c7ecae6f07c8c5f43b2338257fd8e22e013d12c",
+      "stdout": "\nrunning 1 test\ntest package_record_fields_preserve_complete_nominal_identities ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    }
+  ],
+  "release_complete": false,
+  "managed_acceptance": "coordinator-review-required",
+  "full_memory_complete": false,
+  "bounds": {
+    "wall_seconds": 180,
+    "cpu_seconds_per_process": 120,
+    "address_space_bytes_per_process": 4294967296,
+    "file_bytes_per_process": 536870912,
+    "retained_bytes_per_stream": 2097152,
+    "aggregate_cgroup_isolation": false
+  },
+  "binary_sha256": {
+    "cgx2": "652b1555f9130d2679191d4dbb4b4f6184a157b104bae7262a7c646242585c89",
+    "cgx2c": "e0135ed2b0c148f6af52fbb4dd9e6343cb026da6b53a378d9acaa90d225f18fe"
+  },
+  "source_sha256": {
+    "nominal.cg": "0cdf6e6ca3fa9bdc01ba0c09b38ca06d128406943556491daf5cc45f23951c4d",
+    "nominal-plain.cg": "1f8fc46c57543cf755d6c593d823c39bc137c0e5961da176c887d3570a2f45ea",
+    "entry-managed.cg": "0d5a26efe857231629c11ea418280443c9b8111a2c7baf958fd42c782a0749e4",
+    "entry-hybrid.cg": "db60e6fc7bf22591d770e2a6a04f7f86952609802ca135b09daf4ab622d29603",
+    "wrong-error.cg": "a3de47880c346950b9ef84694b349b455bde0b76ea93eef38b7b628537960cc2",
+    "recovery.cg": "c5af834d599a45b1b8a036e32cc52c9c61f9cb71482a6c5f572b7e904c8daf41"
+  },
+  "runner_sha256": "7e555359df2954501eaa11cab30516d21b8af1d64ed129cb32d15ffc1827eebe",
+  "runtime_sha256": {
+    "crates/cgx2-runtime/src/budget.rs": "7bd562dae680c6102598a68d139042fba758ae3b3cb8c0d937778c0f0f13e0e4",
+    "crates/cgx2-runtime/src/fault.rs": "bc4652355ca094d8e1daca99b76d38e194c35fcc852c25b071593a4dbe9dc252",
+    "crates/cgx2-runtime/src/graph.rs": "414f340958245f001927f6d92a5fc48277fda2f8867e1d1259d29d037d8fb7ae",
+    "crates/cgx2-runtime/src/heap.rs": "f167f13b46866d9999aa3c8f4329f3a7ad5e59e534d9f5b7b789208296351a8f",
+    "crates/cgx2-runtime/src/lib.rs": "c297d26243a864fdec4c1ec2707b3002843b971dae750ce08a7f856f446c176b",
+    "crates/cgx2-runtime/src/owned.rs": "08b8c47b10ff55c9174467c623127136f034e314f8b5f2d49010e9c21547c197",
+    "crates/cgx2-runtime/src/region.rs": "50362a5df6c4469bfb5f03e9a93a3a351853a97d6fc505a322ce6bc5bb9f6077",
+    "crates/cgx2-runtime/src/report.rs": "4569e7848983a5179c60abdb4cd779f3707512eaae5e614214a50cf8d39ba9aa",
+    "crates/cgx2-runtime/src/scope.rs": "4cd5fdf4d2d1ddf3044b04fec5347442eecc1374d97c7f8220432b8510264840"
+  },
+  "passed": 116,
+  "failed": 0,
+  "rustc_identity": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "artifact_sha256": {
+    "nominal-plain-False": "2f7c21a00513a92a1667bd30a4f88e675d947f934d4d59d3242f70e5b46a435f",
+    "nominal-plain-True": "bafd99668e60480c9971c5dc14719be35b3b891cfeb811cba99a271a8a7a95ea",
+    "nominal-plain.rs": "f7c6b4ba611a01793e9a0d18348fd0310ef4dd1b97859f476c4e0787b9804ce1",
+    "nominal-plain-standalone": "d60bf8e1bf3da173ab524a1dd86c95d9c125b049a8056ae1ed6f6f1ebe43e5be",
+    "nominal-False": "8da87f50a2fa93ea352761e2f9bfec4e080cc15c5f7b24656abe96fab66eb41a",
+    "nominal-True": "1d147a27e5b405af383ba7d8acf71c267ceb729afd262496550eef281c96efce",
+    "nominal.rs": "8a4304b10b5cf11effdcd4208e02f1636998d8262cda4feddf6f55c09bb79166",
+    "nominal-standalone": "24ac3d5c015e3ab3e6d02cb48ff0e781877011a969c5c5d4d49c94c57a2b6f32",
+    "recovery-False": "6ab38c610c51c944a1949de6961ad5c4ec38ed16bfe8218169fc0acc233c96b2",
+    "recovery-True": "7abccd26b7ebe3bbeede4b7054b8f96d080567a20cc99e351911d2b6ac692e71",
+    "recovery.rs": "0f4fd6ddd4492f416c4c8c38b2dc2a499a7e4ccef4a301765243050859af5899",
+    "recovery-standalone": "e6915a13d86d903ba0655ffa3bb9c521a283b5af7f33baacbd5d116d07177f42",
+    "nominal-package-False": "9e605745b25f3732a9b4c9d45c3a80e9b44e3c651d2c68bc388e3042d4ccb3fb",
+    "nominal-package-True": "03a9b4e425fa469e11de8f64697711b5b5c9b20f5a5460607bbbc97353962935",
+    "nominal-package.rs": "cc57571f6015d151e002bb2e61336fda7d7aecc37bc656f097875870f36d9e4f",
+    "nominal-package-standalone": "98aae0518d400902eb96911d1b8473836a82b71addd23993569fb2341527ff78",
+    "entry-managed-False": "6c844faf3b35b98038ca956d581e026bd926cf5e1c642c1f1dc6f350191c1d9e",
+    "entry-managed-True": "4af18623c29b6e4a17268aaa183690ab32efce0761924dbf97eb4875d246c0be",
+    "entry-managed.rs": "4d8b5f7329ca4a21f0fa187d281c6c4309eecb0d55ace75ab60cc5f6dcc58cad",
+    "entry-managed-standalone": "39d3d08f06aef9a55520d4ba3df5bb947ca9db828a8795478b25db23e61ccc99",
+    "entry-hybrid-False": "540634d28a358d40813951cab6fa740ba84c209c6661c5fb01306650e96463e2",
+    "entry-hybrid-True": "dc6d04b0cff3e4b91a12d41fa46471dc0f263145e877d204f7617918cb61ccb0",
+    "entry-hybrid.rs": "3de73a9cd0df29203e634347c1255446177588d1174195377547d71c0ae25456",
+    "entry-hybrid-standalone": "fff407fc29f5edddb0b26118c8ae4777707619b1d50c5928353d734c177c4c75"
+  },
+  "package_sources_sha256": {
+    "cgx2.toml": "7007d1603b414a3f66c5bff69c0f989da48171b4c76af488ca5b814c1456ccf8",
+    "main.cg": "9f5f785b3a52845894dc0c8841234030596c7cd5da359cd343ea164b78ce1bf6",
+    "lib.cg": "0a79ea1d81482a67b86fd5db9070f66a0a18b833fcbcd98c015aca863760958d"
+  },
+  "historical_layout_test_sha256": "403ee4432d0a5fffe2f999535380b7ab94529a920983e375012c36c65e5c447b",
+  "migrated_layout_test_sha256": "3227917c070ddf568dc0b5547b0149c813ebe2374697666d8334d8938259ac7f"
+}

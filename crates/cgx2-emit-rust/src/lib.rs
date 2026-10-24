@@ -379,12 +379,11 @@ pub fn emit_rust(module: &Module, checked: &TypedModule) -> Result<String, Vec<E
                 module.span,
             )]);
         }
-        let program = cgx2_sema::default_managed::compile_module(module, &format!("{module:?}"))
-            .map_err(|ds| {
-                ds.into_iter()
-                    .map(|d| EmitDiagnostic::new(d.code, d.message, d.span))
-                    .collect::<Vec<_>>()
-            })?;
+        let program = cgx2_sema::default_managed::compile_ast(module).map_err(|ds| {
+            ds.into_iter()
+                .map(|d| EmitDiagnostic::new(d.code, d.message, d.span))
+                .collect::<Vec<_>>()
+        })?;
         return emit_managed_rust(&program);
     }
 

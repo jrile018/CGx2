@@ -137,7 +137,7 @@ fn inner(
         "i64" | "Bool" | "String" | "Unit" => Some(0),
         _ => None,
     };
-    if name == "AllocationError" && record.is_some() && ty.arguments.is_empty() {
+    if name == "AllocationError" && (record.is_some() || variant.is_some()) {
         builtin = None;
     }
     if matches!(name.as_str(), "managed.Ref" | "cgx2.managed.Ref")

@@ -71,44 +71,18 @@ pub(super) fn package(package: &CheckedPackage) -> Result<String, Vec<PackageEmi
         .iter()
         .find(|m| m.source() == package.index().entry)
         .expect("checked entry");
-    let name = entry
-        .syntax()
-        .name
-        .as_ref()
-        .map(|p| p.segments.join("."))
-        .unwrap_or_default();
-    let merged = cgx2_sema::merge_modules(
-        &package
-            .modules()
-            .iter()
-            .map(|m| m.syntax())
-            .collect::<Vec<_>>(),
-        &name,
-    );
-    let typed = cgx2_sema::check_module(&merged).map_err(|ds| {
-        failure(ds)
-            .into_iter()
-            .map(|diagnostic| PackageEmitDiagnostic {
-                file: entry.source().to_path_buf(),
-                diagnostic,
-            })
-            .collect::<Vec<_>>()
-    })?;
-    let source = package
-        .modules()
-        .iter()
-        .map(|m| m.text())
-        .collect::<Vec<_>>()
-        .join("\n");
-    let program = cgx2_sema::default_managed::compile_module(&merged, &source).map_err(|ds| {
+    let program = package.managed_program_v1().map_err(|ds| {
         ds.into_iter()
             .map(|d| PackageEmitDiagnostic {
-                file: entry.source().to_path_buf(),
-                diagnostic: EmitDiagnostic::new(d.code, d.message, d.span),
+                file: d.file,
+                diagnostic: EmitDiagnostic::new(
+                    d.code,
+                    d.message,
+                    d.span.unwrap_or(entry.syntax().span),
+                ),
             })
             .collect::<Vec<_>>()
     })?;
-    let _ = typed;
     crate::emit_managed_rust(&program).map_err(|ds| {
         ds.into_iter()
             .map(|diagnostic| PackageEmitDiagnostic {

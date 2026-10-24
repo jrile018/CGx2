@@ -46,7 +46,7 @@ fn main() {{
     let result=if let Some(index)=option_env!("CGX2_TEST_FAIL_RESERVE").and_then(|n|n.parse::<usize>().ok()) {{
         match crate::cgx2_runtime::Session::try_new_with_host_failure_at_reserve(index) {{
             Ok(s)=>execution::run_with_session(&owned,&managed,&bridges,s),
-            Err(e)=>{{eprintln!("CGR080: session allocation failed: {{e:?}}");std::process::exit(1)}}
+            Err(e)=>{{let loc=owned.functions[owned.entry].span;eprintln!("CGR080: session allocation failed: {{e:?}} at {{}}..{{}}",loc.start,loc.end);std::process::exit(1)}}
         }}
     }} else {{execution::run(&owned,&managed,&bridges)}};
     #[cfg(not(feature="fault-injection"))]

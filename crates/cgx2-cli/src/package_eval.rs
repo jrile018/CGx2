@@ -133,23 +133,21 @@ pub(crate) fn run(
             .iter()
             .find(|m| m.source() == package.index().entry)
             .expect("checked entry");
-        let name = entry
-            .syntax()
-            .name
-            .as_ref()
-            .map(|p| p.segments.join("."))
-            .unwrap_or_default();
-        let mut merged = cgx2_sema::merge_modules(
-            &package
-                .modules()
-                .iter()
-                .map(|m| m.syntax())
-                .collect::<Vec<_>>(),
-            &name,
-        );
-        // Final-value diagnostics belong to the entry source, as in standalone
-        // execution, rather than whichever dependency is merged first.
-        merged.span = entry.syntax().span;
+        let program = package.managed_program_v1().map_err(|ds| {
+            ds.into_iter()
+                .map(|d| NativeDiagnostic {
+                    code: if d.code == "CGRS003" {
+                        "CGR009"
+                    } else {
+                        d.code
+                    }
+                    .into(),
+                    message: d.message,
+                    file: d.file,
+                    span: d.span,
+                })
+                .collect::<Vec<_>>()
+        })?;
         let origins = package
             .modules()
             .iter()
@@ -174,7 +172,7 @@ pub(crate) fn run(
                 })
             })
             .collect();
-        let (result, file) = eval::run_package_module(&merged, args, &origins);
+        let (result, file) = eval::run_managed_package(&program, args, &origins);
         return result.map_err(|e| {
             vec![NativeDiagnostic {
                 code: e.code.into(),

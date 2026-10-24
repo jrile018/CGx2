@@ -246,6 +246,68 @@ fn finalize_value(value: Value, span: Span) -> Result<RunResult, RunError> {
     Ok(RunResult { value })
 }
 
+pub(crate) fn run_managed_package(
+    program: &cgx2_sema::default_managed::ManagedProgramV1,
+    args: &[String],
+    origins: &BTreeMap<String, std::path::PathBuf>,
+) -> (Result<RunResult, RunError>, Option<std::path::PathBuf>) {
+    if program.program().entry == usize::MAX {
+        return (
+            Err(error(
+                "CGR008",
+                "package requires main",
+                program.entry_span(),
+            )),
+            None,
+        );
+    }
+    let execution = match program.execute(args) {
+        Ok(e) => e,
+        Err(ds) => {
+            return (
+                Err(error(ds[0].code, ds[0].message.clone(), ds[0].span)),
+                None,
+            )
+        }
+    };
+    if std::env::var_os("CGX2_MANAGED_EVIDENCE").is_some() {
+        eprintln!(
+            "CGX2_MANAGED_EVIDENCE {}",
+            execution.evidence.json(&execution.memory)
+        );
+    }
+    let file = execution
+        .result
+        .as_ref()
+        .err()
+        .and_then(|e| e.function)
+        .and_then(|i| origins.get(&program.program().strings[program.program().functions[i].name]))
+        .cloned();
+    let ty = program
+        .program()
+        .functions
+        .get(program.program().entry)
+        .map_or(&cgx2_sema::Type::Unit, |f| &program.types()[f.result]);
+    (
+        execution
+            .result
+            .map(|v| RunResult {
+                value: crate::default_managed::copy(v, ty, program),
+            })
+            .map_err(|e| {
+                error(
+                    e.code,
+                    e.message,
+                    cgx2_syntax::Span {
+                        start: e.loc.start,
+                        end: e.loc.end,
+                    },
+                )
+            }),
+        file,
+    )
+}
+
 pub(crate) fn run_package_module(
     module: &Module,
     args: &[String],
@@ -258,71 +320,24 @@ pub(crate) fn run_package_module(
                 None,
             );
         }
-        let program =
-            match cgx2_sema::default_managed::compile_module(module, &format!("{module:?}")) {
-                Ok(p) => p,
-                Err(ds) => {
-                    return (
-                        Err(error(
-                            if ds[0].code == "CGRS003" {
-                                "CGR009"
-                            } else {
-                                ds[0].code
-                            },
-                            ds[0].message.clone(),
-                            ds[0].span,
-                        )),
-                        None,
-                    )
-                }
-            };
-        let execution = match program.execute(args) {
-            Ok(e) => e,
+        let program = match cgx2_sema::default_managed::compile_ast(module) {
+            Ok(p) => p,
             Err(ds) => {
                 return (
-                    Err(error(ds[0].code, ds[0].message.clone(), ds[0].span)),
+                    Err(error(
+                        if ds[0].code == "CGRS003" {
+                            "CGR009"
+                        } else {
+                            ds[0].code
+                        },
+                        ds[0].message.clone(),
+                        ds[0].span,
+                    )),
                     None,
                 )
             }
         };
-        if std::env::var_os("CGX2_MANAGED_EVIDENCE").is_some() {
-            eprintln!(
-                "CGX2_MANAGED_EVIDENCE {}",
-                execution.evidence.json(&execution.memory)
-            );
-        }
-        let file = execution
-            .result
-            .as_ref()
-            .err()
-            .and_then(|e| e.function)
-            .and_then(|i| {
-                origins.get(&program.program().strings[program.program().functions[i].name])
-            })
-            .cloned();
-        let ty = program
-            .program()
-            .functions
-            .get(program.program().entry)
-            .map_or(&cgx2_sema::Type::Unit, |f| &program.types()[f.result]);
-        return (
-            execution
-                .result
-                .map(|v| RunResult {
-                    value: crate::default_managed::copy(v, ty, &program),
-                })
-                .map_err(|e| {
-                    error(
-                        e.code,
-                        e.message,
-                        cgx2_syntax::Span {
-                            start: e.loc.start,
-                            end: e.loc.end,
-                        },
-                    )
-                }),
-            file,
-        );
+        return run_managed_package(&program, args, origins);
     }
     let prepared = match prepare_data(module) {
         Ok(p) => p,

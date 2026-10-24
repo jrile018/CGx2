@@ -1,0 +1,8 @@
+module app.main
+import app.lib
+
+fn main() -> i64 effects():
+    let value: app.lib.AllocationError<i64> = app.lib.AllocationError<i64>.Mine(42)
+    match app.lib.echo(value):
+        app.lib.AllocationError<i64>.Mine(x):
+            x
