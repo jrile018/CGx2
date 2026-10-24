@@ -38,6 +38,13 @@ pub(super) fn emit_variants(modules: &[(&Module, &TypedModule)], out: &mut Strin
         for (_, ty) in typed.expressions.iter() {
             collect(ty, &mut found);
         }
+        // Specializations can share source spans while having different concrete
+        // local types. The module-wide span map retains only one such view.
+        for body in typed.bodies.values() {
+            for (_, ty) in body.iter() {
+                collect(ty, &mut found);
+            }
+        }
         for signature in typed.functions.values() {
             collect(&signature.return_type, &mut found);
             for ty in &signature.parameters {

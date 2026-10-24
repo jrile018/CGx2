@@ -334,6 +334,14 @@ pub fn emit_package_python(
     }) {
         package.verify_unchanged().map_err(package_errors)?;
         for source in package.modules() {
+            crate::data::validate_strings(source.syntax()).map_err(|errors| {
+                errors
+                    .into_iter()
+                    .map(|d| {
+                        PackageEmitDiagnostic::new(d.code, d.message, source.source(), Some(d.span))
+                    })
+                    .collect::<Vec<_>>()
+            })?;
             for f in &source.syntax().functions {
                 if let Some(binding) = &f.foreign {
                     return Err(vec![PackageEmitDiagnostic::new(

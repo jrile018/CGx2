@@ -1131,7 +1131,7 @@ fn emit_expr_with_result(expr: &Expr, bind_result: bool) -> String {
     )
 }
 
-fn decode_string(raw: &str) -> Option<String> {
+pub(crate) fn decode_string(raw: &str) -> Option<String> {
     let content = raw.strip_prefix('"')?.strip_suffix('"')?;
     let mut chars = content.chars();
     let mut result = String::new();

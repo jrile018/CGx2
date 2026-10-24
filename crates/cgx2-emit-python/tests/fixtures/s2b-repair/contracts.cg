@@ -1,0 +1,6 @@
+fn bounded<T>(value: i64) -> i64:
+    requires length([get([Option<T>.None()], 0)]) == 1
+    ensures length([get([Option<T>.None()], 0)]) == result
+    length([value])
+fn main() -> i64:
+    bounded<i64>(1) + bounded<Bool>(1)

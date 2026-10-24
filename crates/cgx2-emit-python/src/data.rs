@@ -11,6 +11,33 @@ fn errors(es: Vec<cgx2_sema::TypeDiagnostic>) -> Vec<EmitDiagnostic> {
         .map(|d| EmitDiagnostic::new(d.code, d.message, d.span))
         .collect()
 }
+pub(crate) fn validate_strings(module: &Module) -> Result<(), Vec<EmitDiagnostic>> {
+    // The finite target bypasses scalar admission. Never let Python interpret
+    // raw CGx2 literal text using its larger set of escape sequences.
+    let mut literal_errors = Vec::new();
+    let mut literal = |expr: &Expr| {
+        if matches!(&expr.kind, ExprKind::StringLiteral(raw) if crate::emit::decode_string(raw).is_none())
+        {
+            literal_errors.push(EmitDiagnostic::new(
+                "CGE003",
+                "string literal contains unsupported escape",
+                expr.span,
+            ));
+        }
+    };
+    cgx2_syntax::visit_stmts(&module.statements, &mut |_| {}, &mut literal);
+    for function in &module.functions {
+        cgx2_syntax::visit_stmts(&function.body, &mut |_| {}, &mut literal);
+        for expr in function.requires.iter().chain(&function.ensures) {
+            cgx2_syntax::visit_expr(expr, &mut literal);
+        }
+    }
+    if !literal_errors.is_empty() {
+        return Err(literal_errors);
+    }
+    Ok(())
+}
+
 pub(crate) fn emit(module: &Module, typed: &TypedModule) -> Result<String, Vec<EmitDiagnostic>> {
     let checked = cgx2_sema::check_module(module).map_err(errors)?;
     if &checked != typed {
@@ -20,6 +47,7 @@ pub(crate) fn emit(module: &Module, typed: &TypedModule) -> Result<String, Vec<E
             module.span,
         )]);
     }
+    validate_strings(module)?;
     if let Some(f) = module.functions.iter().find(|f| f.foreign.is_some()) {
         return Err(vec![EmitDiagnostic::new(
             "CGE006",
@@ -199,7 +227,9 @@ impl Emitter<'_> {
                     "False".into()
                 }
             }
-            ExprKind::StringLiteral(s) => s.clone(), // parser admits precisely the portable escapes
+            ExprKind::StringLiteral(s) => {
+                quote(&crate::emit::decode_string(s).expect("validated finite string"))
+            }
             ExprKind::Name(p) => {
                 if p.segments.len() == 1 {
                     self.lookup(&p.segments[0])

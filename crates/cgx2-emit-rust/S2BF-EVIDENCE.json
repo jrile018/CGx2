@@ -1,0 +1,652 @@
+{
+  "reviewed_base": "b595724e1b086c604220cc5b165c141e65a0531f",
+  "scope": [
+    "crates/cgx2-emit-rust/**",
+    "crates/cgx2-emit-python/**"
+  ],
+  "versions": {
+    "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+    "cargo": "cargo 1.98.1 (797e8a9bc 2026-08-05)",
+    "python": "Python 3.14.4"
+  },
+  "tests": {
+    "passed": 69,
+    "failed": 0,
+    "ignored": 0,
+    "suites": 16
+  },
+  "product_checks": 104,
+  "product_outcomes": [
+    {
+      "case": "local-option/check",
+      "exit": 0
+    },
+    {
+      "case": "local-option/run",
+      "exit": 0
+    },
+    {
+      "case": "local-option/build/False",
+      "exit": 0
+    },
+    {
+      "case": "local-option/native/False",
+      "exit": 0
+    },
+    {
+      "case": "local-option/build/True",
+      "exit": 0
+    },
+    {
+      "case": "local-option/native/True",
+      "exit": 0
+    },
+    {
+      "case": "local-option/emit/rust",
+      "exit": 0
+    },
+    {
+      "case": "local-option/rustc/False",
+      "exit": 0
+    },
+    {
+      "case": "local-option/standalone/False",
+      "exit": 0
+    },
+    {
+      "case": "local-option/rustc/True",
+      "exit": 0
+    },
+    {
+      "case": "local-option/standalone/True",
+      "exit": 0
+    },
+    {
+      "case": "local-option/emit/python",
+      "exit": 0
+    },
+    {
+      "case": "local-option/python",
+      "exit": 0
+    },
+    {
+      "case": "local-types/check",
+      "exit": 0
+    },
+    {
+      "case": "local-types/run",
+      "exit": 0
+    },
+    {
+      "case": "local-types/build/False",
+      "exit": 0
+    },
+    {
+      "case": "local-types/native/False",
+      "exit": 0
+    },
+    {
+      "case": "local-types/build/True",
+      "exit": 0
+    },
+    {
+      "case": "local-types/native/True",
+      "exit": 0
+    },
+    {
+      "case": "local-types/emit/rust",
+      "exit": 0
+    },
+    {
+      "case": "local-types/rustc/False",
+      "exit": 0
+    },
+    {
+      "case": "local-types/standalone/False",
+      "exit": 0
+    },
+    {
+      "case": "local-types/rustc/True",
+      "exit": 0
+    },
+    {
+      "case": "local-types/standalone/True",
+      "exit": 0
+    },
+    {
+      "case": "local-types/emit/python",
+      "exit": 0
+    },
+    {
+      "case": "local-types/python",
+      "exit": 0
+    },
+    {
+      "case": "strings/check",
+      "exit": 0
+    },
+    {
+      "case": "strings/run",
+      "exit": 0
+    },
+    {
+      "case": "strings/build/False",
+      "exit": 0
+    },
+    {
+      "case": "strings/native/False",
+      "exit": 0
+    },
+    {
+      "case": "strings/build/True",
+      "exit": 0
+    },
+    {
+      "case": "strings/native/True",
+      "exit": 0
+    },
+    {
+      "case": "strings/emit/rust",
+      "exit": 0
+    },
+    {
+      "case": "strings/rustc/False",
+      "exit": 0
+    },
+    {
+      "case": "strings/standalone/False",
+      "exit": 0
+    },
+    {
+      "case": "strings/rustc/True",
+      "exit": 0
+    },
+    {
+      "case": "strings/standalone/True",
+      "exit": 0
+    },
+    {
+      "case": "strings/emit/python",
+      "exit": 0
+    },
+    {
+      "case": "strings/python",
+      "exit": 0
+    },
+    {
+      "case": "contracts/check",
+      "exit": 0
+    },
+    {
+      "case": "contracts/run",
+      "exit": 0
+    },
+    {
+      "case": "contracts/build/False",
+      "exit": 0
+    },
+    {
+      "case": "contracts/native/False",
+      "exit": 0
+    },
+    {
+      "case": "contracts/build/True",
+      "exit": 0
+    },
+    {
+      "case": "contracts/native/True",
+      "exit": 0
+    },
+    {
+      "case": "contracts/emit/rust",
+      "exit": 0
+    },
+    {
+      "case": "contracts/rustc/False",
+      "exit": 0
+    },
+    {
+      "case": "contracts/standalone/False",
+      "exit": 0
+    },
+    {
+      "case": "contracts/rustc/True",
+      "exit": 0
+    },
+    {
+      "case": "contracts/standalone/True",
+      "exit": 0
+    },
+    {
+      "case": "contracts/emit/python",
+      "exit": 0
+    },
+    {
+      "case": "contracts/python",
+      "exit": 0
+    },
+    {
+      "case": "reverse/check",
+      "exit": 0
+    },
+    {
+      "case": "reverse/run",
+      "exit": 0
+    },
+    {
+      "case": "reverse/build/False",
+      "exit": 0
+    },
+    {
+      "case": "reverse/native/False",
+      "exit": 0
+    },
+    {
+      "case": "reverse/build/True",
+      "exit": 0
+    },
+    {
+      "case": "reverse/native/True",
+      "exit": 0
+    },
+    {
+      "case": "reverse/emit/rust",
+      "exit": 0
+    },
+    {
+      "case": "reverse/rustc/False",
+      "exit": 0
+    },
+    {
+      "case": "reverse/standalone/False",
+      "exit": 0
+    },
+    {
+      "case": "reverse/rustc/True",
+      "exit": 0
+    },
+    {
+      "case": "reverse/standalone/True",
+      "exit": 0
+    },
+    {
+      "case": "reverse/emit/python",
+      "exit": 0
+    },
+    {
+      "case": "reverse/python",
+      "exit": 0
+    },
+    {
+      "case": "package/check",
+      "exit": 0
+    },
+    {
+      "case": "package/run",
+      "exit": 0
+    },
+    {
+      "case": "package/build/False",
+      "exit": 0
+    },
+    {
+      "case": "package/native/False",
+      "exit": 0
+    },
+    {
+      "case": "package/build/True",
+      "exit": 0
+    },
+    {
+      "case": "package/native/True",
+      "exit": 0
+    },
+    {
+      "case": "package/emit/rust",
+      "exit": 0
+    },
+    {
+      "case": "package/rustc/False",
+      "exit": 0
+    },
+    {
+      "case": "package/standalone/False",
+      "exit": 0
+    },
+    {
+      "case": "package/rustc/True",
+      "exit": 0
+    },
+    {
+      "case": "package/standalone/True",
+      "exit": 0
+    },
+    {
+      "case": "package/emit/python",
+      "exit": 0
+    },
+    {
+      "case": "package/python",
+      "exit": 0
+    },
+    {
+      "case": "direct/source-check",
+      "exit": 0
+    },
+    {
+      "case": "direct/source-run",
+      "exit": 1
+    },
+    {
+      "case": "direct/reject/['--target', 'rust']",
+      "exit": 1
+    },
+    {
+      "case": "direct/reject/['--target', 'python']",
+      "exit": 1
+    },
+    {
+      "case": "direct/reject/[]",
+      "exit": 1
+    },
+    {
+      "case": "direct/reject/['--release']",
+      "exit": 1
+    },
+    {
+      "case": "generic/source-check",
+      "exit": 0
+    },
+    {
+      "case": "generic/source-run",
+      "exit": 1
+    },
+    {
+      "case": "generic/reject/['--target', 'rust']",
+      "exit": 1
+    },
+    {
+      "case": "generic/reject/['--target', 'python']",
+      "exit": 1
+    },
+    {
+      "case": "generic/reject/[]",
+      "exit": 1
+    },
+    {
+      "case": "generic/reject/['--release']",
+      "exit": 1
+    },
+    {
+      "case": "requires/source-check",
+      "exit": 0
+    },
+    {
+      "case": "requires/source-run",
+      "exit": 1
+    },
+    {
+      "case": "requires/reject/['--target', 'rust']",
+      "exit": 1
+    },
+    {
+      "case": "requires/reject/['--target', 'python']",
+      "exit": 1
+    },
+    {
+      "case": "requires/reject/[]",
+      "exit": 1
+    },
+    {
+      "case": "requires/reject/['--release']",
+      "exit": 1
+    },
+    {
+      "case": "ensures/source-check",
+      "exit": 0
+    },
+    {
+      "case": "ensures/source-run",
+      "exit": 1
+    },
+    {
+      "case": "ensures/reject/['--target', 'rust']",
+      "exit": 1
+    },
+    {
+      "case": "ensures/reject/['--target', 'python']",
+      "exit": 1
+    },
+    {
+      "case": "ensures/reject/[]",
+      "exit": 1
+    },
+    {
+      "case": "ensures/reject/['--release']",
+      "exit": 1
+    },
+    {
+      "case": "package/reject/rust",
+      "exit": 1
+    },
+    {
+      "case": "package/reject/python",
+      "exit": 1
+    }
+  ],
+  "logs": {
+    "baseline-regressions.log": "3c3be1c33e8a4e1357c9593e9e92c803121c70b6c6a31a3adc343c6df8537a37",
+    "tests.log": "0b6bfa6fccf327d86e6904fdae20714bec75c12aac41d243d947f17dd1f67656",
+    "clippy.log": "cc4f0a4d7247b24631eb13e56fc11e51e8e8e436e4fb1d11d2741bd539dcba2d",
+    "build.log": "2c1099d18bdd2ee4151b7355aa681e2f1a44534074907140913ef83beb5a98f6",
+    "product.log": "2620de15c25b6017d1e70477b0c9b9468613eaba3b3a94d83c34c36017f42eb2",
+    "product.json": "dbe12559d4d3e1e84b674f1c354744e24a72204972ffddfea7d20966ad375b29"
+  },
+  "files": [
+    {
+      "path": "crates/cgx2-emit-rust/Cargo.toml",
+      "sha256": "72132b69b221ed141eaea4aa3bd56c480f9dc4433f5f0091bbd0a008a9032966"
+    },
+    {
+      "path": "crates/cgx2-emit-rust/src/data.rs",
+      "sha256": "520ef9861dcb917b67c204235d62ab6381d7f5b335aa6b730570cc1223f992e7"
+    },
+    {
+      "path": "crates/cgx2-emit-rust/src/data_runtime.rs.txt",
+      "sha256": "252da4f948f944bfa8979b871a60b66641779556ec49dbfcf0a1063fcebb2fa6"
+    },
+    {
+      "path": "crates/cgx2-emit-rust/src/lib.rs",
+      "sha256": "9a133ef6cd02fd50906e20b3a427285d75db4e8a4009b85fee87c9da8ec7e0a8"
+    },
+    {
+      "path": "crates/cgx2-emit-rust/src/memory.rs",
+      "sha256": "caf5a6cfe5b0cd04fc12ff71ee072c1c25edd132781fbff90c3c5871f8412d83"
+    },
+    {
+      "path": "crates/cgx2-emit-rust/src/memory_report.rs.txt",
+      "sha256": "065d901f1c210c57939ab2c605fa4b7871d063af5d2adf8714b0c9453fb5c24e"
+    },
+    {
+      "path": "crates/cgx2-emit-rust/src/memory_runtime.rs.txt",
+      "sha256": "1bbdeeb8a1bd9cd1a1c11ea2b04ef84a383fea52da90ef56cd071d70b2aabd77"
+    },
+    {
+      "path": "crates/cgx2-emit-rust/src/variants.rs",
+      "sha256": "4071b91fe61ac2dc597f07001d9ea91ea64b6c1f99f4956a78d431ae39013021"
+    },
+    {
+      "path": "crates/cgx2-emit-rust/tests/differential.rs",
+      "sha256": "4886002aa413f525353e6ca8479f5ca7cf963b697299aee7d662fa552665b24b"
+    },
+    {
+      "path": "crates/cgx2-emit-rust/tests/fixtures/s2a-imports/cgx2.toml",
+      "sha256": "d0ec793ffcdfce548e02c4b06c61a09ffef30292ec2ab10b86f1ded8322db163"
+    },
+    {
+      "path": "crates/cgx2-emit-rust/tests/fixtures/s2a-imports/src/left.cg",
+      "sha256": "eb81492deb991e193ae394150452a0371b504bf0cf4e7b79f0ef589129c86453"
+    },
+    {
+      "path": "crates/cgx2-emit-rust/tests/fixtures/s2a-imports/src/main.cg",
+      "sha256": "baae748b02a71b0c2c4b0cf9e289b5fa46e1f17a9023847a7269119900031b3d"
+    },
+    {
+      "path": "crates/cgx2-emit-rust/tests/fixtures/s2a-imports/src/right.cg",
+      "sha256": "cec24a2feaf25f523616893d67d39b9bf2ec337ed31bfc10e82d5345a95a1019"
+    },
+    {
+      "path": "crates/cgx2-emit-rust/tests/fixtures/s2a-local/cgx2.toml",
+      "sha256": "b9f32ee4dc5e0ecb5acba00d727b08304784bf8b226e42baf872eeca271594c6"
+    },
+    {
+      "path": "crates/cgx2-emit-rust/tests/fixtures/s2a-local/src/main.cg",
+      "sha256": "31b4b93a84deadb372db2a8100c6a3ca5d2697a40b9d0da668f6a02dc1ff9116"
+    },
+    {
+      "path": "crates/cgx2-emit-rust/tests/native_memory.rs",
+      "sha256": "6302b1ceaf9275cd4052a0caeb24e5ea6d4853b44257b89471b8e5d95d9fd5bc"
+    },
+    {
+      "path": "crates/cgx2-emit-rust/tests/package_records.rs",
+      "sha256": "e4ad2953dc8573aa8d04fd1e00071c6c9647fc15e8e81b41b6366880ea8fa65c"
+    },
+    {
+      "path": "crates/cgx2-emit-rust/tests/s2a_record_identities.rs",
+      "sha256": "e9845f06b29543af96a9d9a80186bb50b63f5b9901281182bd588cc825cd5e56"
+    },
+    {
+      "path": "crates/cgx2-emit-rust/tests/s2b_snapshot.rs",
+      "sha256": "8ca04d72805bbd0dd2ee4399af85a7a1cd5903ac0cf401f923cbd3b5ce1e75c5"
+    },
+    {
+      "path": "crates/cgx2-emit-python/Cargo.toml",
+      "sha256": "15268f5638568bf727ff2d1ab84ea03b4a5ddd66331a3efdcd9bd0461d08ff03"
+    },
+    {
+      "path": "crates/cgx2-emit-python/src/data.rs",
+      "sha256": "2aec10ae1ad4599ddfb3985ac9a819482ebc08eabd341cc9efab0b35e79d6a3c"
+    },
+    {
+      "path": "crates/cgx2-emit-python/src/data_runtime.py.txt",
+      "sha256": "5f3cbfd8e5b31d2f8d1ea54163e24559a2353547bed246f11042e086e68b584d"
+    },
+    {
+      "path": "crates/cgx2-emit-python/src/emit.rs",
+      "sha256": "4d21459f7ddfc32f70a166bb95b4449c2364fcecf55708a08e1754d5f48cd3eb"
+    },
+    {
+      "path": "crates/cgx2-emit-python/src/error.rs",
+      "sha256": "0ec4d7097d565938aa72e37edcec56cac1a1ee9be64da33e9d95bb275083d7d3"
+    },
+    {
+      "path": "crates/cgx2-emit-python/src/lib.rs",
+      "sha256": "eb9c7e2095bfbcbd9b3a1112de4097b9d85be0a9e5615a82c7df49e2fb50a73b"
+    },
+    {
+      "path": "crates/cgx2-emit-python/src/names.rs",
+      "sha256": "a5c7d884cfee93a781ec795044bb7e88abe4a99cc7d65f9f84e302184725e130"
+    },
+    {
+      "path": "crates/cgx2-emit-python/src/package.rs",
+      "sha256": "a9178735e131371ee26a44737c459587b9ecf8f1d2ad5f40fccc09aa0c680564"
+    },
+    {
+      "path": "crates/cgx2-emit-python/tests/differential.rs",
+      "sha256": "f87b603ad0d8c73493ee050b0088d2ecef2e152fc5f732e8263ccdbf24dad183"
+    },
+    {
+      "path": "crates/cgx2-emit-python/tests/emit.rs",
+      "sha256": "cda3aecf18476072ae3df38722336715934230f38346276044836aa531d8d050"
+    },
+    {
+      "path": "crates/cgx2-emit-python/tests/fixtures/arguments.cg",
+      "sha256": "1164e26719dc1408cbae3c4d43489df199d4d6154b33d9ed9743189467534e27"
+    },
+    {
+      "path": "crates/cgx2-emit-python/tests/fixtures/checked_error.cg",
+      "sha256": "a1de396186c1a8fb137a975b4e94fd4c2d3e569de8e8ff9d1aa554f1dba58a96"
+    },
+    {
+      "path": "crates/cgx2-emit-python/tests/fixtures/functions.cg",
+      "sha256": "ba0f0c5dbbef83cd84c13e0ccc30624ecf14237f618490e79855873c72f24e46"
+    },
+    {
+      "path": "crates/cgx2-emit-python/tests/fixtures/package_three/cgx2.toml",
+      "sha256": "d7c978019df60088222e3137283b4c112cd4cd40474c9baf148881db9be6a74d"
+    },
+    {
+      "path": "crates/cgx2-emit-python/tests/fixtures/package_three/src/base.cg",
+      "sha256": "fa7297ce30d4c763412ae1022a150ad54876d64afdf6180c990d02c3e3b15d01"
+    },
+    {
+      "path": "crates/cgx2-emit-python/tests/fixtures/package_three/src/main.cg",
+      "sha256": "c510548cbe7c55e3494e8c1357c01c1f4229b6c6918d32e8b6e86bce0e5bd534"
+    },
+    {
+      "path": "crates/cgx2-emit-python/tests/fixtures/package_three/src/math.cg",
+      "sha256": "fc209af710cf4c8b8c572151aa2733f5cd1e509b4f9c976a26a517d5ca670ee0"
+    },
+    {
+      "path": "crates/cgx2-emit-python/tests/fixtures/package_two/cgx2.toml",
+      "sha256": "4c1505c5344e684f3488787ffe5ce7308fbf1a4b3b37cbae5fd8eb35cdd4edde"
+    },
+    {
+      "path": "crates/cgx2-emit-python/tests/fixtures/package_two/src/main.cg",
+      "sha256": "255cd39cb82c45beafa053cd8da0491e94a18685dce8b929c226a2c5287fd698"
+    },
+    {
+      "path": "crates/cgx2-emit-python/tests/fixtures/package_two/src/math.cg",
+      "sha256": "2bc911cf590206f296773537bacd23648cbb0c13cfb724d9558411d9c5850c2d"
+    },
+    {
+      "path": "crates/cgx2-emit-python/tests/fixtures/record.cg",
+      "sha256": "f6b8a1c23e83d0389a4503cdf2bacbc9e5dd8971f01be367e9c8c60e37636826"
+    },
+    {
+      "path": "crates/cgx2-emit-python/tests/fixtures/s2b-repair/contracts.cg",
+      "sha256": "13af8ac76401532cc8e1cf68ba6a33cf226da9b485a80af30ab9a9e198c81f96"
+    },
+    {
+      "path": "crates/cgx2-emit-python/tests/fixtures/s2b-repair/local-types.cg",
+      "sha256": "37f4a44118f84cb9a6b23b4e8ca3832b187fb895241e9fca89a503d39861965e"
+    },
+    {
+      "path": "crates/cgx2-emit-python/tests/fixtures/s2b-repair/strings.cg",
+      "sha256": "88df49d0f3cffd0e604dc7fd24722e02182a929505c539811de853239800a442"
+    },
+    {
+      "path": "crates/cgx2-emit-python/tests/fixtures/script.cg",
+      "sha256": "d618edbc3ad92588a6691592b92176ba9c09af9a6ffba596321e38f6f6fd347a"
+    },
+    {
+      "path": "crates/cgx2-emit-python/tests/package.rs",
+      "sha256": "c241eca8d8c888dc0e3958b9841c2a2f292b1d1bcb25b5ef947dc02cb751afa0"
+    },
+    {
+      "path": "crates/cgx2-emit-python/tests/package_records.rs",
+      "sha256": "f16054ac84da9113b4ec74f05d804fd2b0b6bb94bed99ecdd4e7f877b63faf35"
+    },
+    {
+      "path": "crates/cgx2-emit-python/tests/records.rs",
+      "sha256": "651387ff227c4455dc43fd035b626596a535e315847254f21508e1dc45475e51"
+    },
+    {
+      "path": "crates/cgx2-emit-python/tests/s2b_product.py",
+      "sha256": "3c08336a67abeb3d9185f7c8f5c604432988c4913c711e17d559ce7a4d9e3729"
+    },
+    {
+      "path": "crates/cgx2-emit-python/tests/s2b_repair.rs",
+      "sha256": "2d549d58f3eb21bd0429ca6079c788ce6a4406f4bbd4d0b1531eb49dedc0ce03"
+    },
+    {
+      "path": "crates/cgx2-emit-python/tests/s2b_snapshot.rs",
+      "sha256": "8ab6fd221a84b63b2ee0e4269752bb8843808616078779535ff101cd3769091a"
+    }
+  ],
+  "limitations": [
+    "Source checking still admits unsupported escapes; interpreter rejects CGR009; emitters reject CGRS003/CGE003 before output.",
+    "CGT014 still restricts contracts to annotated i64/Bool parameters/results; generic type parameter contracts are tested only within this admitted profile.",
+    "No shared representation, root manifest/lock, coordinator ledger, or other repair lane changed. Foundation and release acceptance remain coordinator gates."
+  ]
+}

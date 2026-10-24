@@ -1,0 +1,14 @@
+record Box<T>:
+    value: T
+variant Item<T>:
+    Value(T)
+    Empty
+fn size<T: Eq + Show>(value: T) -> i64:
+    let found = get([value], 0)
+    let parsed = parse_i64("12")
+    let nested = get([get([value], 0)], 0)
+    let aggregate = get([Box(value: Item<T>.Value(value))], 0)
+    let rendered = show(value)
+    length([value])
+fn main() -> i64:
+    size(1) + size(true)
