@@ -240,3 +240,11 @@ Reviewed common base89464a76c9bd84a3b090ec58a14ca6be0043c6ea matches all three w
 ## Nominal constructor repair reviewed; recovery and harness active
 
 35a8618 accepted/integrated6ffbf16 after two independent reviews and coordinator243/0 product replay with795 compiler inputs and all frozen artifact/dependency hashes matched. Worker425Rust and23 actual external standalone programs independently verified. Full attempt history retained; narrow OM04 and external-evidence gap closed. Runtime recovery and harness chats still running; saved cursors in thread-state.json. No new consumer or duplicate repair dispatch.
+
+## Recovery and harness follow-ups reviewed
+
+Both chats delivered and stopped. Recovery0503ed9 integratedded3768 is reviewed as a bounded repair; combined checks pending. Harnessd43eb9f stagedb552fcf is reviewed-incomplete; exact rejection, abnormal finalization and source identity require the independently reviewed harness-finalization successor. No new chat dispatched yet. Existing IDs/cursors updated in thread-state.json; no duplicates.
+
+## Combined bounded repairs verified; finalization successor ready
+
+Combined1383Rust/0failed/6ignored and quality gates pass. Main962/1 retains static dependency filename; Auto32,package43,review19,nominal243,admission196,recovery515 and separate legacy reconciliation133 pass. Historical135/1+nested670/8 and original recovery-runner exception stay retained.536 verified archives in s2b-ordinary-memory-review/evidence/finalization-combined. Only harness-finalization is dependency-ready; its reviewed plan freezes candidate reuse and exclusive paths. Dispatch IDs and actual setup status follow after common-base commit. No broad memory/S3/release claim.

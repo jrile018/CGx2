@@ -1,0 +1,74 @@
+{
+  "validator_sha256": "ad74f2beeaa229443dba7199d596575edf3b23148a5ff860645a6f9d25da9260",
+  "common_sha256": "789e23e61038b0ce04011fda85863118fe627743dc5adbc828fccd9b016cc179",
+  "sentinel_probes": [
+    {
+      "name": "duplicate",
+      "input": {
+        "reason": "exit",
+        "exit": 1,
+        "signal": null,
+        "stdout": "",
+        "stderr": "CGE006: unsupported\nCGE006: unsupported\n"
+      },
+      "expected_rejection": false,
+      "actual": [
+        true,
+        true
+      ]
+    },
+    {
+      "name": "mixed",
+      "input": {
+        "reason": "exit",
+        "exit": 1,
+        "signal": null,
+        "stdout": "",
+        "stderr": "CGXC005: compiler process failed\nCGE006: unsupported\n"
+      },
+      "expected_rejection": false,
+      "actual": [
+        true,
+        true
+      ]
+    },
+    {
+      "name": "prose",
+      "input": {
+        "reason": "exit",
+        "exit": 1,
+        "signal": null,
+        "stdout": "",
+        "stderr": "CGXC005: unrelated error mentions CGE006\n"
+      },
+      "expected_rejection": false,
+      "actual": [
+        true,
+        true
+      ]
+    }
+  ],
+  "finalization_probes": [
+    {
+      "name": "timeout",
+      "expected_nonzero": true,
+      "actual_exit": 0,
+      "actual_complete": true,
+      "coverage_errors": []
+    },
+    {
+      "name": "signal",
+      "expected_nonzero": true,
+      "actual_exit": 0,
+      "actual_complete": true,
+      "coverage_errors": []
+    },
+    {
+      "name": "overflow",
+      "expected_nonzero": true,
+      "actual_exit": 0,
+      "actual_complete": true,
+      "coverage_errors": []
+    }
+  ]
+}

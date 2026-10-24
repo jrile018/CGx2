@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24T16:33:11.355022+00:00",
+  "checked_at": "2026-10-24T17:23:08.727428+00:00",
   "original_chats": [
     {
       "lane": "core",
@@ -587,9 +587,12 @@
       "hostId": "local",
       "threadId": "01a16ea8-81b2-7323-a1ed-602c72630fe9",
       "worktree": "/home/john-riley/.codex/worktrees/2b95/lang",
-      "status": "running",
-      "afterCursor": "6aeabcc6-9be3-4965-94f9-251878fe752c:5",
-      "setup_verified": "Worktree HEAD equals89464a76c9bd84a3b090ec58a14ca6be0043c6ea; app read_thread and compact wait confirm active. list_threads omitted agent-created chats; exact read-only local metadata and app reads resolved identities. No duplicates."
+      "status": "reviewed-bounded-repair",
+      "afterCursor": "6aeabcc6-9be3-4965-94f9-251878fe752c:7",
+      "setup_verified": "Worktree HEAD equals89464a76c9bd84a3b090ec58a14ca6be0043c6ea; app read_thread and compact wait confirm active. list_threads omitted agent-created chats; exact read-only local metadata and app reads resolved identities. No duplicates.",
+      "commit": "0503ed95691a7411fb0d8615acd20cb69e3ffd3c",
+      "integrated_commit": "ded3768480c745ce544d33c56aea44d4fc0bfa5a",
+      "acceptance_note": "Accepted bounded repair: independent source/evidence review and coordinator combined1383Rust plus515recovery/962pass1knownstaticfailure. One-line recovery runner compatibility reconciliation reviewed; original463checks+exception and historical135/1+nested670/8 retained. No broad memory acceptance."
     },
     {
       "lane": "harness-hardening",
@@ -600,9 +603,22 @@
       "hostId": "local",
       "threadId": "01a16ea8-bbf7-7381-8599-5953d15d1757",
       "worktree": "/home/john-riley/.codex/worktrees/97d1/lang",
-      "status": "running",
-      "afterCursor": "ea5db0ca-9d6e-48d2-845e-748bfe81768a:5",
-      "setup_verified": "Worktree HEAD equals89464a76c9bd84a3b090ec58a14ca6be0043c6ea; app read_thread and compact wait confirm active. list_threads omitted agent-created chats; exact read-only local metadata and app reads resolved identities. No duplicates."
+      "status": "reviewed-incomplete",
+      "afterCursor": "ea5db0ca-9d6e-48d2-845e-748bfe81768a:6",
+      "setup_verified": "Worktree HEAD equals89464a76c9bd84a3b090ec58a14ca6be0043c6ea; app read_thread and compact wait confirm active. list_threads omitted agent-created chats; exact read-only local metadata and app reads resolved identities. No duplicates.",
+      "commit": "d43eb9fa43da6c19385f2c54195de506193e143d",
+      "integrated_commit": "b552fcfffb8a24eb6d17f54ce0847c88e9399228",
+      "acceptance_note": "Truthful971/11 and1326/34/6 retained.58selftests pass,393 historical files unchanged,362archives/808streams verified. Sentinel duplicate/mixed diagnostics and abnormal-command finalization false acceptance plus hardcoded provenance require harness-finalization repair."
+    }
+  ],
+  "s2b_ordinary_memory_finalization": [
+    {
+      "lane": "harness-finalization",
+      "title": "CGx2 ordinary evidence finalization repair",
+      "plan": "plans/release-completion/s2b-ordinary-memory-review/harness-finalization/plan.md",
+      "status": "planned",
+      "compiler_candidate": "ded3768480c745ce544d33c56aea44d4fc0bfa5a",
+      "acceptance_note": "Bounded exact-diagnostic, abnormal-finalization and candidate-provenance repair. Reviewed plan;536 combined archives; shared compiler/interfaces unchanged. No dispatch yet."
     }
   ]
 }

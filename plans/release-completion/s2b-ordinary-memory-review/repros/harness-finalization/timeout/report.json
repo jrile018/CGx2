@@ -1,0 +1,41 @@
+{
+  "schema_version": 2,
+  "reviewed_base": "89464a76c9bd84a3b090ec58a14ca6be0043c6ea",
+  "commands": [
+    {
+      "name": "rustc-identity",
+      "reason": "timeout",
+      "exit": null,
+      "signal": null,
+      "stdout": "",
+      "stderr": "",
+      "executable_unchanged": true
+    }
+  ],
+  "checks": [
+    {
+      "name": "required-evidence-coverage",
+      "passed": true,
+      "errors": []
+    }
+  ],
+  "exceptions": [],
+  "complete": true,
+  "ordinary_memory_accepted": false,
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/target/release-ordinary-harness-hardening",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/target/tmp-ordinary-harness-hardening",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "passed": 1,
+  "failed": 0,
+  "required_inventory": {
+    "commands": [
+      "rustc-identity"
+    ],
+    "checks": []
+  },
+  "coverage_errors": []
+}

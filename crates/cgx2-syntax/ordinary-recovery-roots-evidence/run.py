@@ -147,7 +147,7 @@ def main():
         # separate control uses the already reviewed six-root bookkeeping sum.
         original = (legacy / 'runtime_probe.rs').read_text()
         derived = original.replace('let copy=4*root +', 'let copy=6*root +')
-        assert original != derived
+        assert original.count("let copy=4*root +") + original.count("let copy=6*root +") == 1
         corrected = j.output / 'derived-copy-budget.rs'
         corrected.write_text(derived)
         probe = j.output / 'derived-copy-budget'

@@ -163,3 +163,11 @@ See [combined acceptance](s2b-default-managed-review/evidence/combined-accepted/
 ### Ordinary API repair accepted; combined memory gate pending
 
 OM08 public API projection is accepted as bounded repair64a71e7 with independent175Rust/84product checks and reviewed historical evidence. Admission/core review and runtime/evidence deliveries are still required. All broader memory and R01–R15 requirements remain open and unchanged.
+
+### Recovery repair reviewed; evidence finalization pending
+
+Runtime0503ed9/ded3768 passes independent bounded source/evidence review. Harnessd43eb9f/b552fcf remains incomplete for exact rejection validation, abnormal-command finalization and candidate provenance. Fresh combined integration is running; see s2b-ordinary-memory-review/README.md and harness-finalization/plan.md. All R01–R15 requirements, broad source ownership/transfer/v3 and external acceptance stay open.
+
+### Combined recovery checkpoint reviewed; harness finalization next
+
+Combined1383Rust/0failed/6ignored and quality gates pass; source recovery515/0, nominal243/0, admission196/0, Auto32/0, package43/0 and review19/0 pass. Main962/1 retains the known dependency filename failure. Historical135/1 and nested670/8 are preserved with separate133/0 reserve reconciliation. The harness remains unaccepted for exact diagnostic validation, abnormal-command completion and source identity. See the reviewed harness-finalization plan and536 archived evidence files. All R01–R15 and remaining capabilities stay open.

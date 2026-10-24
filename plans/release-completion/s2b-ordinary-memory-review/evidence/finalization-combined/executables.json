@@ -1,0 +1,1707 @@
+{
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/extra-fault-64-standalone": {
+    "sha256": "0c627c36cb76a52ec5e43e7ebc4d99c221aa4dbbe482040c05f986c04bfdc6f6",
+    "bytes": 5714648,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/extra-fault-64-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/copy-argument-primary-debug": {
+    "sha256": "2ae8acc8ac29be4c67a5cd95818362b6ec661cff1963e9cd8d303c811959beef",
+    "bytes": 5671456,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/copy-argument-primary-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/return-alias-standalone": {
+    "sha256": "fb995b45da9e8c32fa13920a5a607a7d9577cc1cf333cf49d41b5c212641ca06",
+    "bytes": 5651488,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/return-alias-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/return-error-release": {
+    "sha256": "6c5bfa7d1b4bc846cf342dad20a76eaf7f1d77453ba704023f61039ef3094ce3",
+    "bytes": 4836824,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/return-error-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/copy-argument-primary-standalone": {
+    "sha256": "5f221ffa28c3a1280e10bd350d4b92885d74bbd914463a4a1f585aeb504492ca",
+    "bytes": 5666992,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/copy-argument-primary-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/return-alias-debug": {
+    "sha256": "6d42a5967a360e3da055f83c36ca94bd3a35394da955d8986bd55cff3751fa15",
+    "bytes": 5676376,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/return-alias-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/trace": {
+    "sha256": "124e8473041fba604aa818320ba52ceca553831195f519a642740b97f85abde5",
+    "bytes": 5705920,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/trace"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/rustc-two-threads": {
+    "sha256": "69678aa162e6d524b32b68f569c9b45ae5dfde59997a9a143713d18e74e06ce2",
+    "bytes": 54,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/rustc-two-threads"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/arm-allocation-debug": {
+    "sha256": "c9e90418917d50a7d10c523798399125993123955acfb762d99f23159769efdd",
+    "bytes": 5674528,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/arm-allocation-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/copy-failure-source-debug": {
+    "sha256": "8b140f0705d89bbb3a479e742c6a662eb957df5ec357d28dec9380b84b876b88",
+    "bytes": 5684536,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/copy-failure-source-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/return-alias-release": {
+    "sha256": "fe69e67ac9f145365b81a9bd6fa8182912ffd32a10718bbfd26c0bbb43ede185",
+    "bytes": 4833792,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/return-alias-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/copy-argument-primary-release": {
+    "sha256": "95c14221517057f0fb5ebe6aebbc9d3ed1a511eb28f64f0a275685a159316335",
+    "bytes": 4831456,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/copy-argument-primary-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/extra-fault-64-release": {
+    "sha256": "f7573f7799af3d00069d997a4df54d627e175e00eb2619f3ef95d8a2cac23f37",
+    "bytes": 4857728,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/extra-fault-64-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/return-error-debug": {
+    "sha256": "01668aa9663fc52a93c0759601e7421fb8592e6a27624b1035b7402aabb14b65",
+    "bytes": 5681088,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/return-error-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/arm-allocation-release": {
+    "sha256": "78a2e9b23409492be2d3a13fa3b2e519cfc3b219c1ba2006dfe8e18a5bda230f",
+    "bytes": 4832464,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/arm-allocation-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/copy-failure-source-standalone": {
+    "sha256": "de6d3369613b638dd6b75c5feaaee392a3810b2997f85dc9e6d4c91206bda43b",
+    "bytes": 5676008,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/copy-failure-source-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/copy-failure-source-release": {
+    "sha256": "5bc1ca87df8d8a1d6d0e7346c44d29b859f3f7a464270c027f4a9962263c3f1a",
+    "bytes": 4840544,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/copy-failure-source-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/return-error-standalone": {
+    "sha256": "8b94df3192202d0a5e057767fc85ff5b2a6c0a174ac03ed40bd11f006a9a2087",
+    "bytes": 5656256,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/return-error-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/arm-allocation-standalone": {
+    "sha256": "465f777285bdf70401ee4b805adf83773fb335dccd039daa31e4b4dde786d796",
+    "bytes": 5654176,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/arm-allocation-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/extra-fault-64-debug": {
+    "sha256": "c4398f39ce17d9b7dd4b0aa864a981cde51366d128021992ff4349a5f93e0a17",
+    "bytes": 5735072,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/extra-fault-64-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/derived-copy-budget": {
+    "sha256": "f868d25aded2e9ed377ec84027ec4c9afd0a1f5d454e8d5ba8c9dc021511a7b1",
+    "bytes": 4989160,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/derived-copy-budget"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/auto/standalone": {
+    "sha256": "6fdfb4f7c2712952e7f72a6977c367c8567712ec5f8857784399eba726b5ecff",
+    "bytes": 5637888,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/auto/standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/auto/rustc-two-threads": {
+    "sha256": "69678aa162e6d524b32b68f569c9b45ae5dfde59997a9a143713d18e74e06ce2",
+    "bytes": 54,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/auto/rustc-two-threads"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/auto/release": {
+    "sha256": "6343deb9e86c6f24b44e59c912ea91852f756f025a4f7058a5b9f4ceabd01256",
+    "bytes": 4846904,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/auto/release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/auto/debug": {
+    "sha256": "7e2aa10b71ecfe125cee2417ef48479dfcaaa631f1615dbe40837fd2f3306122",
+    "bytes": 5707864,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/auto/debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/auto/probe": {
+    "sha256": "e75e07b7436311c4854402ab3396759ef4952e7ade46be98a6faae2af738a22e",
+    "bytes": 4656224,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/auto/probe"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/extra-fault-64-standalone": {
+    "sha256": "a159c252d8b85e9332be57a3ab8663933d8d6b21788baa4fea46f7177fd51d62",
+    "bytes": 5714632,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/extra-fault-64-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/copy-argument-primary-debug": {
+    "sha256": "c4c4e79b625eebcea6f6ca19a38be759fdeb11251b9e0043d3a06fc573ace9a8",
+    "bytes": 5671456,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/copy-argument-primary-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/return-alias-standalone": {
+    "sha256": "454ac8c7eb8ca7c1d1db077c774a3eb1fb8844f3d50e3bea04d4d3d3b66bb658",
+    "bytes": 5651472,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/return-alias-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/return-error-release": {
+    "sha256": "a0ed825e3fc3a390ee8da9249f09ac15549f575d473a2676709c3cb233ced6a1",
+    "bytes": 4836816,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/return-error-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/copy-argument-primary-standalone": {
+    "sha256": "c4896ca38b14903fc4d8772a77be004e2cd2a91d2a2ec804a6e0cce626531e50",
+    "bytes": 5666992,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/copy-argument-primary-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/return-alias-debug": {
+    "sha256": "e8362b72d68816bde895a22f8d45ae6008543a86c8ca6296e492254f00fdaeb7",
+    "bytes": 5676376,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/return-alias-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/trace": {
+    "sha256": "084369752cd2ba3dbac3841cdc0f9d227a93f08d9ef0c40952e02478c924d4e0",
+    "bytes": 5705904,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/trace"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/rustc-two-threads": {
+    "sha256": "69678aa162e6d524b32b68f569c9b45ae5dfde59997a9a143713d18e74e06ce2",
+    "bytes": 54,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/rustc-two-threads"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/arm-allocation-debug": {
+    "sha256": "c2c522adc8cb519e5be21679f7ec1425696d969bca919c9d740f824935e69224",
+    "bytes": 5674528,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/arm-allocation-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/copy-failure-source-debug": {
+    "sha256": "d78924984341f6fbd0d454856101d3add24a5ca3e3c44cc8d892f0a7613bb1f5",
+    "bytes": 5684536,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/copy-failure-source-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/return-alias-release": {
+    "sha256": "b373999bf1f5557f21854cb7f8907302de9e6801cf8fd9fbd01feba71dbb7ea5",
+    "bytes": 4833784,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/return-alias-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/copy-argument-primary-release": {
+    "sha256": "a3a48372e1abdb73297c93236b17488fe3ff902b8690b3342ae9176ad2870319",
+    "bytes": 4831448,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/copy-argument-primary-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/extra-fault-64-release": {
+    "sha256": "00884cb11fd9b80289c1567d4ac6101a211885b9dd48f8a02d001c447126662e",
+    "bytes": 4857704,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/extra-fault-64-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/return-error-debug": {
+    "sha256": "bab89a742cb8690cfa8df2abe9b3bf08f99aef90fb81e3b1fec741ded51f63c1",
+    "bytes": 5681088,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/return-error-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/arm-allocation-release": {
+    "sha256": "bb4d11fca8c00666f99a472da609d0a45430a3b74b4c19a0b535e53e8264f474",
+    "bytes": 4832432,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/arm-allocation-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/copy-failure-source-standalone": {
+    "sha256": "c5c49a321d86b17603f5c6822aaf39e6e5f951c45f1bfb63a8707f8419889461",
+    "bytes": 5676008,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/copy-failure-source-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/copy-failure-source-release": {
+    "sha256": "8219ff4ef1864b75bcac08bae25c0bbfb251e87c451a10d94bd6fef9eff8559b",
+    "bytes": 4840536,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/copy-failure-source-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/return-error-standalone": {
+    "sha256": "5222e4419792a4c763812c39929dd0eaba2fa83c7556e55afcad9f0e3e0370e3",
+    "bytes": 5656240,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/return-error-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/arm-allocation-standalone": {
+    "sha256": "45c47b360184d7fa0dfd04adf3c18e8ff735e0a286acf944903bcca4f06c7fe4",
+    "bytes": 5654160,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/arm-allocation-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/extra-fault-64-debug": {
+    "sha256": "47e0397c01823f5c89ac83dac59e962a20a95872bd4694339bc1d53c6fe3755c",
+    "bytes": 5735072,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/extra-fault-64-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/package/package-error-debug": {
+    "sha256": "5d4a0e941968b21f4f78dba7f32a6d8674c67570530820a92d755f261a786d2a",
+    "bytes": 5611216,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/package/package-error-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/package/rustc-two-threads": {
+    "sha256": "69678aa162e6d524b32b68f569c9b45ae5dfde59997a9a143713d18e74e06ce2",
+    "bytes": 54,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/package/rustc-two-threads"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/package/package-value-standalone": {
+    "sha256": "245b7f2646e0ae6a9b53bebe12986f990bc86f0ad132e242855bd2d49f6ca188",
+    "bytes": 5637432,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/package/package-value-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/package/package-value-debug": {
+    "sha256": "4ebb1a4142a7b0d4510cdefec40cbc72661ea8f5b23e422f4a12c55b225bb4bd",
+    "bytes": 5626176,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/package/package-value-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/package/package-error-standalone": {
+    "sha256": "b2c7eade9b7498073d4ac754e3e6bd8972118ae384984a32a3b94b5dc1bfe693",
+    "bytes": 5622488,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/package/package-error-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/package/package-value-release": {
+    "sha256": "de2d9323078026d347cf073f0a244573f5fea21565ceeb3eaadfb6783eee46cd",
+    "bytes": 4826312,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/package/package-value-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/package/package-error-release": {
+    "sha256": "f20ce8e6a6704f5ff86f5990804be49d11cb6474875fb2a90b4b6f1e9d4f9bbc",
+    "bytes": 4818960,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/package/package-error-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-3-standalone": {
+    "sha256": "343d8204fdb7706d0f7dd5a1fc1999b88dcfd099461e3e8aa90d0538aeb72cf2",
+    "bytes": 5714624,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-3-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-14-release": {
+    "sha256": "9e73b7cccfc8c43b560891f8918f14c39ca55a3f6db9ae0d08323d6487628ed0",
+    "bytes": 4857696,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-14-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/return-release": {
+    "sha256": "2608cdfd2116d39255558d7b4b5d5f5f7919fcb498b514ea9fae8288ca695452",
+    "bytes": 4839840,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/return-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-12-release": {
+    "sha256": "293e74d087ed2f2505db46a7f80faae88535ad9c95ac391c52dc4d163a2e507e",
+    "bytes": 4857712,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-12-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-18-debug": {
+    "sha256": "d0f4fda98423273285b1e3f087fa04bc6a5bf7a457ea5e0d93f4339cea461103",
+    "bytes": 5735056,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-18-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-12-debug": {
+    "sha256": "6c8696a0d95c369e77d605fadd0a99e3c86ccf31e87ad68d418982f56b7489e3",
+    "bytes": 5735056,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-12-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-18-release": {
+    "sha256": "d7d98023d4f7247d0c7f2ee5490a1a9ddaa661206de39a6db91a462e8688eea8",
+    "bytes": 4857712,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-18-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/contract-release": {
+    "sha256": "60b419fe4d4fbcc5fe84feb690882a369dcab51433b132dc263ae3afdf4dabeb",
+    "bytes": 4840752,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/contract-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/guard-release": {
+    "sha256": "2454069b11a7631e0bb0a496e170cfd8694fc9d8d5902d0604ba46c45bd44b5f",
+    "bytes": 4833272,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/guard-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-7-debug": {
+    "sha256": "5c1ec2ff6700e6c2d2628e2a73a35fe15d57b1459a3c4ba17ff8efe3cd95b2b0",
+    "bytes": 5735056,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-7-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/allocation-debug": {
+    "sha256": "425ed45e9cb66c6f3851660b8a6dbfed404377b43f7140665667279ac48928d5",
+    "bytes": 5683872,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/allocation-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/failed-argument-release": {
+    "sha256": "cfdfcfdd96a167c32b0f7e25fbacb3e8bb6cd7c30f5fe5f38b0419b3f6c9153f",
+    "bytes": 4843704,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/failed-argument-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/session-standalone": {
+    "sha256": "cc90b4940172683eccd245c4d1a37f9adc21169f77f29313bab4d0c11152e7bd",
+    "bytes": 5640696,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/session-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-1-release": {
+    "sha256": "c90f2894c715ecf9a52f35d0dba3a7708792c8f2b5ed4b9bb03ea8cbb199c3e2",
+    "bytes": 4857704,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-1-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/contract-standalone": {
+    "sha256": "bc856ef44cf0ed96f507e0d79ebe23eab14e43ac313a75e85aeac970d3c89334",
+    "bytes": 5658208,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/contract-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-16-debug": {
+    "sha256": "41a21104da6749da44a6993c35fc55ae519c15abadff38970231ce203fddf6af",
+    "bytes": 5735056,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-16-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/allocation-standalone": {
+    "sha256": "9515955649b6f4bb378d096189878c876f6721c5a63a0099a14154b6a0189821",
+    "bytes": 5654960,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/allocation-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-9-release": {
+    "sha256": "d6b059ff79c6ed4c03ed7642e0a7e21bfc963501bbfcdf51efdd539eceb94c90",
+    "bytes": 4857704,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-9-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-10-debug": {
+    "sha256": "46f3311f5a4fd938fb30630021a0da5a0c7c83ce63cc1d3134ac6ab6821d535a",
+    "bytes": 5735056,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-10-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-20-release": {
+    "sha256": "07885766f15cc6416f6302d7d9debae4ad0cf84f6020c0cdc024903116d1e39c",
+    "bytes": 4857712,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-20-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-5-debug": {
+    "sha256": "d25f507bc30762d3932e6e460d4d87b380d570fcefacce0be3572525bf06e4d6",
+    "bytes": 5735056,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-5-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-21-release": {
+    "sha256": "3500d504cd9f60face0f42a3126da971df63c9f28fb799affdd65a48f6c42e43",
+    "bytes": 4857712,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-21-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-20-standalone": {
+    "sha256": "8462a90714e1708f1b9ca25cff8e5bb58740032896f01566957d57dda0424e7d",
+    "bytes": 5714552,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-20-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-17-debug": {
+    "sha256": "ed57e53c8100b6b91c7cfe6c5d8f5b5965ff00c8e99f00e28e4c4e017383b72f",
+    "bytes": 5735056,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-17-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-9-debug": {
+    "sha256": "a6b021f78947f72c7ef030dd49c6c3a8e8b8e6106f82b252eb29cb705eec5cd8",
+    "bytes": 5735056,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-9-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/arithmetic-standalone": {
+    "sha256": "391e3e5aae47501b3424412670a107cf0cdd4489617f2a628dcc769c244e8f2b",
+    "bytes": 5661232,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/arithmetic-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/failed-argument-standalone": {
+    "sha256": "c4c67ae0b413c2452678df40dd283c151d3e4b75b4ac4d526eb3d4d27909823d",
+    "bytes": 5679336,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/failed-argument-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-8-debug": {
+    "sha256": "96af905124b73bdb2c06057db7265869d21d7a6e12242b2b9b1ee185956e5735",
+    "bytes": 5735056,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-8-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/failed-argument-debug": {
+    "sha256": "5108ac9f44a85888ff20b7e8c434ba8fc80515d26cd50e9f153de9db900818dd",
+    "bytes": 5697048,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/failed-argument-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-8-standalone": {
+    "sha256": "729b79e801b0e776acd679e666dcdac969e478ada0f13d8c9eae22cd404d60e7",
+    "bytes": 5714616,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-8-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-15-release": {
+    "sha256": "d89572e58618c4f1c01bfbc0a796173c13f68abeb0ddfa0ab7fd57054a56a661",
+    "bytes": 4857712,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-15-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-4-release": {
+    "sha256": "7789afd5c1772ac4d94e957f3b4cb138b7834382cde982d4c5e565252721f7de",
+    "bytes": 4857712,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-4-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-19-release": {
+    "sha256": "81eef85b1b1a74f975f3db203856f90457a3a94fd8d4036bc6998afdd1638780",
+    "bytes": 4857696,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-19-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-20-debug": {
+    "sha256": "e21faa99d74348b72f4250d9f57069e020b8379d58b5ead07cdcf5526b160b0e",
+    "bytes": 5735056,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-20-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-17-release": {
+    "sha256": "42563a3e8a874627c0d438536f85e75087282435fd3ff56df01b223e29e2f75f",
+    "bytes": 4857696,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-17-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/rustc-two-threads": {
+    "sha256": "69678aa162e6d524b32b68f569c9b45ae5dfde59997a9a143713d18e74e06ce2",
+    "bytes": 54,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/rustc-two-threads"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-3-release": {
+    "sha256": "50d267ac6f16c52d0a739b2290d93725790eb99d774668ffc448c8b49059addb",
+    "bytes": 4857704,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-3-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/copy-cycle-standalone": {
+    "sha256": "ae95cbd0caa602d9fd727355eff26fec17a8922654b320c18dc93a15e02dd47a",
+    "bytes": 5679688,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/copy-cycle-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-1-debug": {
+    "sha256": "f75822c1693334f6aa4012b76bca3f007d58c32329e0fb0f631d223536f7d613",
+    "bytes": 5735056,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-1-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-6-release": {
+    "sha256": "0f933a0f35f925588502e2467ddcec71851a48f33b46e4be18b0b7bd197ce4c5",
+    "bytes": 4857712,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-6-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/normal-debug": {
+    "sha256": "769f64bf4c053829849514e6a6925f101f29333af1469813d301c79257fe6fb0",
+    "bytes": 5689440,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/normal-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/normal-standalone": {
+    "sha256": "a8a14d35384f8f0dca8f25e4be315cd6d130be201e14379312f7b4430c987157",
+    "bytes": 5651440,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/normal-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-7-release": {
+    "sha256": "9164cfe4cc23f61dd58a773cd0c2f5d641e8bb9f3a73ab553fa3485d4b52d053",
+    "bytes": 4857696,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-7-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-10-standalone": {
+    "sha256": "eafc624d97c09a85ad3162f1ed572398392e7984708aac21abe4e323de336115",
+    "bytes": 5716912,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-10-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-7-standalone": {
+    "sha256": "1a7c40f0d3f96e4d63fef84d6420cf225bea9dee778a1b5081d440c76135e233",
+    "bytes": 5714448,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-7-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-19-standalone": {
+    "sha256": "fd83a4ca9b60c6a689c31fe19a2e793bde1316a4a2437f83135103a03f32b6cc",
+    "bytes": 5716920,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-19-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-6-standalone": {
+    "sha256": "607cbb9cc21ceabd9c555d2956b9ff8b9e528f75c50f1a898833142ab5fb0cdf",
+    "bytes": 5714536,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-6-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-14-standalone": {
+    "sha256": "56d13231a86dd5e97e433f009444115d7cea643a5e1c60626da04b12fcf05ebc",
+    "bytes": 5716912,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-14-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-11-standalone": {
+    "sha256": "7438b46efe5cbccbbab8aee5432471305964f08d0291d301a9f364d5417e04b0",
+    "bytes": 5716912,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-11-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source_probe": {
+    "sha256": "024b544a82ee5dae49b5aa89c7fd9c5b7bbe02d42a5d0c933c640cc8af34a6eb",
+    "bytes": 17376552,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source_probe"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/normal-release": {
+    "sha256": "9c2cf45df215ea8fbf42fbacd9121f508e572f62a7144f70664fd57246a6f29b",
+    "bytes": 4839792,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/normal-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-15-standalone": {
+    "sha256": "b93419fe6266ea503462a8345dc5c0d2b180e4a2d025befa2b4c63e6b093874a",
+    "bytes": 5716840,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-15-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-14-debug": {
+    "sha256": "73f7588b8f9a1e59f54bbb817aef8604de1c2d1d07d3badf3b8a922a6726ec9d",
+    "bytes": 5735056,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-14-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-18-standalone": {
+    "sha256": "d0a150b673ef9abe79c9c305246e138946bad626e26e08921811c0c2d2ad7fef",
+    "bytes": 5716760,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-18-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/region-standalone": {
+    "sha256": "25a91cd6a762a29fcf5600153be68a69a8513b0e6f27d1a207da6c8029a8cf08",
+    "bytes": 5644904,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/region-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/nested-guards-debug": {
+    "sha256": "7c1f4e86f3084f26f033c6fb904ca946a73c4a6f1b34701d5df7c2e71c9dbdbb",
+    "bytes": 5714624,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/nested-guards-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-13-standalone": {
+    "sha256": "70b3d1f5458290cd86acb097ceabb25c303fd911d727e9325a81ea4bcc200f94",
+    "bytes": 5716816,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-13-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-2-release": {
+    "sha256": "4f5f87edddf28632b49ce3515b69684c652481d1aa6fbcb2d9f9cd7351f7fd01",
+    "bytes": 4857704,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-2-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-13-release": {
+    "sha256": "7c0bf9f5aca6238a4ce4c607b7772203f056231ee380dca25d332a3d785b8acf",
+    "bytes": 4857704,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-13-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/session-debug": {
+    "sha256": "701a22d2ef3dc0a4156b3a8f54aa176bf751019bd6161db08e6863a0ffeaf6aa",
+    "bytes": 5676968,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/session-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/arithmetic-release": {
+    "sha256": "26828198542a286d0f0ec2566a567e7119ab7f0722acd47d1d9ae7d2c77a2585",
+    "bytes": 4840200,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/arithmetic-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/copy-cycle-release": {
+    "sha256": "e4ef1fe7fea1868137cc9227b60f0e130e9a095ea70be2ea316d70b657382f91",
+    "bytes": 4849832,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/copy-cycle-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/runtime_probe": {
+    "sha256": "cfd6e2bb342cf2616ecce34cc232246f9a8805052ef935631991fd3a197e204f",
+    "bytes": 4987816,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/runtime_probe"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-4-debug": {
+    "sha256": "1aad6202fbda68eed95e2f76dc15dc16b3a8057fe0a21b3aefe04db635cb4149",
+    "bytes": 5735056,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-4-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/region-debug": {
+    "sha256": "51c3b9ff5849b19a99782d7b41aa4efc2e42c9379481636d944200b3ef07daed",
+    "bytes": 5682840,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/region-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/copy-cycle-debug": {
+    "sha256": "53b2efaf948653c2243fba3eb46a7d1e20b316642671fa1e4d7f40bd8bff0ae6",
+    "bytes": 5708864,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/copy-cycle-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/region-release": {
+    "sha256": "2bebfdaadb32218cb2282473f0f48f2ef0b80e6cc8453f1fb2758d4a72e033d4",
+    "bytes": 4836960,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/region-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-3-debug": {
+    "sha256": "865362f972ad9447aca0cb12224d5c20c3e024b2336b1cf118c1cd6ca3947263",
+    "bytes": 5735056,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-3-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/allocation-release": {
+    "sha256": "0b9f4b1fce2b4c69d01ad4ae51fc6114733f8b72d3bde83ee4307199dcc280f4",
+    "bytes": 4837264,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/allocation-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-12-standalone": {
+    "sha256": "124b921464f5454c02352dac645cee1b354b22f8cf7f9dfc7059389ce8cf8d1d",
+    "bytes": 5716856,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-12-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/guard-debug": {
+    "sha256": "93545f37462496c64b258af95e74472ca66c92285d811280bae8b1d451e78602",
+    "bytes": 5673520,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/guard-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-2-standalone": {
+    "sha256": "c8bb26b42fcac57495bc269be2813a0066c342c8c8bc8cfe59bdd17e5ca0479d",
+    "bytes": 5714536,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-2-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-1-standalone": {
+    "sha256": "24373e1e0c1f27b5923328e8a4ed6712c4b1a5ae9ac447dc02758660a4332b04",
+    "bytes": 5714632,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-1-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-2-debug": {
+    "sha256": "2d5d2824b523342b3c774aabf0b7641518599c3f28cc2bad73dce062509181b1",
+    "bytes": 5735056,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-2-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/contract-debug": {
+    "sha256": "1e4d24b3ec08889a8b92c789aefe646265d80011976287033337fecfa2c70829",
+    "bytes": 5691768,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/contract-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/arithmetic-debug": {
+    "sha256": "6524e19ae0d435399bc4d199e4b1f8ac4330548377def27ea675553311b092fb",
+    "bytes": 5690200,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/arithmetic-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-19-debug": {
+    "sha256": "6c6f96d3ca57e205db3b086246bf548e0405d87be13fd5a70729fe34684f4a32",
+    "bytes": 5735056,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-19-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-9-standalone": {
+    "sha256": "bb29e1fca45272da39621116923534323116ad4abea6d9a27491a824b7d08585",
+    "bytes": 5714632,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-9-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-10-release": {
+    "sha256": "ea72ce926aa0497d94b8e910434037483be62398692f34b679ecdb0d8a5aa63e",
+    "bytes": 4857720,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-10-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/return-debug": {
+    "sha256": "28485d8093c013d870a5054e0a4f8d083ab54728f0732824659011b43c560f60",
+    "bytes": 5689440,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/return-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-16-standalone": {
+    "sha256": "2d6fc3e237a3305ecc14719334755d06f3e346e380beb5b280543e3543c9221b",
+    "bytes": 5716728,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-16-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-11-debug": {
+    "sha256": "65d13e3fdd3bfe3cff7cd0c5c03131199610a0ff19709da79055afe359bbc4cd",
+    "bytes": 5735056,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-11-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-16-release": {
+    "sha256": "5478cc3a19d13f38ccf8afd4341e210ee52938cc3aec3e8efbb9444928a657c6",
+    "bytes": 4857704,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-16-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/guard-standalone": {
+    "sha256": "29a048dc7b13b156947c58706b72979fd93544c2dcefd6b3b285102b1799c81a",
+    "bytes": 5633032,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/guard-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-15-debug": {
+    "sha256": "eb2d9bbe77d8f89aa1d61b4fe3d4485fe7200813a77c973b1427eb89c4c0dbb8",
+    "bytes": 5735056,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-15-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-21-debug": {
+    "sha256": "32b0a45f615325f71eed0aaca04ba7d00b4ddfc4621d21ad41d4133a55c284c1",
+    "bytes": 5735056,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-21-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-5-release": {
+    "sha256": "7eb55f5731879495152efecc611f5149cad99c08e7a814b10023567043d76b6c",
+    "bytes": 4857712,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-5-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-21-standalone": {
+    "sha256": "7758955740ab45c83dcec990c5e2422508de91bfc5842a88443d1fb1b443545a",
+    "bytes": 5716736,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-21-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-5-standalone": {
+    "sha256": "9db28353222c0140bda794bf46f70d460908d76a40925df82b1157a73b50262e",
+    "bytes": 5714536,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-5-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-13-debug": {
+    "sha256": "2e72bc87417de7d23e3a7f74082edf629106b5b0ee77ccedc430e1ce65c98991",
+    "bytes": 5735056,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-13-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/nested-guards-release": {
+    "sha256": "cab42e6705961d0c277f7a4d38357fb77c92c057bb37782a96b8452456871ff5",
+    "bytes": 4849512,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/nested-guards-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-11-release": {
+    "sha256": "722c55061368cd224cc382d1e42cf4454cde7b4b9ad1f14e18112123ff8f7084",
+    "bytes": 4857720,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-11-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-17-standalone": {
+    "sha256": "0c3ffdfd1fa2686dd9b6e544d8d98aa71d554b3b9c0c23433df74eede2b209bf",
+    "bytes": 5716912,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-17-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-8-release": {
+    "sha256": "19b8cbe103f762d5d60dc2fe9517183bc40660861cf34f5984e46cddff963bea",
+    "bytes": 4857704,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-8-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-4-standalone": {
+    "sha256": "8eeae4e045f9f5227b41e03713e706fcef167a8e322147988839b59b78ca8101",
+    "bytes": 5714592,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-4-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/return-standalone": {
+    "sha256": "57c50a18f781d52d4e3057bf6964fa62488e439c04b08b6ad4f6cd61f2787038",
+    "bytes": 5651432,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/return-standalone"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/session-release": {
+    "sha256": "d02c2f694cee0ecf055479696b505e41dff3a5221ab8fd9dc9a168b4f425f331",
+    "bytes": 4834664,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/session-release"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-6-debug": {
+    "sha256": "3c98f3a0c2a3afc255f4fffc4ee1d2030da8be6b2f549ed4b3258839fab20b31",
+    "bytes": 5735056,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/source-fault-6-debug"
+  },
+  "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/nested-guards-standalone": {
+    "sha256": "3b991b22539db2af2a51f45802a7a51f3531af5ba0fc97dc6872ce069b54ec6b",
+    "bytes": 5692248,
+    "resolved": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/nested-guards-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/recovery-reconciled/extra-fault-64-standalone": {
+    "sha256": "0c627c36cb76a52ec5e43e7ebc4d99c221aa4dbbe482040c05f986c04bfdc6f6",
+    "bytes": 5714648,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/recovery-reconciled/extra-fault-64-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/recovery-reconciled/return-alias-standalone": {
+    "sha256": "fb995b45da9e8c32fa13920a5a607a7d9577cc1cf333cf49d41b5c212641ca06",
+    "bytes": 5651488,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/recovery-reconciled/return-alias-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/recovery-reconciled/copy-argument-primary-standalone": {
+    "sha256": "5f221ffa28c3a1280e10bd350d4b92885d74bbd914463a4a1f585aeb504492ca",
+    "bytes": 5666992,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/recovery-reconciled/copy-argument-primary-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/recovery-reconciled/copy-failure-source-standalone": {
+    "sha256": "de6d3369613b638dd6b75c5feaaee392a3810b2997f85dc9e6d4c91206bda43b",
+    "bytes": 5676008,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/recovery-reconciled/copy-failure-source-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/recovery-reconciled/return-error-standalone": {
+    "sha256": "8b94df3192202d0a5e057767fc85ff5b2a6c0a174ac03ed40bd11f006a9a2087",
+    "bytes": 5656256,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/recovery-reconciled/return-error-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/recovery-reconciled/arm-allocation-standalone": {
+    "sha256": "465f777285bdf70401ee4b805adf83773fb335dccd039daa31e4b4dde786d796",
+    "bytes": 5654176,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/recovery-reconciled/arm-allocation-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/auto/auto": {
+    "sha256": "6fdfb4f7c2712952e7f72a6977c367c8567712ec5f8857784399eba726b5ecff",
+    "bytes": 5637888,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/auto/auto"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/package-debug": {
+    "sha256": "131aabf20baa7dd997fba95fc18f143c06503f752fd1e4b197e5a708a8636b6b",
+    "bytes": 5626240,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/package-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/guard-release": {
+    "sha256": "584814cc068ce6af440034041d3c4a81486e2582df6421cf00272d09cf670ade",
+    "bytes": 4833352,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/guard-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/session-standalone": {
+    "sha256": "fe5733a28d2723d1d53b2e22730a2782b4680363ffcaf84b5d277401cf5c4711",
+    "bytes": 5613600,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/session-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/entry-probe": {
+    "sha256": "ddc2b4e564b72f76e3f442a9def21209534a326dd833e768e5fc41e3f60293fe",
+    "bytes": 17374448,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/entry-probe"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/session-entry-fault-release": {
+    "sha256": "70f2cd15f039d61f96c370e7ff8eacd201c3283717cab0ea4fc5c01caf936e31",
+    "bytes": 4836168,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/session-entry-fault-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/package-release": {
+    "sha256": "c565add4a563043791e1e5b7efc381ad0f375a32a76ea90b37bf10e7bf101611",
+    "bytes": 4826368,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/package-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/rustc-two-threads": {
+    "sha256": "69678aa162e6d524b32b68f569c9b45ae5dfde59997a9a143713d18e74e06ce2",
+    "bytes": 54,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/rustc-two-threads"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/session-entry-fault-standalone": {
+    "sha256": "91f6f6efde129153e8187b11fe28d61f71ee516dcb98e4aaaca3122acba96e9d",
+    "bytes": 5617944,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/session-entry-fault-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/copy-cycle-standalone": {
+    "sha256": "77f59ff0d94072d2712ee77b60028ba985c1c4adac83f8f1164b0554cb3e71a3",
+    "bytes": 5652376,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/copy-cycle-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/region-standalone": {
+    "sha256": "de2e60064b17f5340479de0c8e1f7ac0879cb7b9333e1e031e1aff7774611626",
+    "bytes": 5617656,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/region-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/nested-guards-debug": {
+    "sha256": "d5a7c3247c0b56e20370d7de9e37bf40626c405a25d0ec19ae3c7aaf4e6e3bbe",
+    "bytes": 5714688,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/nested-guards-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/session-entry-fault-debug": {
+    "sha256": "f5727c40028bd0345221d4838595c96716abfe1dc37178cce69b5b8f9f2bb11f",
+    "bytes": 5681704,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/session-entry-fault-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/session-debug": {
+    "sha256": "77ef324dc33e714848405b7fcd8b12d357e6335e84c65fc2e4284cc09eff258b",
+    "bytes": 5677032,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/session-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/copy-cycle-release": {
+    "sha256": "57d31ba9b64906920e397260d0314b40c88aa274d8cd47ad170de0c140f95c62",
+    "bytes": 4849888,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/copy-cycle-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/region-debug": {
+    "sha256": "a7852ced5b851e19cb6ea68843ae4abdfb89c87f8ac3eb04b70bd408ff0460f2",
+    "bytes": 5682904,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/region-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/copy-cycle-debug": {
+    "sha256": "98bc0fe7b14490d639bab297d1f0cdbd1000110aceb688e5af19ac2b96d27640",
+    "bytes": 5708928,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/copy-cycle-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/region-release": {
+    "sha256": "72dcbea4c5c785fb0b42f23c570726f253284fc246af3438d7e71966cfe2bc50",
+    "bytes": 4837040,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/region-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/rustc-stale-input": {
+    "sha256": "ab12340a749c8fe032535d50cabf52d36e46f7dfb1b6da820e0a4b1d14574a95",
+    "bytes": 371,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/rustc-stale-input"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/package-standalone": {
+    "sha256": "b34b7e64d867ec976f95a0612abfd049300df6937e68c9ce44288a01a5e380ff",
+    "bytes": 5621576,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/package-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/guard-debug": {
+    "sha256": "c2f727a15ef085e17714c6ec3a3700f68ba6cf4a0245f6f3bb1d14d0a0ac10d8",
+    "bytes": 5673584,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/guard-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/guard-standalone": {
+    "sha256": "68c5ecc75b38d684c8f652058b9376d27ecb9eba2fde00a5d93d8abdc557e7c9",
+    "bytes": 5605744,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/guard-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/nested-guards-release": {
+    "sha256": "c3cbbba2f8cbb0dab8167f55170d6c888fb937bc17c01726a3bdfec7361afae4",
+    "bytes": 4849576,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/nested-guards-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/session-release": {
+    "sha256": "bfd60a15d510eb687985f4bf02e5b54443cc5d8f34383ba52c99ab66100c3640",
+    "bytes": 4834712,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/session-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/nested-guards-standalone": {
+    "sha256": "d67e184f510d588f4311fb6d7987f5120cd0e3fed2c253d8266c658a067ec770",
+    "bytes": 5665008,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/nested-guards-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/public-package-release": {
+    "sha256": "1ae3e2d34376c9546fc185d275d66cc57ac5af0b0cad5e71259612b7b03b5d80",
+    "bytes": 4785824,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/public-package-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/package-debug": {
+    "sha256": "cd3b2b2ee18f0548abff520801ecbe5f95ec0745e4cdca947cb76cb71406ed3c",
+    "bytes": 5465744,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/package-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/public-values-rust": {
+    "sha256": "9db0ad26e9df430eb9acc35b81febefccf74a88ec1ac5b6b32615d205bc714d3",
+    "bytes": 5441728,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/public-values-rust"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/package-rust": {
+    "sha256": "f22fe0b2ad161ea2747f0fa25d23edaafe0b73ed3a1d3cee2863100a33251c6e",
+    "bytes": 5461792,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/package-rust"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/public-values-release": {
+    "sha256": "4e9b33833bfc37ecb6601978b60af8ad559b731ec66290693d1f89ea27fac5a4",
+    "bytes": 4791496,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/public-values-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/public-package-debug": {
+    "sha256": "25244e24ffab34978bd7b69f6d7ac9e5d9a09d703e6a2e02a896359ae21e3c2b",
+    "bytes": 5446072,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/public-package-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/package-release": {
+    "sha256": "4caecbb4b5d4025bead5965633c7578a0f1e0c3b51e442eca185258a93e02d2e",
+    "bytes": 4794728,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/package-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/source-release": {
+    "sha256": "9c2ce96ac6b26a0b19038e84a0f9dd113c91e71ec18588d961d9f0a3b09ff775",
+    "bytes": 4809328,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/source-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/public-values-debug": {
+    "sha256": "66f016bfd49ec5b20c3ba8fd98682fc42f5df3714cf16c6db11e445c794d8415",
+    "bytes": 5490600,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/public-values-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/public-package-rust": {
+    "sha256": "8685da386d74fc19237cdf71ee6231c5b49ff1546c8a079041add736eddc1f34",
+    "bytes": 5457456,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/public-package-rust"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/public-source-release": {
+    "sha256": "216a919383ac6f4f4640d2e7fe4cb71ebaa3bf8df0b7e16cf08664130b298058",
+    "bytes": 4795440,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/public-source-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/source-debug": {
+    "sha256": "95872e25e1dd49d78df76d46b3c4891b1eef0fa2f0ed6f2f3a66637f99169c1d",
+    "bytes": 5529728,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/source-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/public-source-debug": {
+    "sha256": "db7a144890b1ef6db083075eb3bb9d5c7ed2bbbfedfce25a25736ece2b115506",
+    "bytes": 5498936,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/public-source-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/source-rust": {
+    "sha256": "2160fbf893cf7bbb9ac8e010ff7a49dd3a173f47488017cdff746deb8f822cbe",
+    "bytes": 5466832,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/source-rust"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/public-source-rust": {
+    "sha256": "f3ef3a9fdcf18f0016ef4b016875dbd6db80cb024d41510efbaa95ead6299867",
+    "bytes": 5451736,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/visibility/visibility/public-source-rust"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/public-package-release": {
+    "sha256": "5c10164928f733cba4faf482d1322d4d75d0c92c1cc55f4359c8a859c5d1bd1d",
+    "bytes": 4785832,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/public-package-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/visibility-source-debug": {
+    "sha256": "72287589e9c879fcb209f45394dad636ce50e4a5639390e19e77f72bc9b8a69f",
+    "bytes": 5529744,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/visibility-source-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/package-private-rust": {
+    "sha256": "3383881e955975a9c5763d1929da4ce76bcad49250670ca36774420ed8f6f53a",
+    "bytes": 5447008,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/package-private-rust"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/collisions-debug": {
+    "sha256": "49e2c8aa386d2e15ba34235bfa2a198859c222edf7de489ef5b849c135e5dfbb",
+    "bytes": 5478368,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/collisions-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/qualified-release": {
+    "sha256": "4f4fec8bcd3c0319d8184c582c983d5f60bb7c394f96e7897c67d84c2ba971e3",
+    "bytes": 4782544,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/qualified-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/collisions-rust": {
+    "sha256": "812b7ac80e1af51edee823882b3890fddac70627d3f2229077134f41ce724f29",
+    "bytes": 5418176,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/collisions-rust"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/public-values-rust": {
+    "sha256": "5ae08f13eecd69e6bdfd94a09a40d2e0a8b83193b8c5844d9896f2820baa4e13",
+    "bytes": 5430072,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/public-values-rust"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/visibility-package-rust": {
+    "sha256": "1877a265d64f2217472e38a6e57dbef90df051c3cd4a5766309aa8874741a6ce",
+    "bytes": 5461800,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/visibility-package-rust"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/public-values-release": {
+    "sha256": "8ed2582bf6e9ba458056fa6ad0640899866fcc1c575afdb99a5f85aba2438aba",
+    "bytes": 4791480,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/public-values-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/visibility-package-release": {
+    "sha256": "88e115d23c14799b3edbf37004319f506b2e55ed75fdb758a6fafe20278a2473",
+    "bytes": 4794736,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/visibility-package-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/nested-private-rust": {
+    "sha256": "6b6a1c44d2caff7ae8748fed46891ebefd8eaeadf6cdf487dda4a38d00b31f64",
+    "bytes": 5425592,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/nested-private-rust"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/qualified-rust": {
+    "sha256": "8b7e3521aa1ac416a9e99af4467ea764550ffc752d9fb7c28058168c1d575cc8",
+    "bytes": 5412624,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/qualified-rust"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/package-private-release": {
+    "sha256": "4a3682fa9c26d6ae6c00a2e5a7e3068711758446f564c51db79b400c67d34b7d",
+    "bytes": 4788632,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/package-private-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/package-private-debug": {
+    "sha256": "3a917780eff6287cec0a09a5cd9ad2d40d35bddcd593072d6aabaa5ecf4b3cd4",
+    "bytes": 5450944,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/package-private-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/public-package-debug": {
+    "sha256": "b5bb5fdfb7901a45e0bec267d4fae91709c5134871e3c4f2d02a08ae795b5861",
+    "bytes": 5446088,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/public-package-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/public-interfaces-debug": {
+    "sha256": "c3fb367799fc4a3b36d4ee499704b4f901503b7087b44bcc79388a6c1ed4c32f",
+    "bytes": 5486128,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/public-interfaces-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/visibility-source-rust": {
+    "sha256": "c4f5893ebf78327d646803aa0b1e40e1f73505462e8a769f474ff94c1472f94c",
+    "bytes": 5468832,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/visibility-source-rust"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/public-interfaces-rust": {
+    "sha256": "46f7b38fe0eaace45a9702882ead7e80224cff2404c956243dc927bae7171fc0",
+    "bytes": 5425768,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/public-interfaces-rust"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/public-values-debug": {
+    "sha256": "01aa7f06a2152e59fb3566dcc5c92e3d3bf3ab3f2376ce2b807ddfce47b19761",
+    "bytes": 5490616,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/public-values-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/public-interfaces-release": {
+    "sha256": "b4df6e22ed3949ace3f8514fede9d84b7540a3f86dfbf19b8cf70a3633cb141c",
+    "bytes": 4789368,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/public-interfaces-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/nested-private-release": {
+    "sha256": "474ccb1e4a0ae6b15fa98ae713513bb2beaa1260a375b988230a017ceeef1fb5",
+    "bytes": 4788912,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/nested-private-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/public-package-rust": {
+    "sha256": "b6501cd523556425e027e5e5d3875f5accc209eed205f327d4d481af057d7052",
+    "bytes": 5442128,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/public-package-rust"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/visibility-source-release": {
+    "sha256": "bbf36728d218cf9d14c5852049eec8ce13f43e120d2d309f469192593925efdb",
+    "bytes": 4809360,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/visibility-source-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/public-source-release": {
+    "sha256": "a5dc87320d537af91dcc0713682ff0aa4a78ceeb59f2cbb5324a1b0797a85fcf",
+    "bytes": 4795432,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/public-source-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/qualified-debug": {
+    "sha256": "32056a2cc4c293474eee65f93698fefda43e0fcb3257a5ace3e241f9f51a4197",
+    "bytes": 5472976,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/qualified-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/public-source-debug": {
+    "sha256": "b5a2d82063dd3585e568518af3f2e2109e873be70abb2d8264b48d782ddda3f7",
+    "bytes": 5498952,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/public-source-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/visibility-package-debug": {
+    "sha256": "10a14284062b8745b63eb9f80bd6f159734618699b4fa1cca65a87b5cdfa033e",
+    "bytes": 5465760,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/visibility-package-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/collisions-release": {
+    "sha256": "08e1cea8cd974d4933baade541474f23f39efa5b55829c413ec71e723106d46b",
+    "bytes": 4785640,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/collisions-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/public-source-rust": {
+    "sha256": "bb780766ec5c670913e8effaf3ad01be9ddb4ee9870c91c0989e858a7f85e92b",
+    "bytes": 5438312,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/public-source-rust"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/nested-private-debug": {
+    "sha256": "66179f601b3275feefff5e673833534c058ee1faba152394e1f0f07a29680beb",
+    "bytes": 5485936,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/historical/product/regressions/specialization/specialization/nested-private-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/legacy-reconciliation/fault-guard-trace": {
+    "sha256": "2eda9ae72c28d687949ba86de38d2cf1214312b0eded27d3df76dc0a6f0f9fcf",
+    "bytes": 5452880,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/legacy-reconciliation/fault-guard-trace"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/legacy-reconciliation/fault-graph-root-trace": {
+    "sha256": "d1f6a29a4d30723d9cb5ace10d77f2f1c289f7ba6499d8e86922e237fe9e6e0d",
+    "bytes": 5461696,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/legacy-reconciliation/fault-graph-root-trace"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/nested-assignment-standalone": {
+    "sha256": "bd8cd2d238d753655bf09a595491140adfba729141a2f4e3d17bc03574843090",
+    "bytes": 5634544,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/nested-assignment-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/copy-release": {
+    "sha256": "7bbcb20c0d43cbbc23e6dcddbbb9214427e0dacdf61d4bfdd902560706f0853f",
+    "bytes": 4840024,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/copy-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/legacy-guard-release": {
+    "sha256": "72fdd2f89b39b4c9263d88c44a9a05bb76500c95d0caddbf6066c412bda09b9c",
+    "bytes": 4829752,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/legacy-guard-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/user-effects-package-debug": {
+    "sha256": "9e2dfaa051518ffb882434a272844d90d4f050f36e939ab7d77b4a2d4ac6a307",
+    "bytes": 5617776,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/user-effects-package-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/nested-assignment-debug": {
+    "sha256": "9745f82971aab72fe477e91d242819d9fefed4ffd39ffff0cef72c052b951512",
+    "bytes": 5672984,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/nested-assignment-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/shadow-package-debug": {
+    "sha256": "4ee04fcb23d6e1799869999cf030d394aaf733663719d0dc9eed8875004fde7b",
+    "bytes": 5622736,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/shadow-package-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/borrow-package-debug": {
+    "sha256": "29d2b32029eaa9af247fb9efa250b13af12e58320f6b3043a3464c7eb0092b74",
+    "bytes": 5626720,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/borrow-package-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/borrow-package-standalone": {
+    "sha256": "655598bf54bdcd738d7594a342abaddb744ba9f25678403d40f5fd62190d8069",
+    "bytes": 5640176,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/borrow-package-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/session-shadow-release": {
+    "sha256": "1408a6ea9b5b94b0339a9ac94cdc0b83957ad3cbd851dd9281f3451b871e9284",
+    "bytes": 4831376,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/session-shadow-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/legacy-guard-debug": {
+    "sha256": "d7b8ce4fadd967970d67dad7926c3b364502be9a5869e482e9faa18750ef63f9",
+    "bytes": 5669112,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/legacy-guard-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/user-effects-package-standalone": {
+    "sha256": "0753329bb3abcd90337525d93e0e2c676ecbb06bd0b47e25d481fca7233b4ace",
+    "bytes": 5644936,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/user-effects-package-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/legacy-guard-standalone": {
+    "sha256": "4470b41dee3493bb5f7ea7714b43e00e2b6551f131be49fb092b05733a15d5a1",
+    "bytes": 5619360,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/legacy-guard-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/rustc-two-threads": {
+    "sha256": "69678aa162e6d524b32b68f569c9b45ae5dfde59997a9a143713d18e74e06ce2",
+    "bytes": 54,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/rustc-two-threads"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/nested-assignment-release": {
+    "sha256": "defa255b91b5f1b1e770f909465289741c72fb298cc50861d132f776a97833f0",
+    "bytes": 4832992,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/nested-assignment-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/session-shadow-standalone": {
+    "sha256": "ce8b20cee64b53ade091ef289888790ccf69a17dba70ff129e7f65b32545adcb",
+    "bytes": 5627552,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/session-shadow-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/user-err-local-release": {
+    "sha256": "a68c56374e220479c29172508cdc567665c5fd6b36d05523c016bde0e83cfd80",
+    "bytes": 4837824,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/user-err-local-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/user-borrow-standalone": {
+    "sha256": "b70fe8e5d140dedcff4eacd6992294638777308698a6f1133db6d09359c25984",
+    "bytes": 5619808,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/user-borrow-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/user-err-local-standalone": {
+    "sha256": "2c8c873bdfa23caa6f3c88f4a2b29177fb764d276f6ad756a8f5659fdb3be417",
+    "bytes": 5640584,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/user-err-local-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/user-effects-package-release": {
+    "sha256": "b18f9c0821db284bdc85aa6b3999094e1ec05c3ab52c393754bf8979c259c4d6",
+    "bytes": 4821768,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/user-effects-package-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/copy-debug": {
+    "sha256": "43145f4f8bf1c33881071837ede53cf88b414861b41b117484a98ea8c7636fa9",
+    "bytes": 5689808,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/copy-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/shadow-package-release": {
+    "sha256": "63b47a7b16875b8ac89927800dc3b28ff4d6e03841edff381258eeb19d4eef80",
+    "bytes": 4825272,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/shadow-package-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/session-shadow-debug": {
+    "sha256": "24d17e2090d3c77dd3e06b357e5895d9011a68ede69f6a7de8d3f6d8104d0fee",
+    "bytes": 5672928,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/session-shadow-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/shadow-package-standalone": {
+    "sha256": "b9dfc6c58df94f4019311dcff284e14610b40c018fd43261b8167d1ab46ed7bb",
+    "bytes": 5636216,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/shadow-package-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/borrow-package-release": {
+    "sha256": "bfbbfa56cab0163f50255c3f0b066e3b92b93356acdc6436e8a46853f63ac77c",
+    "bytes": 4826592,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/borrow-package-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/user-borrow-release": {
+    "sha256": "613b3dcb97bb448d822e35172f89efa2c1d2456331590f3c868a3eb629de3244",
+    "bytes": 4831408,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/user-borrow-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/copy-standalone": {
+    "sha256": "ab31b9d24df7e7979cfb8ea7018c9bb5a5948437288b5493145678d9275bd47d",
+    "bytes": 5619872,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/copy-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/user-borrow-debug": {
+    "sha256": "244394d6bb4ab4aaa53f8ab8473d2e8ca7a1aaf22c6e544241180c41acc03457",
+    "bytes": 5671960,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/user-borrow-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/user-err-local-debug": {
+    "sha256": "7a09a8c3b7f24bc8cab985fa84f10a82a758c0e005fd0cc3f4f276dcb3d0d22b",
+    "bytes": 5685544,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/user-err-local-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/generic-heap-debug": {
+    "sha256": "0dc6372c38c30f54e216630dbabc820e0b3a647b674cc6e3cc7681fe1a5f49c7",
+    "bytes": 5672592,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/generic-heap-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/imported-simple-release": {
+    "sha256": "357d9e5e506084e8c1dfd661f3ec63059c578c169342f58e809df0ba5e120a56",
+    "bytes": 4824208,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/imported-simple-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/inferred-generic-debug": {
+    "sha256": "5c9efc3978d498508a428fc381e410d667bf7bc9b3353812581ee0c9a8d9866f",
+    "bytes": 5672592,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/inferred-generic-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/nested-heap-debug": {
+    "sha256": "4847e9a0d2c7ed62d51ca858c2cac8a29c3bd82ee4bcc1a3bca2f1d6d9198296",
+    "bytes": 5675496,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/nested-heap-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/imported-inferred-release": {
+    "sha256": "4e2db52c17908c15d9da4ef0565f4ab19e5337d768cc5eb337902ed73a4efde1",
+    "bytes": 4825384,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/imported-inferred-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/imported-simple-standalone": {
+    "sha256": "71cc1b65f8412189ec2d4f24af15b471e59a8602d2b50f2b916c70934e9a883f",
+    "bytes": 5636360,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/imported-simple-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/imported-record-debug": {
+    "sha256": "81e6e914260119c45da884523aa6fc1c7e1677edbe27152d8354e2ada6986bcd",
+    "bytes": 5611736,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/imported-record-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/user-function-debug": {
+    "sha256": "62adc49414106814722990418ca34d16f42f8d08039fcfa329edd9730c71a71a",
+    "bytes": 5671960,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/user-function-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/nested-imported-standalone": {
+    "sha256": "74bed9b90a928a6105454f5ad2b1eb797da99a47cf6a3e165bfe117dafe903b6",
+    "bytes": 5641656,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/nested-imported-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/imported-function-release": {
+    "sha256": "dd182536ccc53d2664c605aa001661791ea5e66f26980590cfc5342501d804db",
+    "bytes": 4826584,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/imported-function-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/imported-inferred-standalone": {
+    "sha256": "e99ef11c5a12391db981a85fcc8c99cf3a7ed4bdab7af64386b52460dad90e33",
+    "bytes": 5643224,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/imported-inferred-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/inferred-generic-standalone": {
+    "sha256": "8c041e87489ccdf4c4c63cc716c53378f2e8f008d345d945ff3f1a0dab3a4bbb",
+    "bytes": 5631872,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/inferred-generic-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/inferred-generic-release": {
+    "sha256": "7898b0bcbef391146262f9eccb8cb5aed247e86ccb62102291363e71ee07666d",
+    "bytes": 4831960,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/inferred-generic-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/rustc-two-threads": {
+    "sha256": "69678aa162e6d524b32b68f569c9b45ae5dfde59997a9a143713d18e74e06ce2",
+    "bytes": 54,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/rustc-two-threads"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/contextual-imported-release": {
+    "sha256": "7624df8a4c52b016288f333fd45b5c1828c11993096db8ab15fef7a0e194583e",
+    "bytes": 4825376,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/contextual-imported-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/retained-local-debug": {
+    "sha256": "e40d98a7206e703ccde12ea9cc6951765dd616649b6b2475cae43c51fd4965bd",
+    "bytes": 5670592,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/retained-local-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/imported-record-release": {
+    "sha256": "b60e0a471abaef223904ffd859f4ee747cb4f02b4b83537eaf04284475a5100d",
+    "bytes": 4819496,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/imported-record-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/retained-local-release": {
+    "sha256": "48435a0bb42ef5de56e87803fecace6ec98e2c0ba03a1b84904d093a8f748379",
+    "bytes": 4830936,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/retained-local-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/nested-borrow-release": {
+    "sha256": "d5d4f3b224adfc8c30c2b1ad2ff078510b67a8f5d2ffc8b8abac7d3fda4954d2",
+    "bytes": 4832144,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/nested-borrow-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/retained-local-standalone": {
+    "sha256": "83a2283ecc82e545971ad1ce6c3bc3d9a2b49cd38504d95123a0b229debdfa9c",
+    "bytes": 5625256,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/retained-local-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/contextual-imported-standalone": {
+    "sha256": "71b1d12c4fa5cfdbc41486dffa442caeb13ecef0a575d14eda03948588cd3685",
+    "bytes": 5647816,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/contextual-imported-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/nested-heap-standalone": {
+    "sha256": "d31ffe313bde0d7a23df55849098cf6d59e09232982500ead8222f64e12ab808",
+    "bytes": 5623600,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/nested-heap-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/nested-borrow-debug": {
+    "sha256": "d22d83cadd868aa50dc6fafe2ca80c842584092c0a882f3949c4559779df12ad",
+    "bytes": 5673208,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/nested-borrow-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/imported-record-standalone": {
+    "sha256": "33f133a143329deba83173787e5d5ba6428596271345dc9bf8ffb14e863acfaf",
+    "bytes": 5627600,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/imported-record-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/generic-heap-release": {
+    "sha256": "a5b7b9f7a4a17d058100fcce6e218c7663005b66e641ddab30cce3947293eab0",
+    "bytes": 4831960,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/generic-heap-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/imported-function-standalone": {
+    "sha256": "9801c706c16018a2ce5fd105c3aa82e678520c616422c47b762a6b6498fffc78",
+    "bytes": 5647104,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/imported-function-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/user-function-standalone": {
+    "sha256": "1b6b4281345cc4d9924064b93e6971773e0a4f03a8b991582ba1c669d22fe931",
+    "bytes": 5624416,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/user-function-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/nested-heap-release": {
+    "sha256": "859bbbdd2576d173205dd657ecbe7408dfe8526b9d3e5b9a349bb04e5cde6148",
+    "bytes": 4833440,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/nested-heap-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/qualified-local-debug": {
+    "sha256": "fd489d2e84eb20d44c060af2cb0a547d6cb08392475cc8e772d36de595e84476",
+    "bytes": 5670592,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/qualified-local-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/imported-function-debug": {
+    "sha256": "c78638ed50cb0debb3502463e5e39577f2446eaf4f2c347b3259993f1147a26f",
+    "bytes": 5626720,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/imported-function-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/qualified-local-release": {
+    "sha256": "04c89d0a5fbde42fee7f1f5da2fa6c20f6ea54ba943126be2737d8ed3f232428",
+    "bytes": 4830944,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/qualified-local-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/genuine-capability-release": {
+    "sha256": "54ae0e0d955f071743f5752d0884247cacaa9d154860b5e6b58989a8e4db657f",
+    "bytes": 4835992,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/genuine-capability-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/generic-heap-standalone": {
+    "sha256": "83daf223114ae3d1e64e208949d2bbfcdfc4f52319f19edd260a5dd6603b4c34",
+    "bytes": 5622936,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/generic-heap-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/imported-simple-debug": {
+    "sha256": "ae622d731724970523ad7591ed694de67d4fce20c4b349bd42217df104ed9973",
+    "bytes": 5620504,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/imported-simple-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/imported-inferred-debug": {
+    "sha256": "9f7ff4483579dfd789d2776a4cd021cdc53df95aa7feb23179b56f3fed760af6",
+    "bytes": 5622936,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/imported-inferred-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/genuine-capability-debug": {
+    "sha256": "83d7cec5d34779b2a7ccb8b47010b1edbafcea29921b818e02867c2a82305816",
+    "bytes": 5680040,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/genuine-capability-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/nested-imported-debug": {
+    "sha256": "8130e4ceedcb94922a9656f366efb08182c17a05aff2732e3aad305d7e2c3cf8",
+    "bytes": 5625816,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/nested-imported-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/genuine-capability-standalone": {
+    "sha256": "d844d5e6da6683c741b7058450fc99ccec56f1a57aa4b1b33cc3e6140988ea47",
+    "bytes": 5643872,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/genuine-capability-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/qualified-local-standalone": {
+    "sha256": "f873e88de2a8af5b5d5a1d8678b9385a0eada6f386bff2619eec398d35889f80",
+    "bytes": 5627496,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/qualified-local-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/user-function-release": {
+    "sha256": "d87db0b09c8a047c2dbe5673945fa860c2642b1c62115a6fe03e2729a9a8acc5",
+    "bytes": 4831400,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/user-function-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/contextual-imported-debug": {
+    "sha256": "bda18479fa1eed902d091a4afe5d7709d2bae2977ed2854b0290c4edd75359c8",
+    "bytes": 5622936,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/contextual-imported-debug"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/nested-imported-release": {
+    "sha256": "730ffd5d3c9afd1fe5dceaef288d0e153708a314b861ce5f17e7773d82b5fa3c",
+    "bytes": 4827120,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/nested-imported-release"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/nested-borrow-standalone": {
+    "sha256": "e71f7e0082c0bb90bfcd6bb16b61acdac4dd56351a63c1440a32ec801eb3fd80",
+    "bytes": 5625576,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/nested-borrow-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/recovery/extra-fault-64-standalone": {
+    "sha256": "a159c252d8b85e9332be57a3ab8663933d8d6b21788baa4fea46f7177fd51d62",
+    "bytes": 5714632,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/recovery/extra-fault-64-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/recovery/return-alias-standalone": {
+    "sha256": "454ac8c7eb8ca7c1d1db077c774a3eb1fb8844f3d50e3bea04d4d3d3b66bb658",
+    "bytes": 5651472,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/recovery/return-alias-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/recovery/copy-argument-primary-standalone": {
+    "sha256": "c4896ca38b14903fc4d8772a77be004e2cd2a91d2a2ec804a6e0cce626531e50",
+    "bytes": 5666992,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/recovery/copy-argument-primary-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/recovery/copy-failure-source-standalone": {
+    "sha256": "c5c49a321d86b17603f5c6822aaf39e6e5f951c45f1bfb63a8707f8419889461",
+    "bytes": 5676008,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/recovery/copy-failure-source-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/recovery/return-error-standalone": {
+    "sha256": "5222e4419792a4c763812c39929dd0eaba2fa83c7556e55afcad9f0e3e0370e3",
+    "bytes": 5656240,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/recovery/return-error-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/recovery/arm-allocation-standalone": {
+    "sha256": "45c47b360184d7fa0dfd04adf3c18e8ff735e0a286acf944903bcca4f06c7fe4",
+    "bytes": 5654160,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/recovery/arm-allocation-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/package/package-value-standalone": {
+    "sha256": "245b7f2646e0ae6a9b53bebe12986f990bc86f0ad132e242855bd2d49f6ca188",
+    "bytes": 5637432,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/package/package-value-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/package/package-error-standalone": {
+    "sha256": "b2c7eade9b7498073d4ac754e3e6bd8972118ae384984a32a3b94b5dc1bfe693",
+    "bytes": 5622488,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/package/package-error-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-3-standalone": {
+    "sha256": "343d8204fdb7706d0f7dd5a1fc1999b88dcfd099461e3e8aa90d0538aeb72cf2",
+    "bytes": 5714624,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-3-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/session-standalone": {
+    "sha256": "cc90b4940172683eccd245c4d1a37f9adc21169f77f29313bab4d0c11152e7bd",
+    "bytes": 5640696,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/session-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/contract-standalone": {
+    "sha256": "bc856ef44cf0ed96f507e0d79ebe23eab14e43ac313a75e85aeac970d3c89334",
+    "bytes": 5658208,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/contract-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/allocation-standalone": {
+    "sha256": "9515955649b6f4bb378d096189878c876f6721c5a63a0099a14154b6a0189821",
+    "bytes": 5654960,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/allocation-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-20-standalone": {
+    "sha256": "8462a90714e1708f1b9ca25cff8e5bb58740032896f01566957d57dda0424e7d",
+    "bytes": 5714552,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-20-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/arithmetic-standalone": {
+    "sha256": "391e3e5aae47501b3424412670a107cf0cdd4489617f2a628dcc769c244e8f2b",
+    "bytes": 5661232,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/arithmetic-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/failed-argument-standalone": {
+    "sha256": "c4c67ae0b413c2452678df40dd283c151d3e4b75b4ac4d526eb3d4d27909823d",
+    "bytes": 5679336,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/failed-argument-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-8-standalone": {
+    "sha256": "729b79e801b0e776acd679e666dcdac969e478ada0f13d8c9eae22cd404d60e7",
+    "bytes": 5714616,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-8-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/copy-cycle-standalone": {
+    "sha256": "ae95cbd0caa602d9fd727355eff26fec17a8922654b320c18dc93a15e02dd47a",
+    "bytes": 5679688,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/copy-cycle-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/normal-standalone": {
+    "sha256": "a8a14d35384f8f0dca8f25e4be315cd6d130be201e14379312f7b4430c987157",
+    "bytes": 5651440,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/normal-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-10-standalone": {
+    "sha256": "eafc624d97c09a85ad3162f1ed572398392e7984708aac21abe4e323de336115",
+    "bytes": 5716912,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-10-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-7-standalone": {
+    "sha256": "1a7c40f0d3f96e4d63fef84d6420cf225bea9dee778a1b5081d440c76135e233",
+    "bytes": 5714448,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-7-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-19-standalone": {
+    "sha256": "fd83a4ca9b60c6a689c31fe19a2e793bde1316a4a2437f83135103a03f32b6cc",
+    "bytes": 5716920,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-19-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-6-standalone": {
+    "sha256": "607cbb9cc21ceabd9c555d2956b9ff8b9e528f75c50f1a898833142ab5fb0cdf",
+    "bytes": 5714536,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-6-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-14-standalone": {
+    "sha256": "56d13231a86dd5e97e433f009444115d7cea643a5e1c60626da04b12fcf05ebc",
+    "bytes": 5716912,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-14-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-11-standalone": {
+    "sha256": "7438b46efe5cbccbbab8aee5432471305964f08d0291d301a9f364d5417e04b0",
+    "bytes": 5716912,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-11-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-15-standalone": {
+    "sha256": "b93419fe6266ea503462a8345dc5c0d2b180e4a2d025befa2b4c63e6b093874a",
+    "bytes": 5716840,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-15-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-18-standalone": {
+    "sha256": "d0a150b673ef9abe79c9c305246e138946bad626e26e08921811c0c2d2ad7fef",
+    "bytes": 5716760,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-18-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/region-standalone": {
+    "sha256": "25a91cd6a762a29fcf5600153be68a69a8513b0e6f27d1a207da6c8029a8cf08",
+    "bytes": 5644904,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/region-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-13-standalone": {
+    "sha256": "70b3d1f5458290cd86acb097ceabb25c303fd911d727e9325a81ea4bcc200f94",
+    "bytes": 5716816,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-13-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-12-standalone": {
+    "sha256": "124b921464f5454c02352dac645cee1b354b22f8cf7f9dfc7059389ce8cf8d1d",
+    "bytes": 5716856,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-12-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-2-standalone": {
+    "sha256": "c8bb26b42fcac57495bc269be2813a0066c342c8c8bc8cfe59bdd17e5ca0479d",
+    "bytes": 5714536,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-2-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-1-standalone": {
+    "sha256": "24373e1e0c1f27b5923328e8a4ed6712c4b1a5ae9ac447dc02758660a4332b04",
+    "bytes": 5714632,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-1-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-9-standalone": {
+    "sha256": "bb29e1fca45272da39621116923534323116ad4abea6d9a27491a824b7d08585",
+    "bytes": 5714632,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-9-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-16-standalone": {
+    "sha256": "2d6fc3e237a3305ecc14719334755d06f3e346e380beb5b280543e3543c9221b",
+    "bytes": 5716728,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-16-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/guard-standalone": {
+    "sha256": "29a048dc7b13b156947c58706b72979fd93544c2dcefd6b3b285102b1799c81a",
+    "bytes": 5633032,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/guard-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-21-standalone": {
+    "sha256": "7758955740ab45c83dcec990c5e2422508de91bfc5842a88443d1fb1b443545a",
+    "bytes": 5716736,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-21-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-5-standalone": {
+    "sha256": "9db28353222c0140bda794bf46f70d460908d76a40925df82b1157a73b50262e",
+    "bytes": 5714536,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-5-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-17-standalone": {
+    "sha256": "0c3ffdfd1fa2686dd9b6e544d8d98aa71d554b3b9c0c23433df74eede2b209bf",
+    "bytes": 5716912,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-17-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-4-standalone": {
+    "sha256": "8eeae4e045f9f5227b41e03713e706fcef167a8e322147988839b59b78ca8101",
+    "bytes": 5714592,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/source-fault-4-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/return-standalone": {
+    "sha256": "57c50a18f781d52d4e3057bf6964fa62488e439c04b08b6ad4f6cd61f2787038",
+    "bytes": 5651432,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/return-standalone"
+  },
+  "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/nested-guards-standalone": {
+    "sha256": "3b991b22539db2af2a51f45802a7a51f3531af5ba0fc97dc6872ce069b54ec6b",
+    "bytes": 5692248,
+    "resolved": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/matrix/nested-guards-standalone"
+  }
+}

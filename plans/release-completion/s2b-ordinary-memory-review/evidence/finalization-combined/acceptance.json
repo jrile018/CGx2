@@ -1,0 +1,177 @@
+{
+  "source_commit": "ded3768480c745ce544d33c56aea44d4fc0bfa5a",
+  "compiler_inputs_changed": [],
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_TARGET_DIR": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/cargo",
+    "TMPDIR": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/tmp",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "workspace_counts": {
+    "passed": 1383,
+    "failed": 0,
+    "ignored": 6
+  },
+  "reports": {
+    "verification": {
+      "path": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/verification/report.json",
+      "sha256": "3579e8055a25ab67b99cf8919c2609f43eb1f32ce9db6c6ab47d8d8000984212",
+      "passed": 7,
+      "failed": 0,
+      "failures": [],
+      "complete": true,
+      "coverage_errors": [],
+      "exceptions": [],
+      "product_summary": null
+    },
+    "matrix": {
+      "path": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/matrix/report.json",
+      "sha256": "18c9687b07b3b05e9944d01485717b39d7a583ebf5d1dff6565d67aeab49376d",
+      "passed": 962,
+      "failed": 1,
+      "failures": [
+        {
+          "name": "dependency-negative-exact-file",
+          "passed": false,
+          "expected_file": "lib.cg",
+          "required_gate": "known missing static dependency-file attribution"
+        }
+      ],
+      "complete": true,
+      "coverage_errors": [],
+      "exceptions": [],
+      "product_summary": null
+    },
+    "auto": {
+      "path": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/auto/report.json",
+      "sha256": "ba0c6ed79074fbfb7af3428a224136adad8d599b8c727f2e91ec92f2fbebcb07",
+      "passed": 32,
+      "failed": 0,
+      "failures": [],
+      "complete": true,
+      "coverage_errors": [],
+      "exceptions": [],
+      "product_summary": null
+    },
+    "historical": {
+      "path": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/historical/report.json",
+      "sha256": "a2046b50f7c9521bb90f52d78eb02769e9daf92c12c0043955d087d62dbddac8",
+      "passed": 8,
+      "failed": 1,
+      "failures": [
+        {
+          "name": "historical-process-exit",
+          "passed": false
+        }
+      ],
+      "complete": true,
+      "coverage_errors": [],
+      "exceptions": [],
+      "product_summary": {
+        "passed": 135,
+        "failed": 1
+      }
+    },
+    "package": {
+      "path": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/package/report.json",
+      "sha256": "dd33d54e14f25b9c44e48f57c8d01aec7430e22a5089f2af8683692c0aa68740",
+      "passed": 43,
+      "failed": 0,
+      "failures": [],
+      "complete": true,
+      "coverage_errors": [],
+      "exceptions": [],
+      "product_summary": null
+    },
+    "review": {
+      "path": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/review/report.json",
+      "sha256": "db9102953bb9e08d9baaca1edddd073c8b4d29d945806714a0b5d13eeeccafb8",
+      "passed": 19,
+      "failed": 0,
+      "failures": [],
+      "complete": true,
+      "coverage_errors": [],
+      "exceptions": [],
+      "product_summary": null
+    },
+    "recovery": {
+      "path": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery/report.json",
+      "sha256": "ac858223cbcdb7e70455a483006653d8e5a4dde454c7fac259dc89d35fce2d86",
+      "passed": 463,
+      "failed": 0,
+      "failures": [],
+      "complete": true,
+      "coverage_errors": null,
+      "exceptions": [
+        "Traceback (most recent call last):\n  File \"/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/ordinary-recovery-roots-evidence/run.py\", line 150, in main\n    assert original != derived\n           ^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+      ],
+      "product_summary": null
+    },
+    "recovery-reconciled": {
+      "path": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/recovery-reconciled/report.json",
+      "sha256": "14f11b184bc4330502baa1a07e71a28c0b2f20e4f6e266f1166229a2810c7b2c",
+      "passed": 515,
+      "failed": 0,
+      "failures": [],
+      "complete": true,
+      "coverage_errors": null,
+      "exceptions": [],
+      "product_summary": null
+    },
+    "legacy-reconciliation": {
+      "path": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024/legacy-reconciliation/report.json",
+      "sha256": "15329cd18730e6a2369a4ec6c87359e38bcbab14a247f0a9a26f2f38a7462cfc",
+      "passed": 133,
+      "failed": 0,
+      "failures": [],
+      "complete": true,
+      "coverage_errors": null,
+      "exceptions": [],
+      "product_summary": null
+    },
+    "nominal": {
+      "path": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/nominal/report.json",
+      "sha256": "a643bd37f9b6ffe783245cc58df722dbb40ad15940642b248f147cf2de681fb5",
+      "passed": 243,
+      "failed": 0,
+      "failures": [],
+      "complete": null,
+      "coverage_errors": null,
+      "exceptions": [],
+      "product_summary": null
+    },
+    "admission": {
+      "path": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024/admission/report.json",
+      "sha256": "466e67500460ad27613fcbbcf294a4bdf131a88bf80cfe87ea219631c49d0021",
+      "passed": 196,
+      "failed": 0,
+      "failures": [],
+      "complete": null,
+      "coverage_errors": null,
+      "exceptions": [],
+      "product_summary": null
+    }
+  },
+  "abnormal_commands": [],
+  "stream_mismatches": [],
+  "artifact_identity_errors": [],
+  "archives": 536,
+  "raw_root": "/home/john-riley/projects/lang/target/ordinary-finalization-combined-20261024",
+  "external_root": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-finalization-combined-20261024",
+  "runtime_recovery_bounded_review": true,
+  "harness_accepted": false,
+  "ordinary_memory_accepted": false,
+  "release_accepted": false,
+  "limits": [
+    "Main static dependency filename remains failed.",
+    "Historical reports preserve removed-root reserve expectation failures; separate reconciliation does not rewrite history.",
+    "Harness diagnostic/finalization/provenance defects require the planned bounded repair.",
+    "Journal reviewed_base89464a7 is stale; actual source ded3768 is recorded by coordinator-invocation plus all compiler hashes.",
+    "No live solver, leak-enabled memory, scored isolation, library/runtime external, GPU or paired human/model acceptance is implied."
+  ]
+}
