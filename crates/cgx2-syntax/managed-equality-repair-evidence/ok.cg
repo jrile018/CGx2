@@ -1,0 +1,36 @@
+fn main() -> i64 effects(ManagedAlloc):
+    let carrier = managed.try_alloc(1)
+    let ordinary = Result<i64, AllocationError>.Ok(1)
+    if carrier != ordinary:
+        return 1
+    else:
+        0
+    if ordinary != carrier:
+        return 2
+    else:
+        0
+    if (carrier == ordinary) == false:
+        return 3
+    else:
+        0
+    if (ordinary == carrier) == false:
+        return 4
+    else:
+        0
+    if carrier == Result<i64, AllocationError>.Ok(2):
+        return 5
+    else:
+        0
+    if Result<i64, AllocationError>.Ok(2) == carrier:
+        return 6
+    else:
+        0
+    if managed.try_alloc(2) == carrier:
+        return 8
+    else:
+        0
+    if managed.try_alloc(1) != carrier:
+        return 9
+    else:
+        0
+    42

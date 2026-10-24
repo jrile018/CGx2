@@ -1,0 +1,41 @@
+{
+  "command": [
+    "cargo",
+    "test",
+    "-p",
+    "cgx2-sema",
+    "--all-features",
+    "--offline",
+    "--locked",
+    "--test",
+    "managed_result_equality"
+  ],
+  "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang",
+  "exit": 101,
+  "reason": "exit",
+  "signal": null,
+  "overflow_stream": null,
+  "duration_seconds": 0.091,
+  "stdout_bytes": 1501,
+  "stdout_sha256": "6da654c009acd6790756caba04e5c4a394cb019f8ed4d4562da45c5c7b733630",
+  "stderr_bytes": 0,
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "passed": false,
+  "log": "baseline-sema-repro.log.gz",
+  "log_sha256": "6da654c009acd6790756caba04e5c4a394cb019f8ed4d4562da45c5c7b733630",
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/d1b5/lang/target/release-managed-equality-repair",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "bounds": {
+    "wall_seconds": 900,
+    "cpu_seconds_per_process": 900,
+    "address_space_bytes_per_process": 4294967296,
+    "retained_combined_bytes": 8388608,
+    "aggregate_cgroup_isolation": false
+  },
+  "runtime_graph_sha256": "414f340958245f001927f6d92a5fc48277fda2f8867e1d1259d29d037d8fb7ae"
+}

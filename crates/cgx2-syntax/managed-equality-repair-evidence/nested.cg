@@ -1,0 +1,61 @@
+record Box<T>:
+    value: T
+
+variant Choice<T>:
+    Item(T)
+    Empty
+
+fn main() -> i64 effects(ManagedAlloc):
+    let carrier = managed.try_alloc(1)
+    let ordinary = Result<i64, AllocationError>.Ok(1)
+    let left = Box(value: Choice.Item(array([carrier, ordinary])))
+    let right = Box(value: Choice.Item(array([ordinary, carrier])))
+    if left != right:
+        return 1
+    else:
+        0
+    if right != left:
+        return 2
+    else:
+        0
+    if (left == right) == false:
+        return 3
+    else:
+        0
+    if (right == left) == false:
+        return 4
+    else:
+        0
+    let different = Box(value: Choice.Item(array([ordinary, Result<i64, AllocationError>.Ok(2)])))
+    if left == different:
+        return 5
+    else:
+        0
+    if different == left:
+        return 6
+    else:
+        0
+    if left != Box(value: Choice.Item(array([carrier, ordinary]))):
+        return 7
+    else:
+        0
+    let wrapped = managed.try_alloc(managed.try_alloc([Box(value: "λ🙂")]))
+    let heap = Result<Result<List<Box<String>>, AllocationError>, AllocationError>.Ok(Result<List<Box<String>>, AllocationError>.Ok([Box(value: "λ🙂")]))
+    if wrapped != heap:
+        return 8
+    else:
+        0
+    if heap != wrapped:
+        return 9
+    else:
+        0
+    let changed = append([carrier], Result<i64, AllocationError>.Ok(2))
+    if [carrier] != [ordinary]:
+        return 10
+    else:
+        0
+    if length(changed) != 2:
+        return 11
+    else:
+        0
+    42

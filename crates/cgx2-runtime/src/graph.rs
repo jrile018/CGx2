@@ -2438,7 +2438,7 @@ pub mod default_managed {
                 depth: usize,
             ) -> Fallible<bool> {
                 self.step(Loc::default())?;
-                if a.ty != b.ty || a.depth != b.depth {
+                if a.ty != b.ty {
                     return Ok(false);
                 }
                 *nodes += 1;
@@ -2449,21 +2449,12 @@ pub mod default_managed {
                         Loc::default(),
                     ));
                 }
-                if a.depth > 0 {
-                    let (c, a) = a.unwrap();
-                    let (d, b) = b.unwrap();
-                    return if c != d {
-                        Ok(false)
-                    } else {
-                        self.equal(a, b, s, seen, nodes, depth + 1)
-                    };
-                }
-                match (a.atom, b.atom) {
-                    (Atom::Heap(x), Atom::Heap(y)) => {
-                        if x == y {
-                            return Ok(true);
-                        }
-                        if seen.contains(&(x, y)) {
+                // Carrier depth describes storage, not the logical variant value.
+                // Only unwrapped heap nodes may use handle identity/cycle shortcuts:
+                // a carrier's handle belongs to its payload, not its outer case.
+                match (a.depth, b.depth, a.atom, b.atom) {
+                    (0, 0, Atom::Heap(x), Atom::Heap(y)) => {
+                        if x == y || seen.contains(&(x, y)) {
                             return Ok(true);
                         }
                         seen.try_reserve(1)
@@ -2472,20 +2463,23 @@ pub mod default_managed {
                         if self.p.layouts[a.ty].shape == Shape::KString {
                             return Ok(self.text(a, s)? == self.text(b, s)?);
                         }
-                        let (c, aa) = self.parts(a, s)?;
-                        let (d, bb) = self.parts(b, s)?;
-                        if c != d || aa.len() != bb.len() {
-                            return Ok(false);
-                        }
-                        for (a, b) in aa.into_iter().zip(bb) {
-                            if !self.equal(a, b, s, seen, nodes, depth + 1)? {
-                                return Ok(false);
-                            }
-                        }
-                        Ok(true)
                     }
-                    (a, b) => Ok(a == b),
+                    (0, 0, a, b) => return Ok(a == b),
+                    _ => {}
                 }
+                // Decode a single logical layer from either representation without
+                // constructing a managed variant or changing roots/guard charges.
+                let (c, aa) = self.parts(a, s)?;
+                let (d, bb) = self.parts(b, s)?;
+                if c != d || aa.len() != bb.len() {
+                    return Ok(false);
+                }
+                for (a, b) in aa.into_iter().zip(bb) {
+                    if !self.equal(a, b, s, seen, nodes, depth + 1)? {
+                        return Ok(false);
+                    }
+                }
+                Ok(true)
             }
             fn binary(
                 &mut self,

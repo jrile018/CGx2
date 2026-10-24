@@ -1,0 +1,1073 @@
+{
+  "schema_version": 1,
+  "checks": [
+    {
+      "label": "pinned-rustc",
+      "command": [
+        "rustup",
+        "which",
+        "rustc"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.003,
+      "stdout_bytes": 78,
+      "stdout_sha256": "66af87d7f5dc56db4094d4257d2ebfd67b77bb8e36e37ef58d69a87d2016117c",
+      "stdout": "/home/john-riley/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/bin/rustc\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "rustc-identity",
+      "command": [
+        "/home/john-riley/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/bin/rustc",
+        "-vV"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.004,
+      "stdout_bytes": 196,
+      "stdout_sha256": "778fbc643a806f0dd123c056e66201d7e8a56a61928ec0a33171be8d6c2d5a37",
+      "stdout": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "pinned-version",
+      "passed": true
+    },
+    {
+      "label": "ok:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/release-managed-equality-repair/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/crates/cgx2-syntax/managed-equality-repair-evidence/ok.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.003,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "ok:interpreter",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/release-managed-equality-repair/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/crates/cgx2-syntax/managed-equality-repair-evidence/ok.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.004,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1118,
+      "stderr_sha256": "28c3924e97ff53a96764f1c0d0c24f955fb02970a003c5ab93aaf78c16af4157",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":3,\"roots_registered\":7,\"roots_released\":7,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":6,\"graph_writes\":3,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":774,\"behavioral_effects\":[\"ManagedAlloc\"],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":582,\"live_bytes\":582,\"peak_bytes\":582,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":582,\"live_bytes\":582,\"peak_bytes\":582,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "ok:interpreter:one-memory-observation",
+      "passed": true
+    },
+    {
+      "label": "ok:value",
+      "passed": true
+    },
+    {
+      "label": "ok:real-recovery",
+      "passed": true
+    },
+    {
+      "label": "ok:root-cleanup",
+      "passed": true
+    },
+    {
+      "label": "ok:no-guard-collection",
+      "passed": true
+    },
+    {
+      "label": "ok-debug:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/release-managed-equality-repair/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/crates/cgx2-syntax/managed-equality-repair-evidence/ok.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/ok-debug",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/rustc-linker"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.622,
+      "stdout_bytes": 516,
+      "stdout_sha256": "addd82b43969f9bb6a22f74ead2e656c013367f9b3db18ecdaca373162ea1de9",
+      "stdout": "cgx2c build metadata: source_sha256=e7dcd6b53d485272dd6297b67621948e1554ac8b9d1a41edcfe12c92798a3acc rustc=/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/rustc-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=3a33c412707a97710ab77a111031b9d836f5c7a1ae741a5cde2a403ef6b46e4e output=/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/ok-debug\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "ok-debug:execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/ok-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1118,
+      "stderr_sha256": "28c3924e97ff53a96764f1c0d0c24f955fb02970a003c5ab93aaf78c16af4157",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":3,\"roots_registered\":7,\"roots_released\":7,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":6,\"graph_writes\":3,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":774,\"behavioral_effects\":[\"ManagedAlloc\"],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":582,\"live_bytes\":582,\"peak_bytes\":582,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":582,\"live_bytes\":582,\"peak_bytes\":582,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "ok-debug:execute:one-memory-observation",
+      "passed": true
+    },
+    {
+      "label": "ok-debug:value-and-memory-parity",
+      "passed": true
+    },
+    {
+      "label": "ok-release:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/release-managed-equality-repair/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/crates/cgx2-syntax/managed-equality-repair-evidence/ok.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/ok-release",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/rustc-linker",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 1.979,
+      "stdout_bytes": 520,
+      "stdout_sha256": "1f2695f935d9f92f43f8ed814cda8acdacf66c3eb930471317703a772b26bc22",
+      "stdout": "cgx2c build metadata: source_sha256=e7dcd6b53d485272dd6297b67621948e1554ac8b9d1a41edcfe12c92798a3acc rustc=/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/rustc-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=3a33c412707a97710ab77a111031b9d836f5c7a1ae741a5cde2a403ef6b46e4e output=/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/ok-release\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "ok-release:execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/ok-release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1118,
+      "stderr_sha256": "28c3924e97ff53a96764f1c0d0c24f955fb02970a003c5ab93aaf78c16af4157",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":3,\"roots_registered\":7,\"roots_released\":7,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":6,\"graph_writes\":3,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":774,\"behavioral_effects\":[\"ManagedAlloc\"],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":582,\"live_bytes\":582,\"peak_bytes\":582,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":582,\"live_bytes\":582,\"peak_bytes\":582,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "ok-release:execute:one-memory-observation",
+      "passed": true
+    },
+    {
+      "label": "ok-release:value-and-memory-parity",
+      "passed": true
+    },
+    {
+      "label": "ok:emit",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/release-managed-equality-repair/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/crates/cgx2-syntax/managed-equality-repair-evidence/ok.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/ok.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.007,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "ok:standalone-embedded-runtime",
+      "passed": true
+    },
+    {
+      "label": "ok:standalone-compile",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/rustc-linker",
+        "--edition=2024",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/ok.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/ok-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.309,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "ok:standalone-execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/ok-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1118,
+      "stderr_sha256": "28c3924e97ff53a96764f1c0d0c24f955fb02970a003c5ab93aaf78c16af4157",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":3,\"roots_registered\":7,\"roots_released\":7,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":6,\"graph_writes\":3,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":774,\"behavioral_effects\":[\"ManagedAlloc\"],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":582,\"live_bytes\":582,\"peak_bytes\":582,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":582,\"live_bytes\":582,\"peak_bytes\":582,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "ok:standalone-execute:one-memory-observation",
+      "passed": true
+    },
+    {
+      "label": "ok:standalone-parity",
+      "passed": true
+    },
+    {
+      "label": "err:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/release-managed-equality-repair/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/crates/cgx2-syntax/managed-equality-repair-evidence/err.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.004,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "err:interpreter",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/release-managed-equality-repair/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/crates/cgx2-syntax/managed-equality-repair-evidence/err.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.006,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1125,
+      "stderr_sha256": "a1fd80fda95b4756990c65937da8dbac1aadbf046167612d438f486968178d8a",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":5,\"roots_registered\":9,\"roots_released\":9,\"cleanup_failures\":0,\"recovered\":2,\"guard_entries\":2,\"guard_exits\":2,\"guard_entry_failures\":0,\"graph_reads\":8,\"graph_writes\":5,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":1551,\"behavioral_effects\":[\"ManagedAlloc\"],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":1055,\"live_bytes\":1055,\"peak_bytes\":1055,\"allocation_failures\":2,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":1055,\"live_bytes\":1055,\"peak_bytes\":1055,\"allocation_failures\":2,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "err:interpreter:one-memory-observation",
+      "passed": true
+    },
+    {
+      "label": "err:value",
+      "passed": true
+    },
+    {
+      "label": "err:real-recovery",
+      "passed": true
+    },
+    {
+      "label": "err:root-cleanup",
+      "passed": true
+    },
+    {
+      "label": "err:no-guard-collection",
+      "passed": true
+    },
+    {
+      "label": "err-debug:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/release-managed-equality-repair/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/crates/cgx2-syntax/managed-equality-repair-evidence/err.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/err-debug",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/rustc-linker"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.631,
+      "stdout_bytes": 517,
+      "stdout_sha256": "1bee59d0a23c0164ea93199511745d0c1e456820a417db122ac5d68fbcd0be00",
+      "stdout": "cgx2c build metadata: source_sha256=b8422588ef6ebdfe0d48aa274ba42a6593060bbcfc8bbb175ee922c9ff3da26b rustc=/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/rustc-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=3a33c412707a97710ab77a111031b9d836f5c7a1ae741a5cde2a403ef6b46e4e output=/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/err-debug\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "err-debug:execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/err-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1125,
+      "stderr_sha256": "a1fd80fda95b4756990c65937da8dbac1aadbf046167612d438f486968178d8a",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":5,\"roots_registered\":9,\"roots_released\":9,\"cleanup_failures\":0,\"recovered\":2,\"guard_entries\":2,\"guard_exits\":2,\"guard_entry_failures\":0,\"graph_reads\":8,\"graph_writes\":5,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":1551,\"behavioral_effects\":[\"ManagedAlloc\"],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":1055,\"live_bytes\":1055,\"peak_bytes\":1055,\"allocation_failures\":2,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":1055,\"live_bytes\":1055,\"peak_bytes\":1055,\"allocation_failures\":2,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "err-debug:execute:one-memory-observation",
+      "passed": true
+    },
+    {
+      "label": "err-debug:value-and-memory-parity",
+      "passed": true
+    },
+    {
+      "label": "err-release:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/release-managed-equality-repair/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/crates/cgx2-syntax/managed-equality-repair-evidence/err.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/err-release",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/rustc-linker",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 2.004,
+      "stdout_bytes": 521,
+      "stdout_sha256": "2459b874486d5076e0650e86bb16f089379d3d7d17c2e2ef37ad10931b3ea4f6",
+      "stdout": "cgx2c build metadata: source_sha256=b8422588ef6ebdfe0d48aa274ba42a6593060bbcfc8bbb175ee922c9ff3da26b rustc=/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/rustc-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=3a33c412707a97710ab77a111031b9d836f5c7a1ae741a5cde2a403ef6b46e4e output=/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/err-release\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "err-release:execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/err-release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1125,
+      "stderr_sha256": "a1fd80fda95b4756990c65937da8dbac1aadbf046167612d438f486968178d8a",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":5,\"roots_registered\":9,\"roots_released\":9,\"cleanup_failures\":0,\"recovered\":2,\"guard_entries\":2,\"guard_exits\":2,\"guard_entry_failures\":0,\"graph_reads\":8,\"graph_writes\":5,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":1551,\"behavioral_effects\":[\"ManagedAlloc\"],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":1055,\"live_bytes\":1055,\"peak_bytes\":1055,\"allocation_failures\":2,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":1055,\"live_bytes\":1055,\"peak_bytes\":1055,\"allocation_failures\":2,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "err-release:execute:one-memory-observation",
+      "passed": true
+    },
+    {
+      "label": "err-release:value-and-memory-parity",
+      "passed": true
+    },
+    {
+      "label": "err:emit",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/release-managed-equality-repair/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/crates/cgx2-syntax/managed-equality-repair-evidence/err.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/err.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.009,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "err:standalone-embedded-runtime",
+      "passed": true
+    },
+    {
+      "label": "err:standalone-compile",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/rustc-linker",
+        "--edition=2024",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/err.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/err-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.316,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "err:standalone-execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/err-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1125,
+      "stderr_sha256": "a1fd80fda95b4756990c65937da8dbac1aadbf046167612d438f486968178d8a",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":5,\"roots_registered\":9,\"roots_released\":9,\"cleanup_failures\":0,\"recovered\":2,\"guard_entries\":2,\"guard_exits\":2,\"guard_entry_failures\":0,\"graph_reads\":8,\"graph_writes\":5,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":1551,\"behavioral_effects\":[\"ManagedAlloc\"],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":1055,\"live_bytes\":1055,\"peak_bytes\":1055,\"allocation_failures\":2,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":1055,\"live_bytes\":1055,\"peak_bytes\":1055,\"allocation_failures\":2,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "err:standalone-execute:one-memory-observation",
+      "passed": true
+    },
+    {
+      "label": "err:standalone-parity",
+      "passed": true
+    },
+    {
+      "label": "nested:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/release-managed-equality-repair/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/crates/cgx2-syntax/managed-equality-repair-evidence/nested.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.008,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nested:interpreter",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/release-managed-equality-repair/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/crates/cgx2-syntax/managed-equality-repair-evidence/nested.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.011,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1132,
+      "stderr_sha256": "b0ec41c06b9e366c600e9c6d80ce96ffa4954400905c4bbdbf79612bcc01bd4c",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":31,\"roots_registered\":54,\"roots_released\":54,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":122,\"graph_writes\":31,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":10660,\"behavioral_effects\":[\"ManagedAlloc\"],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":6244,\"live_bytes\":6244,\"peak_bytes\":6244,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":6244,\"live_bytes\":6244,\"peak_bytes\":6244,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nested:interpreter:one-memory-observation",
+      "passed": true
+    },
+    {
+      "label": "nested:value",
+      "passed": true
+    },
+    {
+      "label": "nested:real-recovery",
+      "passed": true
+    },
+    {
+      "label": "nested:root-cleanup",
+      "passed": true
+    },
+    {
+      "label": "nested:no-guard-collection",
+      "passed": true
+    },
+    {
+      "label": "nested-debug:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/release-managed-equality-repair/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/crates/cgx2-syntax/managed-equality-repair-evidence/nested.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/nested-debug",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/rustc-linker"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.68,
+      "stdout_bytes": 520,
+      "stdout_sha256": "e2c22a8b56f421d6e5488ab5733168a74c2b31bf1373646f12eaf867577ff49f",
+      "stdout": "cgx2c build metadata: source_sha256=de84ac9859af9889cf1c560ebe2743329612141583944a8843db28fd8a64e481 rustc=/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/rustc-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=3a33c412707a97710ab77a111031b9d836f5c7a1ae741a5cde2a403ef6b46e4e output=/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/nested-debug\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nested-debug:execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/nested-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1132,
+      "stderr_sha256": "b0ec41c06b9e366c600e9c6d80ce96ffa4954400905c4bbdbf79612bcc01bd4c",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":31,\"roots_registered\":54,\"roots_released\":54,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":122,\"graph_writes\":31,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":10660,\"behavioral_effects\":[\"ManagedAlloc\"],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":6244,\"live_bytes\":6244,\"peak_bytes\":6244,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":6244,\"live_bytes\":6244,\"peak_bytes\":6244,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nested-debug:execute:one-memory-observation",
+      "passed": true
+    },
+    {
+      "label": "nested-debug:value-and-memory-parity",
+      "passed": true
+    },
+    {
+      "label": "nested-release:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/release-managed-equality-repair/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/crates/cgx2-syntax/managed-equality-repair-evidence/nested.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/nested-release",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/rustc-linker",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 2.138,
+      "stdout_bytes": 524,
+      "stdout_sha256": "108f9007b894876bed79ba273f278684907923793dc1dfea0220f38cab6d9f74",
+      "stdout": "cgx2c build metadata: source_sha256=de84ac9859af9889cf1c560ebe2743329612141583944a8843db28fd8a64e481 rustc=/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/rustc-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=3a33c412707a97710ab77a111031b9d836f5c7a1ae741a5cde2a403ef6b46e4e output=/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/nested-release\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nested-release:execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/nested-release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1132,
+      "stderr_sha256": "b0ec41c06b9e366c600e9c6d80ce96ffa4954400905c4bbdbf79612bcc01bd4c",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":31,\"roots_registered\":54,\"roots_released\":54,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":122,\"graph_writes\":31,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":10660,\"behavioral_effects\":[\"ManagedAlloc\"],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":6244,\"live_bytes\":6244,\"peak_bytes\":6244,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":6244,\"live_bytes\":6244,\"peak_bytes\":6244,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nested-release:execute:one-memory-observation",
+      "passed": true
+    },
+    {
+      "label": "nested-release:value-and-memory-parity",
+      "passed": true
+    },
+    {
+      "label": "nested:emit",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/release-managed-equality-repair/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/crates/cgx2-syntax/managed-equality-repair-evidence/nested.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/nested.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.014,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nested:standalone-embedded-runtime",
+      "passed": true
+    },
+    {
+      "label": "nested:standalone-compile",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/rustc-linker",
+        "--edition=2024",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/nested.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/nested-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.3,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nested:standalone-execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/nested-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.002,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1132,
+      "stderr_sha256": "b0ec41c06b9e366c600e9c6d80ce96ffa4954400905c4bbdbf79612bcc01bd4c",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":31,\"roots_registered\":54,\"roots_released\":54,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":122,\"graph_writes\":31,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":10660,\"behavioral_effects\":[\"ManagedAlloc\"],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":6244,\"live_bytes\":6244,\"peak_bytes\":6244,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":6244,\"live_bytes\":6244,\"peak_bytes\":6244,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nested:standalone-execute:one-memory-observation",
+      "passed": true
+    },
+    {
+      "label": "nested:standalone-parity",
+      "passed": true
+    },
+    {
+      "label": "nested-err:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/release-managed-equality-repair/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/crates/cgx2-syntax/managed-equality-repair-evidence/nested-err.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.005,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nested-err:interpreter",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/release-managed-equality-repair/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/crates/cgx2-syntax/managed-equality-repair-evidence/nested-err.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.008,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1130,
+      "stderr_sha256": "7c013eea1ab79cf1e94200b5706746c204abb016cf362e7e1cd1164fbd93fcf7",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":13,\"roots_registered\":25,\"roots_released\":25,\"cleanup_failures\":0,\"recovered\":1,\"guard_entries\":1,\"guard_exits\":1,\"guard_entry_failures\":0,\"graph_reads\":56,\"graph_writes\":13,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":4401,\"behavioral_effects\":[\"ManagedAlloc\"],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":2657,\"live_bytes\":2657,\"peak_bytes\":2657,\"allocation_failures\":1,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":2657,\"live_bytes\":2657,\"peak_bytes\":2657,\"allocation_failures\":1,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nested-err:interpreter:one-memory-observation",
+      "passed": true
+    },
+    {
+      "label": "nested-err:value",
+      "passed": true
+    },
+    {
+      "label": "nested-err:real-recovery",
+      "passed": true
+    },
+    {
+      "label": "nested-err:root-cleanup",
+      "passed": true
+    },
+    {
+      "label": "nested-err:no-guard-collection",
+      "passed": true
+    },
+    {
+      "label": "nested-err-debug:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/release-managed-equality-repair/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/crates/cgx2-syntax/managed-equality-repair-evidence/nested-err.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/nested-err-debug",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/rustc-linker"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.598,
+      "stdout_bytes": 524,
+      "stdout_sha256": "9206cb7c885bb72655ce83cccecba5d1a59571f8f2530154a7565b9ca803230c",
+      "stdout": "cgx2c build metadata: source_sha256=774044cb5a2ef590e77fb81c9c6238a8fd7958ff8e447887a0560faf7a2e6d4e rustc=/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/rustc-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=3a33c412707a97710ab77a111031b9d836f5c7a1ae741a5cde2a403ef6b46e4e output=/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/nested-err-debug\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nested-err-debug:execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/nested-err-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1130,
+      "stderr_sha256": "7c013eea1ab79cf1e94200b5706746c204abb016cf362e7e1cd1164fbd93fcf7",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":13,\"roots_registered\":25,\"roots_released\":25,\"cleanup_failures\":0,\"recovered\":1,\"guard_entries\":1,\"guard_exits\":1,\"guard_entry_failures\":0,\"graph_reads\":56,\"graph_writes\":13,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":4401,\"behavioral_effects\":[\"ManagedAlloc\"],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":2657,\"live_bytes\":2657,\"peak_bytes\":2657,\"allocation_failures\":1,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":2657,\"live_bytes\":2657,\"peak_bytes\":2657,\"allocation_failures\":1,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nested-err-debug:execute:one-memory-observation",
+      "passed": true
+    },
+    {
+      "label": "nested-err-debug:value-and-memory-parity",
+      "passed": true
+    },
+    {
+      "label": "nested-err-release:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/release-managed-equality-repair/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/crates/cgx2-syntax/managed-equality-repair-evidence/nested-err.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/nested-err-release",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/rustc-linker",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 1.946,
+      "stdout_bytes": 528,
+      "stdout_sha256": "3581480bcc1a40f885db26ee2397d6396ccbc2a536757fe5d6618260914f3699",
+      "stdout": "cgx2c build metadata: source_sha256=774044cb5a2ef590e77fb81c9c6238a8fd7958ff8e447887a0560faf7a2e6d4e rustc=/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/rustc-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=3a33c412707a97710ab77a111031b9d836f5c7a1ae741a5cde2a403ef6b46e4e output=/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/nested-err-release\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nested-err-release:execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/nested-err-release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1130,
+      "stderr_sha256": "7c013eea1ab79cf1e94200b5706746c204abb016cf362e7e1cd1164fbd93fcf7",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":13,\"roots_registered\":25,\"roots_released\":25,\"cleanup_failures\":0,\"recovered\":1,\"guard_entries\":1,\"guard_exits\":1,\"guard_entry_failures\":0,\"graph_reads\":56,\"graph_writes\":13,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":4401,\"behavioral_effects\":[\"ManagedAlloc\"],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":2657,\"live_bytes\":2657,\"peak_bytes\":2657,\"allocation_failures\":1,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":2657,\"live_bytes\":2657,\"peak_bytes\":2657,\"allocation_failures\":1,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nested-err-release:execute:one-memory-observation",
+      "passed": true
+    },
+    {
+      "label": "nested-err-release:value-and-memory-parity",
+      "passed": true
+    },
+    {
+      "label": "nested-err:emit",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/release-managed-equality-repair/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/crates/cgx2-syntax/managed-equality-repair-evidence/nested-err.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/nested-err.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.011,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nested-err:standalone-embedded-runtime",
+      "passed": true
+    },
+    {
+      "label": "nested-err:standalone-compile",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/rustc-linker",
+        "--edition=2024",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/nested-err.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/nested-err-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.327,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nested-err:standalone-execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1/nested-err-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair/result-equality-5v0sfci1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.007,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1130,
+      "stderr_sha256": "7c013eea1ab79cf1e94200b5706746c204abb016cf362e7e1cd1164fbd93fcf7",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":13,\"roots_registered\":25,\"roots_released\":25,\"cleanup_failures\":0,\"recovered\":1,\"guard_entries\":1,\"guard_exits\":1,\"guard_entry_failures\":0,\"graph_reads\":56,\"graph_writes\":13,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":4401,\"behavioral_effects\":[\"ManagedAlloc\"],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":2657,\"live_bytes\":2657,\"peak_bytes\":2657,\"allocation_failures\":1,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":2657,\"live_bytes\":2657,\"peak_bytes\":2657,\"allocation_failures\":1,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nested-err:standalone-execute:one-memory-observation",
+      "passed": true
+    },
+    {
+      "label": "nested-err:standalone-parity",
+      "passed": true
+    }
+  ],
+  "release_complete": false,
+  "managed_delivery_accepted": false,
+  "external_leak_audit_performance": "unrun",
+  "binary_sha256": "c7d4541da71ae0d797d754f10869c265ad347f01aa28cb941e7b4b0fd2c126c1",
+  "runner_sha256": "e14e8eb46512d62cc25b27f4ec515a31a26b05407888c4267ef0428b492dc9bc",
+  "runtime_graph_sha256": "67390805f719b39281cabde1e0e0bf3add3ae8614629bdb2a128a023c752efd0",
+  "bounds": {
+    "wall_seconds": 180,
+    "cpu_seconds_per_process": 120,
+    "address_space_bytes_per_process": 4294967296,
+    "retained_bytes_per_stream": 2097152,
+    "aggregate_cgroup_isolation": false
+  },
+  "sources_sha256": {
+    "ok": "e7dcd6b53d485272dd6297b67621948e1554ac8b9d1a41edcfe12c92798a3acc",
+    "err": "b8422588ef6ebdfe0d48aa274ba42a6593060bbcfc8bbb175ee922c9ff3da26b",
+    "nested": "de84ac9859af9889cf1c560ebe2743329612141583944a8843db28fd8a64e481",
+    "nested-err": "774044cb5a2ef590e77fb81c9c6238a8fd7958ff8e447887a0560faf7a2e6d4e"
+  },
+  "passed": 87,
+  "failed": 0,
+  "artifacts_sha256": {
+    "ok-debug": "aeec28c81b46bfd191581d44306ba88aa7144bd70a44e829bf61229fd12c0311",
+    "ok-release": "5b0cf41c18f35401e0840ebd759007523e1780e7b2a4f97a2ff72a9dbccf82ea",
+    "ok.rs": "8c4c2429a7b4f53cc7775ba5a1a136146abe40b7206b87c2078f0b64568ba4c7",
+    "ok-standalone": "720d1f5ad25305f613cafe0fd0a7152c9363fd7a4751b5edbf75980698d6dd6b",
+    "err-debug": "9622a40378070a00d9d5a3f5756dd81859ad4045e46f112b096fe8ba76db4249",
+    "err-release": "a55f937a11e9a4a51290b956c1cf5f698f5432efc4b4a94cd1ff77436c7b1707",
+    "err.rs": "9f004523fcbc1817a15232d4e31bdc2686d06c0923df10911853a4fb25ce71f3",
+    "err-standalone": "23d9aabe2f22fb667af95bb1db10e74d8ab0ea459eb0cdf3bdb3c63daf7c5db6",
+    "nested-debug": "0cfb19781a5358d7b8b25e97496bdebf9ed26a73acf5ec3c52fed67d62d149ae",
+    "nested-release": "51be98b0ccd7eb5b9374ac43c90d1f7b89cf67cd596fa04f5d0875531c6b94d6",
+    "nested.rs": "1cfccb5eeb884e43d239492b0fce7c1628e7fa1f08e7cd5a30faf0e50fc93b5f",
+    "nested-standalone": "87e02787f1db0f896b0f12f6d4d6cf38ab56274c6ccf662826a5a23fc62ca64b",
+    "nested-err-debug": "af00528dd85207d8c988d4cf0493edd73bbd945c4530f34e76d1b13dece60eaf",
+    "nested-err-release": "811515edf50ec671eab918c7ccf9bb90961e4dfa37498bb5f38e084a7017cd27",
+    "nested-err.rs": "afdb9faacc3845c1bbefab2851153a097ba05f1284848a444b6efa9b0cc96410",
+    "nested-err-standalone": "9ed9e6d7cc93c88b629aec8c0a560d05fadcab4449cbe059e84a2fd2cb262737"
+  }
+}

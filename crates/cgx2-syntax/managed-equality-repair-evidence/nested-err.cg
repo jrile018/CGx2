@@ -1,0 +1,46 @@
+record Box<T>:
+    value: T
+
+variant Choice<T>:
+    Item(T)
+    Empty
+
+fn fail() -> Result<List<i64>, AllocationError> effects(ManagedAlloc):
+    no_gc(budget: 0):
+        return managed.try_alloc([1, 2])
+    Result<List<i64>, AllocationError>.Ok([])
+
+fn main() -> i64 effects(ManagedAlloc):
+    let carrier = fail()
+    match carrier:
+        Result.Err(error):
+            let ordinary = Result<List<i64>, AllocationError>.Err(error)
+            let left = Box(value: Choice.Item(array([carrier, ordinary])))
+            let right = Box(value: Choice.Item(array([ordinary, carrier])))
+            if left != right:
+                return 1
+            else:
+                0
+            if right != left:
+                return 2
+            else:
+                0
+            if (left == right) == false:
+                return 3
+            else:
+                0
+            if (right == left) == false:
+                return 4
+            else:
+                0
+            if [carrier] != [ordinary]:
+                return 5
+            else:
+                0
+            if [ordinary] != [carrier]:
+                return 6
+            else:
+                0
+            42
+        Result.Ok(value):
+            0
