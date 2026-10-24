@@ -26,27 +26,7 @@ fn package_record_fields_preserve_complete_nominal_identities() {
     for fixture in ["s2a-local", "s2a-imports"] {
         let package = load_checked_package(&Path::new("tests/fixtures").join(fixture)).unwrap();
         let generated = emit_package_rust(&package).unwrap();
-        let entry = package
-            .modules()
-            .iter()
-            .find(|m| m.source() == package.index().entry)
-            .unwrap();
-        let name = entry.syntax().name.as_ref().unwrap().segments.join(".");
-        let merged = cgx2_sema::merge_modules(
-            &package
-                .modules()
-                .iter()
-                .map(|m| m.syntax())
-                .collect::<Vec<_>>(),
-            &name,
-        );
-        let text = package
-            .modules()
-            .iter()
-            .map(|m| m.text())
-            .collect::<Vec<_>>()
-            .join("\n");
-        let program = cgx2_sema::default_managed::compile_module(&merged, &text).unwrap();
+        let program = package.managed_program_v1().unwrap();
         assert!(generated.contains(&program.rust_data().unwrap()));
         assert_eq!(generated, emit_package_rust(&package).unwrap());
         let modules: &[&str] = if fixture == "s2a-local" {

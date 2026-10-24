@@ -174,10 +174,17 @@ def main():
         # retained separately. Only the obsolete constructor setup is replaced.
         historical = ROOT / "crates/cgx2-emit-rust/tests/s2a_record_identities.rs"
         original = historical.read_text()
-        start = original.index("        let entry = package")
-        end = original.index("        assert!(generated.contains", start)
+        if "        let entry = package" in original:
+            start = original.index("        let entry = package")
+            end = original.index("        assert!(generated.contains", start)
+            migrated_source = original[:start] + "        let program = package.managed_program_v1().unwrap();\n" + original[end:]
+            report["layout_test_constructor"] = "temporary-migration"
+        else:
+            assert "        let program = package.managed_program_v1().unwrap();" in original
+            migrated_source = original
+            report["layout_test_constructor"] = "already-migrated"
         migrated = work / "record-identities-migrated.rs"
-        migrated.write_text(original[:start] + "        let program = package.managed_program_v1().unwrap();\n" + original[end:])
+        migrated.write_text(migrated_source)
         report["historical_layout_test_sha256"] = digest(historical)
         report["migrated_layout_test_sha256"] = digest(migrated)
         artifact = work / "record-identities-migrated"
