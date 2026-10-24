@@ -1,0 +1,5 @@
+module lib
+
+pub fn heap() -> i64 effects() caps(MemoryCollect):
+    managed.collect()
+    42

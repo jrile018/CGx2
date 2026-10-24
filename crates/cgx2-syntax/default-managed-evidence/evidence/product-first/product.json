@@ -1,0 +1,335 @@
+{
+  "schema_version": 1,
+  "checks": [
+    {
+      "label": "pinned-rustc",
+      "command": [
+        "rustup",
+        "which",
+        "rustc"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.003,
+      "stdout_bytes": 78,
+      "stdout_sha256": "66af87d7f5dc56db4094d4257d2ebfd67b77bb8e36e37ef58d69a87d2016117c",
+      "stdout": "/home/john-riley/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/bin/rustc\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "shapes:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/685c/lang/crates/cgx2-syntax/default-managed-evidence/shapes.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.003,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "shapes:interpreter",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/685c/lang/crates/cgx2-syntax/default-managed-evidence/shapes.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.004,
+      "stdout_bytes": 2,
+      "stdout_sha256": "10159baf262b43a92d95db59dae1f72c645127301661e0a3ce4e38b295a97c58",
+      "stdout": "7\n",
+      "stderr_bytes": 1114,
+      "stderr_sha256": "aaa7d472a511d395a07a9fa46643845ede957ab5f818d2173bbe5ca141455c38",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":8,\"roots_registered\":22,\"roots_released\":22,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":11,\"graph_writes\":8,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":3636,\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":1620,\"live_bytes\":1620,\"peak_bytes\":1620,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":1620,\"live_bytes\":1620,\"peak_bytes\":1620,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "shapes:value",
+      "passed": true
+    },
+    {
+      "label": "shapes:roots",
+      "passed": true
+    },
+    {
+      "label": "shapes-False:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/685c/lang/crates/cgx2-syntax/default-managed-evidence/shapes.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1/shapes-False",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1/rustc-linker"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.565,
+      "stdout_bytes": 504,
+      "stdout_sha256": "a025d871b77289bff943853aa14d35a27f2dfc9edd19789d8773dbcc71024014",
+      "stdout": "cgx2c build metadata: source_sha256=2508c95ce2ea7aa810f3f83e9ca40be74d3521e0c84aeddeb36f12750fa7e199 rustc=/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1/rustc-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=d111d4b07846addec30a5882b03917177fe9e0740488df75cb7cc66ed9a7b3d8 output=/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1/shapes-False\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "shapes-False:execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1/shapes-False"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 2,
+      "stdout_sha256": "10159baf262b43a92d95db59dae1f72c645127301661e0a3ce4e38b295a97c58",
+      "stdout": "7\n",
+      "stderr_bytes": 1114,
+      "stderr_sha256": "aaa7d472a511d395a07a9fa46643845ede957ab5f818d2173bbe5ca141455c38",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":8,\"roots_registered\":22,\"roots_released\":22,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":11,\"graph_writes\":8,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":3636,\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":1620,\"live_bytes\":1620,\"peak_bytes\":1620,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":1620,\"live_bytes\":1620,\"peak_bytes\":1620,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "shapes-False:value-and-memory-parity",
+      "passed": true
+    },
+    {
+      "label": "shapes-True:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/685c/lang/crates/cgx2-syntax/default-managed-evidence/shapes.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1/shapes-True",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1/rustc-linker",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 1.789,
+      "stdout_bytes": 505,
+      "stdout_sha256": "a35c251a705f84c70abd190fea544cf61c689ea16e54a16891cea353f1f34663",
+      "stdout": "cgx2c build metadata: source_sha256=2508c95ce2ea7aa810f3f83e9ca40be74d3521e0c84aeddeb36f12750fa7e199 rustc=/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1/rustc-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=d111d4b07846addec30a5882b03917177fe9e0740488df75cb7cc66ed9a7b3d8 output=/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1/shapes-True\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "shapes-True:execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1/shapes-True"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 2,
+      "stdout_sha256": "10159baf262b43a92d95db59dae1f72c645127301661e0a3ce4e38b295a97c58",
+      "stdout": "7\n",
+      "stderr_bytes": 1114,
+      "stderr_sha256": "aaa7d472a511d395a07a9fa46643845ede957ab5f818d2173bbe5ca141455c38",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":8,\"roots_registered\":22,\"roots_released\":22,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":11,\"graph_writes\":8,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":3636,\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":1620,\"live_bytes\":1620,\"peak_bytes\":1620,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":1620,\"live_bytes\":1620,\"peak_bytes\":1620,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "shapes-True:value-and-memory-parity",
+      "passed": true
+    },
+    {
+      "label": "shapes:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/crates/cgx2-syntax/default-managed-evidence/shapes.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1/shapes.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.007,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "shapes:standalone-compile",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1/rustc-linker",
+        "--edition=2024",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1/shapes.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1/shapes-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.259,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "shapes:standalone-execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1/shapes-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 2,
+      "stdout_sha256": "10159baf262b43a92d95db59dae1f72c645127301661e0a3ce4e38b295a97c58",
+      "stdout": "7\n",
+      "stderr_bytes": 1114,
+      "stderr_sha256": "aaa7d472a511d395a07a9fa46643845ede957ab5f818d2173bbe5ca141455c38",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":8,\"roots_registered\":22,\"roots_released\":22,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":11,\"graph_writes\":8,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":3636,\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":1620,\"live_bytes\":1620,\"peak_bytes\":1620,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":1620,\"live_bytes\":1620,\"peak_bytes\":1620,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "shapes:standalone-parity",
+      "passed": true
+    },
+    {
+      "label": "shapes:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/crates/cgx2-syntax/default-managed-evidence/shapes.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1/shapes.py"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.004,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "shapes:python-execute",
+      "command": [
+        "/usr/bin/python3",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1/shapes.py"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-3z85onb1",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.008,
+      "stdout_bytes": 2,
+      "stdout_sha256": "10159baf262b43a92d95db59dae1f72c645127301661e0a3ce4e38b295a97c58",
+      "stdout": "7\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "shapes:portable-value",
+      "passed": true
+    }
+  ],
+  "checkpoint_complete": false,
+  "release_complete": false,
+  "external_leak_audit_performance": "unrun",
+  "bounds": {
+    "wall_seconds": 180,
+    "cpu_seconds_per_process": 120,
+    "address_space_bytes_per_process": 4294967296,
+    "retained_bytes_per_stream": 2097152,
+    "aggregate_cgroup_isolation": false
+  },
+  "binary_sha256": "6cb706dfd06579f1c61723c1843a0e0ea4a557521020077f37bf407dc4240a39",
+  "runtime_sha256": {
+    "budget.rs": "7bd562dae680c6102598a68d139042fba758ae3b3cb8c0d937778c0f0f13e0e4",
+    "fault.rs": "bc4652355ca094d8e1daca99b76d38e194c35fcc852c25b071593a4dbe9dc252",
+    "graph.rs": "ef1fbd8c2bf791aac1bce0dce86274db8e77cd1d36f617560e1783a922f52ae4",
+    "heap.rs": "f167f13b46866d9999aa3c8f4329f3a7ad5e59e534d9f5b7b789208296351a8f",
+    "lib.rs": "c297d26243a864fdec4c1ec2707b3002843b971dae750ce08a7f856f446c176b",
+    "owned.rs": "08b8c47b10ff55c9174467c623127136f034e314f8b5f2d49010e9c21547c197",
+    "region.rs": "50362a5df6c4469bfb5f03e9a93a3a351853a97d6fc505a322ce6bc5bb9f6077",
+    "report.rs": "4569e7848983a5179c60abdb4cd779f3707512eaae5e614214a50cf8d39ba9aa",
+    "scope.rs": "0a22f1381d242bb4646e783a58f91ad2e8d81fd1002dc19ef4a088fb21396fcf"
+  },
+  "passed": 18,
+  "failed": 0,
+  "sources_sha256": {
+    "shapes": "2508c95ce2ea7aa810f3f83e9ca40be74d3521e0c84aeddeb36f12750fa7e199",
+    "alias": "5aa8bbed4ec092056856fe08ac48724f29afa71feea7037d75a2c3a72fa231f9",
+    "cycle": "adb25289d4509fcde234f2885d934e883c8e0b27fade4c8da47f33020931fe50",
+    "pressure": "90edc008da8a33867d130f134af267f95a25934a368619743313654d0eaa5a36",
+    "unicode": "ca2dca2593591519a93c27357fc8d5a7321898f2218e22dff5d9724252afc19a",
+    "recover": "6e0705124c817fc44c388a806b4c993448db0f42cd70ac0548036cb91c7bad71",
+    "region-limit": "4b1c0b520693d7e9861988ca76278548e98040648befe5d0281fe8f98656d05b",
+    "hybrid": "b5c5287e5d2a807a25fc6e491ecb3adae404e8f42491e00f9a183e1734b23ee2",
+    "wide": "d2d3d0c3f1da52236f5f5747bc91c9bce5ad0c9bc4f84dc74f62c85a9c4ad927",
+    "elements": "8a286b39ac066e1dd8e0ffcd7bd620a47deb113fc7c695f550828755c547ff08"
+  },
+  "artifacts_sha256": {
+    "shapes-False": "d3dccaa474ef699408d60abe5211caa808166a56cb3bbbeedbd7b8e04ced6426",
+    "shapes-True": "a161b0625a8bf787092801d541bcfc0a3f48566216dfb5a53beb58a4d96a484c",
+    "shapes.rs": "8f0fdcf29345a86b317c41c8cfa8e882e56f547b79e27e6a274f054168b74f37",
+    "shapes-standalone": "3622be706eb00f4c0ae0cb0468bc144b149bdbd053e3e12a4b19fa8ee11edac2"
+  }
+}

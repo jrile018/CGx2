@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "base": "c9d60229ecf3ed2bf76b29525fec0bdda41d0906",
+  "checks": [
+    {
+      "name": "emitters",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-emit-python/tests/s2b_product.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/685c/lang/crates/cgx2-syntax/default-managed-evidence/evidence/emitter-final2/emitters.json"
+      ],
+      "exit": 1,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 21.637,
+      "stdout_bytes": 1428,
+      "stdout_sha256": "7906a57e0226685f8830c4120ff8d9ed4882987f6ed1eb38cc038d450404cbd8",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "emitters.log.gz",
+      "log_sha256": "7906a57e0226685f8830c4120ff8d9ed4882987f6ed1eb38cc038d450404cbd8",
+      "status": "failed"
+    }
+  ],
+  "checkpoint_complete": false,
+  "release_complete": false,
+  "dependency_reconciliation": "none; root Cargo files unchanged",
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "bounds": {
+    "wall_seconds": 900,
+    "cpu_seconds_per_process": 900,
+    "address_space_bytes_per_process": 4294967296,
+    "retained_combined_bytes": 8388608,
+    "aggregate_cgroup_isolation": false
+  },
+  "external_audit_performance": "unrun"
+}

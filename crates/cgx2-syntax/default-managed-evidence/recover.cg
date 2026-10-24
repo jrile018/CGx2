@@ -1,0 +1,19 @@
+fn main() -> i64 effects(ManagedAlloc):
+    no_gc(budget: 0):
+        let outcome = managed.try_alloc([1, 2])
+        match outcome:
+            Result.Ok(xs):
+                return length(xs)
+            Result.Err(error):
+                match error:
+                    AllocationError.BudgetExceeded:
+                        return 42
+                    AllocationError.RegionLimit:
+                        return 2
+                    AllocationError.HostAllocation:
+                        return 3
+                    AllocationError.InvalidRegion:
+                        return 4
+                    AllocationError.ShapeLimit:
+                        return 5
+    0

@@ -2,6 +2,44 @@ use crate::{RunError, RunResult, Value};
 use cgx2_sema::ordinary_owned::{compile_source_v2 as compile_source, Scalar};
 
 pub fn validate_owned_source(source: &str) -> Result<(), Vec<crate::CheckDiagnostic>> {
+    if cgx2_syntax::parse_module(source).is_ok_and(|m| {
+        !cgx2_sema::default_managed::hybrid::is_hybrid(&m)
+            && cgx2_sema::default_managed::profile(&m)
+    }) {
+        return cgx2_sema::default_managed::compile_source(source)
+            .map(|_| ())
+            .or_else(|ds| {
+                if ds.iter().all(|d| d.code == "CGRS003") {
+                    Ok(())
+                } else {
+                    Err(ds)
+                }
+            })
+            .map_err(|ds| {
+                ds.into_iter()
+                    .map(|d| crate::CheckDiagnostic {
+                        code: d.code.into(),
+                        message: d.message,
+                        span: d.span,
+                    })
+                    .collect()
+            });
+    }
+    if cgx2_syntax::parse_module(source)
+        .is_ok_and(|m| cgx2_sema::default_managed::hybrid::is_hybrid(&m))
+    {
+        return cgx2_sema::default_managed::hybrid::compile_source(source)
+            .map(|_| ())
+            .map_err(|ds| {
+                ds.into_iter()
+                    .map(|d| crate::CheckDiagnostic {
+                        code: d.code.into(),
+                        message: d.message,
+                        span: d.span,
+                    })
+                    .collect()
+            });
+    }
     compile_source(source).map(|_| ()).map_err(|ds| {
         ds.into_iter()
             .map(|d| crate::CheckDiagnostic {
@@ -82,7 +120,7 @@ pub(super) fn run(
         })
 }
 
-fn copied_value(v: Scalar) -> Value {
+pub(super) fn copied_value(v: Scalar) -> Value {
     match v {
         Scalar::I64(v) => Value::I64(v),
         Scalar::Bool(v) => Value::Bool(v),

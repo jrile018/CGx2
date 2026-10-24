@@ -38,6 +38,96 @@ impl Session {
 }
 
 impl ScopedRoots<'_> {
+    /// Nonallocating marker for a compiler expression's temporary registrations.
+    pub fn checkpoint(&self) -> usize {
+        self.roots.len()
+    }
+
+    pub fn contains_since(&self, checkpoint: usize, handle: Handle) -> bool {
+        self.roots
+            .get(checkpoint..)
+            .is_some_and(|roots| roots.contains(&handle))
+    }
+
+    /// Releases expression temporaries, retaining one already registered result.
+    /// Capacity is retained and this operation never allocates or collects.
+    pub fn finish_since(&mut self, checkpoint: usize, retain: Option<Handle>) -> CleanupReport {
+        if checkpoint > self.roots.len() {
+            return CleanupReport {
+                released_roots: 0,
+                first_error: Some(MemoryError::NotRooted),
+            };
+        }
+        let retained = retain.and_then(|handle| {
+            self.roots[checkpoint..]
+                .iter()
+                .rposition(|h| *h == handle)
+                .map(|index| self.roots.swap_remove(checkpoint + index))
+        });
+        let mut report = CleanupReport::default();
+        while self.roots.len() > checkpoint {
+            let handle = self.roots.pop().expect("temporary root");
+            match self.session.object_mut(handle).and_then(|object| {
+                if object.scoped_roots == 0 || object.roots == 0 {
+                    return Err(MemoryError::NotRooted);
+                }
+                object.scoped_roots -= 1;
+                object.roots -= 1;
+                Ok(())
+            }) {
+                Ok(()) => report.released_roots += 1,
+                Err(error) => {
+                    report.first_error.get_or_insert(error);
+                }
+            }
+        }
+        if let Some(handle) = retained {
+            self.roots.push(handle);
+        }
+        report
+    }
+
+    /// Releases one registration owned by this scope, without allocation or collection.
+    /// This permits compiler temporaries and overwritten bindings to end promptly.
+    pub fn release(&mut self, handle: Handle) -> Result<(), MemoryError> {
+        let index = self
+            .roots
+            .iter()
+            .rposition(|h| *h == handle)
+            .ok_or(MemoryError::NotRooted)?;
+        let object = self.session.object_mut(handle)?;
+        if object.scoped_roots == 0 || object.roots == 0 {
+            return Err(MemoryError::NotRooted);
+        }
+        object.scoped_roots -= 1;
+        object.roots -= 1;
+        self.roots.swap_remove(index);
+        Ok(())
+    }
+
+    /// Runs a lexical guard with the same protected registration table and Session.
+    /// Moving the table performs no allocation. Nested scopes still clean up on unwind.
+    pub fn with_no_gc<T>(
+        &mut self,
+        budget: usize,
+        body: impl FnOnce(&mut ScopedRoots<'_>) -> T,
+    ) -> Result<T, AllocationError> {
+        let mut guard = self.session.try_no_gc(budget)?;
+        let registrations = std::mem::take(&mut self.roots);
+        let mut nested = ScopedRoots {
+            session: &mut guard,
+            roots: registrations,
+        };
+        // Restore the registration owner even when a caller catches an unwind
+        // without dropping its outer scope. Then resume the original panic.
+        let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| body(&mut nested)));
+        self.roots = std::mem::take(&mut nested.roots);
+        match result {
+            Ok(value) => Ok(value),
+            Err(payload) => std::panic::resume_unwind(payload),
+        }
+    }
+
     /// Registers one protected root. Failure leaves registrations unchanged.
     /// Root-table growth is charged to every active no_gc budget, not a region.
     pub fn root(&mut self, handle: Handle) -> Result<(), MemoryError> {

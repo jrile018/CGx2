@@ -1,0 +1,5 @@
+fn main() -> i64 effects(ManagedAlloc, ReadManaged, Mutate):
+    let cell = managed.ref(1)
+    let alias = cell
+    managed.set(alias, 42)
+    managed.get(cell)

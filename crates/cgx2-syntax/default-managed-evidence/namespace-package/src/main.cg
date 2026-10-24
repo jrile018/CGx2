@@ -1,0 +1,5 @@
+module app
+import managed
+
+fn main() -> i64:
+    managed.ref(41)

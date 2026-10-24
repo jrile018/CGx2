@@ -327,6 +327,50 @@ fn lower_module(
 pub fn emit_package_python(
     package: &CheckedPackage,
 ) -> Result<BTreeMap<PathBuf, String>, Vec<PackageEmitDiagnostic>> {
+    if let Some(source) = package
+        .modules()
+        .iter()
+        .find(|m| cgx2_sema::default_managed::resolved_explicit(m.syntax(), m.typed()))
+    {
+        // Imported scalar calls are not in a module's local function table.
+        // Resolve the closed package before interpreting a `managed` namespace
+        // as the reserved builtin boundary.
+        package.verify_unchanged().map_err(package_errors)?;
+        let entry = package
+            .modules()
+            .iter()
+            .find(|m| m.source() == package.index().entry)
+            .expect("checked entry");
+        let name = entry
+            .syntax()
+            .name
+            .as_ref()
+            .map(|p| p.segments.join("."))
+            .unwrap_or_default();
+        let merged = cgx2_sema::merge_modules(
+            &package
+                .modules()
+                .iter()
+                .map(|m| m.syntax())
+                .collect::<Vec<_>>(),
+            &name,
+        );
+        let typed = cgx2_sema::check_module(&merged).map_err(|ds| {
+            ds.into_iter()
+                .map(|d| {
+                    PackageEmitDiagnostic::new(d.code, d.message, entry.source(), Some(d.span))
+                })
+                .collect::<Vec<_>>()
+        })?;
+        if cgx2_sema::default_managed::resolved_explicit(&merged, &typed) {
+            return Err(vec![PackageEmitDiagnostic::new(
+                "CGE006",
+                "explicit managed observables are unsupported by Python",
+                source.source(),
+                Some(source.syntax().span),
+            )]);
+        }
+    }
     if package.modules().iter().any(|m| {
         m.typed().finite_values
             || cgx2_syntax::s2a_feature_span(m.syntax()).is_some()

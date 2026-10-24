@@ -70,6 +70,10 @@ fn expr_sites(expr: &Expr, sites: &mut Vec<Site>) {
                         "$cgx2_cmp_eq" | "$cgx2_cmp_ne" | "$cgx2_cmp_lt" | "$cgx2_cmp_le"
                         | "$cgx2_cmp_gt" | "$cgx2_cmp_ge" | "range" => return,
                         "arg" | "arg_count" => (None, Some("ReadArgs"), Some("ArgsRead")),
+                        "managed.ref" | "managed.try_alloc" => (None, Some("ManagedAlloc"), None),
+                        "managed.get" => (None, Some("ReadManaged"), None),
+                        "managed.set" => (None, Some("Mutate"), None),
+                        "managed.collect" => (None, Some("Collect"), Some("MemoryCollect")),
                         "memory.collect" => (None, Some("Collect"), Some("MemoryCollect")),
                         n if n.starts_with("memory.alloc")
                             || n == "memory.region"
@@ -190,8 +194,12 @@ pub(crate) fn analyze_with_imports(
                 return false;
             }
             !site.target.as_ref().is_some_and(|name| {
-                records.contains(name)
-                    || module.records.iter().any(|record| record.name == *name)
+                builtin_value_constructor(name)
+                    || records.contains(name)
+                    || module.records.iter().any(|record| {
+                        record.name == *name
+                            || crate::nominal::identity(module, &record.name) == *name
+                    })
                     || name.rsplit_once('.').is_some_and(|(ty, case)| {
                         module
                             .variants
@@ -376,8 +384,12 @@ fn check_site(
 
 fn local_constructor(site: &Site, module: &Module) -> bool {
     site.target.as_deref().is_some_and(|name| {
-        (data_intrinsic(name) && !module.functions.iter().any(|f| f.name == name))
-            || module.records.iter().any(|r| r.name == name)
+        builtin_value_constructor(name)
+            || (data_intrinsic(name) && !module.functions.iter().any(|f| f.name == name))
+            || module
+                .records
+                .iter()
+                .any(|r| r.name == name || crate::nominal::identity(module, &r.name) == name)
             || name.rsplit_once('.').is_some_and(|(ty, case)| {
                 module
                     .variants
@@ -474,4 +486,64 @@ fn data_intrinsic(n: &str) -> bool {
             | "slice"
             | "parse_i64"
     )
+}
+
+fn builtin_value_constructor(n: &str) -> bool {
+    matches!(
+        n,
+        "Option.Some"
+            | "Option.None"
+            | "Result.Ok"
+            | "Result.Err"
+            | "cgx2.core.Option.Some"
+            | "cgx2.core.Option.None"
+            | "cgx2.core.Result.Ok"
+            | "cgx2.core.Result.Err"
+    )
+}
+
+/// Early, source-file-local rejection. The managed producer independently
+/// authenticates the concrete resource closure before execution/emission.
+pub(crate) fn guard_diagnostics(
+    body: &[Stmt],
+    module: &Module,
+    imports: &ImportedSignatures,
+    local: &BTreeMap<String, EffectSummary>,
+) -> Vec<TypeDiagnostic> {
+    let imported = imports.verified_effects(module);
+    let mut sites = vec![];
+    for s in body {
+        stmt_sites(s, &mut sites);
+    }
+    let mut errors = vec![];
+    for site in sites {
+        if local_constructor(&site, module)
+            || site
+                .target
+                .as_ref()
+                .is_some_and(|n| imports.public_records.contains_key(n))
+        {
+            continue;
+        }
+        let summary = site
+            .target
+            .as_ref()
+            .and_then(|n| local.get(n).or_else(|| imported.get(n)));
+        let forbidden = if let Some(summary) = summary {
+            summary
+                .effects
+                .iter()
+                .any(|e| matches!(e.as_str(), "Collect" | "Unknown" | "Foreign"))
+        } else {
+            matches!(site.effect, Some("Collect" | "Unknown" | "Foreign")) || site.callee.is_some()
+        };
+        if forbidden {
+            errors.push(TypeDiagnostic::new(
+                "CGT090",
+                "explicit or unknown collection is forbidden transitively under no_gc".into(),
+                site.span,
+            ));
+        }
+    }
+    errors
 }

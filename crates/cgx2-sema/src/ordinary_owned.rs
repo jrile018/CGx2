@@ -352,6 +352,28 @@ impl From<ExecutionV2> for Execution {
     }
 }
 
+/// Internal hybrid producer adapter. Managed functions are replaced only by
+/// copied scalar declarations; no managed handle is sent to the affine analyzer.
+pub(crate) fn analyze_projection(
+    module: &Module,
+    source: &str,
+) -> Result<(model_v2::Model, String), Vec<TypeDiagnostic>> {
+    let (model, functions, summaries) = lower::lower(module, source).map_err(|d| vec![d])?;
+    // lower::lower requires every v2 worklist report to be accepted.
+    let digest = format!(
+        "{:x}",
+        Sha256::digest(
+            format!("hybrid-owned-v1:{source}:{module:?}:{model:?}:{functions:?}:{summaries:?}")
+                .as_bytes()
+        )
+    );
+    Ok((model, digest))
+}
+pub use engine::{run_with_bridge, ManagedBridge};
+pub(crate) fn projection_rust(model: &model_v2::Model) -> String {
+    model.rust()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

@@ -1,0 +1,28 @@
+fn main() -> i64 effects(ManagedAlloc, Mutate):
+    let mut text = "🙂"
+    for i in range(0, 18):
+        text = concat(text, text)
+    let mut values: List<String> = []
+    let mut failures = 0
+    no_gc(budget: 268435456):
+        for i in range(0, 70):
+            let result = managed.try_alloc(concat(text, ""))
+            match result:
+                Result.Ok(value):
+                    values = append(values, value)
+                Result.Err(error):
+                    match error:
+                        AllocationError.RegionLimit:
+                            failures += 1
+                        AllocationError.BudgetExceeded:
+                            return 1
+                        AllocationError.HostAllocation:
+                            return 2
+                        AllocationError.InvalidRegion:
+                            return 3
+                        AllocationError.ShapeLimit:
+                            return 4
+    if failures > 0:
+        return 42
+    else:
+        return 0

@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "base": "c9d60229ecf3ed2bf76b29525fec0bdda41d0906",
+  "checks": [
+    {
+      "name": "workspace-tests",
+      "command": [
+        "cargo",
+        "test",
+        "--workspace",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--no-fail-fast"
+      ],
+      "exit": 101,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 168.169,
+      "stdout_bytes": 150235,
+      "stdout_sha256": "7f7eab99be9736b00a308d392d73089f74c41dde5c1c70faa5db8539f568acd1",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "workspace-tests.log.gz",
+      "log_sha256": "7f7eab99be9736b00a308d392d73089f74c41dde5c1c70faa5db8539f568acd1",
+      "status": "failed",
+      "suites": 268,
+      "passed": 1253,
+      "failed": 7,
+      "ignored": 6
+    }
+  ],
+  "checkpoint_complete": false,
+  "release_complete": false,
+  "dependency_reconciliation": "none; root Cargo files unchanged",
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "bounds": {
+    "wall_seconds": 900,
+    "cpu_seconds_per_process": 900,
+    "address_space_bytes_per_process": 4294967296,
+    "retained_combined_bytes": 8388608,
+    "aggregate_cgroup_isolation": false
+  },
+  "external_audit_performance": "unrun"
+}

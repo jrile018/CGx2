@@ -1,4 +1,5 @@
 mod check;
+mod default_managed;
 mod error;
 mod eval;
 mod memory;
@@ -117,6 +118,42 @@ fn execute_with_failure(
                 .into(),
             span: Some(function.span),
         })]);
+    }
+    if cgx2_sema::default_managed::hybrid::is_hybrid(&module) {
+        let program = cgx2_sema::default_managed::hybrid::compile_source(source).map_err(|ds| {
+            ds.into_iter()
+                .map(|d| {
+                    no_report(RunError {
+                        code: d.code,
+                        message: d.message,
+                        span: Some(d.span),
+                    })
+                })
+                .collect::<Vec<_>>()
+        })?;
+        return default_managed::run_hybrid(&program, host_fail_reserve)
+            .map(|(r, m)| (r, Some(m)))
+            .map_err(|ds| ds.into_iter().map(no_report).collect());
+    }
+    if cgx2_sema::default_managed::profile(&module) {
+        let program = cgx2_sema::default_managed::compile_source(source).map_err(|ds| {
+            ds.into_iter()
+                .map(|d| {
+                    no_report(RunError {
+                        code: if d.code == "CGRS003" {
+                            "CGR009"
+                        } else {
+                            d.code
+                        },
+                        message: d.message,
+                        span: Some(d.span),
+                    })
+                })
+                .collect::<Vec<_>>()
+        })?;
+        return default_managed::run(&program, args, host_fail_reserve)
+            .map(|(r, m)| (r, Some(m)))
+            .map_err(|ds| ds.into_iter().map(no_report).collect());
     }
     if cgx2_syntax::ordinary_owned_span(&module).is_some() {
         return ordinary_owned::run(source, host_fail_reserve)

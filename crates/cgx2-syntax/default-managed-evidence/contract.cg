@@ -1,0 +1,7 @@
+fn rejected() -> i64:
+    requires false
+    1
+
+fn main() -> i64 effects(ManagedAlloc):
+    let protected = managed.try_alloc(rejected())
+    42

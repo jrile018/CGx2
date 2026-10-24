@@ -62,7 +62,10 @@ pub fn index_checked_package(
 ) -> Result<PackageAnalysis, Vec<PackageDiagnostic>> {
     checked.verify_unchanged()?;
     for module in checked.modules() {
-        if let Some(span) = cgx2_syntax::s2a_feature_span(module.syntax()) {
+        if let Some(span) = cgx2_sema::default_managed::guard_span(module.syntax())
+            .or_else(|| cgx2_syntax::managed_feature_span(module.syntax()))
+            .or_else(|| cgx2_syntax::s2a_feature_span(module.syntax()))
+        {
             return Err(vec![PackageDiagnostic {
                 code: "CGI006",
                 message:

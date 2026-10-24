@@ -1,0 +1,10 @@
+module app.main
+import dep.library
+record Secret:
+    value: i64
+pub fn wrap<T>(x: T) -> dep.library.Wrapper<dep.library.Choice<T>> effects() caps():
+    dep.library.nested<T>(dep.library.id<T>(x))
+pub fn main() -> i64:
+    let caller_private = wrap<Secret>(Secret(value: 3))
+    let unused_private = dep.library.unused<Secret>(1)
+    dep.library.value()

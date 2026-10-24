@@ -559,6 +559,11 @@ impl Checker {
         span: Span,
     ) -> Option<Type> {
         let name = path.segments.join(".");
+        if name.starts_with("managed.") && !self.functions.contains_key(&name) && !self.imported.public_functions.contains_key(&name) && !self.record_constructor(path) {
+            if self.imported.modules.contains("managed") {self.report("CGT020","ambiguous managed builtin and imported namespace",span);return None;}
+            if self.local("managed").is_some() { self.report("CGT020", "ambiguous managed builtin and local namespace", span); return None; }
+            if let Some(result) = self.managed_call(&name, args, hint, span) { return result; }
+        }
         if path.segments.len() > 1 && self.local(&path.segments[0]).is_some() {
             self.report("CGT020", "ambiguous local value and module path", span);
             return None;
@@ -743,5 +748,19 @@ fn needs_context(e: &Expr) -> bool {
             arguments.is_empty() || arguments.iter().any(|a| needs_context(&a.value))
         }
         _ => false,
+    }
+}
+
+impl Checker {
+    fn managed_call(&mut self, name:&str, args:&[CallArg], hint:Option<&Type>, span:Span)->Option<Option<Type>> {
+        let arity=match name {"managed.ref"|"managed.get"|"managed.try_alloc"=>1,"managed.set"=>2,"managed.collect"=>0,_=>return None};
+        if args.len()!=arity || args.iter().any(|a|a.name.is_some()) { self.report("CGT005",format!("{name} requires {arity} positional arguments"),span);return Some(None); }
+        let ref_type=|t:Type|Type::AppliedRecord{name:"cgx2.managed.Ref".into(),arguments:vec![t]};
+        let result=match name {
+            "managed.collect"=>Some(Type::Unit),
+            "managed.ref"=>{let expected=match hint {Some(Type::AppliedRecord{name,arguments}) if name=="cgx2.managed.Ref"=>arguments.first(),_=>None};self.check_expr_as(&args[0].value,expected).map(ref_type)},
+            "managed.try_alloc"=>{let expected=match hint {Some(Type::Variant{name,arguments}) if name=="cgx2.core.Result"=>arguments.first(),_=>None};self.check_expr_as(&args[0].value,expected).map(|t|Type::Variant{name:"cgx2.core.Result".into(),arguments:vec![t,Type::Variant{name:"cgx2.core.AllocationError".into(),arguments:vec![]}]})},
+            _=>{match self.check_expr(&args[0].value) {Some(Type::AppliedRecord{name,arguments}) if name=="cgx2.managed.Ref" && arguments.len()==1=>{if arity==2{if let Some(t)=self.check_expr_as(&args[1].value,Some(&arguments[0])){self.expect_type(&t,&arguments[0],args[1].value.span);}Some(Type::Unit)}else{Some(arguments[0].clone())}},_=>{self.report("CGT090","managed cell operation requires managed.Ref<T>",span);None}}}
+        };Some(result)
     }
 }

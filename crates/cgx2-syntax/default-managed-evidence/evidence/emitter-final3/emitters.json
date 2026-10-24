@@ -1,0 +1,1292 @@
+{
+  "status": "passed",
+  "versions": {
+    "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+    "cargo": "cargo 1.98.1 (797e8a9bc 2026-08-05)",
+    "python": "Python 3.14.4"
+  },
+  "checks": 104,
+  "records": [
+    {
+      "case": "local-option/check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-option.cg"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "local-option/run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-option.cg"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "local-option/build/False",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-option.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-option-native-False"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=c65bf97ca1474eda4cf42e491c2e6e76fa15ad682840a29593ecfdbaa40e1054 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=62e813a32b2d2b4d5db980a18cc5f8b1121c8a1e992c14f4dcf5e43c353f55c4 output=/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-option-native-False\n",
+      "stderr": ""
+    },
+    {
+      "case": "local-option/native/False",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-option-native-False"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "local-option/build/True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-option.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-option-native-True",
+        "--release"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=c65bf97ca1474eda4cf42e491c2e6e76fa15ad682840a29593ecfdbaa40e1054 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=62e813a32b2d2b4d5db980a18cc5f8b1121c8a1e992c14f4dcf5e43c353f55c4 output=/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-option-native-True\n",
+      "stderr": ""
+    },
+    {
+      "case": "local-option/native/True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-option-native-True"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "local-option/emit/rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-option.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-option.rs"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "local-option/rustc/False",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-option.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-option-standalone-False"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "local-option/standalone/False",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-option-standalone-False"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "local-option/rustc/True",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-option.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-option-standalone-True",
+        "-O"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "local-option/standalone/True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-option-standalone-True"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "local-option/emit/python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-option.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-option.py"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "local-option/python",
+      "command": [
+        "python3",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-option.py"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "local-types/check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-types.cg"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "local-types/run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-types.cg"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "local-types/build/False",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-types.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-types-native-False"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=37f4a44118f84cb9a6b23b4e8ca3832b187fb895241e9fca89a503d39861965e rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=62e813a32b2d2b4d5db980a18cc5f8b1121c8a1e992c14f4dcf5e43c353f55c4 output=/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-types-native-False\n",
+      "stderr": ""
+    },
+    {
+      "case": "local-types/native/False",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-types-native-False"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "local-types/build/True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-types.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-types-native-True",
+        "--release"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=37f4a44118f84cb9a6b23b4e8ca3832b187fb895241e9fca89a503d39861965e rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=62e813a32b2d2b4d5db980a18cc5f8b1121c8a1e992c14f4dcf5e43c353f55c4 output=/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-types-native-True\n",
+      "stderr": ""
+    },
+    {
+      "case": "local-types/native/True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-types-native-True"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "local-types/emit/rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-types.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-types.rs"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "local-types/rustc/False",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-types.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-types-standalone-False"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "local-types/standalone/False",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-types-standalone-False"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "local-types/rustc/True",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-types.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-types-standalone-True",
+        "-O"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "local-types/standalone/True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-types-standalone-True"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "local-types/emit/python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-types.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-types.py"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "local-types/python",
+      "command": [
+        "python3",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/local-types.py"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "strings/check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/strings.cg"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "strings/run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/strings.cg"
+      ],
+      "exit": 0,
+      "stdout": "line\n\r\t\\\"é界💡\n",
+      "stderr": ""
+    },
+    {
+      "case": "strings/build/False",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/strings.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/strings-native-False"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=88df49d0f3cffd0e604dc7fd24722e02182a929505c539811de853239800a442 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=62e813a32b2d2b4d5db980a18cc5f8b1121c8a1e992c14f4dcf5e43c353f55c4 output=/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/strings-native-False\n",
+      "stderr": ""
+    },
+    {
+      "case": "strings/native/False",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/strings-native-False"
+      ],
+      "exit": 0,
+      "stdout": "line\n\r\t\\\"é界💡\n",
+      "stderr": ""
+    },
+    {
+      "case": "strings/build/True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/strings.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/strings-native-True",
+        "--release"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=88df49d0f3cffd0e604dc7fd24722e02182a929505c539811de853239800a442 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=62e813a32b2d2b4d5db980a18cc5f8b1121c8a1e992c14f4dcf5e43c353f55c4 output=/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/strings-native-True\n",
+      "stderr": ""
+    },
+    {
+      "case": "strings/native/True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/strings-native-True"
+      ],
+      "exit": 0,
+      "stdout": "line\n\r\t\\\"é界💡\n",
+      "stderr": ""
+    },
+    {
+      "case": "strings/emit/rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/strings.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/strings.rs"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "strings/rustc/False",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/strings.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/strings-standalone-False"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "strings/standalone/False",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/strings-standalone-False"
+      ],
+      "exit": 0,
+      "stdout": "line\n\r\t\\\"é界💡\n",
+      "stderr": ""
+    },
+    {
+      "case": "strings/rustc/True",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/strings.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/strings-standalone-True",
+        "-O"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "strings/standalone/True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/strings-standalone-True"
+      ],
+      "exit": 0,
+      "stdout": "line\n\r\t\\\"é界💡\n",
+      "stderr": ""
+    },
+    {
+      "case": "strings/emit/python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/strings.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/strings.py"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "strings/python",
+      "command": [
+        "python3",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/strings.py"
+      ],
+      "exit": 0,
+      "stdout": "line\n\r\t\\\"é界💡\n",
+      "stderr": ""
+    },
+    {
+      "case": "contracts/check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/contracts.cg"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "contracts/run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/contracts.cg"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "contracts/build/False",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/contracts.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/contracts-native-False"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=13af8ac76401532cc8e1cf68ba6a33cf226da9b485a80af30ab9a9e198c81f96 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=62e813a32b2d2b4d5db980a18cc5f8b1121c8a1e992c14f4dcf5e43c353f55c4 output=/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/contracts-native-False\n",
+      "stderr": ""
+    },
+    {
+      "case": "contracts/native/False",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/contracts-native-False"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "contracts/build/True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/contracts.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/contracts-native-True",
+        "--release"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=13af8ac76401532cc8e1cf68ba6a33cf226da9b485a80af30ab9a9e198c81f96 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=62e813a32b2d2b4d5db980a18cc5f8b1121c8a1e992c14f4dcf5e43c353f55c4 output=/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/contracts-native-True\n",
+      "stderr": ""
+    },
+    {
+      "case": "contracts/native/True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/contracts-native-True"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "contracts/emit/rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/contracts.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/contracts.rs"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "contracts/rustc/False",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/contracts.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/contracts-standalone-False"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "contracts/standalone/False",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/contracts-standalone-False"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "contracts/rustc/True",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/contracts.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/contracts-standalone-True",
+        "-O"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "contracts/standalone/True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/contracts-standalone-True"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "contracts/emit/python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/contracts.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/contracts.py"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "contracts/python",
+      "command": [
+        "python3",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/contracts.py"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "reverse/check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/reverse.cg"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "reverse/run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/reverse.cg"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "reverse/build/False",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/reverse.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/reverse-native-False"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=c38303e3132267e08a83d23d7dc80367430de4237adece89ddbc882cf920e76d rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=62e813a32b2d2b4d5db980a18cc5f8b1121c8a1e992c14f4dcf5e43c353f55c4 output=/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/reverse-native-False\n",
+      "stderr": ""
+    },
+    {
+      "case": "reverse/native/False",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/reverse-native-False"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "reverse/build/True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/reverse.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/reverse-native-True",
+        "--release"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=c38303e3132267e08a83d23d7dc80367430de4237adece89ddbc882cf920e76d rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=62e813a32b2d2b4d5db980a18cc5f8b1121c8a1e992c14f4dcf5e43c353f55c4 output=/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/reverse-native-True\n",
+      "stderr": ""
+    },
+    {
+      "case": "reverse/native/True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/reverse-native-True"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "reverse/emit/rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/reverse.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/reverse.rs"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "reverse/rustc/False",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/reverse.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/reverse-standalone-False"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "reverse/standalone/False",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/reverse-standalone-False"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "reverse/rustc/True",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/reverse.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/reverse-standalone-True",
+        "-O"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "reverse/standalone/True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/reverse-standalone-True"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "reverse/emit/python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/reverse.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/reverse.py"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "reverse/python",
+      "command": [
+        "python3",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/reverse.py"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "package/check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/package"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "package/run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/package"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "package/build/False",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/package",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/package-native-False"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: package_manifest_sha256=88f3abf1ff9deb16c428526d2fad22cdfd341d7bce524b4830a36c889fb95ed3 package_sources_sha256=[\"src/main.cg:fb58d3dc9f36d691b731fe2cce57a59ffe78d61c571f493b0c03d1087f9f066d\", \"src/local.cg:3c8ab925e99fcd3b91c627861bae772ec2cec379577f50734bcb6e3987d6693c\"] rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug output=/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/package-native-False\n",
+      "stderr": ""
+    },
+    {
+      "case": "package/native/False",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/package-native-False"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "package/build/True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/package",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/package-native-True",
+        "--release"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: package_manifest_sha256=88f3abf1ff9deb16c428526d2fad22cdfd341d7bce524b4830a36c889fb95ed3 package_sources_sha256=[\"src/main.cg:fb58d3dc9f36d691b731fe2cce57a59ffe78d61c571f493b0c03d1087f9f066d\", \"src/local.cg:3c8ab925e99fcd3b91c627861bae772ec2cec379577f50734bcb6e3987d6693c\"] rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release output=/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/package-native-True\n",
+      "stderr": ""
+    },
+    {
+      "case": "package/native/True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/package-native-True"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "package/emit/rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/package",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/package.rs"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "package/rustc/False",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/package.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/package-standalone-False"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "package/standalone/False",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/package-standalone-False"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "package/rustc/True",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/package.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/package-standalone-True",
+        "-O"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "package/standalone/True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/package-standalone-True"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "package/emit/python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/package",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/package.pyz"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "package/python",
+      "command": [
+        "python3",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/package.pyz"
+      ],
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "case": "direct/source-check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-direct.cg"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "direct/source-run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-direct.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGR009: /home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-direct.cg:32..38: string literal contains unsupported escape\n"
+    },
+    {
+      "case": "direct/reject/['--target', 'rust']",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-direct.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/preserved-artifact.rs",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGRS003: /home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-direct.cg:32..38: string literal contains unsupported escape\n"
+    },
+    {
+      "case": "direct/reject/['--target', 'python']",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-direct.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/preserved-artifact.py",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGE003: /home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-direct.cg:32..38: string literal contains unsupported escape\n"
+    },
+    {
+      "case": "direct/reject/[]",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-direct.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/preserved-artifact",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGRS003: /home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-direct.cg:32..38: string literal contains unsupported escape\n"
+    },
+    {
+      "case": "direct/reject/['--release']",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-direct.cg",
+        "--release",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/preserved-artifact",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGRS003: /home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-direct.cg:32..38: string literal contains unsupported escape\n"
+    },
+    {
+      "case": "generic/source-check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-generic.cg"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "generic/source-run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-generic.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGR009: /home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-generic.cg:43..51: string literal contains unsupported escape\n"
+    },
+    {
+      "case": "generic/reject/['--target', 'rust']",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-generic.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/preserved-artifact.rs",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGRS003: /home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-generic.cg:43..51: string literal contains unsupported escape\n"
+    },
+    {
+      "case": "generic/reject/['--target', 'python']",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-generic.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/preserved-artifact.py",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGE003: /home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-generic.cg:43..51: string literal contains unsupported escape\n"
+    },
+    {
+      "case": "generic/reject/[]",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-generic.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/preserved-artifact",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGRS003: /home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-generic.cg:43..51: string literal contains unsupported escape\n"
+    },
+    {
+      "case": "generic/reject/['--release']",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-generic.cg",
+        "--release",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/preserved-artifact",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGRS003: /home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-generic.cg:43..51: string literal contains unsupported escape\n"
+    },
+    {
+      "case": "requires/source-check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-requires.cg"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "requires/source-run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-requires.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGR009: /home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-requires.cg:50..56: string literal contains unsupported escape\n"
+    },
+    {
+      "case": "requires/reject/['--target', 'rust']",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-requires.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/preserved-artifact.rs",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGRS003: /home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-requires.cg:50..56: string literal contains unsupported escape\n"
+    },
+    {
+      "case": "requires/reject/['--target', 'python']",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-requires.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/preserved-artifact.py",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGE003: /home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-requires.cg:50..56: string literal contains unsupported escape\n"
+    },
+    {
+      "case": "requires/reject/[]",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-requires.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/preserved-artifact",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGRS003: /home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-requires.cg:50..56: string literal contains unsupported escape\n"
+    },
+    {
+      "case": "requires/reject/['--release']",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-requires.cg",
+        "--release",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/preserved-artifact",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGRS003: /home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-requires.cg:50..56: string literal contains unsupported escape\n"
+    },
+    {
+      "case": "ensures/source-check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-ensures.cg"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "ensures/source-run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-ensures.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGR009: /home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-ensures.cg:49..53: string literal contains unsupported escape\n"
+    },
+    {
+      "case": "ensures/reject/['--target', 'rust']",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-ensures.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/preserved-artifact.rs",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGRS003: /home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-ensures.cg:49..53: string literal contains unsupported escape\n"
+    },
+    {
+      "case": "ensures/reject/['--target', 'python']",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-ensures.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/preserved-artifact.py",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGE003: /home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-ensures.cg:49..53: string literal contains unsupported escape\n"
+    },
+    {
+      "case": "ensures/reject/[]",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-ensures.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/preserved-artifact",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGRS003: /home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-ensures.cg:49..53: string literal contains unsupported escape\n"
+    },
+    {
+      "case": "ensures/reject/['--release']",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-ensures.cg",
+        "--release",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/preserved-artifact",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGRS003: /home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/invalid-ensures.cg:49..53: string literal contains unsupported escape\n"
+    },
+    {
+      "case": "package/reject/rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/package",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/package-preserved.rs",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGRS003: src/local.cg:68..74: string literal contains unsupported escape\n"
+    },
+    {
+      "case": "package/reject/python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/package",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/s2bf-products-1odcepuj/package-preserved.pyz",
+        "--force"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGE003: src/local.cg:68..74: string literal contains unsupported escape\n"
+    }
+  ],
+  "fixture_sha256": {
+    "contracts.cg": "13af8ac76401532cc8e1cf68ba6a33cf226da9b485a80af30ab9a9e198c81f96",
+    "local-types.cg": "37f4a44118f84cb9a6b23b4e8ca3832b187fb895241e9fca89a503d39861965e",
+    "strings.cg": "88df49d0f3cffd0e604dc7fd24722e02182a929505c539811de853239800a442"
+  }
+}

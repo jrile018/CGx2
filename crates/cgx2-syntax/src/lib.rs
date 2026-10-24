@@ -21,3 +21,6 @@ pub use visit::{s2a_feature_span, visit_expr, visit_stmts};
 
 mod canonical;
 pub use canonical::{canonical_module, qualify_type};
+
+mod default_managed;
+pub use default_managed::{managed_feature_span, managed_guard_span};

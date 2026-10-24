@@ -1,0 +1,7 @@
+fn helper() -> Unit effects(Collect) caps(MemoryCollect):
+    managed.collect()
+
+fn main() -> i64 effects(Collect) caps(MemoryCollect):
+    no_gc(budget: 100):
+        helper()
+    42

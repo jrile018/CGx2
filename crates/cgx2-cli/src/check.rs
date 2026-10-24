@@ -44,5 +44,25 @@ pub fn check_source(source: &str) -> Result<TypedModule, Vec<CheckDiagnostic>> {
             span: function.span,
         }]);
     }
+    if cgx2_sema::default_managed::profile(&module) {
+        if let Err(ds) = cgx2_sema::default_managed::compile_source(source) {
+            // Literal escape portability is a target preflight, as in the
+            // existing source checker. Execution/emission still authenticate it.
+            let ds = ds
+                .into_iter()
+                .filter(|d| d.code != "CGRS003")
+                .collect::<Vec<_>>();
+            if !ds.is_empty() {
+                return Err(ds
+                    .into_iter()
+                    .map(|d| CheckDiagnostic {
+                        code: d.code.into(),
+                        message: d.message,
+                        span: d.span,
+                    })
+                    .collect::<Vec<_>>());
+            }
+        }
+    }
     Ok(typed)
 }

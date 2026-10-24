@@ -410,6 +410,12 @@ impl Lower<'_> {
                 self.aggregates.insert(name.clone(), ty.clone());
                 ty.clone()
             }
+            Type::AppliedRecord { name, arguments } if name == "cgx2.managed.Ref" => {
+                Type::AppliedRecord {
+                    name: name.clone(),
+                    arguments: arguments.iter().map(|t| self.concrete(t)).collect(),
+                }
+            }
             Type::AppliedRecord { name, arguments } => {
                 let key = specialization(name, arguments);
                 self.aggregates.insert(key.clone(), ty.clone());

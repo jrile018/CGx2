@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "checks": [
+    {
+      "label": "pinned-rustc",
+      "command": [
+        "rustup",
+        "which",
+        "rustc"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-62yrnhch",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.003,
+      "stdout_bytes": 78,
+      "stdout_sha256": "66af87d7f5dc56db4094d4257d2ebfd67b77bb8e36e37ef58d69a87d2016117c",
+      "stdout": "/home/john-riley/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/bin/rustc\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "dishonest-package:check-reject",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/685c/lang/crates/cgx2-syntax/default-managed-evidence/dishonest-package"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-62yrnhch",
+      "exit": 1,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.002,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 641,
+      "stderr_sha256": "8d0a1ecc4949cdbeff9b68686184a9c823a5c61dd6379d03c418e682f2883285",
+      "stderr": "CGT012: /home/john-riley/.codex/worktrees/685c/lang/crates/cgx2-syntax/default-managed-evidence/dishonest-package/src/lib.cg:68..85: effect `Collect` is not permitted by explicit declaration by call to `managed.collect`\nCGT012: /home/john-riley/.codex/worktrees/685c/lang/crates/cgx2-syntax/default-managed-evidence/dishonest-package/src/main.cg:124..134: effect `Unknown` is not permitted by explicit declaration by call to `lib.heap`\nCGT090: /home/john-riley/.codex/worktrees/685c/lang/crates/cgx2-syntax/default-managed-evidence/dishonest-package/src/main.cg:124..134: explicit or unknown collection is forbidden transitively under no_gc\n",
+      "passed": true
+    },
+    {
+      "label": "dishonest-package:rust-reject",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/crates/cgx2-syntax/default-managed-evidence/dishonest-package",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-62yrnhch/dishonest-package.rs",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-62yrnhch",
+      "exit": 1,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.002,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 114,
+      "stderr_sha256": "174afc7547a9a2b6a5a8c26afab9f9b5bd1d3dbae726085cacce43bf0b8887c3",
+      "stderr": "CGT012: src/lib.cg:68..85: effect `Collect` is not permitted by explicit declaration by call to `managed.collect`\n",
+      "passed": true
+    },
+    {
+      "label": "dishonest-package:rust-artifact-preserved",
+      "passed": true
+    },
+    {
+      "label": "dishonest-package:python-reject",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/crates/cgx2-syntax/default-managed-evidence/dishonest-package",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-62yrnhch/dishonest-package.pyz",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/default-managed-62yrnhch",
+      "exit": 1,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 114,
+      "stderr_sha256": "174afc7547a9a2b6a5a8c26afab9f9b5bd1d3dbae726085cacce43bf0b8887c3",
+      "stderr": "CGT012: src/lib.cg:68..85: effect `Collect` is not permitted by explicit declaration by call to `managed.collect`\n",
+      "passed": true
+    },
+    {
+      "label": "dishonest-package:python-artifact-preserved",
+      "passed": true
+    }
+  ],
+  "checkpoint_complete": false,
+  "release_complete": false,
+  "external_leak_audit_performance": "unrun",
+  "bounds": {
+    "wall_seconds": 180,
+    "cpu_seconds_per_process": 120,
+    "address_space_bytes_per_process": 4294967296,
+    "retained_bytes_per_stream": 2097152,
+    "aggregate_cgroup_isolation": false
+  },
+  "binary_sha256": "119c0878d9edc7d4032f0cd4a16c00d682b619649b803f6014f1efa96dfa7349",
+  "runtime_sha256": {
+    "budget.rs": "7bd562dae680c6102598a68d139042fba758ae3b3cb8c0d937778c0f0f13e0e4",
+    "fault.rs": "bc4652355ca094d8e1daca99b76d38e194c35fcc852c25b071593a4dbe9dc252",
+    "graph.rs": "414f340958245f001927f6d92a5fc48277fda2f8867e1d1259d29d037d8fb7ae",
+    "heap.rs": "f167f13b46866d9999aa3c8f4329f3a7ad5e59e534d9f5b7b789208296351a8f",
+    "lib.rs": "c297d26243a864fdec4c1ec2707b3002843b971dae750ce08a7f856f446c176b",
+    "owned.rs": "08b8c47b10ff55c9174467c623127136f034e314f8b5f2d49010e9c21547c197",
+    "region.rs": "50362a5df6c4469bfb5f03e9a93a3a351853a97d6fc505a322ce6bc5bb9f6077",
+    "report.rs": "4569e7848983a5179c60abdb4cd779f3707512eaae5e614214a50cf8d39ba9aa",
+    "scope.rs": "4cd5fdf4d2d1ddf3044b04fec5347442eecc1374d97c7f8220432b8510264840"
+  },
+  "passed": 6,
+  "failed": 0,
+  "sources_sha256": {
+    "shapes": "2508c95ce2ea7aa810f3f83e9ca40be74d3521e0c84aeddeb36f12750fa7e199",
+    "alias": "5aa8bbed4ec092056856fe08ac48724f29afa71feea7037d75a2c3a72fa231f9",
+    "cycle": "adb25289d4509fcde234f2885d934e883c8e0b27fade4c8da47f33020931fe50",
+    "pressure": "90edc008da8a33867d130f134af267f95a25934a368619743313654d0eaa5a36",
+    "unicode": "ca2dca2593591519a93c27357fc8d5a7321898f2218e22dff5d9724252afc19a",
+    "recover": "6e0705124c817fc44c388a806b4c993448db0f42cd70ac0548036cb91c7bad71",
+    "region-limit": "4b1c0b520693d7e9861988ca76278548e98040648befe5d0281fe8f98656d05b",
+    "hybrid": "b5c5287e5d2a807a25fc6e491ecb3adae404e8f42491e00f9a183e1734b23ee2",
+    "wide": "d2d3d0c3f1da52236f5f5747bc91c9bce5ad0c9bc4f84dc74f62c85a9c4ad927",
+    "elements": "8a286b39ac066e1dd8e0ffcd7bd620a47deb113fc7c695f550828755c547ff08",
+    "nodes": "488605f30decb273af07f9357689e2e1b8daaffdfd3aba35388cb6bfff3751a7"
+  }
+}

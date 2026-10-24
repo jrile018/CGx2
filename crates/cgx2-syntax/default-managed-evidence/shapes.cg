@@ -1,0 +1,22 @@
+record Box<T>:
+    value: T
+
+variant Choice<T>:
+    Item(T)
+    Empty
+
+fn wrap<T>(x: T) -> Box<T> effects():
+    Box<T>(value: x)
+
+fn main() -> i64:
+    let original = [10, 20]
+    let changed = append(original, 30)
+    let fixed = array(changed)
+    let boxed = wrap(fixed)
+    let chosen = Choice<Array<i64>>.Item(boxed.value)
+    let text = concat("λ", "🙂")
+    match chosen:
+        Choice.Item(value):
+            length(original) + length(value) + length(text)
+        Choice.Empty:
+            0

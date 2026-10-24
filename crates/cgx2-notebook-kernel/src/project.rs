@@ -108,7 +108,10 @@ impl Project {
                 .join("\n")
         })?;
         for module in checked.modules() {
-            if let Some(span) = cgx2_syntax::s2a_feature_span(module.syntax()) {
+            if let Some(span) = cgx2_syntax::managed_guard_span(module.syntax())
+                .or_else(|| cgx2_syntax::managed_feature_span(module.syntax()))
+                .or_else(|| cgx2_syntax::s2a_feature_span(module.syntax()))
+            {
                 return Err(format!(
                     "CGNK026: S2a package notebook execution is deferred to S3-N: {} at {}..{}",
                     module.source().display(),

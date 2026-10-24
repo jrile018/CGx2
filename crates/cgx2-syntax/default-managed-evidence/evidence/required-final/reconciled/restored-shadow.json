@@ -1,0 +1,320 @@
+{
+  "status": "coordinator-reconciliation",
+  "historical_files_modified": false,
+  "superseded_negative": {
+    "code": "CGT082",
+    "span": {
+      "start": 33,
+      "end": 47
+    },
+    "slice": "try_owned: i64"
+  },
+  "superseded_negative_count": 9,
+  "historical_fixture_sha256": "ecf093780ce97109549849081e2bd69241fbf2a527cbb8cde7c62b2b550917e4",
+  "runner_sha256": "c37b78d64081b295c0b99aaf873f096426f0b33a7787d1b42a129749fe95427a",
+  "new_negative_expectations": {
+    "reserved-owned": {
+      "code": "CGT082",
+      "span": {
+        "start": 33,
+        "end": 43
+      },
+      "slice": "owned: i64"
+    },
+    "ambiguous-error": {
+      "code": "CGT081",
+      "span": {
+        "start": 81,
+        "end": 114
+      },
+      "slice": "Result<owned<R>, AllocationError>"
+    }
+  },
+  "checks": [
+    {
+      "label": "restored-shadow:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/685c/lang/crates/cgx2-syntax/owned-result-evidence/fixtures/shadow-builtin.cg"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow:interpreter",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/685c/lang/crates/cgx2-syntax/owned-result-evidence/fixtures/shadow-builtin.cg"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 2,
+      "stdout_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "stdout": "0\n",
+      "stderr_bytes": 157,
+      "stderr_sha256": "854bb80924ab0cdcc972fad55f6f82ac50b5cef866b09f0765644731b6d56a65",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":0,\"releases\":0,\"live_bytes\":0,\"allocated_bytes\":0,\"released_bytes\":0,\"peak_live_bytes\":0,\"reads\":0,\"writes\":0}\n",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow:value-cleanup",
+      "passed": true
+    },
+    {
+      "label": "pinned-rustc",
+      "command": [
+        "rustup",
+        "which",
+        "rustc"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.003,
+      "stdout_bytes": 78,
+      "stdout_sha256": "66af87d7f5dc56db4094d4257d2ebfd67b77bb8e36e37ef58d69a87d2016117c",
+      "stdout": "/home/john-riley/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/bin/rustc\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow-False:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/685c/lang/crates/cgx2-syntax/owned-result-evidence/fixtures/shadow-builtin.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/reconciled-result-6wrfeqin/restored-shadow-False",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/reconciled-result-6wrfeqin/rustc-linker"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.442,
+      "stdout_bytes": 517,
+      "stdout_sha256": "36c4958d8c280b918e2222e25075cf38cbb6e19938d404ccdda147347ad3b661",
+      "stdout": "cgx2c build metadata: source_sha256=ecf093780ce97109549849081e2bd69241fbf2a527cbb8cde7c62b2b550917e4 rustc=/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/reconciled-result-6wrfeqin/rustc-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=7268ebea25858bc6deb1502fb04c4c4c1a98d7b12ba5c60c95e5de79023e14c3 output=/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/reconciled-result-6wrfeqin/restored-shadow-False\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow-False:execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/reconciled-result-6wrfeqin/restored-shadow-False"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 2,
+      "stdout_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "stdout": "0\n",
+      "stderr_bytes": 157,
+      "stderr_sha256": "854bb80924ab0cdcc972fad55f6f82ac50b5cef866b09f0765644731b6d56a65",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":0,\"releases\":0,\"live_bytes\":0,\"allocated_bytes\":0,\"released_bytes\":0,\"peak_live_bytes\":0,\"reads\":0,\"writes\":0}\n",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow-False:parity",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow-True:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/685c/lang/crates/cgx2-syntax/owned-result-evidence/fixtures/shadow-builtin.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/reconciled-result-6wrfeqin/restored-shadow-True",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/reconciled-result-6wrfeqin/rustc-linker",
+        "--release"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 1.378,
+      "stdout_bytes": 518,
+      "stdout_sha256": "409e51497eee4f0a7f9f11f3230ae67ba94ca017f8de3a4c1372beb9994ea1fd",
+      "stdout": "cgx2c build metadata: source_sha256=ecf093780ce97109549849081e2bd69241fbf2a527cbb8cde7c62b2b550917e4 rustc=/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/reconciled-result-6wrfeqin/rustc-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=7268ebea25858bc6deb1502fb04c4c4c1a98d7b12ba5c60c95e5de79023e14c3 output=/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/reconciled-result-6wrfeqin/restored-shadow-True\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow-True:execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/reconciled-result-6wrfeqin/restored-shadow-True"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 2,
+      "stdout_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "stdout": "0\n",
+      "stderr_bytes": 157,
+      "stderr_sha256": "854bb80924ab0cdcc972fad55f6f82ac50b5cef866b09f0765644731b6d56a65",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":0,\"releases\":0,\"live_bytes\":0,\"allocated_bytes\":0,\"released_bytes\":0,\"peak_live_bytes\":0,\"reads\":0,\"writes\":0}\n",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow-True:parity",
+      "passed": true
+    },
+    {
+      "label": "standalone-runtime",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/reconciled-result-6wrfeqin/rustc-linker",
+        "--edition=2021",
+        "--crate-name",
+        "cgx2_runtime",
+        "--crate-type",
+        "rlib",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/reconciled-result-6wrfeqin/runtime/lib.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/reconciled-result-6wrfeqin/libcgx2_runtime.rlib"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.323,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/crates/cgx2-syntax/owned-result-evidence/fixtures/shadow-builtin.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/reconciled-result-6wrfeqin/restored-shadow.rs"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.002,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow:standalone-compile",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/reconciled-result-6wrfeqin/rustc-linker",
+        "--edition=2024",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/reconciled-result-6wrfeqin/restored-shadow.rs",
+        "--extern",
+        "cgx2_runtime=/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/reconciled-result-6wrfeqin/libcgx2_runtime.rlib",
+        "-o",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/reconciled-result-6wrfeqin/restored-shadow-standalone"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.127,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow:standalone-execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/reconciled-result-6wrfeqin/restored-shadow-standalone"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 2,
+      "stdout_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "stdout": "0\n",
+      "stderr_bytes": 157,
+      "stderr_sha256": "854bb80924ab0cdcc972fad55f6f82ac50b5cef866b09f0765644731b6d56a65",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":0,\"releases\":0,\"live_bytes\":0,\"allocated_bytes\":0,\"released_bytes\":0,\"peak_live_bytes\":0,\"reads\":0,\"writes\":0}\n",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow:standalone-parity",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow:python-reject",
+      "command": [
+        "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/685c/lang/crates/cgx2-syntax/owned-result-evidence/fixtures/shadow-builtin.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed/reconciled-result-6wrfeqin/restored-shadow.py",
+        "--force"
+      ],
+      "exit": 1,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 191,
+      "stderr_sha256": "0f293722852582c00a18e67a805ef294a6383fbfc425ae4f60fe19d9251a8e65",
+      "stderr": "CGE006: /home/john-riley/.codex/worktrees/685c/lang/crates/cgx2-syntax/owned-result-evidence/fixtures/shadow-builtin.cg:52..60: ordinary owned storage and loans are outside the Python target\n",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow:python-preserved",
+      "passed": true
+    }
+  ],
+  "passed": 17,
+  "failed": 0,
+  "release_complete": false
+}

@@ -924,7 +924,9 @@ pub fn facts_for_source(source: &str) -> Result<CellFacts, KernelError> {
             ),
         )
     })?;
-    if let Some(span) = cgx2_syntax::ordinary_owned_span(&module) {
+    if let Some(span) = cgx2_syntax::ordinary_owned_span(&module)
+        .or_else(|| cgx2_syntax::managed_feature_span(&module))
+    {
         return Err(error(
             "CGNK026",
             format!(

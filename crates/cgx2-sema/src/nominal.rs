@@ -128,12 +128,35 @@ fn inner(
         .iter()
         .find(|v| identity(module, &v.name) == own)
         .or_else(|| imported.public_variants.get(&name));
-    let builtin = match name.as_str() {
-        "Option" | "cgx2.core.Option" | "List" | "Array" => Some(1),
+    let mut builtin = match name.as_str() {
+        "Option" | "cgx2.core.Option" | "List" | "Array" | "managed.Ref" | "cgx2.managed.Ref" => {
+            Some(1)
+        }
+        "AllocationError" | "cgx2.core.AllocationError" => Some(0),
         "Result" | "cgx2.core.Result" => Some(2),
         "i64" | "Bool" | "String" | "Unit" => Some(0),
         _ => None,
     };
+    if name == "AllocationError" && record.is_some() && ty.arguments.is_empty() {
+        builtin = None;
+    }
+    if matches!(name.as_str(), "managed.Ref" | "cgx2.managed.Ref")
+        && (record.is_some() || variant.is_some())
+    {
+        let nominal_arity = record
+            .map(|r| r.type_parameters.len())
+            .or_else(|| variant.map(|v| v.type_parameters.len()))
+            .unwrap_or(0);
+        if nominal_arity != 1 && ty.arguments.len() == nominal_arity {
+            builtin = None;
+        } else if nominal_arity == 1 {
+            return fail(
+                errors,
+                "CGT020",
+                format!("ambiguous managed reference builtin and nominal type `{name}`"),
+            );
+        }
+    }
     if builtin.is_none() && record.is_none() && variant.is_none() {
         return fail(
             errors,
@@ -203,6 +226,14 @@ fn inner(
         }
     }
     Some(match name.as_str() {
+        "managed.Ref" | "cgx2.managed.Ref" if builtin.is_some() => Type::AppliedRecord {
+            name: "cgx2.managed.Ref".into(),
+            arguments: args,
+        },
+        "AllocationError" | "cgx2.core.AllocationError" if builtin.is_some() => Type::Variant {
+            name: "cgx2.core.AllocationError".into(),
+            arguments: vec![],
+        },
         "i64" => Type::I64,
         "Bool" => Type::Bool,
         "String" => Type::String,
@@ -292,6 +323,20 @@ pub(crate) fn cases(
     let Type::Variant { name, arguments } = ty else {
         return None;
     };
+    if name == "cgx2.core.AllocationError" && arguments.is_empty() {
+        return Some(
+            [
+                "BudgetExceeded",
+                "RegionLimit",
+                "HostAllocation",
+                "InvalidRegion",
+                "ShapeLimit",
+            ]
+            .iter()
+            .map(|n| (n.to_string(), vec![]))
+            .collect(),
+        );
+    }
     if name == "cgx2.core.Option" && arguments.len() == 1 {
         return Some(vec![
             ("Some".into(), vec![arguments[0].clone()]),
