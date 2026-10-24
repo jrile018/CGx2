@@ -1,0 +1,33 @@
+fn same<T: Eq + Show>(x: T, y: T) -> String:
+    if x == y:
+        return show(x)
+    else:
+        return "different"
+
+record Box<T>:
+    value: T
+
+variant Choice<T>:
+    Item(T)
+    Empty
+
+fn main() -> i64:
+    let words = ["12", "bad", "30"]
+    let mut sum = 0
+    for word in words:
+        match parse_i64(word):
+            Result.Ok(value):
+                sum += value
+            Result.Err(message):
+                let ignored = same(message, "bad")
+    let wrapped = Box(value: sum)
+    let chosen = Choice<i64>.Item(wrapped.value)
+    match chosen:
+        Choice.Item(value):
+            match [value][0]:
+                Option.Some(result):
+                    result
+                Option.None:
+                    0
+        Choice.Empty:
+            0

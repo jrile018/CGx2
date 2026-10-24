@@ -212,6 +212,7 @@ fn json_round_trips_escapes_controls_and_unicode() {
     let function_name = "f\"\\\n\t\r\u{0001}é";
     let parameter_name = "p\u{0000}λ";
     let index = ApiIndex {
+        instantiations: vec![],
         variants: vec![],
         semantics_status: "checked".into(),
         schema_version: 2,

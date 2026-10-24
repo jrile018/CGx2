@@ -1,0 +1,13 @@
+fn risky() -> i64:
+    1 / 0
+fn choose(value: Option<i64>) -> i64:
+    let mut total = 0
+    match value:
+        Option.Some(x):
+            total = x
+        Option.None:
+            total = risky()
+    let ignored = [1, 2]
+    total + length(ignored)
+fn main() -> i64:
+    choose(Option<i64>.Some(40))

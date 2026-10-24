@@ -145,7 +145,7 @@ fn mutable_record_binding_is_rejected() {
 }
 
 #[test]
-fn unsupported_record_shapes_never_reach_python_emission() {
+fn finite_record_shapes_are_admitted_and_ownership_remains_unavailable() {
     for source in [
         "record Inner:\n    x: i64\nrecord Outer:\n    inner: Inner\nfn main() -> i64:\n    1\n",
         "record Bag:\n    values: List<i64>\nfn main() -> i64:\n    1\n",
@@ -153,8 +153,7 @@ fn unsupported_record_shapes_never_reach_python_emission() {
     ] {
         let module = parse_module(source).unwrap();
         if let Ok(typed) = check_module(&module) {
-            let errors = emit_python(&module, &typed).unwrap_err();
-            assert!(errors.iter().any(|error| error.code == "CGE006"));
+            emit_python(&module, &typed).unwrap();
         }
     }
     let public =

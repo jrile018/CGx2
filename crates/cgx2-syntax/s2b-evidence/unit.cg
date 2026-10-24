@@ -1,0 +1,2 @@
+fn main() -> Unit:
+    let values: List<i64> = []

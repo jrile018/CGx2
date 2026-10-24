@@ -327,10 +327,59 @@ fn lower_module(
 pub fn emit_package_python(
     package: &CheckedPackage,
 ) -> Result<BTreeMap<PathBuf, String>, Vec<PackageEmitDiagnostic>> {
-    for source in package.modules() {
-        if let Some(span) = cgx2_syntax::s2a_feature_span(source.syntax()) {
-            return Err(vec![PackageEmitDiagnostic::new("CGE006","Python package target does not yet support the S2a variant/generic/collection/loop-contract profile (S2b)",source.source(),Some(span))]);
+    if package.modules().iter().any(|m| {
+        m.typed().finite_values
+            || cgx2_syntax::s2a_feature_span(m.syntax()).is_some()
+            || cgx2_sema::foundation_profile(m.syntax())
+    }) {
+        package.verify_unchanged().map_err(package_errors)?;
+        for source in package.modules() {
+            for f in &source.syntax().functions {
+                if let Some(binding) = &f.foreign {
+                    return Err(vec![PackageEmitDiagnostic::new(
+                        "CGE006",
+                        "foreign declarations are unsupported by the portable finite value target",
+                        source.source(),
+                        Some(binding.target.span),
+                    )]);
+                }
+            }
         }
+
+        let entry = package
+            .modules()
+            .iter()
+            .find(|m| m.source() == package.index().entry)
+            .expect("checked entry");
+        let name = entry
+            .syntax()
+            .name
+            .as_ref()
+            .map(|p| p.segments.join("."))
+            .unwrap_or_default();
+        let merged = cgx2_sema::merge_modules(
+            &package
+                .modules()
+                .iter()
+                .map(|m| m.syntax())
+                .collect::<Vec<_>>(),
+            &name,
+        );
+        let typed = cgx2_sema::check_module(&merged).map_err(|ds| {
+            ds.into_iter()
+                .map(|d| {
+                    PackageEmitDiagnostic::new(d.code, d.message, entry.source(), Some(d.span))
+                })
+                .collect::<Vec<_>>()
+        })?;
+        let generated = crate::data::emit(&merged, &typed).map_err(|ds| {
+            ds.into_iter()
+                .map(|d| {
+                    PackageEmitDiagnostic::new(d.code, d.message, entry.source(), Some(d.span))
+                })
+                .collect::<Vec<_>>()
+        })?;
+        return Ok(BTreeMap::from([(PathBuf::from("__main__.py"), generated)]));
     }
 
     package.verify_unchanged().map_err(package_errors)?;

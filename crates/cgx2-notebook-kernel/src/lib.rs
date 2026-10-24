@@ -57,7 +57,9 @@ pub fn scalar_worker_main() -> i32 {
     };
     let result = match run_source(&script, &[]) {
         Ok(result) => match result.value {
-            Value::Variant { .. } => b"ECGNK026: variant worker output requires S3-N".to_vec(),
+            Value::Variant { .. } | Value::Sequence { .. } => {
+                b"ECGNK026: variant worker output requires S3-N".to_vec()
+            }
             Value::I64(number) => format!("I{number}").into_bytes(),
             Value::Bool(boolean) => format!("B{boolean}").into_bytes(),
             Value::String(value) => {
@@ -1765,7 +1767,7 @@ impl RetainedExecutor {
                 |project| project.canonical_identity(&expected),
             );
             let actual = match &value {
-                Value::Variant { .. } => {
+                Value::Variant { .. } | Value::Sequence { .. } => {
                     return Err("CGNK026: variant worker output requires S3-N".into())
                 }
                 Value::Record { name, .. } => name.as_str(),
@@ -2199,7 +2201,7 @@ fn value_size(value: &Value) -> usize {
 
 fn append_value(script: &mut String, value: &Value) -> Result<(), String> {
     match value {
-        Value::Variant { .. } => {
+        Value::Variant { .. } | Value::Sequence { .. } => {
             return Err("CGNK026: retained variant execution requires S3-N".into())
         }
         Value::I64(number) if *number == i64::MIN => script.push_str("0 - 9223372036854775807 - 1"),

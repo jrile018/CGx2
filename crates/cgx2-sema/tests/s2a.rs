@@ -104,14 +104,20 @@ fn private_types_cannot_leak_through_public_aggregates_or_applications() {
 }
 
 #[test]
-fn deferred_syntax_has_explicit_semantic_diagnostics() {
+fn generic_data_declarations_are_admitted_and_loop_contracts_remain_deferred() {
     for source in [
         "pub variant Box<T: Eq + Show>:\n    Value(T)\n",
         "fn identity<T: Eq>(x: T) -> T:\n    x\n",
         "record Box<T>:\n    value: T\n",
-        "fn main() -> i64:\n    let values = [1, 2]\n    values[0]\n",
-        "fn main() -> i64:\n    for i in range(0, 1):\n        invariant i >= 0\n        decreases 1 - i\n        i\n    0\n",
-    ] { assert!(errors(source).iter().any(|e| e.code == "CGT032")); }
+    ] {
+        check_module(&parse_module(source).unwrap()).unwrap();
+    }
+    assert!(
+        errors("fn main() -> i64:\n    let values = [1, 2]\n    values[0]\n")
+            .iter()
+            .any(|e| e.code == "CGT003")
+    );
+    assert!(errors("fn main() -> i64:\n    for i in range(0, 1):\n        invariant i >= 0\n        decreases 1 - i\n        i\n    0\n").iter().any(|e|e.code=="CGT032"));
 }
 
 #[test]

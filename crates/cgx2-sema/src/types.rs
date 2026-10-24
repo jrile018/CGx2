@@ -6,7 +6,19 @@ pub enum Type {
     Unit,
     List(Box<Type>),
     Record(String),
-    Variant { name: String, arguments: Vec<Type> },
+    AppliedRecord {
+        name: String,
+        arguments: Vec<Type>,
+    },
+    Parameter {
+        name: String,
+        constraints: Vec<String>,
+    },
+    Array(Box<Type>),
+    Variant {
+        name: String,
+        arguments: Vec<Type>,
+    },
 }
 
 impl std::fmt::Display for Type {
@@ -17,7 +29,9 @@ impl std::fmt::Display for Type {
             Self::String => write!(f, "String"),
             Self::Unit => write!(f, "Unit"),
             Self::List(inner) => write!(f, "List<{inner}>"),
-            Self::Variant { name, arguments } => {
+            Self::Array(inner) => write!(f, "Array<{inner}>"),
+            Self::Parameter { name, .. } => f.write_str(name.rsplit("::").next().unwrap_or(name)),
+            Self::Variant { name, arguments } | Self::AppliedRecord { name, arguments } => {
                 write!(f, "{name}")?;
                 if !arguments.is_empty() {
                     write!(f, "<")?;

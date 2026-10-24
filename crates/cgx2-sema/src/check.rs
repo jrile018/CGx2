@@ -24,6 +24,7 @@ fn block_returns(body: &[Stmt]) -> bool {
 /// A resolved function signature. Private unannotated returns are inferred from the body.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct FunctionSignature {
+    pub type_parameters: Vec<Type>,
     pub public: bool,
     pub parameters: Vec<Type>,
     pub return_type: Type,
@@ -53,6 +54,9 @@ impl SpanTypes {
 /// Typed summary of an unchanged syntax tree.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct TypedModule {
+    pub finite_values: bool,
+    pub bodies: BTreeMap<String, SpanTypes>,
+    pub calls: BTreeMap<(String, usize, usize), ResolvedCall>,
     pub functions: BTreeMap<String, FunctionSignature>,
     pub expressions: SpanTypes,
     pub effects: BTreeMap<String, EffectSummary>,
@@ -77,17 +81,15 @@ pub struct ImportedSignatures {
 fn record_identity(module: &Module, name: &str, _imported: &ImportedSignatures) -> String {
     crate::nominal::identity(module, name)
 }
-fn resolve_in_module(
-    ty: &cgx2_syntax::TypeSyntax,
-    module: &Module,
-    imported: &ImportedSignatures,
-    diagnostics: &mut Vec<TypeDiagnostic>,
-) -> Option<Type> {
-    crate::nominal::resolve(ty, module, imported, diagnostics)
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ResolvedCall {
+    pub callee: String,
+    pub arguments: Vec<Type>,
 }
 
 #[derive(Clone)]
 struct DraftSignature {
+    type_parameters: Vec<Type>,
     public: bool,
     parameters: Vec<Option<Type>>,
     result: Option<Type>,
@@ -101,6 +103,12 @@ struct Binding {
 }
 
 struct Checker {
+    binders: BTreeMap<String, Type>,
+    expected: Option<Type>,
+    tail_hint: Option<Type>,
+    owner: String,
+    bodies: BTreeMap<String, SpanTypes>,
+    calls: BTreeMap<(String, usize, usize), ResolvedCall>,
     functions: BTreeMap<String, DraftSignature>,
     expressions: SpanTypes,
     diagnostics: Vec<TypeDiagnostic>,
@@ -120,7 +128,11 @@ pub fn check_module(module: &Module) -> Result<TypedModule, Vec<TypeDiagnostic>>
             import.span,
         )]);
     }
-    check_module_with_imports(module, &ImportedSignatures::default())
+    let typed = check_module_with_imports(module, &ImportedSignatures::default())?;
+    if crate::foundation_profile(module) {
+        crate::lower_module(module, &typed)?;
+    }
+    Ok(typed)
 }
 
 /// Check a module against declared, local package signatures without executing imports.
@@ -128,25 +140,6 @@ pub fn check_module_with_imports(
     module: &Module,
     imported: &ImportedSignatures,
 ) -> Result<TypedModule, Vec<TypeDiagnostic>> {
-    let generic = module
-        .records
-        .iter()
-        .flat_map(|r| &r.type_parameters)
-        .chain(module.variants.iter().flat_map(|v| &v.type_parameters))
-        .chain(module.functions.iter().flat_map(|f| &f.type_parameters));
-    let deferred: Vec<_> = generic
-        .map(|p| {
-            TypeDiagnostic::new(
-                "CGT032",
-                "user generic declarations and named constraint semantics are deferred to S2b"
-                    .into(),
-                p.span,
-            )
-        })
-        .collect();
-    if !deferred.is_empty() {
-        return Err(deferred);
-    }
     crate::tensor::tensor_profile(module)?;
     let mut foreign_errors = Vec::new();
     for function in &module.functions {
@@ -348,6 +341,12 @@ pub fn check_module_with_imports(
         return result;
     }
     let mut checker = Checker {
+        binders: BTreeMap::new(),
+        expected: None,
+        tail_hint: None,
+        owner: String::new(),
+        bodies: BTreeMap::new(),
+        calls: BTreeMap::new(),
         functions: BTreeMap::new(),
         expressions: SpanTypes::default(),
         diagnostics: Vec::new(),
@@ -367,6 +366,9 @@ pub fn check_module_with_imports(
     checker.insert_builtin("arg_count", vec![], Type::I64);
     checker.insert_builtin("arg", vec![Type::I64], Type::String);
     checker.check_records();
+    if checker.diagnostics.iter().any(|d| d.code == "CGT030") {
+        return Err(checker.diagnostics);
+    }
     for function in &module.functions {
         checker.declare_function(function);
     }
@@ -390,6 +392,7 @@ pub fn check_module_with_imports(
             (
                 name,
                 FunctionSignature {
+                    type_parameters: signature.type_parameters,
                     public: signature.public,
                     parameters: signature
                         .parameters
@@ -402,7 +405,17 @@ pub fn check_module_with_imports(
             )
         })
         .collect();
+    let finite_values = crate::foundation_profile(module)
+        || cgx2_syntax::s2a_feature_span(module).is_some()
+        || module.functions.iter().any(|f| f.name.contains('<'))
+        || equality_needs_values(module, &checker.expressions);
+    checker
+        .bodies
+        .insert(String::new(), checker.expressions.clone());
     Ok(TypedModule {
+        finite_values,
+        bodies: checker.bodies,
+        calls: checker.calls,
         functions,
         expressions: checker.expressions,
         effects: checker.effect_summaries,
@@ -422,20 +435,6 @@ pub fn collect_public_signatures_with_imports(
     module: &Module,
     imported: &ImportedSignatures,
 ) -> Result<BTreeMap<String, FunctionSignature>, Vec<TypeDiagnostic>> {
-    if let Some(parameter) = module
-        .records
-        .iter()
-        .flat_map(|r| &r.type_parameters)
-        .chain(module.variants.iter().flat_map(|v| &v.type_parameters))
-        .chain(module.functions.iter().flat_map(|f| &f.type_parameters))
-        .next()
-    {
-        return Err(vec![TypeDiagnostic::new(
-            "CGT032",
-            "user generic declarations and named constraint semantics are deferred to S2b".into(),
-            parameter.span,
-        )]);
-    }
     let mut signatures = BTreeMap::new();
     let mut seen = BTreeSet::new();
     let mut errors = Vec::new();
@@ -451,13 +450,24 @@ pub fn collect_public_signatures_with_imports(
         if !function.public {
             continue;
         }
+        let scope = crate::nominal::binders(
+            module,
+            &function.name,
+            &function.type_parameters,
+            &mut errors,
+        );
+        let type_parameters = function
+            .type_parameters
+            .iter()
+            .filter_map(|p| scope.get(&p.name).cloned())
+            .collect();
         let parameters: Vec<_> = function
             .parameters
             .iter()
-            .map(|p| resolve_in_module(&p.ty, module, imported, &mut errors))
+            .map(|p| crate::nominal::scoped(&p.ty, module, imported, &scope, &mut errors))
             .collect();
         let result = match &function.return_type {
-            Some(ty) => resolve_in_module(ty, module, imported, &mut errors),
+            Some(ty) => crate::nominal::scoped(ty, module, imported, &scope, &mut errors),
             None => {
                 errors.push(TypeDiagnostic::new(
                     "CGT006",
@@ -481,6 +491,7 @@ pub fn collect_public_signatures_with_imports(
             signatures.insert(
                 function.name.clone(),
                 FunctionSignature {
+                    type_parameters,
                     public: true,
                     parameters: parameters.into_iter().flatten().collect(),
                     return_type: result,
@@ -499,7 +510,14 @@ pub fn collect_public_signatures_with_imports(
 fn function_order(functions: &[Function]) -> Vec<&Function> {
     fn calls_in_expr(expr: &Expr, calls: &mut Vec<String>) {
         match &expr.kind {
-            ExprKind::Constructor { arguments, .. } => {
+            ExprKind::Constructor {
+                ty,
+                case,
+                arguments,
+            } => {
+                if case.is_empty() {
+                    calls.push(ty.path.segments.join("."));
+                }
                 for arg in arguments {
                     calls_in_expr(&arg.value, calls);
                 }
@@ -626,6 +644,7 @@ impl Checker {
                     r.name.clone(),
                     r.public,
                     r.span,
+                    r.type_parameters.clone(),
                     r.fields.iter().map(|f| f.ty.clone()).collect::<Vec<_>>(),
                 )
             })
@@ -634,6 +653,7 @@ impl Checker {
                     v.name.clone(),
                     v.public,
                     v.span,
+                    v.type_parameters.clone(),
                     v.cases
                         .iter()
                         .flat_map(|c| c.payloads.clone())
@@ -644,17 +664,19 @@ impl Checker {
         fn dependencies(ty: &Type, out: &mut Vec<String>) {
             match ty {
                 Type::Record(n) => out.push(n.clone()),
-                Type::Variant { name, arguments } => {
+                Type::Variant { name, arguments } | Type::AppliedRecord { name, arguments } => {
                     out.push(name.clone());
                     for arg in arguments {
                         dependencies(arg, out);
                     }
                 }
-                Type::List(t) => dependencies(t, out),
+                Type::List(t) | Type::Array(t) => dependencies(t, out),
                 _ => {}
             }
         }
-        for (name, public, span, payloads) in &declarations {
+        for (name, public, span, params, payloads) in &declarations {
+            self.binders =
+                crate::nominal::binders(&self.module, name, params, &mut self.diagnostics);
             if !names.insert(name.clone())
                 || self.module.functions.iter().any(|f| f.name == *name)
                 || matches!(
@@ -680,20 +702,17 @@ impl Checker {
             }
             let mut edges = Vec::new();
             for payload in payloads {
-                if let Some(ty) =
-                    resolve_in_module(payload, &self.module, &self.imported, &mut self.diagnostics)
-                {
+                if let Some(ty) = crate::nominal::scoped(
+                    payload,
+                    &self.module,
+                    &self.imported,
+                    &self.binders,
+                    &mut self.diagnostics,
+                ) {
                     if *public && crate::nominal::private_type(&ty, &self.module) {
                         self.report(
                             "CGT022",
                             "public aggregate exposes a private nominal type",
-                            payload.span,
-                        );
-                    }
-                    if matches!(ty, Type::List(_)) {
-                        self.report(
-                            "CGT032",
-                            "collection aggregate payload semantics are deferred to S2b",
                             payload.span,
                         );
                     }
@@ -730,7 +749,8 @@ impl Checker {
             false
         }
         let mut done = BTreeSet::new();
-        for (name, _, span, _) in &declarations {
+        self.binders.clear();
+        for (name, _, span, _, _) in &declarations {
             if cycle(
                 &record_identity(&self.module, name, &self.imported),
                 &graph,
@@ -753,7 +773,13 @@ impl Checker {
         arguments: &[CallArg],
         span: Span,
     ) -> Option<Type> {
-        let ty = resolve_in_module(syntax, &self.module, &self.imported, &mut self.diagnostics)?;
+        let ty = crate::nominal::scoped(
+            syntax,
+            &self.module,
+            &self.imported,
+            &self.binders,
+            &mut self.diagnostics,
+        )?;
         let Some(cases) =
             crate::nominal::cases(&ty, &self.module, &self.imported, &mut self.diagnostics)
         else {
@@ -798,6 +824,7 @@ impl Checker {
         expected: Option<&Type>,
         span: Span,
     ) -> Option<(Type, Span)> {
+        let value_hint = self.tail_hint.clone();
         let ty = self.check_expr(scrutinee)?;
         let Some(cases) =
             crate::nominal::cases(&ty, &self.module, &self.imported, &mut self.diagnostics)
@@ -825,10 +852,13 @@ impl Checker {
                     bindings,
                     span: pattern_span,
                 } => {
-                    if let Some(pattern_ty) = resolve_in_module(
+                    let inferred_syntax = self.pattern_type(syntax, &ty);
+                    let syntax = &inferred_syntax;
+                    if let Some(pattern_ty) = crate::nominal::scoped(
                         syntax,
                         &self.module,
                         &self.imported,
+                        &self.binders,
                         &mut self.diagnostics,
                     ) {
                         self.expect_type(&pattern_ty, &ty, syntax.span);
@@ -865,7 +895,7 @@ impl Checker {
             // `expected` constrains explicit returns anywhere in the arm. Only
             // fallthrough values participate in the match's own value join;
             // the enclosing block checks its final value against the function.
-            let tail = self.check_block(&arm.body, expected);
+            let tail = self.check_block_hint(&arm.body, expected, value_hint.as_ref());
             if !block_returns(&arm.body) {
                 let (branch, branch_span) = tail.unwrap_or((Type::Unit, arm.span));
                 if let Some(result) = &result {
@@ -902,6 +932,7 @@ impl Checker {
         self.functions.insert(
             name.into(),
             DraftSignature {
+                type_parameters: vec![],
                 public: false,
                 parameters: parameters.into_iter().map(Some).collect(),
                 result: Some(result),
@@ -911,6 +942,19 @@ impl Checker {
     }
 
     fn declare_function(&mut self, function: &Function) {
+        self.binders = crate::nominal::binders(
+            &self.module,
+            &function.name,
+            &function.type_parameters,
+            &mut self.diagnostics,
+        );
+        if function.name == "main" && !function.type_parameters.is_empty() {
+            self.report(
+                "CGT040",
+                "main cannot have unresolved type parameters",
+                function.span,
+            );
+        }
         let name_span = Span {
             start: function.span.start + if function.public { 7 } else { 3 },
             end: function.span.start + if function.public { 7 } else { 3 } + function.name.len(),
@@ -926,10 +970,24 @@ impl Checker {
         let parameters: Vec<Option<Type>> = function
             .parameters
             .iter()
-            .map(|p| resolve_in_module(&p.ty, &self.module, &self.imported, &mut self.diagnostics))
+            .map(|p| {
+                crate::nominal::scoped(
+                    &p.ty,
+                    &self.module,
+                    &self.imported,
+                    &self.binders,
+                    &mut self.diagnostics,
+                )
+            })
             .collect();
         let result = function.return_type.as_ref().and_then(|ty| {
-            resolve_in_module(ty, &self.module, &self.imported, &mut self.diagnostics)
+            crate::nominal::scoped(
+                ty,
+                &self.module,
+                &self.imported,
+                &self.binders,
+                &mut self.diagnostics,
+            )
         });
         if function.public && function.return_type.is_none() {
             self.report(
@@ -956,6 +1014,11 @@ impl Checker {
         self.functions.insert(
             function.name.clone(),
             DraftSignature {
+                type_parameters: function
+                    .type_parameters
+                    .iter()
+                    .filter_map(|p| self.binders.get(&p.name).cloned())
+                    .collect(),
                 public: function.public,
                 parameters,
                 result,
@@ -965,6 +1028,13 @@ impl Checker {
     }
 
     fn check_function(&mut self, function: &Function) {
+        self.owner = function.name.clone();
+        self.binders = crate::nominal::binders(
+            &self.module,
+            &function.name,
+            &function.type_parameters,
+            &mut self.diagnostics,
+        );
         if function.foreign.is_some() {
             return;
         }
@@ -1034,6 +1104,10 @@ impl Checker {
                 }
             }
         }
+        self.bodies
+            .insert(function.name.clone(), self.expressions.clone());
+        self.binders.clear();
+        self.owner.clear();
     }
 
     fn check_inferred_result(&mut self, body: &[Stmt], tail: Option<(Type, Span)>) -> Option<Type> {
@@ -1117,10 +1191,25 @@ impl Checker {
         statements: &[Stmt],
         expected: Option<&Type>,
     ) -> Option<(Type, Span)> {
+        self.check_block_hint(statements, expected, expected)
+    }
+    fn check_block_hint(
+        &mut self,
+        statements: &[Stmt],
+        expected: Option<&Type>,
+        hint: Option<&Type>,
+    ) -> Option<(Type, Span)> {
+        let prior = self.tail_hint.clone();
         let mut last = None;
-        for statement in statements {
+        for (index, statement) in statements.iter().enumerate() {
+            self.tail_hint = if index + 1 == statements.len() {
+                hint.cloned()
+            } else {
+                None
+            };
             last = self.check_stmt(statement, expected);
         }
+        self.tail_hint = prior;
         last
     }
 
@@ -1147,7 +1236,7 @@ impl Checker {
                 }
                 for body in [then_body, else_body] {
                     self.scopes.push(BTreeMap::new());
-                    self.check_block(body, expected);
+                    self.check_block_hint(body, expected, None);
                     self.scopes.pop();
                 }
                 Some((Type::Unit, statement.span))
@@ -1158,10 +1247,16 @@ impl Checker {
                 annotation,
                 value,
             } => {
-                let value_ty = self.check_expr(value);
                 let annotated = annotation.as_ref().and_then(|ty| {
-                    resolve_in_module(ty, &self.module, &self.imported, &mut self.diagnostics)
+                    crate::nominal::scoped(
+                        ty,
+                        &self.module,
+                        &self.imported,
+                        &self.binders,
+                        &mut self.diagnostics,
+                    )
                 });
+                let value_ty = self.check_expr_as(value, annotated.as_ref());
                 if let (Some(actual), Some(expected)) = (&value_ty, &annotated) {
                     self.expect_type(actual, expected, value.span);
                 }
@@ -1221,7 +1316,9 @@ impl Checker {
             }
             StmtKind::Return(value) => {
                 let actual = match value {
-                    Some(value) => self.check_expr(value).map(|ty| (ty, value.span)),
+                    Some(value) => self
+                        .check_expr_as(value, expected)
+                        .map(|ty| (ty, value.span)),
                     None => Some((Type::Unit, statement.span)),
                 };
                 if let (Some((actual, span)), Some(expected)) = (&actual, expected) {
@@ -1229,7 +1326,11 @@ impl Checker {
                 }
                 actual
             }
-            StmtKind::Expr(expr) => self.check_expr(expr).map(|ty| (ty, expr.span)),
+            StmtKind::Expr(expr) => {
+                let hint = self.tail_hint.clone();
+                self.check_expr_as(expr, hint.as_ref())
+                    .map(|ty| (ty, expr.span))
+            }
             StmtKind::For {
                 binding,
                 iter,
@@ -1265,7 +1366,8 @@ impl Checker {
                         }
                     }
                     _ => match self.check_expr(iter) {
-                        Some(Type::List(inner)) => Some(*inner),
+                        Some(Type::List(inner) | Type::Array(inner)) => Some(*inner),
+                        Some(Type::String) => Some(Type::String),
                         Some(_) => {
                             self.report(
                                 "CGT003",
@@ -1295,7 +1397,7 @@ impl Checker {
                 {
                     self.check_range_body_policy(body);
                 }
-                self.check_block(body, expected);
+                self.check_block_hint(body, expected, None);
                 self.scopes.pop();
                 Some((Type::Unit, statement.span))
             }
@@ -1439,6 +1541,13 @@ impl Checker {
     }
 
     fn check_expr(&mut self, expr: &Expr) -> Option<Type> {
+        let hint = self.expected.take();
+        if let Some(result) = self.foundation_expr(expr, hint.as_ref()) {
+            if let Some(ty) = &result {
+                self.expressions.insert(expr.span, ty.clone());
+            }
+            return result;
+        }
         let ty = match &expr.kind {
             ExprKind::Constructor {
                 ty,
@@ -1485,30 +1594,18 @@ impl Checker {
                                 path.span,
                             );
                             None
-                        } else if let Type::Record(record_name) = binding.ty {
-                            let found = self
-                                .module
-                                .records
-                                .iter()
-                                .find(|record| {
-                                    record_identity(&self.module, &record.name, &self.imported)
-                                        == record_name
-                                })
-                                .or_else(|| self.imported.public_records.get(&record_name))
-                                .and_then(|record| {
-                                    record.fields.iter().find(|item| item.name == *field)
-                                });
-                            match found {
-                                Some(item) => crate::nominal::resolve_member(
-                                    &item.ty,
-                                    &self.module,
-                                    &self.imported,
-                                    &mut self.diagnostics,
-                                ),
+                        } else if let Some(fields) = crate::nominal::members(
+                            &binding.ty,
+                            &self.module,
+                            &self.imported,
+                            &mut self.diagnostics,
+                        ) {
+                            match fields.into_iter().find(|(n, _)| n == field) {
+                                Some((_, ty)) => Some(ty),
                                 None => {
                                     self.report(
                                         "CGT021",
-                                        format!("record `{record_name}` has no field `{field}`"),
+                                        format!("record `{}` has no field `{field}`", binding.ty),
                                         path.span,
                                     );
                                     None
@@ -1790,41 +1887,44 @@ impl Checker {
         } else if self.imported.private_functions.contains(&name) {
             self.report("CGT009", format!("function `{name}` is private"), path.span);
         } else if let Some(signature) = self.imported.public_functions.get(&name) {
-            for ty in signature
+            fn nominal_names<'a>(ty: &'a Type, names: &mut Vec<&'a str>) {
+                match ty {
+                    Type::Record(n) => names.push(n),
+                    Type::Variant { name, arguments } | Type::AppliedRecord { name, arguments } => {
+                        if !name.starts_with("cgx2.core.") {
+                            names.push(name);
+                        }
+                        for t in arguments {
+                            nominal_names(t, names);
+                        }
+                    }
+                    Type::List(t) | Type::Array(t) => nominal_names(t, names),
+                    _ => {}
+                }
+            }
+            let mut names = vec![];
+            for t in signature
                 .parameters
                 .iter()
                 .chain(std::iter::once(&signature.return_type))
             {
-                if let Type::Record(identity) = ty {
-                    if let Some((defining, _)) = identity.rsplit_once('.') {
-                        let own = self.module.name.as_ref().map(|p| p.segments.join("."));
-                        if own.as_deref() != Some(defining) && !self.imports.contains(defining) {
-                            self.report(
-                                "CGT008",
-                                format!(
-                                    "record `{identity}` requires a direct import of `{defining}`"
-                                ),
-                                path.span,
-                            );
-                            return None;
-                        }
+                nominal_names(t, &mut names);
+            }
+            for identity in names {
+                if let Some((defining, _)) = identity.rsplit_once('.') {
+                    let own = self.module.name.as_ref().map(|p| p.segments.join("."));
+                    if own.as_deref() != Some(defining) && !self.imports.contains(defining) {
+                        self.report(
+                            "CGT008",
+                            format!("type `{identity}` requires a direct import of `{defining}`"),
+                            path.span,
+                        );
+                        return None;
                     }
                 }
             }
-            if signature
-                .parameters
-                .iter()
-                .any(|ty| matches!(ty, Type::List(_)))
-                || matches!(signature.return_type, Type::List(_))
-            {
-                self.report(
-                    "CGT010",
-                    format!("imported function `{name}` has a non-scalar signature"),
-                    path.span,
-                );
-                return None;
-            }
             return Some(DraftSignature {
+                type_parameters: signature.type_parameters.clone(),
                 public: true,
                 parameters: signature.parameters.iter().cloned().map(Some).collect(),
                 result: Some(signature.return_type.clone()),
@@ -1839,4 +1939,28 @@ impl Checker {
         }
         None
     }
+}
+
+include!("generic.rs");
+
+fn equality_needs_values(module: &Module, types: &SpanTypes) -> bool {
+    let found = std::cell::Cell::new(false);
+    let mut visit = |expr: &Expr| {
+        let ExprKind::Call { callee, arguments } = &expr.kind else {
+            return;
+        };
+        if matches!(&callee.kind,ExprKind::Name(p) if matches!(p.segments.join(".").as_str(),"$cgx2_cmp_eq"|"$cgx2_cmp_ne"))
+            && arguments
+                .first()
+                .and_then(|a| types.get(a.value.span))
+                .is_some_and(|t| !matches!(t, Type::I64 | Type::Bool))
+        {
+            found.set(true);
+        }
+    };
+    cgx2_syntax::visit_stmts(&module.statements, &mut |_| {}, &mut visit);
+    for function in &module.functions {
+        cgx2_syntax::visit_stmts(&function.body, &mut |_| {}, &mut visit);
+    }
+    found.get()
 }

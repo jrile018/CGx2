@@ -342,8 +342,10 @@ fn write_expr(out: &mut String, expr: &Expr, required: u8) {
             arguments,
         } => {
             out.push_str(&ty.to_string());
-            out.push('.');
-            out.push_str(case);
+            if !case.is_empty() {
+                out.push('.');
+                out.push_str(case);
+            }
             out.push('(');
             for (i, arg) in arguments.iter().enumerate() {
                 if i > 0 {

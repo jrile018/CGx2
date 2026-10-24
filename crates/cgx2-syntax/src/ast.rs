@@ -215,7 +215,8 @@ pub struct CallArg {
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum ExprKind {
-    /// Explicit type application on a constructor (e.g. Option<i64>.Some(1)).
+    /// Explicit type application. An empty case denotes a function or record
+    /// application, e.g. identity<i64>(1) or Box<i64>(value: 1).
     Constructor {
         ty: TypeSyntax,
         case: String,

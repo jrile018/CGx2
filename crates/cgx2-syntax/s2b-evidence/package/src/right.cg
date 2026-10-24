@@ -1,0 +1,8 @@
+module foundation.right
+pub record Box<T>:
+    value: List<T>
+pub variant Choice<T>:
+    Value(T)
+    Empty
+pub fn identity<T>(x: T) -> T effects() caps():
+    x

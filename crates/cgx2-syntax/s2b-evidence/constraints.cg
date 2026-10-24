@@ -1,0 +1,10 @@
+record Point<T>:
+    value: T
+fn label<T: Eq + Show>(left: T, right: T) -> String:
+    if left == right:
+        return show(left)
+    else:
+        return "different"
+fn main() -> String:
+    let point = Point(value: 42)
+    concat(label(point, point), concat(":", label([1], [2])))

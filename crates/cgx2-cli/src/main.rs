@@ -8,7 +8,7 @@ use cgx2_syntax::{format_module, parse_module};
 
 use diagnostics::{CliDiagnostic, DiagnosticFormat};
 
-const HELP: &str = "usage: cgx2 [--diagnostic-format=json] check FILE.cg|PACKAGE | cgx2 [--diagnostic-format=json] run FILE.cg|PACKAGE [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 api [--json] [--syntax-only] FILE.cg|PACKAGE | cgx2 build FILE.cg|PACKAGE --out BINARY [--release] [--force] [--rustc PATH] | cgx2 emit FILE.cg|PACKAGE --target rust|python --out FILE [--force] | cgx2 memory report FILE.cg [--format=json] | cgx2 memory failure-report FILE.cg | cgx2 fmt FILE.cg\ncheck validates syntax, scalar types, and a bounded memory/ownership script subset; a PACKAGE directory can run checked pure scalar/record functions through cgx2-native; schema 2 also supports bounded pinned native C calls; memory report shows CGx2 allocations only";
+const HELP: &str = "usage: cgx2 [--diagnostic-format=json] check FILE.cg|PACKAGE | cgx2 [--diagnostic-format=json] run FILE.cg|PACKAGE [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 api [--json] [--syntax-only] FILE.cg|PACKAGE | cgx2 build FILE.cg|PACKAGE --out BINARY [--release] [--force] [--rustc PATH] | cgx2 emit FILE.cg|PACKAGE --target rust|python --out FILE [--force] | cgx2 memory report FILE.cg [--format=json] | cgx2 memory failure-report FILE.cg | cgx2 fmt FILE.cg\ncheck validates syntax, generic constraints, copied finite values, and the bounded memory/ownership script subset; a PACKAGE directory can run checked value functions through cgx2-native; schema 2 also supports bounded pinned native C calls; memory report shows CGx2 allocations only";
 
 enum Command {
     Check {

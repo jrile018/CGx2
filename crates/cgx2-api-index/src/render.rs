@@ -11,6 +11,38 @@ impl ApiIndex {
         } else {
             out.push_str("null");
         }
+        if self.schema_version >= 7 {
+            out.push_str(",\"instantiations\":[");
+            for (i, instance) in self.instantiations.iter().enumerate() {
+                if i > 0 {
+                    out.push(',');
+                }
+                out.push_str("{\"owner\":");
+                push_json_string(&mut out, &instance.owner);
+                out.push_str(",\"callee\":");
+                push_json_string(&mut out, &instance.callee);
+                for (key, values) in [
+                    ("type_arguments", &instance.type_arguments),
+                    ("parameters", &instance.parameters),
+                ] {
+                    out.push_str(&format!(",\"{key}\":["));
+                    for (j, v) in values.iter().enumerate() {
+                        if j > 0 {
+                            out.push(',');
+                        }
+                        push_json_string(&mut out, v);
+                    }
+                    out.push(']');
+                }
+                out.push_str(",\"return_type\":");
+                push_json_string(&mut out, &instance.return_type);
+                out.push_str(&format!(
+                    ",\"span\":{{\"start\":{},\"end\":{}}}}}",
+                    instance.span.start, instance.span.end
+                ));
+            }
+            out.push(']');
+        }
         out.push_str(",\"functions\":[");
         for (index, function) in self.functions.iter().enumerate() {
             if index > 0 {
@@ -225,6 +257,17 @@ impl ApiIndex {
             self.module.as_deref().unwrap_or("<unnamed>"),
             self.semantics_status
         );
+        for instance in &self.instantiations {
+            out.push_str(&format!(
+                "instantiate {}<{}>({}) -> {} [checked] [{}, {})\n",
+                instance.callee,
+                instance.type_arguments.join(", "),
+                instance.parameters.join(", "),
+                instance.return_type,
+                instance.span.start,
+                instance.span.end
+            ));
+        }
         for variant in &self.variants {
             out.push_str(&format!(
                 "variant {}{} [{}, {})\n",

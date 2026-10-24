@@ -5,12 +5,23 @@ use crate::IndexError;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ApiIndex {
+    pub instantiations: Vec<ApiInstantiation>,
     pub schema_version: u32,
     pub module: Option<String>,
     pub functions: Vec<ApiFunction>,
     pub records: Vec<ApiRecord>,
     pub variants: Vec<ApiVariant>,
     pub semantics_status: String,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ApiInstantiation {
+    pub owner: String,
+    pub callee: String,
+    pub type_arguments: Vec<String>,
+    pub parameters: Vec<String>,
+    pub return_type: String,
+    pub span: Span,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -104,7 +115,7 @@ pub struct ApiParameter {
 /// Build an index only when `typed` equals a fresh semantic check of `module`.
 pub fn build_index(module: &Module, typed: &TypedModule) -> Result<ApiIndex, IndexError> {
     let checked = check_module(module).map_err(IndexError::InvalidModule)?;
-    build_index_checked(module, typed, checked)
+    build_index_checked(module, typed, checked, &ImportedSignatures::default())
 }
 
 /// Recheck a package module against exactly the supplied imported declarations.
@@ -114,13 +125,14 @@ pub fn build_index_with_imports(
     imports: &ImportedSignatures,
 ) -> Result<ApiIndex, IndexError> {
     let checked = check_module_with_imports(module, imports).map_err(IndexError::InvalidModule)?;
-    build_index_checked(module, typed, checked)
+    build_index_checked(module, typed, checked, imports)
 }
 
 fn build_index_checked(
     module: &Module,
     typed: &TypedModule,
     checked: TypedModule,
+    imports: &ImportedSignatures,
 ) -> Result<ApiIndex, IndexError> {
     if &checked != typed {
         return Err(IndexError::MismatchedTypedModule);
@@ -141,9 +153,12 @@ fn build_index_checked(
                 parameter_types: function
                     .parameters
                     .iter()
-                    .map(|p| api_type(&p.ty, module))
+                    .map(|p| api_type_scoped(&p.ty, module, &function.type_parameters))
                     .collect(),
-                result_type: function.return_type.as_ref().map(|ty| api_type(ty, module)),
+                result_type: function
+                    .return_type
+                    .as_ref()
+                    .map(|ty| api_type_scoped(ty, module, &function.type_parameters)),
                 parameters: function
                     .parameters
                     .iter()
@@ -243,12 +258,53 @@ fn build_index_checked(
             .then(a.span.end.cmp(&b.span.end))
     });
 
+    let instantiations = checked
+        .calls
+        .iter()
+        .filter_map(|((owner, start, end), call)| {
+            let sig = checked
+                .functions
+                .get(&call.callee)
+                .or_else(|| imports.public_functions.get(&call.callee))?;
+            let instantiated = cgx2_sema::instantiate_signature(sig, &call.arguments);
+            Some(ApiInstantiation {
+                owner: identity(module, owner),
+                callee: if checked.functions.contains_key(&call.callee) {
+                    identity(module, &call.callee)
+                } else {
+                    call.callee.clone()
+                },
+                type_arguments: call.arguments.iter().map(cgx2_sema::type_key).collect(),
+                parameters: instantiated
+                    .parameters
+                    .iter()
+                    .map(cgx2_sema::type_key)
+                    .collect(),
+                return_type: cgx2_sema::type_key(&instantiated.return_type),
+                span: Span {
+                    start: *start,
+                    end: *end,
+                },
+            })
+        })
+        .collect();
     Ok(ApiIndex {
+        instantiations,
         semantics_status: "checked".into(),
         variants: variants(module),
-        schema_version: if cgx2_syntax::s2a_feature_span(module).is_some()
-            || !module.records.is_empty()
+        schema_version: if !checked.calls.is_empty()
+            || module
+                .functions
+                .iter()
+                .any(|f| !f.type_parameters.is_empty())
+            || module.records.iter().any(|r| !r.type_parameters.is_empty())
+            || module
+                .variants
+                .iter()
+                .any(|v| !v.type_parameters.is_empty())
         {
+            7
+        } else if cgx2_syntax::s2a_feature_span(module).is_some() || !module.records.is_empty() {
             6
         } else if !module.records.is_empty() {
             5
@@ -304,8 +360,22 @@ fn parameters(parameters: &[cgx2_syntax::TypeParameter]) -> Vec<ApiTypeParameter
         })
         .collect()
 }
-fn api_type(ty: &cgx2_syntax::TypeSyntax, module: &Module) -> ApiType {
-    api_type_scoped(ty, module, &[])
+fn scoped_type_syntax(
+    ty: &cgx2_syntax::TypeSyntax,
+    module: &Module,
+    parameters: &[cgx2_syntax::TypeParameter],
+) -> cgx2_syntax::TypeSyntax {
+    let mut result = ty.clone();
+    result.arguments.clear();
+    if !(ty.path.segments.len() == 1 && parameters.iter().any(|p| p.name == ty.path.segments[0])) {
+        cgx2_syntax::qualify_type(&mut result, module);
+    }
+    result.arguments = ty
+        .arguments
+        .iter()
+        .map(|t| scoped_type_syntax(t, module, parameters))
+        .collect();
+    result
 }
 fn api_type_scoped(
     ty: &cgx2_syntax::TypeSyntax,
@@ -349,8 +419,7 @@ fn records(module: &Module) -> Vec<ApiRecord> {
                 .fields
                 .iter()
                 .map(|f| {
-                    let mut ty = f.ty.clone();
-                    cgx2_syntax::qualify_type(&mut ty, module);
+                    let ty = scoped_type_syntax(&f.ty, module, &r.type_parameters);
                     ApiParameter {
                         name: f.name.clone(),
                         ty: ty.to_string(),
@@ -464,6 +533,7 @@ pub fn build_syntax_index(module: &Module) -> ApiIndex {
         .collect();
     functions.sort_by(|a, b| a.name.cmp(&b.name));
     ApiIndex {
+        instantiations: vec![],
         schema_version: 6,
         module: module.name.as_ref().map(|p| p.segments.join(".")),
         functions,

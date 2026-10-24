@@ -30,6 +30,8 @@ struct Declarations {
     private_functions: BTreeSet<String>,
     public_records: BTreeMap<String, Record>,
     private_records: BTreeSet<String>,
+    public_variants: BTreeMap<String, cgx2_syntax::Variant>,
+    private_variants: BTreeSet<String>,
 }
 
 impl Declarations {
@@ -40,6 +42,8 @@ impl Declarations {
             private_functions: imports.private_functions.clone(),
             public_records: imports.public_records.clone(),
             private_records: imports.private_records.clone(),
+            public_variants: imports.public_variants.clone(),
+            private_variants: imports.private_variants.clone(),
         }
     }
 }

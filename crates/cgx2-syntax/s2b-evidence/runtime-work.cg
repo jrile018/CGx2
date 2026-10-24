@@ -1,0 +1,5 @@
+fn main() -> i64:
+    let mut values: List<i64> = []
+    for i in range(0, 50000):
+        values = append(values, i)
+    length(values)

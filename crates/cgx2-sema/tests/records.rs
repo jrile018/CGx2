@@ -60,9 +60,7 @@ fn record_diagnostics_have_source_spans() {
     assert!(diagnostics("fn main() -> i64:\n    Missing(x: 1)\n")
         .iter()
         .any(|d| d.code == "CGT002" && d.message.contains("unknown record type")));
-    assert!(diagnostics("record Point:\n    x: i64\nfn take(xs: List<Point>) -> Unit:\n    return\nfn main() -> Unit:\n    return\n")
-        .iter()
-        .any(|d| d.code == "CGT023"));
+    check_module(&parse_module("record Point:\n    x: i64\nfn take(xs: List<Point>) -> Unit:\n    return\nfn main() -> Unit:\n    return\n").unwrap()).unwrap();
 }
 
 #[test]
@@ -75,6 +73,7 @@ fn local_field_and_qualified_module_call_coexist_and_ambiguity_is_reported() {
     imports.public_functions.insert(
         "lib.double".into(),
         FunctionSignature {
+            type_parameters: vec![],
             public: true,
             parameters: vec![Type::I64],
             return_type: Type::I64,

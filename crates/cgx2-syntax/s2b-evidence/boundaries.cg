@@ -1,0 +1,38 @@
+fn identity<T>(value: T) -> T:
+    value
+
+fn main() -> String:
+    let empty: List<i64> = []
+    let nested: List<List<i64>> = [[], [1]]
+    let a: Array<i64> = [7]
+    let xs = append(append(empty, 4), 5)
+    let old = xs
+    let changed = updated(xs, 0, 9)
+    let text = "é🙂中"
+    let mut answer = concat(show(length(empty)), ":")
+    answer = concat(answer, show(length(nested)))
+    answer = concat(answer, concat(":", show(a)))
+    answer = concat(answer, concat(":", show(identity(xs))))
+    answer = concat(answer, concat(":", show(old)))
+    answer = concat(answer, concat(":", show(changed)))
+    answer = concat(answer, concat(":", show(xs[0])))
+    answer = concat(answer, concat(":", show(xs[1])))
+    answer = concat(answer, concat(":", show(xs[2])))
+    answer = concat(answer, concat(":", show(xs[0 - 1])))
+    answer = concat(answer, concat(":", show(get(empty, 0))))
+    answer = concat(answer, concat(":", show(length(text))))
+    answer = concat(answer, concat(":", show(text[1])))
+    answer = concat(answer, concat(":", show(text[3])))
+    answer = concat(answer, concat(":", show(slice(text, 1, 3))))
+    answer = concat(answer, concat(":", show(slice(text, 0 - 1, 1))))
+    answer = concat(answer, concat(":", show(slice(text, 2, 1))))
+    answer = concat(answer, concat(":", show(parse_i64("-9223372036854775808"))))
+    answer = concat(answer, concat(":", show(parse_i64("9223372036854775808"))))
+    answer = concat(answer, concat(":", show(parse_i64("１２"))))
+    answer = concat(answer, concat(":", show(length(""))))
+    answer = concat(answer, concat(":", show(get("", 0))))
+    answer = concat(answer, concat(":", show(slice(text, 0, 0))))
+    answer = concat(answer, concat(":", show(a[0])))
+    answer = concat(answer, concat(":", show(a[1])))
+    answer = concat(answer, concat(":", show(updated(a, 1, 8))))
+    answer

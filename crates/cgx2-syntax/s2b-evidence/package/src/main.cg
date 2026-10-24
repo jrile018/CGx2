@@ -1,0 +1,25 @@
+module foundation.main
+import foundation.left
+import foundation.right
+fn main() -> i64:
+    let a = foundation.left.Box<i64>(value: 42)
+    let b = foundation.right.Box<i64>(value: [a.value])
+    let x = foundation.left.identity<foundation.left.Box<i64>>(a)
+    let y: Option<Result<List<Array<i64>>, String>> = Option.Some(Result.Ok([array(b.value)]))
+    let c = foundation.right.Choice.Value(y)
+    match c:
+        foundation.right.Choice.Value(payload):
+            match payload:
+                Option.Some(ok):
+                    match ok:
+                        Result.Ok(values):
+                            if foundation.left.equal(x, a):
+                                return a.value
+                            else:
+                                return 0
+                        Result.Err(message):
+                            0
+                Option.None:
+                    0
+        foundation.right.Choice.Empty:
+            0

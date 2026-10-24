@@ -1,0 +1,4 @@
+fn bounce<T>(value: T) -> T:
+    bounce(value)
+fn main() -> i64:
+    bounce(1)

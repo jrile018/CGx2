@@ -151,7 +151,7 @@ fn annotations_and_unsupported_items_are_explicit() {
     );
     assert_eq!(
         run_source("let x: List<i64> = 1\n", &[]).unwrap_err().code,
-        "CGR009"
+        "CGR004"
     );
     assert_eq!(
         run_source(

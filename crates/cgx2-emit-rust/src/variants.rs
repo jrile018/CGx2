@@ -6,6 +6,8 @@ pub(super) fn syntax_type(ty: &TypeSyntax) -> Type {
         "Bool" => Type::Bool,
         "String" => Type::String,
         "Unit" => Type::Unit,
+        "List" => Type::List(Box::new(syntax_type(&ty.arguments[0]))),
+        "Array" => Type::Array(Box::new(syntax_type(&ty.arguments[0]))),
         "Option" | "Result" => Type::Variant {
             name: format!("cgx2.core.{}", ty.path.segments[0]),
             arguments: ty.arguments.iter().map(syntax_type).collect(),
@@ -21,6 +23,9 @@ pub(super) fn syntax_type(ty: &TypeSyntax) -> Type {
 
 pub(super) fn emit_variants(modules: &[(&Module, &TypedModule)], out: &mut String) {
     fn collect(ty: &Type, found: &mut BTreeMap<String, Type>) {
+        if let Type::List(t) | Type::Array(t) = ty {
+            collect(t, found);
+        }
         if let Type::Variant { arguments, .. } = ty {
             found.insert(ty.to_string(), ty.clone());
             for ty in arguments {
@@ -101,7 +106,9 @@ pub(super) fn emit_variants(modules: &[(&Module, &TypedModule)], out: &mut Strin
     }
     for (identity, cases) in definitions {
         let name = rust_name(&identity);
-        out.push_str(&format!("#[derive(Clone)]\nenum {name} {{\n"));
+        out.push_str(&format!(
+            "#[derive(Clone, PartialEq, Eq)]\nenum {name} {{\n"
+        ));
         for (case, payloads) in &cases {
             out.push_str(&format!("    {}", rust_name(case)));
             if !payloads.is_empty() {
@@ -146,6 +153,33 @@ pub(super) fn emit_variants(modules: &[(&Module, &TypedModule)], out: &mut Strin
             out.push_str(" f.write_str(\")\") },\n");
         }
         out.push_str("        }\n    }\n}\n\n");
+        out.push_str(&format!(
+            "impl Cgx2Show for {name} {{ fn cg_show(&self)->String {{format!(\"{{}}\",self)}}\n"
+        ));
+        for method in ["cg_nodes", "cg_bytes"] {
+            out.push_str(&format!("fn {method}(&self)->usize {{ match self {{\n"));
+            for (case, payloads) in &cases {
+                let bindings = (0..payloads.len())
+                    .map(|i| format!("v{i}"))
+                    .collect::<Vec<_>>();
+                out.push_str(&format!(
+                    "Self::{}{} => {}usize",
+                    rust_name(case),
+                    if bindings.is_empty() {
+                        String::new()
+                    } else {
+                        format!("({})", bindings.join(", "))
+                    },
+                    if method == "cg_nodes" { 1 } else { 0 }
+                ));
+                for binding in bindings {
+                    out.push_str(&format!(".saturating_add({binding}.{method}())"));
+                }
+                out.push_str(",\n");
+            }
+            out.push_str("} }\n");
+        }
+        out.push_str("}\n");
     }
 }
 
@@ -154,6 +188,7 @@ pub(super) fn constructor(
     case: &str,
     arguments: &[cgx2_syntax::CallArg],
     module: Option<&str>,
+    typed: &TypedModule,
 ) -> String {
     let ty = syntax_type(ty);
     let name = match &ty {
@@ -164,7 +199,7 @@ pub(super) fn constructor(
     for (i, arg) in arguments.iter().enumerate() {
         prefix.push_str(&format!(
             "let cgx2_payload_{i} = {}?; ",
-            emit_expr_context(&arg.value, module)
+            emit_expr_context(&arg.value, module, typed)
         ));
     }
     let payloads = if arguments.is_empty() {

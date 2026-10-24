@@ -79,6 +79,9 @@ pub(crate) fn check_memory_module(
     }
     Some(if lowerer.diagnostics.is_empty() {
         Ok(TypedModule {
+            finite_values: false,
+            bodies: Default::default(),
+            calls: Default::default(),
             functions: BTreeMap::new(),
             expressions: SpanTypes::default(),
             effects: BTreeMap::new(),
@@ -304,6 +307,7 @@ fn check_memory_functions(module: &Module) -> Result<TypedModule, Vec<TypeDiagno
         signatures.insert(
             function.name.clone(),
             FunctionSignature {
+                type_parameters: vec![],
                 public: function.public,
                 parameters: function.parameters.iter().map(|_| Type::I64).collect(),
                 return_type: Type::Unit,
@@ -434,6 +438,9 @@ fn check_memory_functions(module: &Module) -> Result<TypedModule, Vec<TypeDiagno
     }
     if diagnostics.is_empty() {
         Ok(TypedModule {
+            finite_values: false,
+            bodies: Default::default(),
+            calls: Default::default(),
             functions: signatures,
             expressions: SpanTypes::default(),
             effects: summaries,
