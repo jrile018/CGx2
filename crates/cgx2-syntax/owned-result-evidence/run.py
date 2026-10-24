@@ -6,13 +6,14 @@ import json
 import os
 from pathlib import Path
 import resource
-import signal
 import shlex
-import subprocess
+import sys
 import tempfile
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]
+sys.path.insert(0, str(HERE.parent / "owned-result-runner-evidence"))
+from supervisor import evidence as command_evidence, supervise
 RUNTIME = ["lib.rs", "budget.rs", "heap.rs", "graph.rs", "scope.rs", "fault.rs", "owned.rs", "region.rs", "report.rs"]
 CAP = 1024 * 1024
 
@@ -34,6 +35,9 @@ def main():
     fixtures = HERE / "fixtures"
     report = {"schema_version": 2, "checkpoint_complete": False, "release_complete": False,
               "scope": "recoverable owned Result and bounded no_gc", "commands": records,
+              "limits": {"wall_seconds": 120, "cpu_seconds_per_process": 60,
+                         "address_space_bytes_per_process": 2 * 1024**3,
+                         "retained_bytes_per_stream": CAP, "aggregate_cgroup_isolation": False},
               "fixture_sha256": {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(fixtures.glob("*.cg"))}}
     try:
         with tempfile.TemporaryDirectory(prefix="owned-result-", dir=os.environ["TMPDIR"]) as temporary:
@@ -41,22 +45,16 @@ def main():
 
             def run(label, command, rc=0, code=None, extra_env=None):
                 command = [str(c) for c in command]
-                stdout, stderr = work / "stdout", work / "stderr"
-                with stdout.open("wb") as out, stderr.open("wb") as err:
-                    child = subprocess.Popen(command, cwd=work, env={**os.environ, "CGX2_OWNED_EVIDENCE": "1", **(extra_env or {})},
-                                             stdout=out, stderr=err, start_new_session=True, preexec_fn=limits)
-                    try:
-                        actual = child.wait(timeout=120)
-                    except subprocess.TimeoutExpired:
-                        os.killpg(child.pid, signal.SIGKILL)
-                        child.wait()
-                        raise AssertionError(f"{label}: process exceeded 120 seconds")
-                assert stdout.stat().st_size <= CAP and stderr.stat().st_size <= CAP, label
-                out, err = stdout.read_text(), stderr.read_text()
-                passed = actual == rc and (code is None or code in err)
-                records.append({"label": label, "command": command, "exit": actual,
-                                "stdout": out, "stderr": err, "passed": passed})
-                assert passed, (label, actual, out, err)
+                result = supervise(command, cwd=work,
+                                   env={**os.environ, "CGX2_OWNED_EVIDENCE": "1", **(extra_env or {})},
+                                   limits=limits, cap=CAP, timeout=120)
+                record = {"label": label, "command": command, "expected_exit": rc,
+                          "expected_diagnostic": code, **command_evidence(result)}
+                actual, out, err = record["exit"], record["stdout"], record["stderr"]
+                passed = result["reason"] == "exit" and actual == rc and (code is None or code in err)
+                record["passed"] = passed
+                records.append(record)
+                assert passed, (label, result["reason"], actual, out, err)
                 return out, err
 
             def assertion(label, condition):

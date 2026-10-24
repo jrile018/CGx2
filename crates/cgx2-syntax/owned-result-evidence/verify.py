@@ -7,12 +7,11 @@ import os
 from pathlib import Path
 import re
 import resource
-import signal
-import subprocess
 import sys
-import time
 
 ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "owned-result-runner-evidence"))
+from supervisor import evidence, supervise
 
 
 def main():
@@ -21,7 +20,8 @@ def main():
     options = parser.parse_args()
     output = options.output_dir.resolve()
     output.mkdir(parents=True, exist_ok=True)
-    target, temporary = ROOT / "target/release-owned-result", ROOT / "target/tmp-owned-result"
+    target = Path(os.environ.get("CARGO_TARGET_DIR", ROOT / "target/release-owned-result")).resolve()
+    temporary = Path(os.environ.get("TMPDIR", ROOT / "target/tmp-owned-result")).resolve()
     target.mkdir(parents=True, exist_ok=True)
     temporary.mkdir(parents=True, exist_ok=True)
     env = {**os.environ, "RUSTUP_TOOLCHAIN": "1.98.1", "CARGO_BUILD_JOBS": "2", "CARGO_TARGET_DIR": str(target), "TMPDIR": str(temporary), "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"}
@@ -48,6 +48,9 @@ def main():
     ]
     checks = []
     report = {"schema_version": 1, "checkpoint_complete": False, "release_complete": False,
+              "limits": {"wall_seconds": 900, "cpu_seconds_per_process": 900,
+                         "address_space_bytes_per_process": 4 * 1024**3,
+                         "retained_combined_bytes": 8 * 1024**2, "aggregate_cgroup_isolation": False},
               "environment": {k: env[k] for k in ["RUSTUP_TOOLCHAIN", "CARGO_BUILD_JOBS", "CARGO_TARGET_DIR", "TMPDIR", "LIBRARY_PATH"]}, "checks": checks}
     def limits():
         resource.setrlimit(resource.RLIMIT_AS, (4 * 1024**3, 4 * 1024**3))
@@ -56,32 +59,22 @@ def main():
         command = [str(c) for c in command]
         path = output / (name + ".log")
         print("start " + name, flush=True)
-        started = time.monotonic()
-        with path.open("wb") as log:
-            child = subprocess.Popen(command, cwd=ROOT, env=env, stdout=log, stderr=subprocess.STDOUT, start_new_session=True, preexec_fn=limits)
-            while child.poll() is None:
-                if time.monotonic() - started > 900 or path.stat().st_size > 8 * 1024**2:
-                    os.killpg(child.pid, signal.SIGKILL)
-                    child.wait()
-                    break
-                try:
-                    child.wait(timeout=0.5)
-                except subprocess.TimeoutExpired:
-                    pass
-            rc = child.returncode
-        if path.stat().st_size > 8 * 1024 * 1024:
-            raise RuntimeError(f"{name} exceeded the 8 MiB log bound")
-        data = path.read_bytes()
-        record = {"name": name, "command": command, "exit": rc, "log": path.name,
-                  "log_sha256": hashlib.sha256(data).hexdigest(), "duration_seconds": round(time.monotonic() - started, 3)}
+        result = supervise(command, cwd=ROOT, env=env, limits=limits,
+                           cap=8 * 1024**2, timeout=900, merged=True)
+        data = result["stdout"]
+        path.write_bytes(data)
+        rc = result["exit"]
+        record = {"name": name, "command": command, "log": path.name,
+                  "log_sha256": hashlib.sha256(data).hexdigest(),
+                  **evidence(result, include_output=False)}
         if name == "workspace-tests":
             summaries = re.findall(rb"test result: (\w+)\. (\d+) passed; (\d+) failed; (\d+) ignored", data)
             record["suites"] = len(summaries)
             record.update({k: sum(int(s[i]) for s in summaries) for k, i in [("passed", 1), ("failed", 2), ("ignored", 3)]})
         checks.append(record)
         (output / "verification.json").write_text(json.dumps(report, indent=2) + "\n")
-        print(f"finish {name}: exit {rc}", flush=True)
-    return int(any(c["exit"] != 0 for c in checks))
+        print(f"finish {name}: exit {rc}; reason {result['reason']}", flush=True)
+    return int(any(c["exit"] != 0 or c["reason"] != "exit" for c in checks))
 
 
 if __name__ == "__main__":

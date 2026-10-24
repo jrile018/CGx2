@@ -1,0 +1,13 @@
+[
+  {
+    "command": [
+      "git",
+      "diff",
+      "--cached",
+      "--check"
+    ],
+    "exit": 2,
+    "diagnostic": "crates/cgx2-syntax/owned-result-runner-evidence/results/syntax-tests.log:113: new blank line at EOF.",
+    "resolution": "Preserve exact raw log bytes using lossless gzip, then repeat validation and final staged diff check."
+  }
+]
