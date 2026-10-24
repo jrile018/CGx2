@@ -1,0 +1,38 @@
+{
+  "argv": [
+    "python3",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/export.py",
+    "--scratch-dir",
+    "target/tmp-ordinary-runtime-roots",
+    "--outside-root",
+    "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-b9bf-76c3-8096-5a9f6fbac892"
+  ],
+  "cwd": "/home/john-riley/.codex/worktrees/c0c1/lang",
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_INCREMENTAL": "0",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/c0c1/lang/target/release-ordinary-runtime-roots",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/c0c1/lang/target/tmp-ordinary-runtime-roots",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "limits": {
+    "wall_seconds": 1200,
+    "cpu_seconds_per_process": 2400,
+    "address_bytes_per_process": 8589934592,
+    "file_bytes": 536870912,
+    "retained_bytes_per_stream": 131072
+  },
+  "exit": 0,
+  "reason": "exit",
+  "signal": null,
+  "overflow_stream": null,
+  "duration_seconds": 1.269,
+  "stdout_bytes": 147,
+  "stdout_sha256": "5fa590d5ed86d22b2037643d53582b062f80932fdaf79b6d0b876850a528000e",
+  "stdout": "{\"exported_files\": 144, \"product\": {\"passed\": 136, \"failed\": 0}, \"parity\": {\"passed\": 80, \"failed\": 0}, \"standalone\": {\"passed\": 22, \"failed\": 0}}\n",
+  "stderr_bytes": 0,
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr": ""
+}

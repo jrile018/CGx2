@@ -1,0 +1,43 @@
+{
+  "argv": [
+    "cargo",
+    "test",
+    "-p",
+    "cgx2-sema",
+    "--test",
+    "ordinary_roots_repair",
+    "--all-features",
+    "--offline",
+    "--locked",
+    "--",
+    "--nocapture"
+  ],
+  "cwd": "/home/john-riley/.codex/worktrees/c0c1/lang",
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_INCREMENTAL": "0",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/c0c1/lang/target/release-ordinary-runtime-roots",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/c0c1/lang/target/tmp-ordinary-runtime-roots",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "limits": {
+    "wall_seconds": 1200,
+    "cpu_seconds_per_process": 900,
+    "address_bytes_per_process": 8589934592,
+    "file_bytes": 536870912,
+    "retained_bytes_per_stream": 131072
+  },
+  "exit": 101,
+  "reason": "exit",
+  "signal": null,
+  "overflow_stream": null,
+  "duration_seconds": 3.032,
+  "stdout_bytes": 841,
+  "stdout_sha256": "85c5e5672ce0a9b228dadb3d059496aa8374f6042b027eea68f39dfb1a4475d0",
+  "stdout": "\nrunning 5 tests\ntest region_local_graph_still_cannot_escape_through_outer_assignment ... ok\ntest shipped_outer_assignment_repro_releases_the_actual_outer_registration ... FAILED\ntest repeated_outer_heap_and_scalar_assignments_survive_nested_regions_and_guards ... FAILED\ntest outer_assignments_clean_up_on_return_and_primary_error ... FAILED\ntest copy_publication_is_counted_exactly_once_on_success_and_not_on_failure ... FAILED\n\nfailures:\n\nfailures:\n    copy_publication_is_counted_exactly_once_on_success_and_not_on_failure\n    outer_assignments_clean_up_on_return_and_primary_error\n    repeated_outer_heap_and_scalar_assignments_survive_nested_regions_and_guards\n    shipped_outer_assignment_repro_releases_the_actual_outer_registration\n\ntest result: FAILED. 1 passed; 4 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n",
+  "stderr_bytes": 2107,
+  "stderr_sha256": "869811c2d294661df4807fe6aa74a453825f876acaede3f0508e6e7230729b93",
+  "stderr": "   Compiling version_check v0.9.5\n   Compiling typenum v1.20.1\n   Compiling generic-array v0.14.7\n   Compiling cgx2-syntax v0.1.0 (/home/john-riley/.codex/worktrees/c0c1/lang/crates/cgx2-syntax)\n   Compiling crypto-common v0.1.7\n   Compiling block-buffer v0.10.4\n   Compiling digest v0.10.7\n   Compiling cfg-if v1.0.5\n   Compiling cpufeatures v0.2.17\n   Compiling sha2 v0.10.9\n   Compiling cgx2-ownership v0.1.0 (/home/john-riley/.codex/worktrees/c0c1/lang/crates/cgx2-ownership)\n   Compiling cgx2-sema v0.1.0 (/home/john-riley/.codex/worktrees/c0c1/lang/crates/cgx2-sema)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.01s\n     Running tests/ordinary_roots_repair.rs (target/release-ordinary-runtime-roots/debug/deps/ordinary_roots_repair-8878ff9e4967f665)\n\nthread 'shipped_outer_assignment_repro_releases_the_actual_outer_registration' (213) panicked at crates/cgx2-sema/tests/ordinary_roots_repair.rs:6:33:\ncalled `Result::unwrap()` on an `Err` value: Failure { code: \"CGR091\", message: \"managed memory invariant: NotRooted\", loc: Loc { start: 0, end: 250 }, function: Some(2) }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n\nthread 'repeated_outer_heap_and_scalar_assignments_survive_nested_regions_and_guards' (212) panicked at crates/cgx2-sema/tests/ordinary_roots_repair.rs:6:33:\ncalled `Result::unwrap()` on an `Err` value: Failure { code: \"CGR091\", message: \"managed memory invariant: NotRooted\", loc: Loc { start: 0, end: 820 }, function: Some(4) }\n\nthread 'outer_assignments_clean_up_on_return_and_primary_error' (210) panicked at crates/cgx2-sema/tests/ordinary_roots_repair.rs:6:33:\ncalled `Result::unwrap()` on an `Err` value: Failure { code: \"CGR091\", message: \"managed memory invariant: NotRooted\", loc: Loc { start: 0, end: 819 }, function: Some(4) }\n\nthread 'copy_publication_is_counted_exactly_once_on_success_and_not_on_failure' (209) panicked at crates/cgx2-sema/tests/ordinary_roots_repair.rs:8:5:\nassertion `left == right` failed\n  left: 25\n right: 26\nerror: test failed, to rerun pass `-p cgx2-sema --test ordinary_roots_repair`\n"
+}

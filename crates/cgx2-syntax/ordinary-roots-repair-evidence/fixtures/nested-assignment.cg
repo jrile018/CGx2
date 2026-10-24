@@ -1,0 +1,23 @@
+fn main() -> i64 effects(ManagedAlloc, Mutate):
+    let mut xs = [1]
+    let mut total = 0
+    match memory.try_region(mode: memory.Mode.Manual, limit: 16384):
+        Result.Ok(outer):
+            xs = [2, 3]
+            total = length(xs)
+            match memory.try_no_gc(budget: 16384):
+                Result.Ok(guard):
+                    match memory.try_region(mode: memory.Mode.Manual, limit: 16384):
+                        Result.Ok(inner):
+                            xs = [4, 5, 6]
+                            xs = [7, 8]
+                            total = 42
+                            0
+                        Result.Err(error):
+                            -3
+                Result.Err(error):
+                    -2
+            0
+        Result.Err(error):
+            -1
+    total + length(xs) - 2

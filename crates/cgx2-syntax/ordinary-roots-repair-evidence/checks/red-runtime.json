@@ -1,0 +1,43 @@
+{
+  "argv": [
+    "cargo",
+    "test",
+    "-p",
+    "cgx2-runtime",
+    "--test",
+    "ordinary_roots_repair",
+    "--all-features",
+    "--offline",
+    "--locked",
+    "--",
+    "--nocapture"
+  ],
+  "cwd": "/home/john-riley/.codex/worktrees/c0c1/lang",
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_INCREMENTAL": "0",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/c0c1/lang/target/release-ordinary-runtime-roots",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/c0c1/lang/target/tmp-ordinary-runtime-roots",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "limits": {
+    "wall_seconds": 1200,
+    "cpu_seconds_per_process": 900,
+    "address_bytes_per_process": 8589934592,
+    "file_bytes": 536870912,
+    "retained_bytes_per_stream": 131072
+  },
+  "exit": 101,
+  "reason": "exit",
+  "signal": null,
+  "overflow_stream": null,
+  "duration_seconds": 0.727,
+  "stdout_bytes": 0,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout": "",
+  "stderr_bytes": 869,
+  "stderr_sha256": "b8e713749ca7d1c7c6369f7d2e52697de134fb61a7c7e7c2ea49dd9ba45b87ef",
+  "stderr": "   Compiling cgx2-runtime v0.1.0 (/home/john-riley/.codex/worktrees/c0c1/lang/crates/cgx2-runtime)\nerror[E0603]: module `graph` is private\n   --> crates/cgx2-runtime/tests/ordinary_roots_repair.rs:110:57\n    |\n110 | ...   assert_eq!(error, cgx2_runtime::graph::GraphError::Memory(cgx2_runtime::MemoryError::Allocation(cgx2_runtime::AllocationError...\n    |                                       ^^^^^              ------ tuple variant `Memory` is not publicly re-exported\n    |                                       |\n    |                                       private module\n    |\nnote: the module `graph` is defined here\n   --> crates/cgx2-runtime/src/lib.rs:6:1\n    |\n  6 | mod graph;\n    | ^^^^^^^^^\n\nFor more information about this error, try `rustc --explain E0603`.\nerror: could not compile `cgx2-runtime` (test \"ordinary_roots_repair\") due to 1 previous error\n"
+}

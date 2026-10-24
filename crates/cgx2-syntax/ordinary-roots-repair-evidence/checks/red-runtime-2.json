@@ -1,0 +1,43 @@
+{
+  "argv": [
+    "cargo",
+    "test",
+    "-p",
+    "cgx2-runtime",
+    "--test",
+    "ordinary_roots_repair",
+    "--all-features",
+    "--offline",
+    "--locked",
+    "--",
+    "--nocapture"
+  ],
+  "cwd": "/home/john-riley/.codex/worktrees/c0c1/lang",
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_INCREMENTAL": "0",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/c0c1/lang/target/release-ordinary-runtime-roots",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/c0c1/lang/target/tmp-ordinary-runtime-roots",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "limits": {
+    "wall_seconds": 1200,
+    "cpu_seconds_per_process": 900,
+    "address_bytes_per_process": 8589934592,
+    "file_bytes": 536870912,
+    "retained_bytes_per_stream": 131072
+  },
+  "exit": 101,
+  "reason": "exit",
+  "signal": null,
+  "overflow_stream": null,
+  "duration_seconds": 0.107,
+  "stdout_bytes": 1053,
+  "stdout_sha256": "fa3ba714b61a67c615cdf53b1cbd3d2caf45a23d3ab305719ca2229eb017000b",
+  "stdout": "\nrunning 3 tests\ntest failed_destination_and_guard_budget_preserve_unrooted_source_and_census ... ok\ntest unrooted_input_survives_manual_auto_same_and_different_region_copy ... FAILED\ncopy-faults mode=Manual same=false failures=12 sites={\"Existing(ObjectReferences)\", \"Existing(ObjectPayload)\", \"ScopedRoots\", \"Existing(SlotTable)\", \"Existing(OwnedBytes)\"}\ncopy-faults mode=Manual same=true failures=11 sites={\"Existing(ObjectPayload)\", \"Existing(ObjectReferences)\", \"Existing(OwnedBytes)\", \"ScopedRoots\"}\ncopy-faults mode=Auto { trigger_bytes: 1 } same=false failures=12 sites={\"Existing(ObjectReferences)\", \"Existing(OwnedBytes)\", \"Existing(ObjectPayload)\", \"Existing(SlotTable)\", \"ScopedRoots\"}\ntest every_copy_reserve_failure_preserves_source_and_rolls_back_destination ... FAILED\n\nfailures:\n\nfailures:\n    every_copy_reserve_failure_preserves_source_and_rolls_back_destination\n    unrooted_input_survives_manual_auto_same_and_different_region_copy\n\ntest result: FAILED. 1 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+  "stderr_bytes": 891,
+  "stderr_sha256": "a271b049639028912fc05ba294af5fb35a5726eca7401ffbcd41574f7663aab9",
+  "stderr": "   Compiling cgx2-runtime v0.1.0 (/home/john-riley/.codex/worktrees/c0c1/lang/crates/cgx2-runtime)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running tests/ordinary_roots_repair.rs (target/release-ordinary-runtime-roots/debug/deps/ordinary_roots_repair-41b516600dc99b85)\n\nthread 'unrooted_input_survives_manual_auto_same_and_different_region_copy' (44) panicked at crates/cgx2-runtime/tests/ordinary_roots_repair.rs:20:41:\ncalled `Result::unwrap()` on an `Err` value: InvalidHandle\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n\nthread 'every_copy_reserve_failure_preserves_source_and_rolls_back_destination' (42) panicked at crates/cgx2-runtime/tests/ordinary_roots_repair.rs:20:41:\ncalled `Result::unwrap()` on an `Err` value: InvalidHandle\nerror: test failed, to rerun pass `-p cgx2-runtime --test ordinary_roots_repair`\n"
+}

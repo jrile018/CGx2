@@ -1,0 +1,45 @@
+{
+  "argv": [
+    "cargo",
+    "test",
+    "-p",
+    "cgx2-runtime",
+    "-p",
+    "cgx2-sema",
+    "--test",
+    "ordinary_roots_repair",
+    "--all-features",
+    "--offline",
+    "--locked",
+    "--",
+    "--nocapture"
+  ],
+  "cwd": "/home/john-riley/.codex/worktrees/c0c1/lang",
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_INCREMENTAL": "0",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/c0c1/lang/target/release-ordinary-runtime-roots",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/c0c1/lang/target/tmp-ordinary-runtime-roots",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "limits": {
+    "wall_seconds": 1200,
+    "cpu_seconds_per_process": 900,
+    "address_bytes_per_process": 8589934592,
+    "file_bytes": 536870912,
+    "retained_bytes_per_stream": 131072
+  },
+  "exit": 0,
+  "reason": "exit",
+  "signal": null,
+  "overflow_stream": null,
+  "duration_seconds": 0.13,
+  "stdout_bytes": 1630,
+  "stdout_sha256": "7f3d790d8ef226e2979e9a92d97a4b28887c345b9b27f695dcee1ce93df169a6",
+  "stdout": "\nrunning 3 tests\ntest failed_destination_and_guard_budget_preserve_unrooted_source_and_census ... ok\ntest unrooted_input_survives_manual_auto_same_and_different_region_copy ... ok\ncopy-faults mode=Manual same=false failures=14 sites={\"ScopedRoots\", \"Existing(ObjectPayload)\", \"Existing(OwnedBytes)\", \"Existing(ObjectReferences)\", \"Existing(SlotTable)\"}\ncopy-faults mode=Manual same=true failures=13 sites={\"Existing(ObjectReferences)\", \"ScopedRoots\", \"Existing(OwnedBytes)\", \"Existing(ObjectPayload)\"}\ncopy-faults mode=Auto { trigger_bytes: 1 } same=false failures=14 sites={\"Existing(ObjectPayload)\", \"ScopedRoots\", \"Existing(OwnedBytes)\", \"Existing(ObjectReferences)\", \"Existing(SlotTable)\"}\ncopy-faults mode=Auto { trigger_bytes: 1 } same=true failures=13 sites={\"Existing(ObjectPayload)\", \"Existing(ObjectReferences)\", \"Existing(OwnedBytes)\", \"ScopedRoots\"}\ntest every_copy_reserve_failure_preserves_source_and_rolls_back_destination ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 6 tests\ntest region_local_graph_still_cannot_escape_through_outer_assignment ... ok\ntest shipped_outer_assignment_repro_releases_the_actual_outer_registration ... ok\ntest repeated_outer_heap_and_scalar_assignments_survive_nested_regions_and_guards ... ok\ntest outer_assignments_clean_up_on_return_and_primary_error ... ok\ntest source_copy_and_assignment_reserve_failures_keep_exact_root_deltas ... ok\ntest copy_publication_is_counted_exactly_once_on_success_and_not_on_failure ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n",
+  "stderr_bytes": 533,
+  "stderr_sha256": "1b79efbcc96d8a02929f20e6dbd2ee6f1445a6656698fe608ebcb0b1cce9d006",
+  "stderr": "   Compiling cgx2-runtime v0.1.0 (/home/john-riley/.codex/worktrees/c0c1/lang/crates/cgx2-runtime)\n   Compiling cgx2-sema v0.1.0 (/home/john-riley/.codex/worktrees/c0c1/lang/crates/cgx2-sema)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running tests/ordinary_roots_repair.rs (target/release-ordinary-runtime-roots/debug/deps/ordinary_roots_repair-41b516600dc99b85)\n     Running tests/ordinary_roots_repair.rs (target/release-ordinary-runtime-roots/debug/deps/ordinary_roots_repair-8878ff9e4967f665)\n"
+}
