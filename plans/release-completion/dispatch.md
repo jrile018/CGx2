@@ -120,3 +120,13 @@ Reviewed base c110fd5f9ae140aa985188ca1ab526f38e15a7ca. Chat 01a16ba1-fa9a-7613-
 ## Memory delivery reviewed incomplete; three bounded lanes ready
 
 74cfa2b staged as6467575. 1157 coordinator workspace tests and99 graph product checks pass, but native guard budgeting and source report provenance regressions reproduced. Ordinary-function ownership/managed storage/recoverable transfers remain missing. See s2b-memory-review/README.md. Two disjoint legacy repairs and one ordinary-owned source slice are prepared; no proposed interface consumer dispatch. Actual creation IDs/status follow.
+
+## Three memory follow-up chats running
+
+Common reviewed repair base9fcefbbb201f1f73f387f43672bc9b4f9d23eeb7. All three worktree HEADs match; read_thread and compact wait_threads confirm active work. list_threads omitted agent-created chats; read-only local metadata resolved exact worktrees, then app reads verified identity. Queued IDs/cursors preserved in thread-state.json; no duplicate chats. Memory checkpoint remains incomplete.
+
+| Lane | Chat | Worktree | Status |
+| --- | --- | --- | --- |
+| ordinary-owned | 01a16bc8-90ff-7621-9e07-56cd23e25524 | /home/john-riley/.codex/worktrees/bd1f/lang | running |
+| report-layout | 01a16bc8-7d97-7cc3-9f03-be20ce7186d7 | /home/john-riley/.codex/worktrees/b705/lang | running |
+| native-guards | 01a16bc8-738b-70a0-8606-4bee2ed891f0 | /home/john-riley/.codex/worktrees/58d1/lang | running |

@@ -331,5 +331,40 @@
       "commit": "74d1116b36a80a44d3d97e3d5a331a1c3026fe94",
       "integrated_commit": "fb7649e55484fc553eccdbb716061a3435a35423"
     }
+  ],
+  "s2b_memory_followups": [
+    {
+      "lane": "ordinary-owned",
+      "title": "CGx2 ordinary owned function execution",
+      "threadId": "01a16bc8-90ff-7621-9e07-56cd23e25524",
+      "hostId": "local",
+      "worktree": "/home/john-riley/.codex/worktrees/bd1f/lang",
+      "base": "9fcefbbb201f1f73f387f43672bc9b4f9d23eeb7",
+      "status": "running",
+      "clientThreadId": "client-new-thread:d3ea39e6-c9fd-4b0d-9757-72603e291ca0",
+      "afterCursor": "4b2d88ff-7fb1-4074-bcbe-85c6a2648334:1"
+    },
+    {
+      "lane": "report-layout",
+      "title": "CGx2 memory report provenance repair",
+      "threadId": "01a16bc8-7d97-7cc3-9f03-be20ce7186d7",
+      "hostId": "local",
+      "worktree": "/home/john-riley/.codex/worktrees/b705/lang",
+      "base": "9fcefbbb201f1f73f387f43672bc9b4f9d23eeb7",
+      "status": "running",
+      "clientThreadId": "client-new-thread:2c95eed6-86c9-421c-ac48-efcb68f64eba",
+      "afterCursor": "c61bb7dc-2189-4221-9b1c-215b2c9d775e:1"
+    },
+    {
+      "lane": "native-guards",
+      "title": "CGx2 memory native guard repair",
+      "threadId": "01a16bc8-738b-70a0-8606-4bee2ed891f0",
+      "hostId": "local",
+      "worktree": "/home/john-riley/.codex/worktrees/58d1/lang",
+      "base": "9fcefbbb201f1f73f387f43672bc9b4f9d23eeb7",
+      "status": "running",
+      "clientThreadId": "client-new-thread:ebb8f15c-eeb5-4658-90f9-286521dce0f6",
+      "afterCursor": "231394aa-582e-41a6-bf50-98a0e2292794:1"
+    }
   ]
 }
