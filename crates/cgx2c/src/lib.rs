@@ -144,7 +144,7 @@ pub fn run(args: Vec<OsString>) -> Result<(), CliError> {
     })?;
     let ordinary = if cgx2_syntax::ordinary_owned_span(&module).is_some() {
         Some(
-            cgx2_sema::ordinary_owned::compile_source(&source).map_err(|errors| {
+            cgx2_sema::ordinary_owned::compile_source_v2(&source).map_err(|errors| {
                 let d = &errors[0];
                 source_error(
                     &options.source,
@@ -190,7 +190,7 @@ pub fn run(args: Vec<OsString>) -> Result<(), CliError> {
                 s.end,
             ));
         }
-        cgx2_emit_rust::emit_owned_rust(program).map_err(|errors| {
+        cgx2_emit_rust::emit_owned_result_rust(program).map_err(|errors| {
             let d = &errors[0];
             source_error(
                 &options.source,

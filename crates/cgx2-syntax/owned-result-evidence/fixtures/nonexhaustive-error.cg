@@ -1,0 +1,11 @@
+# π
+record R:
+    x: i64
+fn main() -> i64:
+    match try_owned(R(x: 1)):
+        Result.Ok(p):
+            return p.x
+        Result.Err(e):
+            match e:
+                AllocationError.BudgetExceeded():
+                    return 0

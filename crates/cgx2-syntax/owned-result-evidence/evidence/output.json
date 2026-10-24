@@ -1,0 +1,529 @@
+{
+  "base": "b595724e1b086c604220cc5b165c141e65a0531f",
+  "fixture_sha256": "f9c42ee3032cbb862f011d52b6d5188908683d8daadd9084d9a4a0ef3b300004",
+  "limits": {
+    "execution_address_space_mib": 512,
+    "execution_cpu_seconds": 15,
+    "execution_wall_seconds": 20,
+    "build_address_space_mib": 4096,
+    "build_cpu_seconds": 60,
+    "build_wall_seconds": 120,
+    "file_bytes": 16777216
+  },
+  "toolchain": "1.98.1",
+  "release_only": false,
+  "checks": [
+    {
+      "label": "reviewed-package:interpreter",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-cli/tests/fixtures/output-bound/package"
+      ],
+      "status": "passed",
+      "independent_target": false,
+      "returncode": 1,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 58,
+      "stderr": "CGR010: src/main.cg:0..7893: output exceeds 1048576 bytes\n"
+    },
+    {
+      "label": "reviewed-package:build-False",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-cli/tests/fixtures/output-bound/package",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/reviewed-package-debug",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/rustc-bounded-linker"
+      ],
+      "status": "passed",
+      "independent_target": true,
+      "returncode": 0,
+      "stdout_bytes": 558,
+      "stdout_sha256": "58c07d6b50e3e447d4d744bf8004b8db1750e5d9f4de2090d70d83251f297ce6",
+      "stderr_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "label": "reviewed-package:native-False",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/reviewed-package-debug"
+      ],
+      "status": "passed",
+      "independent_target": true,
+      "returncode": 1,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 30,
+      "stderr": "CGR010: output limit exceeded\n"
+    },
+    {
+      "label": "reviewed-package:build-True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-cli/tests/fixtures/output-bound/package",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/reviewed-package-release",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/rustc-bounded-linker",
+        "--release"
+      ],
+      "status": "passed",
+      "independent_target": true,
+      "returncode": 0,
+      "stdout_bytes": 562,
+      "stdout_sha256": "1a99729eba25a8f29f6a407420cf8f1bd1d7530493092dccc3e14a2a2d89e85a",
+      "stderr_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "label": "reviewed-package:native-True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/reviewed-package-release"
+      ],
+      "status": "passed",
+      "independent_target": true,
+      "returncode": 1,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 30,
+      "stderr": "CGR010: output limit exceeded\n"
+    },
+    {
+      "label": "reviewed-package:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-cli/tests/fixtures/output-bound/package",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/reviewed-package.pyz"
+      ],
+      "status": "passed",
+      "independent_target": true,
+      "returncode": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "label": "reviewed-package:python",
+      "command": [
+        "python3",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/reviewed-package.pyz"
+      ],
+      "status": "passed",
+      "independent_target": true,
+      "returncode": 1,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 38,
+      "stderr": "CGR010 at 0..0: output limit exceeded\n"
+    },
+    {
+      "label": "reviewed-standalone:interpreter",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/reviewed.cg"
+      ],
+      "status": "passed",
+      "independent_target": false,
+      "returncode": 1,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 155,
+      "stderr": "CGR010: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/reviewed.cg:0..7877: output exceeds 1048576 bytes\n"
+    },
+    {
+      "label": "reviewed-standalone:build-False",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/reviewed.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/reviewed-standalone-debug",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/rustc-bounded-linker"
+      ],
+      "status": "passed",
+      "independent_target": true,
+      "returncode": 0,
+      "stdout_bytes": 467,
+      "stdout_sha256": "b6e8ab0347759e05ccc507cb9e7b39e323709668fffa2d0bfa634aa05f263ccb",
+      "stderr_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "label": "reviewed-standalone:native-False",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/reviewed-standalone-debug"
+      ],
+      "status": "passed",
+      "independent_target": true,
+      "returncode": 1,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 30,
+      "stderr": "CGR010: output limit exceeded\n"
+    },
+    {
+      "label": "reviewed-standalone:build-True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/reviewed.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/reviewed-standalone-release",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/rustc-bounded-linker",
+        "--release"
+      ],
+      "status": "passed",
+      "independent_target": true,
+      "returncode": 0,
+      "stdout_bytes": 471,
+      "stdout_sha256": "4b3ead4ff2e23c1937655f3afa7516cfb3e3547600b26d22232d9df3af3cfa9a",
+      "stderr_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "label": "reviewed-standalone:native-True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/reviewed-standalone-release"
+      ],
+      "status": "passed",
+      "independent_target": true,
+      "returncode": 1,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 30,
+      "stderr": "CGR010: output limit exceeded\n"
+    },
+    {
+      "label": "reviewed-standalone:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/reviewed.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/reviewed-standalone.py"
+      ],
+      "status": "passed",
+      "independent_target": true,
+      "returncode": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "label": "reviewed-standalone:python",
+      "command": [
+        "python3",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/reviewed-standalone.py"
+      ],
+      "status": "passed",
+      "independent_target": true,
+      "returncode": 1,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 38,
+      "stderr": "CGR010 at 0..0: output limit exceeded\n"
+    },
+    {
+      "label": "standalone-1048575:interpreter",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/standalone-1048575.cg"
+      ],
+      "status": "passed",
+      "independent_target": false,
+      "returncode": 0,
+      "stdout_bytes": 1048576,
+      "stdout_sha256": "16d1aae3150a499f5f45034677c0f80f36a79cf5abfe5e53a8d60d4011f18d18",
+      "stderr_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "label": "standalone-1048576:interpreter",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/standalone-1048576.cg"
+      ],
+      "status": "passed",
+      "independent_target": false,
+      "returncode": 0,
+      "stdout_bytes": 1048577,
+      "stdout_sha256": "b6134f931a5b14cb8f335a8d8c10f993893ae41173e115613c5b67560b727e5b",
+      "stderr_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "label": "standalone-1048577:interpreter",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/standalone-1048577.cg"
+      ],
+      "status": "passed",
+      "independent_target": false,
+      "returncode": 1,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 166,
+      "stderr": "CGR010: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/standalone-1048577.cg:0..82488: output exceeds 1048576 bytes\n"
+    },
+    {
+      "label": "package-1048575:interpreter",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/package-1048575"
+      ],
+      "status": "passed",
+      "independent_target": false,
+      "returncode": 0,
+      "stdout_bytes": 1048576,
+      "stdout_sha256": "af206d9fc28b4a1e6eecbc3bf9ee63df98f3a0b4b914ae8ca1d2058a4fb1c735",
+      "stderr_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "label": "package-1048576:interpreter",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/package-1048576"
+      ],
+      "status": "passed",
+      "independent_target": false,
+      "returncode": 0,
+      "stdout_bytes": 1048577,
+      "stdout_sha256": "b4b515026858a2304d1328b95e4129e3679a4cd6786175fb4078048b367caa83",
+      "stderr_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "label": "package-1048577:interpreter",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/package-1048577"
+      ],
+      "status": "passed",
+      "independent_target": false,
+      "returncode": 1,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 59,
+      "stderr": "CGR010: src/main.cg:0..68095: output exceeds 1048576 bytes\n"
+    },
+    {
+      "label": "unicode-nested:interpreter",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/unicode-nested.cg"
+      ],
+      "status": "passed",
+      "independent_target": false,
+      "returncode": 0,
+      "stdout_bytes": 45,
+      "stdout_sha256": "e2d736efbb2567b8f0638111f86986ea14f38ecc196559b8e0780e4e95a8e990",
+      "stderr_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "label": "unicode-nested:build-False",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/unicode-nested.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/unicode-nested-False",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/rustc-bounded-linker"
+      ],
+      "status": "passed",
+      "independent_target": true,
+      "returncode": 0,
+      "stdout_bytes": 462,
+      "stdout_sha256": "424684541aac26a9c881aea158fe84dd5360320e35a27726af063ea0f5d5d22b",
+      "stderr_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "label": "unicode-nested:native-False",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/unicode-nested-False"
+      ],
+      "status": "passed",
+      "independent_target": true,
+      "returncode": 0,
+      "stdout_bytes": 45,
+      "stdout_sha256": "e2d736efbb2567b8f0638111f86986ea14f38ecc196559b8e0780e4e95a8e990",
+      "stderr_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "label": "unicode-nested:build-True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/unicode-nested.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/unicode-nested-True",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/rustc-bounded-linker",
+        "--release"
+      ],
+      "status": "passed",
+      "independent_target": true,
+      "returncode": 0,
+      "stdout_bytes": 463,
+      "stdout_sha256": "d7e5dc58f572111e0637c9b5b5968a803ce1eb0539df897765144a12890e1c18",
+      "stderr_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "label": "unicode-nested:native-True",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/unicode-nested-True"
+      ],
+      "status": "passed",
+      "independent_target": true,
+      "returncode": 0,
+      "stdout_bytes": 45,
+      "stdout_sha256": "e2d736efbb2567b8f0638111f86986ea14f38ecc196559b8e0780e4e95a8e990",
+      "stderr_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "label": "unicode-nested:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/unicode-nested.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/unicode-nested.py"
+      ],
+      "status": "passed",
+      "independent_target": true,
+      "returncode": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "label": "unicode-nested:python",
+      "command": [
+        "python3",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/unicode-nested.py"
+      ],
+      "status": "passed",
+      "independent_target": true,
+      "returncode": 0,
+      "stdout_bytes": 45,
+      "stdout_sha256": "e2d736efbb2567b8f0638111f86986ea14f38ecc196559b8e0780e4e95a8e990",
+      "stderr_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "label": "qualified-standalone-admission",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-cli/tests/fixtures/output-bound/package/src/main.cg"
+      ],
+      "status": "passed",
+      "independent_target": true,
+      "returncode": 1,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 154,
+      "stderr": "CGR010: /home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-cli/tests/fixtures/output-bound/package/src/main.cg:0..7893: output exceeds 1048576 bytes\n"
+    },
+    {
+      "label": "rejected-native",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/bad.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/preserve-native",
+        "--force"
+      ],
+      "status": "passed",
+      "independent_target": false,
+      "returncode": 1,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 145,
+      "stderr": "CGT003: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/bad.cg:22..26: expected i64, found Bool\n",
+      "artifact_preserved": true
+    },
+    {
+      "label": "rejected-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/bad.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/preserve-rust",
+        "--force"
+      ],
+      "status": "passed",
+      "independent_target": false,
+      "returncode": 1,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 145,
+      "stderr": "CGT003: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/bad.cg:22..26: expected i64, found Bool\n",
+      "artifact_preserved": true
+    },
+    {
+      "label": "rejected-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/bad.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/preserve-python",
+        "--force"
+      ],
+      "status": "passed",
+      "independent_target": false,
+      "returncode": 1,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 145,
+      "stderr": "CGT003: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-output-product-1cyc86jq/bad.cg:22..26: expected i64, found Bool\n",
+      "artifact_preserved": true
+    }
+  ],
+  "native_compiler": {
+    "path": "/home/john-riley/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/bin/rustc",
+    "flags": [
+      "-Awarnings",
+      "-Clink-arg=-Wl,--threads=2"
+    ]
+  }
+}

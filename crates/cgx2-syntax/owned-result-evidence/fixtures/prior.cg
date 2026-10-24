@@ -1,0 +1,10 @@
+record R:
+    x: i64
+fn main() -> i64:
+    let prior = owned(R(x: 42))
+    no_gc(budget: 0):
+        match try_owned(R(x: 9)):
+            Result.Ok(p):
+                return p.x
+            Result.Err(e):
+                return prior.x

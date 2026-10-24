@@ -1,0 +1,12 @@
+# π
+record R:
+    x: i64
+fn main() -> i64:
+    let q = try_owned(R(x: 1))
+    match q:
+        Result.Ok(p):
+            0
+        Result.Err(e):
+            0
+    let second = q
+    0

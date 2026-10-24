@@ -1,0 +1,35 @@
+# π
+fn main() -> i64:
+    no_gc(budget: 1000000):
+        no_gc(budget: 1000000):
+            no_gc(budget: 1000000):
+                no_gc(budget: 1000000):
+                    no_gc(budget: 1000000):
+                        no_gc(budget: 1000000):
+                            no_gc(budget: 1000000):
+                                no_gc(budget: 1000000):
+                                    no_gc(budget: 1000000):
+                                        no_gc(budget: 1000000):
+                                            no_gc(budget: 1000000):
+                                                no_gc(budget: 1000000):
+                                                    no_gc(budget: 1000000):
+                                                        no_gc(budget: 1000000):
+                                                            no_gc(budget: 1000000):
+                                                                no_gc(budget: 1000000):
+                                                                    no_gc(budget: 1000000):
+                                                                        no_gc(budget: 1000000):
+                                                                            no_gc(budget: 1000000):
+                                                                                no_gc(budget: 1000000):
+                                                                                    no_gc(budget: 1000000):
+                                                                                        no_gc(budget: 1000000):
+                                                                                            no_gc(budget: 1000000):
+                                                                                                no_gc(budget: 1000000):
+                                                                                                    no_gc(budget: 1000000):
+                                                                                                        no_gc(budget: 1000000):
+                                                                                                            no_gc(budget: 1000000):
+                                                                                                                no_gc(budget: 1000000):
+                                                                                                                    no_gc(budget: 1000000):
+                                                                                                                        no_gc(budget: 1000000):
+                                                                                                                            no_gc(budget: 1000000):
+                                                                                                                                no_gc(budget: 1000000):
+                                                                                                                                    return 42

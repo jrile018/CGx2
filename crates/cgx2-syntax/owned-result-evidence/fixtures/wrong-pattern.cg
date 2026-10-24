@@ -1,0 +1,11 @@
+# π
+record R:
+    x: i64
+record S:
+    x: i64
+fn main() -> i64:
+    match try_owned(R(x: 1)):
+        Result<owned<S>, AllocationError>.Ok(p):
+            return 1
+        Result.Err(e):
+            return 0

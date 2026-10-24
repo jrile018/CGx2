@@ -1,0 +1,1065 @@
+{
+  "status": "passed",
+  "checkpoint_complete": false,
+  "scope": "explicit graph/payload source operations only",
+  "ordinary_ownership_lowering": "incomplete",
+  "ordinary_default_managed_values": "incomplete",
+  "source_recoverable_transfers": "incomplete",
+  "runtime_sha256": "5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910",
+  "source_sha256": {
+    "chunked-cycle": "a32f05994e209f92d10f09c2f353202d70a536adc26c7b29399baa94e8e3e1eb",
+    "initialized-object": "af7a7bc6531e56af78f3496e085f9a9a3d5448cc313ee57fb3a910009ebf5356",
+    "graph-no-gc": "94e7d7e5bcc53321726359ae6f914495d20259e1db10642eb6da6277345596ec",
+    "graph-budget-error": "cafa26961545e01319bfc99f7725c8a44caa3ed728d095c7f6d103cede575279",
+    "graph-byte-error": "350676184b3045f6a6518f9a3b8009da4beed97fbc40ff4047ddfc4406d1e3c5"
+  },
+  "source_cases": 5,
+  "rejected_source_cases": 6,
+  "passed": 99,
+  "checks": [
+    {
+      "label": "standalone authenticated runtime",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "--crate-name",
+        "cgx2_runtime",
+        "--crate-type",
+        "rlib",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/runtime/lib.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/libcgx2_runtime.rlib"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "chunked-cycle: check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/chunked-cycle.cg"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "chunked-cycle: interpreter",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/chunked-cycle.cg"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "chunked-cycle: source report",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "memory",
+        "report",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/chunked-cycle.cg",
+        "--format=json"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":0,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}},{\"region_id\":{\"session\":1,\"index\":1},\"is_open\":false,\"mode\":\"manual\",\"trigger_bytes\":null,\"limit_bytes\":8388608,\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":3703040,\"allocation_failures\":0,\"collection_count\":2,\"total_collected_bytes\":3703040,\"pause\":{\"sample_count\":2,\"total_ns\":114196133,\"min_ns\":73740,\"max_ns\":114122393,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":3703040,\"allocation_failures\":0,\"collection_count\":2,\"total_collected_bytes\":3703040}}\n",
+      "stderr": ""
+    },
+    {
+      "label": "chunked-cycle: source cleanup counters",
+      "passed": true
+    },
+    {
+      "label": "chunked-cycle: native debug build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/chunked-cycle.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/chunked-cycle-debug"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "cgx2c build metadata: source_sha256=a32f05994e209f92d10f09c2f353202d70a536adc26c7b29399baa94e8e3e1eb rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/chunked-cycle-debug\n",
+      "stderr": ""
+    },
+    {
+      "label": "chunked-cycle: native debug run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/chunked-cycle-debug"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "chunked-cycle: native debug report parity",
+      "passed": true
+    },
+    {
+      "label": "chunked-cycle: native release build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/chunked-cycle.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/chunked-cycle-release",
+        "--release"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "cgx2c build metadata: source_sha256=a32f05994e209f92d10f09c2f353202d70a536adc26c7b29399baa94e8e3e1eb rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/chunked-cycle-release\n",
+      "stderr": ""
+    },
+    {
+      "label": "chunked-cycle: native release run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/chunked-cycle-release"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "chunked-cycle: native release report parity",
+      "passed": true
+    },
+    {
+      "label": "chunked-cycle: emit rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/chunked-cycle.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/chunked-cycle.rs"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "chunked-cycle: standalone rust build",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/chunked-cycle.rs",
+        "--extern",
+        "cgx2_runtime=/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/libcgx2_runtime.rlib",
+        "-o",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/chunked-cycle-standalone"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": "warning: unused variable: `iterations`\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/chunked-cycle.rs:460:13\n    |\n460 |         let iterations = &mut iterations;\n    |             ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_iterations`\n    |\n    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default\n\nwarning: variants `Owned` and `Borrow` are never constructed\n --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/chunked-cycle.rs:7:34\n  |\n7 | enum Binding { Region(RegionId), Owned(OwnedBytes), Managed(Handle), Reference(Option<Handle>), Borrow(String) }\n  |      -------                     ^^^^^                                                          ^^^^^^\n  |      |\n  |      variants in this enum\n  |\n  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default\n\nwarning: variants `Bytes` and `Object` are never constructed\n  --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/chunked-cycle.rs:13:21\n   |\n13 | enum SourceLayout { Bytes, Object { slots: usize }, Graph }\n   |      ------------   ^^^^^  ^^^^^^\n   |      |\n   |      variants in this enum\n   |\n   = note: `SourceLayout` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis\n\nwarning: function `cleanup_scope` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/chunked-cycle.rs:105:4\n    |\n105 | fn cleanup_scope(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, outer: &HashSet<&'static str>, span: (usize,...\n    |    ^^^^^^^^^^^^^\n\nwarning: function `enter_iteration` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/chunked-cycle.rs:125:4\n    |\n125 | fn enter_iteration(iterations: &mut usize, span: (usize, usize)) -> Result<(), String> {\n    |    ^^^^^^^^^^^^^^^\n\nwarning: function `owned` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/chunked-cycle.rs:153:4\n    |\n153 | fn owned(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, size: usize, span: (usize, usize...\n    |    ^^^^^\n\nwarning: function `move_owned` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/chunked-cycle.rs:158:4\n    |\n158 | fn move_owned(bindings: &mut HashMap<&'static str, Binding>, name: &'static str, from: &'static str, span: (usize, usize)) -> Resul...\n    |    ^^^^^^^^^^\n\nwarning: function `promote` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/chunked-cycle.rs:166:4\n    |\n166 | fn promote(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, region_name: &'static str, fro...\n    |    ^^^^^^^\n\nwarning: function `copy_owned` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/chunked-cycle.rs:184:4\n    |\n184 | fn copy_owned(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, from: &'static str, span: (...\n    |    ^^^^^^^^^^\n\nwarning: function `alloc` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/chunked-cycle.rs:195:4\n    |\n195 | fn alloc(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, region_name: &'static str, size:...\n    |    ^^^^^\n\nwarning: function `alloc_object` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/chunked-cycle.rs:203:4\n    |\n203 | fn alloc_object(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, region_name: &'static str...\n    |    ^^^^^^^^^^^^\n\nwarning: function `set_reference` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/chunked-cycle.rs:217:4\n    |\n217 | fn set_reference(session: &mut Session, bindings: &HashMap<&'static str, Binding>, owner: &'static str, index: usize, target: Optio...\n    |    ^^^^^^^^^^^^^\n\nwarning: function `reference` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/chunked-cycle.rs:222:4\n    |\n222 | fn reference(session: &Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, owner: &'static str, index: usiz...\n    |    ^^^^^^^^^\n\nwarning: function `borrow` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/chunked-cycle.rs:236:4\n    |\n236 | fn borrow(bindings: &mut HashMap<&'static str, Binding>, name: &'static str, target: &'static str, span: (usize, usize)) -> Result<...\n    |    ^^^^^^\n\nwarning: function `use_value` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/chunked-cycle.rs:244:4\n    |\n244 | fn use_value(session: &Session, bindings: &HashMap<&'static str, Binding>, name: &'static str, span: (usize, usize)) -> Result<(), ...\n    |    ^^^^^^^^^\n\nwarning: function `end_borrow` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/chunked-cycle.rs:262:4\n    |\n262 | fn end_borrow(bindings: &mut HashMap<&'static str, Binding>, name: &'static str, span: (usize, usize)) -> Result<(), String> {\n    |    ^^^^^^^^^^\n\nwarning: 16 warnings emitted\n\n"
+    },
+    {
+      "label": "chunked-cycle: standalone rust run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/chunked-cycle-standalone"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "chunked-cycle: python rejection",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/chunked-cycle.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/chunked-cycle.py",
+        "--force"
+      ],
+      "returncode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGE001: /home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/chunked-cycle.cg:8..51: memory operations are unsupported by Python emission\n"
+    },
+    {
+      "label": "chunked-cycle: python artifact preservation",
+      "passed": true
+    },
+    {
+      "label": "initialized-object: check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/initialized-object.cg"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "initialized-object: interpreter",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/initialized-object.cg"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "initialized-object: source report",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "memory",
+        "report",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/initialized-object.cg",
+        "--format=json"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":0,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}},{\"region_id\":{\"session\":1,\"index\":1},\"is_open\":false,\"mode\":\"manual\",\"trigger_bytes\":null,\"limit_bytes\":1024,\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":66,\"allocation_failures\":0,\"collection_count\":1,\"total_collected_bytes\":66,\"pause\":{\"sample_count\":1,\"total_ns\":820,\"min_ns\":820,\"max_ns\":820,\"buckets\":[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}},{\"region_id\":{\"session\":1,\"index\":2},\"is_open\":false,\"mode\":\"manual\",\"trigger_bytes\":null,\"limit_bytes\":1024,\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":66,\"allocation_failures\":0,\"collection_count\":1,\"total_collected_bytes\":66,\"pause\":{\"sample_count\":1,\"total_ns\":111,\"min_ns\":111,\"max_ns\":111,\"buckets\":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":132,\"allocation_failures\":0,\"collection_count\":2,\"total_collected_bytes\":132}}\n",
+      "stderr": ""
+    },
+    {
+      "label": "initialized-object: source cleanup counters",
+      "passed": true
+    },
+    {
+      "label": "initialized-object: native debug build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/initialized-object.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object-debug"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "cgx2c build metadata: source_sha256=af7a7bc6531e56af78f3496e085f9a9a3d5448cc313ee57fb3a910009ebf5356 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object-debug\n",
+      "stderr": ""
+    },
+    {
+      "label": "initialized-object: native debug run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object-debug"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "initialized-object: native debug report parity",
+      "passed": true
+    },
+    {
+      "label": "initialized-object: native release build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/initialized-object.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object-release",
+        "--release"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "cgx2c build metadata: source_sha256=af7a7bc6531e56af78f3496e085f9a9a3d5448cc313ee57fb3a910009ebf5356 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object-release\n",
+      "stderr": ""
+    },
+    {
+      "label": "initialized-object: native release run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object-release"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "initialized-object: native release report parity",
+      "passed": true
+    },
+    {
+      "label": "initialized-object: emit rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/initialized-object.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object.rs"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "initialized-object: standalone rust build",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object.rs",
+        "--extern",
+        "cgx2_runtime=/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/libcgx2_runtime.rlib",
+        "-o",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object-standalone"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": "warning: unused variable: `iterations`\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object.rs:445:69\n    |\n445 | ...n, steps: &mut usize, iterations: &mut usize, call_span: (usize, usize)) -> Result<(), String> {\n    |                          ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_iterations`\n    |\n    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default\n\nwarning: variable does not need to be mutable\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object.rs:497:9\n    |\n497 |     let mut bindings: HashMap<&'static str, Binding> = HashMap::new();\n    |         ----^^^^^^^^\n    |         |\n    |         help: remove this `mut`\n    |\n    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default\n\nwarning: variable does not need to be mutable\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object.rs:532:9\n    |\n532 |     let mut bindings: HashMap<&'static str, Binding> = HashMap::new();\n    |         ----^^^^^^^^\n    |         |\n    |         help: remove this `mut`\n\nwarning: variants `Owned`, `Reference`, and `Borrow` are never constructed\n --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object.rs:7:34\n  |\n7 | enum Binding { Region(RegionId), Owned(OwnedBytes), Managed(Handle), Reference(Option<Handle>), Borrow(String) }\n  |      -------                     ^^^^^                               ^^^^^^^^^                  ^^^^^^\n  |      |\n  |      variants in this enum\n  |\n  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default\n\nwarning: variants `Bytes` and `Graph` are never constructed\n  --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object.rs:13:21\n   |\n13 | enum SourceLayout { Bytes, Object { slots: usize }, Graph }\n   |      ------------   ^^^^^                           ^^^^^\n   |      |\n   |      variants in this enum\n   |\n   = note: `SourceLayout` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis\n\nwarning: function `cleanup_scope` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object.rs:105:4\n    |\n105 | fn cleanup_scope(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, outer: &HashSet<&'static str>, span: (usize,...\n    |    ^^^^^^^^^^^^^\n\nwarning: function `enter_iteration` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object.rs:125:4\n    |\n125 | fn enter_iteration(iterations: &mut usize, span: (usize, usize)) -> Result<(), String> {\n    |    ^^^^^^^^^^^^^^^\n\nwarning: function `owned` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object.rs:153:4\n    |\n153 | fn owned(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, size: usize, span: (usize, usize...\n    |    ^^^^^\n\nwarning: function `move_owned` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object.rs:158:4\n    |\n158 | fn move_owned(bindings: &mut HashMap<&'static str, Binding>, name: &'static str, from: &'static str, span: (usize, usize)) -> Resul...\n    |    ^^^^^^^^^^\n\nwarning: function `promote` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object.rs:166:4\n    |\n166 | fn promote(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, region_name: &'static str, fro...\n    |    ^^^^^^^\n\nwarning: function `copy_owned` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object.rs:184:4\n    |\n184 | fn copy_owned(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, from: &'static str, span: (...\n    |    ^^^^^^^^^^\n\nwarning: function `alloc` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object.rs:195:4\n    |\n195 | fn alloc(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, region_name: &'static str, size:...\n    |    ^^^^^\n\nwarning: function `set_reference` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object.rs:217:4\n    |\n217 | fn set_reference(session: &mut Session, bindings: &HashMap<&'static str, Binding>, owner: &'static str, index: usize, target: Optio...\n    |    ^^^^^^^^^^^^^\n\nwarning: function `reference` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object.rs:222:4\n    |\n222 | fn reference(session: &Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, owner: &'static str, index: usiz...\n    |    ^^^^^^^^^\n\nwarning: function `use_reference` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object.rs:228:4\n    |\n228 | fn use_reference(session: &Session, bindings: &HashMap<&'static str, Binding>, name: &'static str, span: (usize, usize)) -> Result<...\n    |    ^^^^^^^^^^^^^\n\nwarning: function `borrow` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object.rs:236:4\n    |\n236 | fn borrow(bindings: &mut HashMap<&'static str, Binding>, name: &'static str, target: &'static str, span: (usize, usize)) -> Result<...\n    |    ^^^^^^\n\nwarning: function `use_value` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object.rs:244:4\n    |\n244 | fn use_value(session: &Session, bindings: &HashMap<&'static str, Binding>, name: &'static str, span: (usize, usize)) -> Result<(), ...\n    |    ^^^^^^^^^\n\nwarning: function `end_borrow` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object.rs:262:4\n    |\n262 | fn end_borrow(bindings: &mut HashMap<&'static str, Binding>, name: &'static str, span: (usize, usize)) -> Result<(), String> {\n    |    ^^^^^^^^^^\n\nwarning: function `alloc_graph` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object.rs:286:4\n    |\n286 | fn alloc_graph(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, region_name: &'static str,...\n    |    ^^^^^^^^^^^\n\nwarning: function `set_graph_reference` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object.rs:294:4\n    |\n294 | fn set_graph_reference(session: &mut Session, bindings: &HashMap<&'static str, Binding>, owner: &'static str, index: usize, target:...\n    |    ^^^^^^^^^^^^^^^^^^^\n\nwarning: function `graph_reference` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object.rs:299:4\n    |\n299 | fn graph_reference(session: &Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, owner: &'static str, index...\n    |    ^^^^^^^^^^^^^^^\n\nwarning: 21 warnings emitted\n\n"
+    },
+    {
+      "label": "initialized-object: standalone rust run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object-standalone"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "initialized-object: python rejection",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/initialized-object.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/initialized-object.py",
+        "--force"
+      ],
+      "returncode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGE001: /home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/initialized-object.cg:91..131: memory operations are unsupported by Python emission\n"
+    },
+    {
+      "label": "initialized-object: python artifact preservation",
+      "passed": true
+    },
+    {
+      "label": "graph-no-gc: check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-no-gc.cg"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "graph-no-gc: interpreter",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-no-gc.cg"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "graph-no-gc: source report",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "memory",
+        "report",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-no-gc.cg",
+        "--format=json"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":0,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}},{\"region_id\":{\"session\":1,\"index\":1},\"is_open\":false,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":2097152,\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":10544,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}},{\"region_id\":{\"session\":1,\"index\":2},\"is_open\":false,\"mode\":\"manual\",\"trigger_bytes\":null,\"limit_bytes\":2097152,\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":10544,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}},{\"region_id\":{\"session\":1,\"index\":3},\"is_open\":false,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":2097152,\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":10544,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}},{\"region_id\":{\"session\":1,\"index\":4},\"is_open\":false,\"mode\":\"manual\",\"trigger_bytes\":null,\"limit_bytes\":2097152,\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":10544,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":42176,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}\n",
+      "stderr": ""
+    },
+    {
+      "label": "graph-no-gc: source cleanup counters",
+      "passed": true
+    },
+    {
+      "label": "source no_gc counts",
+      "passed": true
+    },
+    {
+      "label": "graph-no-gc: native debug build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-no-gc.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc-debug"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "cgx2c build metadata: source_sha256=94e7d7e5bcc53321726359ae6f914495d20259e1db10642eb6da6277345596ec rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc-debug\n",
+      "stderr": ""
+    },
+    {
+      "label": "graph-no-gc: native debug run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc-debug"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "graph-no-gc: native debug report parity",
+      "passed": true
+    },
+    {
+      "label": "graph-no-gc: native release build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-no-gc.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc-release",
+        "--release"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "cgx2c build metadata: source_sha256=94e7d7e5bcc53321726359ae6f914495d20259e1db10642eb6da6277345596ec rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc-release\n",
+      "stderr": ""
+    },
+    {
+      "label": "graph-no-gc: native release run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc-release"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "graph-no-gc: native release report parity",
+      "passed": true
+    },
+    {
+      "label": "graph-no-gc: emit rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-no-gc.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc.rs"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "graph-no-gc: standalone rust build",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc.rs",
+        "--extern",
+        "cgx2_runtime=/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/libcgx2_runtime.rlib",
+        "-o",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc-standalone"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": "warning: unused variable: `iterations`\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc.rs:445:69\n    |\n445 | ...n, steps: &mut usize, iterations: &mut usize, call_span: (usize, usize), cgx2_param_0: i64) -> Result<(), String> {\n    |                          ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_iterations`\n    |\n    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default\n\nwarning: unused variable: `cgx2_param_0`\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc.rs:445:120\n    |\n445 | ...an: (usize, usize), cgx2_param_0: i64) -> Result<(), String> {\n    |                        ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_cgx2_param_0`\n\nwarning: variable does not need to be mutable\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc.rs:525:9\n    |\n525 |     let mut bindings: HashMap<&'static str, Binding> = HashMap::new();\n    |         ----^^^^^^^^\n    |         |\n    |         help: remove this `mut`\n    |\n    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default\n\nwarning: variable does not need to be mutable\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc.rs:560:9\n    |\n560 |     let mut bindings: HashMap<&'static str, Binding> = HashMap::new();\n    |         ----^^^^^^^^\n    |         |\n    |         help: remove this `mut`\n\nwarning: variants `Owned`, `Reference`, and `Borrow` are never constructed\n --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc.rs:7:34\n  |\n7 | enum Binding { Region(RegionId), Owned(OwnedBytes), Managed(Handle), Reference(Option<Handle>), Borrow(String) }\n  |      -------                     ^^^^^                               ^^^^^^^^^                  ^^^^^^\n  |      |\n  |      variants in this enum\n  |\n  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default\n\nwarning: variants `Bytes` and `Object` are never constructed\n  --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc.rs:13:21\n   |\n13 | enum SourceLayout { Bytes, Object { slots: usize }, Graph }\n   |      ------------   ^^^^^  ^^^^^^\n   |      |\n   |      variants in this enum\n   |\n   = note: `SourceLayout` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis\n\nwarning: function `cleanup_scope` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc.rs:105:4\n    |\n105 | fn cleanup_scope(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, outer: &HashSet<&'static str>, span: (usize,...\n    |    ^^^^^^^^^^^^^\n\nwarning: function `enter_iteration` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc.rs:125:4\n    |\n125 | fn enter_iteration(iterations: &mut usize, span: (usize, usize)) -> Result<(), String> {\n    |    ^^^^^^^^^^^^^^^\n\nwarning: function `owned` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc.rs:153:4\n    |\n153 | fn owned(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, size: usize, span: (usize, usize...\n    |    ^^^^^\n\nwarning: function `move_owned` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc.rs:158:4\n    |\n158 | fn move_owned(bindings: &mut HashMap<&'static str, Binding>, name: &'static str, from: &'static str, span: (usize, usize)) -> Resul...\n    |    ^^^^^^^^^^\n\nwarning: function `promote` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc.rs:166:4\n    |\n166 | fn promote(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, region_name: &'static str, fro...\n    |    ^^^^^^^\n\nwarning: function `copy_owned` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc.rs:184:4\n    |\n184 | fn copy_owned(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, from: &'static str, span: (...\n    |    ^^^^^^^^^^\n\nwarning: function `alloc` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc.rs:195:4\n    |\n195 | fn alloc(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, region_name: &'static str, size:...\n    |    ^^^^^\n\nwarning: function `alloc_object` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc.rs:203:4\n    |\n203 | fn alloc_object(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, region_name: &'static str...\n    |    ^^^^^^^^^^^^\n\nwarning: function `set_reference` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc.rs:217:4\n    |\n217 | fn set_reference(session: &mut Session, bindings: &HashMap<&'static str, Binding>, owner: &'static str, index: usize, target: Optio...\n    |    ^^^^^^^^^^^^^\n\nwarning: function `reference` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc.rs:222:4\n    |\n222 | fn reference(session: &Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, owner: &'static str, index: usiz...\n    |    ^^^^^^^^^\n\nwarning: function `use_reference` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc.rs:228:4\n    |\n228 | fn use_reference(session: &Session, bindings: &HashMap<&'static str, Binding>, name: &'static str, span: (usize, usize)) -> Result<...\n    |    ^^^^^^^^^^^^^\n\nwarning: function `borrow` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc.rs:236:4\n    |\n236 | fn borrow(bindings: &mut HashMap<&'static str, Binding>, name: &'static str, target: &'static str, span: (usize, usize)) -> Result<...\n    |    ^^^^^^\n\nwarning: function `use_value` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc.rs:244:4\n    |\n244 | fn use_value(session: &Session, bindings: &HashMap<&'static str, Binding>, name: &'static str, span: (usize, usize)) -> Result<(), ...\n    |    ^^^^^^^^^\n\nwarning: function `end_borrow` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc.rs:262:4\n    |\n262 | fn end_borrow(bindings: &mut HashMap<&'static str, Binding>, name: &'static str, span: (usize, usize)) -> Result<(), String> {\n    |    ^^^^^^^^^^\n\nwarning: function `collect` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc.rs:270:4\n    |\n270 | fn collect(session: &mut Session, bindings: &HashMap<&'static str, Binding>, region_name: &'static str, span: (usize, usize)) -> Re...\n    |    ^^^^^^^\n\nwarning: function `graph_reference` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc.rs:299:4\n    |\n299 | fn graph_reference(session: &Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, owner: &'static str, index...\n    |    ^^^^^^^^^^^^^^^\n\nwarning: 22 warnings emitted\n\n"
+    },
+    {
+      "label": "graph-no-gc: standalone rust run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc-standalone"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "graph-no-gc: python rejection",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-no-gc.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-no-gc.py",
+        "--force"
+      ],
+      "returncode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGE001: /home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-no-gc.cg:68..109: memory operations are unsupported by Python emission\n"
+    },
+    {
+      "label": "graph-no-gc: python artifact preservation",
+      "passed": true
+    },
+    {
+      "label": "graph-budget-error: check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-budget-error.cg"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "graph-budget-error: interpreter",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-budget-error.cg"
+      ],
+      "returncode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGR013: /home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-budget-error.cg:71..111: memory allocation failed: BudgetExceeded\n"
+    },
+    {
+      "label": "graph-budget-error: source report",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "memory",
+        "failure-report",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-budget-error.cg"
+      ],
+      "returncode": 1,
+      "passed": true,
+      "stdout": "{\"cleanup_errors\":[],\"diagnostic_code\":\"CGR013\",\"failure_report_schema_version\":1,\"file\":\"/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-budget-error.cg\",\"final_unwind\":{\"memory\":{\"regions\":[{\"allocation_failures\":0,\"collection_count\":0,\"committed_bytes\":0,\"is_open\":true,\"limit_bytes\":67108864,\"live_bytes\":0,\"mode\":\"auto\",\"pause\":{\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"max_ns\":0,\"min_ns\":0,\"sample_count\":0,\"total_ns\":0},\"peak_bytes\":0,\"region_id\":{\"index\":0,\"session\":1},\"total_collected_bytes\":0,\"trigger_bytes\":1048576},{\"allocation_failures\":1,\"collection_count\":0,\"committed_bytes\":0,\"is_open\":true,\"limit_bytes\":1024,\"live_bytes\":0,\"mode\":\"manual\",\"pause\":{\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"max_ns\":0,\"min_ns\":0,\"sample_count\":0,\"total_ns\":0},\"peak_bytes\":0,\"region_id\":{\"index\":1,\"session\":1},\"total_collected_bytes\":0,\"trigger_bytes\":null}],\"schema_version\":1,\"totals\":{\"allocation_failures\":1,\"collection_count\":0,\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":0,\"total_collected_bytes\":0}},\"rooted_edges\":0,\"rooted_handles\":0,\"runtime_root_census_error\":null,\"runtime_root_registrations\":0,\"runtime_rooted_handles\":0},\"memory\":{\"regions\":[{\"allocation_failures\":0,\"collection_count\":0,\"committed_bytes\":0,\"is_open\":true,\"limit_bytes\":67108864,\"live_bytes\":0,\"mode\":\"auto\",\"pause\":{\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"max_ns\":0,\"min_ns\":0,\"sample_count\":0,\"total_ns\":0},\"peak_bytes\":0,\"region_id\":{\"index\":0,\"session\":1},\"total_collected_bytes\":0,\"trigger_bytes\":1048576},{\"allocation_failures\":1,\"collection_count\":0,\"committed_bytes\":0,\"is_open\":true,\"limit_bytes\":1024,\"live_bytes\":0,\"mode\":\"manual\",\"pause\":{\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"max_ns\":0,\"min_ns\":0,\"sample_count\":0,\"total_ns\":0},\"peak_bytes\":0,\"region_id\":{\"index\":1,\"session\":1},\"total_collected_bytes\":0,\"trigger_bytes\":null}],\"schema_version\":1,\"totals\":{\"allocation_failures\":1,\"collection_count\":0,\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":0,\"total_collected_bytes\":0}},\"operation_failure\":{\"memory\":{\"regions\":[{\"allocation_failures\":0,\"collection_count\":0,\"committed_bytes\":0,\"is_open\":true,\"limit_bytes\":67108864,\"live_bytes\":0,\"mode\":\"auto\",\"pause\":{\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"max_ns\":0,\"min_ns\":0,\"sample_count\":0,\"total_ns\":0},\"peak_bytes\":0,\"region_id\":{\"index\":0,\"session\":1},\"total_collected_bytes\":0,\"trigger_bytes\":1048576},{\"allocation_failures\":1,\"collection_count\":0,\"committed_bytes\":0,\"is_open\":true,\"limit_bytes\":1024,\"live_bytes\":0,\"mode\":\"manual\",\"pause\":{\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"max_ns\":0,\"min_ns\":0,\"sample_count\":0,\"total_ns\":0},\"peak_bytes\":0,\"region_id\":{\"index\":1,\"session\":1},\"total_collected_bytes\":0,\"trigger_bytes\":null}],\"schema_version\":1,\"totals\":{\"allocation_failures\":1,\"collection_count\":0,\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":0,\"total_collected_bytes\":0}},\"rooted_edges\":0,\"rooted_handles\":0,\"runtime_root_census_error\":null,\"runtime_root_registrations\":0,\"runtime_rooted_handles\":0},\"rollback_preserved\":true,\"span\":{\"end\":111,\"start\":71},\"status\":\"error\"}\n",
+      "stderr": "CGR013: /home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-budget-error.cg:71..111: memory allocation failed: BudgetExceeded\n"
+    },
+    {
+      "label": "graph-budget-error: source cleanup counters",
+      "passed": true
+    },
+    {
+      "label": "graph-budget-error: native debug build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-budget-error.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error-debug"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "cgx2c build metadata: source_sha256=cafa26961545e01319bfc99f7725c8a44caa3ed728d095c7f6d103cede575279 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error-debug\n",
+      "stderr": ""
+    },
+    {
+      "label": "graph-budget-error: native debug run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error-debug"
+      ],
+      "returncode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGR013 at 71..111: memory allocation failed: BudgetExceeded\n"
+    },
+    {
+      "label": "graph-budget-error: native debug report parity",
+      "passed": true
+    },
+    {
+      "label": "graph-budget-error: native debug error cleanup",
+      "passed": true
+    },
+    {
+      "label": "graph-budget-error: native release build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-budget-error.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error-release",
+        "--release"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "cgx2c build metadata: source_sha256=cafa26961545e01319bfc99f7725c8a44caa3ed728d095c7f6d103cede575279 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error-release\n",
+      "stderr": ""
+    },
+    {
+      "label": "graph-budget-error: native release run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error-release"
+      ],
+      "returncode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGR013 at 71..111: memory allocation failed: BudgetExceeded\n"
+    },
+    {
+      "label": "graph-budget-error: native release report parity",
+      "passed": true
+    },
+    {
+      "label": "graph-budget-error: native release error cleanup",
+      "passed": true
+    },
+    {
+      "label": "graph-budget-error: emit rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-budget-error.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error.rs"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "graph-budget-error: standalone rust build",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error.rs",
+        "--extern",
+        "cgx2_runtime=/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/libcgx2_runtime.rlib",
+        "-o",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error-standalone"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": "warning: unused variable: `iterations`\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error.rs:460:13\n    |\n460 |         let iterations = &mut iterations;\n    |             ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_iterations`\n    |\n    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default\n\nwarning: variants `Owned`, `Reference`, and `Borrow` are never constructed\n --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error.rs:7:34\n  |\n7 | enum Binding { Region(RegionId), Owned(OwnedBytes), Managed(Handle), Reference(Option<Handle>), Borrow(String) }\n  |      -------                     ^^^^^                               ^^^^^^^^^                  ^^^^^^\n  |      |\n  |      variants in this enum\n  |\n  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default\n\nwarning: variants `Bytes` and `Object` are never constructed\n  --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error.rs:13:21\n   |\n13 | enum SourceLayout { Bytes, Object { slots: usize }, Graph }\n   |      ------------   ^^^^^  ^^^^^^\n   |      |\n   |      variants in this enum\n   |\n   = note: `SourceLayout` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis\n\nwarning: function `cleanup_scope` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error.rs:105:4\n    |\n105 | fn cleanup_scope(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, outer: &HashSet<&'static str>, span: (usize,...\n    |    ^^^^^^^^^^^^^\n\nwarning: function `enter_iteration` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error.rs:125:4\n    |\n125 | fn enter_iteration(iterations: &mut usize, span: (usize, usize)) -> Result<(), String> {\n    |    ^^^^^^^^^^^^^^^\n\nwarning: function `owned` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error.rs:153:4\n    |\n153 | fn owned(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, size: usize, span: (usize, usize...\n    |    ^^^^^\n\nwarning: function `move_owned` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error.rs:158:4\n    |\n158 | fn move_owned(bindings: &mut HashMap<&'static str, Binding>, name: &'static str, from: &'static str, span: (usize, usize)) -> Resul...\n    |    ^^^^^^^^^^\n\nwarning: function `promote` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error.rs:166:4\n    |\n166 | fn promote(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, region_name: &'static str, fro...\n    |    ^^^^^^^\n\nwarning: function `copy_owned` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error.rs:184:4\n    |\n184 | fn copy_owned(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, from: &'static str, span: (...\n    |    ^^^^^^^^^^\n\nwarning: function `alloc` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error.rs:195:4\n    |\n195 | fn alloc(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, region_name: &'static str, size:...\n    |    ^^^^^\n\nwarning: function `alloc_object` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error.rs:203:4\n    |\n203 | fn alloc_object(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, region_name: &'static str...\n    |    ^^^^^^^^^^^^\n\nwarning: function `managed` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error.rs:211:4\n    |\n211 | fn managed(bindings: &HashMap<&'static str, Binding>, name: &str, span: (usize, usize), role: &str) -> Result<Handle, String> {\n    |    ^^^^^^^\n\nwarning: function `set_reference` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error.rs:217:4\n    |\n217 | fn set_reference(session: &mut Session, bindings: &HashMap<&'static str, Binding>, owner: &'static str, index: usize, target: Optio...\n    |    ^^^^^^^^^^^^^\n\nwarning: function `reference` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error.rs:222:4\n    |\n222 | fn reference(session: &Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, owner: &'static str, index: usiz...\n    |    ^^^^^^^^^\n\nwarning: function `use_reference` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error.rs:228:4\n    |\n228 | fn use_reference(session: &Session, bindings: &HashMap<&'static str, Binding>, name: &'static str, span: (usize, usize)) -> Result<...\n    |    ^^^^^^^^^^^^^\n\nwarning: function `borrow` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error.rs:236:4\n    |\n236 | fn borrow(bindings: &mut HashMap<&'static str, Binding>, name: &'static str, target: &'static str, span: (usize, usize)) -> Result<...\n    |    ^^^^^^\n\nwarning: function `use_value` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error.rs:244:4\n    |\n244 | fn use_value(session: &Session, bindings: &HashMap<&'static str, Binding>, name: &'static str, span: (usize, usize)) -> Result<(), ...\n    |    ^^^^^^^^^\n\nwarning: function `end_borrow` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error.rs:262:4\n    |\n262 | fn end_borrow(bindings: &mut HashMap<&'static str, Binding>, name: &'static str, span: (usize, usize)) -> Result<(), String> {\n    |    ^^^^^^^^^^\n\nwarning: function `collect` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error.rs:270:4\n    |\n270 | fn collect(session: &mut Session, bindings: &HashMap<&'static str, Binding>, region_name: &'static str, span: (usize, usize)) -> Re...\n    |    ^^^^^^^\n\nwarning: function `set_graph_reference` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error.rs:294:4\n    |\n294 | fn set_graph_reference(session: &mut Session, bindings: &HashMap<&'static str, Binding>, owner: &'static str, index: usize, target:...\n    |    ^^^^^^^^^^^^^^^^^^^\n\nwarning: function `graph_reference` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error.rs:299:4\n    |\n299 | fn graph_reference(session: &Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, owner: &'static str, index...\n    |    ^^^^^^^^^^^^^^^\n\nwarning: function `memory_byte` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error.rs:305:4\n    |\n305 | fn memory_byte(session: &mut Session, bindings: &HashMap<&'static str, Binding>, owner: &'static str, offset: usize, value: u8, wri...\n    |    ^^^^^^^^^^^\n\nwarning: 22 warnings emitted\n\n"
+    },
+    {
+      "label": "graph-budget-error: standalone rust run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error-standalone"
+      ],
+      "returncode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGR013 at 71..111: memory allocation failed: BudgetExceeded\n"
+    },
+    {
+      "label": "graph-budget-error: python rejection",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-budget-error.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-budget-error.py",
+        "--force"
+      ],
+      "returncode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGE001: /home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-budget-error.cg:8..48: memory operations are unsupported by Python emission\n"
+    },
+    {
+      "label": "graph-budget-error: python artifact preservation",
+      "passed": true
+    },
+    {
+      "label": "graph-byte-error: check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-byte-error.cg"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "graph-byte-error: interpreter",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-byte-error.cg"
+      ],
+      "returncode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGR015: /home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-byte-error.cg:138..176: memory byte expectation failed\n"
+    },
+    {
+      "label": "graph-byte-error: source report",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "memory",
+        "failure-report",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-byte-error.cg"
+      ],
+      "returncode": 1,
+      "passed": true,
+      "stdout": "{\"cleanup_errors\":[],\"diagnostic_code\":\"CGR015\",\"failure_report_schema_version\":1,\"file\":\"/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-byte-error.cg\",\"final_unwind\":{\"memory\":{\"regions\":[{\"allocation_failures\":0,\"collection_count\":0,\"committed_bytes\":0,\"is_open\":true,\"limit_bytes\":67108864,\"live_bytes\":0,\"mode\":\"auto\",\"pause\":{\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"max_ns\":0,\"min_ns\":0,\"sample_count\":0,\"total_ns\":0},\"peak_bytes\":0,\"region_id\":{\"index\":0,\"session\":1},\"total_collected_bytes\":0,\"trigger_bytes\":1048576},{\"allocation_failures\":0,\"collection_count\":0,\"committed_bytes\":10537,\"is_open\":true,\"limit_bytes\":65536,\"live_bytes\":10537,\"mode\":\"manual\",\"pause\":{\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"max_ns\":0,\"min_ns\":0,\"sample_count\":0,\"total_ns\":0},\"peak_bytes\":10537,\"region_id\":{\"index\":1,\"session\":1},\"total_collected_bytes\":0,\"trigger_bytes\":null}],\"schema_version\":1,\"totals\":{\"allocation_failures\":0,\"collection_count\":0,\"committed_bytes\":10537,\"live_bytes\":10537,\"peak_bytes\":10537,\"total_collected_bytes\":0}},\"rooted_edges\":0,\"rooted_handles\":0,\"runtime_root_census_error\":null,\"runtime_root_registrations\":0,\"runtime_rooted_handles\":0},\"memory\":{\"regions\":[{\"allocation_failures\":0,\"collection_count\":0,\"committed_bytes\":0,\"is_open\":true,\"limit_bytes\":67108864,\"live_bytes\":0,\"mode\":\"auto\",\"pause\":{\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"max_ns\":0,\"min_ns\":0,\"sample_count\":0,\"total_ns\":0},\"peak_bytes\":0,\"region_id\":{\"index\":0,\"session\":1},\"total_collected_bytes\":0,\"trigger_bytes\":1048576},{\"allocation_failures\":0,\"collection_count\":0,\"committed_bytes\":10537,\"is_open\":true,\"limit_bytes\":65536,\"live_bytes\":10537,\"mode\":\"manual\",\"pause\":{\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"max_ns\":0,\"min_ns\":0,\"sample_count\":0,\"total_ns\":0},\"peak_bytes\":10537,\"region_id\":{\"index\":1,\"session\":1},\"total_collected_bytes\":0,\"trigger_bytes\":null}],\"schema_version\":1,\"totals\":{\"allocation_failures\":0,\"collection_count\":0,\"committed_bytes\":10537,\"live_bytes\":10537,\"peak_bytes\":10537,\"total_collected_bytes\":0}},\"operation_failure\":{\"memory\":{\"regions\":[{\"allocation_failures\":0,\"collection_count\":0,\"committed_bytes\":0,\"is_open\":true,\"limit_bytes\":67108864,\"live_bytes\":0,\"mode\":\"auto\",\"pause\":{\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"max_ns\":0,\"min_ns\":0,\"sample_count\":0,\"total_ns\":0},\"peak_bytes\":0,\"region_id\":{\"index\":0,\"session\":1},\"total_collected_bytes\":0,\"trigger_bytes\":1048576},{\"allocation_failures\":0,\"collection_count\":0,\"committed_bytes\":10537,\"is_open\":true,\"limit_bytes\":65536,\"live_bytes\":10537,\"mode\":\"manual\",\"pause\":{\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"max_ns\":0,\"min_ns\":0,\"sample_count\":0,\"total_ns\":0},\"peak_bytes\":10537,\"region_id\":{\"index\":1,\"session\":1},\"total_collected_bytes\":0,\"trigger_bytes\":null}],\"schema_version\":1,\"totals\":{\"allocation_failures\":0,\"collection_count\":0,\"committed_bytes\":10537,\"live_bytes\":10537,\"peak_bytes\":10537,\"total_collected_bytes\":0}},\"rooted_edges\":1,\"rooted_handles\":1,\"runtime_root_census_error\":null,\"runtime_root_registrations\":1,\"runtime_rooted_handles\":1},\"rollback_preserved\":true,\"span\":{\"end\":176,\"start\":138},\"status\":\"error\"}\n",
+      "stderr": "CGR015: /home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-byte-error.cg:138..176: memory byte expectation failed\n"
+    },
+    {
+      "label": "graph-byte-error: source cleanup counters",
+      "passed": true
+    },
+    {
+      "label": "graph-byte-error: native debug build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-byte-error.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error-debug"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "cgx2c build metadata: source_sha256=350676184b3045f6a6518f9a3b8009da4beed97fbc40ff4047ddfc4406d1e3c5 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error-debug\n",
+      "stderr": ""
+    },
+    {
+      "label": "graph-byte-error: native debug run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error-debug"
+      ],
+      "returncode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGR015 at 138..177: memory byte expectation failed\n"
+    },
+    {
+      "label": "graph-byte-error: native debug report parity",
+      "passed": true
+    },
+    {
+      "label": "graph-byte-error: native debug error cleanup",
+      "passed": true
+    },
+    {
+      "label": "graph-byte-error: native release build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-byte-error.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error-release",
+        "--release"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "cgx2c build metadata: source_sha256=350676184b3045f6a6518f9a3b8009da4beed97fbc40ff4047ddfc4406d1e3c5 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error-release\n",
+      "stderr": ""
+    },
+    {
+      "label": "graph-byte-error: native release run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error-release"
+      ],
+      "returncode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGR015 at 138..177: memory byte expectation failed\n"
+    },
+    {
+      "label": "graph-byte-error: native release report parity",
+      "passed": true
+    },
+    {
+      "label": "graph-byte-error: native release error cleanup",
+      "passed": true
+    },
+    {
+      "label": "graph-byte-error: emit rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-byte-error.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error.rs"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "graph-byte-error: standalone rust build",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error.rs",
+        "--extern",
+        "cgx2_runtime=/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/libcgx2_runtime.rlib",
+        "-o",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error-standalone"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": "warning: unused variable: `iterations`\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error.rs:460:13\n    |\n460 |         let iterations = &mut iterations;\n    |             ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_iterations`\n    |\n    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default\n\nwarning: variants `Owned`, `Reference`, and `Borrow` are never constructed\n --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error.rs:7:34\n  |\n7 | enum Binding { Region(RegionId), Owned(OwnedBytes), Managed(Handle), Reference(Option<Handle>), Borrow(String) }\n  |      -------                     ^^^^^                               ^^^^^^^^^                  ^^^^^^\n  |      |\n  |      variants in this enum\n  |\n  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default\n\nwarning: variants `Bytes` and `Object` are never constructed\n  --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error.rs:13:21\n   |\n13 | enum SourceLayout { Bytes, Object { slots: usize }, Graph }\n   |      ------------   ^^^^^  ^^^^^^\n   |      |\n   |      variants in this enum\n   |\n   = note: `SourceLayout` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis\n\nwarning: function `cleanup_scope` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error.rs:105:4\n    |\n105 | fn cleanup_scope(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, outer: &HashSet<&'static str>, span: (usize,...\n    |    ^^^^^^^^^^^^^\n\nwarning: function `enter_iteration` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error.rs:125:4\n    |\n125 | fn enter_iteration(iterations: &mut usize, span: (usize, usize)) -> Result<(), String> {\n    |    ^^^^^^^^^^^^^^^\n\nwarning: function `owned` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error.rs:153:4\n    |\n153 | fn owned(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, size: usize, span: (usize, usize...\n    |    ^^^^^\n\nwarning: function `move_owned` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error.rs:158:4\n    |\n158 | fn move_owned(bindings: &mut HashMap<&'static str, Binding>, name: &'static str, from: &'static str, span: (usize, usize)) -> Resul...\n    |    ^^^^^^^^^^\n\nwarning: function `promote` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error.rs:166:4\n    |\n166 | fn promote(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, region_name: &'static str, fro...\n    |    ^^^^^^^\n\nwarning: function `copy_owned` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error.rs:184:4\n    |\n184 | fn copy_owned(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, from: &'static str, span: (...\n    |    ^^^^^^^^^^\n\nwarning: function `alloc` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error.rs:195:4\n    |\n195 | fn alloc(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, region_name: &'static str, size:...\n    |    ^^^^^\n\nwarning: function `alloc_object` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error.rs:203:4\n    |\n203 | fn alloc_object(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, region_name: &'static str...\n    |    ^^^^^^^^^^^^\n\nwarning: function `set_reference` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error.rs:217:4\n    |\n217 | fn set_reference(session: &mut Session, bindings: &HashMap<&'static str, Binding>, owner: &'static str, index: usize, target: Optio...\n    |    ^^^^^^^^^^^^^\n\nwarning: function `reference` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error.rs:222:4\n    |\n222 | fn reference(session: &Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, owner: &'static str, index: usiz...\n    |    ^^^^^^^^^\n\nwarning: function `use_reference` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error.rs:228:4\n    |\n228 | fn use_reference(session: &Session, bindings: &HashMap<&'static str, Binding>, name: &'static str, span: (usize, usize)) -> Result<...\n    |    ^^^^^^^^^^^^^\n\nwarning: function `borrow` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error.rs:236:4\n    |\n236 | fn borrow(bindings: &mut HashMap<&'static str, Binding>, name: &'static str, target: &'static str, span: (usize, usize)) -> Result<...\n    |    ^^^^^^\n\nwarning: function `use_value` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error.rs:244:4\n    |\n244 | fn use_value(session: &Session, bindings: &HashMap<&'static str, Binding>, name: &'static str, span: (usize, usize)) -> Result<(), ...\n    |    ^^^^^^^^^\n\nwarning: function `end_borrow` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error.rs:262:4\n    |\n262 | fn end_borrow(bindings: &mut HashMap<&'static str, Binding>, name: &'static str, span: (usize, usize)) -> Result<(), String> {\n    |    ^^^^^^^^^^\n\nwarning: function `collect` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error.rs:270:4\n    |\n270 | fn collect(session: &mut Session, bindings: &HashMap<&'static str, Binding>, region_name: &'static str, span: (usize, usize)) -> Re...\n    |    ^^^^^^^\n\nwarning: function `graph_reference` is never used\n   --> /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error.rs:299:4\n    |\n299 | fn graph_reference(session: &Session, bindings: &mut HashMap<&'static str, Binding>, name: &'static str, owner: &'static str, index...\n    |    ^^^^^^^^^^^^^^^\n\nwarning: 19 warnings emitted\n\n"
+    },
+    {
+      "label": "graph-byte-error: standalone rust run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error-standalone"
+      ],
+      "returncode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGR015 at 138..177: memory byte expectation failed\n"
+    },
+    {
+      "label": "graph-byte-error: python rejection",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-byte-error.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/graph-byte-error.py",
+        "--force"
+      ],
+      "returncode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGE001: /home/john-riley/.codex/worktrees/b047/lang/crates/cgx2-syntax/s2b-memory-evidence/graph-byte-error.cg:8..49: memory operations are unsupported by Python emission\n"
+    },
+    {
+      "label": "graph-byte-error: python artifact preservation",
+      "passed": true
+    },
+    {
+      "label": "too-many-refs: source rejection",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-refs.cg"
+      ],
+      "returncode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-refs.cg:64..101: object shape exceeds runtime limits\nCGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-refs.cg:127..132: unknown memory handle or wrong handle type `graph`\nCGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-refs.cg:170..175: unknown memory handle or wrong handle type `graph`\nCGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-refs.cg:214..219: unknown memory handle or wrong handle type `graph`\nCGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-refs.cg:258..263: unknown memory handle or wrong handle type `graph`\nCGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-refs.cg:303..308: unknown memory handle or wrong handle type `graph`\nCGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-refs.cg:348..353: unknown memory handle or wrong handle type `graph`\nCGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-refs.cg:393..398: unknown memory handle or wrong handle type `graph`\nCGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-refs.cg:440..445: unknown memory handle or wrong handle type `graph`\nCGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-refs.cg:496..501: unknown memory handle or wrong handle type `graph`\nCGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-refs.cg:549..554: unknown memory handle or wrong handle type `cycle`\nCGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-refs.cg:568..573: unknown memory handle or wrong handle type `graph`\n"
+    },
+    {
+      "label": "too-many-refs: native rejection",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-refs.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-refs.rs",
+        "--force"
+      ],
+      "returncode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-refs.cg:64..101: object shape exceeds runtime limits\n"
+    },
+    {
+      "label": "too-many-refs: artifact preservation",
+      "passed": true
+    },
+    {
+      "label": "too-many-bytes: source rejection",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-bytes.cg"
+      ],
+      "returncode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-bytes.cg:64..101: object shape exceeds runtime limits\nCGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-bytes.cg:127..132: unknown memory handle or wrong handle type `graph`\nCGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-bytes.cg:170..175: unknown memory handle or wrong handle type `graph`\nCGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-bytes.cg:214..219: unknown memory handle or wrong handle type `graph`\nCGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-bytes.cg:258..263: unknown memory handle or wrong handle type `graph`\nCGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-bytes.cg:303..308: unknown memory handle or wrong handle type `graph`\nCGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-bytes.cg:348..353: unknown memory handle or wrong handle type `graph`\nCGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-bytes.cg:393..398: unknown memory handle or wrong handle type `graph`\nCGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-bytes.cg:440..445: unknown memory handle or wrong handle type `graph`\nCGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-bytes.cg:496..501: unknown memory handle or wrong handle type `graph`\nCGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-bytes.cg:549..554: unknown memory handle or wrong handle type `cycle`\nCGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-bytes.cg:568..573: unknown memory handle or wrong handle type `graph`\n"
+    },
+    {
+      "label": "too-many-bytes: native rejection",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-bytes.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-bytes.rs",
+        "--force"
+      ],
+      "returncode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/too-many-bytes.cg:64..101: object shape exceeds runtime limits\n"
+    },
+    {
+      "label": "too-many-bytes: artifact preservation",
+      "passed": true
+    },
+    {
+      "label": "bad-byte: source rejection",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/bad-byte.cg"
+      ],
+      "returncode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/bad-byte.cg:146..190: byte operation requires matching layout, in-range offset and byte 0..255\nCGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/bad-byte.cg:279..324: byte operation requires matching layout, in-range offset and byte 0..255\n"
+    },
+    {
+      "label": "bad-byte: native rejection",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/bad-byte.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/bad-byte.rs",
+        "--force"
+      ],
+      "returncode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/bad-byte.cg:146..190: byte operation requires matching layout, in-range offset and byte 0..255\n"
+    },
+    {
+      "label": "bad-byte: artifact preservation",
+      "passed": true
+    },
+    {
+      "label": "wrong-layout: source rejection",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/wrong-layout.cg"
+      ],
+      "returncode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/wrong-layout.cg:434..439: reference operation does not match object/graph layout\n"
+    },
+    {
+      "label": "wrong-layout: native rejection",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/wrong-layout.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/wrong-layout.rs",
+        "--force"
+      ],
+      "returncode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/wrong-layout.cg:434..439: reference operation does not match object/graph layout\n"
+    },
+    {
+      "label": "wrong-layout: artifact preservation",
+      "passed": true
+    },
+    {
+      "label": "slot-bounds: source rejection",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/slot-bounds.cg"
+      ],
+      "returncode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/slot-bounds.cg:447..452: reference index outside object shape\n"
+    },
+    {
+      "label": "slot-bounds: native rejection",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/slot-bounds.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/slot-bounds.rs",
+        "--force"
+      ],
+      "returncode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGM002: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/slot-bounds.cg:447..452: reference index outside object shape\n"
+    },
+    {
+      "label": "slot-bounds: artifact preservation",
+      "passed": true
+    },
+    {
+      "label": "collect-in-guard: source rejection",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/collect-in-guard.cg"
+      ],
+      "returncode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGO004: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/collect-in-guard.cg:520..537: collection is forbidden inside no_gc\nCGT012: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/collect-in-guard.cg:520..537: effect `Collect` is not permitted by explicit declaration by call to `memory.collect`\nCGT012: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/collect-in-guard.cg:659..667: effect `Collect` is not permitted by explicit declaration by call to `build`\nCGT012: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/collect-in-guard.cg:672..680: effect `Collect` is not permitted by explicit declaration by call to `build`\nCGT013: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/collect-in-guard.cg:0..606: memory function requires explicit capabilities\nCGT013: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/collect-in-guard.cg:606..681: memory function requires explicit capabilities\n"
+    },
+    {
+      "label": "collect-in-guard: native rejection",
+      "command": [
+        "/home/john-riley/.codex/worktrees/b047/lang/target/release-owned-result/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/collect-in-guard.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/collect-in-guard.rs",
+        "--force"
+      ],
+      "returncode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGO004: /home/john-riley/.codex/worktrees/b047/lang/target/tmp-owned-result/cgx2-memory-7wrzhdit/collect-in-guard.cg:520..537: collection is forbidden inside no_gc\n"
+    },
+    {
+      "label": "collect-in-guard: artifact preservation",
+      "passed": true
+    }
+  ]
+}

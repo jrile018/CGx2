@@ -130,7 +130,7 @@ fn list<T>(xs: &[T], f: impl Fn(&T) -> String) -> String {
     format!("vec![{}]", xs.iter().map(f).collect::<Vec<_>>().join(","))
 }
 impl SourceSpan {
-    fn rust(self) -> String {
+    pub(super) fn rust(self) -> String {
         format!("SourceSpan{{start:{},end:{}}}", self.start, self.end)
     }
 }

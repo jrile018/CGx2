@@ -260,3 +260,18 @@ budgets, bulk-root counts and injected reserve failures. The independent logical
 slot oracle is `../cgx2-memory-conformance/tests/graph_storage_model.rs`. The
 ASan/LSan runner now includes both suites. Use the existing leak-enabled runner
 first; non-leak ASan is separately labeled and never closes leak acceptance.
+
+## Ordinary Result observations (additive v2)
+
+`Session::memory_observation_v2() -> MemoryObservationV2` reads without allocating:
+`charged_bytes: u128`, `active_guards: usize`, `collection_count: u64`.
+The cumulative charge counter saturates only at u128::MAX and records successful
+calls through the existing logical charge path, even outside active guards.
+It never refunds drops. It excludes the initial SessionRegions reserve, host
+compiler/evaluator containers and foreign storage; it is not RSS or a full
+memory report. Guard-table replacements and OwnedBytes actual capacities plus
+logical headers are included. Collection counts sum the retained region stats,
+including closed regions. Failed precommit reservations do not add charges.
+The observer does not reserve, collect, change defaults, or reinterpret any v1
+error/enum/entry API. The additional counter exists so actual ordinary source
+execution can report runtime charges rather than simulate a second budget.

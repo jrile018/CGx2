@@ -1,0 +1,11 @@
+# π
+record R:
+    x: i64
+fn main() -> i64:
+    match try_owned(R(x: 1)):
+        Result.Ok(p):
+            let moved = p
+            let twice = p
+            return 0
+        Result.Err(e):
+            return 0

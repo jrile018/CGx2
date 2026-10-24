@@ -1,6 +1,6 @@
-use super::{diagnostic, model::*, source_span, span};
+use super::{diagnostic, model_v2::*, source_span, span};
 use crate::TypeDiagnostic;
-use cgx2_ownership::v1 as o;
+use cgx2_ownership::v2 as o;
 use cgx2_syntax::{self as s, ExprKind as E, StmtKind as S};
 use std::collections::{BTreeMap, BTreeSet};
 type Check<T> = Result<T, TypeDiagnostic>;
@@ -11,7 +11,14 @@ fn err(message: impl Into<String>, span: s::Span) -> TypeDiagnostic {
 fn reserved(n: &str) -> bool {
     matches!(
         n,
-        "owned" | "shared" | "exclusive" | "borrow" | "borrow_mut"
+        "owned"
+            | "shared"
+            | "exclusive"
+            | "try_owned"
+            | "AllocationError"
+            | "Result"
+            | "borrow"
+            | "borrow_mut"
     )
 }
 fn name(n: &str, at: s::Span) -> Check<()> {
@@ -29,6 +36,24 @@ fn name(n: &str, at: s::Span) -> Check<()> {
 }
 fn ty(t: &s::TypeSyntax, layouts: &[Layout]) -> Check<Ty> {
     let n = t.path.segments.join(".");
+    if n == "Result" {
+        if t.arguments.len() != 2 || ty(&t.arguments[1], layouts)? != Ty::AllocationError {
+            return Err(err(
+                "owned Result requires Result<owned<R>, AllocationError>",
+                t.span,
+            ));
+        }
+        if let Ty::Owned(i) = ty(&t.arguments[0], layouts)? {
+            return Ok(Ty::OwnedResult(i));
+        }
+        return Err(err(
+            "only owned scalar-record Result payloads are supported",
+            t.span,
+        ));
+    }
+    if n == "AllocationError" && t.arguments.is_empty() {
+        return Ok(Ty::AllocationError);
+    }
     if matches!(n.as_str(), "owned" | "shared" | "exclusive") {
         if t.arguments.len() != 1 {
             return Err(err(
@@ -94,6 +119,10 @@ struct Binding {
 }
 #[derive(Clone)]
 enum Reference {
+    Result {
+        place: o::Place,
+        origin: Option<usize>,
+    },
     Copy,
     Owner {
         place: o::Place,
@@ -120,6 +149,108 @@ pub(super) fn lower(module: &s::Module, source: &str) -> Check<Lowered> {
             "ordinary-owned v1 requires local functions and scalar records; imports, variants and script statements are unsupported",
             module.span,
         ));
+    }
+    // New source expansion bounds apply only to the additive profile. Schema-1
+    // copied-only bodies retain their prior source/runtime bounds.
+    fn conditional_type(t: &s::TypeSyntax) -> bool {
+        (t.path.segments == ["Result"] || t.path.segments == ["AllocationError"])
+            || t.arguments.iter().any(conditional_type)
+    }
+    let new_profile = std::cell::Cell::new(module.functions.iter().any(|f| {
+        f.parameters.iter().any(|p| conditional_type(&p.ty))
+            || f.return_type.as_ref().is_some_and(conditional_type)
+    }));
+    let mut nodes = 0usize;
+    let mut expressions = 0usize;
+    for f in &module.functions {
+        s::visit_stmts(
+            &f.body,
+            &mut |stmt| {
+                nodes = nodes.saturating_add(1);
+                if matches!(stmt.kind, S::NoGc { .. }) {
+                    new_profile.set(true);
+                }
+            },
+            &mut |expr| {
+                expressions = expressions.saturating_add(1);
+                if matches!(&expr.kind, E::Call {callee, ..} if matches!(&callee.kind, E::Name(p) if p.segments == ["try_owned"]))
+                {
+                    new_profile.set(true);
+                }
+            },
+        );
+    }
+    if new_profile.get() && (nodes > 4096 || expressions > 4096) {
+        return Err(err(
+            "ordinary Result statement/expression limit is 4096",
+            module.span,
+        ));
+    }
+    fn bounded_expression(e: &s::Expr, depth: usize) -> Check<()> {
+        if depth > 32 {
+            return Err(err(
+                "ordinary Result expression nesting limit is 32",
+                e.span,
+            ));
+        }
+        match &e.kind {
+            E::Call { callee, arguments } => {
+                bounded_expression(callee, depth + 1)?;
+                for a in arguments {
+                    bounded_expression(&a.value, depth + 1)?;
+                }
+            }
+            E::Constructor { arguments, .. } => {
+                for a in arguments {
+                    bounded_expression(&a.value, depth + 1)?;
+                }
+            }
+            E::Binary { left, right, .. } => {
+                bounded_expression(left, depth + 1)?;
+                bounded_expression(right, depth + 1)?;
+            }
+            _ => {}
+        }
+        Ok(())
+    }
+    fn bounded_body(body: &[s::Stmt], depth: usize) -> Check<()> {
+        for stmt in body {
+            if depth > 32 {
+                return Err(err("ordinary Result block nesting limit is 32", stmt.span));
+            }
+            match &stmt.kind {
+                S::NoGc { budget, body } => {
+                    bounded_expression(budget, 1)?;
+                    bounded_body(body, depth + 1)?;
+                }
+                S::If {
+                    condition,
+                    then_body,
+                    else_body,
+                } => {
+                    bounded_expression(condition, 1)?;
+                    bounded_body(then_body, depth + 1)?;
+                    bounded_body(else_body, depth + 1)?;
+                }
+                S::Match { scrutinee, arms } => {
+                    bounded_expression(scrutinee, 1)?;
+                    for arm in arms {
+                        bounded_body(&arm.body, depth + 1)?;
+                    }
+                }
+                S::Let { value, .. }
+                | S::Assign { value, .. }
+                | S::Expr(value)
+                | S::Return(Some(value)) => bounded_expression(value, 1)?,
+                _ => {}
+            }
+        }
+        Ok(())
+    }
+    if new_profile.get() {
+        for f in &module.functions {
+            bounded_body(&f.body, 0)?;
+        }
     }
     if module.functions.len() > 256 {
         return Err(err("ordinary-owned function limit is 256", module.span));
@@ -218,7 +349,10 @@ pub(super) fn lower(module: &s::Module, source: &str) -> Check<Lowered> {
     let entry = *function_names
         .get("main")
         .ok_or_else(|| err("ordinary-owned source requires main", module.span))?;
-    if !signatures[entry].parameters.is_empty() || signatures[entry].result.ownership() {
+    if !signatures[entry].parameters.is_empty()
+        || signatures[entry].result.ownership()
+        || signatures[entry].result == Ty::AllocationError
+    {
         return Err(err(
             "main requires no parameters and a copied scalar or Unit result",
             module.functions[entry].span,
@@ -308,6 +442,7 @@ struct Lower<'a> {
     current: Option<usize>,
     tokens: Vec<String>,
     serial: usize,
+    operation_count: usize,
     returns: Vec<Option<usize>>,
 }
 impl<'a> Lower<'a> {
@@ -334,15 +469,24 @@ impl<'a> Lower<'a> {
             current: None,
             tokens: vec![],
             serial: 0,
+            operation_count: 0,
             returns: vec![],
         };
-        this.current = Some(this.block(f.span));
+        this.current = Some(this.block(f.span)?);
         for (i, p) in f.parameters.iter().enumerate() {
             let t = signatures[id].parameters[i];
             let local = this.local(&p.name, t, p.span);
             let reference = if t.ownership() {
-                let v = this.owner_local(p.span);
+                let v = if matches!(t, Ty::OwnedResult(_)) {
+                    this.sum_local(p.span)?
+                } else {
+                    this.owner_local(p.span)?
+                };
                 match t {
+                    Ty::OwnedResult(_) => Reference::Result {
+                        place: o::Place::local(v),
+                        origin: signatures[id].mapping[i],
+                    },
                     Ty::Owned(_) => Reference::Owner {
                         place: o::Place::local(v),
                         origin: signatures[id].mapping[i],
@@ -387,31 +531,59 @@ impl<'a> Lower<'a> {
         self.serial += 1;
         n
     }
-    fn owner_local(&mut self, at: s::Span) -> String {
+    fn owner_local(&mut self, at: s::Span) -> Check<String> {
+        if self.owner_locals.len() >= o::AnalysisLimits::default().max_locals {
+            return Err(diagnostic(
+                "CGO106",
+                "ownership local limit before expansion",
+                at,
+            ));
+        }
         let name = self.fresh();
         self.owner_locals.push(o::Local {
             name: name.clone(),
             storage: o::Storage::Owned,
             span: at,
         });
-        name
+        Ok(name)
     }
-    fn block(&mut self, at: s::Span) -> usize {
+    fn sum_local(&mut self, at: s::Span) -> Check<String> {
+        let name = self.owner_local(at)?;
+        self.owner_locals.last_mut().unwrap().storage = o::Storage::ConditionalOwned;
+        Ok(name)
+    }
+    fn block(&mut self, at: s::Span) -> Check<usize> {
+        if self.blocks.len() >= o::AnalysisLimits::default().max_blocks {
+            return Err(diagnostic(
+                "CGO106",
+                "ownership block limit before expansion",
+                at,
+            ));
+        }
         let id = self.blocks.len();
         self.blocks.push(o::Block {
             operations: vec![],
             terminator: o::Terminator::Return(o::ReturnValue::Unit),
             span: at,
         });
-        id
+        Ok(id)
     }
-    fn op(&mut self, operation: o::Operation, at: s::Span) {
+    fn op(&mut self, operation: o::Operation, at: s::Span) -> Check<()> {
+        if self.operation_count >= o::AnalysisLimits::default().max_operations {
+            return Err(diagnostic(
+                "CGO106",
+                "ownership operation limit before expansion",
+                at,
+            ));
+        }
         if let Some(i) = self.current {
+            self.operation_count += 1;
             self.blocks[i].operations.push(o::SpannedOperation {
                 operation,
                 span: at,
             });
         }
+        Ok(())
     }
     fn terminate(&mut self, terminator: o::Terminator, at: s::Span) {
         if let Some(i) = self.current.take() {
@@ -479,7 +651,7 @@ impl<'a> Lower<'a> {
                         o::Operation::Read(p)
                     },
                     at,
-                );
+                )?;
             }
             Reference::Loan(l) => {
                 if write && l.kind != o::LoanKind::Exclusive {
@@ -492,7 +664,7 @@ impl<'a> Lower<'a> {
                             write,
                         },
                         at,
-                    );
+                    )?;
                 } else {
                     let p = l.place.clone().project(o::Projection::Field(field_name));
                     self.op(
@@ -502,7 +674,7 @@ impl<'a> Lower<'a> {
                             o::Operation::Read(p)
                         },
                         at,
-                    );
+                    )?;
                 }
             }
             Reference::Copy if !write => {}
@@ -575,6 +747,7 @@ impl<'a> Lower<'a> {
                 };
                 self.call(&p.segments.join("."), arguments, at, call_argument)
             }
+            E::Constructor { case, .. } if !case.is_empty() => Err(err("direct Result/AllocationError constructors are excluded; propagate try_owned results", at)),
             E::Constructor {
                 ty,
                 case,
@@ -600,11 +773,14 @@ impl<'a> Lower<'a> {
             },
             reference,
         };
-        if matches!(n, "owned" | "borrow" | "borrow_mut") {
+        if n.starts_with("Result.") || n.starts_with("AllocationError.") {
+            return Err(err("direct Result/AllocationError constructors are excluded; propagate try_owned results", at));
+        }
+        if matches!(n, "owned" | "try_owned" | "borrow" | "borrow_mut") {
             if args.len() != 1 || args[0].name.is_some() {
                 return Err(err("ownership intrinsic requires one positional value", at));
             }
-            if n == "owned" {
+            if n == "owned" || n == "try_owned" {
                 let value = self.expression(&args[0].value, false)?;
                 let Ty::Record(layout) = value.ty() else {
                     return Err(err(
@@ -612,8 +788,20 @@ impl<'a> Lower<'a> {
                         args[0].span,
                     ));
                 };
-                let temp = self.owner_local(at);
-                self.op(o::Operation::Create(temp.clone()), at);
+                if n == "try_owned" {
+                    let temp = self.sum_local(at)?;
+                    self.op(o::Operation::TryCreate(temp.clone()), at)?;
+                    return Ok(make(
+                        ExpressionKind::TryOwned(Box::new(value.expr)),
+                        Ty::OwnedResult(layout),
+                        Reference::Result {
+                            place: o::Place::local(temp),
+                            origin: None,
+                        },
+                    ));
+                }
+                let temp = self.owner_local(at)?;
+                self.op(o::Operation::Create(temp.clone()), at)?;
                 return Ok(make(
                     ExpressionKind::Owned(Box::new(value.expr)),
                     Ty::Owned(layout),
@@ -658,7 +846,7 @@ impl<'a> Lower<'a> {
                         kind,
                     },
                     at,
-                );
+                )?;
                 self.tokens.push(token.clone());
                 Some(token)
             };
@@ -770,16 +958,28 @@ impl<'a> Lower<'a> {
                 ));
             }
             match value.reference {
+                Reference::Result { place, origin } => {
+                    let temp = self.sum_local(arg.value.span)?;
+                    self.op(
+                        o::Operation::MoveResult {
+                            from: place,
+                            to: temp.clone(),
+                        },
+                        arg.value.span,
+                    )?;
+                    places.push(o::Place::local(temp));
+                    origins.push(origin);
+                }
                 Reference::Owner { place, origin } => {
                     // Source arguments evaluate left-to-right: transfer now, before later arguments.
-                    let temp = self.owner_local(arg.value.span);
+                    let temp = self.owner_local(arg.value.span)?;
                     self.op(
                         o::Operation::Move {
                             from: place,
                             to: temp.clone(),
                         },
                         arg.value.span,
-                    );
+                    )?;
                     places.push(o::Place::local(temp));
                     origins.push(origin);
                 }
@@ -802,8 +1002,18 @@ impl<'a> Lower<'a> {
             expressions.push(value.expr);
         }
         let (result, reference) = match (&summary.result, sig.result) {
+            (o::ResultMode::OwnedResult { from_parameter }, Ty::OwnedResult(_)) => {
+                let temp = self.sum_local(at)?;
+                (
+                    o::CallResult::OwnedResult(temp.clone()),
+                    Reference::Result {
+                        place: o::Place::local(temp),
+                        origin: from_parameter.and_then(|i| origins[i]),
+                    },
+                )
+            }
             (o::ResultMode::Owned { from_parameter }, Ty::Owned(_)) => {
-                let temp = self.owner_local(at);
+                let temp = self.owner_local(at)?;
                 (
                     o::CallResult::Owned(temp.clone()),
                     Reference::Owner {
@@ -844,7 +1054,7 @@ impl<'a> Lower<'a> {
                 retention_owner: None,
             },
             at,
-        );
+        )?;
         Ok(make(
             ExpressionKind::Call {
                 function: id,
@@ -860,6 +1070,10 @@ impl<'a> Lower<'a> {
         }
         let mut returned_token = None;
         let result = match v.reference {
+            Reference::Result { place, origin } => {
+                self.returns.push(origin);
+                o::ReturnValue::OwnedResult(place)
+            }
             Reference::Copy => o::ReturnValue::Unit,
             Reference::Owner { place, origin } => {
                 self.returns.push(origin);
@@ -877,7 +1091,7 @@ impl<'a> Lower<'a> {
                             kind: l.kind,
                         },
                         at,
-                    );
+                    )?;
                     t
                 };
                 returned_token = Some(token.clone());
@@ -886,7 +1100,7 @@ impl<'a> Lower<'a> {
         };
         for token in self.tokens.clone().iter().rev() {
             if returned_token.as_ref() != Some(token) {
-                self.op(o::Operation::EndLoan(token.clone()), at);
+                self.op(o::Operation::EndLoan(token.clone()), at)?;
             }
         }
         self.terminate(o::Terminator::Return(result), at);
@@ -929,15 +1143,29 @@ impl<'a> Lower<'a> {
                         ));
                     }
                     let reference = match value.reference {
+                        Reference::Result { place, origin } => {
+                            let dest = self.sum_local(s.span)?;
+                            self.op(
+                                o::Operation::MoveResult {
+                                    from: place,
+                                    to: dest.clone(),
+                                },
+                                span(value.expr.span),
+                            )?;
+                            Reference::Result {
+                                place: o::Place::local(dest),
+                                origin,
+                            }
+                        }
                         Reference::Owner { place, origin } => {
-                            let dest = self.owner_local(s.span);
+                            let dest = self.owner_local(s.span)?;
                             self.op(
                                 o::Operation::Move {
                                     from: place,
                                     to: dest.clone(),
                                 },
                                 span(value.expr.span),
-                            );
+                            )?;
                             Reference::Owner {
                                 place: o::Place::local(dest),
                                 origin,
@@ -959,7 +1187,7 @@ impl<'a> Lower<'a> {
                                     kind: l.kind,
                                 },
                                 span(value.expr.span),
-                            );
+                            )?;
                             self.tokens.push(token.clone());
                             Reference::Loan(Loan {
                                 token: Some(token),
@@ -1036,10 +1264,32 @@ impl<'a> Lower<'a> {
                         out.push(self.return_value(v, e.span)?);
                         continue;
                     }
+                    if let Reference::Result { place, .. } = &v.reference {
+                        self.op(o::Operation::DropResult(place.clone()), e.span)?;
+                    }
                     if let Reference::Owner { place, .. } = &v.reference {
-                        self.op(o::Operation::Drop(place.clone()), e.span);
+                        self.op(o::Operation::Drop(place.clone()), e.span)?;
                     }
                     StatementKind::Evaluate(v.expr)
+                }
+                S::NoGc { budget, body } => {
+                    let E::Integer(n) = &budget.kind else {
+                        return Err(err(
+                            "no_gc budget requires a nonnegative integer literal",
+                            budget.span,
+                        ));
+                    };
+                    let budget = n
+                        .replace('_', "")
+                        .parse::<usize>()
+                        .map_err(|_| err("no_gc budget is outside usize", budget.span))?;
+                    StatementKind::NoGc {
+                        budget,
+                        body: self.statements(body, false)?,
+                    }
+                }
+                S::Match { scrutinee, arms } => {
+                    self.match_statement(scrutinee, arms, s.span, tail && i + 1 == body.len())?
                 }
                 S::If {
                     condition,
@@ -1050,8 +1300,8 @@ impl<'a> Lower<'a> {
                     if c.ty() != Ty::Bool {
                         return Err(err("if condition requires Bool", condition.span));
                     }
-                    let then_block = self.block(s.span);
-                    let else_block = self.block(s.span);
+                    let then_block = self.block(s.span)?;
+                    let else_block = self.block(s.span)?;
                     self.terminate(
                         o::Terminator::Branch {
                             then_block,
@@ -1066,7 +1316,7 @@ impl<'a> Lower<'a> {
                     let else_body = self.statements(else_body, false)?;
                     let else_exit = self.current.take();
                     if then_exit.is_some() || else_exit.is_some() {
-                        let join = self.block(s.span);
+                        let join = self.block(s.span)?;
                         for exit in [then_exit, else_exit].into_iter().flatten() {
                             self.blocks[exit].terminator = o::Terminator::Goto(join);
                         }
@@ -1096,12 +1346,168 @@ impl<'a> Lower<'a> {
                     o::Operation::EndLoan(token.clone()),
                     body.last()
                         .map_or(self.module.functions[self.id].span, |s| s.span),
-                );
+                )?;
             }
         }
         self.tokens.truncate(token_start);
         self.scopes.pop();
         Ok(out)
+    }
+    fn match_statement(
+        &mut self,
+        scrutinee: &s::Expr,
+        arms: &[s::MatchArm],
+        at: s::Span,
+        tail: bool,
+    ) -> Check<StatementKind> {
+        let value = self.expression(scrutinee, false)?;
+        let cases: &[&str] = match value.ty() {
+            Ty::OwnedResult(_) => &["Ok", "Err"],
+            Ty::AllocationError => &[
+                "BudgetExceeded",
+                "RegionLimit",
+                "HostAllocation",
+                "InvalidRegion",
+                "ShapeLimit",
+            ],
+            _ => {
+                return Err(err(
+                    "match requires an owned Result or AllocationError",
+                    scrutinee.span,
+                ))
+            }
+        };
+        if arms.len() != cases.len() {
+            return Err(err("match must exhaust exactly the declared cases", at));
+        }
+        let type_name = if cases.len() == 2 {
+            "Result"
+        } else {
+            "AllocationError"
+        };
+        let mut ordered = vec![None; cases.len()];
+        for arm in arms {
+            let s::Pattern::Case {
+                ty: pattern_ty,
+                case,
+                bindings,
+                ..
+            } = &arm.pattern
+            else {
+                return Err(err(
+                    "only exhaustive qualified case patterns are supported",
+                    arm.span,
+                ));
+            };
+            if pattern_ty.path.segments.join(".") != type_name
+                || (!pattern_ty.arguments.is_empty() && ty(pattern_ty, self.layouts)? != value.ty())
+            {
+                return Err(err(
+                    "pattern type/layout differs from scrutinee",
+                    pattern_ty.span,
+                ));
+            }
+            let index = cases
+                .iter()
+                .position(|c| *c == case)
+                .ok_or_else(|| err("unknown match case", arm.span))?;
+            if ordered[index].replace(arm).is_some()
+                || bindings.len() != usize::from(cases.len() == 2)
+            {
+                return Err(err("duplicate case or wrong payload arity", arm.span));
+            }
+        }
+        let blocks: Vec<_> = cases.iter().map(|_| self.block(at)).collect::<Check<_>>()?;
+        let mut binding_locals = Vec::new();
+        let mut references = Vec::new();
+        if let (Ty::OwnedResult(layout), Reference::Result { place, origin }) =
+            (value.ty(), &value.reference)
+        {
+            let payload = self.owner_local(at)?;
+            self.terminate(
+                o::Terminator::MatchResult {
+                    from: place.clone(),
+                    payload: payload.clone(),
+                    ok: blocks[0],
+                    err: blocks[1],
+                },
+                scrutinee.span,
+            );
+            references.push(Reference::Owner {
+                place: o::Place::local(payload),
+                origin: *origin,
+            });
+            references.push(Reference::Copy);
+            binding_locals.push(self.local("$ok", Ty::Owned(layout), at));
+            binding_locals.push(self.local("$err", Ty::AllocationError, at));
+        } else {
+            // Five copied error arms: a linear binary decision CFG checks every arm.
+            for (i, block) in blocks.iter().enumerate().take(blocks.len() - 1) {
+                let next = if i + 2 == blocks.len() {
+                    blocks[i + 1]
+                } else {
+                    self.block(at)?
+                };
+                self.terminate(
+                    o::Terminator::Branch {
+                        then_block: *block,
+                        else_block: next,
+                    },
+                    scrutinee.span,
+                );
+                self.current = Some(next);
+            }
+            self.current = None;
+        }
+        let mut bodies = Vec::new();
+        let mut exits = Vec::new();
+        for (i, arm) in ordered.into_iter().enumerate() {
+            let arm = arm.unwrap();
+            self.current = Some(blocks[i]);
+            self.scopes.push(BTreeMap::new());
+            if cases.len() == 2 {
+                let s::Pattern::Case { bindings, .. } = &arm.pattern else {
+                    unreachable!()
+                };
+                let local = binding_locals[i];
+                self.insert(
+                    &bindings[0].name,
+                    Binding {
+                        id: local,
+                        ty: self.locals[local].ty,
+                        mutable: false,
+                        reference: references[i].clone(),
+                    },
+                    bindings[0].span,
+                )?;
+            }
+            bodies.push(self.statements(&arm.body, tail)?);
+            self.scopes.pop();
+            exits.push(self.current.take());
+        }
+        if exits.iter().any(Option::is_some) {
+            let join = self.block(at)?;
+            for exit in exits.into_iter().flatten() {
+                self.blocks[exit].terminator = o::Terminator::Goto(join);
+            }
+            self.current = Some(join);
+        }
+        if cases.len() == 2 {
+            let err_body = bodies.pop().unwrap();
+            let ok_body = bodies.pop().unwrap();
+            Ok(StatementKind::MatchResult {
+                scrutinee: value.expr,
+                ok_local: binding_locals[0],
+                err_local: binding_locals[1],
+                ok_body,
+                err_body,
+            })
+        } else {
+            Ok(StatementKind::MatchError {
+                scrutinee: value.expr,
+                arms: bodies,
+            })
+        }
     }
     fn finish(mut self) -> Check<(Function, o::Function)> {
         let f = &self.module.functions[self.id];
@@ -1124,7 +1530,7 @@ impl<'a> Lower<'a> {
             )?);
         }
         let result = match sig.result {
-            Ty::Owned(_) => {
+            Ty::Owned(_) | Ty::OwnedResult(_) => {
                 let origin = self.returns.first().copied().flatten();
                 if self.returns.iter().any(|o| *o != origin) {
                     return Err(err(
@@ -1132,8 +1538,14 @@ impl<'a> Lower<'a> {
                         f.span,
                     ));
                 }
-                o::ResultMode::Owned {
-                    from_parameter: origin,
+                if matches!(sig.result, Ty::OwnedResult(_)) {
+                    o::ResultMode::OwnedResult {
+                        from_parameter: origin,
+                    }
+                } else {
+                    o::ResultMode::Owned {
+                        from_parameter: origin,
+                    }
                 }
             }
             Ty::Shared(layout) | Ty::Exclusive(layout) => {
@@ -1162,6 +1574,7 @@ impl<'a> Lower<'a> {
                 .parameters
                 .iter()
                 .filter_map(|t| match t {
+                    Ty::OwnedResult(_) => Some(o::ParameterMode::OwnedResult),
                     Ty::Owned(_) => Some(o::ParameterMode::Owned),
                     Ty::Shared(_) => Some(o::ParameterMode::Shared),
                     Ty::Exclusive(_) => Some(o::ParameterMode::Exclusive),

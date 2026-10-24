@@ -8,3 +8,6 @@ pub mod v1;
 pub use check::check_ops;
 pub use diagnostic::OwnershipDiagnostic;
 pub use ir::Op;
+
+/// Additive conditional-owner CFG and worklist checker.
+pub mod v2;

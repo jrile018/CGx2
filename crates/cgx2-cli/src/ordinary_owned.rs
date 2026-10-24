@@ -1,5 +1,5 @@
 use crate::{RunError, RunResult, Value};
-use cgx2_sema::ordinary_owned::{compile_source, Scalar};
+use cgx2_sema::ordinary_owned::{compile_source_v2 as compile_source, Scalar};
 
 pub fn validate_owned_source(source: &str) -> Result<(), Vec<crate::CheckDiagnostic>> {
     compile_source(source).map(|_| ()).map_err(|ds| {
@@ -29,7 +29,7 @@ pub(super) fn run(
     let execution = if let Some(index) = host_fail_reserve {
         match cgx2_runtime::Session::try_new_with_host_failure_at_reserve(index) {
             Ok(session) => program.execute_with_session(session),
-            Err(error) => Ok(cgx2_sema::ordinary_owned::Execution {
+            Err(error) => Ok(cgx2_sema::ordinary_owned::ExecutionV2 {
                 result: Err(cgx2_sema::ordinary_owned::Failure {
                     code: "CGR080",
                     message: format!("session allocation failed: {error:?}"),
@@ -56,7 +56,14 @@ pub(super) fn run(
             .collect::<Vec<_>>()
     })?;
     if std::env::var_os("CGX2_OWNED_EVIDENCE").is_some() {
-        eprintln!("CGX2_OWNED_EVIDENCE {}", execution.evidence.json());
+        eprintln!(
+            "CGX2_OWNED_EVIDENCE {}",
+            if program.schema_version() == 1 {
+                execution.evidence.json()
+            } else {
+                execution.evidence.json_v2()
+            }
+        );
     }
     execution
         .result

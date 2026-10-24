@@ -216,3 +216,19 @@ The smallest next memory extension is a versioned summary for allocation
 `Result` arms (success owns the new scalar record; failure owns no new value),
 followed by source-level recoverable allocation for these same fixed layouts.
 That requires an ownership-interface review before dependent consumers proceed.
+
+## Additive version history
+
+Schema 2 adds recoverable fixed-layout owned Results and bounded ordinary
+no_gc. See [the frozen additive contract](S2B-OWNED-RESULT.md) and
+`owned-result-evidence/`. The schema-1 source/value API, v1 checker projection
+and schema-1 evidence JSON remain available with their original meaning. New
+schema-2 bodies use complete v2 CFG/summary accessors and `Evidence::json_v2`;
+v1 accessors are empty for these bodies and cannot certify them. Historical
+reports and remaining gates above are preserved as historical evidence.
+
+The additive API is explicit: old compile_source/OwnedProgram/model/Evidence/
+Execution stay schema 1; compile_source_v2/OwnedProgramV2/model_v2/EvidenceV2/
+ExecutionV2 carry new shapes. emit_owned_result_rust is the new emitter;
+emit_owned_rust remains a checked schema-1 upgrade adapter. No old exhaustive
+model enum gains a case and no old public evidence literal gains a field.

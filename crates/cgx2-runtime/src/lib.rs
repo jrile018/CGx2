@@ -49,6 +49,7 @@ pub struct Session {
     id: u64,
     regions: Vec<Region>,
     pub(crate) budgets: Vec<Budget>,
+    pub(crate) charged_bytes_v2: u128,
     fault: FaultInjection,
 }
 
@@ -58,7 +59,25 @@ impl Default for Session {
     }
 }
 
+/// Cumulative successful logical runtime charges, not RSS or foreign storage.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct MemoryObservationV2 {
+    pub charged_bytes: u128,
+    pub active_guards: usize,
+    pub collection_count: u64,
+}
 impl Session {
+    pub fn memory_observation_v2(&self) -> MemoryObservationV2 {
+        MemoryObservationV2 {
+            charged_bytes: self.charged_bytes_v2,
+            active_guards: self.budgets.len(),
+            collection_count: self
+                .regions
+                .iter()
+                .fold(0u64, |n, r| n.saturating_add(r.stats.collection_count)),
+        }
+    }
+
     pub fn new() -> Self {
         // Compatibility entry point: retain historical allocation/fault behavior.
         let id = NEXT_SESSION_ID
@@ -73,6 +92,7 @@ impl Session {
                 64 << 20,
             )],
             budgets: Vec::new(),
+            charged_bytes_v2: 0,
             fault: FaultInjection::default(),
         }
     }
@@ -110,6 +130,7 @@ impl Session {
             id,
             regions,
             budgets: Vec::new(),
+            charged_bytes_v2: 0,
             fault,
         })
     }

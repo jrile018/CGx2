@@ -1,0 +1,154 @@
+{
+  "sum-twice": {
+    "code": "CGO101",
+    "span": {
+      "start": 109,
+      "end": 110
+    },
+    "slice": "q"
+  },
+  "payload-twice": {
+    "code": "CGO101",
+    "span": {
+      "start": 146,
+      "end": 147
+    },
+    "slice": "p"
+  },
+  "err-sees-ok": {
+    "code": "CGT081",
+    "span": {
+      "start": 159,
+      "end": 162
+    },
+    "slice": "p.x"
+  },
+  "after-arm": {
+    "code": "CGT081",
+    "span": {
+      "start": 151,
+      "end": 154
+    },
+    "slice": "p.x"
+  },
+  "match-twice": {
+    "code": "CGO101",
+    "span": {
+      "start": 178,
+      "end": 179
+    },
+    "slice": "q"
+  },
+  "conditional-move": {
+    "code": "CGO101",
+    "span": {
+      "start": 146,
+      "end": 147
+    },
+    "slice": "q"
+  },
+  "negative-budget": {
+    "code": "CGS106",
+    "span": {
+      "start": 77,
+      "end": 79
+    },
+    "slice": "-1"
+  },
+  "bool-budget": {
+    "code": "CGT081",
+    "span": {
+      "start": 77,
+      "end": 81
+    },
+    "slice": "true"
+  },
+  "dynamic-budget": {
+    "code": "CGT081",
+    "span": {
+      "start": 77,
+      "end": 78
+    },
+    "slice": "n"
+  },
+  "wrong-call": {
+    "code": "CGT081",
+    "span": {
+      "start": 140,
+      "end": 158
+    },
+    "slice": "try_owned(R(x: 1))"
+  },
+  "reborrow": {
+    "code": "CGT083",
+    "span": {
+      "start": 116,
+      "end": 117
+    },
+    "slice": "a"
+  },
+  "loan-to-result": {
+    "code": "CGT081",
+    "span": {
+      "start": 99,
+      "end": 100
+    },
+    "slice": "p"
+  },
+  "constructor": {
+    "code": "CGT081",
+    "span": {
+      "start": 56,
+      "end": 108
+    },
+    "slice": "Result<owned<R>, AllocationError>.Ok(owned(R(x: 1)))"
+  },
+  "shadow-builtin": {
+    "code": "CGT082",
+    "span": {
+      "start": 33,
+      "end": 47
+    },
+    "slice": "try_owned: i64"
+  },
+  "wrong-pattern": {
+    "code": "CGT081",
+    "span": {
+      "start": 103,
+      "end": 136
+    },
+    "slice": "Result<owned<S>, AllocationError>"
+  },
+  "nonexhaustive-result": {
+    "code": "CGT081",
+    "span": {
+      "start": 48,
+      "end": 119
+    },
+    "slice": "match try_owned(R(x: 1)):\n        Result.Ok(p):\n            return p.x\n"
+  },
+  "nonexhaustive-error": {
+    "code": "CGT081",
+    "span": {
+      "start": 154,
+      "end": 242
+    },
+    "slice": "match e:\n                AllocationError.BudgetExceeded():\n                    return 0\n"
+  },
+  "overflow-budget": {
+    "code": "CGT081",
+    "span": {
+      "start": 62,
+      "end": 82
+    },
+    "slice": "18446744073709551616"
+  },
+  "over-nesting": {
+    "code": "CGT081",
+    "span": {
+      "start": 3195,
+      "end": 3205
+    },
+    "slice": "return 42\n"
+  }
+}

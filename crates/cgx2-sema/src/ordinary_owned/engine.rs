@@ -1,6 +1,6 @@
 //! Same byte-storage interpreter compiled into both source execution and native output.
-use super::model::*;
-use cgx2_runtime::{OwnedBytes, Session};
+use super::model_v2::*;
+use cgx2_runtime::{AllocationError, OwnedBytes, Session};
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Scalar {
@@ -39,6 +39,17 @@ pub struct Failure {
 }
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct Evidence {
+    pub result_ok: usize,
+    pub result_err: usize,
+    pub allocation_failures: usize,
+    pub guard_entries: usize,
+    pub guard_exits: usize,
+    pub guard_failures: usize,
+    pub charged_bytes: u128,
+    pub owned_charged_bytes: u128,
+    pub guard_charged_bytes: u128,
+    pub collection_count: u64,
+    pub active_guards_at_exit: usize,
     pub allocations: usize,
     pub releases: usize,
     pub live_bytes: usize,
@@ -50,17 +61,13 @@ pub struct Evidence {
 }
 impl Evidence {
     pub fn json(&self) -> String {
-        format!(
-            "{{\"schema\":1,\"allocations\":{},\"releases\":{},\"live_bytes\":{},\"allocated_bytes\":{},\"released_bytes\":{},\"peak_live_bytes\":{},\"reads\":{},\"writes\":{}}}",
-            self.allocations,
-            self.releases,
-            self.live_bytes,
-            self.allocated_bytes,
-            self.released_bytes,
-            self.peak_live_bytes,
-            self.reads,
-            self.writes
-        )
+        format!("{{\"schema\":1,\"allocations\":{},\"releases\":{},\"live_bytes\":{},\"allocated_bytes\":{},\"released_bytes\":{},\"peak_live_bytes\":{},\"reads\":{},\"writes\":{}}}", self.allocations, self.releases, self.live_bytes, self.allocated_bytes, self.released_bytes, self.peak_live_bytes, self.reads, self.writes)
+    }
+    pub fn json_v2(&self) -> String {
+        format!(concat!("{{\"schema\":2,\"allocations\":{},\"releases\":{},\"live_bytes\":{},\"allocated_bytes\":{},\"released_bytes\":{},\"peak_live_bytes\":{},\"reads\":{},\"writes\":{},",
+            "\"result_ok\":{},\"result_err\":{},\"allocation_failures\":{},\"guard_entries\":{},\"guard_exits\":{},\"guard_failures\":{},\"charged_bytes\":{},\"owned_charged_bytes\":{},\"guard_charged_bytes\":{},\"collection_count\":{},\"active_guards_at_exit\":{}}}"),
+            self.allocations, self.releases, self.live_bytes, self.allocated_bytes, self.released_bytes, self.peak_live_bytes, self.reads, self.writes,
+            self.result_ok, self.result_err, self.allocation_failures, self.guard_entries, self.guard_exits, self.guard_failures, self.charged_bytes, self.owned_charged_bytes, self.guard_charged_bytes, self.collection_count, self.active_guards_at_exit)
     }
 }
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -72,14 +79,16 @@ enum Value {
     Scalar(Scalar),
     Record(usize, Vec<Scalar>),
     Owner(usize),
+    OwnedResult(Result<usize, AllocationError>),
+    Error(AllocationError),
     Loan(usize),
 }
-struct Engine<'a> {
+struct Engine<'a, 's> {
     model: &'a Model,
-    session: Session,
-    storage: Vec<Option<(usize, OwnedBytes)>>,
-    evidence: Evidence,
-    steps: usize,
+    session: &'s mut Session,
+    storage: &'s mut Vec<Option<(usize, OwnedBytes)>>,
+    evidence: &'s mut Evidence,
+    steps: &'s mut usize,
 }
 type Eval<T> = Result<T, Failure>;
 fn fail(span: SourceSpan, message: impl Into<String>) -> Failure {
@@ -101,13 +110,16 @@ pub(super) fn run(model: &Model) -> Execution {
         },
     }
 }
-pub(super) fn run_with_session(model: &Model, session: Session) -> Execution {
+pub(super) fn run_with_session(model: &Model, mut session: Session) -> Execution {
+    let mut storage = vec![];
+    let mut evidence = Evidence::default();
+    let mut steps = 0;
     let mut e = Engine {
         model,
-        session,
-        storage: vec![],
-        evidence: Evidence::default(),
-        steps: 0,
+        session: &mut session,
+        storage: &mut storage,
+        evidence: &mut evidence,
+        steps: &mut steps,
     };
     let result = e.call(model.entry, vec![], 0).and_then(|v| match v {
         Value::Scalar(v) => Ok(v),
@@ -125,19 +137,19 @@ pub(super) fn run_with_session(model: &Model, session: Session) -> Execution {
             "main must return a copied value or Unit",
         )),
     });
-    // Also releases temporaries on allocation/arithmetic/argument evaluation failure.
     for id in 0..e.storage.len() {
         e.release(id);
     }
-    Execution {
-        result,
-        evidence: e.evidence,
-    }
+    let observation = e.session.memory_observation_v2();
+    e.evidence.charged_bytes = observation.charged_bytes;
+    e.evidence.collection_count = observation.collection_count;
+    e.evidence.active_guards_at_exit = observation.active_guards;
+    Execution { result, evidence }
 }
-impl Engine<'_> {
+impl Engine<'_, '_> {
     fn tick(&mut self, span: SourceSpan) -> Eval<()> {
-        self.steps += 1;
-        if self.steps > 1_000_000 {
+        *self.steps += 1;
+        if *self.steps > 1_000_000 {
             Err(fail(span, "ordinary execution step limit"))
         } else {
             Ok(())
@@ -152,7 +164,7 @@ impl Engine<'_> {
         }
     }
     fn dispose(&mut self, value: Value) {
-        if let Value::Owner(id) = value {
+        if let Value::Owner(id) | Value::OwnedResult(Ok(id)) = value {
             self.release(id);
         }
     }
@@ -184,6 +196,70 @@ impl Engine<'_> {
             for s in body {
                 self.tick(s.span)?;
                 match &s.kind {
+                    StatementKind::NoGc { budget, body } => {
+                        let before = self.session.memory_observation_v2().charged_bytes;
+                        let mut guard = match self.session.try_no_gc(*budget) {
+                            Ok(guard) => guard,
+                            Err(error) => {
+                                self.evidence.guard_failures += 1;
+                                return Err(fail(s.span, format!("no_gc entry failed: {error:?}")));
+                            }
+                        };
+                        self.evidence.guard_entries += 1;
+                        self.evidence.guard_charged_bytes +=
+                            guard.memory_observation_v2().charged_bytes - before;
+                        let result = Engine {
+                            model: self.model,
+                            session: &mut guard,
+                            storage: self.storage,
+                            evidence: self.evidence,
+                            steps: self.steps,
+                        }
+                        .block(body, slots, depth);
+                        drop(guard);
+                        self.evidence.guard_exits += 1;
+                        if let Some(value) = result? {
+                            return Ok(Some(value));
+                        }
+                    }
+                    StatementKind::MatchResult {
+                        scrutinee,
+                        ok_local,
+                        err_local,
+                        ok_body,
+                        err_body,
+                    } => {
+                        let Value::OwnedResult(result) = self.expr(scrutinee, slots, depth)? else {
+                            return Err(fail(s.span, "expected conditional owner"));
+                        };
+                        let (local, value, body) = match result {
+                            Ok(id) => (*ok_local, Value::Owner(id), ok_body),
+                            Err(error) => (*err_local, Value::Error(error), err_body),
+                        };
+                        slots[local] = Some(value);
+                        let result = self.block(body, slots, depth);
+                        if let Some(value) = slots[local].take() {
+                            self.dispose(value);
+                        }
+                        if let Some(value) = result? {
+                            return Ok(Some(value));
+                        }
+                    }
+                    StatementKind::MatchError { scrutinee, arms } => {
+                        let Value::Error(error) = self.expr(scrutinee, slots, depth)? else {
+                            return Err(fail(s.span, "expected allocation error"));
+                        };
+                        let arm = match error {
+                            AllocationError::BudgetExceeded => 0,
+                            AllocationError::RegionLimit => 1,
+                            AllocationError::HostAllocation => 2,
+                            AllocationError::InvalidRegion => 3,
+                            AllocationError::ShapeLimit => 4,
+                        };
+                        if let Some(value) = self.block(&arms[arm], slots, depth)? {
+                            return Ok(Some(value));
+                        }
+                    }
                     StatementKind::Let { local, value } => {
                         let v = self.expr(value, slots, depth)?;
                         slots[*local] = Some(v);
@@ -196,6 +272,13 @@ impl Engine<'_> {
                         add,
                     } => {
                         let value = self.expr(value, slots, depth)?;
+                        if let Value::Error(error) = value {
+                            if field.is_some() || *add {
+                                return Err(fail(s.span, "invalid copied-error assignment"));
+                            }
+                            slots[*local] = Some(Value::Error(error));
+                            continue;
+                        }
                         let Value::Scalar(mut scalar) = value else {
                             return Err(fail(s.span, "non-scalar assignment"));
                         };
@@ -269,10 +352,11 @@ impl Engine<'_> {
             ExpressionKind::Bool(v) => Value::Scalar(Scalar::Bool(*v)),
             ExpressionKind::Unit => Value::Scalar(Scalar::Unit),
             ExpressionKind::Local(i) => match slots[*i].as_ref() {
-                Some(Value::Owner(_)) => slots[*i]
+                Some(Value::Owner(_) | Value::OwnedResult(_)) => slots[*i]
                     .take()
                     .ok_or_else(|| fail(e.span, "owner moved"))?,
                 Some(Value::Loan(id)) => Value::Loan(*id),
+                Some(Value::Error(error)) => Value::Error(*error),
                 Some(Value::Scalar(s)) => Value::Scalar(s.clone()),
                 Some(Value::Record(l, fields)) => Value::Record(*l, fields.clone()),
                 None => return Err(fail(e.span, "binding moved or uninitialized")),
@@ -305,34 +389,25 @@ impl Engine<'_> {
                 }
                 Value::Record(*layout, values)
             }
-            ExpressionKind::Owned(value) => {
+            ExpressionKind::Owned(value) | ExpressionKind::TryOwned(value) => {
                 let Value::Record(layout, fields) = self.expr(value, slots, depth)? else {
                     return Err(fail(e.span, "owned requires a scalar record"));
                 };
-                let len = self.model.layouts[layout].size;
-                let bytes = self
-                    .session
-                    .alloc_owned_bytes(len)
-                    .map_err(|a| fail(e.span, format!("owned allocation failed: {a:?}")))?;
-                let id = self
-                    .storage
-                    .iter()
-                    .position(Option::is_none)
-                    .unwrap_or(self.storage.len());
-                if id == self.storage.len() {
-                    self.storage.push(Some((layout, bytes)));
-                } else {
-                    self.storage[id] = Some((layout, bytes));
+                let recoverable = matches!(e.kind, ExpressionKind::TryOwned(_));
+                match self.allocate(layout, &fields, e.span) {
+                    Ok(id) if recoverable => {
+                        self.evidence.result_ok += 1;
+                        Value::OwnedResult(Ok(id))
+                    }
+                    Ok(id) => Value::Owner(id),
+                    Err(error) if recoverable => {
+                        self.evidence.result_err += 1;
+                        Value::OwnedResult(Err(error))
+                    }
+                    Err(error) => {
+                        return Err(fail(e.span, format!("owned allocation failed: {error:?}")))
+                    }
                 }
-                self.evidence.allocations += 1;
-                self.evidence.allocated_bytes += len;
-                self.evidence.live_bytes += len;
-                self.evidence.peak_live_bytes =
-                    self.evidence.peak_live_bytes.max(self.evidence.live_bytes);
-                for (i, scalar) in fields.iter().enumerate() {
-                    self.write(id, layout, i, scalar, e.span)?;
-                }
-                Value::Owner(id)
             }
             ExpressionKind::Borrow { local } => {
                 Value::Loan(Self::storage_id(slots, *local, e.span)?)
@@ -343,7 +418,15 @@ impl Engine<'_> {
             } => {
                 let mut args = Vec::new();
                 for a in arguments {
-                    args.push(self.expr(a, slots, depth)?);
+                    match self.expr(a, slots, depth) {
+                        Ok(v) => args.push(v),
+                        Err(error) => {
+                            for v in args {
+                                self.dispose(v);
+                            }
+                            return Err(error);
+                        }
+                    }
                 }
                 self.call(*function, args, depth + 1)?
             }
@@ -357,6 +440,44 @@ impl Engine<'_> {
                 Value::Scalar(arithmetic(*op, a, b, e.span)?)
             }
         })
+    }
+    fn allocate(
+        &mut self,
+        layout: usize,
+        fields: &[Scalar],
+        at: SourceSpan,
+    ) -> Result<usize, AllocationError> {
+        let len = self.model.layouts[layout].size;
+        let before = self.session.memory_observation_v2().charged_bytes;
+        let bytes = match self.session.alloc_owned_bytes(len) {
+            Ok(bytes) => bytes,
+            Err(error) => {
+                self.evidence.allocation_failures += 1;
+                return Err(error);
+            }
+        };
+        self.evidence.owned_charged_bytes +=
+            self.session.memory_observation_v2().charged_bytes - before;
+        let id = self
+            .storage
+            .iter()
+            .position(Option::is_none)
+            .unwrap_or(self.storage.len());
+        if id == self.storage.len() {
+            self.storage.push(Some((layout, bytes)));
+        } else {
+            self.storage[id] = Some((layout, bytes));
+        }
+        self.evidence.allocations += 1;
+        self.evidence.allocated_bytes += len;
+        self.evidence.live_bytes += len;
+        self.evidence.peak_live_bytes = self.evidence.peak_live_bytes.max(self.evidence.live_bytes);
+        for (i, scalar) in fields.iter().enumerate() {
+            // Authenticated scalar layouts/values make encoding total.
+            self.write(id, layout, i, scalar, at)
+                .expect("checked scalar record encoding");
+        }
+        Ok(id)
     }
     fn read(&mut self, id: usize, layout: usize, field: usize, span: SourceSpan) -> Eval<Scalar> {
         let f = &self.model.layouts[layout].fields[field];
@@ -454,16 +575,16 @@ mod tests {
     #[test]
     fn signed_little_endian_and_bool_validity_use_real_owned_bytes() {
         let source = "record R:\n    x: i64\n    yes: Bool\nfn main() -> i64:\n    let p = owned(R(x: 0, yes: true))\n    p.x\n";
-        let p = crate::ordinary_owned::compile_source(source).unwrap();
+        let p = crate::ordinary_owned::compile_source_v2(source).unwrap();
         let model = p.model();
         let mut session = Session::try_new().unwrap();
         let storage = session.alloc_owned_bytes(9).unwrap();
         let mut engine = Engine {
             model,
-            session,
-            storage: vec![Some((0, storage))],
-            evidence: Evidence::default(),
-            steps: 0,
+            session: &mut session,
+            storage: &mut vec![Some((0, storage))],
+            evidence: &mut Evidence::default(),
+            steps: &mut 0,
         };
         let span = model.layouts[0].span;
         engine.write(0, 0, 0, &Scalar::I64(i64::MIN), span).unwrap();

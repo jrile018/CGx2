@@ -1,0 +1,7 @@
+# π
+record R:
+    x: i64
+fn bad(try_owned: i64, p: owned<R>) -> i64:
+    0
+fn main() -> i64:
+    0
