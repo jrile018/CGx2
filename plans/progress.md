@@ -71,3 +71,7 @@ Graph/payload delivery is staged repair-required. 1157 workspace tests and99 gra
 ## S2b memory legacy repairs accepted
 
 The native guard budget and source report provenance regressions are fixed and independently reviewed. Combined1163Rust tests and882source/target product checks pass; default build, Clippy and fmt pass. Graph/payload support is accepted as infrastructure only. Ordinary-owned source execution is still running; full ordinary memory, remaining S2b, S3 and external evidence gates remain open. [Evidence](release-completion/s2b-memory-review/evidence/accepted-repairs.json).
+
+## First ordinary-owned source slice accepted
+
+Local owned scalar records and shared/exclusive function loans now execute through checked ownership IR and actual runtime storage in interpreter/native/standalone Rust. Three independent reviews and combined1179Rust/2123product checks pass. Supported limits and all missing memory requirements remain explicit; this is not full R03/R04 closure. [Acceptance evidence](release-completion/s2b-memory-review/evidence/ordinary-owned-accepted/acceptance.json). Next: recoverable allocation Result and bounded ordinary no_gc semantics.

@@ -1,6 +1,6 @@
 # S2b memory delivery review — 2026-10-24
 
-Status: graph/payload supporting delivery and both legacy repairs accepted; ordinary-owned source slice running. Ordinary-function checkpoint remains incomplete.
+Status: graph/payload supporting delivery and both legacy repairs accepted; first ordinary-owned source slice accepted. Ordinary-function checkpoint remains incomplete.
 Worker 74cfa2bd371f87fe22f79b0c38bfc4aa8785c862 is staged as 6467575ba6627eeafe6bffd5f8fbe6e87720fb70 on the coordinator review branch. No main merge or release. All changed paths were authorized; no dependency or root-lock reconciliation.
 
 ## Evidence and findings
@@ -23,3 +23,9 @@ All three must be reviewed and combined before a new common acceptance base. The
 Report-layout d0a6055 and native-guards fe9714e passed independent reviews and were integrated as0a13447 and2994ebf. Combined256 workspace suites/1163passed/0failed/6ignored, default build, all-feature/all-target Clippy -D warnings and fmt/diff pass. Actual source/target runners pass518guard +265report +99legacy checks (882total). Nested guard entry now matches interpreter/native failure; forged raw payload reports the real source edge. Evidence and exact log hashes: evidence/accepted-repairs.json. Legacy Python normal exit1/CGE001/artifact preservation is verified; the plan incorrectly named CGE006 and is transparently corrected with historical evidence retained.
 
 The only active implementation is ordinary-owned01a16bc8-90ff-7621-9e07-56cd23e25524; last snapshot still in progress. No further consumer is dependency-ready while its new representation is unreviewed. Full ordinary managed/owned source requirements and every later release gate remain open. No new chat is created merely to replace a completed repair.
+
+## Ordinary-owned slice accepted — 2026-10-24 03:30 UTC
+
+All three reviews accept006d267 as the documented local scalar-record owned/loan slice. Integrated asb84a24a with exact local-runtime/cached-sha2 lock reconciliation atd87d8c8. Combined260Rust suites/1179passed/0failed/6ignored; default build, Clippy all-target/all-feature -D warnings, fmt/diff pass. All11source/target runners pass2123checks:256ordinary +882legacy guard/report/graph +985foundation/package/API/emission. Exact compressed logs/results and hashes are committed under evidence/ordinary-owned-accepted/. No concrete reviewer blockers remain for this bounded slice.
+
+Full ordinary memory is still incomplete. The next concrete source task is ../s2b-owned-result/plan.md: discriminated Result owner provenance, recoverable try_owned and ordinary no_gc budgeting over these fixed layouts. One core/runtime owner is necessary for the changed typed model/analyzer/engine; consumers wait for reviewed interfaces. Broader memory, subsequent S2b/S3/S4 and external evidence requirements remain intact.

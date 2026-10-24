@@ -1,0 +1,338 @@
+{
+  "status": "bounded-ordinary-owned-slice-accepted",
+  "worker_commit": "006d267d414acb93959f66b63e8ed953167219b6",
+  "integrated_commit": "b84a24a97af82bf826c5c3eb6be78cc47d9a3a03",
+  "code_and_lock_commit": "d87d8c8fcda543e5767283974c399a31c4ee32a0",
+  "workspace": {
+    "suites": 260,
+    "passed": 1179,
+    "failed": 0,
+    "ignored": 6
+  },
+  "build": "passed",
+  "clippy": "passed",
+  "fmt": "passed",
+  "diff_check": "passed",
+  "product_counts": {
+    "ordinary": 256,
+    "guards": 518,
+    "reports": 265,
+    "graph": 99,
+    "foundation": 159,
+    "semantic": 278,
+    "specialization": 207,
+    "visibility": 118,
+    "binders": 88,
+    "output": 31,
+    "emitters": 104
+  },
+  "total_product_checks": 2123,
+  "product_commands": [
+    {
+      "name": "ordinary",
+      "exit_code": 0,
+      "command": [
+        "python3",
+        "crates/cgx2-syntax/ordinary-owned-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug",
+        "--output",
+        "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/ordinary.json"
+      ]
+    },
+    {
+      "name": "guards",
+      "exit_code": 0,
+      "command": [
+        "python3",
+        "crates/cgx2-emit-rust/tests/graph_guard_parity/run.py",
+        "--binary-dir",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug",
+        "--output",
+        "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/guards.json"
+      ]
+    },
+    {
+      "name": "reports",
+      "exit_code": 0,
+      "command": [
+        "python3",
+        "crates/cgx2-cli/tests/memory_report_layout/run.py",
+        "--binary",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "--output",
+        "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/reports.json"
+      ]
+    },
+    {
+      "name": "graph",
+      "exit_code": 0,
+      "command": [
+        "python3",
+        "crates/cgx2-syntax/s2b-memory-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug",
+        "--output",
+        "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/graph.json"
+      ]
+    },
+    {
+      "name": "foundation",
+      "exit_code": 0,
+      "command": [
+        "python3",
+        "crates/cgx2-syntax/s2b-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug",
+        "--output",
+        "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/foundation.json"
+      ]
+    },
+    {
+      "name": "semantic",
+      "exit_code": 0,
+      "command": [
+        "python3",
+        "crates/cgx2-sema/tests/semantic_resolution/run.py",
+        "--binary",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "--output",
+        "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/semantic.json"
+      ]
+    },
+    {
+      "name": "specialization",
+      "exit_code": 0,
+      "command": [
+        "python3",
+        "crates/cgx2-sema/tests/source_specialization/run.py",
+        "--binary",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "--output-dir",
+        "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/specialization"
+      ]
+    },
+    {
+      "name": "visibility",
+      "exit_code": 0,
+      "command": [
+        "python3",
+        "crates/cgx2-api-index/tests/verify_visibility_cli.py",
+        "--binary",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "--output-dir",
+        "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/visibility"
+      ]
+    },
+    {
+      "name": "binders",
+      "exit_code": 0,
+      "command": [
+        "python3",
+        "crates/cgx2-package/scripts/verify_binders.py",
+        "--binary-dir",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug",
+        "--output",
+        "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/binders.json"
+      ]
+    },
+    {
+      "name": "output",
+      "exit_code": 0,
+      "command": [
+        "python3",
+        "crates/cgx2-cli/scripts/verify_output_bounds.py",
+        "--binary",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "--build-address-space-mib",
+        "4096",
+        "--output",
+        "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/output.json"
+      ]
+    },
+    {
+      "name": "emitters",
+      "exit_code": 0,
+      "command": [
+        "python3",
+        "crates/cgx2-emit-python/tests/s2b_product.py",
+        "--binary-dir",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug",
+        "--output",
+        "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/emitters.json"
+      ]
+    }
+  ],
+  "ordinary_memory_checkpoint_complete": false,
+  "release_complete": false,
+  "dependency_reconciliation": [
+    "cgx2-sema -> cgx2-runtime (existing local path)",
+    "cgx2-sema -> sha2 (existing locked cached crate)"
+  ],
+  "exports": {
+    "ordinary-owned-combined-tests.log": {
+      "source_path": "/home/john-riley/projects/lang/target/ordinary-owned-combined-tests.log",
+      "gzip": "ordinary-owned-combined-tests.log.gz",
+      "sha256": "59db459f89726554a01a3582b0fa0ecb9592d19afc122257338c1a9b4053e245",
+      "gzip_sha256": "41a8a7d705909017735a5be0296f2018f16561dec93ecf4d85ed0885970348ed"
+    },
+    "ordinary-owned-combined-build.log": {
+      "source_path": "/home/john-riley/projects/lang/target/ordinary-owned-combined-build.log",
+      "gzip": "ordinary-owned-combined-build.log.gz",
+      "sha256": "de80c4eef59ef4fd8b2567d47fb156c5a7b2bc3775f693104462cd999a6055f2",
+      "gzip_sha256": "3219991f8a39ebe1bed3702d38068e2a67e5ffd1804bce793540342b168b5ab6"
+    },
+    "ordinary-owned-combined-clippy.log": {
+      "source_path": "/home/john-riley/projects/lang/target/ordinary-owned-combined-clippy.log",
+      "gzip": "ordinary-owned-combined-clippy.log.gz",
+      "sha256": "7e85cc8b32dc9926e6641eeea57c172191f37856b04521df6d04a96fb57168f5",
+      "gzip_sha256": "6f73a1e619a2dc693fdd120deff0e1666a6653cdb436ed58790c8a85f36ad62f"
+    },
+    "commands.json": {
+      "source_path": "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/commands.json",
+      "gzip": "commands.json.gz",
+      "sha256": "c61814d2970171b55533c55fb4067c96849f34290f1c5bb9a3a1790938a20bf7",
+      "gzip_sha256": "798bb8bf2ff0274d7e30ca284c27c58414437c9051235e1bb15a1f119a63d14e"
+    },
+    "ordinary.log": {
+      "source_path": "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/ordinary.log",
+      "gzip": "ordinary.log.gz",
+      "sha256": "eac7a823e60dc4922bb955dde1af4379e8b81184461e3f67d3fb8dc4c578d82c",
+      "gzip_sha256": "94c5a645f05957a5b93c5bf345f43bd62e7d3df70889b6e9293fda0036437f24"
+    },
+    "ordinary.json": {
+      "source_path": "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/ordinary.json",
+      "gzip": "ordinary.json.gz",
+      "sha256": "665d8df7b5b6e9d7eef0ce13799417732a024ba9dc38a6374013b117b0a01eeb",
+      "gzip_sha256": "563ecc5f1c8a45e66b44f5f267a6f5c34e94fcf7802b52438773aa014a3d5c8d"
+    },
+    "guards.log": {
+      "source_path": "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/guards.log",
+      "gzip": "guards.log.gz",
+      "sha256": "88de176cf1b58a8fbe70fe536d7ac1e75a8436000b3e74e62eafaeb26a2c0f01",
+      "gzip_sha256": "0893c84cf05fad22682c00d4be406a025d1c90dab8c43712d894842b0b707715"
+    },
+    "guards.json": {
+      "source_path": "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/guards.json",
+      "gzip": "guards.json.gz",
+      "sha256": "6618e898d62a8e25fb6ce586cbdd3d13726b957e86c007e7212c646bfd4eefa2",
+      "gzip_sha256": "6ef9f71de1a9586fe017d2a16fa7cbe8a55e27dabe9423331d4fc05417ac5e18"
+    },
+    "reports.log": {
+      "source_path": "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/reports.log",
+      "gzip": "reports.log.gz",
+      "sha256": "97d9f2f87c2438386b802a2194219c86a50571065aa3603720f3e87314d1d9fc",
+      "gzip_sha256": "e31b411199bb70442fdb5414a5f795400a6f72788eb984768f1787a9c5853e38"
+    },
+    "reports.json": {
+      "source_path": "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/reports.json",
+      "gzip": "reports.json.gz",
+      "sha256": "3865d57cef172d46477da2ac4c779b288edf0ef02b82e5129a1ed2f70792ce15",
+      "gzip_sha256": "435071968a3d947214256803b78cbf9b555ae09e50550e0e34c09a57306ef953"
+    },
+    "graph.log": {
+      "source_path": "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/graph.log",
+      "gzip": "graph.log.gz",
+      "sha256": "8603c2cc4bcd524f20174740d9f95f470056bb62fd5577b3bf236c2a7ff64594",
+      "gzip_sha256": "615b81b1a700f4381e5541981d02996b70ad9c642989617f86b6cf60ea597a82"
+    },
+    "graph.json": {
+      "source_path": "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/graph.json",
+      "gzip": "graph.json.gz",
+      "sha256": "379909aac67b213aec6fe06ba2398b357c4e1b30919b73bffb3c180289458cdb",
+      "gzip_sha256": "066fd3a5330eb68d590a760318b1b802c202438a8e911174b9f9d74fd9697e3d"
+    },
+    "foundation.log": {
+      "source_path": "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/foundation.log",
+      "gzip": "foundation.log.gz",
+      "sha256": "91adaa26ac56b550d1e84483cc1229283a3b9f7a60e70bc9e0ab8fb7d7f26e63",
+      "gzip_sha256": "9ea86ca6a70025064959d27305485fcb43283676da6757abb79e9ec74dad7634"
+    },
+    "foundation.json": {
+      "source_path": "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/foundation.json",
+      "gzip": "foundation.json.gz",
+      "sha256": "0f27c029db7c7856ee8b8b431ca1a1785e1a25cdba6190c8a31b31849766c480",
+      "gzip_sha256": "72b8d790689c6868108e6e1585f38e367e6d8bc968102c3b1f6348ed240c9ba5"
+    },
+    "semantic.log": {
+      "source_path": "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/semantic.log",
+      "gzip": "semantic.log.gz",
+      "sha256": "e4db6ae5c0ec9375767e16c4779338b9a11ef6a05ed0e58e10b42d064c87b578",
+      "gzip_sha256": "3b520fc16eba43c3eff7239e9733977981cbcbf05ac7a62bb2b11fed54f9913a"
+    },
+    "semantic.json": {
+      "source_path": "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/semantic.json",
+      "gzip": "semantic.json.gz",
+      "sha256": "34b75a862a0cbd5f09719169a0c27ce18a63f6d054338f822ccef004d17083d2",
+      "gzip_sha256": "6d49d55299f5cefae48e41bf478a00ad70eb786b1519e7b911abaf5b4d6fbbd1"
+    },
+    "specialization.log": {
+      "source_path": "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/specialization.log",
+      "gzip": "specialization.log.gz",
+      "sha256": "c727497e41be718a60be0db3ecb9d8954f06543d2a7934cce2cdf459da11feb7",
+      "gzip_sha256": "6af744d7525183b8bd6ca526cf7e9f5814f06a4d3e03b4724c8bc549657b327f"
+    },
+    "specialization-report.json": {
+      "source_path": "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/specialization/report.json",
+      "gzip": "specialization-report.json.gz",
+      "sha256": "aa1ad8e2de35cbaab57818184538f66f0822143e70ee4e80b2e7ba8799e1c896",
+      "gzip_sha256": "f8bef43b556a4bbb43fd8bca87b0b9d241ec94f3a9f6976370a6399a68559f4e"
+    },
+    "visibility.log": {
+      "source_path": "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/visibility.log",
+      "gzip": "visibility.log.gz",
+      "sha256": "401d72e59d6e501204ff6982370061f2ae82e7487b73100025f6acfed5fc19d9",
+      "gzip_sha256": "44a5314d177b53f00a4f314e2f93d97ff179974f3a9175ef14009bc9388a1c7a"
+    },
+    "visibility-report.json": {
+      "source_path": "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/visibility/report.json",
+      "gzip": "visibility-report.json.gz",
+      "sha256": "971ed08dbe3d1479c70d45288b492e8debf32f27a558f821069f849f3a0c0ddf",
+      "gzip_sha256": "21abaae3a48c383c5608a37a4ae9ed4ccb837fa4d900ff83f066f4924937277f"
+    },
+    "binders.log": {
+      "source_path": "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/binders.log",
+      "gzip": "binders.log.gz",
+      "sha256": "fb7780840f8f80e8d2e88d534699483a3df599d4d65fe8ae9c7a133e7f2eb8c8",
+      "gzip_sha256": "2d9bfd53351ae9e4bbf0849af1b5a4d14e77de0e8fc67a0f45a3cea5eebbbac7"
+    },
+    "binders.json": {
+      "source_path": "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/binders.json",
+      "gzip": "binders.json.gz",
+      "sha256": "725c9b2735f4b97c81e17ee668a882d96cf776482d0f96da74799ed7cb6cbfa5",
+      "gzip_sha256": "7c691a58144bef112f6e9f3f0885e3df453bb10f4ff27f2208763d03cb2fdd40"
+    },
+    "output.log": {
+      "source_path": "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/output.log",
+      "gzip": "output.log.gz",
+      "sha256": "eb1a6089eb7bdd7a005d7de27510fd7a7660f242399a66f115de0a4d38737b8f",
+      "gzip_sha256": "c817ff32bc6b9d5dbcabb84e0ec90cb60a660cda1c60a9061fa1f23b03009511"
+    },
+    "output.json": {
+      "source_path": "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/output.json",
+      "gzip": "output.json.gz",
+      "sha256": "2525d583bd5c1fc23d2dc5155ad96818d5d38b80134f436b270e034180991572",
+      "gzip_sha256": "73ace1472aecdf24949ab9aa449aaa87afc103cb6a1eb89f07fdd6b88bf5c990"
+    },
+    "emitters.log": {
+      "source_path": "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/emitters.log",
+      "gzip": "emitters.log.gz",
+      "sha256": "2620de15c25b6017d1e70477b0c9b9468613eaba3b3a94d83c34c36017f42eb2",
+      "gzip_sha256": "d40f10baca099082fcbd79170a02b1b845c38e75d3516c4db8d55403f8561692"
+    },
+    "emitters.json": {
+      "source_path": "/home/john-riley/projects/lang/target/ordinary-owned-combined-products/emitters.json",
+      "gzip": "emitters.json.gz",
+      "sha256": "849b2931f107754b5103fc0a280708a169184f0b0bf271771079f47d061a3b4d",
+      "gzip_sha256": "be044b0bb051d6caebcc672ad25b606c89c687d9aeae2fb3ed4d533f3621200e"
+    }
+  },
+  "remaining": "Full generic/package/recursive/partial-move/Result/default-managed/regions/transfers/no_gc/cancel memory semantics and subsequent S2b/S3/S4, R01-R15 remain mandatory.",
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2 (Cargo builds/tests)",
+    "CARGO_TARGET_DIR": "/home/john-riley/projects/lang/target/release-plan-review",
+    "TMPDIR": "/home/john-riley/projects/lang/target/cgx2-wave21-tmp",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  }
+}

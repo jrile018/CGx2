@@ -1,6 +1,6 @@
 # CGx2 finite completion plan
 
-Status: all twelve S1 deliveries, S2a and S2b foundation including repairs reviewed as bounded deliveries. Graph/payload supporting memory and both legacy repairs are reviewed; ordinary-owned source execution is running and the full ordinary-memory checkpoint remains incomplete; foreign/execution/command integration and S3 remain gated. See [foundation acceptance](s2b-review/README.md). Updated 2026-10-24. Coordinator branch: riley/release-completion-plan. Full release capabilities and evidence remain required.
+Status: all twelve S1 deliveries, S2a and S2b foundation including repairs reviewed as bounded deliveries. Graph/payload support, both legacy repairs and the first ordinary-owned source slice are reviewed; recoverable allocation is the next executable memory task, while full ordinary memory remains incomplete; foreign/execution/command integration and S3 remain gated. See [foundation acceptance](s2b-review/README.md). Updated 2026-10-24. Coordinator branch: riley/release-completion-plan. Full release capabilities and evidence remain required.
 
 ## Answer to “how many more waves?”
 

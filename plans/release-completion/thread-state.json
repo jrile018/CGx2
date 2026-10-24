@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24T03:10:30.477Z",
+  "checked_at": "2026-10-24T03:30:30.481Z",
   "original_chats": [
     {
       "lane": "core",
@@ -341,9 +341,12 @@
       "hostId": "local",
       "worktree": "/home/john-riley/.codex/worktrees/bd1f/lang",
       "base": "9fcefbbb201f1f73f387f43672bc9b4f9d23eeb7",
-      "status": "running",
+      "status": "reviewed-bounded-delivery",
       "clientThreadId": "client-new-thread:d3ea39e6-c9fd-4b0d-9757-72603e291ca0",
-      "afterCursor": "4b2d88ff-7fb1-4074-bcbe-85c6a2648334:4"
+      "afterCursor": "4b2d88ff-7fb1-4074-bcbe-85c6a2648334:5",
+      "commit": "006d267d414acb93959f66b63e8ed953167219b6",
+      "integrated_commit": "b84a24a97af82bf826c5c3eb6be78cc47d9a3a03",
+      "accepted_code_commit": "d87d8c8fcda543e5767283974c399a31c4ee32a0"
     },
     {
       "lane": "report-layout",
