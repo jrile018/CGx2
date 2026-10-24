@@ -145,9 +145,7 @@ def main():
         j.check('standalone-outside-repository', normal(outside, 128))
         if not normal(outside, 128):
             raise ValueError('Standalone directory must be outside every repository')
-        j.run('rustc-identity', ['rustc', '--version', '--verbose'], cwd=standalone)
-        sysroot = j.run('rustc-sysroot', ['rustc', '--print', 'sysroot'], cwd=standalone)
-        toolroot = Path(sysroot['stdout'].strip())
+        toolroot = j.toolchain(cwd=standalone)
         toolchain_files = [toolroot/'bin/rustc'] + list((toolroot/'lib').glob('libLLVM*.so*')) + list((toolroot/'lib').glob('librustc_driver*.so'))
         toolchain_files += list((toolroot/'lib/rustlib').glob('*/lib/libstd-*'))
         j.report['toolchain_files'] = {str(p):digest(p) for p in toolchain_files if p.is_file()}

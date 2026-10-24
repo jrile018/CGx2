@@ -46,6 +46,25 @@ def harness_paths():
     return set(HERE.glob('*.py')) | set(HERE.glob('*.rs')) | {p for p in (HERE / 'fixtures').rglob('*') if p.is_file()}
 
 
+def helper_paths():
+    # The unchanged historical corpus invokes these scripts and sibling probe/
+    # supervisor helpers. They are read-only inputs, distinct from this harness.
+    specification = ROOT / 'plans/release-completion/s2b-ordinary-memory/regressions.json'
+    paths = {specification, HERE.parent / 'ordinary-memory-evidence/run.py',
+             HERE.parent / 'ordinary-memory-evidence/test_run.py',
+             HERE.parent / 'owned-result-runner-evidence/supervisor.py'}
+    for check in json.loads(specification.read_text())['checks']:
+        for argument in check['argv']:
+            argument = argument.replace('${SOURCE_ROOT}', str(ROOT))
+            if argument.endswith('.py'):
+                path = Path(argument)
+                paths.add(path if path.is_absolute() else ROOT / path)
+    for directory in {p.parent for p in paths}:
+        paths.update(directory.glob('*.py'))
+        paths.update(directory.glob('*.rs'))
+    return paths
+
+
 def file_inventory(paths):
     return {str(p.absolute()): {'sha256': digest(p), 'bytes': p.stat().st_size, 'resolved': str(p.resolve()),
                               'device':p.stat().st_dev, 'inode':p.stat().st_ino, 'mode':p.stat().st_mode,
@@ -56,13 +75,13 @@ def freeze_inputs(binary, toolchain_paths):
     return {'artifacts': tree_inventory(binary),
             'compiler': file_inventory(compiler_paths()),
             'harness': file_inventory(harness_paths()),
-            'toolchain': file_inventory(toolchain_paths)}
+            'toolchain': file_inventory(toolchain_paths), 'helpers': file_inventory(helper_paths())}
 
 
 def verify_inputs(binary, expected):
     errors = []
     actual = {}
-    for section in ('artifacts', 'compiler', 'harness', 'toolchain'):
+    for section in ('artifacts', 'compiler', 'harness', 'toolchain', 'helpers'):
         try:
             if section == 'artifacts':
                 values = tree_inventory(binary)
@@ -70,6 +89,8 @@ def verify_inputs(binary, expected):
                 values = file_inventory(compiler_paths())
             elif section == 'harness':
                 values = file_inventory(harness_paths())
+            elif section == 'helpers':
+                values = file_inventory(helper_paths())
             else:
                 values = file_inventory([Path(p) for p in expected[section]])
             actual[section] = values
@@ -77,7 +98,7 @@ def verify_inputs(binary, expected):
             errors += [f'{section}: missing {p}' for p in sorted(previous.keys() - values.keys())]
             errors += [f'{section}: added {p}' for p in sorted(values.keys() - previous.keys())]
             errors += [f'{section}: changed {p}' for p in sorted(values.keys() & previous.keys()) if values[p] != previous[p]]
-        except (OSError, ValueError) as error:
+        except (OSError, ValueError, KeyError, TypeError, AttributeError) as error:
             errors.append(f'{section}: {error}')
     return actual, errors
 
@@ -87,9 +108,21 @@ def audit(journal, binary, phase):
         path = Path(binary).parent / 'inputs.json'
         expected = json.loads(path.read_text())
         actual, errors = verify_inputs(binary, expected)
+        from provenance import candidate_errors
+        candidate_path = path.parent / 'candidate.json'
+        manifest = json.loads((path.parent / 'frozen.json').read_text())
+        candidate = json.loads(candidate_path.read_text())
+        errors.extend(candidate_errors(candidate))
+        if manifest.get('schema_version') != 3 or manifest.get('candidate_sha256') != digest(candidate_path):
+            errors.append('missing/stale candidate provenance binding')
+        if manifest.get('source_commit') != candidate.get('build', {}).get('source_commit'):
+            errors.append('candidate/build source commit mismatch')
+        journal.report['candidate_identity'] = {'path': str(candidate_path), 'sha256': digest(candidate_path),
+            'build_source_commit': candidate.get('build', {}).get('source_commit'),
+            'harness_snapshot_sha256': candidate.get('observing_harness', {}).get('harness_snapshot_sha256')}
         journal.report.setdefault('input_audits', {})[phase] = {
             'manifest': str(path), 'manifest_sha256': digest(path), 'errors': errors, 'actual': actual}
-    except (OSError, ValueError, KeyError) as error:
+    except (OSError, ValueError, KeyError, TypeError, AttributeError) as error:
         errors = [str(error)]
     journal.check('frozen-inputs-' + phase, not errors, errors=errors)
     if errors:

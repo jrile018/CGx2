@@ -18,6 +18,7 @@ try:
     outside=a.standalone_root.resolve()/j.output.name;outside.mkdir(parents=True,exist_ok=False)
     check=j.run('outside',['git','rev-parse','--is-inside-work-tree'],cwd=outside);j.check('outside',normal(check,128))
     if not normal(check,128):raise ValueError('inside repository')
+    j.toolchain(cwd=outside)
     wrapper=j.output/'rustc-two-threads';wrapper.write_text('#!/bin/sh\nexec rustc -C link-arg=-Wl,--threads=2 "$@"\n');wrapper.chmod(0o700)
     probe=j.output/'probe'
     build=j.run('direct-build',[wrapper,'--edition=2021',HERE/'auto_probe.rs','--extern',f'cgx2_runtime={b}/libcgx2_runtime.rlib','-L',f'dependency={b}/deps','-o',probe]);j.check('direct-build',normal(build))

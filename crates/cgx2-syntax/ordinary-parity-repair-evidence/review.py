@@ -21,6 +21,7 @@ j.required_checks.update(f'{id}-{part}' for id in ('OM02','OM04','OM05') for par
 j.required_checks.update(f'OM07-{mode}-balanced-evidence' for mode in ('interpreter','debug','release','standalone'))
 try:
     if not audit(j,b,'before'):raise ValueError('frozen inputs changed')
+    j.toolchain()
     original=ROOT/'plans/release-completion/s2b-ordinary-memory-review/repros'
     source=j.output/'repros'; shutil.copytree(original,source)
     j.report['sources']={str(p.relative_to(source)):digest(p) for p in source.rglob('*') if p.is_file()}

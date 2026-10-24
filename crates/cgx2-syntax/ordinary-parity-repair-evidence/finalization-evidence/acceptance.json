@@ -1,0 +1,319 @@
+{
+  "schema_version": 1,
+  "bounded_task": "ordinary-memory evidence finalization repair; coordinator review required",
+  "reviewed_base": "9f0804feac1a3c549ed879a8738e0152b370ed4a",
+  "compiler_build_commit": "ded3768480c745ce544d33c56aea44d4fc0bfa5a",
+  "compiler_snapshot_sha256": "b20762f59667ba168f4d1dddd4b06d8c9fd045668bfe994fe7ecf744ddf57d6c",
+  "observing_harness_snapshot_sha256": "fb6abc3d6a75b5de83f01b1f5ebd11af868c78259a57a7b38d8ba90586863e66",
+  "candidate_json_sha256": "e829cc7ebb4fe8299592b44b8b598dcd8b2ad80f4d7a94006e8bf7edb90327c8",
+  "frozen_input_counts": {
+    "artifacts": 1382,
+    "compiler": 214,
+    "harness": 39,
+    "toolchain": 68,
+    "helpers": 67
+  },
+  "canonical_binaries": 7,
+  "canonical_probe_libraries": 5,
+  "dependency_files": 1368,
+  "fresh_results": {
+    "audit": {
+      "passed": 12,
+      "failed": 0,
+      "complete": true,
+      "coverage_errors": [],
+      "exceptions": [],
+      "failed_checks": []
+    },
+    "freeze": {
+      "passed": 6,
+      "failed": 0,
+      "complete": true,
+      "coverage_errors": [],
+      "exceptions": [],
+      "failed_checks": []
+    },
+    "matrix": {
+      "passed": 964,
+      "failed": 1,
+      "complete": true,
+      "coverage_errors": [],
+      "exceptions": [],
+      "failed_checks": [
+        "dependency-negative-exact-file"
+      ]
+    },
+    "auto": {
+      "passed": 34,
+      "failed": 0,
+      "complete": true,
+      "coverage_errors": [],
+      "exceptions": [],
+      "failed_checks": []
+    },
+    "package": {
+      "passed": 45,
+      "failed": 0,
+      "complete": true,
+      "coverage_errors": [],
+      "exceptions": [],
+      "failed_checks": []
+    },
+    "review": {
+      "passed": 21,
+      "failed": 0,
+      "complete": true,
+      "coverage_errors": [],
+      "exceptions": [],
+      "failed_checks": []
+    },
+    "historical": {
+      "passed": 10,
+      "failed": 1,
+      "complete": true,
+      "coverage_errors": [],
+      "exceptions": [],
+      "failed_checks": [
+        "historical-process-exit"
+      ]
+    },
+    "quality": {
+      "passed": 11,
+      "failed": 0,
+      "complete": true,
+      "coverage_errors": [],
+      "exceptions": [],
+      "failed_checks": []
+    },
+    "driver": {
+      "passed": 8,
+      "failed": 2,
+      "complete": true,
+      "coverage_errors": [],
+      "exceptions": [],
+      "failed_checks": [
+        "matrix",
+        "historical"
+      ]
+    }
+  },
+  "selftests": {
+    "primary_unchanged": 48,
+    "supplemental_unchanged": 2,
+    "historical_unchanged": 8,
+    "adversarial_production": 19,
+    "total": 77
+  },
+  "independent_audit": {
+    "passed": 51,
+    "failed": 0,
+    "complete": true
+  },
+  "historical_raw": {
+    "passed": 135,
+    "failed": 1
+  },
+  "nested_managed_raw": {
+    "passed": 670,
+    "failed": 8
+  },
+  "nested_original_raw": {
+    "passed": 523,
+    "failed": 1
+  },
+  "regressions": [
+    {
+      "name": "regression-owned-symbol195",
+      "reason": "exit",
+      "exit": 0,
+      "signal": null,
+      "expected_exit": 0
+    },
+    {
+      "name": "regression-owned-result-original",
+      "reason": "exit",
+      "exit": 1,
+      "signal": null,
+      "expected_exit": 1
+    },
+    {
+      "name": "regression-owned-result-reconciled",
+      "reason": "exit",
+      "exit": 0,
+      "signal": null,
+      "expected_exit": 0
+    },
+    {
+      "name": "regression-ordinary256",
+      "reason": "exit",
+      "exit": 0,
+      "signal": null,
+      "expected_exit": 0
+    },
+    {
+      "name": "regression-foundation",
+      "reason": "exit",
+      "exit": 0,
+      "signal": null,
+      "expected_exit": 0
+    },
+    {
+      "name": "regression-semantic",
+      "reason": "exit",
+      "exit": 0,
+      "signal": null,
+      "expected_exit": 0
+    },
+    {
+      "name": "regression-specialization",
+      "reason": "exit",
+      "exit": 0,
+      "signal": null,
+      "expected_exit": 0
+    },
+    {
+      "name": "regression-visibility",
+      "reason": "exit",
+      "exit": 0,
+      "signal": null,
+      "expected_exit": 0
+    },
+    {
+      "name": "regression-binders",
+      "reason": "exit",
+      "exit": 0,
+      "signal": null,
+      "expected_exit": 0
+    },
+    {
+      "name": "regression-output",
+      "reason": "exit",
+      "exit": 0,
+      "signal": null,
+      "expected_exit": 0
+    },
+    {
+      "name": "regression-emitters",
+      "reason": "exit",
+      "exit": 0,
+      "signal": null,
+      "expected_exit": 0
+    },
+    {
+      "name": "regression-graph99",
+      "reason": "exit",
+      "exit": 0,
+      "signal": null,
+      "expected_exit": 0
+    },
+    {
+      "name": "regression-guards518",
+      "reason": "exit",
+      "exit": 0,
+      "signal": null,
+      "expected_exit": 0
+    },
+    {
+      "name": "regression-reports265",
+      "reason": "exit",
+      "exit": 0,
+      "signal": null,
+      "expected_exit": 0
+    },
+    {
+      "name": "regression-managed-product",
+      "reason": "exit",
+      "exit": 1,
+      "signal": null,
+      "expected_exit": 0
+    },
+    {
+      "name": "regression-equality-product",
+      "reason": "exit",
+      "exit": 0,
+      "signal": null,
+      "expected_exit": 0
+    },
+    {
+      "name": "regression-core-product",
+      "reason": "exit",
+      "exit": 0,
+      "signal": null,
+      "expected_exit": 0
+    },
+    {
+      "name": "regression-repair-selftests",
+      "reason": "exit",
+      "exit": 0,
+      "signal": null,
+      "expected_exit": 0
+    }
+  ],
+  "regression_count": 18,
+  "regression_expected_exit_matches": 17,
+  "external_modern_standalone_programs": 35,
+  "external_modern_standalone_build_run_commands": 70,
+  "modern_native_program_hashes": 105,
+  "retained_prior_evidence_files": 766,
+  "retained_hardening_reports": 19,
+  "retained_hardening_commands": 422,
+  "retained_sentinels": 14,
+  "all_retained_sentinel_files_available_and_preserved": true,
+  "coordinator_archives_verified": 536,
+  "ordinary_memory_accepted": false,
+  "release_accepted": false,
+  "attempts": [
+    {
+      "path": "run-1",
+      "outcome": "first retained audit classifier selected wrong code for four Python emission type rejections; 11/1 audit, driver incomplete; exact snapshots retained"
+    },
+    {
+      "path": "run-2",
+      "outcome": "intermediate source matrices/historical retained; final command-structure repair changed harness and later integrity audits rejected stale harness identity"
+    },
+    {
+      "path": "run-3",
+      "outcome": "final fb6abc3 harness; all inventories complete, semantic failures remain raw and red"
+    },
+    {
+      "path": "setup-and-audits-opaque-1",
+      "outcome": "all setup/audit/reproduction raw files including actual stripped-command vulnerability, first independent audit46/5 (count parser and wrong nested-report selection), corrected independent audit51/0"
+    },
+    {
+      "path": "setup-and-audits",
+      "outcome": "immutable partial export; exporter encountered deliberately stripped report without argv"
+    },
+    {
+      "path": "export-gates",
+      "outcome": "first packaging gate2/1 complete; raw failure retained"
+    },
+    {
+      "path": "export-gates-2",
+      "outcome": "both packaging gates retained, including successful opaque gate2/0"
+    }
+  ],
+  "supplied_not_rerun": {
+    "workspace": {
+      "passed": 1383,
+      "failed": 0,
+      "ignored": 6
+    },
+    "quality": "Clippy/all targets/all features/-D warnings, fmt and build pass on ded3768",
+    "focused_recovery": {
+      "passed": 515,
+      "failed": 0
+    },
+    "legacy_reconciliation": {
+      "passed": 133,
+      "failed": 0
+    },
+    "original_recovery_attempt": "463 checks then exception/nonzero; archived in supplied536 and not relabeled"
+  },
+  "limitations": [
+    "Static dependency filename remains failed (lib.cg required, main.cg observed).",
+    "Managed legacy fault graph root8 and guard9 are not reached in interpreter/debug/release/standalone: eight unchanged failed expectations; separate supplied reconciliation remains separate.",
+    "Original owned-result523/1 is the explicitly expected historical negative, distinct from managed670/8.",
+    "Export.py cannot interpret intentionally stripped synthetic command rows without argv; immutable partial export and opaque raw archive preserve all data without rewriting the malformed report or changing the tested harness.",
+    "All R01-R15 and broad source ownership/transfer/v3/external acceptance remain open. No Cargo during frozen verification, installs, paid APIs, external contacts, performance measurement, merge or publication."
+  ]
+}
