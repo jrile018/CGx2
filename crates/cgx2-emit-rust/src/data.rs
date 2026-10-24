@@ -7,6 +7,32 @@ fn failure(errors: Vec<cgx2_sema::TypeDiagnostic>) -> Vec<EmitDiagnostic> {
         .map(|d| EmitDiagnostic::new(d.code, d.message, d.span))
         .collect()
 }
+pub(crate) fn validate_strings(module: &Module) -> Result<(), Vec<EmitDiagnostic>> {
+    // Finite lowering bypasses the scalar validator. Check the complete source
+    // before specialization, including literals in generic contracts and data.
+    let mut errors = Vec::new();
+    let mut literal = |expr: &Expr| {
+        if matches!(&expr.kind, ExprKind::StringLiteral(raw) if decode_string(raw).is_none()) {
+            errors.push(EmitDiagnostic::new(
+                "CGRS003",
+                "string literal contains unsupported escape",
+                expr.span,
+            ));
+        }
+    };
+    cgx2_syntax::visit_stmts(&module.statements, &mut |_| {}, &mut literal);
+    for function in &module.functions {
+        cgx2_syntax::visit_stmts(&function.body, &mut |_| {}, &mut literal);
+        for expr in function.requires.iter().chain(&function.ensures) {
+            cgx2_syntax::visit_expr(expr, &mut literal);
+        }
+    }
+    if !errors.is_empty() {
+        return Err(errors);
+    }
+    Ok(())
+}
+
 pub(super) fn package(package: &CheckedPackage) -> Result<String, Vec<PackageEmitDiagnostic>> {
     package.verify_unchanged().map_err(|ds| {
         ds.into_iter()
@@ -21,6 +47,12 @@ pub(super) fn package(package: &CheckedPackage) -> Result<String, Vec<PackageEmi
             .collect::<Vec<_>>()
     })?;
     for source in package.modules() {
+        validate_strings(source.syntax()).map_err(|errors| {
+            errors
+                .into_iter()
+                .map(|diagnostic| package_error(source, diagnostic))
+                .collect::<Vec<_>>()
+        })?;
         for f in &source.syntax().functions {
             if let Some(binding) = &f.foreign {
                 return Err(vec![package_error(
@@ -80,6 +112,7 @@ pub(super) fn emit(module: &Module, typed: &TypedModule) -> Result<String, Vec<E
             module.span,
         )]);
     }
+    validate_strings(module)?;
     for f in &module.functions {
         if f.foreign.is_some() || f.body.iter().any(memory_stmt) {
             return Err(vec![EmitDiagnostic::new(
