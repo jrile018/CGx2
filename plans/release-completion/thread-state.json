@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24T11:57:00.696Z",
+  "checked_at": "2026-10-24T12:17:00.729Z",
   "original_chats": [
     {
       "lane": "core",
@@ -235,10 +235,10 @@
       "worktree": "/home/john-riley/.codex/worktrees/4836/lang",
       "base": "0d321d3d1b0341121b8363a5a87eeaf674c20eec",
       "status": "running",
-      "afterCursor": "9a64eb13-4087-480b-808c-6ba54eb87c2d:4",
+      "afterCursor": "9a64eb13-4087-480b-808c-6ba54eb87c2d:5",
       "plan": "plans/release-completion/s2b-ordinary-memory/plan.md",
       "setup_verified": "worktree HEAD equals reviewed base; read_thread and wait_threads active; list_threads omitted agent-created chat, exact read-only local metadata resolved without duplication",
-      "progress_note": "Active, uncommitted. Worker reports native/interpreter region parity and balanced roots; first workspace run found legacy memory.collect routing regression and child-process permission failures. Worker reports routing corrected and rerun underway with required local test permissions. No reviewed acceptance or delivered commit."
+      "progress_note": "Active, uncommitted. Worker reports exploratory region/cycle-copy cases pass; fallback fixture missing local Mutate effect and mixed-build probe libraries exposed harness failures, retained. Fresh complete verification/build/freeze/product run underway. No reviewed acceptance or delivered commit."
     }
   ],
   "s2a_repairs": [
