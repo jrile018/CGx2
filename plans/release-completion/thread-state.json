@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24T18:36:54.533550+00:00",
+  "checked_at": "2026-10-24T18:40:56.642408+00:00",
   "original_chats": [
     {
       "lane": "core",
@@ -628,6 +628,15 @@
       "setup_verified": "Worktree HEAD exactly9f0804feac1a3c549ed879a8738e0152b370ed4a; app read_thread and compact wait confirm active. list_threads omitted newly created chat; exact read-only metadata plus app read resolved identity. Only generated .serena metadata is untracked. No duplicate creation.",
       "commit": "4c4f07eb9d69a41ef0ba2d68d116274c59b79d28",
       "integrated_commit": "1e283aa972c49ef0cd9d087f7807f3d61402c691"
+    }
+  ],
+  "s2b_general_ownership": [
+    {
+      "lane": "general-ownership-A",
+      "plan": "plans/release-completion/s2b-general-ownership/plan.md",
+      "status": "planned",
+      "prerequisite_acceptance": "7a62376df37a753635e0a02d19773589eb52fba8",
+      "acceptance_note": "Sole source producer: executable aggregate ownership, projected loans/moves, authenticated body/SCC summaries and precise dependency source locations. Explicit existing source grammar, additive v4/aggregate_v1 and accountable owner storage frozen. B source conversions and S3 consumers gated on A review. No dispatch yet."
     }
   ]
 }
