@@ -1,0 +1,53 @@
+module app.main
+import app.left
+import app.right
+record Bundle:
+    left: app.left.Holder
+    right: app.right.Holder
+    maybe: Option<app.left.Flag>
+    outcome: Result<app.right.Point, app.left.Flag>
+    nested: Option<Result<app.left.Point, app.right.Flag>>
+    reversed: Result<Option<app.right.Point>, app.left.Flag>
+fn optional(value: Option<app.left.Flag>) -> i64 effects():
+    match value:
+        Option<app.left.Flag>.None:
+            0
+        Option<app.left.Flag>.Some(flag):
+            app.left.read_flag(flag)
+fn outcome(value: Result<app.right.Point, app.left.Flag>) -> i64 effects():
+    match value:
+        Result<app.right.Point, app.left.Flag>.Ok(point):
+            point.x
+        Result<app.right.Point, app.left.Flag>.Err(flag):
+            app.left.read_flag(flag)
+fn nested(value: Option<Result<app.left.Point, app.right.Flag>>) -> i64 effects():
+    match value:
+        Option<Result<app.left.Point, app.right.Flag>>.None:
+            0
+        Option<Result<app.left.Point, app.right.Flag>>.Some(result):
+            nested_result(result)
+fn nested_result(value: Result<app.left.Point, app.right.Flag>) -> i64 effects():
+    match value:
+        Result<app.left.Point, app.right.Flag>.Ok(point):
+            point.x
+        Result<app.left.Point, app.right.Flag>.Err(flag):
+            app.right.read_flag(flag)
+fn maybe_point(value: Option<app.right.Point>) -> i64 effects():
+    match value:
+        Option<app.right.Point>.None:
+            0
+        Option<app.right.Point>.Some(point):
+            point.x
+fn reversed(value: Result<Option<app.right.Point>, app.left.Flag>) -> i64 effects():
+    match value:
+        Result<Option<app.right.Point>, app.left.Flag>.Ok(point):
+            maybe_point(point)
+        Result<Option<app.right.Point>, app.left.Flag>.Err(flag):
+            app.left.read_flag(flag)
+fn main() -> i64 effects():
+    let bundle = Bundle(left: app.left.make(2), right: app.right.make(3), maybe: Option<app.left.Flag>.Some(app.left.Flag.Off()), outcome: Result<app.right.Point, app.left.Flag>.Ok(app.right.Point(x: 4)), nested: Option<Result<app.left.Point, app.right.Flag>>.Some(Result<app.left.Point, app.right.Flag>.Err(app.right.Flag.Value(app.right.Point(x: 5)))), reversed: Result<Option<app.right.Point>, app.left.Flag>.Ok(Option<app.right.Point>.Some(app.right.Point(x: 18))))
+    let left = bundle.left
+    let right = bundle.right
+    let left_point = left.point
+    let right_point = right.point
+    app.left.read_flag(left.flag) + left_point.x + app.left.read(left.nested) + app.right.read_flag(right.flag) + right_point.x + app.right.read(right.nested) + optional(bundle.maybe) + outcome(bundle.outcome) + nested(bundle.nested) + reversed(bundle.reversed)

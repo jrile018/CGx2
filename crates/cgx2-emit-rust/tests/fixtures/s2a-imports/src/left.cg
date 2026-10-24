@@ -1,0 +1,30 @@
+module app.left
+pub record Point:
+    x: i64
+pub variant Flag:
+    Off
+    Value(Point)
+pub record Holder:
+    flag: Flag
+    point: Point
+    nested: Option<Result<Point, Flag>>
+pub fn make(x: i64) -> Holder effects():
+    Holder(flag: Flag.Value(Point(x: x)), point: Point(x: x), nested: Option<Result<Point, Flag>>.Some(Result<Point, Flag>.Ok(Point(x: x))))
+pub fn read(value: Option<Result<Point, Flag>>) -> i64 effects():
+    match value:
+        Option<Result<Point, Flag>>.None:
+            0
+        Option<Result<Point, Flag>>.Some(result):
+            read_result(result)
+fn read_result(value: Result<Point, Flag>) -> i64 effects():
+    match value:
+        Result<Point, Flag>.Ok(point):
+            point.x
+        Result<Point, Flag>.Err(flag):
+            read_flag(flag)
+pub fn read_flag(value: Flag) -> i64 effects():
+    match value:
+        Flag.Off:
+            0
+        Flag.Value(point):
+            point.x
