@@ -38,7 +38,7 @@ def main():
         report=json.loads((attempt/'report.json').read_text())
         summaries[attempt.name]={k:report.get(k) for k in ('passed','failed','complete','exceptions')}
         for source in attempt.rglob('*'):
-            if source.is_file() and source.suffix in ('.json','.cg','.toml','.py','.rs') and 'frozen' not in source.relative_to(attempt).parts:
+            if source.is_file() and source.suffix in ('.json','.cg','.toml','.py','.rs','.txt','.log') and 'frozen' not in source.relative_to(attempt).parts:
                 export(source,Path('attempts')/source.relative_to(scratch))
         for tag,artifact in report.get('standalone_artifacts',{}).items():
             export(Path(artifact['source']),Path('standalone-source')/attempt.name/(tag+'.rs'))
@@ -50,7 +50,7 @@ def main():
                     if source.suffix=='.rs' and source.is_file():
                         export(source,Path('standalone-source')/attempt.name/(command['name']+'.rs'))
     (out/'manifest.json').write_text(json.dumps({'schema_version':1,'files':files},indent=2)+'\n')
-    (out/'summary.json').write_text(json.dumps({'schema_version':1,'reviewed_base':'7bb7a480119826693db67ed503caaf7f23f6abb2',
+    (out/'summary.json').write_text(json.dumps({'schema_version':1,'reviewed_base':'89464a76c9bd84a3b090ec58a14ca6be0043c6ea',
         'attempts':summaries,'ordinary_memory_accepted':False,'release_accepted':False,
         'interpretation':'Semantic failures remain failed. Timing fields supervise bounded commands only. Review report distinguishes source/library/unrun gates.'},indent=2)+'\n')
     print(json.dumps({'exported_files':len(files),'attempts':summaries}))

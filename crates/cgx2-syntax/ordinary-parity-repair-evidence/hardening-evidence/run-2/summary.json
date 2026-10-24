@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "reviewed_base": "89464a76c9bd84a3b090ec58a14ca6be0043c6ea",
+  "attempts": {
+    "auto-2": {
+      "passed": 32,
+      "failed": 0,
+      "complete": true,
+      "exceptions": []
+    },
+    "auto-launch-1": {
+      "passed": 0,
+      "failed": 1,
+      "complete": false,
+      "exceptions": []
+    },
+    "explicit-selftests-1": {
+      "passed": 2,
+      "failed": 0,
+      "complete": true,
+      "exceptions": []
+    },
+    "export-attempt-1": {
+      "passed": 0,
+      "failed": 1,
+      "complete": false,
+      "exceptions": []
+    },
+    "final-audit-1": {
+      "passed": 25,
+      "failed": 0,
+      "complete": true,
+      "exceptions": []
+    },
+    "freeze-1": {
+      "passed": 5,
+      "failed": 0,
+      "complete": true,
+      "exceptions": []
+    },
+    "launch-status-1": {
+      "passed": 0,
+      "failed": 1,
+      "complete": false,
+      "exceptions": []
+    },
+    "matrix-1": {
+      "passed": 971,
+      "failed": 11,
+      "complete": true,
+      "exceptions": []
+    },
+    "outside-status-1": {
+      "passed": 0,
+      "failed": 1,
+      "complete": false,
+      "exceptions": []
+    },
+    "package-1": {
+      "passed": 43,
+      "failed": 0,
+      "complete": true,
+      "exceptions": []
+    },
+    "preflight-1": {
+      "passed": 8,
+      "failed": 0,
+      "complete": true,
+      "exceptions": []
+    },
+    "preflight-2": {
+      "passed": 4,
+      "failed": 0,
+      "complete": true,
+      "exceptions": []
+    },
+    "quality-1": {
+      "passed": 9,
+      "failed": 0,
+      "complete": true,
+      "exceptions": []
+    },
+    "replay-2": {
+      "passed": 9,
+      "failed": 0,
+      "complete": true,
+      "exceptions": []
+    },
+    "replay-launch-1": {
+      "passed": 0,
+      "failed": 1,
+      "complete": false,
+      "exceptions": []
+    },
+    "review-1": {
+      "passed": 19,
+      "failed": 0,
+      "complete": true,
+      "exceptions": []
+    },
+    "verification-1": {
+      "passed": 6,
+      "failed": 1,
+      "complete": true,
+      "exceptions": []
+    }
+  },
+  "ordinary_memory_accepted": false,
+  "release_accepted": false,
+  "interpretation": "Semantic failures remain failed. Timing fields supervise bounded commands only. Review report distinguishes source/library/unrun gates."
+}

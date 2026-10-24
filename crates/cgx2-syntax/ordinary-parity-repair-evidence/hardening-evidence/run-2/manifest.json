@@ -1,0 +1,2993 @@
+{
+  "schema_version": 1,
+  "files": {
+    "attempts/auto-2/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/auto-2/report.json",
+      "bytes": 1152207,
+      "sha256": "5de2d370e23a854ab1ac0c11c280c894281f2e898b6a5331c3e9c6e6c17c93d6",
+      "gzip": {
+        "bytes": 192114,
+        "sha256": "33048c2a730e80228000c10e24b4d067cdba44bafff6fbeb9abd1a51e9c8f747"
+      }
+    },
+    "attempts/auto-2/auto-guard.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/auto-2/auto-guard.cg",
+      "bytes": 1011,
+      "sha256": "7c7cc9a80e1fc8000d8f23f68477f6f4a5c639931001ff36e02d16a0b31fd9f6",
+      "gzip": {
+        "bytes": 268,
+        "sha256": "788092719ac12dba9c91ac939692fe22dba479d30c4cce8da467f4976d32d54c"
+      }
+    },
+    "standalone-source/auto-2/standalone-emit.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/auto-2/auto.rs",
+      "bytes": 246194,
+      "sha256": "2531a188d2cce3bbec52783f9340f6adb9cbd301eae4e0307e834502864b97b0",
+      "gzip": {
+        "bytes": 43083,
+        "sha256": "6fc70cb54db6356c78cf8e457aca900c072b95d51ad492b3741c3d354595046f"
+      }
+    },
+    "attempts/auto-launch-1/command-identity.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/auto-launch-1/command-identity.json",
+      "bytes": 777,
+      "sha256": "9ebfef27b715bb3a76e097dd49d0f2f932df1c6d435fa1bf7865edfe1e2b9095",
+      "gzip": {
+        "bytes": 484,
+        "sha256": "29a22d6fe38ee375c81fc9daf2db016edc340c95cc1f363bc9799abb410ba6f4"
+      }
+    },
+    "attempts/auto-launch-1/original-startup-report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/auto-launch-1/original-startup-report.json",
+      "bytes": 1177,
+      "sha256": "ff6b2ac817c6798338e9a51a959bda0ab3b5c60cd6e22f32ad00c1927edf4208",
+      "gzip": {
+        "bytes": 677,
+        "sha256": "e964cc3d9a32e7261d5a1c4d0eef1b598b89ef1fddd35635495590bddd64ea12"
+      }
+    },
+    "attempts/auto-launch-1/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/auto-launch-1/report.json",
+      "bytes": 2026,
+      "sha256": "71dc3eaba28a82b774448ae9028ea318c1421a724185419af7cd8835e3a05378",
+      "gzip": {
+        "bytes": 1002,
+        "sha256": "9b9f1e9c4f8509b9cc4d3f3f28be19f5318f724c4381a474a2925cbf26cf48f1"
+      }
+    },
+    "attempts/explicit-selftests-1/explicit_scenarios.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/explicit-selftests-1/explicit_scenarios.py",
+      "bytes": 2423,
+      "sha256": "e7fc0698b25ea060bc43a82bee9d91afa6ba4b4ceb79ecca65b2310f511a20ae",
+      "gzip": {
+        "bytes": 900,
+        "sha256": "679c1dc4e39f8afce112ce6581e6a39e967b5b8f104cb15869b1f247333d5e7e"
+      }
+    },
+    "attempts/explicit-selftests-1/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/explicit-selftests-1/report.json",
+      "bytes": 2030,
+      "sha256": "6c75553993702d10ab25d14e30c68259014c3a3eaf918626497bcc78c9d2ae60",
+      "gzip": {
+        "bytes": 916,
+        "sha256": "2f1fd08a445e1326646dca7b291f6df755f8114172a83e1d0fe7cf9a02626b15"
+      }
+    },
+    "attempts/export-attempt-1/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/export-attempt-1/report.json",
+      "bytes": 2448,
+      "sha256": "5d4de99198c2039e062e18751b27c221a72948bd8636dd6b5350d10c05b5a42b",
+      "gzip": {
+        "bytes": 1047,
+        "sha256": "faf56a3fda312eb654875b9f2abe2378f11e13968a3cffcd7413842bb8f03a3e"
+      }
+    },
+    "attempts/final-audit-1/audit-source.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/final-audit-1/audit-source.py",
+      "bytes": 4735,
+      "sha256": "e00f98333f8b6821cfde89bb25ab47c37cd1fb593658d340061b6753af3781da",
+      "gzip": {
+        "bytes": 1935,
+        "sha256": "f943838fe5530c54fdd9b754568e4ceb5ddda035320527223bae48e92193c288"
+      }
+    },
+    "attempts/final-audit-1/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/final-audit-1/report.json",
+      "bytes": 567452,
+      "sha256": "8fa35b7acc680ef4614bac95b7c040b3f32d420a7e806b7cb2028aa802d27da6",
+      "gzip": {
+        "bytes": 95624,
+        "sha256": "4b34be8cd5f6c66a180051b5e23a47a23bcc5091860faefb24e73d2f2906558f"
+      }
+    },
+    "attempts/freeze-1/inputs.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/inputs.json",
+      "bytes": 477728,
+      "sha256": "8b55b4378d86e26cf5862e12c82ec8fd7350667c8f9da7d0a8788d882f9ab8b3",
+      "gzip": {
+        "bytes": 93405,
+        "sha256": "05032a0dd1ce5c6186a9937e80e5b54476a635d91846879c06da81af88d9903c"
+      }
+    },
+    "attempts/freeze-1/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/report.json",
+      "bytes": 621400,
+      "sha256": "31c4662a37527c1377ddfb8b1895df82b59a62a1f3219b519fea7785ddf22814",
+      "gzip": {
+        "bytes": 108679,
+        "sha256": "6ec8d16dc222b12924abb5a0574e3149af7ff4a00b38600ac8a99886e411352b"
+      }
+    },
+    "attempts/freeze-1/source.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/source.json",
+      "bytes": 23664,
+      "sha256": "3e624aad04c3cce4acabd45cb52aaff7d160872dc6b9b750704cd1a2c572114f",
+      "gzip": {
+        "bytes": 10146,
+        "sha256": "aa464f2de620da3bc1f34241563c278e1c938291d6532ed93e29fd9dc0c900ff"
+      }
+    },
+    "attempts/freeze-1/frozen.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/frozen.json",
+      "bytes": 1443,
+      "sha256": "265cc7b0f69d8687b4cb0a7a7517b549e9326172207ee00c17193f9110b893a3",
+      "gzip": {
+        "bytes": 839,
+        "sha256": "cf705efd5e4effb14659d6d57aded91fef8ef6281e33f25969e8cfd104cac737"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/export.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/export.py",
+      "bytes": 3128,
+      "sha256": "2f54d8bd4f5203f2deb54a292c435ecf5a442f5be444a315005a37e37a9add57",
+      "gzip": {
+        "bytes": 1393,
+        "sha256": "fb8b35b98a208ebf09e80f9b7577340f9c7fa07e66b696a4744c5227865691ca"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/test_harness.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/test_harness.py",
+      "bytes": 22027,
+      "sha256": "62403320aecb0fc65454a830567a31c5baaa1e7769ea929969c1420bd79b5574",
+      "gzip": {
+        "bytes": 4719,
+        "sha256": "345893e27aa8c7d3de68fdc414da79f479155fca8232763fccecf69e1704795d"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/integrity.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/integrity.py",
+      "bytes": 4124,
+      "sha256": "9a9c26eef53cbc85c9f6825fb75b5fca5dc81b80f849da88bcef9a0e9c74e151",
+      "gzip": {
+        "bytes": 1437,
+        "sha256": "34b712c5bcead972b47c85158a46bbdbb148ea1e057c221460ece5032b45df8f"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/freeze.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/freeze.py",
+      "bytes": 4022,
+      "sha256": "0313cc20678fbf4b736bee7b4cb44183e03f27eb4399bc35c90cf274b930f23a",
+      "gzip": {
+        "bytes": 1538,
+        "sha256": "57ff94306a8c70f0ac3c9e3298b50b64990d33a53ff212111b74003ea2a7b505"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/auto_probe.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/auto_probe.rs",
+      "bytes": 1529,
+      "sha256": "32813e86d40a49a1e0ee228e83cba52b3328137bd64ceab4528b92d07c02f9cb",
+      "gzip": {
+        "bytes": 482,
+        "sha256": "8c050c5d675cfd90e3516db19bcfa7a0e31aac6944bede64873dfc7537b88275"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/verify.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/verify.py",
+      "bytes": 4367,
+      "sha256": "148984b3f5deee4d2df36bf3e33c9d9503ea36e73933acef051aca5cdd3231b7",
+      "gzip": {
+        "bytes": 1578,
+        "sha256": "87fff7f07b1743933d22d23b1f036865e6cb5fbc9906ed3632f44cc285996c09"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/package_parity.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/package_parity.py",
+      "bytes": 4440,
+      "sha256": "58e21b644b187e3c6c282a3690a9579e5362ec1ecb66849e157a0e58efc97b65",
+      "gzip": {
+        "bytes": 1698,
+        "sha256": "98ae1432d755f32dc819eb4f0ee29c5052c753c932f786c0aba50719a279373c"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/source_probe.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/source_probe.rs",
+      "bytes": 677,
+      "sha256": "a0cd939a5a6d27799b206a211f4010908bb73ee54851bfe1c68eac879860cceb",
+      "gzip": {
+        "bytes": 400,
+        "sha256": "b87541ede2139d9a8df1eb97191a5a4362f91271df7e4c7964e99d45f3f2eb57"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/auto.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/auto.py",
+      "bytes": 3986,
+      "sha256": "3a5b9a319cb12b118c47343fce2f4e00e02a8e16802e286a324bdef0d04e7b79",
+      "gzip": {
+        "bytes": 1568,
+        "sha256": "ed6878d97864a3661a250016211f2c8a3bb7853f6318a8fe022f62ee351cc450"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/review.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/review.py",
+      "bytes": 3578,
+      "sha256": "3b099896c583a773a58762e3111b01243c9b6e64db14073ddacd3385b22ff013",
+      "gzip": {
+        "bytes": 1494,
+        "sha256": "5b234517d4550cd685d678d9f8e5d1fc61e23ae1657642113cabeb33510d5c90"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/replay.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/replay.py",
+      "bytes": 4722,
+      "sha256": "5e48e95625ef7acf707eadd8a77c5130b15c1bea46a6169e14fcb5b51e6a2c19",
+      "gzip": {
+        "bytes": 1664,
+        "sha256": "f684144979f07ae535bb8050f9c0cd0d440ccfa38d7e238296c2e052aafe3827"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/common.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/common.py",
+      "bytes": 6744,
+      "sha256": "789e23e61038b0ce04011fda85863118fe627743dc5adbc828fccd9b016cc179",
+      "gzip": {
+        "bytes": 2396,
+        "sha256": "57c0503b7df9a5018fc724ef533d00bab6d0f9e3c2a089a3583c8a51a7eaf483"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/quality.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/quality.py",
+      "bytes": 2427,
+      "sha256": "fb62e7f0d7c5c2ee2b84c8ef0ccf4e5906ad97529c8ddc623d90c8955900c76d",
+      "gzip": {
+        "bytes": 1051,
+        "sha256": "d6fb2b4fc384377814457877de5b1d63ad9b533eceb4f0796606390a5a13f424"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/run.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/run.py",
+      "bytes": 16356,
+      "sha256": "76aa5cc4c888240f7650a9047d52518641c63ed45bd5eecd6442a3da2b10c52d",
+      "gzip": {
+        "bytes": 5341,
+        "sha256": "7568c7ea953134f66f942d3798665abeafc9831e64bc823f580a72c020969373"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/validation.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/validation.py",
+      "bytes": 8605,
+      "sha256": "ad74f2beeaa229443dba7199d596575edf3b23148a5ff860645a6f9d25da9260",
+      "gzip": {
+        "bytes": 2730,
+        "sha256": "e6670eae62386ee49874499faa612ed79ed6a2c1a97f88ee11ee6857189c4802"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/runtime_probe.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/runtime_probe.rs",
+      "bytes": 9479,
+      "sha256": "6e8404a13385b9ede33d0b0eb345018ef6c79a7bf55b4fe8c34a749caf70f929",
+      "gzip": {
+        "bytes": 2668,
+        "sha256": "9546f5b75ce157e26c06679805c499c74513cde7be04bdf4c93a0b50aa65d6c1"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/fixtures/cross-region-utf8.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/fixtures/cross-region-utf8.cg",
+      "bytes": 377,
+      "sha256": "891e1fb3331b89e77d4ecd8bcbc6c039a6fa692990ad2b91d904b3949a2bd998",
+      "gzip": {
+        "bytes": 215,
+        "sha256": "9a3e1d30a18eb93885d77f66b00f96a0d8df01fc1be31140f2d70f1696211fee"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/fixtures/arithmetic.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/fixtures/arithmetic.cg",
+      "bytes": 595,
+      "sha256": "441aa4e1622ce56c77d5e10cb89de4bcdfc57888ec7ad532896d27215ff9da07",
+      "gzip": {
+        "bytes": 281,
+        "sha256": "511457924744be093077f99d28abfb8661a66787611b720d3cf9195e5af50764"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/fixtures/contract.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/fixtures/contract.cg",
+      "bytes": 646,
+      "sha256": "f8b423277b241373ba19fc1192a8f821c3eb8295aa59dfb9125c2ae5d54b72a1",
+      "gzip": {
+        "bytes": 303,
+        "sha256": "d8d33fce51ee59bb56217d5d6ed85b5746907b89a1874034ee5449f25ffa7562"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/fixtures/failed-argument.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/fixtures/failed-argument.cg",
+      "bytes": 678,
+      "sha256": "d9ec3a20e21b163bd0741d25400e1dad1cfdb0ad6a28dc84cf67c22c1eb5a6f5",
+      "gzip": {
+        "bytes": 320,
+        "sha256": "318111b4810b1526f4a04bdfac96b0be1f88064a26e74b3199686df5c346b0d2"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/fixtures/nested-guards.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/fixtures/nested-guards.cg",
+      "bytes": 1305,
+      "sha256": "8c05226df1feba43565bf9bd5a0731897e599be705da58a7cfcb5bf3fdc449a8",
+      "gzip": {
+        "bytes": 283,
+        "sha256": "1bbd816898f497f570831c41770de7bfd68b9f80293ab0535f614e9863cc7a74"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/fixtures/guard.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/fixtures/guard.cg",
+      "bytes": 543,
+      "sha256": "5c8c238b7f94962230c0ba38ff53f3093b35e73a81afc988609dc4ea1ddc638b",
+      "gzip": {
+        "bytes": 222,
+        "sha256": "475f3d7d2f26f229b6928f7e82c88e9058d17b4050710bdef6ff9c200d42a219"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/fixtures/copy-cycle.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/fixtures/copy-cycle.cg",
+      "bytes": 1620,
+      "sha256": "86187fa24adbfed1ac27d2092b160545a705ecd4a7ba7674c68d4ebf9ef776d9",
+      "gzip": {
+        "bytes": 403,
+        "sha256": "b4503abc0f9d26c76e30fb7654c463ff705aabb3d0e077f8ee8649ee9c63f56e"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/fixtures/sweep.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/fixtures/sweep.cg",
+      "bytes": 1650,
+      "sha256": "7632d4051995eb368d9c587b7d5301d0046666253530df238ba9720346c524b4",
+      "gzip": {
+        "bytes": 363,
+        "sha256": "5195ee653927c1a4c27f8d458345aea2681fa25b4e7a1eb17a190fec6fc687f3"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/fixtures/region.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/fixtures/region.cg",
+      "bytes": 497,
+      "sha256": "c23bcd5d82cfe85d4233e4c1ac87a615b9e14977dd31f636855e0813719379d0",
+      "gzip": {
+        "bytes": 258,
+        "sha256": "cbe766a985bb51bc99ed362276678b1e94913590c2f71ad2b34afe3ac0126128"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/fixtures/return.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/fixtures/return.cg",
+      "bytes": 597,
+      "sha256": "c38b36a693bb72e4c6611e79ddaddd69c8f6269f04b9ee442a7fa99420091bde",
+      "gzip": {
+        "bytes": 279,
+        "sha256": "90b01998befc50052f05684f342975b7f0337d3e681d5c5dcbdd11012706e789"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/fixtures/session.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/fixtures/session.cg",
+      "bytes": 479,
+      "sha256": "7d85ab43f44852490cd52b226b515fa6484125346be5eb79659bc3ed7e409695",
+      "gzip": {
+        "bytes": 242,
+        "sha256": "faa7d643916528cd6af1b08aa09f0277caad1e9091a500b5698c9b1c0d657fa7"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/fixtures/cross-region.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/fixtures/cross-region.cg",
+      "bytes": 364,
+      "sha256": "a9f8f88e06b806555b7fd386f8493c89e3cc5c9639377daf8d8c499c49943544",
+      "gzip": {
+        "bytes": 195,
+        "sha256": "ef4f4e45347de1f7195d4ef67ebcecc5a63efcce8bf748a43497f2ee966ed202"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/fixtures/auto-guard.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/fixtures/auto-guard.cg",
+      "bytes": 1011,
+      "sha256": "7c7cc9a80e1fc8000d8f23f68477f6f4a5c639931001ff36e02d16a0b31fd9f6",
+      "gzip": {
+        "bytes": 268,
+        "sha256": "788092719ac12dba9c91ac939692fe22dba479d30c4cce8da467f4976d32d54c"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/fixtures/fallback-resource.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/fixtures/fallback-resource.cg",
+      "bytes": 247,
+      "sha256": "27128b34df603a62be7e9e5f6c6a510295ea28cb94b28a795dea763e3c8c0102",
+      "gzip": {
+        "bytes": 172,
+        "sha256": "b16fd02ba8e65ff5981334d6147071ee8f2d2ed4fb84289ea1392c67eb057ca3"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/fixtures/allocation.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/fixtures/allocation.cg",
+      "bytes": 772,
+      "sha256": "9f4e639395430306b18866e88c72624310bd92758a42629befbd57c283654d49",
+      "gzip": {
+        "bytes": 260,
+        "sha256": "5cdecdf934d63320350e74c802f53a85f4481dd3e2acd49c2ca2518a914f9fd5"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/fixtures/normal.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/fixtures/normal.cg",
+      "bytes": 590,
+      "sha256": "6cdd77e0d3ce8909b0acbc5f7f0759f04ab1c326f37fcf7fd81ca8193f31df56",
+      "gzip": {
+        "bytes": 275,
+        "sha256": "9ad8ded9f5cc5a5574028788c815d8763c15920bef367e42517d4e5f1363aacb"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/fixtures/packages/runtime-error/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/fixtures/packages/runtime-error/cgx2.toml",
+      "bytes": 91,
+      "sha256": "4edfc51922f79ad75b4ad8ac5c3de3129af0193a8bd11445ad9b80e0027340df",
+      "gzip": {
+        "bytes": 97,
+        "sha256": "111fd0834c53b0d2214fdbb926edadbc37e2aee6f58c38b6b88fa6f1240fc121"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/fixtures/packages/runtime-error/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/fixtures/packages/runtime-error/main.cg",
+      "bytes": 230,
+      "sha256": "1c08d3b237de6d0fd674932b315595106a754ae075d1bc9327d33262d8f53112",
+      "gzip": {
+        "bytes": 171,
+        "sha256": "e7f14399c0a8578fe52c637764aab99a3e15813732337f83f5a0fbc068ffd8e0"
+      }
+    },
+    "attempts/freeze-1/harness-snapshot/fixtures/packages/runtime-error/lib.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/freeze-1/harness-snapshot/fixtures/packages/runtime-error/lib.cg",
+      "bytes": 120,
+      "sha256": "357ede5c4affeb093be20fd5ade2a47ede0ae3dd696b5d530a0ca71332e9d60a",
+      "gzip": {
+        "bytes": 132,
+        "sha256": "8a784155dd9a53ce0a961dbbcd2447aa3fab5e6ed18edfa14edb633b5d29479b"
+      }
+    },
+    "attempts/launch-status-1/command-identity.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/launch-status-1/command-identity.json",
+      "bytes": 467,
+      "sha256": "a552e7d38ba09cd054bf2b55b17b7f17a6f860e4ac8d3644359b437d628af6bd",
+      "gzip": {
+        "bytes": 310,
+        "sha256": "5e9e0d2713a6d2ad59310ea7fcfc4a9a8aeaf3a98f5addbf140a2a8488192f2b"
+      }
+    },
+    "attempts/launch-status-1/original-startup-report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/launch-status-1/original-startup-report.json",
+      "bytes": 1028,
+      "sha256": "c1db266af7da50fffdf4e38a8393d790077ac1192d7801c9d591b312fa0b2398",
+      "gzip": {
+        "bytes": 604,
+        "sha256": "ce3682a095dbcb7d3fa4bb8490af42a6c5569bfa2d3f58c1cf08eeca25741018"
+      }
+    },
+    "attempts/launch-status-1/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/launch-status-1/report.json",
+      "bytes": 1705,
+      "sha256": "62fbacf9647e37041d858facc6541aed5c2cf22db59d21dfa1e2ba15d40e2898",
+      "gzip": {
+        "bytes": 916,
+        "sha256": "726bd629af1a08162bd9e1d2c249d2a88f475f1a07070f5f8f4c7e4f75533279"
+      }
+    },
+    "attempts/matrix-1/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/report.json",
+      "bytes": 3314060,
+      "sha256": "24e75a672af0df31447256ee4a76f1d7cfca1809be1f96671c26bf81c133a8ab",
+      "gzip": {
+        "bytes": 246962,
+        "sha256": "7e0442f6597d6b601b53214c5d9cc69f9a67ea48b555d2994487d1849d9d3121"
+      }
+    },
+    "attempts/matrix-1/fixtures/cross-region-utf8.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/fixtures/cross-region-utf8.cg",
+      "bytes": 377,
+      "sha256": "891e1fb3331b89e77d4ecd8bcbc6c039a6fa692990ad2b91d904b3949a2bd998",
+      "gzip": {
+        "bytes": 215,
+        "sha256": "9a3e1d30a18eb93885d77f66b00f96a0d8df01fc1be31140f2d70f1696211fee"
+      }
+    },
+    "attempts/matrix-1/fixtures/arithmetic.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/fixtures/arithmetic.cg",
+      "bytes": 595,
+      "sha256": "441aa4e1622ce56c77d5e10cb89de4bcdfc57888ec7ad532896d27215ff9da07",
+      "gzip": {
+        "bytes": 281,
+        "sha256": "511457924744be093077f99d28abfb8661a66787611b720d3cf9195e5af50764"
+      }
+    },
+    "attempts/matrix-1/fixtures/contract.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/fixtures/contract.cg",
+      "bytes": 646,
+      "sha256": "f8b423277b241373ba19fc1192a8f821c3eb8295aa59dfb9125c2ae5d54b72a1",
+      "gzip": {
+        "bytes": 303,
+        "sha256": "d8d33fce51ee59bb56217d5d6ed85b5746907b89a1874034ee5449f25ffa7562"
+      }
+    },
+    "attempts/matrix-1/fixtures/failed-argument.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/fixtures/failed-argument.cg",
+      "bytes": 678,
+      "sha256": "d9ec3a20e21b163bd0741d25400e1dad1cfdb0ad6a28dc84cf67c22c1eb5a6f5",
+      "gzip": {
+        "bytes": 320,
+        "sha256": "318111b4810b1526f4a04bdfac96b0be1f88064a26e74b3199686df5c346b0d2"
+      }
+    },
+    "attempts/matrix-1/fixtures/nested-guards.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/fixtures/nested-guards.cg",
+      "bytes": 1305,
+      "sha256": "8c05226df1feba43565bf9bd5a0731897e599be705da58a7cfcb5bf3fdc449a8",
+      "gzip": {
+        "bytes": 283,
+        "sha256": "1bbd816898f497f570831c41770de7bfd68b9f80293ab0535f614e9863cc7a74"
+      }
+    },
+    "attempts/matrix-1/fixtures/guard.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/fixtures/guard.cg",
+      "bytes": 543,
+      "sha256": "5c8c238b7f94962230c0ba38ff53f3093b35e73a81afc988609dc4ea1ddc638b",
+      "gzip": {
+        "bytes": 222,
+        "sha256": "475f3d7d2f26f229b6928f7e82c88e9058d17b4050710bdef6ff9c200d42a219"
+      }
+    },
+    "attempts/matrix-1/fixtures/copy-cycle.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/fixtures/copy-cycle.cg",
+      "bytes": 1620,
+      "sha256": "86187fa24adbfed1ac27d2092b160545a705ecd4a7ba7674c68d4ebf9ef776d9",
+      "gzip": {
+        "bytes": 403,
+        "sha256": "b4503abc0f9d26c76e30fb7654c463ff705aabb3d0e077f8ee8649ee9c63f56e"
+      }
+    },
+    "attempts/matrix-1/fixtures/sweep.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/fixtures/sweep.cg",
+      "bytes": 1650,
+      "sha256": "7632d4051995eb368d9c587b7d5301d0046666253530df238ba9720346c524b4",
+      "gzip": {
+        "bytes": 363,
+        "sha256": "5195ee653927c1a4c27f8d458345aea2681fa25b4e7a1eb17a190fec6fc687f3"
+      }
+    },
+    "attempts/matrix-1/fixtures/region.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/fixtures/region.cg",
+      "bytes": 497,
+      "sha256": "c23bcd5d82cfe85d4233e4c1ac87a615b9e14977dd31f636855e0813719379d0",
+      "gzip": {
+        "bytes": 258,
+        "sha256": "cbe766a985bb51bc99ed362276678b1e94913590c2f71ad2b34afe3ac0126128"
+      }
+    },
+    "attempts/matrix-1/fixtures/return.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/fixtures/return.cg",
+      "bytes": 597,
+      "sha256": "c38b36a693bb72e4c6611e79ddaddd69c8f6269f04b9ee442a7fa99420091bde",
+      "gzip": {
+        "bytes": 279,
+        "sha256": "90b01998befc50052f05684f342975b7f0337d3e681d5c5dcbdd11012706e789"
+      }
+    },
+    "attempts/matrix-1/fixtures/session.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/fixtures/session.cg",
+      "bytes": 479,
+      "sha256": "7d85ab43f44852490cd52b226b515fa6484125346be5eb79659bc3ed7e409695",
+      "gzip": {
+        "bytes": 242,
+        "sha256": "faa7d643916528cd6af1b08aa09f0277caad1e9091a500b5698c9b1c0d657fa7"
+      }
+    },
+    "attempts/matrix-1/fixtures/cross-region.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/fixtures/cross-region.cg",
+      "bytes": 364,
+      "sha256": "a9f8f88e06b806555b7fd386f8493c89e3cc5c9639377daf8d8c499c49943544",
+      "gzip": {
+        "bytes": 195,
+        "sha256": "ef4f4e45347de1f7195d4ef67ebcecc5a63efcce8bf748a43497f2ee966ed202"
+      }
+    },
+    "attempts/matrix-1/fixtures/auto-guard.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/fixtures/auto-guard.cg",
+      "bytes": 1011,
+      "sha256": "7c7cc9a80e1fc8000d8f23f68477f6f4a5c639931001ff36e02d16a0b31fd9f6",
+      "gzip": {
+        "bytes": 268,
+        "sha256": "788092719ac12dba9c91ac939692fe22dba479d30c4cce8da467f4976d32d54c"
+      }
+    },
+    "attempts/matrix-1/fixtures/fallback-resource.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/fixtures/fallback-resource.cg",
+      "bytes": 247,
+      "sha256": "27128b34df603a62be7e9e5f6c6a510295ea28cb94b28a795dea763e3c8c0102",
+      "gzip": {
+        "bytes": 172,
+        "sha256": "b16fd02ba8e65ff5981334d6147071ee8f2d2ed4fb84289ea1392c67eb057ca3"
+      }
+    },
+    "attempts/matrix-1/fixtures/allocation.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/fixtures/allocation.cg",
+      "bytes": 772,
+      "sha256": "9f4e639395430306b18866e88c72624310bd92758a42629befbd57c283654d49",
+      "gzip": {
+        "bytes": 260,
+        "sha256": "5cdecdf934d63320350e74c802f53a85f4481dd3e2acd49c2ca2518a914f9fd5"
+      }
+    },
+    "attempts/matrix-1/fixtures/normal.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/fixtures/normal.cg",
+      "bytes": 590,
+      "sha256": "6cdd77e0d3ce8909b0acbc5f7f0759f04ab1c326f37fcf7fd81ca8193f31df56",
+      "gzip": {
+        "bytes": 275,
+        "sha256": "9ad8ded9f5cc5a5574028788c815d8763c15920bef367e42517d4e5f1363aacb"
+      }
+    },
+    "attempts/matrix-1/dependency-negative/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/dependency-negative/cgx2.toml",
+      "bytes": 87,
+      "sha256": "6aa11a318045e36091528184e29785cc744b0f49171a944145379cfdbd703390",
+      "gzip": {
+        "bytes": 93,
+        "sha256": "f0a3590102dc46783f86b949f1bc3eaab1759446ae3d829d764e280a3b3a6ab9"
+      }
+    },
+    "attempts/matrix-1/dependency-negative/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/dependency-negative/main.cg",
+      "bytes": 90,
+      "sha256": "ad875081c8b6154a0173607aeab1232134190fe29e3e326d39d3fa3a457c9bd7",
+      "gzip": {
+        "bytes": 98,
+        "sha256": "7cdddcbdda89e35f55cf9c18d68223463afcb4d8cb756c6b010bdd165e9c5cc2"
+      }
+    },
+    "attempts/matrix-1/dependency-negative/lib.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/dependency-negative/lib.cg",
+      "bytes": 396,
+      "sha256": "ff158e7979656fb8d4dd9d31c6d302fd8d48886589be4a9b60d1791053085572",
+      "gzip": {
+        "bytes": 233,
+        "sha256": "fd6a002ba04e6f44a9381487cd35565064bd72415e178109be50420a17c2edc6"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/export.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/export.py",
+      "bytes": 3128,
+      "sha256": "2f54d8bd4f5203f2deb54a292c435ecf5a442f5be444a315005a37e37a9add57",
+      "gzip": {
+        "bytes": 1393,
+        "sha256": "fb8b35b98a208ebf09e80f9b7577340f9c7fa07e66b696a4744c5227865691ca"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/test_harness.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/test_harness.py",
+      "bytes": 22027,
+      "sha256": "62403320aecb0fc65454a830567a31c5baaa1e7769ea929969c1420bd79b5574",
+      "gzip": {
+        "bytes": 4719,
+        "sha256": "345893e27aa8c7d3de68fdc414da79f479155fca8232763fccecf69e1704795d"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/integrity.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/integrity.py",
+      "bytes": 4124,
+      "sha256": "9a9c26eef53cbc85c9f6825fb75b5fca5dc81b80f849da88bcef9a0e9c74e151",
+      "gzip": {
+        "bytes": 1437,
+        "sha256": "34b712c5bcead972b47c85158a46bbdbb148ea1e057c221460ece5032b45df8f"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/freeze.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/freeze.py",
+      "bytes": 4022,
+      "sha256": "0313cc20678fbf4b736bee7b4cb44183e03f27eb4399bc35c90cf274b930f23a",
+      "gzip": {
+        "bytes": 1538,
+        "sha256": "57ff94306a8c70f0ac3c9e3298b50b64990d33a53ff212111b74003ea2a7b505"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/auto_probe.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/auto_probe.rs",
+      "bytes": 1529,
+      "sha256": "32813e86d40a49a1e0ee228e83cba52b3328137bd64ceab4528b92d07c02f9cb",
+      "gzip": {
+        "bytes": 482,
+        "sha256": "8c050c5d675cfd90e3516db19bcfa7a0e31aac6944bede64873dfc7537b88275"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/verify.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/verify.py",
+      "bytes": 4367,
+      "sha256": "148984b3f5deee4d2df36bf3e33c9d9503ea36e73933acef051aca5cdd3231b7",
+      "gzip": {
+        "bytes": 1578,
+        "sha256": "87fff7f07b1743933d22d23b1f036865e6cb5fbc9906ed3632f44cc285996c09"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/package_parity.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/package_parity.py",
+      "bytes": 4440,
+      "sha256": "58e21b644b187e3c6c282a3690a9579e5362ec1ecb66849e157a0e58efc97b65",
+      "gzip": {
+        "bytes": 1698,
+        "sha256": "98ae1432d755f32dc819eb4f0ee29c5052c753c932f786c0aba50719a279373c"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/source_probe.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/source_probe.rs",
+      "bytes": 677,
+      "sha256": "a0cd939a5a6d27799b206a211f4010908bb73ee54851bfe1c68eac879860cceb",
+      "gzip": {
+        "bytes": 400,
+        "sha256": "b87541ede2139d9a8df1eb97191a5a4362f91271df7e4c7964e99d45f3f2eb57"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/auto.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/auto.py",
+      "bytes": 3986,
+      "sha256": "3a5b9a319cb12b118c47343fce2f4e00e02a8e16802e286a324bdef0d04e7b79",
+      "gzip": {
+        "bytes": 1568,
+        "sha256": "ed6878d97864a3661a250016211f2c8a3bb7853f6318a8fe022f62ee351cc450"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/review.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/review.py",
+      "bytes": 3578,
+      "sha256": "3b099896c583a773a58762e3111b01243c9b6e64db14073ddacd3385b22ff013",
+      "gzip": {
+        "bytes": 1494,
+        "sha256": "5b234517d4550cd685d678d9f8e5d1fc61e23ae1657642113cabeb33510d5c90"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/replay.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/replay.py",
+      "bytes": 4722,
+      "sha256": "5e48e95625ef7acf707eadd8a77c5130b15c1bea46a6169e14fcb5b51e6a2c19",
+      "gzip": {
+        "bytes": 1664,
+        "sha256": "f684144979f07ae535bb8050f9c0cd0d440ccfa38d7e238296c2e052aafe3827"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/common.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/common.py",
+      "bytes": 6744,
+      "sha256": "789e23e61038b0ce04011fda85863118fe627743dc5adbc828fccd9b016cc179",
+      "gzip": {
+        "bytes": 2396,
+        "sha256": "57c0503b7df9a5018fc724ef533d00bab6d0f9e3c2a089a3583c8a51a7eaf483"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/quality.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/quality.py",
+      "bytes": 2427,
+      "sha256": "fb62e7f0d7c5c2ee2b84c8ef0ccf4e5906ad97529c8ddc623d90c8955900c76d",
+      "gzip": {
+        "bytes": 1051,
+        "sha256": "d6fb2b4fc384377814457877de5b1d63ad9b533eceb4f0796606390a5a13f424"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/run.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/run.py",
+      "bytes": 16356,
+      "sha256": "76aa5cc4c888240f7650a9047d52518641c63ed45bd5eecd6442a3da2b10c52d",
+      "gzip": {
+        "bytes": 5341,
+        "sha256": "7568c7ea953134f66f942d3798665abeafc9831e64bc823f580a72c020969373"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/validation.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/validation.py",
+      "bytes": 8605,
+      "sha256": "ad74f2beeaa229443dba7199d596575edf3b23148a5ff860645a6f9d25da9260",
+      "gzip": {
+        "bytes": 2730,
+        "sha256": "e6670eae62386ee49874499faa612ed79ed6a2c1a97f88ee11ee6857189c4802"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/runtime_probe.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/runtime_probe.rs",
+      "bytes": 9479,
+      "sha256": "6e8404a13385b9ede33d0b0eb345018ef6c79a7bf55b4fe8c34a749caf70f929",
+      "gzip": {
+        "bytes": 2668,
+        "sha256": "9546f5b75ce157e26c06679805c499c74513cde7be04bdf4c93a0b50aa65d6c1"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/cross-region-utf8.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/fixtures/cross-region-utf8.cg",
+      "bytes": 377,
+      "sha256": "891e1fb3331b89e77d4ecd8bcbc6c039a6fa692990ad2b91d904b3949a2bd998",
+      "gzip": {
+        "bytes": 215,
+        "sha256": "9a3e1d30a18eb93885d77f66b00f96a0d8df01fc1be31140f2d70f1696211fee"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/arithmetic.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/fixtures/arithmetic.cg",
+      "bytes": 595,
+      "sha256": "441aa4e1622ce56c77d5e10cb89de4bcdfc57888ec7ad532896d27215ff9da07",
+      "gzip": {
+        "bytes": 281,
+        "sha256": "511457924744be093077f99d28abfb8661a66787611b720d3cf9195e5af50764"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/contract.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/fixtures/contract.cg",
+      "bytes": 646,
+      "sha256": "f8b423277b241373ba19fc1192a8f821c3eb8295aa59dfb9125c2ae5d54b72a1",
+      "gzip": {
+        "bytes": 303,
+        "sha256": "d8d33fce51ee59bb56217d5d6ed85b5746907b89a1874034ee5449f25ffa7562"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/failed-argument.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/fixtures/failed-argument.cg",
+      "bytes": 678,
+      "sha256": "d9ec3a20e21b163bd0741d25400e1dad1cfdb0ad6a28dc84cf67c22c1eb5a6f5",
+      "gzip": {
+        "bytes": 320,
+        "sha256": "318111b4810b1526f4a04bdfac96b0be1f88064a26e74b3199686df5c346b0d2"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/nested-guards.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/fixtures/nested-guards.cg",
+      "bytes": 1305,
+      "sha256": "8c05226df1feba43565bf9bd5a0731897e599be705da58a7cfcb5bf3fdc449a8",
+      "gzip": {
+        "bytes": 283,
+        "sha256": "1bbd816898f497f570831c41770de7bfd68b9f80293ab0535f614e9863cc7a74"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/guard.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/fixtures/guard.cg",
+      "bytes": 543,
+      "sha256": "5c8c238b7f94962230c0ba38ff53f3093b35e73a81afc988609dc4ea1ddc638b",
+      "gzip": {
+        "bytes": 222,
+        "sha256": "475f3d7d2f26f229b6928f7e82c88e9058d17b4050710bdef6ff9c200d42a219"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/copy-cycle.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/fixtures/copy-cycle.cg",
+      "bytes": 1620,
+      "sha256": "86187fa24adbfed1ac27d2092b160545a705ecd4a7ba7674c68d4ebf9ef776d9",
+      "gzip": {
+        "bytes": 403,
+        "sha256": "b4503abc0f9d26c76e30fb7654c463ff705aabb3d0e077f8ee8649ee9c63f56e"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/sweep.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/fixtures/sweep.cg",
+      "bytes": 1650,
+      "sha256": "7632d4051995eb368d9c587b7d5301d0046666253530df238ba9720346c524b4",
+      "gzip": {
+        "bytes": 363,
+        "sha256": "5195ee653927c1a4c27f8d458345aea2681fa25b4e7a1eb17a190fec6fc687f3"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/region.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/fixtures/region.cg",
+      "bytes": 497,
+      "sha256": "c23bcd5d82cfe85d4233e4c1ac87a615b9e14977dd31f636855e0813719379d0",
+      "gzip": {
+        "bytes": 258,
+        "sha256": "cbe766a985bb51bc99ed362276678b1e94913590c2f71ad2b34afe3ac0126128"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/return.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/fixtures/return.cg",
+      "bytes": 597,
+      "sha256": "c38b36a693bb72e4c6611e79ddaddd69c8f6269f04b9ee442a7fa99420091bde",
+      "gzip": {
+        "bytes": 279,
+        "sha256": "90b01998befc50052f05684f342975b7f0337d3e681d5c5dcbdd11012706e789"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/session.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/fixtures/session.cg",
+      "bytes": 479,
+      "sha256": "7d85ab43f44852490cd52b226b515fa6484125346be5eb79659bc3ed7e409695",
+      "gzip": {
+        "bytes": 242,
+        "sha256": "faa7d643916528cd6af1b08aa09f0277caad1e9091a500b5698c9b1c0d657fa7"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/cross-region.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/fixtures/cross-region.cg",
+      "bytes": 364,
+      "sha256": "a9f8f88e06b806555b7fd386f8493c89e3cc5c9639377daf8d8c499c49943544",
+      "gzip": {
+        "bytes": 195,
+        "sha256": "ef4f4e45347de1f7195d4ef67ebcecc5a63efcce8bf748a43497f2ee966ed202"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/auto-guard.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/fixtures/auto-guard.cg",
+      "bytes": 1011,
+      "sha256": "7c7cc9a80e1fc8000d8f23f68477f6f4a5c639931001ff36e02d16a0b31fd9f6",
+      "gzip": {
+        "bytes": 268,
+        "sha256": "788092719ac12dba9c91ac939692fe22dba479d30c4cce8da467f4976d32d54c"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/fallback-resource.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/fixtures/fallback-resource.cg",
+      "bytes": 247,
+      "sha256": "27128b34df603a62be7e9e5f6c6a510295ea28cb94b28a795dea763e3c8c0102",
+      "gzip": {
+        "bytes": 172,
+        "sha256": "b16fd02ba8e65ff5981334d6147071ee8f2d2ed4fb84289ea1392c67eb057ca3"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/allocation.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/fixtures/allocation.cg",
+      "bytes": 772,
+      "sha256": "9f4e639395430306b18866e88c72624310bd92758a42629befbd57c283654d49",
+      "gzip": {
+        "bytes": 260,
+        "sha256": "5cdecdf934d63320350e74c802f53a85f4481dd3e2acd49c2ca2518a914f9fd5"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/normal.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/harness-snapshot/fixtures/normal.cg",
+      "bytes": 590,
+      "sha256": "6cdd77e0d3ce8909b0acbc5f7f0759f04ab1c326f37fcf7fd81ca8193f31df56",
+      "gzip": {
+        "bytes": 275,
+        "sha256": "9ad8ded9f5cc5a5574028788c815d8763c15920bef367e42517d4e5f1363aacb"
+      }
+    },
+    "attempts/matrix-1/fixtures/packages/runtime-error/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/fixtures/packages/runtime-error/cgx2.toml",
+      "bytes": 91,
+      "sha256": "4edfc51922f79ad75b4ad8ac5c3de3129af0193a8bd11445ad9b80e0027340df",
+      "gzip": {
+        "bytes": 97,
+        "sha256": "111fd0834c53b0d2214fdbb926edadbc37e2aee6f58c38b6b88fa6f1240fc121"
+      }
+    },
+    "attempts/matrix-1/fixtures/packages/runtime-error/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/fixtures/packages/runtime-error/main.cg",
+      "bytes": 230,
+      "sha256": "1c08d3b237de6d0fd674932b315595106a754ae075d1bc9327d33262d8f53112",
+      "gzip": {
+        "bytes": 171,
+        "sha256": "e7f14399c0a8578fe52c637764aab99a3e15813732337f83f5a0fbc068ffd8e0"
+      }
+    },
+    "attempts/matrix-1/fixtures/packages/runtime-error/lib.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/matrix-1/fixtures/packages/runtime-error/lib.cg",
+      "bytes": 120,
+      "sha256": "357ede5c4affeb093be20fd5ade2a47ede0ae3dd696b5d530a0ca71332e9d60a",
+      "gzip": {
+        "bytes": 132,
+        "sha256": "8a784155dd9a53ce0a961dbbcd2447aa3fab5e6ed18edfa14edb633b5d29479b"
+      }
+    },
+    "standalone-source/matrix-1/normal-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/normal-standalone.rs",
+      "bytes": 242079,
+      "sha256": "3db375cd148d5b67e48cf28ddd301bf150c8f1d4d54098d3a0125ec70d18f0c6",
+      "gzip": {
+        "bytes": 42750,
+        "sha256": "41f95e6914cd3566d49b8257b067a08872d306fb3a52596a81f46c40eb7bfd54"
+      }
+    },
+    "standalone-source/matrix-1/return-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/return-standalone.rs",
+      "bytes": 242087,
+      "sha256": "0acc759c47d25c0c8bb97d54e21bbdd5defe3df6b385c696e0af047c67eac1c5",
+      "gzip": {
+        "bytes": 42759,
+        "sha256": "d3bc6bffa352cff9abf18be0346de84bddce29c328406deee1100ed65b4c7f36"
+      }
+    },
+    "standalone-source/matrix-1/allocation-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/allocation-standalone.rs",
+      "bytes": 241070,
+      "sha256": "88202e414ca99a48d6264f5ae5d02cfe5bffdee7744285dcbac7f292af145966",
+      "gzip": {
+        "bytes": 42621,
+        "sha256": "59f2839718604530e3a89c8e5902fce6501cab191d4d745346141936488e8547"
+      }
+    },
+    "standalone-source/matrix-1/region-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/region-standalone.rs",
+      "bytes": 240859,
+      "sha256": "33927e4391cbe432d948d7fe7b532a5324416737dc5c6ffdcd5537e73b9466cd",
+      "gzip": {
+        "bytes": 42597,
+        "sha256": "17f0659cbaf129ac8d8d1f80d915c1116518c1e6939cef9bf8a0a04464bc86ab"
+      }
+    },
+    "standalone-source/matrix-1/guard-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/guard-standalone.rs",
+      "bytes": 238809,
+      "sha256": "cc317c7486576e0636cf16e41d9f8884d1aeaa274555b3b15696c72ba54600ec",
+      "gzip": {
+        "bytes": 42367,
+        "sha256": "6820b0b795fac4c34feb3485b350a18726d642e8ed9b856c29eb23757514ca01"
+      }
+    },
+    "standalone-source/matrix-1/nested-guards-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/nested-guards-standalone.rs",
+      "bytes": 247538,
+      "sha256": "98ef2367b3274a16de8affe949d2356d401cbbc030b641784df6772a398f4fe8",
+      "gzip": {
+        "bytes": 43179,
+        "sha256": "0df601a112709d5f19d1396624693b29faf6bd23abc45cebc4f45a1307d0f1fb"
+      }
+    },
+    "standalone-source/matrix-1/copy-cycle-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/copy-cycle-standalone.rs",
+      "bytes": 246725,
+      "sha256": "4ac6b1a481966cb8e5685c8727556ffaee914b299561d96c6ba81ffc9c5c4fef",
+      "gzip": {
+        "bytes": 43324,
+        "sha256": "49be4b9ce028dbea0658f93ada9d9732acf2a23223a6e947b15ae1830addf394"
+      }
+    },
+    "standalone-source/matrix-1/session-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/session-standalone.rs",
+      "bytes": 239656,
+      "sha256": "99b570b97f340c22aa15042ea754cb4689c9efb1932ff7c461d6992565b417fc",
+      "gzip": {
+        "bytes": 42475,
+        "sha256": "69d05b3d8448b92ef5473b2c8a7fdc9fb9ac1850af92525215042f92547e100a"
+      }
+    },
+    "standalone-source/matrix-1/arithmetic-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/arithmetic-standalone.rs",
+      "bytes": 242429,
+      "sha256": "8de6107b746aa10a3fadb073ef52c99dbdeaf211865eb225f86a9996f36b9be5",
+      "gzip": {
+        "bytes": 42793,
+        "sha256": "9b5e65d4a3e523fc0b4b68c313c81758be3a79ae7472894250b288899ac7e55c"
+      }
+    },
+    "standalone-source/matrix-1/contract-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/contract-standalone.rs",
+      "bytes": 242849,
+      "sha256": "8d7f9b7c442faa416a5c0d54a4e9331dd79f2871b4e1e80000f85885c67e068e",
+      "gzip": {
+        "bytes": 42828,
+        "sha256": "f0a3b0c9ad8f521137df89437818fcc6a2139b5a62fee33e8ab3071848d9628f"
+      }
+    },
+    "standalone-source/matrix-1/failed-argument-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/failed-argument-standalone.rs",
+      "bytes": 244346,
+      "sha256": "63a7a46033ed9c3e64b412d0e7666176688e1f368a81a1739d4d466a5583af24",
+      "gzip": {
+        "bytes": 42958,
+        "sha256": "e72fd91c6a2e84a32ca41affe050c201d6f2814bbac519558bb47ab3056ab4b1"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-1-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/source-fault-1-standalone.rs",
+      "bytes": 250362,
+      "sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+      "gzip": {
+        "bytes": 43474,
+        "sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-2-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/source-fault-2-standalone.rs",
+      "bytes": 250362,
+      "sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+      "gzip": {
+        "bytes": 43474,
+        "sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-3-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/source-fault-3-standalone.rs",
+      "bytes": 250362,
+      "sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+      "gzip": {
+        "bytes": 43474,
+        "sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-4-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/source-fault-4-standalone.rs",
+      "bytes": 250362,
+      "sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+      "gzip": {
+        "bytes": 43474,
+        "sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-5-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/source-fault-5-standalone.rs",
+      "bytes": 250362,
+      "sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+      "gzip": {
+        "bytes": 43474,
+        "sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-6-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/source-fault-6-standalone.rs",
+      "bytes": 250362,
+      "sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+      "gzip": {
+        "bytes": 43474,
+        "sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-7-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/source-fault-7-standalone.rs",
+      "bytes": 250362,
+      "sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+      "gzip": {
+        "bytes": 43474,
+        "sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-8-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/source-fault-8-standalone.rs",
+      "bytes": 250362,
+      "sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+      "gzip": {
+        "bytes": 43474,
+        "sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-9-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/source-fault-9-standalone.rs",
+      "bytes": 250362,
+      "sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+      "gzip": {
+        "bytes": 43474,
+        "sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-10-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/source-fault-10-standalone.rs",
+      "bytes": 250362,
+      "sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+      "gzip": {
+        "bytes": 43474,
+        "sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-11-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/source-fault-11-standalone.rs",
+      "bytes": 250362,
+      "sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+      "gzip": {
+        "bytes": 43474,
+        "sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-12-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/source-fault-12-standalone.rs",
+      "bytes": 250362,
+      "sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+      "gzip": {
+        "bytes": 43474,
+        "sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-13-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/source-fault-13-standalone.rs",
+      "bytes": 250362,
+      "sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+      "gzip": {
+        "bytes": 43474,
+        "sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-14-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/source-fault-14-standalone.rs",
+      "bytes": 250362,
+      "sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+      "gzip": {
+        "bytes": 43474,
+        "sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-15-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/source-fault-15-standalone.rs",
+      "bytes": 250362,
+      "sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+      "gzip": {
+        "bytes": 43474,
+        "sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-16-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/source-fault-16-standalone.rs",
+      "bytes": 250362,
+      "sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+      "gzip": {
+        "bytes": 43474,
+        "sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-17-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/source-fault-17-standalone.rs",
+      "bytes": 250362,
+      "sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+      "gzip": {
+        "bytes": 43474,
+        "sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-18-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/source-fault-18-standalone.rs",
+      "bytes": 250362,
+      "sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+      "gzip": {
+        "bytes": 43474,
+        "sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-19-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/source-fault-19-standalone.rs",
+      "bytes": 250362,
+      "sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+      "gzip": {
+        "bytes": 43474,
+        "sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-20-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/source-fault-20-standalone.rs",
+      "bytes": 250362,
+      "sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+      "gzip": {
+        "bytes": 43474,
+        "sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-21-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/source-fault-21-standalone.rs",
+      "bytes": 250362,
+      "sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+      "gzip": {
+        "bytes": 43474,
+        "sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-22-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/matrix-1/source-fault-22-standalone.rs",
+      "bytes": 250362,
+      "sha256": "15093770c1203c80eb4446c57b5b2d8775151a5257fbfede02df5f252d5c3737",
+      "gzip": {
+        "bytes": 43474,
+        "sha256": "4f2c41227994961a40ea7002283059a412149436755a633b1784d183b92058c2"
+      }
+    },
+    "attempts/outside-status-1/command-identity.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/outside-status-1/command-identity.json",
+      "bytes": 171,
+      "sha256": "cb4399994d7851c7c9ac53c9778fd8e7d98e95d8acd463027a94d30a13901608",
+      "gzip": {
+        "bytes": 157,
+        "sha256": "5a194470966461218b4dc8d45a62e6e0566fc98c70e9c5844613bee282684b53"
+      }
+    },
+    "attempts/outside-status-1/original-startup-report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/outside-status-1/original-startup-report.json",
+      "bytes": 1030,
+      "sha256": "1006e512d5f9517b9d42d37057c7bfa2dc656c226891e108dc57350ca1fa34a2",
+      "gzip": {
+        "bytes": 608,
+        "sha256": "03b0e225a415ae4f9f27a6751beee77d9f6399d7811acde5a1a8bdbcaecb2d70"
+      }
+    },
+    "attempts/outside-status-1/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/outside-status-1/report.json",
+      "bytes": 1411,
+      "sha256": "a76c24b368eaf1aa53cb105eb6944d13960d2fe2cef0c88b1848b42ffe4b839f",
+      "gzip": {
+        "bytes": 790,
+        "sha256": "00291a4928d1e31c4cd125ffe78bf0ccec5e154417dec1680c52ff625045367e"
+      }
+    },
+    "attempts/package-1/package-value.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/package-1/package-value.py",
+      "bytes": 15,
+      "sha256": "d4aa2db9f91b000557b5868dc1a3fc4d9ceec662ae627e065f068d1ccfc5c36a",
+      "gzip": {
+        "bytes": 35,
+        "sha256": "2a4cb7c2aef0f40ff0dcf391ba250c7fb4570bc269bab0259a98e2a9d1748f91"
+      }
+    },
+    "attempts/package-1/package-error.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/package-1/package-error.py",
+      "bytes": 15,
+      "sha256": "d4aa2db9f91b000557b5868dc1a3fc4d9ceec662ae627e065f068d1ccfc5c36a",
+      "gzip": {
+        "bytes": 35,
+        "sha256": "2a4cb7c2aef0f40ff0dcf391ba250c7fb4570bc269bab0259a98e2a9d1748f91"
+      }
+    },
+    "attempts/package-1/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/package-1/report.json",
+      "bytes": 1221147,
+      "sha256": "36b6c6b932b473331082df2c4a32cf4a071e6733d4cd0e88b5e5101a6b647a9e",
+      "gzip": {
+        "bytes": 194677,
+        "sha256": "c7674cff85b09c02f3c1c799d732c866c66b35fe96244f1b1bf5ec7a069fb346"
+      }
+    },
+    "attempts/package-1/package-error/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/package-1/package-error/cgx2.toml",
+      "bytes": 91,
+      "sha256": "4edfc51922f79ad75b4ad8ac5c3de3129af0193a8bd11445ad9b80e0027340df",
+      "gzip": {
+        "bytes": 97,
+        "sha256": "111fd0834c53b0d2214fdbb926edadbc37e2aee6f58c38b6b88fa6f1240fc121"
+      }
+    },
+    "attempts/package-1/package-error/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/package-1/package-error/main.cg",
+      "bytes": 230,
+      "sha256": "1c08d3b237de6d0fd674932b315595106a754ae075d1bc9327d33262d8f53112",
+      "gzip": {
+        "bytes": 171,
+        "sha256": "e7f14399c0a8578fe52c637764aab99a3e15813732337f83f5a0fbc068ffd8e0"
+      }
+    },
+    "attempts/package-1/package-error/lib.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/package-1/package-error/lib.cg",
+      "bytes": 120,
+      "sha256": "357ede5c4affeb093be20fd5ade2a47ede0ae3dd696b5d530a0ca71332e9d60a",
+      "gzip": {
+        "bytes": 132,
+        "sha256": "8a784155dd9a53ce0a961dbbcd2447aa3fab5e6ed18edfa14edb633b5d29479b"
+      }
+    },
+    "attempts/package-1/package-value/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/package-1/package-value/cgx2.toml",
+      "bytes": 85,
+      "sha256": "1e17310fc9fc1cacf4a071f3852d62317d71c5c73edcb77496b33403b89b6199",
+      "gzip": {
+        "bytes": 90,
+        "sha256": "afe2b26cb596602d46ee6da5ac27f3fb14548b3bdaa3a35308154f901877ef20"
+      }
+    },
+    "attempts/package-1/package-value/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/package-1/package-value/main.cg",
+      "bytes": 394,
+      "sha256": "eb40f04f87a978fe733bf6f51649e88dbe1c4196245cb35dddd59fd9ced0be83",
+      "gzip": {
+        "bytes": 213,
+        "sha256": "66dcf25f11a117cc47f946a335e3b4a0fb3e271fe252615dfe5c8c1e98903273"
+      }
+    },
+    "attempts/package-1/package-value/lib.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/package-1/package-value/lib.cg",
+      "bytes": 215,
+      "sha256": "3d588ff7569450b492e4a7b947f3e0aeb4f922f39fdcbfaec8d73557faa20298",
+      "gzip": {
+        "bytes": 185,
+        "sha256": "e91b3b9ee830ded456be2b4f5af4544f088ada3e1e3c943c72827d901d72f49e"
+      }
+    },
+    "standalone-source/package-1/package-value-standalone-emit.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/package-1/package-value.rs",
+      "bytes": 241398,
+      "sha256": "0df605e991187e4e19c2a5d318535a01e6f96de9fa575f5959a3d1cad100c4fa",
+      "gzip": {
+        "bytes": 42594,
+        "sha256": "f5e0d1062ba41fa36e3e1ed7d4d69cc81ff2b907c093b48443c01c78a8dc1ba4"
+      }
+    },
+    "standalone-source/package-1/package-error-standalone-emit.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/package-1/package-error.rs",
+      "bytes": 238382,
+      "sha256": "dc1541628059e26aca04d9f6a7fd0a5d7db9ac95f89a32edb67f83acc7be1889",
+      "gzip": {
+        "bytes": 42254,
+        "sha256": "34b33cb6d38278baaeb8060929728e65623b7cc2eb8b5b20cb7cec960bd9f007"
+      }
+    },
+    "attempts/preflight-1/historical-evidence-before.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/preflight-1/historical-evidence-before.json",
+      "bytes": 50770,
+      "sha256": "bca1a946ab369934040daa452bf069376fae28449b50df0b3802b551feca1778",
+      "gzip": {
+        "bytes": 8461,
+        "sha256": "be336c0d1967b6fca3c0ad1145a723d13816e00d6126c9e197f79885480e0329"
+      }
+    },
+    "attempts/preflight-1/test_harness_47.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/preflight-1/test_harness_47.py",
+      "bytes": 21544,
+      "sha256": "6f41f4d6e1babb733e61f352a05dff66ff316e91e731b55a0904b79f49a80393",
+      "gzip": {
+        "bytes": 4653,
+        "sha256": "d65867638b0c15bb08a87dbf02ecdd0aa9cb0477b563d4182299558f4e9f63e1"
+      }
+    },
+    "attempts/preflight-1/selftest-source-provenance.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/preflight-1/selftest-source-provenance.json",
+      "bytes": 404,
+      "sha256": "82af89021a876b8d183a990764381a92230a6586c911143f70c6f3c261ffab05",
+      "gzip": {
+        "bytes": 274,
+        "sha256": "654cd595e47b5af86e34397cea6d3ad66bfb48656a9a259e21eecfffcad8e048"
+      }
+    },
+    "attempts/preflight-1/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/preflight-1/report.json",
+      "bytes": 150676,
+      "sha256": "f86f95de7c00b6319f3f1723c17cce6b35ca45a93b85c0096082bfbf3a22b124",
+      "gzip": {
+        "bytes": 29498,
+        "sha256": "a26418bc2d1c6916279806e98d192b2085647716a0e3ba773244981ac0310ab4"
+      }
+    },
+    "attempts/preflight-1/selftests-1.log.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/preflight-1/selftests-1.log",
+      "bytes": 146,
+      "sha256": "21c50e4abdac1b3663d2c2e808db69752b493ce6c2a10383eadd79180bb555e3",
+      "gzip": {
+        "bytes": 56,
+        "sha256": "1ca5456a91c25a41a290987addf1980906eb9595b779ba898fcdd402cc9730ae"
+      }
+    },
+    "attempts/preflight-1/preflight-source.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/preflight-1/preflight-source.py",
+      "bytes": 2112,
+      "sha256": "7c62459b9cb6e79507864147beb7b596e3cc7b073d58e943478cb9df24e5c18b",
+      "gzip": {
+        "bytes": 1085,
+        "sha256": "f847cde56487862e239c2bb0c64faf8e743c33988e858d033a0561e394d7572b"
+      }
+    },
+    "attempts/preflight-1/early-command-audit.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/preflight-1/early-command-audit.json",
+      "bytes": 1074,
+      "sha256": "09e2b3ec1eb474258dff54f3784f6265268174c9d902563179dd7fafb1b388b9",
+      "gzip": {
+        "bytes": 540,
+        "sha256": "3123bd25b819fe1d0161a2b8552a7fef908423ac4567e2860bef73a048f48945"
+      }
+    },
+    "attempts/preflight-2/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/preflight-2/report.json",
+      "bytes": 2871,
+      "sha256": "aa1b9f38ac8f20e885dfa051b56bb99436f7b68679c58f9113669016ce5499f4",
+      "gzip": {
+        "bytes": 958,
+        "sha256": "7a15e80b324f392216a5b692c6997061d8a169ffbd6791f5b8df4a8bde0bf330"
+      }
+    },
+    "attempts/quality-1/export.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/quality-1/export.py",
+      "bytes": 3128,
+      "sha256": "2f54d8bd4f5203f2deb54a292c435ecf5a442f5be444a315005a37e37a9add57",
+      "gzip": {
+        "bytes": 1393,
+        "sha256": "fb8b35b98a208ebf09e80f9b7577340f9c7fa07e66b696a4744c5227865691ca"
+      }
+    },
+    "attempts/quality-1/test_harness.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/quality-1/test_harness.py",
+      "bytes": 22027,
+      "sha256": "62403320aecb0fc65454a830567a31c5baaa1e7769ea929969c1420bd79b5574",
+      "gzip": {
+        "bytes": 4719,
+        "sha256": "345893e27aa8c7d3de68fdc414da79f479155fca8232763fccecf69e1704795d"
+      }
+    },
+    "attempts/quality-1/integrity.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/quality-1/integrity.py",
+      "bytes": 4124,
+      "sha256": "9a9c26eef53cbc85c9f6825fb75b5fca5dc81b80f849da88bcef9a0e9c74e151",
+      "gzip": {
+        "bytes": 1437,
+        "sha256": "34b712c5bcead972b47c85158a46bbdbb148ea1e057c221460ece5032b45df8f"
+      }
+    },
+    "attempts/quality-1/freeze.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/quality-1/freeze.py",
+      "bytes": 4022,
+      "sha256": "0313cc20678fbf4b736bee7b4cb44183e03f27eb4399bc35c90cf274b930f23a",
+      "gzip": {
+        "bytes": 1538,
+        "sha256": "57ff94306a8c70f0ac3c9e3298b50b64990d33a53ff212111b74003ea2a7b505"
+      }
+    },
+    "attempts/quality-1/auto_probe.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/quality-1/auto_probe.rs",
+      "bytes": 1529,
+      "sha256": "32813e86d40a49a1e0ee228e83cba52b3328137bd64ceab4528b92d07c02f9cb",
+      "gzip": {
+        "bytes": 482,
+        "sha256": "8c050c5d675cfd90e3516db19bcfa7a0e31aac6944bede64873dfc7537b88275"
+      }
+    },
+    "attempts/quality-1/verify.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/quality-1/verify.py",
+      "bytes": 4367,
+      "sha256": "148984b3f5deee4d2df36bf3e33c9d9503ea36e73933acef051aca5cdd3231b7",
+      "gzip": {
+        "bytes": 1578,
+        "sha256": "87fff7f07b1743933d22d23b1f036865e6cb5fbc9906ed3632f44cc285996c09"
+      }
+    },
+    "attempts/quality-1/package_parity.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/quality-1/package_parity.py",
+      "bytes": 4440,
+      "sha256": "58e21b644b187e3c6c282a3690a9579e5362ec1ecb66849e157a0e58efc97b65",
+      "gzip": {
+        "bytes": 1698,
+        "sha256": "98ae1432d755f32dc819eb4f0ee29c5052c753c932f786c0aba50719a279373c"
+      }
+    },
+    "attempts/quality-1/source_probe.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/quality-1/source_probe.rs",
+      "bytes": 677,
+      "sha256": "a0cd939a5a6d27799b206a211f4010908bb73ee54851bfe1c68eac879860cceb",
+      "gzip": {
+        "bytes": 400,
+        "sha256": "b87541ede2139d9a8df1eb97191a5a4362f91271df7e4c7964e99d45f3f2eb57"
+      }
+    },
+    "attempts/quality-1/auto.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/quality-1/auto.py",
+      "bytes": 3986,
+      "sha256": "3a5b9a319cb12b118c47343fce2f4e00e02a8e16802e286a324bdef0d04e7b79",
+      "gzip": {
+        "bytes": 1568,
+        "sha256": "ed6878d97864a3661a250016211f2c8a3bb7853f6318a8fe022f62ee351cc450"
+      }
+    },
+    "attempts/quality-1/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/quality-1/report.json",
+      "bytes": 566904,
+      "sha256": "b3e58ca99dc6a728c48c1a533e6fa457160b7ecc47c4569a30382a414104b448",
+      "gzip": {
+        "bytes": 96039,
+        "sha256": "e2a27e312c0f1cca7ffd8999930e6768defc1f6d09d82b5fbc5b72221224cd50"
+      }
+    },
+    "attempts/quality-1/review.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/quality-1/review.py",
+      "bytes": 3578,
+      "sha256": "3b099896c583a773a58762e3111b01243c9b6e64db14073ddacd3385b22ff013",
+      "gzip": {
+        "bytes": 1494,
+        "sha256": "5b234517d4550cd685d678d9f8e5d1fc61e23ae1657642113cabeb33510d5c90"
+      }
+    },
+    "attempts/quality-1/replay.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/quality-1/replay.py",
+      "bytes": 4722,
+      "sha256": "5e48e95625ef7acf707eadd8a77c5130b15c1bea46a6169e14fcb5b51e6a2c19",
+      "gzip": {
+        "bytes": 1664,
+        "sha256": "f684144979f07ae535bb8050f9c0cd0d440ccfa38d7e238296c2e052aafe3827"
+      }
+    },
+    "attempts/quality-1/common.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/quality-1/common.py",
+      "bytes": 6744,
+      "sha256": "789e23e61038b0ce04011fda85863118fe627743dc5adbc828fccd9b016cc179",
+      "gzip": {
+        "bytes": 2396,
+        "sha256": "57c0503b7df9a5018fc724ef533d00bab6d0f9e3c2a089a3583c8a51a7eaf483"
+      }
+    },
+    "attempts/quality-1/quality.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/quality-1/quality.py",
+      "bytes": 2427,
+      "sha256": "fb62e7f0d7c5c2ee2b84c8ef0ccf4e5906ad97529c8ddc623d90c8955900c76d",
+      "gzip": {
+        "bytes": 1051,
+        "sha256": "d6fb2b4fc384377814457877de5b1d63ad9b533eceb4f0796606390a5a13f424"
+      }
+    },
+    "attempts/quality-1/run.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/quality-1/run.py",
+      "bytes": 16356,
+      "sha256": "76aa5cc4c888240f7650a9047d52518641c63ed45bd5eecd6442a3da2b10c52d",
+      "gzip": {
+        "bytes": 5341,
+        "sha256": "7568c7ea953134f66f942d3798665abeafc9831e64bc823f580a72c020969373"
+      }
+    },
+    "attempts/quality-1/validation.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/quality-1/validation.py",
+      "bytes": 8605,
+      "sha256": "ad74f2beeaa229443dba7199d596575edf3b23148a5ff860645a6f9d25da9260",
+      "gzip": {
+        "bytes": 2730,
+        "sha256": "e6670eae62386ee49874499faa612ed79ed6a2c1a97f88ee11ee6857189c4802"
+      }
+    },
+    "attempts/quality-1/runtime_probe.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/quality-1/runtime_probe.rs",
+      "bytes": 9479,
+      "sha256": "6e8404a13385b9ede33d0b0eb345018ef6c79a7bf55b4fe8c34a749caf70f929",
+      "gzip": {
+        "bytes": 2668,
+        "sha256": "9546f5b75ce157e26c06679805c499c74513cde7be04bdf4c93a0b50aa65d6c1"
+      }
+    },
+    "attempts/replay-2/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/report.json",
+      "bytes": 1138321,
+      "sha256": "80c8c0ea8d7e154096daf5eb9f39bc944f3701e986e58a1c46e48ae5c53daad1",
+      "gzip": {
+        "bytes": 191312,
+        "sha256": "34fde5c3fec3c1c6d8fe0d19a3809db67d53eb0b6c96d83ac7282b91b96f7d94"
+      }
+    },
+    "attempts/replay-2/product/product.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/product.json",
+      "bytes": 165739,
+      "sha256": "bbd08304883a98d53611cfc6d82f6349fa9a42ac1f7c7061f2bdbf19dcd7a77a",
+      "gzip": {
+        "bytes": 12076,
+        "sha256": "5320888825b5ca960d219100bd8f592fc7d7afe2ae4b0fa0ea0b19cc0075a8ea"
+      }
+    },
+    "attempts/replay-2/product/entry-probe.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/entry-probe.rs",
+      "bytes": 376,
+      "sha256": "629d7ffb34152f42faddade4c3a33ffc7361322cf67d71c62ac1b25aab3d49b6",
+      "gzip": {
+        "bytes": 256,
+        "sha256": "badae45cfaead9123de27d29d275a4c3781994070eebee18cb1f987fc73385cc"
+      }
+    },
+    "attempts/replay-2/product/region.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/region.py",
+      "bytes": 18,
+      "sha256": "f084e50f3d84cfc3a71cad0a4c2610fe42c87b5c78de5ff50bba3ac7c1b16ab8",
+      "gzip": {
+        "bytes": 38,
+        "sha256": "394a8fd5b468f2c1ae0cedf13fe94e941817d2af31c37b2aa77368573fb97841"
+      }
+    },
+    "attempts/replay-2/product/nested-guards.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/nested-guards.py",
+      "bytes": 18,
+      "sha256": "f084e50f3d84cfc3a71cad0a4c2610fe42c87b5c78de5ff50bba3ac7c1b16ab8",
+      "gzip": {
+        "bytes": 38,
+        "sha256": "394a8fd5b468f2c1ae0cedf13fe94e941817d2af31c37b2aa77368573fb97841"
+      }
+    },
+    "attempts/replay-2/product/session.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/session.py",
+      "bytes": 18,
+      "sha256": "f084e50f3d84cfc3a71cad0a4c2610fe42c87b5c78de5ff50bba3ac7c1b16ab8",
+      "gzip": {
+        "bytes": 38,
+        "sha256": "394a8fd5b468f2c1ae0cedf13fe94e941817d2af31c37b2aa77368573fb97841"
+      }
+    },
+    "attempts/replay-2/product/guard.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/guard.py",
+      "bytes": 18,
+      "sha256": "f084e50f3d84cfc3a71cad0a4c2610fe42c87b5c78de5ff50bba3ac7c1b16ab8",
+      "gzip": {
+        "bytes": 38,
+        "sha256": "394a8fd5b468f2c1ae0cedf13fe94e941817d2af31c37b2aa77368573fb97841"
+      }
+    },
+    "attempts/replay-2/product/runner-snapshot.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/runner-snapshot.py",
+      "bytes": 17241,
+      "sha256": "fa7206950b2672b4f67f05830272ea3cea039455c063b88d69b16d812d8b8ba2",
+      "gzip": {
+        "bytes": 5158,
+        "sha256": "f50548c28daf6a271570915338c529d4fd1db03c16cc13ad61ca21ac3e3ad533"
+      }
+    },
+    "attempts/replay-2/product/copy-cycle.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/copy-cycle.py",
+      "bytes": 18,
+      "sha256": "f084e50f3d84cfc3a71cad0a4c2610fe42c87b5c78de5ff50bba3ac7c1b16ab8",
+      "gzip": {
+        "bytes": 38,
+        "sha256": "394a8fd5b468f2c1ae0cedf13fe94e941817d2af31c37b2aa77368573fb97841"
+      }
+    },
+    "attempts/replay-2/product/fixtures-snapshot/nested-guards.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/fixtures-snapshot/nested-guards.cg",
+      "bytes": 1305,
+      "sha256": "8c05226df1feba43565bf9bd5a0731897e599be705da58a7cfcb5bf3fdc449a8",
+      "gzip": {
+        "bytes": 283,
+        "sha256": "1bbd816898f497f570831c41770de7bfd68b9f80293ab0535f614e9863cc7a74"
+      }
+    },
+    "attempts/replay-2/product/fixtures-snapshot/guard.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/fixtures-snapshot/guard.cg",
+      "bytes": 543,
+      "sha256": "5c8c238b7f94962230c0ba38ff53f3093b35e73a81afc988609dc4ea1ddc638b",
+      "gzip": {
+        "bytes": 222,
+        "sha256": "475f3d7d2f26f229b6928f7e82c88e9058d17b4050710bdef6ff9c200d42a219"
+      }
+    },
+    "attempts/replay-2/product/fixtures-snapshot/copy-cycle.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/fixtures-snapshot/copy-cycle.cg",
+      "bytes": 1620,
+      "sha256": "86187fa24adbfed1ac27d2092b160545a705ecd4a7ba7674c68d4ebf9ef776d9",
+      "gzip": {
+        "bytes": 403,
+        "sha256": "b4503abc0f9d26c76e30fb7654c463ff705aabb3d0e077f8ee8649ee9c63f56e"
+      }
+    },
+    "attempts/replay-2/product/fixtures-snapshot/region.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/fixtures-snapshot/region.cg",
+      "bytes": 497,
+      "sha256": "c23bcd5d82cfe85d4233e4c1ac87a615b9e14977dd31f636855e0813719379d0",
+      "gzip": {
+        "bytes": 258,
+        "sha256": "cbe766a985bb51bc99ed362276678b1e94913590c2f71ad2b34afe3ac0126128"
+      }
+    },
+    "attempts/replay-2/product/fixtures-snapshot/session.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/fixtures-snapshot/session.cg",
+      "bytes": 479,
+      "sha256": "7d85ab43f44852490cd52b226b515fa6484125346be5eb79659bc3ed7e409695",
+      "gzip": {
+        "bytes": 242,
+        "sha256": "faa7d643916528cd6af1b08aa09f0277caad1e9091a500b5698c9b1c0d657fa7"
+      }
+    },
+    "attempts/replay-2/product/fixtures-snapshot/cross-region.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/fixtures-snapshot/cross-region.cg",
+      "bytes": 364,
+      "sha256": "a9f8f88e06b806555b7fd386f8493c89e3cc5c9639377daf8d8c499c49943544",
+      "gzip": {
+        "bytes": 195,
+        "sha256": "ef4f4e45347de1f7195d4ef67ebcecc5a63efcce8bf748a43497f2ee966ed202"
+      }
+    },
+    "attempts/replay-2/product/fixtures-snapshot/fallback-resource.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/fixtures-snapshot/fallback-resource.cg",
+      "bytes": 247,
+      "sha256": "27128b34df603a62be7e9e5f6c6a510295ea28cb94b28a795dea763e3c8c0102",
+      "gzip": {
+        "bytes": 172,
+        "sha256": "b16fd02ba8e65ff5981334d6147071ee8f2d2ed4fb84289ea1392c67eb057ca3"
+      }
+    },
+    "attempts/replay-2/product/outside/region.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/outside/region.rs",
+      "bytes": 240859,
+      "sha256": "33927e4391cbe432d948d7fe7b532a5324416737dc5c6ffdcd5537e73b9466cd",
+      "gzip": {
+        "bytes": 42597,
+        "sha256": "17f0659cbaf129ac8d8d1f80d915c1116518c1e6939cef9bf8a0a04464bc86ab"
+      }
+    },
+    "attempts/replay-2/product/outside/nested-guards.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/outside/nested-guards.rs",
+      "bytes": 247538,
+      "sha256": "98ef2367b3274a16de8affe949d2356d401cbbc030b641784df6772a398f4fe8",
+      "gzip": {
+        "bytes": 43179,
+        "sha256": "0df601a112709d5f19d1396624693b29faf6bd23abc45cebc4f45a1307d0f1fb"
+      }
+    },
+    "attempts/replay-2/product/outside/package.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/outside/package.rs",
+      "bytes": 241398,
+      "sha256": "875e2e5d0b193f9e11a9a110a79f0b677155d729660d4de74fcc776441dd0423",
+      "gzip": {
+        "bytes": 42591,
+        "sha256": "866e8fab3deca6e4d438782d5f49f57d323a2d5d42fedfc6347408bad9941c4b"
+      }
+    },
+    "attempts/replay-2/product/outside/guard.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/outside/guard.rs",
+      "bytes": 238809,
+      "sha256": "cc317c7486576e0636cf16e41d9f8884d1aeaa274555b3b15696c72ba54600ec",
+      "gzip": {
+        "bytes": 42367,
+        "sha256": "6820b0b795fac4c34feb3485b350a18726d642e8ed9b856c29eb23757514ca01"
+      }
+    },
+    "attempts/replay-2/product/outside/session.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/outside/session.rs",
+      "bytes": 239656,
+      "sha256": "99b570b97f340c22aa15042ea754cb4689c9efb1932ff7c461d6992565b417fc",
+      "gzip": {
+        "bytes": 42475,
+        "sha256": "69d05b3d8448b92ef5473b2c8a7fdc9fb9ac1850af92525215042f92547e100a"
+      }
+    },
+    "attempts/replay-2/product/outside/copy-cycle.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/outside/copy-cycle.rs",
+      "bytes": 246725,
+      "sha256": "4ac6b1a481966cb8e5685c8727556ffaee914b299561d96c6ba81ffc9c5c4fef",
+      "gzip": {
+        "bytes": 43324,
+        "sha256": "49be4b9ce028dbea0658f93ada9d9732acf2a23223a6e947b15ae1830addf394"
+      }
+    },
+    "attempts/replay-2/product/package/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/package/cgx2.toml",
+      "bytes": 85,
+      "sha256": "1e17310fc9fc1cacf4a071f3852d62317d71c5c73edcb77496b33403b89b6199",
+      "gzip": {
+        "bytes": 90,
+        "sha256": "afe2b26cb596602d46ee6da5ac27f3fb14548b3bdaa3a35308154f901877ef20"
+      }
+    },
+    "attempts/replay-2/product/package/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/package/main.cg",
+      "bytes": 394,
+      "sha256": "eb40f04f87a978fe733bf6f51649e88dbe1c4196245cb35dddd59fd9ced0be83",
+      "gzip": {
+        "bytes": 213,
+        "sha256": "66dcf25f11a117cc47f946a335e3b4a0fb3e271fe252615dfe5c8c1e98903273"
+      }
+    },
+    "attempts/replay-2/product/package/lib.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/package/lib.cg",
+      "bytes": 215,
+      "sha256": "3d588ff7569450b492e4a7b947f3e0aeb4f922f39fdcbfaec8d73557faa20298",
+      "gzip": {
+        "bytes": 185,
+        "sha256": "e91b3b9ee830ded456be2b4f5af4544f088ada3e1e3c943c72827d901d72f49e"
+      }
+    },
+    "attempts/replay-2/product/package-snapshot/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/package-snapshot/cgx2.toml",
+      "bytes": 85,
+      "sha256": "1e17310fc9fc1cacf4a071f3852d62317d71c5c73edcb77496b33403b89b6199",
+      "gzip": {
+        "bytes": 90,
+        "sha256": "afe2b26cb596602d46ee6da5ac27f3fb14548b3bdaa3a35308154f901877ef20"
+      }
+    },
+    "attempts/replay-2/product/package-snapshot/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/package-snapshot/main.cg",
+      "bytes": 394,
+      "sha256": "eb40f04f87a978fe733bf6f51649e88dbe1c4196245cb35dddd59fd9ced0be83",
+      "gzip": {
+        "bytes": 213,
+        "sha256": "66dcf25f11a117cc47f946a335e3b4a0fb3e271fe252615dfe5c8c1e98903273"
+      }
+    },
+    "attempts/replay-2/product/package-snapshot/lib.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/package-snapshot/lib.cg",
+      "bytes": 188,
+      "sha256": "f82eb55a0a4d6d67788f339fecd6dbaae5f8ff1cc49166ddd3dd1994136204eb",
+      "gzip": {
+        "bytes": 169,
+        "sha256": "076f904bb53b50d28aa83524f2d1a6542d0fe712f4216621650dfc2621fe63f3"
+      }
+    },
+    "attempts/replay-2/product/regressions/core-product/product.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/core-product/product.json",
+      "bytes": 104994,
+      "sha256": "60c850240bece4a1d645935db08e1c5b7072cce930d65c83c0bf77c2d0d58bf4",
+      "gzip": {
+        "bytes": 8404,
+        "sha256": "f14a1552cc875ad7a89009fef6144978987bac2c6c00ef1a514aac8399d7890f"
+      }
+    },
+    "attempts/replay-2/product/regressions/equality-product/product.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/equality-product/product.json",
+      "bytes": 66079,
+      "sha256": "fd15d316772616f57d69b36d2750d65050d5f6220a73ebfe77fe13e7a4e01d1f",
+      "gzip": {
+        "bytes": 4671,
+        "sha256": "b3759378377d2b8b10ac3b34e05328cf7f7a8b1ed5f07e9e80f7d7cdcd7a405e"
+      }
+    },
+    "attempts/replay-2/product/regressions/guards518/guards518.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/guards518/guards518.json",
+      "bytes": 1095357,
+      "sha256": "c71ca20c52c6eb47516bbb757af2bed7466ccb8f8508d518644ebe47296494e2",
+      "gzip": {
+        "bytes": 26712,
+        "sha256": "4e6500a5a7d6e81f9ce0db9344972edc93ada85461163a81b60f55b21e04bad0"
+      }
+    },
+    "attempts/replay-2/product/regressions/graph99/graph99.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/graph99/graph99.json",
+      "bytes": 102484,
+      "sha256": "224583b8fba628805d8e34098e050dcdfed51abe0ab64ba7b6dfca3e7d0f5a90",
+      "gzip": {
+        "bytes": 5853,
+        "sha256": "6247fe88a9788fdc0341987731a59a4f067609e7fca86d289c5b27c11a5f5f43"
+      }
+    },
+    "attempts/replay-2/product/regressions/output/output.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/output/output.json",
+      "bytes": 22691,
+      "sha256": "5d5385a580dc7a22a57401f1097de5fc86ee38c28db916ca3f196631afb7feeb",
+      "gzip": {
+        "bytes": 1967,
+        "sha256": "455c77b898762b496e6765fcbc39881a139ac22fb4f4fea350127d1ea045f524"
+      }
+    },
+    "attempts/replay-2/product/regressions/ordinary256/ordinary256.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/ordinary256/ordinary256.json",
+      "bytes": 126742,
+      "sha256": "5a5d8077980a529550337e19ce6458f99857d8ebc84ca6b9be6500561d992f74",
+      "gzip": {
+        "bytes": 7699,
+        "sha256": "817082f9aedbfc7fc72d82f13456ad0eb5a2ded42e422366eead48a5ca5a6d5a"
+      }
+    },
+    "attempts/replay-2/product/regressions/owned-symbol195/owned-symbol195.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/owned-symbol195/owned-symbol195.json",
+      "bytes": 122715,
+      "sha256": "6e15de9245c58d60eaad31853d6e493f2345af96d6767bf117defe2e3c761704",
+      "gzip": {
+        "bytes": 8844,
+        "sha256": "4d30a88242bc52237e279868805b5f94a180da32b4af1a4c15e0ddb40cab4a75"
+      }
+    },
+    "attempts/replay-2/product/regressions/foundation/foundation.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/foundation/foundation.json",
+      "bytes": 32622,
+      "sha256": "0cc7291c2b7045abaf6617fd36d2ab0fa19477afc0cb94c072575ed0e383a84e",
+      "gzip": {
+        "bytes": 2701,
+        "sha256": "d301e03e8e57a4ff3bbbf30b54a8eac4bb2360efa6d019295e0fffb31d3de3ae"
+      }
+    },
+    "attempts/replay-2/product/regressions/emitters/emitters.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/emitters/emitters.json",
+      "bytes": 56154,
+      "sha256": "810ed65455e46d4ba37b84c0db3a077bf29125d23ca0e8bda03517345fce2750",
+      "gzip": {
+        "bytes": 2675,
+        "sha256": "da9002eccf162d4985620d78bd2bfc841ee0611bdf6e77744a764228c1dcb556"
+      }
+    },
+    "attempts/replay-2/product/regressions/owned-result-original/owned-result-original.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/owned-result-original/owned-result-original.json",
+      "bytes": 378201,
+      "sha256": "978c629709fb54fe7337091efe02993e3e560aa40a1d5f1777c82e6f5c388aeb",
+      "gzip": {
+        "bytes": 18994,
+        "sha256": "f0ff041422b12aefbcbb01eff5358551c38d5ca1b15bd37375d9237181e06860"
+      }
+    },
+    "attempts/replay-2/product/regressions/semantic/semantic.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/semantic/semantic.json",
+      "bytes": 157340,
+      "sha256": "ac47386026b19b886af00b2f4f3437caa2e9d5943846d2896f6cdee92a55eee8",
+      "gzip": {
+        "bytes": 5725,
+        "sha256": "cbba5e9712c36962a28252fc8e5167fbc004ae6578b13529a58d6035a2c7e4e6"
+      }
+    },
+    "attempts/replay-2/product/regressions/reports265/reports265.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/reports265/reports265.json",
+      "bytes": 337848,
+      "sha256": "0b47356fba75067cd73f72380e8c5465f8342c284d9aa798ff2e84be630bebe8",
+      "gzip": {
+        "bytes": 11698,
+        "sha256": "6d468eadb28c59ada69b9d090e44e3919db98ef39d8d72c6afa704309ec87280"
+      }
+    },
+    "attempts/replay-2/product/regressions/binders/binders.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/binders/binders.json",
+      "bytes": 57810,
+      "sha256": "f4cfe329f9e8755b749d4cd0c2ab31a516229ea70f02a5edf693a25a560a7520",
+      "gzip": {
+        "bytes": 3445,
+        "sha256": "b4144b3a1e2381019b15367f70669512d71b5044db0581eb0521e90a7eeae761"
+      }
+    },
+    "attempts/replay-2/product/regressions/owned-result-reconciled/reconciled/reconciled-product.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/owned-result-reconciled/reconciled/reconciled-product.json",
+      "bytes": 436560,
+      "sha256": "67a36822c75c5afd9501a5c15318f259a69d8d045bc8c4049fccace174d1eba5",
+      "gzip": {
+        "bytes": 21834,
+        "sha256": "1f1443544eb641f71e753aa4ef2320489dc576025f7028d1062f636d4e9737ba"
+      }
+    },
+    "attempts/replay-2/product/regressions/owned-result-reconciled/reconciled/restored-shadow.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/owned-result-reconciled/reconciled/restored-shadow.json",
+      "bytes": 13651,
+      "sha256": "e7028c76a6f05679aa99d7cd03a2e727d3f4d012577f152732d318a7d874535d",
+      "gzip": {
+        "bytes": 1831,
+        "sha256": "09010344149039ed0a70a82399561618655630c09a9b8257442fe90c1446c845"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/public-values.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/public-values.py",
+      "bytes": 8676,
+      "sha256": "a8847fc861e3c199d52806298bbdddc8b366d2e3ec44da9429acbac157808086",
+      "gzip": {
+        "bytes": 2476,
+        "sha256": "c21f1ef5dc90ae8c2cecbdb4f4ebc28cb4f6628230a1846dd92efb26949dd154"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/qualified.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/qualified.rs",
+      "bytes": 235788,
+      "sha256": "8b0200fbfdcb88cfe0fc0a465efdb296e067e84a97f5c6b60737da4d65d441b9",
+      "gzip": {
+        "bytes": 41997,
+        "sha256": "04d7a25b3ef6ef4e6a5a25777cfc18938a623bea04159636719651ed39ace86e"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/public-package.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/public-package.rs",
+      "bytes": 242430,
+      "sha256": "dc0829fd1066cfa1eafb8237b6766ebff94536c9ff564a6e4c8484ff99b7e236",
+      "gzip": {
+        "bytes": 42704,
+        "sha256": "445d38d08cb80820c4e3554f3f92b817b1a23762585e0692315215c389fb21a7"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/public-source.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/public-source.py",
+      "bytes": 9405,
+      "sha256": "0c2bd5648f7d3cef70338f602c34dc1a0ad2fb7778694e99fc12134ad85a0010",
+      "gzip": {
+        "bytes": 2616,
+        "sha256": "a0fd8bc5dee21d03ed7ce1cbd3c396a5c73b289d645d42fd7691586d532226e3"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/public-interfaces.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/public-interfaces.py",
+      "bytes": 8187,
+      "sha256": "5f83d7e17d9cb3889467bf3797ef8f58ad881278ce3aea38b15a4cd3ecbf306a",
+      "gzip": {
+        "bytes": 2365,
+        "sha256": "faa770918996fae0a8c12d9cea14101c0dc71e9449b01900b2f77556a90ecdcd"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/public-function.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/public-function.cg",
+      "bytes": 83,
+      "sha256": "671fd9e0b1a3b62619f3d7b149bd0a1c3c59972e5590141f000e6b677e560f3c",
+      "gzip": {
+        "bytes": 81,
+        "sha256": "dd95a03ae256f95a2f1a2b07220c6d9058d2aa653a166fcbf56451dc48a29fad"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/package-private.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/package-private.rs",
+      "bytes": 243918,
+      "sha256": "fc72ce3d7025f113793fc4870e14436fac75b1359ff890b336e4ebeb78fadba2",
+      "gzip": {
+        "bytes": 42738,
+        "sha256": "41385348b69ff1a08adb60a6d23c2fcc76e9a9a8a1f59ba45a83acc96e76d453"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/visibility-source.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/visibility-source.py",
+      "bytes": 12074,
+      "sha256": "3d46ab59a9bcc55693cc17e4070c857a07365ad0152e2fc861b6b4ca89a1cf4a",
+      "gzip": {
+        "bytes": 2931,
+        "sha256": "c95d276c84616187d505af428654a6732d5086d3fcc022ef83bd0ad4863bbc97"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/nested-private.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/nested-private.py",
+      "bytes": 8216,
+      "sha256": "ccbd93646841b983f4d787da1dc2cedbf81b3950d3bdc21743e97d3ec9629b32",
+      "gzip": {
+        "bytes": 2387,
+        "sha256": "ba6b2abe201dda062b44b08f65504795e4b508d9a273bc941e5fdc8677682e14"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/public-interfaces.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/public-interfaces.rs",
+      "bytes": 238914,
+      "sha256": "8882edc8c5e913d052eac8875e534ace210fb8b54fc7554ed87e7f2cc95307c5",
+      "gzip": {
+        "bytes": 42386,
+        "sha256": "adef004c490547d0fdc359fbed6e9ab8cad8070b5b8a05a4bd6ab8de19c7c2b9"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/public-values.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/public-values.rs",
+      "bytes": 239856,
+      "sha256": "61376139b94d2bf6101e0474f17cbfa24af6735d46036789addebec1617e95c9",
+      "gzip": {
+        "bytes": 42459,
+        "sha256": "2a4e72d002b6ae0a55585cba8c004ec72274d3e2b57fc5014c80ddf743cd994d"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/report.json",
+      "bytes": 167803,
+      "sha256": "48856eba2ab989044aed80cca06778db5708adecf0184956eb4465adc97be9e2",
+      "gzip": {
+        "bytes": 8070,
+        "sha256": "4c43aca71a341ede05ac18bfc1cc2648f152ca324f2935ff5947bc279ba8174d"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/nested-private.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/nested-private.rs",
+      "bytes": 238628,
+      "sha256": "ac8eb0ec51c860f2b6fde1ed7210d90b90575c06094d15b8cbc41ba2f156ef9b",
+      "gzip": {
+        "bytes": 42355,
+        "sha256": "bc656576600a57850b5e57e45a9e0216733a5538363ae4dcfcc2199d78ddf999"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/visibility-source.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/visibility-source.rs",
+      "bytes": 248569,
+      "sha256": "2391d84711a271b57c109f6621cb07bbcd46ff6fa4e4f8c7dd93a5ae48de9e66",
+      "gzip": {
+        "bytes": 43276,
+        "sha256": "06fdea877cda1c7aa548fe2d16872f4c19107ca45961858079afecc60920d8b4"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/public-record.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/public-record.cg",
+      "bytes": 68,
+      "sha256": "7bf5d373429f57dc8094fe5a37a2f2968daf449e1a25cc1685ffb6ddd34d7a0e",
+      "gzip": {
+        "bytes": 67,
+        "sha256": "eeba8005171229547f7117fb93bb1840f42b8590d2b1da5d42997bc6d48d708e"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/public-variant.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/public-variant.cg",
+      "bytes": 69,
+      "sha256": "8ba8aac907ca519a754fcd00c8c3e5f3f33e38a27b32cc96de481b07e048f0d8",
+      "gzip": {
+        "bytes": 76,
+        "sha256": "597162c33210b5fd737e6904027fb94078fb48284668fd0b71e29c2123700ef1"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/dishonest.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/dishonest.cg",
+      "bytes": 107,
+      "sha256": "a8f41ad1e58630838b4000c5ce8165a4ec4e8ec4de995ae89059d1abdf3a7273",
+      "gzip": {
+        "bytes": 104,
+        "sha256": "4212579780b8bfcba47d9a85db44318d0b27aa114d7dfcb554d57a39d5c28c6f"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/public-source.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/public-source.rs",
+      "bytes": 241512,
+      "sha256": "5db5f2b8de07f8826a13481054b818d87d182c7af2f04419a7cdd593705c1071",
+      "gzip": {
+        "bytes": 42673,
+        "sha256": "dc67364b0bfdbc1bb0f604a75206c8b247a13c01f764772a4150403582696643"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/collisions.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/collisions.rs",
+      "bytes": 237259,
+      "sha256": "492e0b5b3915461a91b741642317fb07baef559fe19c7f3c5189f2aa2cc9e09a",
+      "gzip": {
+        "bytes": 42152,
+        "sha256": "77372530320467d567ff17a9f722dd7238929d08beca58e024e25e50e133db1e"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/visibility-package.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/visibility-package.rs",
+      "bytes": 247425,
+      "sha256": "403a8b521d80e0590ca820141ea03743fa8fc52cac517128000c4c40b1b17d1b",
+      "gzip": {
+        "bytes": 43137,
+        "sha256": "ed6afc12f18a1ee5ea66bb36ec60ffad113e09a9e2f868cf938f735067ac256b"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/qualified.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/qualified.py",
+      "bytes": 7098,
+      "sha256": "5b9fc5ad6abc47c9078f124cd1ccc624deeda49240c9983e4ca27c54a7f0302a",
+      "gzip": {
+        "bytes": 2175,
+        "sha256": "c85a03b32148d17c41f3b2b0681a86fa02dc57684c8daebc3c175038fd543699"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/collisions.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/collisions.cg",
+      "bytes": 151,
+      "sha256": "d68b597eddf4063f468f1f356d5639a3047cf8f5dd30c5db831a248fd2d552a0",
+      "gzip": {
+        "bytes": 133,
+        "sha256": "5cb8730b632cf93684e6bdc483f26064ebe176edb18c464907715e0de48fa5a1"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/collisions.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/collisions.py",
+      "bytes": 7642,
+      "sha256": "b01d1d08d99a9273e9103e57095552532e63d9fd4abb96a8516fad566c4da6f6",
+      "gzip": {
+        "bytes": 2260,
+        "sha256": "fcd39fdd77af763418cecae6ca71f8e81b27ecc6be9628a3f32be6c5d80569db"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/import-unknown/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/import-unknown/cgx2.toml",
+      "bytes": 105,
+      "sha256": "5a148ec83693e95cf9f09a85ca50dc757f1ccdb8c71b1bb1741b793860fa92bb",
+      "gzip": {
+        "bytes": 101,
+        "sha256": "725c47abaafe683bf69189700028fd5cc2fce1354ea78b9da0f20046737c11da"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/import-private/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/import-private/cgx2.toml",
+      "bytes": 105,
+      "sha256": "5a148ec83693e95cf9f09a85ca50dc757f1ccdb8c71b1bb1741b793860fa92bb",
+      "gzip": {
+        "bytes": 101,
+        "sha256": "725c47abaafe683bf69189700028fd5cc2fce1354ea78b9da0f20046737c11da"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/dishonest-import/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/dishonest-import/cgx2.toml",
+      "bytes": 105,
+      "sha256": "5a148ec83693e95cf9f09a85ca50dc757f1ccdb8c71b1bb1741b793860fa92bb",
+      "gzip": {
+        "bytes": 101,
+        "sha256": "725c47abaafe683bf69189700028fd5cc2fce1354ea78b9da0f20046737c11da"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/dishonest-import/src/dep.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/dishonest-import/src/dep.cg",
+      "bytes": 496,
+      "sha256": "54b1be9d3d83104a92395b0a4eb5109b51059f5f898f21b1742e15d105205e0f",
+      "gzip": {
+        "bytes": 255,
+        "sha256": "fc629e46d668c79304709611741be35cefe78541d30118439ca54b12f492aeb7"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/dishonest-import/src/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/dishonest-import/src/main.cg",
+      "bytes": 355,
+      "sha256": "60e80564f338ccce0988d7a4d3057aef7e4332e3abd06cee9ac9f3371b9559ad",
+      "gzip": {
+        "bytes": 211,
+        "sha256": "2c321992492fde95ac44882a287f71732e77ac3aac85dea05e6f90e5a23f59a8"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/import-private/src/dep.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/import-private/src/dep.cg",
+      "bytes": 467,
+      "sha256": "d79c30bb9b272e494dbea7c0ab903c8916e47118b60c217132a56787a4bba33e",
+      "gzip": {
+        "bytes": 235,
+        "sha256": "a76620dca7066e291fb84441254d789ba5e12bfa5779bdb46fce667685d789e0"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/import-private/src/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/import-private/src/main.cg",
+      "bytes": 99,
+      "sha256": "a1edf7c21c2a4f3fbd873a6adb366fd3ae4ada58b0054329ab22148a6f15f621",
+      "gzip": {
+        "bytes": 96,
+        "sha256": "a2b55a6ebea6e9caf88bf73424fcc8e50e11220b38fd039d8f626422c484ac87"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/import-unknown/src/dep.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/import-unknown/src/dep.cg",
+      "bytes": 467,
+      "sha256": "d79c30bb9b272e494dbea7c0ab903c8916e47118b60c217132a56787a4bba33e",
+      "gzip": {
+        "bytes": 235,
+        "sha256": "a76620dca7066e291fb84441254d789ba5e12bfa5779bdb46fce667685d789e0"
+      }
+    },
+    "attempts/replay-2/product/regressions/specialization/specialization/import-unknown/src/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/specialization/specialization/import-unknown/src/main.cg",
+      "bytes": 99,
+      "sha256": "664a8b8cf79ce4bd9d49ed42ba663f25413aaf2f8fef68eab5a7228551ba9bf2",
+      "gzip": {
+        "bytes": 96,
+        "sha256": "9a26debcfb0affbc0ec90d4a9ecf78f11284e5226a4ccafd535af2e5b9f5148e"
+      }
+    },
+    "attempts/replay-2/product/regressions/managed-product/managed-product/product.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/product.json",
+      "bytes": 361555,
+      "sha256": "4b2b2a9fd509bc1fd3f4dd61f58c29755f37844a94f84dc6503cbdd6b11eece0",
+      "gzip": {
+        "bytes": 22886,
+        "sha256": "55aa877f39fedd18422f9d455af786e946c4129adceb11bbe1f4a93d5a83bf14"
+      }
+    },
+    "attempts/replay-2/product/regressions/managed-product/managed-product/repair/repair.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/repair.json",
+      "bytes": 2082268,
+      "sha256": "90616a38dcb17bffbe38881e1e06199216eab98a6c68af83bab8a4af3386acdc",
+      "gzip": {
+        "bytes": 52063,
+        "sha256": "c973572e61a1251c9dd04da4ceb0601a371ce052097693a662c90e9c9a6d1703"
+      }
+    },
+    "attempts/replay-2/product/regressions/visibility/visibility/public-values.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/visibility/visibility/public-values.py",
+      "bytes": 8676,
+      "sha256": "a8847fc861e3c199d52806298bbdddc8b366d2e3ec44da9429acbac157808086",
+      "gzip": {
+        "bytes": 2476,
+        "sha256": "c21f1ef5dc90ae8c2cecbdb4f4ebc28cb4f6628230a1846dd92efb26949dd154"
+      }
+    },
+    "attempts/replay-2/product/regressions/visibility/visibility/public-package.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/visibility/visibility/public-package.rs",
+      "bytes": 242430,
+      "sha256": "dc0829fd1066cfa1eafb8237b6766ebff94536c9ff564a6e4c8484ff99b7e236",
+      "gzip": {
+        "bytes": 42704,
+        "sha256": "445d38d08cb80820c4e3554f3f92b817b1a23762585e0692315215c389fb21a7"
+      }
+    },
+    "attempts/replay-2/product/regressions/visibility/visibility/public-source.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/visibility/visibility/public-source.py",
+      "bytes": 9405,
+      "sha256": "0c2bd5648f7d3cef70338f602c34dc1a0ad2fb7778694e99fc12134ad85a0010",
+      "gzip": {
+        "bytes": 2616,
+        "sha256": "a0fd8bc5dee21d03ed7ce1cbd3c396a5c73b289d645d42fd7691586d532226e3"
+      }
+    },
+    "attempts/replay-2/product/regressions/visibility/visibility/source.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/visibility/visibility/source.py",
+      "bytes": 12074,
+      "sha256": "3d46ab59a9bcc55693cc17e4070c857a07365ad0152e2fc861b6b4ca89a1cf4a",
+      "gzip": {
+        "bytes": 2931,
+        "sha256": "c95d276c84616187d505af428654a6732d5086d3fcc022ef83bd0ad4863bbc97"
+      }
+    },
+    "attempts/replay-2/product/regressions/visibility/visibility/source.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/visibility/visibility/source.rs",
+      "bytes": 248569,
+      "sha256": "2391d84711a271b57c109f6621cb07bbcd46ff6fa4e4f8c7dd93a5ae48de9e66",
+      "gzip": {
+        "bytes": 43276,
+        "sha256": "06fdea877cda1c7aa548fe2d16872f4c19107ca45961858079afecc60920d8b4"
+      }
+    },
+    "attempts/replay-2/product/regressions/visibility/visibility/public-values.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/visibility/visibility/public-values.rs",
+      "bytes": 239856,
+      "sha256": "61376139b94d2bf6101e0474f17cbfa24af6735d46036789addebec1617e95c9",
+      "gzip": {
+        "bytes": 42459,
+        "sha256": "2a4e72d002b6ae0a55585cba8c004ec72274d3e2b57fc5014c80ddf743cd994d"
+      }
+    },
+    "attempts/replay-2/product/regressions/visibility/visibility/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/visibility/visibility/report.json",
+      "bytes": 107158,
+      "sha256": "c9dd8000998dbec15487f0caf05edd438217a1619b41ba239b14a92c8a1966e8",
+      "gzip": {
+        "bytes": 5879,
+        "sha256": "dca8e0a759538188e734550f84d3089a0dc48c562f8ddd827f89c1c3ca571a88"
+      }
+    },
+    "attempts/replay-2/product/regressions/visibility/visibility/package.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/visibility/visibility/package.rs",
+      "bytes": 247425,
+      "sha256": "403a8b521d80e0590ca820141ea03743fa8fc52cac517128000c4c40b1b17d1b",
+      "gzip": {
+        "bytes": 43137,
+        "sha256": "ed6afc12f18a1ee5ea66bb36ec60ffad113e09a9e2f868cf938f735067ac256b"
+      }
+    },
+    "attempts/replay-2/product/regressions/visibility/visibility/public-source.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/visibility/visibility/public-source.rs",
+      "bytes": 241512,
+      "sha256": "5db5f2b8de07f8826a13481054b818d87d182c7af2f04419a7cdd593705c1071",
+      "gzip": {
+        "bytes": 42673,
+        "sha256": "dc67364b0bfdbc1bb0f604a75206c8b247a13c01f764772a4150403582696643"
+      }
+    },
+    "attempts/replay-2/product/regressions/visibility/visibility/private-callee/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/visibility/visibility/private-callee/cgx2.toml",
+      "bytes": 101,
+      "sha256": "0f2e30397aac6de87ed9401fadf1c9291d525184762782f645269741002cdc9f",
+      "gzip": {
+        "bytes": 99,
+        "sha256": "13e7162339a336300f4a59cc3512602b00cd4df13042f2ca9eab227db9855d5e"
+      }
+    },
+    "attempts/replay-2/product/regressions/visibility/visibility/private-type/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/visibility/visibility/private-type/cgx2.toml",
+      "bytes": 101,
+      "sha256": "0f2e30397aac6de87ed9401fadf1c9291d525184762782f645269741002cdc9f",
+      "gzip": {
+        "bytes": 99,
+        "sha256": "13e7162339a336300f4a59cc3512602b00cd4df13042f2ca9eab227db9855d5e"
+      }
+    },
+    "attempts/replay-2/product/regressions/visibility/visibility/private-type/src/dep.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/visibility/visibility/private-type/src/dep.cg",
+      "bytes": 398,
+      "sha256": "244c1262cd73a352775d5ca81d0ea9941367c008facbd6c2a97e7b3e6e062276",
+      "gzip": {
+        "bytes": 228,
+        "sha256": "0e350a4b74b47df5a90e324215d10c72886f3a01f5314328d6aad68b81eca53c"
+      }
+    },
+    "attempts/replay-2/product/regressions/visibility/visibility/private-type/src/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/visibility/visibility/private-type/src/main.cg",
+      "bytes": 115,
+      "sha256": "8eca106f771736c9442941c1684e7eb4d522e6a9924ab82695f1cc75d72fd965",
+      "gzip": {
+        "bytes": 114,
+        "sha256": "1979a2d1b9577ef956ff0eff6567944ed6b38ec3ecc72b43acaf37137fcfd575"
+      }
+    },
+    "attempts/replay-2/product/regressions/visibility/visibility/private-callee/src/dep.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/visibility/visibility/private-callee/src/dep.cg",
+      "bytes": 398,
+      "sha256": "244c1262cd73a352775d5ca81d0ea9941367c008facbd6c2a97e7b3e6e062276",
+      "gzip": {
+        "bytes": 228,
+        "sha256": "0e350a4b74b47df5a90e324215d10c72886f3a01f5314328d6aad68b81eca53c"
+      }
+    },
+    "attempts/replay-2/product/regressions/visibility/visibility/private-callee/src/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-2/product/regressions/visibility/visibility/private-callee/src/main.cg",
+      "bytes": 91,
+      "sha256": "ed1b684e2433ffd1e66b048d6d6d141bbcb0fecaa74df4867588bbf36b4010ec",
+      "gzip": {
+        "bytes": 102,
+        "sha256": "1c8cc3856455412af19d9a7ee098ee3831f45e5da0542bbb67dc6f332c2e93bf"
+      }
+    },
+    "attempts/replay-launch-1/command-identity.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-launch-1/command-identity.json",
+      "bytes": 781,
+      "sha256": "477bf1a821bacef89adfd81eabab0cd2f4ba2b8cea97fcb64297fad053d5fd3e",
+      "gzip": {
+        "bytes": 485,
+        "sha256": "75eda2bb3e75de6f7736169c24afeecee561f7f237179004790ae86ccb0e2f1f"
+      }
+    },
+    "attempts/replay-launch-1/original-startup-report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-launch-1/original-startup-report.json",
+      "bytes": 1181,
+      "sha256": "376ff84c46c1bb9239571dce62e354fcdd22296e4c4d520b88b155e3721a9b01",
+      "gzip": {
+        "bytes": 677,
+        "sha256": "bbd7ac155ec8c6f4659ccdd003c71e08f82afcf48a780b85af61757f96b83c0b"
+      }
+    },
+    "attempts/replay-launch-1/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/replay-launch-1/report.json",
+      "bytes": 2034,
+      "sha256": "befef0faa0bd335b20cb24f3adec44f40b3ad266e876373e02791d290c946f65",
+      "gzip": {
+        "bytes": 1002,
+        "sha256": "188cc3d96fc436323a2b650952e4ce424b63d8d4810caed6666ff4210a983702"
+      }
+    },
+    "attempts/review-1/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/review-1/report.json",
+      "bytes": 1178251,
+      "sha256": "4dde3df9f9b9b597c56e33d4250bca395a8796436c646b4fd70709c7b4bdaad4",
+      "gzip": {
+        "bytes": 192978,
+        "sha256": "fc4f2c24bd894a265b07ca556db402da1e7090d96cb21df0f21ee7c0f2c89450"
+      }
+    },
+    "attempts/review-1/repros/additional-reproductions.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/review-1/repros/additional-reproductions.json",
+      "bytes": 10129,
+      "sha256": "e3a347f0c5c9589d70287aee52695c4c25e14031770ae8577394c7e95c340118",
+      "gzip": {
+        "bytes": 2508,
+        "sha256": "b64571a10d6849905547874f2aba54f43e728dca424e98292f580f493ea5580c"
+      }
+    },
+    "attempts/review-1/repros/copy-root.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/review-1/repros/copy-root.rs",
+      "bytes": 599,
+      "sha256": "d8fb01287b0bd701ec17be92517807e7efc0598739cb0bfbbb729d20da8f382d",
+      "gzip": {
+        "bytes": 307,
+        "sha256": "83bfda22872d49bbf3bdc391b0ae8eda6a0e5cce6b318dedb88c0ab18bb6f9b2"
+      }
+    },
+    "attempts/review-1/repros/user-err-region-escape.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/review-1/repros/user-err-region-escape.cg",
+      "bytes": 581,
+      "sha256": "d929db1715a29b68d4d6beafacbb179d81432ac3bb6a2f4dd1f3a7a174f96e51",
+      "gzip": {
+        "bytes": 254,
+        "sha256": "7d438ed70d6e0b14b9931bbcfb0aaf712664cdfab1debd9307fb9a24b2c2bdc1"
+      }
+    },
+    "attempts/review-1/repros/outer-root-assignment.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/review-1/repros/outer-root-assignment.cg",
+      "bytes": 250,
+      "sha256": "3ae14d4cbfd538a3ea8ca417563bce6d24e900d5a35504fef47efc8d9ed5dfb6",
+      "gzip": {
+        "bytes": 179,
+        "sha256": "b7aaa272624351edb1e15b0ea4be4ab13af76591a859417f6cbcc29c9de34a15"
+      }
+    },
+    "attempts/review-1/repros/api-private.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/review-1/repros/api-private.cg",
+      "bytes": 269,
+      "sha256": "b8ecb78eedcfdb71efd29326ba76a9cebc633ade6615836b33080e93be27b46d",
+      "gzip": {
+        "bytes": 184,
+        "sha256": "0932e0971fa889f6d10bb22404922f816dbbe37d8369d37cd7234609db364468"
+      }
+    },
+    "attempts/review-1/repros/copy-root-reproduction.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/review-1/repros/copy-root-reproduction.json",
+      "bytes": 1019,
+      "sha256": "b10ff45325e9b6daa62984c416097b685defa36a42783786a770409167e96ef6",
+      "gzip": {
+        "bytes": 395,
+        "sha256": "24c651bfbaeb2a5dab18dcf1d24973e26318dcb0565a8345f91bebce19241d86"
+      }
+    },
+    "attempts/review-1/repros/reproductions.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/review-1/repros/reproductions.json",
+      "bytes": 7364,
+      "sha256": "6bfc857f66f38da5ea8ad0773d5ce8994b61c36f52b821488c95a5fcc68a2c0e",
+      "gzip": {
+        "bytes": 1365,
+        "sha256": "229fd2359dac62531b53a04324fe434e4b7990c5d15f4197584050fa5d294282"
+      }
+    },
+    "attempts/review-1/repros/legacy-guard-panic.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/review-1/repros/legacy-guard-panic.cg",
+      "bytes": 245,
+      "sha256": "40582a9cd0e65f295c1573c3b03e077618d8913a682e9f9cf989ac7c346f837f",
+      "gzip": {
+        "bytes": 171,
+        "sha256": "04e9116199f123197e16908140b536d343f7c4ddc41b9ba27364fa314a05c826"
+      }
+    },
+    "attempts/review-1/repros/user-borrow.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/review-1/repros/user-borrow.cg",
+      "bytes": 249,
+      "sha256": "235c6222b8028276a8c5966e5b8e456e50583785d6cd1696b9a226ba4c13f3c0",
+      "gzip": {
+        "bytes": 175,
+        "sha256": "52f6611c0c7055b98026e491985820589e30a31511e472b8eaf3e0c9c1128776"
+      }
+    },
+    "attempts/review-1/repros/shadow-collect/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/review-1/repros/shadow-collect/cgx2.toml",
+      "bytes": 93,
+      "sha256": "74fb9bc0ed767af1d9bf1980b7c07b49540edd16ac1b35fe1244c72b99b3aa17",
+      "gzip": {
+        "bytes": 99,
+        "sha256": "a6abac47c356718951055ffcb9e6cb459ec830ea185d090a1bd3ab42f81a3864"
+      }
+    },
+    "attempts/review-1/repros/shadow-collect/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/review-1/repros/shadow-collect/main.cg",
+      "bytes": 246,
+      "sha256": "804942c7b3480ecbe21701272d22d2887221b83b62c2d873cbddb80a537d5d16",
+      "gzip": {
+        "bytes": 177,
+        "sha256": "f8123ffc5bdbe468c91ed5ed72f213741192bcf291fe51261e63c1946204d0cc"
+      }
+    },
+    "attempts/review-1/repros/shadow-collect/lib.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/review-1/repros/shadow-collect/lib.cg",
+      "bytes": 113,
+      "sha256": "5bc25340be65dff0eca0bba53fbf98dc46ec1ed061bc76381e5ef71848faf4c0",
+      "gzip": {
+        "bytes": 102,
+        "sha256": "a84a5817080951ed06c1008c80da937e9c29630b2da4bc0b8c56167f516b1a1e"
+      }
+    },
+    "attempts/review-1/repros/core-nominal/reproduction.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/review-1/repros/core-nominal/reproduction.json",
+      "bytes": 1235,
+      "sha256": "c078e4b1d27d59a69a4e3a09aaed58975781e49fedb37c586f1f40f9ca760278",
+      "gzip": {
+        "bytes": 424,
+        "sha256": "fc66b4b5815e7a5409a9aed34bc868c667e01e9b2f3fb1ecf6c6e03eafd66973"
+      }
+    },
+    "attempts/review-1/repros/core-nominal/record-borrow.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/review-1/repros/core-nominal/record-borrow.cg",
+      "bytes": 260,
+      "sha256": "4715ebd0a2c073bdf9b5c81787996638daff4b57852ba5682eb11cf8095e3849",
+      "gzip": {
+        "bytes": 182,
+        "sha256": "0e56396541714433ec4aac60150d80b85f58707108afc0ae49c24b263d144037"
+      }
+    },
+    "attempts/verification-1/launch-and-test-summary.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/launch-and-test-summary.json",
+      "bytes": 359,
+      "sha256": "572cbb7e24e844adcf5a23ba929eb258272bd2f9a829b012b1862a9120fcf440",
+      "gzip": {
+        "bytes": 254,
+        "sha256": "3e2d2377d0199208377f50fc6b85e6d331592f8f640092e4d98163305474f81b"
+      }
+    },
+    "attempts/verification-1/inputs.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/inputs.json",
+      "bytes": 476926,
+      "sha256": "6b7719676af110bf7c6ec0747da74ef8c5df635b5a9ca8c0cadb75b1fcf8057d",
+      "gzip": {
+        "bytes": 93233,
+        "sha256": "1f0ae98b2c3689af85a4e94c585576cfcbdcfdeb3dd15b313eec12895eaeafaf"
+      }
+    },
+    "attempts/verification-1/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/report.json",
+      "bytes": 191895,
+      "sha256": "6abfea6340c6a590c1d9861c1906c3f469094947065088fb5c48f311beb67d37",
+      "gzip": {
+        "bytes": 37608,
+        "sha256": "46556fa14756c5ad1c852cca607fb30ea18775ec51410cfdec6a97fe4b68a327"
+      }
+    },
+    "attempts/verification-1/source.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/source.json",
+      "bytes": 23664,
+      "sha256": "70aeac889e624ac77cc973e7ca5438c3c1d68f6a666afbee3d3188ce76224d81",
+      "gzip": {
+        "bytes": 10042,
+        "sha256": "67e2f0c5a89528a36a555c35b6e2324af68faaa087e4f6440cfe1f99f12f0afc"
+      }
+    },
+    "attempts/verification-1/frozen.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/frozen.json",
+      "bytes": 1440,
+      "sha256": "e950a7612d149567bd8fd1eeaa29608d2d0990dc93c5a42d4c22ca085c6aaec2",
+      "gzip": {
+        "bytes": 793,
+        "sha256": "fcd2b688d65b94bfd7706bfb3844b1ea9d38fa78e68dd271eb482a80d48b549e"
+      }
+    },
+    "attempts/verification-1/launch-snapshot/integrity.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/launch-snapshot/integrity.py",
+      "bytes": 4124,
+      "sha256": "9a9c26eef53cbc85c9f6825fb75b5fca5dc81b80f849da88bcef9a0e9c74e151",
+      "gzip": {
+        "bytes": 1437,
+        "sha256": "34b712c5bcead972b47c85158a46bbdbb148ea1e057c221460ece5032b45df8f"
+      }
+    },
+    "attempts/verification-1/launch-snapshot/verify.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/launch-snapshot/verify.py",
+      "bytes": 4348,
+      "sha256": "25475508eb33aa89f8227b43649b764f56c2360279094528f76fc4d2d37038f7",
+      "gzip": {
+        "bytes": 1575,
+        "sha256": "28009204a7dd17d2632004813140329ef527dfef7a8d06775827d2f64851c0a3"
+      }
+    },
+    "attempts/verification-1/launch-snapshot/common.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/launch-snapshot/common.py",
+      "bytes": 6720,
+      "sha256": "e316e58154e49de44e96fb677a6532562ea1a7c87bd42c84925a4f01ba203dda",
+      "gzip": {
+        "bytes": 2389,
+        "sha256": "5db24b2a806bf771100467ef161580fc7399b6b9809aca7a1664901ea3cc6208"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/export.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/export.py",
+      "bytes": 3128,
+      "sha256": "2f54d8bd4f5203f2deb54a292c435ecf5a442f5be444a315005a37e37a9add57",
+      "gzip": {
+        "bytes": 1393,
+        "sha256": "fb8b35b98a208ebf09e80f9b7577340f9c7fa07e66b696a4744c5227865691ca"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/test_harness.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/test_harness.py",
+      "bytes": 22027,
+      "sha256": "62403320aecb0fc65454a830567a31c5baaa1e7769ea929969c1420bd79b5574",
+      "gzip": {
+        "bytes": 4719,
+        "sha256": "345893e27aa8c7d3de68fdc414da79f479155fca8232763fccecf69e1704795d"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/integrity.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/integrity.py",
+      "bytes": 4124,
+      "sha256": "9a9c26eef53cbc85c9f6825fb75b5fca5dc81b80f849da88bcef9a0e9c74e151",
+      "gzip": {
+        "bytes": 1437,
+        "sha256": "34b712c5bcead972b47c85158a46bbdbb148ea1e057c221460ece5032b45df8f"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/auto_probe.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/auto_probe.rs",
+      "bytes": 1529,
+      "sha256": "32813e86d40a49a1e0ee228e83cba52b3328137bd64ceab4528b92d07c02f9cb",
+      "gzip": {
+        "bytes": 482,
+        "sha256": "8c050c5d675cfd90e3516db19bcfa7a0e31aac6944bede64873dfc7537b88275"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/verify.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/verify.py",
+      "bytes": 4367,
+      "sha256": "148984b3f5deee4d2df36bf3e33c9d9503ea36e73933acef051aca5cdd3231b7",
+      "gzip": {
+        "bytes": 1578,
+        "sha256": "87fff7f07b1743933d22d23b1f036865e6cb5fbc9906ed3632f44cc285996c09"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/package_parity.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/package_parity.py",
+      "bytes": 4440,
+      "sha256": "58e21b644b187e3c6c282a3690a9579e5362ec1ecb66849e157a0e58efc97b65",
+      "gzip": {
+        "bytes": 1698,
+        "sha256": "98ae1432d755f32dc819eb4f0ee29c5052c753c932f786c0aba50719a279373c"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/source_probe.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/source_probe.rs",
+      "bytes": 677,
+      "sha256": "a0cd939a5a6d27799b206a211f4010908bb73ee54851bfe1c68eac879860cceb",
+      "gzip": {
+        "bytes": 400,
+        "sha256": "b87541ede2139d9a8df1eb97191a5a4362f91271df7e4c7964e99d45f3f2eb57"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/auto.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/auto.py",
+      "bytes": 3986,
+      "sha256": "3a5b9a319cb12b118c47343fce2f4e00e02a8e16802e286a324bdef0d04e7b79",
+      "gzip": {
+        "bytes": 1568,
+        "sha256": "ed6878d97864a3661a250016211f2c8a3bb7853f6318a8fe022f62ee351cc450"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/review.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/review.py",
+      "bytes": 3578,
+      "sha256": "3b099896c583a773a58762e3111b01243c9b6e64db14073ddacd3385b22ff013",
+      "gzip": {
+        "bytes": 1494,
+        "sha256": "5b234517d4550cd685d678d9f8e5d1fc61e23ae1657642113cabeb33510d5c90"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/replay.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/replay.py",
+      "bytes": 4722,
+      "sha256": "5e48e95625ef7acf707eadd8a77c5130b15c1bea46a6169e14fcb5b51e6a2c19",
+      "gzip": {
+        "bytes": 1664,
+        "sha256": "f684144979f07ae535bb8050f9c0cd0d440ccfa38d7e238296c2e052aafe3827"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/common.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/common.py",
+      "bytes": 6744,
+      "sha256": "789e23e61038b0ce04011fda85863118fe627743dc5adbc828fccd9b016cc179",
+      "gzip": {
+        "bytes": 2396,
+        "sha256": "57c0503b7df9a5018fc724ef533d00bab6d0f9e3c2a089a3583c8a51a7eaf483"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/quality.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/quality.py",
+      "bytes": 2427,
+      "sha256": "fb62e7f0d7c5c2ee2b84c8ef0ccf4e5906ad97529c8ddc623d90c8955900c76d",
+      "gzip": {
+        "bytes": 1051,
+        "sha256": "d6fb2b4fc384377814457877de5b1d63ad9b533eceb4f0796606390a5a13f424"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/run.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/run.py",
+      "bytes": 16356,
+      "sha256": "76aa5cc4c888240f7650a9047d52518641c63ed45bd5eecd6442a3da2b10c52d",
+      "gzip": {
+        "bytes": 5341,
+        "sha256": "7568c7ea953134f66f942d3798665abeafc9831e64bc823f580a72c020969373"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/validation.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/validation.py",
+      "bytes": 8605,
+      "sha256": "ad74f2beeaa229443dba7199d596575edf3b23148a5ff860645a6f9d25da9260",
+      "gzip": {
+        "bytes": 2730,
+        "sha256": "e6670eae62386ee49874499faa612ed79ed6a2c1a97f88ee11ee6857189c4802"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/runtime_probe.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/runtime_probe.rs",
+      "bytes": 9479,
+      "sha256": "6e8404a13385b9ede33d0b0eb345018ef6c79a7bf55b4fe8c34a749caf70f929",
+      "gzip": {
+        "bytes": 2668,
+        "sha256": "9546f5b75ce157e26c06679805c499c74513cde7be04bdf4c93a0b50aa65d6c1"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/fixtures/cross-region-utf8.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/fixtures/cross-region-utf8.cg",
+      "bytes": 377,
+      "sha256": "891e1fb3331b89e77d4ecd8bcbc6c039a6fa692990ad2b91d904b3949a2bd998",
+      "gzip": {
+        "bytes": 215,
+        "sha256": "9a3e1d30a18eb93885d77f66b00f96a0d8df01fc1be31140f2d70f1696211fee"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/fixtures/arithmetic.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/fixtures/arithmetic.cg",
+      "bytes": 595,
+      "sha256": "441aa4e1622ce56c77d5e10cb89de4bcdfc57888ec7ad532896d27215ff9da07",
+      "gzip": {
+        "bytes": 281,
+        "sha256": "511457924744be093077f99d28abfb8661a66787611b720d3cf9195e5af50764"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/fixtures/contract.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/fixtures/contract.cg",
+      "bytes": 646,
+      "sha256": "f8b423277b241373ba19fc1192a8f821c3eb8295aa59dfb9125c2ae5d54b72a1",
+      "gzip": {
+        "bytes": 303,
+        "sha256": "d8d33fce51ee59bb56217d5d6ed85b5746907b89a1874034ee5449f25ffa7562"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/fixtures/failed-argument.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/fixtures/failed-argument.cg",
+      "bytes": 678,
+      "sha256": "d9ec3a20e21b163bd0741d25400e1dad1cfdb0ad6a28dc84cf67c22c1eb5a6f5",
+      "gzip": {
+        "bytes": 320,
+        "sha256": "318111b4810b1526f4a04bdfac96b0be1f88064a26e74b3199686df5c346b0d2"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/fixtures/nested-guards.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/fixtures/nested-guards.cg",
+      "bytes": 1305,
+      "sha256": "8c05226df1feba43565bf9bd5a0731897e599be705da58a7cfcb5bf3fdc449a8",
+      "gzip": {
+        "bytes": 283,
+        "sha256": "1bbd816898f497f570831c41770de7bfd68b9f80293ab0535f614e9863cc7a74"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/fixtures/guard.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/fixtures/guard.cg",
+      "bytes": 543,
+      "sha256": "5c8c238b7f94962230c0ba38ff53f3093b35e73a81afc988609dc4ea1ddc638b",
+      "gzip": {
+        "bytes": 222,
+        "sha256": "475f3d7d2f26f229b6928f7e82c88e9058d17b4050710bdef6ff9c200d42a219"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/fixtures/copy-cycle.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/fixtures/copy-cycle.cg",
+      "bytes": 1620,
+      "sha256": "86187fa24adbfed1ac27d2092b160545a705ecd4a7ba7674c68d4ebf9ef776d9",
+      "gzip": {
+        "bytes": 403,
+        "sha256": "b4503abc0f9d26c76e30fb7654c463ff705aabb3d0e077f8ee8649ee9c63f56e"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/fixtures/sweep.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/fixtures/sweep.cg",
+      "bytes": 1650,
+      "sha256": "7632d4051995eb368d9c587b7d5301d0046666253530df238ba9720346c524b4",
+      "gzip": {
+        "bytes": 363,
+        "sha256": "5195ee653927c1a4c27f8d458345aea2681fa25b4e7a1eb17a190fec6fc687f3"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/fixtures/region.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/fixtures/region.cg",
+      "bytes": 497,
+      "sha256": "c23bcd5d82cfe85d4233e4c1ac87a615b9e14977dd31f636855e0813719379d0",
+      "gzip": {
+        "bytes": 258,
+        "sha256": "cbe766a985bb51bc99ed362276678b1e94913590c2f71ad2b34afe3ac0126128"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/fixtures/return.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/fixtures/return.cg",
+      "bytes": 597,
+      "sha256": "c38b36a693bb72e4c6611e79ddaddd69c8f6269f04b9ee442a7fa99420091bde",
+      "gzip": {
+        "bytes": 279,
+        "sha256": "90b01998befc50052f05684f342975b7f0337d3e681d5c5dcbdd11012706e789"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/fixtures/session.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/fixtures/session.cg",
+      "bytes": 479,
+      "sha256": "7d85ab43f44852490cd52b226b515fa6484125346be5eb79659bc3ed7e409695",
+      "gzip": {
+        "bytes": 242,
+        "sha256": "faa7d643916528cd6af1b08aa09f0277caad1e9091a500b5698c9b1c0d657fa7"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/fixtures/cross-region.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/fixtures/cross-region.cg",
+      "bytes": 364,
+      "sha256": "a9f8f88e06b806555b7fd386f8493c89e3cc5c9639377daf8d8c499c49943544",
+      "gzip": {
+        "bytes": 195,
+        "sha256": "ef4f4e45347de1f7195d4ef67ebcecc5a63efcce8bf748a43497f2ee966ed202"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/fixtures/auto-guard.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/fixtures/auto-guard.cg",
+      "bytes": 1011,
+      "sha256": "7c7cc9a80e1fc8000d8f23f68477f6f4a5c639931001ff36e02d16a0b31fd9f6",
+      "gzip": {
+        "bytes": 268,
+        "sha256": "788092719ac12dba9c91ac939692fe22dba479d30c4cce8da467f4976d32d54c"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/fixtures/fallback-resource.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/fixtures/fallback-resource.cg",
+      "bytes": 247,
+      "sha256": "27128b34df603a62be7e9e5f6c6a510295ea28cb94b28a795dea763e3c8c0102",
+      "gzip": {
+        "bytes": 172,
+        "sha256": "b16fd02ba8e65ff5981334d6147071ee8f2d2ed4fb84289ea1392c67eb057ca3"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/fixtures/allocation.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/fixtures/allocation.cg",
+      "bytes": 772,
+      "sha256": "9f4e639395430306b18866e88c72624310bd92758a42629befbd57c283654d49",
+      "gzip": {
+        "bytes": 260,
+        "sha256": "5cdecdf934d63320350e74c802f53a85f4481dd3e2acd49c2ca2518a914f9fd5"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/fixtures/normal.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/fixtures/normal.cg",
+      "bytes": 590,
+      "sha256": "6cdd77e0d3ce8909b0acbc5f7f0759f04ab1c326f37fcf7fd81ca8193f31df56",
+      "gzip": {
+        "bytes": 275,
+        "sha256": "9ad8ded9f5cc5a5574028788c815d8763c15920bef367e42517d4e5f1363aacb"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/fixtures/packages/runtime-error/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/fixtures/packages/runtime-error/cgx2.toml",
+      "bytes": 91,
+      "sha256": "4edfc51922f79ad75b4ad8ac5c3de3129af0193a8bd11445ad9b80e0027340df",
+      "gzip": {
+        "bytes": 97,
+        "sha256": "111fd0834c53b0d2214fdbb926edadbc37e2aee6f58c38b6b88fa6f1240fc121"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/fixtures/packages/runtime-error/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/fixtures/packages/runtime-error/main.cg",
+      "bytes": 230,
+      "sha256": "1c08d3b237de6d0fd674932b315595106a754ae075d1bc9327d33262d8f53112",
+      "gzip": {
+        "bytes": 171,
+        "sha256": "e7f14399c0a8578fe52c637764aab99a3e15813732337f83f5a0fbc068ffd8e0"
+      }
+    },
+    "attempts/verification-1/harness-snapshot/fixtures/packages/runtime-error/lib.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/97d1/lang/target/tmp-ordinary-harness-hardening/verification-1/harness-snapshot/fixtures/packages/runtime-error/lib.cg",
+      "bytes": 120,
+      "sha256": "357ede5c4affeb093be20fd5ade2a47ede0ae3dd696b5d530a0ca71332e9d60a",
+      "gzip": {
+        "bytes": 132,
+        "sha256": "8a784155dd9a53ce0a961dbbcd2447aa3fab5e6ed18edfa14edb633b5d29479b"
+      }
+    }
+  }
+}

@@ -7,12 +7,8 @@ import re
 import shutil
 import sys
 from common import HERE, ROOT, Journal, digest, normal, observed, rejection, stable
-
-
-def roots_ok(value):
-    return (isinstance(value, dict) and value.get('baseline_roots') == value.get('final_roots') == 0
-            and value.get('roots_registered') == value.get('roots_released')
-            and value.get('cleanup_failures') == 0)
+from validation import roots_ok, session_unavailable, validate_direct, matrix_inventory, SOURCE_CASES, sentinel_status
+from integrity import audit
 
 
 def primary(row):
@@ -55,6 +51,8 @@ def main():
     p.add_argument('--skip-fault-native', action='store_true', help='Exploration only: required rows become unrun.')
     a = p.parse_args()
     j = Journal(a.output_dir)
+    j.required_commands, j.required_checks = matrix_inventory(None)
+    source_bound = None
     binary = a.binary_dir.resolve()
     before = frozen_hashes(binary)
     j.report['frozen_before'] = before
@@ -81,19 +79,18 @@ def main():
         j.check(name+'-build', normal(row))
         return executable if normal(row) else None
 
-    def check_run(name, row, expected, reference=None, error=None, unavailable=False):
+    def check_run(name, row, expected, reference=False, error=None, unavailable=False):
         j.check(name+'-result', normal(row, 1 if error else 0) and
                 (primary(row) == error if error else row.get('stdout') == expected), expected_error=error, actual_error=primary(row))
         memory = observed(row)
         if unavailable:
-            j.check(name+'-pre-session-unavailable', memory == {'session_entered': False, 'metrics': None})
+            j.check(name+'-pre-session-unavailable', session_unavailable(memory))
         else:
             j.check(name+'-balanced-roots', roots_ok(memory), observation=memory)
-            if memory:
-                regions = memory.get('memory', {}).get('regions', [])
-                j.check(name+'-manual-zero-collections', all(r.get('collection_count') == 0 for r in regions if r.get('mode') == 'manual'))
-        if reference is not None:
-            j.check(name+'-deterministic-parity', memory is not None and stable(memory) == stable(reference))
+            regions = memory.get('memory', {}).get('regions') if isinstance(memory, dict) else None
+            j.check(name+'-manual-zero-collections', isinstance(regions, list) and bool(regions) and all(r.get('collection_count') == 0 for r in regions if r.get('mode') == 'manual'))
+        if reference is not False:
+            j.check(name+'-deterministic-parity', memory is not None and reference is not None and stable(memory) == stable(reference))
         return memory
 
     def targets(name, source, expected, reference, error=None, fault=None, reference_result=None):
@@ -135,9 +132,11 @@ def main():
                 actual = j.run(tag+'-run', [artifact], cwd=standalone)
                 check_run(tag, actual, expected, reference, error=error, unavailable=fault == 1)
                 if reference_result is not None:
-                    j.check(tag+'-actual-error-parity', actual.get('exit') == reference_result.get('exit') and primary(actual) == primary(reference_result), actual_primary=primary(actual), source_primary=primary(reference_result))
+                    j.check(tag+'-actual-error-parity', normal(reference_result, reference_result.get('exit')) and reference_result.get('exit') in (0, 1) and normal(actual, reference_result.get('exit')) and (reference_result.get('exit') == 0 or primary(reference_result) is not None) and primary(actual) == primary(reference_result), actual_primary=primary(actual), source_primary=primary(reference_result))
 
     try:
+        if not audit(j, binary, 'before'):
+            raise ValueError('frozen executable inputs do not match manifest')
         manifest = json.loads((binary.parent/'frozen.json').read_text())
         expected = dict(manifest['binary_sha256'], **manifest['probe_library_sha256'])
         j.check('frozen-manifest', before == expected)
@@ -157,11 +156,17 @@ def main():
         if probe:
             direct = j.run('direct-runtime-public-controls', [probe])
             j.check('direct-runtime-process', normal(direct))
-            for line in direct.get('stdout', '').splitlines():
-                row = json.loads(line)
-                j.check('direct:'+row['name'], row['passed'], evidence_kind='direct-library', details=row['details'])
-        for name in ('normal','return','allocation','region','guard','nested-guards','copy-cycle','session',
-                     'arithmetic','contract','failed-argument'):
+            direct_rows, direct_errors, direct_bound = validate_direct(direct.get('stdout', ''))
+            j.report['direct_inventory'] = {'bound': direct_bound, 'errors': direct_errors, 'rows': direct_rows}
+            j.check('direct-runtime-inventory', not direct_errors, errors=direct_errors)
+            if direct_errors:
+                j.report['incomplete_reason'] = 'invalid direct-runtime inventory'
+            seen = set()
+            for row in direct_rows:
+                if row['name'] not in seen:
+                    j.check('direct:'+row['name'], row['passed'], evidence_kind='direct-library', details=row['details'])
+                    seen.add(row['name'])
+        for name in SOURCE_CASES:
             source = fixtures/(name+'.cg')
             checked = j.run(name+'-check', [binary/'cgx2', '--diagnostic-format=json', 'check', source])
             j.check(name+'-check', normal(checked))
@@ -186,8 +191,9 @@ def main():
                 sentinel = j.output/(name+'-'+operation+'-sentinel')
                 sentinel.write_bytes(b'prior artifact\n')
                 rejected = j.run(name+'-'+operation, [binary/'cgx2c', operation, source, '--out', sentinel, '--force'])
-                j.check(name+'-'+operation+'-rejected', normal(rejected, 1) and 'CGT095' in rejected.get('stderr',''))
-                j.check(name+'-'+operation+'-preserved', sentinel.read_bytes() == b'prior artifact\n')
+                rejected_ok, preserved = sentinel_status(rejected, sentinel, b'prior artifact\n', 'CGT095')
+                j.check(name+'-'+operation+'-rejected', rejected_ok)
+                j.check(name+'-'+operation+'-preserved', preserved)
         # A dependency-only region escape: exact file attribution remains required.
         package = j.output/'dependency-negative'
         package.mkdir()
@@ -203,8 +209,9 @@ def main():
         for operation in ('build','emit-rust','emit-python'):
             sentinel=j.output/('dependency-'+operation+'-sentinel'); sentinel.write_bytes(b'prior artifact\n')
             row=j.run('dependency-'+operation,[binary/'cgx2c',operation,'--package',package,'--out',sentinel,'--force'])
-            j.check('dependency-'+operation+'-rejected',normal(row,1) and 'CGT095' in row.get('stderr',''))
-            j.check('dependency-'+operation+'-preserved',sentinel.read_bytes()==b'prior artifact\n')
+            rejected_ok, preserved = sentinel_status(row, sentinel, b'prior artifact\n', 'CGT095')
+            j.check('dependency-'+operation+'-rejected', rejected_ok)
+            j.check('dependency-'+operation+'-preserved', preserved)
         probe = compile_probe('source_probe', 'cgx2_cli')
         if probe:
             source=fixtures/'sweep.cg'
@@ -221,10 +228,13 @@ def main():
                 rows.append((row,memory))
             failures=[i+1 for i,(r,_) in enumerate(rows) if r.get('stdout')!='42\n']
             bound=max(failures,default=0)
+            source_bound = bound
+            j.required_commands, j.required_checks = matrix_inventory(bound)
             j.report['source_reserve_bound']={'ceiling':64,'last_failure':bound,
                 'rationale':'Straight-line two-region/nested-guard/copy fixture; failure arms are scalar-only. All 64 indices run; unaffected tail must match baseline. No general-program bound claimed.'}
             j.check('source-sweep-has-unaffected-tail',0<bound<64 and all(normal(r) and r['stdout']=='42\n' and stable(m)==stable(rows[-1][1]) for r,m in rows[bound:]))
             if a.skip_fault_native:
+                j.report['incomplete_reason'] = 'required compiled sweep skipped'
                 j.report['unrun_fault_native']=list(range(1,bound+2))
                 j.check('required-fault-native-run',False,disposition='unrun exploration option')
             else:
@@ -240,6 +250,7 @@ def main():
     except Exception:
         j.exception()
     finally:
+        audit(j, binary, 'after')
         after = frozen_hashes(binary)
         j.report['frozen_after']=after
         j.check('frozen-unchanged', before==after)

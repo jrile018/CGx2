@@ -5,12 +5,16 @@ from pathlib import Path
 import shutil
 from common import HERE, Journal, normal, observed, stable, digest
 from run import roots_ok, frozen_hashes
+from validation import auto_inventory, sentinel_status
+from integrity import audit
 p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('--binary-dir',type=Path,required=True)
 p.add_argument('--output-dir',type=Path,required=True)
 p.add_argument('--standalone-root',type=Path,required=True)
 a=p.parse_args();j=Journal(a.output_dir);b=a.binary_dir.resolve();before=frozen_hashes(b)
+j.required_commands, j.required_checks = auto_inventory()
 try:
+    if not audit(j, b, 'before'):raise ValueError('frozen inputs changed')
     outside=a.standalone_root.resolve()/j.output.name;outside.mkdir(parents=True,exist_ok=False)
     check=j.run('outside',['git','rev-parse','--is-inside-work-tree'],cwd=outside);j.check('outside',normal(check,128))
     if not normal(check,128):raise ValueError('inside repository')
@@ -46,9 +50,12 @@ try:
             if mode=='standalone':
                 target=outside/'auto';shutil.copy2(artifact,target);artifact=target
             j.report.setdefault('artifacts',{})[mode]={'path':str(artifact),'sha256':digest(artifact)}
+            if mode=='standalone':j.report['artifacts'][mode].update(source=str(emitted),source_sha256=digest(emitted))
+            j.save()
             actual=j.run(mode+'-run',[artifact],cwd=outside);verify(mode,actual)
 except Exception:
     j.exception()
 finally:
+    audit(j, b, 'after')
     j.report['frozen_before']=before;j.report['frozen_after']=frozen_hashes(b);j.check('frozen-unchanged',j.report['frozen_before']==j.report['frozen_after'])
 raise SystemExit(j.finish())

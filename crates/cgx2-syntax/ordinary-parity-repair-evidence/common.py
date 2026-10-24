@@ -4,6 +4,7 @@ import json
 import os
 from pathlib import Path
 import resource
+import shutil
 import sys
 import traceback
 
@@ -18,7 +19,8 @@ def digest(path):
 
 
 def normal(row, expected=0):
-    return row.get('reason') == 'exit' and row.get('exit') == expected and row.get('signal') is None
+    return (row.get('reason') == 'exit' and type(row.get('exit')) is int
+            and row['exit'] == expected and row.get('signal') is None)
 
 
 def observed(row):
@@ -71,27 +73,34 @@ class Journal:
         self.output = Path(output).resolve()
         self.output.mkdir(parents=True, exist_ok=False)
         self.env = dict(os.environ, RUSTUP_TOOLCHAIN='1.98.1', CARGO_BUILD_JOBS='2',
-                        CARGO_TARGET_DIR=str(ROOT / 'target/release-ordinary-evidence-parity'),
-                        TMPDIR=str(ROOT / 'target/tmp-ordinary-evidence-parity'),
+                        CARGO_TARGET_DIR=os.environ.get('CARGO_TARGET_DIR', str(ROOT / 'target/release-ordinary-harness-hardening')),
+                        TMPDIR=os.environ.get('TMPDIR', str(ROOT / 'target/tmp-ordinary-harness-hardening')),
                         LIBRARY_PATH='/tmp/cgx2-wave22-lib', PYTHONDONTWRITEBYTECODE='1',
                         CGX2_MEMORY_EVIDENCE='1')
-        self.report = {'schema_version': 1, 'reviewed_base': '7bb7a480119826693db67ed503caaf7f23f6abb2',
+        self.required_commands = set()
+        self.required_checks = set()
+        self.report = {'schema_version': 2, 'reviewed_base': '89464a76c9bd84a3b090ec58a14ca6be0043c6ea',
                        'commands': [], 'checks': [], 'exceptions': [], 'complete': False,
                        'ordinary_memory_accepted': False, 'environment': {k: self.env[k] for k in
                        ('RUSTUP_TOOLCHAIN', 'CARGO_BUILD_JOBS', 'CARGO_TARGET_DIR', 'TMPDIR', 'LIBRARY_PATH')}}
         self.save()
 
     def save(self):
-        self.report['passed'] = sum(r['passed'] for r in self.report['checks'])
-        self.report['failed'] = sum(not r['passed'] for r in self.report['checks'])
+        self.report['passed'] = sum(r.get('passed') is True for r in self.report['checks'])
+        self.report['failed'] = sum(r.get('passed') is not True for r in self.report['checks'])
         temporary = self.output / 'report.pending'
         temporary.write_text(json.dumps(self.report, indent=2) + '\n')
         temporary.replace(self.output / 'report.json')
 
     def run(self, name, argv, *, cwd=ROOT, extra=None, suite=False):
+        if any(row['name'] == name for row in self.report['commands']):
+            raise ValueError('duplicate command identity: ' + name)
         command = [str(s) for s in argv]
         # Persist invocation before spawning: quota/spawn exceptions remain evidence.
         row = {'name': name, 'argv': command, 'cwd': str(cwd), 'extra_env': extra or {}, 'reason': 'pending'}
+        executable = shutil.which(command[0], path=self.env.get('PATH'))
+        if executable and Path(executable).is_file():
+            row['executable_input'] = {'path': executable, 'resolved': str(Path(executable).resolve()), 'sha256': digest(executable)}
         self.report['commands'].append(row)
         self.save()
         try:
@@ -99,6 +108,11 @@ class Journal:
                                limits=suite_limits if suite else process_limits,
                                cap=2 * 1024**2, timeout=3600 if suite else 180)
             row.update(evidence(result))
+            if 'executable_input' in row:
+                try:
+                    row['executable_unchanged'] = digest(executable) == row['executable_input']['sha256'] and str(Path(executable).resolve()) == row['executable_input']['resolved']
+                except OSError:
+                    row['executable_unchanged'] = False
         except Exception:
             row.update(reason='exception', exit=None, signal=None, traceback=traceback.format_exc())
             self.save()
@@ -108,6 +122,8 @@ class Journal:
         return row
 
     def check(self, name, condition, **details):
+        if any(row['name'] == name for row in self.report['checks']):
+            raise ValueError('duplicate check identity: ' + name)
         self.report['checks'].append(dict(name=name, passed=bool(condition), **details))
         self.save()
 
@@ -116,6 +132,12 @@ class Journal:
         self.save()
 
     def finish(self):
-        self.report['complete'] = True
+        from validation import inventory_errors
+        errors = inventory_errors(self.report, self.required_commands, self.required_checks)
+        self.report['required_inventory'] = {'commands': sorted(self.required_commands), 'checks': sorted(self.required_checks)}
+        self.report['coverage_errors'] = errors
+        self.check('required-evidence-coverage', not errors, errors=errors)
+        self.report['complete'] = not (errors or self.report['exceptions'] or self.report.get('integrity_failed')
+                                       or self.report.get('incomplete_reason'))
         self.save()
-        return int(bool(self.report['failed'] or self.report['exceptions']))
+        return int(bool(self.report['failed'] or not self.report['complete']))

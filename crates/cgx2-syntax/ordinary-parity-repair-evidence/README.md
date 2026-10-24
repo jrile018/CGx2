@@ -21,8 +21,8 @@ From the attached worktree, using the existing Rust 1.98.1 installation:
 
 ```sh
 export RUSTUP_TOOLCHAIN=1.98.1 CARGO_BUILD_JOBS=2 PYTHONDONTWRITEBYTECODE=1
-export CARGO_TARGET_DIR="$PWD/target/release-ordinary-evidence-parity"
-export TMPDIR="$PWD/target/tmp-ordinary-evidence-parity"
+export CARGO_TARGET_DIR="$PWD/target/release-ordinary-harness-hardening"
+export TMPDIR="$PWD/target/tmp-ordinary-harness-hardening"
 export LIBRARY_PATH=/tmp/cgx2-wave22-lib
 mkdir -p "$CARGO_TARGET_DIR" "$TMPDIR"
 python3 crates/cgx2-syntax/ordinary-parity-repair-evidence/test_harness.py
@@ -79,9 +79,9 @@ pinned 64-bit toolchain:
 | Region creation inside guard | `REGION_METADATA_BYTES` = 128 | `BudgetExceeded` |
 | First scoped root | `size_of::<Handle>()` = 32 | `BudgetExceeded` |
 | Nested fallible guard table | 2 entries × 2 `usize` = 32 | `BudgetExceeded` |
-| One raw eight-byte graph copy | 375 | `BudgetExceeded`, no destination publication |
+| One raw eight-byte graph copy | 439 | `BudgetExceeded`, no destination publication |
 
-The copy budget is 4 handle slots (128), three hash buckets charged as
+The copy budget is 6 handle slots (192), three hash buckets charged as
 `size_of::<(Handle,u32)>() + 1` (123), the owned image header/payload/metadata
 (12 + 8 + 32 = 52), and destination payload/slot (72). The four handle slots are
 the temporary source root, traversal vector, preparation vector and staging
@@ -106,7 +106,7 @@ source/interpreter/native/standalone execution. Its public runtime control check
 zero collection under guards and at exit, followed by exactly one collection at
 the next Auto allocation while a Manual region remains untouched.
 
-The direct reserve baseline reaches 15 reserves; the harness tests 1–16 and
+The direct reserve baseline reaches 16 reserves; the harness tests 1–17 and
 records every site, source validity, destination bytes, root census and cleanup.
 Session entry reserve 1 is separate. A straight-line source Session/guard/
 two-region/copy fixture sweeps **all indices 1–64**. Its last affected reserve is
@@ -140,3 +140,38 @@ nonzero outcomes remain present in raw reports.
 sources, all failed attempts and content hashes under `evidence/`. It omits large
 rebuildable executables while preserving their hashes. See the adjacent
 `S2B-ORDINARY-PARITY-REPAIR.md` for exact results and remaining gates.
+
+## Hardened evidence acceptance
+
+`validation.py` rejects missing, negative or non-integer root counters (including
+booleans), unbalanced registrations, malformed/empty/duplicate direct rows,
+and missing required commands or checks. `complete` describes required coverage;
+a fully executed red product matrix remains non-accepting. The Session-entry
+exception is exactly `session_entered: false, metrics: null` at reserve index 1.
+All other routes require actual cleanup counters.
+
+`freeze.py --verification-dir PATH --output-dir NEW_PATH` finalizes an already
+built canonical candidate without Cargo and reloads the final harness snapshot.
+`inputs.json` records complete dependency membership, hashes, inode/mode and
+symlink identities, compiler/runtime/manifests, harness/fixture inputs and the
+toolchain. Every product suite checks this inventory before and after execution.
+Do not run Cargo or edit those inputs during product verification.
+
+`replay.py` now also requires `--standalone-root` and runs the unchanged corpus
+and all 18 regressions under that actual outside-Git directory. `quality.py`
+requires `--historical-inventory` pointing to the preflight old-evidence hash
+inventory. Export fresh runs only beneath `hardening-evidence/` with a distinct
+output directory. The original `evidence/` directory remains immutable.
+
+The copy expectation now includes the complete replacement cap-2 root table
+needed while the source stays rooted through publication: `6*root +
+3*(size_of::<(Handle,u32)>()+1) + 12+8+32 + alloc = 439`. Entering the guard
+adds 16 bytes, for 455 total. Zero, exact 439, and one-under 438 still enforce
+nonrefundable charging, source validity and failure atomicity. The original
+375-byte failed observation remains retained.
+
+The retained main selftest file has 48 tests (21 existing plus 27 added). Run
+`python3 hardening-evidence/explicit_scenarios.py` from this directory for two
+additional explicit prerequisite/sentinel cases. Together with the unchanged
+8 historical harness tests, this is 58 passing Python selftests. The supplemental
+tests mutate only disposable fixture copies and call production validators.

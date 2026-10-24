@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "primary_archives": 332,
+  "supplemental_compressed_files": 30,
+  "bad": [],
+  "original_evidence_files": 393,
+  "frozen_manifest_sha256": "265cc7b0f69d8687b4cb0a7a7517b549e9326172207ee00c17193f9110b893a3",
+  "frozen_inputs_sha256": "8b55b4378d86e26cf5862e12c82ec8fd7350667c8f9da7d0a8788d882f9ab8b3",
+  "frozen_counts": {
+    "artifacts": 1370,
+    "compiler": 214,
+    "harness": 35,
+    "toolchain": 68
+  },
+  "command_stream_byte_pairs": 808,
+  "command_stream_byte_failures": []
+}

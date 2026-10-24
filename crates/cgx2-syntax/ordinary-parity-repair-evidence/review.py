@@ -6,13 +6,21 @@ from pathlib import Path
 import shutil
 from common import ROOT, Journal, digest, normal, observed
 from run import roots_ok
+from integrity import audit
+from validation import inventory_errors
 
 p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('--binary-dir',type=Path,required=True)
 p.add_argument('--matrix-report',type=Path,required=True)
 p.add_argument('--output-dir',type=Path,required=True)
 a=p.parse_args(); j=Journal(a.output_dir); b=a.binary_dir.resolve()
+j.required_commands={'OM01-admission','OM03-admission','OM02-run','OM04-run','OM05-run','OM08-public-api'}
+j.required_checks={'OM01-reject-before-execution','OM03-reject-before-execution',
+    'OM06-safe-runtime-copy-source-valid','OM08-functions-public-only','OM08-public-record-retained','matrix-inventory-valid'}
+j.required_checks.update(f'{id}-{part}' for id in ('OM02','OM04','OM05') for part in ('value','cleanup'))
+j.required_checks.update(f'OM07-{mode}-balanced-evidence' for mode in ('interpreter','debug','release','standalone'))
 try:
+    if not audit(j,b,'before'):raise ValueError('frozen inputs changed')
     original=ROOT/'plans/release-completion/s2b-ordinary-memory-review/repros'
     source=j.output/'repros'; shutil.copytree(original,source)
     j.report['sources']={str(p.relative_to(source)):digest(p) for p in source.rglob('*') if p.is_file()}
@@ -33,6 +41,8 @@ try:
     j.check('OM08-functions-public-only',normal(api) and names=={'exported'},actual=sorted(names))
     j.check('OM08-public-record-retained',records=={'PublicBox'},actual=sorted(records))
     matrix=json.loads(a.matrix_report.read_text())
+    errors=inventory_errors(matrix,set(),set())
+    j.check('matrix-inventory-valid',not errors and matrix.get('complete') is True,errors=errors)
     j.report['matrix_reference']={'path':str(a.matrix_report.resolve()),'sha256':digest(a.matrix_report)}
     direct=next(c for c in matrix['checks'] if c['name']=='direct:OM06-safe-same-region-copy')
     j.check('OM06-safe-runtime-copy-source-valid',direct['passed'],evidence_kind='direct-library',details=direct['details'])
@@ -41,4 +51,6 @@ try:
         j.check('OM07-'+mode+'-balanced-evidence',copy['passed'],observation=copy.get('observation'))
 except Exception:
     j.exception()
+finally:
+    audit(j,b,'after')
 raise SystemExit(j.finish())
