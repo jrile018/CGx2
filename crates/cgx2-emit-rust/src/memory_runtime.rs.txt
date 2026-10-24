@@ -4,6 +4,18 @@ use cgx2_runtime::{AllocationError, CollectionMode, Handle, MemoryError, OwnedBy
 
 enum Binding { Region(RegionId), Owned(OwnedBytes), Managed(Handle), Reference(Option<Handle>), Borrow(String) }
 
+// Construction provenance only: this table never stores CGx2 payloads or edges.
+// Generated programs have one execution session. Handle identity includes its
+// session and generation; metadata survives source scope/frame/binding cleanup.
+#[derive(Clone, Copy)]
+enum SourceLayout { Bytes, Object { slots: usize }, Graph }
+thread_local! { static CGX2_LAYOUTS: std::cell::RefCell<HashMap<Handle, SourceLayout>> = std::cell::RefCell::new(HashMap::new()); }
+fn remember_layout(handle: Handle, layout: SourceLayout) {
+    if CGX2_OBSERVE.with(|value| value.get()) {
+        CGX2_LAYOUTS.with(|layouts| { layouts.borrow_mut().insert(handle, layout); });
+    }
+}
+
 thread_local! { static CGX2_ROLLBACK: std::cell::Cell<Option<bool>> = const { std::cell::Cell::new(None) }; }
 thread_local! { static CGX2_OBSERVE: std::cell::Cell<bool> = const { std::cell::Cell::new(false) }; }
 thread_local! { static CGX2_FAILURE: std::cell::RefCell<Option<FailureObservation>> = const { std::cell::RefCell::new(None) }; }
@@ -55,17 +67,16 @@ fn graph_snapshot(session: &Session, bindings: &HashMap<&'static str, Binding>) 
         let Binding::Managed(handle) = binding else { continue };
         let live = session.read_bytes(*handle).is_ok();
         let mut references = Vec::new();
-        if live && session.graph_shape(*handle).is_ok() {
-            session.visit_graph_references(*handle, |_, child| references.push(child)).ok()?;
-        } else if live {
-            for index in 0..=1024 {
-                match session.reference(*handle, index) {
-                    Ok(reference) if index < 1024 => references.push(reference),
-                    Ok(_) => return None,
-                    Err(MemoryError::NotObject) if index == 0 => break,
-                    Err(MemoryError::InvalidReferenceSlot) => break,
-                    Err(_) => return None,
+        if live {
+            let layout = CGX2_LAYOUTS.with(|layouts| layouts.borrow().get(handle).copied())?;
+            match layout {
+                SourceLayout::Bytes => (),
+                SourceLayout::Object { slots } => {
+                    for index in 0..slots {
+                        references.push(session.reference(*handle, index).ok()?);
+                    }
                 }
+                SourceLayout::Graph => session.visit_graph_references(*handle, |_, child| references.push(child)).ok()?,
             }
         }
         roots.push((name, *handle, live, references));
@@ -164,6 +175,7 @@ fn promote(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>,
         }
     };
     session.root(handle).map_err(|e| runtime(e, span))?;
+    remember_layout(handle, SourceLayout::Bytes);
     bindings.insert(name, Binding::Managed(handle));
     Ok(())
 }
@@ -182,6 +194,7 @@ fn alloc(session: &mut Session, bindings: &mut HashMap<&'static str, Binding>, n
     let id = region(bindings, region_name, span)?;
     let handle = session.alloc_bytes(id, size).map_err(|e| allocation(e, span))?;
     session.root(handle).map_err(|e| runtime(e, span))?;
+    remember_layout(handle, SourceLayout::Bytes);
     bindings.insert(name, Binding::Managed(handle));
     Ok(())
 }
@@ -189,6 +202,7 @@ fn alloc_object(session: &mut Session, bindings: &mut HashMap<&'static str, Bind
     let id = region(bindings, region_name, span)?;
     let handle = session.alloc_object(id, payload, slots).map_err(|e| allocation(e, span))?;
     session.root(handle).map_err(|e| runtime(e, span))?;
+    remember_layout(handle, SourceLayout::Object { slots });
     bindings.insert(name, Binding::Managed(handle));
     Ok(())
 }
@@ -271,6 +285,7 @@ fn alloc_graph(session: &mut Session, bindings: &mut HashMap<&'static str, Bindi
     let id = region(bindings, region_name, span)?;
     let handle = session.alloc_zeroed_graph(id, payload, slots).map_err(|e| graph_error(e, span))?;
     session.root(handle).map_err(|e| runtime(e, span))?;
+    remember_layout(handle, SourceLayout::Graph);
     bindings.insert(name, Binding::Managed(handle));
     Ok(())
 }

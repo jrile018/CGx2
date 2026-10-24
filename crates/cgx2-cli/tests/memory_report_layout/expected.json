@@ -1,0 +1,125 @@
+{
+  "forged-layout": {
+    "code": "CGR015",
+    "message": "memory byte expectation failed",
+    "span": {
+      "start": 661,
+      "end": 691
+    },
+    "rooted_handles": 2,
+    "rooted_edges": 1,
+    "exit": 1,
+    "native_span": {
+      "start": 661,
+      "end": 692
+    }
+  },
+  "raw-invalid-header": {
+    "code": "CGR015",
+    "message": "memory byte expectation failed",
+    "span": {
+      "start": 431,
+      "end": 461
+    },
+    "rooted_handles": 2,
+    "rooted_edges": 2,
+    "exit": 1,
+    "native_span": {
+      "start": 431,
+      "end": 462
+    }
+  },
+  "raw-valid-header": {
+    "code": "CGR015",
+    "message": "memory byte expectation failed",
+    "span": {
+      "start": 488,
+      "end": 518
+    },
+    "rooted_handles": 2,
+    "rooted_edges": 1,
+    "exit": 1,
+    "native_span": {
+      "start": 488,
+      "end": 519
+    }
+  },
+  "mixed-cycles": {
+    "code": "CGR015",
+    "message": "memory byte expectation failed",
+    "span": {
+      "start": 494,
+      "end": 524
+    },
+    "rooted_handles": 2,
+    "rooted_edges": 4,
+    "exit": 1,
+    "native_span": {
+      "start": 494,
+      "end": 525
+    }
+  },
+  "dropped-graph-child": {
+    "code": "CGR015",
+    "message": "memory byte expectation failed",
+    "span": {
+      "start": 301,
+      "end": 331
+    },
+    "rooted_handles": 1,
+    "rooted_edges": 1,
+    "exit": 1,
+    "native_span": {
+      "start": 301,
+      "end": 332
+    }
+  },
+  "dropped-raw-child": {
+    "code": "CGR015",
+    "message": "memory byte expectation failed",
+    "span": {
+      "start": 311,
+      "end": 347
+    },
+    "rooted_handles": 1,
+    "rooted_edges": 1,
+    "exit": 1,
+    "native_span": {
+      "start": 311,
+      "end": 348
+    }
+  },
+  "transfers": {
+    "code": "CGR015",
+    "message": "memory byte expectation failed",
+    "span": {
+      "start": 348,
+      "end": 378
+    },
+    "rooted_handles": 2,
+    "rooted_edges": 1,
+    "exit": 1,
+    "native_span": {
+      "start": 348,
+      "end": 379
+    }
+  },
+  "frames-branches": {
+    "code": "CGR015",
+    "message": "memory byte expectation failed",
+    "span": {
+      "start": 770,
+      "end": 800
+    },
+    "rooted_handles": 3,
+    "rooted_edges": 2,
+    "exit": 1,
+    "native_span": {
+      "start": 770,
+      "end": 801
+    }
+  },
+  "mixed-success": {
+    "exit": 0
+  }
+}

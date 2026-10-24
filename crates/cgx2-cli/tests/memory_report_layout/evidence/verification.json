@@ -1,0 +1,126 @@
+{
+  "status": "passed",
+  "scope": "owned report-layout slice only",
+  "ordinary_memory_checkpoint_complete": false,
+  "release_complete": false,
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/b705/lang/target/release-report-layout",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/b705/lang/target/tmp-report-layout"
+  },
+  "checks": [
+    {
+      "label": "package-tests",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2-emit-rust",
+        "--all-features",
+        "--offline"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "log": "package-tests.log",
+      "log_sha256": "b2df3cec83f84d9da4b8bc3a9bb6fca30f771a231a128a9775b8e6faa25c7f24",
+      "suites": 35,
+      "passed_tests": 150,
+      "failed_tests": 0,
+      "ignored_tests": 0
+    },
+    {
+      "label": "clippy",
+      "command": [
+        "cargo",
+        "clippy",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2-emit-rust",
+        "--all-targets",
+        "--all-features",
+        "--offline",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "log": "clippy.log",
+      "log_sha256": "cc21676640b3df8433a184c32625d0c8d6f852f27974f9c2c785e97f15e45c4c"
+    },
+    {
+      "label": "fmt",
+      "command": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--check"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "log": "fmt.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "diff",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "log": "diff.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "build",
+      "command": [
+        "cargo",
+        "build",
+        "-p",
+        "cgx2-cli",
+        "--all-features",
+        "--offline"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "log": "build.log",
+      "log_sha256": "a13905646e2aed93ec6ea9ed6ac91490a4e01f91af0215c3965279a910612149"
+    },
+    {
+      "label": "product",
+      "command": [
+        "/usr/bin/python3",
+        "/home/john-riley/.codex/worktrees/b705/lang/crates/cgx2-cli/tests/memory_report_layout/run.py",
+        "--binary",
+        "/home/john-riley/.codex/worktrees/b705/lang/target/release-report-layout/debug/cgx2",
+        "--output",
+        "/home/john-riley/.codex/worktrees/b705/lang/crates/cgx2-cli/tests/memory_report_layout/evidence/product.json"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "log": "product.log",
+      "log_sha256": "97d9f2f87c2438386b802a2194219c86a50571065aa3603720f3e87314d1d9fc"
+    },
+    {
+      "label": "existing-graph-product",
+      "command": [
+        "/usr/bin/python3",
+        "/home/john-riley/.codex/worktrees/b705/lang/crates/cgx2-syntax/s2b-memory-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/b705/lang/target/release-report-layout/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/b705/lang/crates/cgx2-cli/tests/memory_report_layout/evidence/existing-graph-product.json"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "log": "existing-graph-product.log",
+      "log_sha256": "8603c2cc4bcd524f20174740d9f95f470056bb62fd5577b3bf236c2a7ff64594"
+    }
+  ]
+}
