@@ -28,3 +28,7 @@ An additional source-span discrepancy is confirmed by inspection, not execution:
 All repair chats start from the same committed reviewed repair base. Historical attempts are immutable; each repair supplies its own evidence. Coordinator performs combined review/checks before any managed acceptance or dependency frontier advance. No S3/new language consumers launch now.
 
 R03/R04, full ordinary ownership, named regions/transfers/entry recovery, foreign/execution/commands, S3/S4, leak-enabled/external/performance and the complete R01–R15 ledger remain required. No release or main merge.
+
+## Two repairs accepted as bounded deliveries
+
+Runtime53d37c1 and evidence23b050f are independently reviewed and integrated as c287985/1b922e2. Coordinator runtime4+typed2 tests and87target parity pass; evidence14selftests pass. The evidence matrix's670passed/8failed result is intentionally retained: all8 failures await the core Session-entry span repair and combined rerun. Core provenance/nominal delivery is still pending; full managed acceptance remains withheld. Details: repairs-reviewed.json.

@@ -1,0 +1,107 @@
+{
+  "source_commit": "c2879855c46345b7dfe5c98ff173deb589f9bcbf",
+  "checks": [
+    {
+      "name": "build",
+      "command": [
+        "cargo",
+        "build",
+        "--offline",
+        "--locked",
+        "--all-features",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2c"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 5.731,
+      "stdout_bytes": 1624,
+      "stdout_sha256": "1df9b7f8351cc95eefdac85cad3159c3a3af3088efad58fe31fc0018e378f851",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "build.log.gz",
+      "log_sha256": "1df9b7f8351cc95eefdac85cad3159c3a3af3088efad58fe31fc0018e378f851",
+      "passed": true
+    },
+    {
+      "name": "runtime-equality-tests",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "--all-features",
+        "-p",
+        "cgx2-runtime",
+        "--test",
+        "managed_result_equality"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.191,
+      "stdout_bytes": 741,
+      "stdout_sha256": "bb7cea9dab5b9d23daff3f104aa0154c5ae50867ced5b47b8b6172585af3b1b2",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "runtime-equality-tests.log.gz",
+      "log_sha256": "bb7cea9dab5b9d23daff3f104aa0154c5ae50867ced5b47b8b6172585af3b1b2",
+      "passed": true
+    },
+    {
+      "name": "typed-equality-tests",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "--all-features",
+        "-p",
+        "cgx2-sema",
+        "--test",
+        "managed_result_equality"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 2.193,
+      "stdout_bytes": 606,
+      "stdout_sha256": "5089e22fd4c73da860e3341365827a424767930e42766946d634dd22e2b9c5e6",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "typed-equality-tests.log.gz",
+      "log_sha256": "5089e22fd4c73da860e3341365827a424767930e42766946d634dd22e2b9c5e6",
+      "passed": true
+    },
+    {
+      "name": "equality-product",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/managed-equality-repair-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug",
+        "--output-dir",
+        "/home/john-riley/projects/lang/target/managed-repairs-review-20261024/runtime/parity"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 11.679,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "equality-product.log.gz",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "passed": true
+    }
+  ],
+  "release_complete": false
+}

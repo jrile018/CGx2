@@ -189,3 +189,7 @@ Common reviewed repair base3c1cfe2aeba2f7135e4069709bf633c082d2aab0 matches all 
 | core-auth | 01a16d5f-04e4-72b0-818f-d3cd2a19621f | /home/john-riley/.codex/worktrees/06b4/lang | running |
 | runtime-equality | 01a16d5f-04f6-7142-97ef-27e4e39ccf5c | /home/john-riley/.codex/worktrees/d1b5/lang | running |
 | evidence-parity | 01a16d5f-1615-7fb3-a8ca-f8467c61488c | /home/john-riley/.codex/worktrees/00f8/lang | running |
+
+## Equality and evidence repairs reviewed; core still running
+
+Runtime53d37c1 accepted/integratedc287985 after independent review plus coordinator4runtime/2typed-source tests and87target-parity passes. Evidence23b050f accepted/integrated1b922e2 after independent review and14selftests;670/8 matrix accurately retains the known core-entry span failures. Core source-auth repair remains active, finishing its report/commit. Its obsolete merged-AST layout test caller will be reconciled by coordinator with original assertions preserved. Full combined checks and managed acceptance remain pending; see s2b-default-managed-review/repairs-reviewed.json. No new consumers or duplicate repairs.

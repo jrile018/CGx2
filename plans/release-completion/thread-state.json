@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24 10:05:56 UTC",
+  "checked_at": "2026-10-24T10:35:01Z",
   "original_chats": [
     {
       "lane": "core",
@@ -442,7 +442,7 @@
       "worktree": "/home/john-riley/.codex/worktrees/06b4/lang",
       "base": "3c1cfe2aeba2f7135e4069709bf633c082d2aab0",
       "status": "running",
-      "afterCursor": "97c7b72a-7d85-4dc0-baa3-400d373feba5:1",
+      "afterCursor": "97c7b72a-7d85-4dc0-baa3-400d373feba5:5",
       "plan": "plans/release-completion/s2b-default-managed-review/core-auth/plan.md"
     },
     {
@@ -453,9 +453,11 @@
       "hostId": "local",
       "worktree": "/home/john-riley/.codex/worktrees/d1b5/lang",
       "base": "3c1cfe2aeba2f7135e4069709bf633c082d2aab0",
-      "status": "running",
-      "afterCursor": "bd48213e-aa0a-4041-bdf1-3887918b9dc5:1",
-      "plan": "plans/release-completion/s2b-default-managed-review/runtime-equality/plan.md"
+      "status": "reviewed-bounded-repair",
+      "afterCursor": "bd48213e-aa0a-4041-bdf1-3887918b9dc5:3",
+      "plan": "plans/release-completion/s2b-default-managed-review/runtime-equality/plan.md",
+      "commit": "53d37c1d668fe5e928fe396df5b9715bc102786e",
+      "integrated_commit": "c2879855c46345b7dfe5c98ff173deb589f9bcbf"
     },
     {
       "lane": "evidence-parity",
@@ -465,9 +467,12 @@
       "hostId": "local",
       "worktree": "/home/john-riley/.codex/worktrees/00f8/lang",
       "base": "3c1cfe2aeba2f7135e4069709bf633c082d2aab0",
-      "status": "running",
-      "afterCursor": "9d6879bb-1456-4ec7-9697-a11f91973d90:1",
-      "plan": "plans/release-completion/s2b-default-managed-review/evidence-parity/plan.md"
+      "status": "reviewed-bounded-repair",
+      "afterCursor": "9d6879bb-1456-4ec7-9697-a11f91973d90:3",
+      "plan": "plans/release-completion/s2b-default-managed-review/evidence-parity/plan.md",
+      "commit": "23b050fad0f49ad7ccfcf1f6404ec5015e6a0f9f",
+      "integrated_commit": "1b922e2f708566f51d7df1c1abc6f434e5e3e55f",
+      "acceptance_note": "Harness accepted;8 known core-span assertions still fail, combined rerun required"
     }
   ]
 }

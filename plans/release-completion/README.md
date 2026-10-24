@@ -148,3 +148,7 @@ At 2026-10-24 08:50 UTC the worker reports native compilation of the required 65
 ## Managed delivery review: repairs required
 
 Default managed bc4ba95 is staged for repair, not accepted. Independent review reproduced source-provenance mismatch, nominal AllocationError compatibility regression and representation-dependent Result equality; required native fault/budget and rejection evidence is incomplete. See [review and three repair plans](s2b-default-managed-review/README.md). Existing workspace/regression successes do not close these failures. R03/R04 and every remaining release requirement stay open; the next frontier is bounded repairs, not S3 consumers.
+
+### Two managed repairs accepted; combined gate pending
+
+Equality and evidence repairs are accepted as bounded deliveries (c287985/1b922e2). The core source-authentication/nominal repair remains running. The stronger matrix retains8 known entry-span failures; core integration, the unchanged-assertion layout-test call-site reconciliation and a full combined rerun remain required. Full managed/R03/R04 acceptance and all release requirements stay open.

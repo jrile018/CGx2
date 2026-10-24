@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "full_managed_accepted": false,
+  "release_complete": false,
+  "runtime": {
+    "worker_commit": "53d37c1d668fe5e928fe396df5b9715bc102786e",
+    "integrated_commit": "c2879855c46345b7dfe5c98ff173deb589f9bcbf",
+    "status": "reviewed-bounded-repair",
+    "review": "completion_runtime",
+    "source_hashes_verified": 11,
+    "worker_log_hashes_verified": 26,
+    "independent_runtime_tests": 4,
+    "independent_typed_source_tests": 2,
+    "independent_target_parity": {
+      "passed": 87,
+      "failed": 0
+    },
+    "evidence": "evidence/runtime-repair-accepted/verification.json"
+  },
+  "evidence": {
+    "worker_commit": "23b050fad0f49ad7ccfcf1f6404ec5015e6a0f9f",
+    "integrated_commit": "1b922e2f708566f51d7df1c1abc6f434e5e3e55f",
+    "status": "reviewed-bounded-repair",
+    "review": "completion_consumers",
+    "inventory_entries_verified": 157,
+    "source_snapshots_verified": 26,
+    "stream_hash_counts_verified": 710,
+    "independent_selftests": 14,
+    "matrix": {
+      "passed": 670,
+      "failed": 8
+    },
+    "remaining_failure": "All8 are CLI reserve-index1 missing entry span against native debug/release/standalone for graph-root and guard fixtures; final combined core fix must rerun the whole matrix."
+  },
+  "core": "running; final report/commit pending, obsolete read-only layout test call site to be mechanically reconciled by coordinator without assertion changes",
+  "combined_integration_gate": "pending core delivery, review, test-call reconciliation and full combined checks"
+}
