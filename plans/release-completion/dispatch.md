@@ -116,3 +116,7 @@ Both follow-up repairs are reviewed-bounded-delivery. Combined 1141 Rust tests, 
 ## Ordinary function memory running
 
 Reviewed base c110fd5f9ae140aa985188ca1ab526f38e15a7ca. Chat 01a16ba1-fa9a-7613-b05c-ec7612ca5734 (CGx2 S2b ordinary function memory), worktree /home/john-riley/.codex/worktrees/fba5/lang, is confirmed active; HEAD matches the base. Queued client ID and polling cursor are in thread-state.json. Recent-chat listing omitted the agent-created chat; read-only exact worktree metadata plus read_thread/wait_threads verified identity and running status. No duplicates. One core/runtime owner is the full safe dependency frontier; no consumer is launched against proposed memory interfaces.
+
+## Memory delivery reviewed incomplete; three bounded lanes ready
+
+74cfa2b staged as6467575. 1157 coordinator workspace tests and99 graph product checks pass, but native guard budgeting and source report provenance regressions reproduced. Ordinary-function ownership/managed storage/recoverable transfers remain missing. See s2b-memory-review/README.md. Two disjoint legacy repairs and one ordinary-owned source slice are prepared; no proposed interface consumer dispatch. Actual creation IDs/status follow.

@@ -63,3 +63,7 @@ Five bounded fixes are reviewed and integrated. Combined 1126 Rust tests (six ig
 ## S2b foundation accepted
 
 The final source-specialization and native-constructor fixes are reviewed and integrated. Combined 1141 Rust tests (six ignored), seven product suites, 166 benchmark tests, 20 docs harness tests and 39 runnable docs pass with no failures. Foundation generic/data capability is accepted; this does not close ordinary memory, foreign/execution/commands, S3 or external evidence. Next is the [ordinary function memory source checkpoint](release-completion/s2b-memory/plan.md). No release percentage is asserted.
+
+## S2b memory supporting delivery reviewed
+
+Graph/payload delivery is staged repair-required. 1157 workspace tests and99 graph product checks pass; review found two executable regressions and confirmed that ordinary-function memory remains unimplemented. Three bounded parallel lanes address native guards, report provenance, and first ordinary-owned source execution. Full R03/R04 and broader release gates remain open; see [review](release-completion/s2b-memory-review/README.md).

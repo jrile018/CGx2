@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24T01:50:30.443Z",
+  "checked_at": "2026-10-24T02:30:30.465Z",
   "original_chats": [
     {
       "lane": "core",
@@ -188,9 +188,12 @@
       "hostId": "local",
       "worktree": "/home/john-riley/.codex/worktrees/fba5/lang",
       "base": "c110fd5f9ae140aa985188ca1ab526f38e15a7ca",
-      "status": "running",
+      "status": "reviewed-incomplete-repair-required",
       "clientThreadId": "client-new-thread:38e3ea4c-e9ef-42a5-84be-01232ecc9733",
-      "afterCursor": "4f9d43a2-a812-405e-8339-8e18a8790794:1"
+      "afterCursor": "4f9d43a2-a812-405e-8339-8e18a8790794:3",
+      "commit": "74cfa2bd371f87fe22f79b0c38bfc4aa8785c862",
+      "integrated_commit": "6467575ba6627eeafe6bffd5f8fbe6e87720fb70",
+      "acceptance": "graph/payload supporting implementation only; ordinary memory missing and two regressions"
     }
   ],
   "s2a_repairs": [

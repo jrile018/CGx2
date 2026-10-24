@@ -1,0 +1,77 @@
+{
+  "worker_commit": "74cfa2bd371f87fe22f79b0c38bfc4aa8785c862",
+  "staged_commit": "6467575ba6627eeafe6bffd5f8fbe6e87720fb70",
+  "status": "repair-required",
+  "memory_checkpoint_complete": false,
+  "release_complete": false,
+  "workspace": {
+    "passed": 1157,
+    "failed": 0,
+    "ignored": 6,
+    "suites": 254
+  },
+  "graph_product_passed": 99,
+  "logs": {
+    "s2b-memory-review-tests.log": {
+      "path": "/home/john-riley/projects/lang/target/s2b-memory-review-tests.log",
+      "sha256": "c767351922ff082a2e7141c2acc7199e27dde18ea81d161515ea14338b43d79a"
+    },
+    "s2b-memory-review-tests-unrestricted.log": {
+      "path": "/home/john-riley/projects/lang/target/s2b-memory-review-tests-unrestricted.log",
+      "sha256": "3e386b37427f6b031bc04ce8fed80ccdc2494f51de7492206cefacc7d1a39b83"
+    },
+    "s2b-memory-review-build.log": {
+      "path": "/home/john-riley/projects/lang/target/s2b-memory-review-build.log",
+      "sha256": "b0b81ef9fc93c8d641f667db54c0df5b7c154a93b56d34325b11dfccc69246d8"
+    },
+    "s2b-memory-reviewed-product.log": {
+      "path": "/home/john-riley/projects/lang/target/s2b-memory-reviewed-product.log",
+      "sha256": "8603c2cc4bcd524f20174740d9f95f470056bb62fd5577b3bf236c2a7ff64594"
+    },
+    "s2b-memory-review-clippy.log": {
+      "path": "/home/john-riley/projects/lang/target/s2b-memory-review-clippy.log",
+      "sha256": "5dc41b8cf146a889c5c9d2dcfa79b61336b8a99bda68f33ee176c1cf0a17c12a"
+    }
+  },
+  "reproductions": [
+    {
+      "fixture": "nested-zero.cg",
+      "interpreter_exit": 1,
+      "interpreter_diagnostic": "CGR013 BudgetExceeded",
+      "span": [
+        179,
+        251
+      ],
+      "native_debug_exit": 0
+    },
+    {
+      "fixture": "forged-layout.cg",
+      "interpreter_exit": 1,
+      "diagnostic": "CGR015",
+      "operation_rooted_handles": 2,
+      "operation_rooted_edges": 0,
+      "expected_operation_rooted_edges": 1
+    }
+  ],
+  "clippy": {
+    "exit_code": 0,
+    "command": "cargo clippy --workspace --all-targets --all-features --offline --locked -- -D warnings"
+  },
+  "format": {
+    "exit_code": 0,
+    "command": "cargo fmt --all --check"
+  },
+  "diff_check_exit_code": 0,
+  "commands": {
+    "workspace": "cargo test --workspace --all-features --offline --locked",
+    "build": "cargo build --workspace --offline --locked",
+    "product": "python3 crates/cgx2-syntax/s2b-memory-evidence/run.py --binary-dir /home/john-riley/projects/lang/target/release-plan-review/debug --output /home/john-riley/projects/lang/target/s2b-memory-reviewed-product.json"
+  },
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/home/john-riley/projects/lang/target/release-plan-review",
+    "TMPDIR": "/home/john-riley/projects/lang/target/cgx2-wave21-tmp",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  }
+}
