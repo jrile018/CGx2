@@ -1,0 +1,12 @@
+fn values() -> Result<i64, List<i64>> effects(ManagedAlloc):
+    match memory.try_in(memory.default_region(), [20, 22]):
+        Result.Ok(xs):
+            Result.Err(xs)
+        Result.Err(error):
+            Result.Ok(0)
+fn main() -> i64 effects(ManagedAlloc):
+    match values():
+        Result.Ok(n):
+            n
+        Result.Err(xs):
+            length(xs) + 40

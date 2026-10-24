@@ -1,0 +1,9 @@
+fn values() -> List<i64> effects(ManagedAlloc):
+    match memory.try_in(memory.default_region(), [20, 22]):
+        Result.Ok(xs):
+            let alias = xs
+            alias
+        Result.Err(error):
+            [0]
+fn main() -> i64 effects(ManagedAlloc):
+    length(values()) + 40

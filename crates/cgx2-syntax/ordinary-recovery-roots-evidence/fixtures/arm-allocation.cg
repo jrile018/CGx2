@@ -1,0 +1,9 @@
+fn main() -> i64 effects(ManagedAlloc):
+    match memory.copy_to(memory.default_region(), [42]):
+        Result.Ok(xs):
+            no_gc(budget: 0):
+                let ys = [1]
+                return length(ys)
+            42
+        Result.Err(error):
+            -5

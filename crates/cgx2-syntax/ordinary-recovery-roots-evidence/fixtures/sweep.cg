@@ -1,0 +1,37 @@
+fn work() -> i64 effects(ManagedAlloc):
+    match memory.try_no_gc(budget: 8192):
+        Result.Ok(outer):
+            match memory.try_no_gc(budget: 4096):
+                Result.Ok(inner):
+                    match memory.try_region(mode: memory.Mode.Manual, limit: 4096):
+                        Result.Ok(a):
+                            match memory.try_region(mode: memory.Mode.Manual, limit: 4096):
+                                Result.Ok(b):
+                                    match memory.try_in(borrow(a), [20, 22]):
+                                        Result.Ok(xs):
+                                            match memory.copy_to(borrow(b), xs):
+                                                Result.Ok(copy):
+                                                    length(xs) + length(copy) + 38
+                                                Result.Err(error):
+                                                    -5
+                                        Result.Err(error):
+                                            -4
+                                Result.Err(error):
+                                    -3
+                        Result.Err(error):
+                            -2
+                Result.Err(error):
+                    -1
+        Result.Err(error):
+            0
+
+fn main() -> i64 effects(ManagedAlloc):
+    match memory.try_session():
+        Result.Ok(session):
+            work()
+        Result.Err(error):
+            match error:
+                memory.SessionEntryError.HostAllocation(site):
+                    -10
+                memory.SessionEntryError.IdentifierExhausted:
+                    -11
