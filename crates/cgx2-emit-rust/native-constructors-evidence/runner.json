@@ -1,0 +1,38 @@
+[
+  {
+    "name": "semantic-resolution",
+    "command": [
+      "/usr/bin/python3",
+      "/home/john-riley/.codex/worktrees/5140/lang/crates/cgx2-sema/tests/semantic_resolution/run.py",
+      "--binary",
+      "/home/john-riley/.codex/worktrees/5140/lang/target/release-native-constructors/debug/cgx2",
+      "--output",
+      "/home/john-riley/.codex/worktrees/5140/lang/crates/cgx2-emit-rust/native-constructors-evidence/semantic-resolution.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "foundation",
+    "command": [
+      "/usr/bin/python3",
+      "/home/john-riley/.codex/worktrees/5140/lang/crates/cgx2-syntax/s2b-evidence/run.py",
+      "--binary-dir",
+      "/home/john-riley/.codex/worktrees/5140/lang/target/release-native-constructors/debug",
+      "--output",
+      "/home/john-riley/.codex/worktrees/5140/lang/crates/cgx2-emit-rust/native-constructors-evidence/foundation.json"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "emitter",
+    "command": [
+      "/usr/bin/python3",
+      "/home/john-riley/.codex/worktrees/5140/lang/crates/cgx2-emit-python/tests/s2b_product.py",
+      "--binary-dir",
+      "/home/john-riley/.codex/worktrees/5140/lang/target/release-native-constructors/debug",
+      "--output",
+      "/home/john-riley/.codex/worktrees/5140/lang/crates/cgx2-emit-rust/native-constructors-evidence/emitter.json"
+    ],
+    "exit": 0
+  }
+]
