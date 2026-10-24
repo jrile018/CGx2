@@ -1,0 +1,8 @@
+record Result:
+    AllocationError: i64
+    try_owned: i64
+fn try_owned(AllocationError: Result) -> Result:
+    AllocationError
+fn main() -> i64:
+    let Result = try_owned(Result(AllocationError: 41, try_owned: 1))
+    Result.AllocationError + Result.try_owned

@@ -1,0 +1,9 @@
+record R:
+    Result: i64
+    AllocationError: i64
+    try_owned: i64
+fn add(Result: i64, AllocationError: i64, try_owned: i64) -> i64:
+    Result + AllocationError + try_owned
+fn main() -> i64:
+    let p = owned(R(Result: 20, AllocationError: 21, try_owned: 1))
+    add(p.Result, p.AllocationError, p.try_owned)

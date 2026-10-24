@@ -1,0 +1,7 @@
+record R:
+    x: i64
+fn Result(AllocationError: i64) -> i64:
+    AllocationError + 1
+fn main() -> i64:
+    let p = owned(R(x: 41))
+    Result(p.x)

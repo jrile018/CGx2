@@ -1,0 +1,355 @@
+{
+  "schema_version": 1,
+  "base": "3e5be4d4907debad1ae5fa8bdc836208255ddb4d",
+  "checks": [
+    {
+      "command": [
+        "cargo",
+        "build",
+        "--workspace",
+        "--all-features",
+        "--offline",
+        "--locked"
+      ],
+      "exit": 101,
+      "limit": null,
+      "log": "build.log",
+      "log_sha256": "15a5c8d8c48dee446f0a1134d76495e53b0bd06a4c723696925b8ad6c40c74c1",
+      "duration_seconds": 0.857,
+      "name": "build",
+      "expected_obsolete_failure": false
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/evidence/compatibility-product.json"
+      ],
+      "exit": 1,
+      "limit": null,
+      "log": "compatibility-product.log",
+      "log_sha256": "cdff21455d4351a248d1d3b8c7c5fad01013fb082aa7f6b5fe327d32f18a6792",
+      "duration_seconds": 0.303,
+      "name": "compatibility-product",
+      "expected_obsolete_failure": false
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/owned-result-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/evidence/owned-result-original.json"
+      ],
+      "exit": 1,
+      "limit": null,
+      "log": "owned-result-original.log",
+      "log_sha256": "d6209f56d3b96155f9b58f79eadf763b0a548b0088e8afdddf62eeea4c437a4c",
+      "duration_seconds": 0.202,
+      "name": "owned-result-original",
+      "expected_obsolete_failure": false
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/replay_result.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/evidence/owned-result-replay.json"
+      ],
+      "exit": 1,
+      "limit": null,
+      "log": "owned-result-replay.log",
+      "log_sha256": "edd20c28c38542e952a5d4eecc78f432e77282a6af3e88805b1b56b850afe6d8",
+      "duration_seconds": 0.051,
+      "name": "owned-result-replay",
+      "expected_obsolete_failure": false
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/ordinary-owned-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/evidence/ordinary-product.json"
+      ],
+      "exit": 1,
+      "limit": null,
+      "log": "ordinary-product.log",
+      "log_sha256": "306c434c2316f8d9cd81f809b185ab6a83fa137472a1dfc5b62048b5b4fb4158",
+      "duration_seconds": 0.202,
+      "name": "ordinary-product",
+      "expected_obsolete_failure": false
+    },
+    {
+      "command": [
+        "cargo",
+        "test",
+        "--workspace",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--no-fail-fast"
+      ],
+      "exit": 101,
+      "limit": null,
+      "log": "workspace-tests.log",
+      "log_sha256": "ef6b6d76b9c82106e80190cdacccb81cc5f2267edcaf6b5d55740b84bc53e42a",
+      "duration_seconds": 0.655,
+      "name": "workspace-tests",
+      "suites": 0,
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "expected_obsolete_failure": false
+    },
+    {
+      "command": [
+        "cargo",
+        "clippy",
+        "--workspace",
+        "--all-targets",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit": 101,
+      "limit": null,
+      "log": "clippy.log",
+      "log_sha256": "a5bb79936c0f31523c33b01a894604f432b437fed3b505d8f4f98b2fdff9dd03",
+      "duration_seconds": 3.576,
+      "name": "clippy",
+      "expected_obsolete_failure": false
+    },
+    {
+      "command": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--check"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "fmt.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.655,
+      "name": "fmt",
+      "expected_obsolete_failure": false
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "diff.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.051,
+      "name": "diff",
+      "expected_obsolete_failure": false
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/s2b-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/evidence/foundation.json"
+      ],
+      "exit": 1,
+      "limit": null,
+      "log": "foundation.log",
+      "log_sha256": "d77753d67c904f41ec09dd545f3ce98e55a03e76dc5bdafe87aa179438fdd752",
+      "duration_seconds": 0.101,
+      "name": "foundation",
+      "expected_obsolete_failure": false
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-sema/tests/semantic_resolution/run.py",
+        "--binary",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "--output",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/evidence/semantic.json"
+      ],
+      "exit": 1,
+      "limit": null,
+      "log": "semantic.log",
+      "log_sha256": "4e64b9922db39e48a95115f75b4e3f3a1b00e884c1ba80601306e5e3886848d3",
+      "duration_seconds": 0.101,
+      "name": "semantic",
+      "expected_obsolete_failure": false
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-sema/tests/source_specialization/run.py",
+        "--binary",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "--output-dir",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/evidence/specialization"
+      ],
+      "exit": 1,
+      "limit": null,
+      "log": "specialization.log",
+      "log_sha256": "2088c0a29a427c5b4d303744aea0457920ff692b9cbc5cf4d14527630d61e43b",
+      "duration_seconds": 0.101,
+      "name": "specialization",
+      "expected_obsolete_failure": false
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-api-index/tests/verify_visibility_cli.py",
+        "--binary",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "--output-dir",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/evidence/visibility"
+      ],
+      "exit": 1,
+      "limit": null,
+      "log": "visibility.log",
+      "log_sha256": "a54a92600d11aeeec09fa770eaa0cbf458c66eb007a2bdeb8e8149c4346fabf1",
+      "duration_seconds": 0.051,
+      "name": "visibility",
+      "expected_obsolete_failure": false
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-package/scripts/verify_binders.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/evidence/binders.json"
+      ],
+      "exit": 1,
+      "limit": null,
+      "log": "binders.log",
+      "log_sha256": "6310f2ace30adf8e6e90d4a9f23df598a7d08675131ca6a92acc70fe5ed50179",
+      "duration_seconds": 0.051,
+      "name": "binders",
+      "expected_obsolete_failure": false
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-cli/scripts/verify_output_bounds.py",
+        "--binary",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "--output",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/evidence/output.json",
+        "--build-address-space-mib",
+        "4096"
+      ],
+      "exit": 1,
+      "limit": null,
+      "log": "output.log",
+      "log_sha256": "8cd3a2f2bf817ea67e092565b740e1a9f2954024795b9ff8c2c62210caa7a5e6",
+      "duration_seconds": 0.101,
+      "name": "output",
+      "expected_obsolete_failure": false
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-emit-python/tests/s2b_product.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/evidence/emitters.json"
+      ],
+      "exit": 1,
+      "limit": null,
+      "log": "emitters.log",
+      "log_sha256": "b3156ab9221541222d824b9658c338ba7cbf790381819eda44710d56dcf4e2b4",
+      "duration_seconds": 0.051,
+      "name": "emitters",
+      "expected_obsolete_failure": false
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/s2b-memory-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/evidence/legacy-graph99.json"
+      ],
+      "exit": 1,
+      "limit": null,
+      "log": "legacy-graph99.log",
+      "log_sha256": "0a710fff37972ab4a97ee63c2c1ee77a81e81bd9c34392209b214521bd8b5c48",
+      "duration_seconds": 0.202,
+      "name": "legacy-graph99",
+      "expected_obsolete_failure": false
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-emit-rust/tests/graph_guard_parity/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/evidence/native-guards518.json"
+      ],
+      "exit": 1,
+      "limit": null,
+      "log": "native-guards518.log",
+      "log_sha256": "ba6f628d05365699130420c633917bf6fb3cc8f8a1427dc96e09b3e4b5c6284d",
+      "duration_seconds": 0.202,
+      "name": "native-guards518",
+      "expected_obsolete_failure": false
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-cli/tests/memory_report_layout/run.py",
+        "--binary",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "--output",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/evidence/report-layouts265.json"
+      ],
+      "exit": 1,
+      "limit": null,
+      "log": "report-layouts265.log",
+      "log_sha256": "eaacb4ff529dbed94e86a7210219fbdaa6064f2ebda4329500497ca168c1519a",
+      "duration_seconds": 0.202,
+      "name": "report-layouts265",
+      "expected_obsolete_failure": false
+    }
+  ],
+  "dependency_reconciliation": "none; root Cargo.lock unchanged",
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib",
+    "RUSTFLAGS": "-Clink-arg=-Wl,--threads=2"
+  },
+  "bounds": {
+    "wall_seconds": 900,
+    "cpu_seconds": 900,
+    "address_space_bytes": 4294967296,
+    "inherited_file_hard_cap_bytes": 8388608,
+    "descendant_live_output_cap_bytes": 1048576,
+    "monitor_seconds": 0.05,
+    "process_tree_count": 128
+  },
+  "known_superseded_expectation": "Original 584-check runner expects CGT082 for a valid schema-1 try_owned parameter. Replay excludes its 11 rejection checks explicitly.",
+  "release_complete": false
+}

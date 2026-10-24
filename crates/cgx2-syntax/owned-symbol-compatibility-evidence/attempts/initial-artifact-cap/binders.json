@@ -1,0 +1,838 @@
+{
+  "schema_version": 1,
+  "scope": "S2b package exported binder repair only",
+  "reviewed_base": "b595724e1b086c604220cc5b165c141e65a0531f",
+  "release_complete": false,
+  "passed": 24,
+  "failed": 52,
+  "checks": [
+    {
+      "name": "binder-record:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-package/fixtures/binder-record"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "binder-record:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-package/fixtures/binder-record"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "binder-record:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-package/fixtures/binder-record",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/binder-record-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "binder-record:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-package/fixtures/binder-record",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/binder-record-release",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "binder-record:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-package/fixtures/binder-record",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/binder-record.pyz"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "binder-variant:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-package/fixtures/binder-variant"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "binder-variant:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-package/fixtures/binder-variant"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "binder-variant:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-package/fixtures/binder-variant",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/binder-variant-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "binder-variant:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-package/fixtures/binder-variant",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/binder-variant-release",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "binder-variant:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-package/fixtures/binder-variant",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/binder-variant.pyz"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "binder-nested:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-package/fixtures/binder-nested"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "binder-nested:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-package/fixtures/binder-nested"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "binder-nested:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-package/fixtures/binder-nested",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/binder-nested-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "binder-nested:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-package/fixtures/binder-nested",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/binder-nested-release",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "binder-nested:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-package/fixtures/binder-nested",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/binder-nested.pyz"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "reviewed-repro:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/plans/release-completion/s2b-review/evidence/binder-package"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "reviewed-repro:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/plans/release-completion/s2b-review/evidence/binder-package"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "reviewed-repro:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/plans/release-completion/s2b-review/evidence/binder-package",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/reviewed-repro-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "reviewed-repro:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/plans/release-completion/s2b-review/evidence/binder-package",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/reviewed-repro-release",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "reviewed-repro:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/plans/release-completion/s2b-review/evidence/binder-package",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/reviewed-repro.pyz"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "record-argument:reject-check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/record-argument"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "record-argument:reject-native",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/record-argument",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/record-argument-native.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "record-argument:preserve-native",
+      "passed": true
+    },
+    {
+      "name": "record-argument:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/record-argument",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/record-argument-rust.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "record-argument:preserve-rust",
+      "passed": true
+    },
+    {
+      "name": "record-argument:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/record-argument",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/record-argument-python.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "record-argument:preserve-python",
+      "passed": true
+    },
+    {
+      "name": "variant-argument:reject-check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/variant-argument"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "variant-argument:reject-native",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/variant-argument",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/variant-argument-native.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "variant-argument:preserve-native",
+      "passed": true
+    },
+    {
+      "name": "variant-argument:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/variant-argument",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/variant-argument-rust.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "variant-argument:preserve-rust",
+      "passed": true
+    },
+    {
+      "name": "variant-argument:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/variant-argument",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/variant-argument-python.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "variant-argument:preserve-python",
+      "passed": true
+    },
+    {
+      "name": "nested-argument:reject-check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/nested-argument"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "nested-argument:reject-native",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/nested-argument",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/nested-argument-native.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "nested-argument:preserve-native",
+      "passed": true
+    },
+    {
+      "name": "nested-argument:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/nested-argument",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/nested-argument-rust.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "nested-argument:preserve-rust",
+      "passed": true
+    },
+    {
+      "name": "nested-argument:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/nested-argument",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/nested-argument-python.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "nested-argument:preserve-python",
+      "passed": true
+    },
+    {
+      "name": "qualified-nominal:reject-check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/qualified-nominal"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "qualified-nominal:reject-native",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/qualified-nominal",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/qualified-nominal-native.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "qualified-nominal:preserve-native",
+      "passed": true
+    },
+    {
+      "name": "qualified-nominal:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/qualified-nominal",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/qualified-nominal-rust.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "qualified-nominal:preserve-rust",
+      "passed": true
+    },
+    {
+      "name": "qualified-nominal:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/qualified-nominal",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/qualified-nominal-python.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "qualified-nominal:preserve-python",
+      "passed": true
+    },
+    {
+      "name": "module-identity:reject-check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/module-identity"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "module-identity:reject-native",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/module-identity",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/module-identity-native.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "module-identity:preserve-native",
+      "passed": true
+    },
+    {
+      "name": "module-identity:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/module-identity",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/module-identity-rust.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "module-identity:preserve-rust",
+      "passed": true
+    },
+    {
+      "name": "module-identity:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/module-identity",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/module-identity-python.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "module-identity:preserve-python",
+      "passed": true
+    },
+    {
+      "name": "constraint:reject-check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/constraint"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "constraint:reject-native",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/constraint",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/constraint-native.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "constraint:preserve-native",
+      "passed": true
+    },
+    {
+      "name": "constraint:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/constraint",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/constraint-rust.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "constraint:preserve-rust",
+      "passed": true
+    },
+    {
+      "name": "constraint:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/constraint",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/constraint-python.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "constraint:preserve-python",
+      "passed": true
+    },
+    {
+      "name": "private:reject-check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/private"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "private:reject-native",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/private",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/private-native.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "private:preserve-native",
+      "passed": true
+    },
+    {
+      "name": "private:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/private",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/private-rust.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "private:preserve-rust",
+      "passed": true
+    },
+    {
+      "name": "private:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/private",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/private-python.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "private:preserve-python",
+      "passed": true
+    },
+    {
+      "name": "hidden-effect:reject-check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/hidden-effect"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "hidden-effect:reject-native",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/hidden-effect",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/hidden-effect-native.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "hidden-effect:preserve-native",
+      "passed": true
+    },
+    {
+      "name": "hidden-effect:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/hidden-effect",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/hidden-effect-rust.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "hidden-effect:preserve-rust",
+      "passed": true
+    },
+    {
+      "name": "hidden-effect:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/hidden-effect",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q/hidden-effect-python.out",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/product-binders-na11mt9q",
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "hidden-effect:preserve-python",
+      "passed": true
+    }
+  ],
+  "fixture_sha256": {
+    "crates/cgx2-package/fixtures/binder-record/cgx2.toml": "f05c40ff508fbb0a6c061196880c8bde4d61eef907b74327f8e36f862156203b",
+    "crates/cgx2-package/fixtures/binder-record/src/dep.cg": "2df7d85aaa97292e5c336bd5a88462915a720e7d2b581197251ba367fec3ab13",
+    "crates/cgx2-package/fixtures/binder-record/src/main.cg": "1586a6177dbdd542d45c96200719be431b6bb3a54bdb518abfe033bd3f64584e",
+    "crates/cgx2-package/fixtures/binder-variant/cgx2.toml": "f05c40ff508fbb0a6c061196880c8bde4d61eef907b74327f8e36f862156203b",
+    "crates/cgx2-package/fixtures/binder-variant/src/dep.cg": "8f10c3b98e80ddf474e9f3ffa75102bf44b7e6cc2d0d6a5312796ab357e79ae0",
+    "crates/cgx2-package/fixtures/binder-variant/src/main.cg": "c610ef52a8d854f9268ea6295d08cabb9f95c50d7f6ad4d12f1ecb097f62efaf",
+    "crates/cgx2-package/fixtures/binder-nested/cgx2.toml": "7884bf448a18d22fff97668ddc341f19fb8ac11a58db8ac67fd8fae99e3245b2",
+    "crates/cgx2-package/fixtures/binder-nested/src/left.cg": "406cb75bf6f3b1124b9b82e21015687c6edf91caed92ba565a783c14a9d0477f",
+    "crates/cgx2-package/fixtures/binder-nested/src/main.cg": "0111422f5d906a5c4a41a27e4ffef966bd57420f58e73656769c516c822d873b",
+    "crates/cgx2-package/fixtures/binder-nested/src/right.cg": "611ddb747c80502b225f764d4c913c7bf011c85c3234a33f76f865ec507e8c63",
+    "plans/release-completion/s2b-review/evidence/binder-package/cgx2.toml": "f05c40ff508fbb0a6c061196880c8bde4d61eef907b74327f8e36f862156203b",
+    "plans/release-completion/s2b-review/evidence/binder-package/src/dep.cg": "2df7d85aaa97292e5c336bd5a88462915a720e7d2b581197251ba367fec3ab13",
+    "plans/release-completion/s2b-review/evidence/binder-package/src/main.cg": "1586a6177dbdd542d45c96200719be431b6bb3a54bdb518abfe033bd3f64584e"
+  },
+  "implementation_sha256": {
+    "crates/cgx2-package/src/lib.rs": "be6c7d9e612f643f47f80d6b202890ae3206ef5be4bcfdc0cf77296de24886a4",
+    "crates/cgx2-package/tests/binders.rs": "89625216f0c29f04491ed89916cf1e855e1f2a049caa3e10569c67caaecc7333",
+    "crates/cgx2-package/scripts/verify_binders.py": "3699c96b6bfaeb53885fbe6d5afa7f23630e03a324d4e864aab6dcbc75a90e63"
+  }
+}

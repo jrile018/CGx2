@@ -1,0 +1,15 @@
+{
+  "command": [
+    "python3",
+    "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/replay_result.py",
+    "--binary-dir",
+    "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug",
+    "--output",
+    "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/evidence/owned-result-replay-rerun.json"
+  ],
+  "exit": 0,
+  "limit": null,
+  "log": "owned-result-replay-rerun.log",
+  "log_sha256": "a6a2a44b3c0d2d8b664d32c2983f45fa477909e5c291f3146c38a9608590aa44",
+  "duration_seconds": 28.179
+}

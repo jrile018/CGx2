@@ -1,0 +1,4 @@
+record Secret:
+    value: i64
+pub fn leak<T>(x: T) -> Secret:
+    Secret(value: 1)

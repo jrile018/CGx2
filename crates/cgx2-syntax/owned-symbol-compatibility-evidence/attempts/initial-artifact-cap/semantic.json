@@ -1,0 +1,2051 @@
+{
+  "schema_version": 1,
+  "lane": "semantic-resolution",
+  "release_complete": false,
+  "subprocess_limits": {
+    "address_space_bytes": 536870912,
+    "cpu_seconds": 15,
+    "expansion_cpu_seconds": 10,
+    "wall_seconds": 20,
+    "native_compiler_address_space_bytes": null
+  },
+  "passed": 0,
+  "failed": 163,
+  "records": [
+    {
+      "name": "original:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/constructor-shadow.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "original:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/constructor-shadow.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "original:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/constructor-shadow.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/original-debug"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "cross_lane_if_failed": "crates/cgx2-emit-rust/src/data.rs: expression() dispatches intrinsic spelling despite checked record identity"
+    },
+    {
+      "name": "original:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/constructor-shadow.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/original-release",
+        "--release"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "cross_lane_if_failed": "crates/cgx2-emit-rust/src/data.rs: expression() dispatches intrinsic spelling despite checked record identity"
+    },
+    {
+      "name": "original:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/constructor-shadow.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/original.py"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "original:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/constructor-shadow.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/original.rs"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "qualified-binder:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/qualified-binder.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "qualified-binder:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/qualified-binder.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "qualified-binder:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/qualified-binder.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/qualified-binder-debug"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "qualified-binder:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/qualified-binder.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/qualified-binder-release",
+        "--release"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "qualified-binder:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/qualified-binder.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/qualified-binder.py"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "qualified-binder:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/qualified-binder.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/qualified-binder.rs"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "imported-package:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/package"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "imported-package:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/package"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "imported-package:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/package",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/imported-package-debug"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "imported-package:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/package",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/imported-package-release",
+        "--release"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "imported-package:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/package",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/imported-package.pyz"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "imported-package:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/package",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/imported-package.rs"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "length-local:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/length-local.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "length-local:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/length-local.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "length-local:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/length-local.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/length-local-debug"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "cross_lane_if_failed": "crates/cgx2-emit-rust/src/data.rs: expression() dispatches intrinsic spelling despite checked record identity"
+    },
+    {
+      "name": "length-local:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/length-local.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/length-local-release",
+        "--release"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "cross_lane_if_failed": "crates/cgx2-emit-rust/src/data.rs: expression() dispatches intrinsic spelling despite checked record identity"
+    },
+    {
+      "name": "length-local:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/length-local.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/length-local.py"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "length-local:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/length-local.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/length-local.rs"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "length-qualified:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/length-qualified.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "length-qualified:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/length-qualified.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "length-qualified:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/length-qualified.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/length-qualified-debug"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "length-qualified:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/length-qualified.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/length-qualified-release",
+        "--release"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "length-qualified:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/length-qualified.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/length-qualified.py"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "length-qualified:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/length-qualified.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/length-qualified.rs"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "show-local:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/show-local.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "show-local:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/show-local.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "show-local:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/show-local.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/show-local-debug"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "cross_lane_if_failed": "crates/cgx2-emit-rust/src/data.rs: expression() dispatches intrinsic spelling despite checked record identity"
+    },
+    {
+      "name": "show-local:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/show-local.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/show-local-release",
+        "--release"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "cross_lane_if_failed": "crates/cgx2-emit-rust/src/data.rs: expression() dispatches intrinsic spelling despite checked record identity"
+    },
+    {
+      "name": "show-local:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/show-local.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/show-local.py"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "show-local:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/show-local.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/show-local.rs"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "show-qualified:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/show-qualified.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "show-qualified:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/show-qualified.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "show-qualified:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/show-qualified.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/show-qualified-debug"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "show-qualified:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/show-qualified.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/show-qualified-release",
+        "--release"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "show-qualified:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/show-qualified.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/show-qualified.py"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "show-qualified:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/show-qualified.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/show-qualified.rs"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "parse_i64-local:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/parse_i64-local.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "parse_i64-local:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/parse_i64-local.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "parse_i64-local:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/parse_i64-local.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/parse_i64-local-debug"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "cross_lane_if_failed": "crates/cgx2-emit-rust/src/data.rs: expression() dispatches intrinsic spelling despite checked record identity"
+    },
+    {
+      "name": "parse_i64-local:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/parse_i64-local.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/parse_i64-local-release",
+        "--release"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "cross_lane_if_failed": "crates/cgx2-emit-rust/src/data.rs: expression() dispatches intrinsic spelling despite checked record identity"
+    },
+    {
+      "name": "parse_i64-local:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/parse_i64-local.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/parse_i64-local.py"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "parse_i64-local:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/parse_i64-local.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/parse_i64-local.rs"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "parse_i64-qualified:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/parse_i64-qualified.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "parse_i64-qualified:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/parse_i64-qualified.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "parse_i64-qualified:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/parse_i64-qualified.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/parse_i64-qualified-debug"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "parse_i64-qualified:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/parse_i64-qualified.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/parse_i64-qualified-release",
+        "--release"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "parse_i64-qualified:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/parse_i64-qualified.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/parse_i64-qualified.py"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "parse_i64-qualified:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/parse_i64-qualified.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/parse_i64-qualified.rs"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "array-local:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/array-local.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "array-local:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/array-local.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "array-local:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/array-local.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/array-local-debug"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "cross_lane_if_failed": "crates/cgx2-emit-rust/src/data.rs: expression() dispatches intrinsic spelling despite checked record identity"
+    },
+    {
+      "name": "array-local:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/array-local.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/array-local-release",
+        "--release"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "cross_lane_if_failed": "crates/cgx2-emit-rust/src/data.rs: expression() dispatches intrinsic spelling despite checked record identity"
+    },
+    {
+      "name": "array-local:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/array-local.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/array-local.py"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "array-local:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/array-local.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/array-local.rs"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "array-qualified:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/array-qualified.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "array-qualified:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/array-qualified.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "array-qualified:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/array-qualified.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/array-qualified-debug"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "array-qualified:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/array-qualified.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/array-qualified-release",
+        "--release"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "array-qualified:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/array-qualified.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/array-qualified.py"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "array-qualified:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/array-qualified.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/array-qualified.rs"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "list-local:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/list-local.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "list-local:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/list-local.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "list-local:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/list-local.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/list-local-debug"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "cross_lane_if_failed": "crates/cgx2-emit-rust/src/data.rs: expression() dispatches intrinsic spelling despite checked record identity"
+    },
+    {
+      "name": "list-local:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/list-local.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/list-local-release",
+        "--release"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "cross_lane_if_failed": "crates/cgx2-emit-rust/src/data.rs: expression() dispatches intrinsic spelling despite checked record identity"
+    },
+    {
+      "name": "list-local:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/list-local.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/list-local.py"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "list-local:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/list-local.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/list-local.rs"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "list-qualified:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/list-qualified.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "list-qualified:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/list-qualified.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "list-qualified:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/list-qualified.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/list-qualified-debug"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "list-qualified:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/list-qualified.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/list-qualified-release",
+        "--release"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "list-qualified:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/list-qualified.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/list-qualified.py"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "list-qualified:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/list-qualified.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/list-qualified.rs"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "get-local:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/get-local.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "get-local:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/get-local.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "get-local:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/get-local.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/get-local-debug"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "cross_lane_if_failed": "crates/cgx2-emit-rust/src/data.rs: expression() dispatches intrinsic spelling despite checked record identity"
+    },
+    {
+      "name": "get-local:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/get-local.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/get-local-release",
+        "--release"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "cross_lane_if_failed": "crates/cgx2-emit-rust/src/data.rs: expression() dispatches intrinsic spelling despite checked record identity"
+    },
+    {
+      "name": "get-local:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/get-local.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/get-local.py"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "get-local:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/get-local.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/get-local.rs"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "get-qualified:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/get-qualified.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "get-qualified:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/get-qualified.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "get-qualified:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/get-qualified.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/get-qualified-debug"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "get-qualified:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/get-qualified.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/get-qualified-release",
+        "--release"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "get-qualified:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/get-qualified.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/get-qualified.py"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "get-qualified:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/get-qualified.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/get-qualified.rs"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "append-local:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/append-local.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "append-local:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/append-local.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "append-local:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/append-local.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/append-local-debug"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "cross_lane_if_failed": "crates/cgx2-emit-rust/src/data.rs: expression() dispatches intrinsic spelling despite checked record identity"
+    },
+    {
+      "name": "append-local:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/append-local.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/append-local-release",
+        "--release"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "cross_lane_if_failed": "crates/cgx2-emit-rust/src/data.rs: expression() dispatches intrinsic spelling despite checked record identity"
+    },
+    {
+      "name": "append-local:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/append-local.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/append-local.py"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "append-local:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/append-local.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/append-local.rs"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "append-qualified:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/append-qualified.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "append-qualified:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/append-qualified.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "append-qualified:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/append-qualified.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/append-qualified-debug"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "append-qualified:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/append-qualified.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/append-qualified-release",
+        "--release"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "append-qualified:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/append-qualified.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/append-qualified.py"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "append-qualified:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/append-qualified.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/append-qualified.rs"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "concat-local:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/concat-local.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "concat-local:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/concat-local.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "concat-local:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/concat-local.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/concat-local-debug"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "cross_lane_if_failed": "crates/cgx2-emit-rust/src/data.rs: expression() dispatches intrinsic spelling despite checked record identity"
+    },
+    {
+      "name": "concat-local:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/concat-local.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/concat-local-release",
+        "--release"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "cross_lane_if_failed": "crates/cgx2-emit-rust/src/data.rs: expression() dispatches intrinsic spelling despite checked record identity"
+    },
+    {
+      "name": "concat-local:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/concat-local.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/concat-local.py"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "concat-local:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/concat-local.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/concat-local.rs"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "concat-qualified:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/concat-qualified.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "concat-qualified:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/concat-qualified.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "concat-qualified:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/concat-qualified.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/concat-qualified-debug"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "concat-qualified:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/concat-qualified.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/concat-qualified-release",
+        "--release"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "concat-qualified:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/concat-qualified.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/concat-qualified.py"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "concat-qualified:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/concat-qualified.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/concat-qualified.rs"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "updated-local:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/updated-local.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "updated-local:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/updated-local.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "updated-local:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/updated-local.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/updated-local-debug"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "cross_lane_if_failed": "crates/cgx2-emit-rust/src/data.rs: expression() dispatches intrinsic spelling despite checked record identity"
+    },
+    {
+      "name": "updated-local:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/updated-local.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/updated-local-release",
+        "--release"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "cross_lane_if_failed": "crates/cgx2-emit-rust/src/data.rs: expression() dispatches intrinsic spelling despite checked record identity"
+    },
+    {
+      "name": "updated-local:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/updated-local.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/updated-local.py"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "updated-local:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/updated-local.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/updated-local.rs"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "updated-qualified:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/updated-qualified.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "updated-qualified:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/updated-qualified.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "updated-qualified:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/updated-qualified.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/updated-qualified-debug"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "updated-qualified:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/updated-qualified.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/updated-qualified-release",
+        "--release"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "updated-qualified:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/updated-qualified.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/updated-qualified.py"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "updated-qualified:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/updated-qualified.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/updated-qualified.rs"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "slice-local:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/slice-local.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "slice-local:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/slice-local.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "slice-local:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/slice-local.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/slice-local-debug"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "cross_lane_if_failed": "crates/cgx2-emit-rust/src/data.rs: expression() dispatches intrinsic spelling despite checked record identity"
+    },
+    {
+      "name": "slice-local:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/slice-local.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/slice-local-release",
+        "--release"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "cross_lane_if_failed": "crates/cgx2-emit-rust/src/data.rs: expression() dispatches intrinsic spelling despite checked record identity"
+    },
+    {
+      "name": "slice-local:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/slice-local.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/slice-local.py"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "slice-local:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/slice-local.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/slice-local.rs"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "slice-qualified:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/slice-qualified.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "slice-qualified:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/slice-qualified.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "slice-qualified:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/slice-qualified.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/slice-qualified-debug"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "slice-qualified:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/slice-qualified.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/slice-qualified-release",
+        "--release"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "slice-qualified:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/slice-qualified.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/slice-qualified.py"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "slice-qualified:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/slice-qualified.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/slice-qualified.rs"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "binder-constructor.cg:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/binder-constructor.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "binder-constructor.cg:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/binder-constructor.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "binder-constructor.cg:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/binder-constructor.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/sentinel-rust",
+        "--force"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "artifact_preserved": true
+    },
+    {
+      "name": "binder-constructor.cg:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/binder-constructor.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/sentinel-python",
+        "--force"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "artifact_preserved": true
+    },
+    {
+      "name": "binder-constructor.cg:reject-native-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/binder-constructor.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/sentinel-native-debug",
+        "--force"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "artifact_preserved": true
+    },
+    {
+      "name": "binder-constructor.cg:reject-native-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/binder-constructor.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/sentinel-native-release",
+        "--force",
+        "--release"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "artifact_preserved": true
+    },
+    {
+      "name": "binder-variant.cg:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/binder-variant.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "binder-variant.cg:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/binder-variant.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "binder-variant.cg:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/binder-variant.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/sentinel-rust",
+        "--force"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "artifact_preserved": true
+    },
+    {
+      "name": "binder-variant.cg:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/binder-variant.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/sentinel-python",
+        "--force"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "artifact_preserved": true
+    },
+    {
+      "name": "binder-variant.cg:reject-native-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/binder-variant.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/sentinel-native-debug",
+        "--force"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "artifact_preserved": true
+    },
+    {
+      "name": "binder-variant.cg:reject-native-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/binder-variant.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/sentinel-native-release",
+        "--force",
+        "--release"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "artifact_preserved": true
+    },
+    {
+      "name": "binder-nested.cg:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/binder-nested.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "binder-nested.cg:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/binder-nested.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "binder-nested.cg:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/binder-nested.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/sentinel-rust",
+        "--force"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "artifact_preserved": true
+    },
+    {
+      "name": "binder-nested.cg:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/binder-nested.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/sentinel-python",
+        "--force"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "artifact_preserved": true
+    },
+    {
+      "name": "binder-nested.cg:reject-native-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/binder-nested.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/sentinel-native-debug",
+        "--force"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "artifact_preserved": true
+    },
+    {
+      "name": "binder-nested.cg:reject-native-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/binder-nested.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/sentinel-native-release",
+        "--force",
+        "--release"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "artifact_preserved": true
+    },
+    {
+      "name": "invalid-package:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/invalid-package"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "invalid-package:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/invalid-package"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    },
+    {
+      "name": "invalid-package:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/invalid-package",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/sentinel-rust",
+        "--force"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "artifact_preserved": true
+    },
+    {
+      "name": "invalid-package:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/invalid-package",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/sentinel-python",
+        "--force"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "artifact_preserved": true
+    },
+    {
+      "name": "invalid-package:reject-native-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/invalid-package",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/sentinel-native-debug",
+        "--force"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "artifact_preserved": true
+    },
+    {
+      "name": "invalid-package:reject-native-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/invalid-package",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/resolution-zu99js0f/sentinel-native-release",
+        "--force",
+        "--release"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'",
+      "artifact_preserved": true
+    },
+    {
+      "name": "type-expansion-14",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-sema/tests/semantic_resolution/type-expansion.cg"
+      ],
+      "passed": false,
+      "failure": "[Errno 2] No such file or directory: '/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2'"
+    }
+  ]
+}
