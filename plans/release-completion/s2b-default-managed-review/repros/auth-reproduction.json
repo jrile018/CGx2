@@ -1,0 +1,9 @@
+{
+  "command": [
+    "/tmp/core-managed-auth"
+  ],
+  "exit": 0,
+  "stdout": "authenticated=true source_sha256=fd777bb14346a7fca2bcb1c64f359c8d032bba7e1b3bddc012d0e27247fbe4e8 execution=Ok(Execution { result: Ok(Integer(42)), evidence: Evidence { allocations: 0, roots_registered: 0, roots_released: 0, cleanup_failures: 0, recovered: 0, guard_entries: 0, guard_exits: 0, guard_entry_failures: 0, graph_reads: 0, graph_writes: 0, baseline_roots: 0, final_roots: 0, charged_bytes: 0, steps: 4, memory_effects_v1: MemoryEffectsV1 { may_allocate_managed: false, may_auto_collect_at_allocation: false, may_explicitly_collect: false, may_allocate_root_bookkeeping: false }, behavioral_effects: [], capabilities: [] }, memory: MemoryReport { schema_version: 1, regions: [RegionReport { id: RegionId { session: 1, index: 0 }, is_open: true, mode: Auto { trigger_bytes: 1048576 }, limit_bytes: 67108864, committed_bytes: 0, live_bytes: 0, peak_bytes: 0, allocation_failures: 0, collection_count: 0, total_collected_bytes: 0, pause: PauseReport { sample_count: 0, total_ns: 0, min_ns: 0, max_ns: 0, buckets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] } }], totals: RegionStats { committed_bytes: 0, live_bytes: 0, peak_bytes: 0, allocation_failures: 0, collection_count: 0, total_collected_bytes: 0 } } })\n",
+  "stderr": "",
+  "binary_sha256": "9f553e0eb38a711d2121011ae596781943a3c4af5e97a5102f74bd6afadf02ce"
+}

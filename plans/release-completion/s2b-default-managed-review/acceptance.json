@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "worker_commit": "bc4ba95e710eaed3816291fdc67de1478e0456f5",
+  "staged_commit": "7643899037c6fd9522534c7b9125b054aab6088c",
+  "bounded_delivery_accepted": false,
+  "release_complete": false,
+  "disposition": "reviewed-repairs-required",
+  "tested_code_matches_staged_crates_and_manifests": true,
+  "workspace": {
+    "name": "workspace-tests",
+    "command": [
+      "cargo",
+      "test",
+      "--workspace",
+      "--all-features",
+      "--offline",
+      "--locked",
+      "--no-fail-fast"
+    ],
+    "exit": 0,
+    "reason": "exit",
+    "signal": null,
+    "overflow_stream": null,
+    "duration_seconds": 181.859,
+    "stdout_bytes": 154647,
+    "stdout_sha256": "620b4c072d5837fc9f5a02f7d1a5ee660df830dd03d51e940143462a4555f892",
+    "stderr_bytes": 0,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "log": "workspace-tests.log.gz",
+    "log_sha256": "620b4c072d5837fc9f5a02f7d1a5ee660df830dd03d51e940143462a4555f892",
+    "status": "passed",
+    "passed": 1268,
+    "failed": 0,
+    "ignored": 6
+  },
+  "managed_product": {
+    "passed": 328,
+    "failed": 0
+  },
+  "required_regression_verification": "evidence/verification.json",
+  "known_historical_negative": "Original unchanged owned Result runner exits1 at shadow-builtin; reconciled593 checks and restored17 compatibility checks pass separately.",
+  "reproduced_defects": [
+    "source/AST provenance authentication mismatch",
+    "user AllocationError variant compatibility",
+    "intrinsic-versus-ordinary Result equality"
+  ],
+  "evidence_gaps": [
+    "native debug/release/standalone exact allocation/root/nested budgets and synthetic reserve faults",
+    "exact rejection diagnostics/spans and native-build artifact preservation"
+  ],
+  "inspection_only": [
+    "injected CLI Session-entry error omits source span; native includes entry Loc"
+  ],
+  "reviewers": [
+    "completion_core",
+    "completion_runtime",
+    "completion_consumers"
+  ],
+  "plan_readiness": "independent core review found no material dispatch blockers",
+  "external_gates": "Leak-enabled negative control remains host-blocked; external audit/performance and complete R01-R15 ledger remain open.",
+  "evidence_sha256": {
+    "evidence/binders/binders.json": "a4a7dd1fe81a5597b260655e7db9bc191e153ca331127f4dd6a3dab0bae52136",
+    "evidence/binders.log.gz": "dce54904cc7bcfc9bdc54936d434e86ff915d957b3aba36cae80e8537ff16a8c",
+    "evidence/build.log.gz": "c5476a174a6c6fc44362bd146d07328da58325da7b0f1a993f658e51fa5496be",
+    "evidence/clippy.log.gz": "a295aa89c00a8481015368145b1aa43ed99d1bc02c817411f8570b3b8b3af864",
+    "evidence/diff.log.gz": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
+    "evidence/emitters/emitters.json": "55bcfba8a58a4aae208ff1e55e12fb4c95607d1778c1dc75e222e7c17965a813",
+    "evidence/emitters.log.gz": "d40f10baca099082fcbd79170a02b1b845c38e75d3516c4db8d55403f8561692",
+    "evidence/fmt.log.gz": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
+    "evidence/foundation/foundation.json": "44da16afaedbefa25fa040611c77f8812a476966b9aef19b6093ee6a5dabf910",
+    "evidence/foundation.log.gz": "9ea86ca6a70025064959d27305485fcb43283676da6757abb79e9ec74dad7634",
+    "evidence/graph99/graph99.json": "0fb27b1ff7ac586cc25d8bd9254334698c773778b93370f89eb320bc77dcd6c1",
+    "evidence/graph99.log.gz": "bae1388da06395f2eca4a111792fb7a5870218e2c32f3cbc791e7cba7c1d0f22",
+    "evidence/guards518/guards518.json": "70bd1b48667eb2bbd7f29a341fd41fce7a22125bd6824ac2d1dde46374cf28d0",
+    "evidence/guards518.log.gz": "0893c84cf05fad22682c00d4be406a025d1c90dab8c43712d894842b0b707715",
+    "evidence/managed-product/managed-product/product.json": "2e3281f3a81c88ea5a322d820b38ec5c945760cfcb08d2abaf867b4a9dd9fb21",
+    "evidence/managed-product.log.gz": "e201943f0146e366f2ac8bf4a1203f6b384aea2d844a30910bd6c169152f036e",
+    "evidence/ordinary256/ordinary256.json": "0a4ce2326dfa076415d8d142578c0d5a06e46b598ecdc9fa30ba26c2d9a6b74a",
+    "evidence/ordinary256.log.gz": "94c5a645f05957a5b93c5bf345f43bd62e7d3df70889b6e9293fda0036437f24",
+    "evidence/output/output.json": "a1d4173512e32c94836752edccdc698a75f0f86f4c650312381dbde246d0f537",
+    "evidence/output.log.gz": "c817ff32bc6b9d5dbcabb84e0ec90cb60a660cda1c60a9061fa1f23b03009511",
+    "evidence/owned-result-original/owned-result-original.json": "f350f85042b49fa166d6a8ae68b2a73ffa6a9ad107aa636ab2a316a2b6544070",
+    "evidence/owned-result-original.log.gz": "452545eec38256f7ee8854579ec71be588bdd881241dd4ef40f1cf016cf5348e",
+    "evidence/owned-result-reconciled/reconciled/reconciled-product.json": "3c2fe99c2e822c45494947744c0b2171b6f86e6aa0898f21bf237d1177841123",
+    "evidence/owned-result-reconciled/reconciled/restored-shadow.json": "98a4fd9b37504f445e44ff87426d7d65434b82d907e1049dfc27961f335ba4e5",
+    "evidence/owned-result-reconciled.log.gz": "9baf73c5ec2df9642a30faf76cba00fb0bbf452e786222ba0fd6227e1f16d6d3",
+    "evidence/owned-symbol195/owned-symbol195.json": "b6551c849d9bd53a69817095713248dc50c9cb81256bd03d5d16992a2bf75fec",
+    "evidence/owned-symbol195.log.gz": "773f49294a03cc199946e62c93ebc8521dbeb637df879064dd908590515df32e",
+    "evidence/reports265/reports265.json": "20bc7936b52aa049ce9a73f519063d8da6cc06ae4736f9a5a3a11da2929f2da6",
+    "evidence/reports265.log.gz": "e31b411199bb70442fdb5414a5f795400a6f72788eb984768f1787a9c5853e38",
+    "evidence/semantic/semantic.json": "bf7364d8f3491edb61e07abd3191b3f10fca2833e3f570616cbfa42865c5e56a",
+    "evidence/semantic.log.gz": "3b520fc16eba43c3eff7239e9733977981cbcbf05ac7a62bb2b11fed54f9913a",
+    "evidence/specialization/specialization/report.json": "bac326c1bce7128e469dd528a52e48200ed53b437abd085840a371536176c9d1",
+    "evidence/specialization.log.gz": "6af744d7525183b8bd6ca526cf7e9f5814f06a4d3e03b4724c8bc549657b327f",
+    "evidence/verification.json": "901b002502113e3ae412cec0ad31083ada71eee9293702c68e46e7e0c2589bbf",
+    "evidence/visibility/visibility/report.json": "5f43ed4fba711ac0ee9b563ea5a60111ad50567ff73b05ef92976be63d44c888",
+    "evidence/visibility.log.gz": "f4e7542224cf2d765682b1dbb043034eec680e69a574a588997e6c5592ae9ec1",
+    "evidence/workspace-tests.log.gz": "9e9f1442a280b7e94f8657eb492798fb107b7a0a40759075f374fe4b0b069dc2"
+  }
+}

@@ -175,3 +175,7 @@ The sole managed worker remains running without a delivered commit. Both worker 
 ## Managed native boundary repair in progress (2026-10-24 08:50 UTC)
 
 The existing sole producer reports the 65,536-element fixture passes interpreter checking/execution but native compilation exhausted the runner 4 GiB compiler bound. Worker is preserving the failure and compacting large emitted model literals with authenticated-model round-trip tests. This is worker-reported in-progress evidence, not coordinator-reviewed acceptance. Same chat continues within its emitter ownership; no duplicate repair chat or consumers launched. R03/R04 remain open.
+
+## Managed delivery reviewed; three bounded repairs prepared
+
+Delivery bc4ba95e710eaed3816291fdc67de1478e0456f5 is stopped, clean and reviewed. Staged as7643899037c6fd9522534c7b9125b054aab6088c for a common repair base; acceptance remains failed. Three reviews and coordinator probes reproduced source/AST authentication mismatch, schema1 user AllocationError variant regression, and intrinsic-vs-ordinary Result equality failure. Native budget/fault parity and exact rejection/artifact evidence also need repair. See s2b-default-managed-review/README.md and its three disjoint plans. Full release ledger preserved; no new language consumers. Actual repair creation outcomes follow after common-base commit.

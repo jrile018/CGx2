@@ -1,0 +1,4 @@
+fn main() -> Bool effects(ManagedAlloc):
+    let a = managed.try_alloc(1)
+    let b = Result<i64, AllocationError>.Ok(1)
+    a == b

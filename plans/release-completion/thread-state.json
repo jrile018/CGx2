@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24T08:50:30.588Z",
+  "checked_at": "2026-10-24T09:50:30.650Z",
   "original_chats": [
     {
       "lane": "core",
@@ -219,9 +219,11 @@
       "hostId": "local",
       "worktree": "/home/john-riley/.codex/worktrees/685c/lang",
       "base": "c9d60229ecf3ed2bf76b29525fec0bdda41d0906",
-      "status": "running",
-      "afterCursor": "306cfc56-28ee-4c5f-ae40-81a6de815086:9",
-      "verification_note": "Worker reports 65,536-element interpreter check/run pass but native compilation exceeded runner 4 GiB bound; compact emitted-model repair in progress. Failure retained, no delivered commit or coordinator acceptance."
+      "status": "reviewed-repairs-required",
+      "afterCursor": "306cfc56-28ee-4c5f-ae40-81a6de815086:12",
+      "verification_note": "Three independent reviews and coordinator reproductions found source-provenance, nominal AllocationError, and Result equality defects plus native evidence gaps. Acceptance withheld; common repair plans prepared.",
+      "commit": "bc4ba95e710eaed3816291fdc67de1478e0456f5",
+      "staged_commit": "7643899037c6fd9522534c7b9125b054aab6088c"
     }
   ],
   "s2a_repairs": [

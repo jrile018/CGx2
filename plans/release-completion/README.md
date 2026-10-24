@@ -144,3 +144,7 @@ At the 2026-10-24 07:50 UTC heartbeat, default managed implementation remains ru
 ### Managed native boundary acceptance remains open
 
 At 2026-10-24 08:50 UTC the worker reports native compilation of the required 65,536-element fixture exceeded the runner 4 GiB compiler bound, despite interpreter checking/execution passing. The existing producer is repairing emitted model size and retaining the failed evidence. No native boundary pass or managed delivery has been accepted; the full release ledger is unchanged.
+
+## Managed delivery review: repairs required
+
+Default managed bc4ba95 is staged for repair, not accepted. Independent review reproduced source-provenance mismatch, nominal AllocationError compatibility regression and representation-dependent Result equality; required native fault/budget and rejection evidence is incomplete. See [review and three repair plans](s2b-default-managed-review/README.md). Existing workspace/regression successes do not close these failures. R03/R04 and every remaining release requirement stay open; the next frontier is bounded repairs, not S3 consumers.

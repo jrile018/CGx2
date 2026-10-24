@@ -1,0 +1,38 @@
+[
+  {
+    "name": "nominal-baseline",
+    "command": [
+      "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+      "run",
+      "/tmp/core-allocationerror.cg"
+    ],
+    "exit": 0,
+    "stdout": "42\n",
+    "stderr": "",
+    "binary_sha256": "b3095b7b929f610de2fa54ea759b62f74b66ca482cc960ddb19b650165e557cc"
+  },
+  {
+    "name": "nominal-delivery",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "run",
+      "/tmp/core-allocationerror.cg"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "CGT003: /tmp/core-allocationerror.cg:85..109: expected AllocationError, found cgx2.core.AllocationError\nCGT033: /tmp/core-allocationerror.cg:166..189: unknown case `Mine` for `cgx2.core.AllocationError`\nCGT001: /tmp/core-allocationerror.cg:203..204: unknown name `x`\nCGT036: /tmp/core-allocationerror.cg:143..205: nonexhaustive match; missing BudgetExceeded, RegionLimit, HostAllocation, InvalidRegion, ShapeLimit\nCGT003: /tmp/core-allocationerror.cg:143..205: expected i64, found Unit\n",
+    "binary_sha256": "432238e191051b7eff64ac98edc2bfd22ed8d5e31134c583a15fe209ef4f7829"
+  },
+  {
+    "name": "result-equality-delivery",
+    "command": [
+      "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+      "run",
+      "/tmp/cgx2-managed-review-runtime/result-equality.cg"
+    ],
+    "exit": 0,
+    "stdout": "false\n",
+    "stderr": "",
+    "binary_sha256": "432238e191051b7eff64ac98edc2bfd22ed8d5e31134c583a15fe209ef4f7829"
+  }
+]
