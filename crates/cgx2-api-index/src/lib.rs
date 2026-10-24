@@ -14,4 +14,6 @@ pub use index::{
 mod memory_v1;
 pub use memory_v1::{build_memory_index, ApiMemoryIndexV1};
 mod memory_v2;
-pub use memory_v2::{build_memory_index_v2, ApiMemoryIndexV2};
+pub use memory_v2::{
+    build_memory_index_v2, build_public_memory_index_v1, ApiMemoryIndexV2, ApiPublicMemoryIndexV1,
+};

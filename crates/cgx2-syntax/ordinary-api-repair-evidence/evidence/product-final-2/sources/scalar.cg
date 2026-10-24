@@ -1,0 +1,16 @@
+module app.api
+pub record Visible<T>:
+    value: T
+pub variant Choice<T>:
+    Some(T)
+    Empty
+record Secret:
+    hidden: i64
+pub fn id<T: Eq + Show>(value: T) -> T effects() caps():
+    value
+pub fn unused<T: Eq>(value: T) -> T effects() caps():
+    value
+pub fn exported() -> i64:
+    id<i64>(42)
+fn main() -> i64:
+    exported()

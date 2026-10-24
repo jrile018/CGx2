@@ -1,0 +1,12 @@
+pub fn build<R: memory.RegionName>(r: shared<memory.Region<R>>) -> Result<memory.Value<R, List<i64>>, AllocationError> effects(ManagedAlloc):
+    memory.try_in(r, [20, 22])
+fn main() -> i64 effects(ManagedAlloc):
+    match memory.try_region(mode: memory.Mode.Manual, limit: 4096):
+        Result.Ok(r):
+            match build(borrow(r)):
+                Result.Ok(xs):
+                    length(xs)
+                Result.Err(error):
+                    -2
+        Result.Err(error):
+            -1

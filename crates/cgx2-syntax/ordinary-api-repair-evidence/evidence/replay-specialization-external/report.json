@@ -1,0 +1,2593 @@
+{
+  "base": "c2a039db3ea0b4e457a9f2e0c7626db77094d313",
+  "kind": "source/target conformance; no performance or release acceptance",
+  "binary_sha256": "effe844ca96c0a64ed9632feb656080d5b58639e8ca52e126a423b45f637cd61",
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/2f3a/lang/target/release-ordinary-api-visibility",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/2f3a/lang/target/tmp-ordinary-api-visibility",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "checks": [
+    {
+      "label": "qualified:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/qualified.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "qualified:interpreted",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/qualified.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "[out.main.Long(x: \u00e9)]\n",
+      "stderr": ""
+    },
+    {
+      "label": "qualified:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/qualified.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/qualified-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: source_sha256=2d14a6e4e705f0d0cd9477e9260c3b5f01903f70b9eef96ae3aaf9b08014ecbd rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=64cdf0f493fed2fe7240c67e8c011b8d19b448eded401f8808e1c4826aa28b21 output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/qualified-debug\n",
+      "stderr": ""
+    },
+    {
+      "label": "qualified:native-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/qualified-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "[out.main.Long(x: \u00e9)]\n",
+      "stderr": ""
+    },
+    {
+      "label": "qualified:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/qualified.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/qualified-release",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: source_sha256=2d14a6e4e705f0d0cd9477e9260c3b5f01903f70b9eef96ae3aaf9b08014ecbd rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=64cdf0f493fed2fe7240c67e8c011b8d19b448eded401f8808e1c4826aa28b21 output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/qualified-release\n",
+      "stderr": ""
+    },
+    {
+      "label": "qualified:native-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/qualified-release"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "[out.main.Long(x: \u00e9)]\n",
+      "stderr": ""
+    },
+    {
+      "label": "qualified:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/qualified.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/qualified.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "qualified:compile-rust",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "--crate-name",
+        "fixture",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/qualified.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/qualified-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "qualified:standalone-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/qualified-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "[out.main.Long(x: \u00e9)]\n",
+      "stderr": ""
+    },
+    {
+      "label": "qualified:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/qualified.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/qualified.py"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "qualified:python",
+      "command": [
+        "python3",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/qualified.py"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "[out.main.Long(x: \u00e9)]\n",
+      "stderr": ""
+    },
+    {
+      "label": "qualified:api",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/qualified.cg",
+        "--json"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "{\"schema_version\":6,\"module\":\"out.main\",\"functions\":[],\"records\":[],\"semantics_status\":\"checked\",\"variants\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "label": "qualified:private-metadata-omitted",
+      "passed": true
+    },
+    {
+      "label": "nested-private:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/nested-private.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "nested-private:interpreted",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/nested-private.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "nested-private:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/nested-private.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/nested-private-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: source_sha256=e42ce354dc1782b3607e3eb6d85a17b5ce3490e11d0b015fda72350ba6a7e22d rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=64cdf0f493fed2fe7240c67e8c011b8d19b448eded401f8808e1c4826aa28b21 output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/nested-private-debug\n",
+      "stderr": ""
+    },
+    {
+      "label": "nested-private:native-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/nested-private-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "nested-private:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/nested-private.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/nested-private-release",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: source_sha256=e42ce354dc1782b3607e3eb6d85a17b5ce3490e11d0b015fda72350ba6a7e22d rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=64cdf0f493fed2fe7240c67e8c011b8d19b448eded401f8808e1c4826aa28b21 output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/nested-private-release\n",
+      "stderr": ""
+    },
+    {
+      "label": "nested-private:native-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/nested-private-release"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "nested-private:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/nested-private.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/nested-private.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "nested-private:compile-rust",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "--crate-name",
+        "fixture",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/nested-private.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/nested-private-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "nested-private:standalone-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/nested-private-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "nested-private:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/nested-private.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/nested-private.py"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "nested-private:python",
+      "command": [
+        "python3",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/nested-private.py"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "nested-private:api",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/nested-private.cg",
+        "--json"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "{\"schema_version\":7,\"module\":\"api\",\"instantiations\":[{\"owner\":\"api.nested\",\"callee\":\"api.id\",\"type_arguments\":[\"api.nested::U\"],\"parameters\":[\"api.nested::U\"],\"return_type\":\"api.nested::U\",\"span\":{\"start\":270,\"end\":278}}],\"functions\":[{\"name\":\"id\",\"parameters\":[{\"name\":\"x\",\"ty\":\"T\"}],\"return_type\":\"T\",\"span\":{\"start\":113,\"end\":161},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":123,\"end\":124}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":129,\"end\":130}}],\"result_type\":{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":135,\"end\":136}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"main\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":337,\"end\":431},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":354,\"end\":357}},\"effects\":[],\"effects_status\":\"inferred\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"nested\",\"parameters\":[{\"name\":\"x\",\"ty\":\"U\"}],\"return_type\":\"api.Wrapper<api.Choice<U>>\",\"span\":{\"start\":161,\"end\":281},\"type_parameters\":[{\"name\":\"U\",\"constraints\":[],\"span\":{\"start\":175,\"end\":176}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":181,\"end\":182}}],\"result_type\":{\"identity\":\"api.Wrapper\",\"arguments\":[{\"identity\":\"api.Choice\",\"arguments\":[{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":202,\"end\":203}}],\"span\":{\"start\":195,\"end\":204}}],\"span\":{\"start\":187,\"end\":205}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"unused\",\"parameters\":[{\"name\":\"x\",\"ty\":\"i64\"}],\"return_type\":\"i64\",\"span\":{\"start\":281,\"end\":337},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":295,\"end\":296}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":301,\"end\":304}}],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":309,\"end\":312}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[{\"name\":\"Wrapper\",\"identity\":\"api.Wrapper\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":60,\"end\":61}}],\"field_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":75,\"end\":76}}],\"fields\":[{\"name\":\"value\",\"ty\":\"T\"}],\"span\":{\"start\":41,\"end\":77}}],\"semantics_status\":\"checked\",\"variants\":[{\"name\":\"Choice\",\"identity\":\"api.Choice\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":96,\"end\":97}}],\"span\":{\"start\":77,\"end\":113},\"cases\":[{\"name\":\"Value\",\"span\":{\"start\":104,\"end\":113},\"payloads\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":110,\"end\":111}}]}]}]}\n",
+      "stderr": ""
+    },
+    {
+      "label": "nested-private:private-metadata-omitted",
+      "passed": true
+    },
+    {
+      "label": "package-private:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/package"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "package-private:interpreted",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/package"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "package-private:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/package",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/package-private-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: package_manifest_sha256=5a148ec83693e95cf9f09a85ca50dc757f1ccdb8c71b1bb1741b793860fa92bb package_sources_sha256=[\"src/main.cg:60e80564f338ccce0988d7a4d3057aef7e4332e3abd06cee9ac9f3371b9559ad\", \"src/dep.cg:d79c30bb9b272e494dbea7c0ab903c8916e47118b60c217132a56787a4bba33e\"] rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/package-private-debug\n",
+      "stderr": ""
+    },
+    {
+      "label": "package-private:native-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/package-private-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "package-private:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/package",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/package-private-release",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: package_manifest_sha256=5a148ec83693e95cf9f09a85ca50dc757f1ccdb8c71b1bb1741b793860fa92bb package_sources_sha256=[\"src/main.cg:60e80564f338ccce0988d7a4d3057aef7e4332e3abd06cee9ac9f3371b9559ad\", \"src/dep.cg:d79c30bb9b272e494dbea7c0ab903c8916e47118b60c217132a56787a4bba33e\"] rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/package-private-release\n",
+      "stderr": ""
+    },
+    {
+      "label": "package-private:native-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/package-private-release"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "package-private:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/package",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/package-private.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "package-private:compile-rust",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "--crate-name",
+        "fixture",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/package-private.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/package-private-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "package-private:standalone-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/package-private-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "package-private:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/package",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/package-private.pyz"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "package-private:python",
+      "command": [
+        "python3",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/package-private.pyz"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "package-private:api",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/package",
+        "--json"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "{\"schema_version\":2,\"name\":\"specialization\",\"entry\":\"src/main.cg\",\"imports_supported\":true,\"modules\":[{\"source\":\"src/main.cg\",\"api\":{\"schema_version\":7,\"module\":\"app.main\",\"instantiations\":[{\"owner\":\"app.main.wrap\",\"callee\":\"dep.library.nested\",\"type_arguments\":[\"app.main.wrap::T\"],\"parameters\":[\"app.main.wrap::T\"],\"return_type\":\"dep.library.Wrapper<dep.library.Choice<app.main.wrap::T>>\",\"span\":{\"start\":154,\"end\":197}},{\"owner\":\"app.main.wrap\",\"callee\":\"dep.library.id\",\"type_arguments\":[\"app.main.wrap::T\"],\"parameters\":[\"app.main.wrap::T\"],\"return_type\":\"app.main.wrap::T\",\"span\":{\"start\":176,\"end\":196}}],\"functions\":[{\"name\":\"main\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":198,\"end\":355},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":215,\"end\":218}},\"effects\":[],\"effects_status\":\"inferred\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"wrap\",\"parameters\":[{\"name\":\"x\",\"ty\":\"T\"}],\"return_type\":\"dep.library.Wrapper<dep.library.Choice<T>>\",\"span\":{\"start\":65,\"end\":198},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":77,\"end\":78}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":83,\"end\":84}}],\"result_type\":{\"identity\":\"dep.library.Wrapper\",\"arguments\":[{\"identity\":\"dep.library.Choice\",\"arguments\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":128,\"end\":129}}],\"span\":{\"start\":109,\"end\":130}}],\"span\":{\"start\":89,\"end\":131}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[],\"semantics_status\":\"checked\",\"variants\":[]},\"imports\":[\"dep.library\"],\"resolved_public_calls\":[{\"name\":\"dep.library.nested\",\"span\":{\"start\":154,\"end\":197}},{\"name\":\"dep.library.id\",\"span\":{\"start\":176,\"end\":196}},{\"name\":\"dep.library.unused\",\"span\":{\"start\":301,\"end\":330}},{\"name\":\"dep.library.value\",\"span\":{\"start\":335,\"end\":354}}]},{\"source\":\"src/dep.cg\",\"api\":{\"schema_version\":7,\"module\":\"dep.library\",\"instantiations\":[{\"owner\":\"dep.library.nested\",\"callee\":\"dep.library.id\",\"type_arguments\":[\"dep.library.nested::U\"],\"parameters\":[\"dep.library.nested::U\"],\"return_type\":\"dep.library.nested::U\",\"span\":{\"start\":278,\"end\":286}}],\"functions\":[{\"name\":\"id\",\"parameters\":[{\"name\":\"x\",\"ty\":\"T\"}],\"return_type\":\"T\",\"span\":{\"start\":121,\"end\":169},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":131,\"end\":132}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":137,\"end\":138}}],\"result_type\":{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":143,\"end\":144}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"nested\",\"parameters\":[{\"name\":\"x\",\"ty\":\"U\"}],\"return_type\":\"dep.library.Wrapper<dep.library.Choice<U>>\",\"span\":{\"start\":169,\"end\":289},\"type_parameters\":[{\"name\":\"U\",\"constraints\":[],\"span\":{\"start\":183,\"end\":184}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":189,\"end\":190}}],\"result_type\":{\"identity\":\"dep.library.Wrapper\",\"arguments\":[{\"identity\":\"dep.library.Choice\",\"arguments\":[{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":210,\"end\":211}}],\"span\":{\"start\":203,\"end\":212}}],\"span\":{\"start\":195,\"end\":213}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"unused\",\"parameters\":[{\"name\":\"x\",\"ty\":\"i64\"}],\"return_type\":\"i64\",\"span\":{\"start\":289,\"end\":345},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":303,\"end\":304}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":309,\"end\":312}}],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":317,\"end\":320}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"value\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":345,\"end\":467},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":363,\"end\":366}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[{\"name\":\"Wrapper\",\"identity\":\"dep.library.Wrapper\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":68,\"end\":69}}],\"field_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":83,\"end\":84}}],\"fields\":[{\"name\":\"value\",\"ty\":\"T\"}],\"span\":{\"start\":49,\"end\":85}}],\"semantics_status\":\"checked\",\"variants\":[{\"name\":\"Choice\",\"identity\":\"dep.library.Choice\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":104,\"end\":105}}],\"span\":{\"start\":85,\"end\":121},\"cases\":[{\"name\":\"Value\",\"span\":{\"start\":112,\"end\":121},\"payloads\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":118,\"end\":119}}]}]}]},\"imports\":[],\"resolved_public_calls\":[]}],\"topological_order\":[\"dep.library\",\"app.main\"]}\n",
+      "stderr": ""
+    },
+    {
+      "label": "package-private:private-metadata-omitted",
+      "passed": true
+    },
+    {
+      "label": "public-interfaces:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/public-interfaces.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-interfaces:interpreted",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/public-interfaces.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-interfaces:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/public-interfaces.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-interfaces-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: source_sha256=d1865aa90ee9ca6727c71579ad31c014f71ebc0bb58672e53ba2b4826cf5037c rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=64cdf0f493fed2fe7240c67e8c011b8d19b448eded401f8808e1c4826aa28b21 output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-interfaces-debug\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-interfaces:native-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-interfaces-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-interfaces:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/public-interfaces.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-interfaces-release",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: source_sha256=d1865aa90ee9ca6727c71579ad31c014f71ebc0bb58672e53ba2b4826cf5037c rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=64cdf0f493fed2fe7240c67e8c011b8d19b448eded401f8808e1c4826aa28b21 output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-interfaces-release\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-interfaces:native-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-interfaces-release"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-interfaces:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/public-interfaces.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-interfaces.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-interfaces:compile-rust",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "--crate-name",
+        "fixture",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-interfaces.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-interfaces-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-interfaces:standalone-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-interfaces-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-interfaces:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/public-interfaces.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-interfaces.py"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-interfaces:python",
+      "command": [
+        "python3",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-interfaces.py"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-interfaces:api",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-sema/tests/source_specialization/public-interfaces.cg",
+        "--json"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "{\"schema_version\":7,\"module\":\"exports\",\"instantiations\":[],\"functions\":[{\"name\":\"main\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":395,\"end\":498},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":412,\"end\":415}},\"effects\":[],\"effects_status\":\"inferred\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"make\",\"parameters\":[],\"return_type\":\"exports.Outer\",\"span\":{\"start\":172,\"end\":299},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"exports.Outer\",\"arguments\":[],\"span\":{\"start\":189,\"end\":194}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"wrapped\",\"parameters\":[],\"return_type\":\"exports.Wrapper<exports.Value>\",\"span\":{\"start\":299,\"end\":395},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"exports.Wrapper\",\"arguments\":[{\"identity\":\"exports.Value\",\"arguments\":[],\"span\":{\"start\":327,\"end\":332}}],\"span\":{\"start\":319,\"end\":333}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[{\"name\":\"Outer\",\"identity\":\"exports.Outer\",\"type_parameters\":[],\"field_types\":[{\"identity\":\"exports.Wrapper\",\"arguments\":[{\"identity\":\"exports.Choice\",\"arguments\":[{\"identity\":\"exports.Value\",\"arguments\":[],\"span\":{\"start\":164,\"end\":169}}],\"span\":{\"start\":157,\"end\":170}}],\"span\":{\"start\":149,\"end\":171}}],\"fields\":[{\"name\":\"value\",\"ty\":\"exports.Wrapper<exports.Choice<exports.Value>>\"}],\"span\":{\"start\":120,\"end\":172}},{\"name\":\"Value\",\"identity\":\"exports.Value\",\"type_parameters\":[],\"field_types\":[{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":44,\"end\":47}}],\"fields\":[{\"name\":\"value\",\"ty\":\"i64\"}],\"span\":{\"start\":15,\"end\":48}},{\"name\":\"Wrapper\",\"identity\":\"exports.Wrapper\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":67,\"end\":68}}],\"field_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":82,\"end\":83}}],\"fields\":[{\"name\":\"value\",\"ty\":\"T\"}],\"span\":{\"start\":48,\"end\":84}}],\"semantics_status\":\"checked\",\"variants\":[{\"name\":\"Choice\",\"identity\":\"exports.Choice\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":103,\"end\":104}}],\"span\":{\"start\":84,\"end\":120},\"cases\":[{\"name\":\"Value\",\"span\":{\"start\":111,\"end\":120},\"payloads\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":117,\"end\":118}}]}]}]}\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-interfaces:private-metadata-omitted",
+      "passed": true
+    },
+    {
+      "label": "visibility-source:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "visibility-source:interpreted",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "visibility-source:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/visibility-source-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: source_sha256=2f4955183912954aba9bae51881d646356bc471e3ca9c11362920b3c55521dd0 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=64cdf0f493fed2fe7240c67e8c011b8d19b448eded401f8808e1c4826aa28b21 output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/visibility-source-debug\n",
+      "stderr": ""
+    },
+    {
+      "label": "visibility-source:native-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/visibility-source-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "visibility-source:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/visibility-source-release",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: source_sha256=2f4955183912954aba9bae51881d646356bc471e3ca9c11362920b3c55521dd0 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=64cdf0f493fed2fe7240c67e8c011b8d19b448eded401f8808e1c4826aa28b21 output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/visibility-source-release\n",
+      "stderr": ""
+    },
+    {
+      "label": "visibility-source:native-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/visibility-source-release"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "visibility-source:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/visibility-source.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "visibility-source:compile-rust",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "--crate-name",
+        "fixture",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/visibility-source.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/visibility-source-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "visibility-source:standalone-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/visibility-source-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "visibility-source:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/visibility-source.py"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "visibility-source:python",
+      "command": [
+        "python3",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/visibility-source.py"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "visibility-source:api",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg",
+        "--json"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "{\"schema_version\":7,\"module\":\"api\",\"instantiations\":[{\"owner\":\"api.main\",\"callee\":\"api.id\",\"type_arguments\":[\"cgx2.core.Option<cgx2.core.Result<List<Array<api.Visible>>, Bool>>\"],\"parameters\":[\"cgx2.core.Option<cgx2.core.Result<List<Array<api.Visible>>, Bool>>\"],\"return_type\":\"cgx2.core.Option<cgx2.core.Result<List<Array<api.Visible>>, Bool>>\",\"span\":{\"start\":814,\"end\":875}},{\"owner\":\"api.main\",\"callee\":\"api.id\",\"type_arguments\":[\"api.Wrapper<api.Choice<api.Visible>>\"],\"parameters\":[\"api.Wrapper<api.Choice<api.Visible>>\"],\"return_type\":\"api.Wrapper<api.Choice<api.Visible>>\",\"span\":{\"start\":901,\"end\":1004}},{\"owner\":\"api.main\",\"callee\":\"api.nested\",\"type_arguments\":[\"i64\"],\"parameters\":[\"List<i64>\"],\"return_type\":\"List<i64>\",\"span\":{\"start\":1028,\"end\":1047}},{\"owner\":\"api.main\",\"callee\":\"api.id\",\"type_arguments\":[\"i64\"],\"parameters\":[\"i64\"],\"return_type\":\"i64\",\"span\":{\"start\":1052,\"end\":1062}},{\"owner\":\"api.nested\",\"callee\":\"api.id\",\"type_arguments\":[\"List<api.nested::U>\"],\"parameters\":[\"List<api.nested::U>\"],\"return_type\":\"List<api.nested::U>\",\"span\":{\"start\":431,\"end\":445}}],\"functions\":[{\"name\":\"id\",\"parameters\":[{\"name\":\"x\",\"ty\":\"T\"}],\"return_type\":\"T\",\"span\":{\"start\":226,\"end\":286},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":236,\"end\":248}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":253,\"end\":254}}],\"result_type\":{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":259,\"end\":260}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"main\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":447,\"end\":1063},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":464,\"end\":467}},\"effects\":[],\"effects_status\":\"inferred\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"nested\",\"parameters\":[{\"name\":\"x\",\"ty\":\"List<U>\"}],\"return_type\":\"List<U>\",\"span\":{\"start\":358,\"end\":447},\"type_parameters\":[{\"name\":\"U\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":372,\"end\":384}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"List\",\"arguments\":[{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":394,\"end\":395}}],\"span\":{\"start\":389,\"end\":396}}],\"result_type\":{\"identity\":\"List\",\"arguments\":[{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":406,\"end\":407}}],\"span\":{\"start\":401,\"end\":408}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[{\"name\":\"Visible\",\"identity\":\"api.Visible\",\"type_parameters\":[],\"field_types\":[{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":147,\"end\":150}}],\"fields\":[{\"name\":\"value\",\"ty\":\"i64\"}],\"span\":{\"start\":116,\"end\":151}},{\"name\":\"Wrapper\",\"identity\":\"api.Wrapper\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":171,\"end\":172}}],\"field_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":186,\"end\":187}}],\"fields\":[{\"name\":\"value\",\"ty\":\"T\"}],\"span\":{\"start\":152,\"end\":188}}],\"semantics_status\":\"checked\",\"variants\":[{\"name\":\"Choice\",\"identity\":\"api.Choice\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":208,\"end\":209}}],\"span\":{\"start\":189,\"end\":226},\"cases\":[{\"name\":\"Value\",\"span\":{\"start\":216,\"end\":225},\"payloads\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":222,\"end\":223}}]}]}]}\n",
+      "stderr": ""
+    },
+    {
+      "label": "visibility-source:private-metadata-omitted",
+      "passed": true
+    },
+    {
+      "label": "visibility-package:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-package"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "visibility-package:interpreted",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-package"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "visibility-package:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-package",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/visibility-package-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: package_manifest_sha256=0f2e30397aac6de87ed9401fadf1c9291d525184762782f645269741002cdc9f package_sources_sha256=[\"src/main.cg:6e1a4e4ed4d5a6b310740808e037b2137b840e1f6d8773bf5b45ff8a272eee9e\", \"src/dep.cg:244c1262cd73a352775d5ca81d0ea9941367c008facbd6c2a97e7b3e6e062276\"] rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/visibility-package-debug\n",
+      "stderr": ""
+    },
+    {
+      "label": "visibility-package:native-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/visibility-package-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "visibility-package:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-package",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/visibility-package-release",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: package_manifest_sha256=0f2e30397aac6de87ed9401fadf1c9291d525184762782f645269741002cdc9f package_sources_sha256=[\"src/main.cg:6e1a4e4ed4d5a6b310740808e037b2137b840e1f6d8773bf5b45ff8a272eee9e\", \"src/dep.cg:244c1262cd73a352775d5ca81d0ea9941367c008facbd6c2a97e7b3e6e062276\"] rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/visibility-package-release\n",
+      "stderr": ""
+    },
+    {
+      "label": "visibility-package:native-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/visibility-package-release"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "visibility-package:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-package",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/visibility-package.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "visibility-package:compile-rust",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "--crate-name",
+        "fixture",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/visibility-package.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/visibility-package-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "visibility-package:standalone-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/visibility-package-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "visibility-package:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-package",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/visibility-package.pyz"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "visibility-package:python",
+      "command": [
+        "python3",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/visibility-package.pyz"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "visibility-package:api",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-package",
+        "--json"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "{\"schema_version\":2,\"name\":\"visibility\",\"entry\":\"src/main.cg\",\"imports_supported\":true,\"modules\":[{\"source\":\"src/main.cg\",\"api\":{\"schema_version\":7,\"module\":\"app\",\"instantiations\":[{\"owner\":\"app.main\",\"callee\":\"dep.id\",\"type_arguments\":[\"dep.Choice<dep.Value>\"],\"parameters\":[\"dep.Choice<dep.Value>\"],\"return_type\":\"dep.Choice<dep.Value>\",\"span\":{\"start\":236,\"end\":316}},{\"owner\":\"app.main\",\"callee\":\"dep.id\",\"type_arguments\":[\"cgx2.core.Option<cgx2.core.Result<List<Array<dep.Value>>, Bool>>\"],\"parameters\":[\"cgx2.core.Option<cgx2.core.Result<List<Array<dep.Value>>, Bool>>\"],\"return_type\":\"cgx2.core.Option<cgx2.core.Result<List<Array<dep.Value>>, Bool>>\",\"span\":{\"start\":471,\"end\":485}},{\"owner\":\"app.main\",\"callee\":\"app.wrap\",\"type_arguments\":[\"i64\"],\"parameters\":[\"Array<i64>\"],\"return_type\":\"Array<i64>\",\"span\":{\"start\":504,\"end\":528}},{\"owner\":\"app.main\",\"callee\":\"dep.id\",\"type_arguments\":[\"i64\"],\"parameters\":[\"i64\"],\"return_type\":\"i64\",\"span\":{\"start\":533,\"end\":557}},{\"owner\":\"app.wrap\",\"callee\":\"dep.id\",\"type_arguments\":[\"Array<app.wrap::U>\"],\"parameters\":[\"Array<app.wrap::U>\"],\"return_type\":\"Array<app.wrap::U>\",\"span\":{\"start\":131,\"end\":150}}],\"functions\":[{\"name\":\"main\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":196,\"end\":558},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":213,\"end\":216}},\"effects\":[],\"effects_status\":\"inferred\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"wrap\",\"parameters\":[{\"name\":\"x\",\"ty\":\"Array<U>\"}],\"return_type\":\"Array<U>\",\"span\":{\"start\":58,\"end\":152},\"type_parameters\":[{\"name\":\"U\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":70,\"end\":82}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"Array\",\"arguments\":[{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":93,\"end\":94}}],\"span\":{\"start\":87,\"end\":95}}],\"result_type\":{\"identity\":\"Array\",\"arguments\":[{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":106,\"end\":107}}],\"span\":{\"start\":100,\"end\":108}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[],\"semantics_status\":\"checked\",\"variants\":[]},\"imports\":[\"dep\"],\"resolved_public_calls\":[{\"name\":\"dep.id\",\"span\":{\"start\":131,\"end\":150}},{\"name\":\"dep.id\",\"span\":{\"start\":180,\"end\":194}},{\"name\":\"dep.id\",\"span\":{\"start\":236,\"end\":316}},{\"name\":\"dep.id\",\"span\":{\"start\":334,\"end\":374}},{\"name\":\"dep.id\",\"span\":{\"start\":471,\"end\":485}},{\"name\":\"dep.id\",\"span\":{\"start\":533,\"end\":557}},{\"name\":\"dep.value\",\"span\":{\"start\":545,\"end\":556}}]},{\"source\":\"src/dep.cg\",\"api\":{\"schema_version\":7,\"module\":\"dep\",\"instantiations\":[{\"owner\":\"dep.value\",\"callee\":\"dep.id\",\"type_arguments\":[\"i64\"],\"parameters\":[\"i64\"],\"return_type\":\"i64\",\"span\":{\"start\":387,\"end\":397}}],\"functions\":[{\"name\":\"id\",\"parameters\":[{\"name\":\"x\",\"ty\":\"T\"}],\"return_type\":\"T\",\"span\":{\"start\":119,\"end\":179},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":129,\"end\":141}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":146,\"end\":147}}],\"result_type\":{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":152,\"end\":153}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"value\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":256,\"end\":398},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":274,\"end\":277}},\"effects\":[],\"effects_status\":\"inferred\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[{\"name\":\"Value\",\"identity\":\"dep.Value\",\"type_parameters\":[],\"field_types\":[{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":42,\"end\":45}}],\"fields\":[{\"name\":\"number\",\"ty\":\"i64\"}],\"span\":{\"start\":12,\"end\":46}}],\"semantics_status\":\"checked\",\"variants\":[{\"name\":\"Choice\",\"identity\":\"dep.Choice\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":66,\"end\":67}}],\"span\":{\"start\":47,\"end\":84},\"cases\":[{\"name\":\"Value\",\"span\":{\"start\":74,\"end\":83},\"payloads\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":80,\"end\":81}}]}]}]},\"imports\":[],\"resolved_public_calls\":[]}],\"topological_order\":[\"dep\",\"app\"]}\n",
+      "stderr": ""
+    },
+    {
+      "label": "visibility-package:private-metadata-omitted",
+      "passed": true
+    },
+    {
+      "label": "public-source:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-source:interpreted",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-source:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-source-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: source_sha256=7975e62491ed41469a166b7de51873629b9de821a857fb8a9ac5b41a3a831622 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=64cdf0f493fed2fe7240c67e8c011b8d19b448eded401f8808e1c4826aa28b21 output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-source-debug\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-source:native-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-source-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-source:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-source-release",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: source_sha256=7975e62491ed41469a166b7de51873629b9de821a857fb8a9ac5b41a3a831622 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=64cdf0f493fed2fe7240c67e8c011b8d19b448eded401f8808e1c4826aa28b21 output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-source-release\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-source:native-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-source-release"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-source:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-source.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-source:compile-rust",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "--crate-name",
+        "fixture",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-source.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-source-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-source:standalone-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-source-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-source:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-source.py"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-source:python",
+      "command": [
+        "python3",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-source.py"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-source:api",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public.cg",
+        "--json"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "{\"schema_version\":7,\"module\":\"public_api\",\"instantiations\":[{\"owner\":\"public_api.main\",\"callee\":\"public_api.id\",\"type_arguments\":[\"public_api.Choice<public_api.Value>\"],\"parameters\":[\"public_api.Choice<public_api.Value>\"],\"return_type\":\"public_api.Choice<public_api.Value>\",\"span\":{\"start\":280,\"end\":336}},{\"owner\":\"public_api.main\",\"callee\":\"public_api.id\",\"type_arguments\":[\"cgx2.core.Option<cgx2.core.Result<List<Array<public_api.Value>>, Bool>>\"],\"parameters\":[\"cgx2.core.Option<cgx2.core.Result<List<Array<public_api.Value>>, Bool>>\"],\"return_type\":\"cgx2.core.Option<cgx2.core.Result<List<Array<public_api.Value>>, Bool>>\",\"span\":{\"start\":430,\"end\":442}},{\"owner\":\"public_api.main\",\"callee\":\"public_api.nested\",\"type_arguments\":[\"i64\"],\"parameters\":[\"List<i64>\"],\"return_type\":\"List<i64>\",\"span\":{\"start\":460,\"end\":479}},{\"owner\":\"public_api.main\",\"callee\":\"public_api.id\",\"type_arguments\":[\"i64\"],\"parameters\":[\"i64\"],\"return_type\":\"i64\",\"span\":{\"start\":484,\"end\":494}},{\"owner\":\"public_api.nested\",\"callee\":\"public_api.id\",\"type_arguments\":[\"List<public_api.nested::U>\"],\"parameters\":[\"List<public_api.nested::U>\"],\"return_type\":\"List<public_api.nested::U>\",\"span\":{\"start\":224,\"end\":238}}],\"functions\":[{\"name\":\"id\",\"parameters\":[{\"name\":\"x\",\"ty\":\"T\"}],\"return_type\":\"T\",\"span\":{\"start\":91,\"end\":151},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":101,\"end\":113}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":118,\"end\":119}}],\"result_type\":{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":124,\"end\":125}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"main\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":240,\"end\":495},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":257,\"end\":260}},\"effects\":[],\"effects_status\":\"inferred\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"nested\",\"parameters\":[{\"name\":\"x\",\"ty\":\"List<U>\"}],\"return_type\":\"List<U>\",\"span\":{\"start\":151,\"end\":240},\"type_parameters\":[{\"name\":\"U\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":165,\"end\":177}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"List\",\"arguments\":[{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":187,\"end\":188}}],\"span\":{\"start\":182,\"end\":189}}],\"result_type\":{\"identity\":\"List\",\"arguments\":[{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":199,\"end\":200}}],\"span\":{\"start\":194,\"end\":201}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[{\"name\":\"Value\",\"identity\":\"public_api.Value\",\"type_parameters\":[],\"field_types\":[{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":49,\"end\":52}}],\"fields\":[{\"name\":\"number\",\"ty\":\"i64\"}],\"span\":{\"start\":19,\"end\":53}}],\"semantics_status\":\"checked\",\"variants\":[{\"name\":\"Choice\",\"identity\":\"public_api.Choice\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":73,\"end\":74}}],\"span\":{\"start\":54,\"end\":91},\"cases\":[{\"name\":\"Value\",\"span\":{\"start\":81,\"end\":90},\"payloads\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":87,\"end\":88}}]}]}]}\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-source:private-metadata-omitted",
+      "passed": true
+    },
+    {
+      "label": "public-package:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public-package"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-package:interpreted",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public-package"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-package:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public-package",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-package-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: package_manifest_sha256=94cc83d917391fc8f196982738a66ea56e7c5a76f3698e15592ab578da02bf5a package_sources_sha256=[\"src/main.cg:41568a6ba19c6259f50ed8bb53eed9590e083035bf3747e486b976674097ef8c\", \"src/dep.cg:ed6f63b8f1765bdc690e165f6ba5ba1b47f9e8d412cc94c078ce441c55a2c059\"] rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-package-debug\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-package:native-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-package-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-package:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public-package",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-package-release",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: package_manifest_sha256=94cc83d917391fc8f196982738a66ea56e7c5a76f3698e15592ab578da02bf5a package_sources_sha256=[\"src/main.cg:41568a6ba19c6259f50ed8bb53eed9590e083035bf3747e486b976674097ef8c\", \"src/dep.cg:ed6f63b8f1765bdc690e165f6ba5ba1b47f9e8d412cc94c078ce441c55a2c059\"] rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-package-release\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-package:native-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-package-release"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-package:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public-package",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-package.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-package:compile-rust",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "--crate-name",
+        "fixture",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-package.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-package-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-package:standalone-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-package-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-package:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public-package",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-package.pyz"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-package:python",
+      "command": [
+        "python3",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-package.pyz"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-package:api",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public-package",
+        "--json"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "{\"schema_version\":2,\"name\":\"public_visibility\",\"entry\":\"src/main.cg\",\"imports_supported\":true,\"modules\":[{\"source\":\"src/main.cg\",\"api\":{\"schema_version\":7,\"module\":\"app\",\"instantiations\":[{\"owner\":\"app.main\",\"callee\":\"dep.id\",\"type_arguments\":[\"dep.Choice<dep.Value>\"],\"parameters\":[\"dep.Choice<dep.Value>\"],\"return_type\":\"dep.Choice<dep.Value>\",\"span\":{\"start\":157,\"end\":237}},{\"owner\":\"app.main\",\"callee\":\"dep.id\",\"type_arguments\":[\"cgx2.core.Option<cgx2.core.Result<List<Array<dep.Value>>, Bool>>\"],\"parameters\":[\"cgx2.core.Option<cgx2.core.Result<List<Array<dep.Value>>, Bool>>\"],\"return_type\":\"cgx2.core.Option<cgx2.core.Result<List<Array<dep.Value>>, Bool>>\",\"span\":{\"start\":334,\"end\":348}},{\"owner\":\"app.main\",\"callee\":\"app.wrap\",\"type_arguments\":[\"i64\"],\"parameters\":[\"Array<i64>\"],\"return_type\":\"Array<i64>\",\"span\":{\"start\":367,\"end\":391}},{\"owner\":\"app.main\",\"callee\":\"dep.id\",\"type_arguments\":[\"i64\"],\"parameters\":[\"i64\"],\"return_type\":\"i64\",\"span\":{\"start\":396,\"end\":420}},{\"owner\":\"app.wrap\",\"callee\":\"dep.id\",\"type_arguments\":[\"Array<app.wrap::U>\"],\"parameters\":[\"Array<app.wrap::U>\"],\"return_type\":\"Array<app.wrap::U>\",\"span\":{\"start\":96,\"end\":115}}],\"functions\":[{\"name\":\"main\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":117,\"end\":421},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":134,\"end\":137}},\"effects\":[],\"effects_status\":\"inferred\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"wrap\",\"parameters\":[{\"name\":\"x\",\"ty\":\"Array<U>\"}],\"return_type\":\"Array<U>\",\"span\":{\"start\":23,\"end\":117},\"type_parameters\":[{\"name\":\"U\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":35,\"end\":47}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"Array\",\"arguments\":[{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":58,\"end\":59}}],\"span\":{\"start\":52,\"end\":60}}],\"result_type\":{\"identity\":\"Array\",\"arguments\":[{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":71,\"end\":72}}],\"span\":{\"start\":65,\"end\":73}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[],\"semantics_status\":\"checked\",\"variants\":[]},\"imports\":[\"dep\"],\"resolved_public_calls\":[{\"name\":\"dep.id\",\"span\":{\"start\":96,\"end\":115}},{\"name\":\"dep.id\",\"span\":{\"start\":157,\"end\":237}},{\"name\":\"dep.id\",\"span\":{\"start\":334,\"end\":348}},{\"name\":\"dep.id\",\"span\":{\"start\":396,\"end\":420}},{\"name\":\"dep.value\",\"span\":{\"start\":408,\"end\":419}}]},{\"source\":\"src/dep.cg\",\"api\":{\"schema_version\":7,\"module\":\"dep\",\"instantiations\":[{\"owner\":\"dep.value\",\"callee\":\"dep.id\",\"type_arguments\":[\"i64\"],\"parameters\":[\"i64\"],\"return_type\":\"i64\",\"span\":{\"start\":188,\"end\":198}}],\"functions\":[{\"name\":\"id\",\"parameters\":[{\"name\":\"x\",\"ty\":\"T\"}],\"return_type\":\"T\",\"span\":{\"start\":84,\"end\":144},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":94,\"end\":106}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":111,\"end\":112}}],\"result_type\":{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":117,\"end\":118}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"value\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":144,\"end\":199},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":162,\"end\":165}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[{\"name\":\"Value\",\"identity\":\"dep.Value\",\"type_parameters\":[],\"field_types\":[{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":42,\"end\":45}}],\"fields\":[{\"name\":\"number\",\"ty\":\"i64\"}],\"span\":{\"start\":12,\"end\":46}}],\"semantics_status\":\"checked\",\"variants\":[{\"name\":\"Choice\",\"identity\":\"dep.Choice\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":66,\"end\":67}}],\"span\":{\"start\":47,\"end\":84},\"cases\":[{\"name\":\"Value\",\"span\":{\"start\":74,\"end\":83},\"payloads\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":80,\"end\":81}}]}]}]},\"imports\":[],\"resolved_public_calls\":[]}],\"topological_order\":[\"dep\",\"app\"]}\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-package:private-metadata-omitted",
+      "passed": true
+    },
+    {
+      "label": "public-values:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public-values.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-values:interpreted",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public-values.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-values:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public-values.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-values-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: source_sha256=2e0800e3653c297f59f5737a42bc4c24f577a9b5f727d6743eec1a5116bb20b6 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=64cdf0f493fed2fe7240c67e8c011b8d19b448eded401f8808e1c4826aa28b21 output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-values-debug\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-values:native-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-values-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-values:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public-values.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-values-release",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: source_sha256=2e0800e3653c297f59f5737a42bc4c24f577a9b5f727d6743eec1a5116bb20b6 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=64cdf0f493fed2fe7240c67e8c011b8d19b448eded401f8808e1c4826aa28b21 output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-values-release\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-values:native-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-values-release"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-values:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public-values.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-values.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-values:compile-rust",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "--crate-name",
+        "fixture",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-values.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-values-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-values:standalone-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-values-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-values:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public-values.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-values.py"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-values:python",
+      "command": [
+        "python3",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-values.py"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-values:api",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public-values.cg",
+        "--json"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "{\"schema_version\":7,\"module\":\"public_values\",\"instantiations\":[{\"owner\":\"public_values.main\",\"callee\":\"public_values.id\",\"type_arguments\":[\"cgx2.core.Option<cgx2.core.Result<List<Array<i64>>, Bool>>\"],\"parameters\":[\"cgx2.core.Option<cgx2.core.Result<List<Array<i64>>, Bool>>\"],\"return_type\":\"cgx2.core.Option<cgx2.core.Result<List<Array<i64>>, Bool>>\",\"span\":{\"start\":284,\"end\":296}},{\"owner\":\"public_values.main\",\"callee\":\"public_values.nested\",\"type_arguments\":[\"i64\"],\"parameters\":[\"List<i64>\"],\"return_type\":\"List<i64>\",\"span\":{\"start\":314,\"end\":333}},{\"owner\":\"public_values.main\",\"callee\":\"public_values.id\",\"type_arguments\":[\"i64\"],\"parameters\":[\"i64\"],\"return_type\":\"i64\",\"span\":{\"start\":338,\"end\":348}},{\"owner\":\"public_values.nested\",\"callee\":\"public_values.id\",\"type_arguments\":[\"List<public_values.nested::U>\"],\"parameters\":[\"List<public_values.nested::U>\"],\"return_type\":\"List<public_values.nested::U>\",\"span\":{\"start\":155,\"end\":169}}],\"functions\":[{\"name\":\"id\",\"parameters\":[{\"name\":\"x\",\"ty\":\"T\"}],\"return_type\":\"T\",\"span\":{\"start\":22,\"end\":82},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":32,\"end\":44}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":49,\"end\":50}}],\"result_type\":{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":55,\"end\":56}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"main\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":171,\"end\":349},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":188,\"end\":191}},\"effects\":[],\"effects_status\":\"inferred\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"nested\",\"parameters\":[{\"name\":\"x\",\"ty\":\"List<U>\"}],\"return_type\":\"List<U>\",\"span\":{\"start\":82,\"end\":171},\"type_parameters\":[{\"name\":\"U\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":96,\"end\":108}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"List\",\"arguments\":[{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":118,\"end\":119}}],\"span\":{\"start\":113,\"end\":120}}],\"result_type\":{\"identity\":\"List\",\"arguments\":[{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":130,\"end\":131}}],\"span\":{\"start\":125,\"end\":132}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[],\"semantics_status\":\"checked\",\"variants\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-values:private-metadata-omitted",
+      "passed": true
+    },
+    {
+      "label": "collisions:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/collisions.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "collisions:interpreted",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/collisions.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "collisions:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/collisions.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/collisions-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: source_sha256=d68b597eddf4063f468f1f356d5639a3047cf8f5dd30c5db831a248fd2d552a0 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=64cdf0f493fed2fe7240c67e8c011b8d19b448eded401f8808e1c4826aa28b21 output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/collisions-debug\n",
+      "stderr": ""
+    },
+    {
+      "label": "collisions:native-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/collisions-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "collisions:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/collisions.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/collisions-release",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "cgx2c build metadata: source_sha256=d68b597eddf4063f468f1f356d5639a3047cf8f5dd30c5db831a248fd2d552a0 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=64cdf0f493fed2fe7240c67e8c011b8d19b448eded401f8808e1c4826aa28b21 output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/collisions-release\n",
+      "stderr": ""
+    },
+    {
+      "label": "collisions:native-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/collisions-release"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "collisions:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/collisions.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/collisions.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "collisions:compile-rust",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "--crate-name",
+        "fixture",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/collisions.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/collisions-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "collisions:standalone-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/collisions-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "collisions:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/collisions.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/collisions.py"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "collisions:python",
+      "command": [
+        "python3",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/collisions.py"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "collisions:api",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/collisions.cg",
+        "--json"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "{\"schema_version\":7,\"module\":\"T\",\"instantiations\":[],\"functions\":[{\"name\":\"id\",\"parameters\":[{\"name\":\"x\",\"ty\":\"T\"}],\"return_type\":\"T\",\"span\":{\"start\":34,\"end\":82},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":44,\"end\":45}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":50,\"end\":51}}],\"result_type\":{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":56,\"end\":57}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[],\"semantics_status\":\"checked\",\"variants\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "label": "collisions:private-metadata-omitted",
+      "passed": true
+    },
+    {
+      "label": "public-function:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-function.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-function.cg:30..83: public signature exposes a private nominal type\n"
+    },
+    {
+      "label": "public-function:api",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-function.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-function.cg:30..83: public signature exposes a private nominal type\n"
+    },
+    {
+      "label": "public-function:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-function.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-function.cg:30..83: public signature exposes a private nominal type\n"
+    },
+    {
+      "label": "public-function:reject-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-function.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-function-rejected-debug",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-function.cg:30..83: public signature exposes a private nominal type\n"
+    },
+    {
+      "label": "public-function:preserved-debug",
+      "passed": true
+    },
+    {
+      "label": "public-function:reject-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-function.cg",
+        "--release",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-function-rejected-release",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-function.cg:30..83: public signature exposes a private nominal type\n"
+    },
+    {
+      "label": "public-function:preserved-release",
+      "passed": true
+    },
+    {
+      "label": "public-function:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-function.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-function-rejected-rust",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-function.cg:30..83: public signature exposes a private nominal type\n"
+    },
+    {
+      "label": "public-function:preserved-rust",
+      "passed": true
+    },
+    {
+      "label": "public-function:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-function.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-function-rejected-python",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-function.cg:30..83: public signature exposes a private nominal type\n"
+    },
+    {
+      "label": "public-function:preserved-python",
+      "passed": true
+    },
+    {
+      "label": "public-record:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-record.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-record.cg:61..67: public aggregate exposes a private nominal type\n"
+    },
+    {
+      "label": "public-record:api",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-record.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-record.cg:61..67: public aggregate exposes a private nominal type\n"
+    },
+    {
+      "label": "public-record:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-record.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-record.cg:61..67: public aggregate exposes a private nominal type\n"
+    },
+    {
+      "label": "public-record:reject-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-record.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-record-rejected-debug",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-record.cg:61..67: public aggregate exposes a private nominal type\n"
+    },
+    {
+      "label": "public-record:preserved-debug",
+      "passed": true
+    },
+    {
+      "label": "public-record:reject-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-record.cg",
+        "--release",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-record-rejected-release",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-record.cg:61..67: public aggregate exposes a private nominal type\n"
+    },
+    {
+      "label": "public-record:preserved-release",
+      "passed": true
+    },
+    {
+      "label": "public-record:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-record.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-record-rejected-rust",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-record.cg:61..67: public aggregate exposes a private nominal type\n"
+    },
+    {
+      "label": "public-record:preserved-rust",
+      "passed": true
+    },
+    {
+      "label": "public-record:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-record.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-record-rejected-python",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-record.cg:61..67: public aggregate exposes a private nominal type\n"
+    },
+    {
+      "label": "public-record:preserved-python",
+      "passed": true
+    },
+    {
+      "label": "public-variant:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-variant.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-variant.cg:61..67: public aggregate exposes a private nominal type\n"
+    },
+    {
+      "label": "public-variant:api",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-variant.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-variant.cg:61..67: public aggregate exposes a private nominal type\n"
+    },
+    {
+      "label": "public-variant:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-variant.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-variant.cg:61..67: public aggregate exposes a private nominal type\n"
+    },
+    {
+      "label": "public-variant:reject-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-variant.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-variant-rejected-debug",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-variant.cg:61..67: public aggregate exposes a private nominal type\n"
+    },
+    {
+      "label": "public-variant:preserved-debug",
+      "passed": true
+    },
+    {
+      "label": "public-variant:reject-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-variant.cg",
+        "--release",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-variant-rejected-release",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-variant.cg:61..67: public aggregate exposes a private nominal type\n"
+    },
+    {
+      "label": "public-variant:preserved-release",
+      "passed": true
+    },
+    {
+      "label": "public-variant:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-variant.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-variant-rejected-rust",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-variant.cg:61..67: public aggregate exposes a private nominal type\n"
+    },
+    {
+      "label": "public-variant:preserved-rust",
+      "passed": true
+    },
+    {
+      "label": "public-variant:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-variant.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-variant-rejected-python",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/public-variant.cg:61..67: public aggregate exposes a private nominal type\n"
+    },
+    {
+      "label": "public-variant:preserved-python",
+      "passed": true
+    },
+    {
+      "label": "dishonest:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT012: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest.cg:55..66: effect `ReadArgs` is not permitted by explicit declaration by call to `arg_count`\nCGT013: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest.cg:55..66: capability `ArgsRead` is required by call to `arg_count`\n"
+    },
+    {
+      "label": "dishonest:api",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT012: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest.cg:55..66: effect `ReadArgs` is not permitted by explicit declaration by call to `arg_count`\nCGT013: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest.cg:55..66: capability `ArgsRead` is required by call to `arg_count`\n"
+    },
+    {
+      "label": "dishonest:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT012: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest.cg:55..66: effect `ReadArgs` is not permitted by explicit declaration by call to `arg_count`\nCGT013: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest.cg:55..66: capability `ArgsRead` is required by call to `arg_count`\n"
+    },
+    {
+      "label": "dishonest:reject-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-rejected-debug",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT012: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest.cg:55..66: effect `ReadArgs` is not permitted by explicit declaration by call to `arg_count`\n"
+    },
+    {
+      "label": "dishonest:preserved-debug",
+      "passed": true
+    },
+    {
+      "label": "dishonest:reject-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest.cg",
+        "--release",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-rejected-release",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT012: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest.cg:55..66: effect `ReadArgs` is not permitted by explicit declaration by call to `arg_count`\n"
+    },
+    {
+      "label": "dishonest:preserved-release",
+      "passed": true
+    },
+    {
+      "label": "dishonest:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-rejected-rust",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT012: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest.cg:55..66: effect `ReadArgs` is not permitted by explicit declaration by call to `arg_count`\n"
+    },
+    {
+      "label": "dishonest:preserved-rust",
+      "passed": true
+    },
+    {
+      "label": "dishonest:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-rejected-python",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT012: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest.cg:55..66: effect `ReadArgs` is not permitted by explicit declaration by call to `arg_count`\n"
+    },
+    {
+      "label": "dishonest:preserved-python",
+      "passed": true
+    },
+    {
+      "label": "import-private:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-private"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-private/src/main.cg:76..94: unknown, unavailable or private type `dep.library.Secret`\nCGT040: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-private/src/main.cg:57..98: ambiguous type parameter `T`; supply explicit type arguments\n"
+    },
+    {
+      "label": "import-private:api",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-private"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: src/main.cg:76..94: unknown, unavailable or private type `dep.library.Secret`\nCGT040: src/main.cg:57..98: ambiguous type parameter `T`; supply explicit type arguments\n"
+    },
+    {
+      "label": "import-private:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-private"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-private/src/main.cg:76..94: unknown, unavailable or private type `dep.library.Secret`\nCGT040: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-private/src/main.cg:57..98: ambiguous type parameter `T`; supply explicit type arguments\n"
+    },
+    {
+      "label": "import-private:reject-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-private",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-private-rejected-debug",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: src/main.cg:76..94: unknown, unavailable or private type `dep.library.Secret`\n"
+    },
+    {
+      "label": "import-private:preserved-debug",
+      "passed": true
+    },
+    {
+      "label": "import-private:reject-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-private",
+        "--release",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-private-rejected-release",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: src/main.cg:76..94: unknown, unavailable or private type `dep.library.Secret`\n"
+    },
+    {
+      "label": "import-private:preserved-release",
+      "passed": true
+    },
+    {
+      "label": "import-private:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-private",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-private-rejected-rust",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: src/main.cg:76..94: unknown, unavailable or private type `dep.library.Secret`\n"
+    },
+    {
+      "label": "import-private:preserved-rust",
+      "passed": true
+    },
+    {
+      "label": "import-private:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-private",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-private-rejected-python",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT022: src/main.cg:76..94: unknown, unavailable or private type `dep.library.Secret`\n"
+    },
+    {
+      "label": "import-private:preserved-python",
+      "passed": true
+    },
+    {
+      "label": "import-unknown:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-unknown"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT002: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-unknown/src/main.cg:76..94: unknown, unavailable or private type `dep.library.Absent`\nCGT040: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-unknown/src/main.cg:57..98: ambiguous type parameter `T`; supply explicit type arguments\n"
+    },
+    {
+      "label": "import-unknown:api",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-unknown"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT002: src/main.cg:76..94: unknown, unavailable or private type `dep.library.Absent`\nCGT040: src/main.cg:57..98: ambiguous type parameter `T`; supply explicit type arguments\n"
+    },
+    {
+      "label": "import-unknown:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-unknown"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT002: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-unknown/src/main.cg:76..94: unknown, unavailable or private type `dep.library.Absent`\nCGT040: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-unknown/src/main.cg:57..98: ambiguous type parameter `T`; supply explicit type arguments\n"
+    },
+    {
+      "label": "import-unknown:reject-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-unknown",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-unknown-rejected-debug",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT002: src/main.cg:76..94: unknown, unavailable or private type `dep.library.Absent`\n"
+    },
+    {
+      "label": "import-unknown:preserved-debug",
+      "passed": true
+    },
+    {
+      "label": "import-unknown:reject-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-unknown",
+        "--release",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-unknown-rejected-release",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT002: src/main.cg:76..94: unknown, unavailable or private type `dep.library.Absent`\n"
+    },
+    {
+      "label": "import-unknown:preserved-release",
+      "passed": true
+    },
+    {
+      "label": "import-unknown:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-unknown",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-unknown-rejected-rust",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT002: src/main.cg:76..94: unknown, unavailable or private type `dep.library.Absent`\n"
+    },
+    {
+      "label": "import-unknown:preserved-rust",
+      "passed": true
+    },
+    {
+      "label": "import-unknown:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-unknown",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/import-unknown-rejected-python",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT002: src/main.cg:76..94: unknown, unavailable or private type `dep.library.Absent`\n"
+    },
+    {
+      "label": "import-unknown:preserved-python",
+      "passed": true
+    },
+    {
+      "label": "dishonest-import:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-import"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT012: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-import/src/dep.cg:180..191: effect `ReadArgs` is not permitted by explicit declaration by call to `arg_count`\nCGT013: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-import/src/dep.cg:180..191: capability `ArgsRead` is required by call to `arg_count`\nCGT012: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-import/src/dep.cg:307..315: effect `ReadArgs` is not permitted by explicit declaration by call to `id`\nCGT013: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-import/src/dep.cg:307..315: capability `ArgsRead` is required by call to `id`\nCGT012: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-import/src/dep.cg:441..473: effect `ReadArgs` is not permitted by explicit declaration by call to `nested`\nCGT013: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-import/src/dep.cg:441..473: capability `ArgsRead` is required by call to `nested`\nCGT012: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-import/src/main.cg:176..196: effect `Unknown` is not permitted by explicit declaration by call to `dep.library.id`\nCGT012: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-import/src/main.cg:154..197: effect `Unknown` is not permitted by explicit declaration by call to `dep.library.nested`\n"
+    },
+    {
+      "label": "dishonest-import:api",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-import"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT012: src/dep.cg:180..191: effect `ReadArgs` is not permitted by explicit declaration by call to `arg_count`\nCGT013: src/dep.cg:180..191: capability `ArgsRead` is required by call to `arg_count`\nCGT012: src/dep.cg:307..315: effect `ReadArgs` is not permitted by explicit declaration by call to `id`\nCGT013: src/dep.cg:307..315: capability `ArgsRead` is required by call to `id`\nCGT012: src/dep.cg:441..473: effect `ReadArgs` is not permitted by explicit declaration by call to `nested`\nCGT013: src/dep.cg:441..473: capability `ArgsRead` is required by call to `nested`\nCGT012: src/main.cg:176..196: effect `Unknown` is not permitted by explicit declaration by call to `dep.library.id`\nCGT012: src/main.cg:154..197: effect `Unknown` is not permitted by explicit declaration by call to `dep.library.nested`\n"
+    },
+    {
+      "label": "dishonest-import:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-import"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT012: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-import/src/dep.cg:180..191: effect `ReadArgs` is not permitted by explicit declaration by call to `arg_count`\nCGT013: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-import/src/dep.cg:180..191: capability `ArgsRead` is required by call to `arg_count`\nCGT012: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-import/src/dep.cg:307..315: effect `ReadArgs` is not permitted by explicit declaration by call to `id`\nCGT013: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-import/src/dep.cg:307..315: capability `ArgsRead` is required by call to `id`\nCGT012: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-import/src/dep.cg:441..473: effect `ReadArgs` is not permitted by explicit declaration by call to `nested`\nCGT013: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-import/src/dep.cg:441..473: capability `ArgsRead` is required by call to `nested`\nCGT012: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-import/src/main.cg:176..196: effect `Unknown` is not permitted by explicit declaration by call to `dep.library.id`\nCGT012: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-import/src/main.cg:154..197: effect `Unknown` is not permitted by explicit declaration by call to `dep.library.nested`\n"
+    },
+    {
+      "label": "dishonest-import:reject-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-import",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-import-rejected-debug",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT012: src/dep.cg:180..191: effect `ReadArgs` is not permitted by explicit declaration by call to `arg_count`\n"
+    },
+    {
+      "label": "dishonest-import:preserved-debug",
+      "passed": true
+    },
+    {
+      "label": "dishonest-import:reject-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-import",
+        "--release",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-import-rejected-release",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT012: src/dep.cg:180..191: effect `ReadArgs` is not permitted by explicit declaration by call to `arg_count`\n"
+    },
+    {
+      "label": "dishonest-import:preserved-release",
+      "passed": true
+    },
+    {
+      "label": "dishonest-import:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-import",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-import-rejected-rust",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT012: src/dep.cg:180..191: effect `ReadArgs` is not permitted by explicit declaration by call to `arg_count`\n"
+    },
+    {
+      "label": "dishonest-import:preserved-rust",
+      "passed": true
+    },
+    {
+      "label": "dishonest-import:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-import",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-specialization-external/dishonest-import-rejected-python",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-cd2a-74e0-854c-ba26c9418640/ordinary-api-standalone/cgx2-specialization-cwd-2paumkpi",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "CGT012: src/dep.cg:180..191: effect `ReadArgs` is not permitted by explicit declaration by call to `arg_count`\n"
+    },
+    {
+      "label": "dishonest-import:preserved-python",
+      "passed": true
+    }
+  ],
+  "failures": []
+}

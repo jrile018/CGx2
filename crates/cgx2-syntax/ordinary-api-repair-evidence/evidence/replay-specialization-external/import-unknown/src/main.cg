@@ -1,0 +1,4 @@
+module app.main
+import dep.library
+fn main() -> i64:
+    dep.library.unused<dep.library.Absent>(7)

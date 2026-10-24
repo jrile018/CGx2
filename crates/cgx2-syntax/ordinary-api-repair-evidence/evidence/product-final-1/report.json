@@ -1,0 +1,529 @@
+{
+  "schema_version": 1,
+  "assertions": [
+    {
+      "label": "frozen:cgx2",
+      "passed": true
+    },
+    {
+      "label": "frozen:cgx2-native",
+      "passed": true
+    },
+    {
+      "label": "frozen:cgx2c",
+      "passed": true
+    },
+    {
+      "label": "frozen:libcgx2_api_index.rlib",
+      "passed": true
+    },
+    {
+      "label": "frozen:libcgx2_cli.rlib",
+      "passed": true
+    },
+    {
+      "label": "ordinary-json:exit",
+      "passed": true
+    },
+    {
+      "label": "ordinary-json:stderr",
+      "passed": true
+    },
+    {
+      "label": "scalar-json:exit",
+      "passed": true
+    },
+    {
+      "label": "scalar-json:stderr",
+      "passed": true
+    },
+    {
+      "label": "equivalent-declarations:module",
+      "passed": true
+    },
+    {
+      "label": "equivalent-declarations:functions",
+      "passed": true
+    },
+    {
+      "label": "equivalent-declarations:records",
+      "passed": true
+    },
+    {
+      "label": "equivalent-declarations:variants",
+      "passed": true
+    },
+    {
+      "label": "checked-ordinary",
+      "passed": true
+    },
+    {
+      "label": "unknown-absent-summary",
+      "passed": true
+    },
+    {
+      "label": "original-public-generics",
+      "passed": true
+    },
+    {
+      "label": "original-generic-type",
+      "passed": true
+    },
+    {
+      "label": "constraints",
+      "passed": true
+    },
+    {
+      "label": "ordinary-text:exit",
+      "passed": true
+    },
+    {
+      "label": "ordinary-text:no-private",
+      "passed": true
+    },
+    {
+      "label": "scalar-text:exit",
+      "passed": true
+    },
+    {
+      "label": "scalar-text:no-private",
+      "passed": true
+    },
+    {
+      "label": "equivalent-human",
+      "passed": false
+    },
+    {
+      "label": "ordinary-package-json:exit",
+      "passed": true
+    },
+    {
+      "label": "ordinary-package-json:stderr",
+      "passed": true
+    },
+    {
+      "label": "ordinary-package-text:exit",
+      "passed": true
+    },
+    {
+      "label": "ordinary-package:no-private-text",
+      "passed": true
+    },
+    {
+      "label": "ordinary-package:source-path",
+      "passed": true
+    },
+    {
+      "label": "scalar-package-json:exit",
+      "passed": true
+    },
+    {
+      "label": "scalar-package-json:stderr",
+      "passed": true
+    },
+    {
+      "label": "scalar-package-text:exit",
+      "passed": true
+    },
+    {
+      "label": "scalar-package:no-private-text",
+      "passed": true
+    },
+    {
+      "label": "scalar-package:source-path",
+      "passed": true
+    },
+    {
+      "label": "package:path:lib.cg",
+      "passed": true
+    },
+    {
+      "label": "package:lib.cg:module",
+      "passed": true
+    },
+    {
+      "label": "package:lib.cg:functions",
+      "passed": true
+    },
+    {
+      "label": "package:lib.cg:records",
+      "passed": true
+    },
+    {
+      "label": "package:lib.cg:variants",
+      "passed": true
+    },
+    {
+      "label": "package:path:main.cg",
+      "passed": true
+    },
+    {
+      "label": "package:main.cg:module",
+      "passed": true
+    },
+    {
+      "label": "package:main.cg:functions",
+      "passed": true
+    },
+    {
+      "label": "file:invalid:exit",
+      "passed": true
+    },
+    {
+      "label": "file:invalid-no-output",
+      "passed": true
+    },
+    {
+      "label": "file:invalid-code",
+      "passed": false
+    },
+    {
+      "label": "om08-json:exit",
+      "passed": true
+    },
+    {
+      "label": "om08-json:stderr",
+      "passed": true
+    },
+    {
+      "label": "om08-public-record",
+      "passed": true
+    },
+    {
+      "label": "om08-only-public-function",
+      "passed": true
+    },
+    {
+      "label": "om08-text:exit",
+      "passed": true
+    },
+    {
+      "label": "om08-human",
+      "passed": true
+    },
+    {
+      "label": "region-json:exit",
+      "passed": true
+    },
+    {
+      "label": "region-json:stderr",
+      "passed": true
+    },
+    {
+      "label": "region-signature",
+      "passed": true
+    },
+    {
+      "label": "region-text:exit",
+      "passed": true
+    },
+    {
+      "label": "region-human",
+      "passed": true
+    },
+    {
+      "label": "frozen:cgx2",
+      "passed": true
+    },
+    {
+      "label": "frozen:cgx2-native",
+      "passed": true
+    },
+    {
+      "label": "frozen:cgx2c",
+      "passed": true
+    },
+    {
+      "label": "frozen:libcgx2_api_index.rlib",
+      "passed": true
+    },
+    {
+      "label": "frozen:libcgx2_cli.rlib",
+      "passed": true
+    }
+  ],
+  "commands": [
+    {
+      "label": "ordinary-json",
+      "argv": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "--json",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/tmp-ordinary-api-visibility/product-product-final-1/ordinary.cg"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.006,
+      "stdout_bytes": 2451,
+      "stdout_sha256": "e28d6c0aab94c1e72c5c8ce9dc673477743a9286ffea0f88ecb0b2f187d9a835",
+      "stdout": "{\"schema_version\":6,\"module\":\"app.api\",\"functions\":[{\"name\":\"exported\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":258,\"end\":300},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":279,\"end\":282}},\"effects\":[],\"effects_status\":\"inferred\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"id\",\"parameters\":[{\"name\":\"value\",\"ty\":\"T\"}],\"return_type\":\"T\",\"span\":{\"start\":127,\"end\":194},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":137,\"end\":149}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":158,\"end\":159}}],\"result_type\":{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":164,\"end\":165}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"unused\",\"parameters\":[{\"name\":\"value\",\"ty\":\"T\"}],\"return_type\":\"T\",\"span\":{\"start\":194,\"end\":258},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\"],\"span\":{\"start\":208,\"end\":213}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":222,\"end\":223}}],\"result_type\":{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":228,\"end\":229}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[{\"name\":\"Visible\",\"identity\":\"app.api.Visible\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":34,\"end\":35}}],\"field_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":49,\"end\":50}}],\"fields\":[{\"name\":\"value\",\"ty\":\"T\"}],\"span\":{\"start\":15,\"end\":51}}],\"semantics_status\":\"checked-ordinary-memory-v1\",\"variants\":[{\"name\":\"Choice\",\"identity\":\"app.api.Choice\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":70,\"end\":71}}],\"span\":{\"start\":51,\"end\":96},\"cases\":[{\"name\":\"Some\",\"span\":{\"start\":78,\"end\":86},\"payloads\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":83,\"end\":84}}]},{\"name\":\"Empty\",\"span\":{\"start\":90,\"end\":96},\"payloads\":[]}]}],\"public_memory_api_version\":1,\"summary_scope\":\"public-original-declarations\",\"absent_summary\":\"unknown\",\"provenance_schema_version\":1,\"provenance_kind\":\"source-v1\",\"inputs_sha256\":\"87c2b5d690a02bc903c5842c1315258543b44501777a815d0f69f9843b076a6b\",\"analysis_sha256\":\"e7d98ea4461084a5be44cfebf4975231df85042a0c390b336cfb0e99b1973561\"}\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "label": "scalar-json",
+      "argv": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "--json",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/tmp-ordinary-api-visibility/product-product-final-1/scalar.cg"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.003,
+      "stdout_bytes": 2267,
+      "stdout_sha256": "9274d9d64ad4dd874ad81d9ce60f587454bdd2d338b7b255d0ab239543dbb02a",
+      "stdout": "{\"schema_version\":7,\"module\":\"app.api\",\"instantiations\":[{\"owner\":\"app.api.exported\",\"callee\":\"app.api.id\",\"type_arguments\":[\"i64\"],\"parameters\":[\"i64\"],\"return_type\":\"i64\",\"span\":{\"start\":288,\"end\":299}}],\"functions\":[{\"name\":\"exported\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":258,\"end\":300},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":279,\"end\":282}},\"effects\":[],\"effects_status\":\"inferred\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"id\",\"parameters\":[{\"name\":\"value\",\"ty\":\"T\"}],\"return_type\":\"T\",\"span\":{\"start\":127,\"end\":194},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":137,\"end\":149}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":158,\"end\":159}}],\"result_type\":{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":164,\"end\":165}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"unused\",\"parameters\":[{\"name\":\"value\",\"ty\":\"T\"}],\"return_type\":\"T\",\"span\":{\"start\":194,\"end\":258},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\"],\"span\":{\"start\":208,\"end\":213}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":222,\"end\":223}}],\"result_type\":{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":228,\"end\":229}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[{\"name\":\"Visible\",\"identity\":\"app.api.Visible\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":34,\"end\":35}}],\"field_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":49,\"end\":50}}],\"fields\":[{\"name\":\"value\",\"ty\":\"T\"}],\"span\":{\"start\":15,\"end\":51}}],\"semantics_status\":\"checked\",\"variants\":[{\"name\":\"Choice\",\"identity\":\"app.api.Choice\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":70,\"end\":71}}],\"span\":{\"start\":51,\"end\":96},\"cases\":[{\"name\":\"Some\",\"span\":{\"start\":78,\"end\":86},\"payloads\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":83,\"end\":84}}]},{\"name\":\"Empty\",\"span\":{\"start\":90,\"end\":96},\"payloads\":[]}]}]}\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "label": "ordinary-text",
+      "argv": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/tmp-ordinary-api-visibility/product-product-final-1/ordinary.cg"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.005,
+      "stdout_bytes": 401,
+      "stdout_sha256": "787e7bfbeee697071d25473448c0c39ef23c118dd82b5fa2308665b5d970c094",
+      "stdout": "module app.api [checked-ordinary-memory-v1]\nvariant app.api.Choice<T> [51, 96)\n    Some(T)\n    Empty()\nrecord app.api.Visible<T> [15, 51)\n    value: T\npub fn exported() -> i64 effects() [inferred] caps() [inferred] [258, 300)\npub fn id<T: Eq + Show>(value: T) -> T effects() [explicit] caps() [explicit] [127, 194)\npub fn unused<T: Eq>(value: T) -> T effects() [explicit] caps() [explicit] [194, 258)\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "label": "scalar-text",
+      "argv": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/tmp-ordinary-api-visibility/product-product-final-1/scalar.cg"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.002,
+      "stdout_bytes": 443,
+      "stdout_sha256": "9636894ac6a3cf7475306f62f2cdafb4ed16b1cf8271fcc24bd982f8f9e87f13",
+      "stdout": "module app.api [checked]\ninstantiate app.api.id<i64>(i64) -> i64 [checked] [288, 299)\nvariant app.api.Choice<T> [51, 96)\n    Some(T)\n    Empty()\nrecord app.api.Visible<T> [15, 51)\n    value: T\npub fn exported() -> i64 effects() [inferred] caps() [inferred] [258, 300)\npub fn id<T: Eq + Show>(value: T) -> T effects() [explicit] caps() [explicit] [127, 194)\npub fn unused<T: Eq>(value: T) -> T effects() [explicit] caps() [explicit] [194, 258)\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "label": "ordinary-package-json",
+      "argv": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "--json",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/tmp-ordinary-api-visibility/product-product-final-1/ordinary-package"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.011,
+      "stdout_bytes": 3038,
+      "stdout_sha256": "f94f46ded3c9c841f1346c6237b0518f75ba328cb2288c63df09750004a846eb",
+      "stdout": "{\"absent_summary\":\"unknown\",\"analysis_sha256\":\"ba6bb2c03ca31553a5fb4513fdfe93ffb1bbff81a0e6adc012cf83d5f3e4d4d9\",\"entry\":\"main.cg\",\"inputs_sha256\":\"20c98751e1cec3384663e99394e1ee5106d648777b6cab07152f70c7aca38719\",\"modules\":[{\"api\":{\"functions\":[{\"capabilities\":[],\"capabilities_status\":\"inferred\",\"effects\":[],\"effects_status\":\"inferred\",\"ensures\":[],\"foreign\":null,\"loop_contracts\":[],\"name\":\"exported\",\"parameter_types\":[],\"parameters\":[],\"requires\":[],\"result_type\":{\"arguments\":[],\"identity\":\"i64\",\"span\":{\"end\":282,\"start\":279}},\"return_type\":\"i64\",\"span\":{\"end\":300,\"start\":258},\"type_parameters\":[]},{\"capabilities\":[],\"capabilities_status\":\"explicit\",\"effects\":[],\"effects_status\":\"explicit\",\"ensures\":[],\"foreign\":null,\"loop_contracts\":[],\"name\":\"id\",\"parameter_types\":[{\"arguments\":[],\"identity\":\"T\",\"span\":{\"end\":159,\"start\":158}}],\"parameters\":[{\"name\":\"value\",\"ty\":\"T\"}],\"requires\":[],\"result_type\":{\"arguments\":[],\"identity\":\"T\",\"span\":{\"end\":165,\"start\":164}},\"return_type\":\"T\",\"span\":{\"end\":194,\"start\":127},\"type_parameters\":[{\"constraints\":[\"Eq\",\"Show\"],\"name\":\"T\",\"span\":{\"end\":149,\"start\":137}}]},{\"capabilities\":[],\"capabilities_status\":\"explicit\",\"effects\":[],\"effects_status\":\"explicit\",\"ensures\":[],\"foreign\":null,\"loop_contracts\":[],\"name\":\"unused\",\"parameter_types\":[{\"arguments\":[],\"identity\":\"T\",\"span\":{\"end\":223,\"start\":222}}],\"parameters\":[{\"name\":\"value\",\"ty\":\"T\"}],\"requires\":[],\"result_type\":{\"arguments\":[],\"identity\":\"T\",\"span\":{\"end\":229,\"start\":228}},\"return_type\":\"T\",\"span\":{\"end\":258,\"start\":194},\"type_parameters\":[{\"constraints\":[\"Eq\"],\"name\":\"T\",\"span\":{\"end\":213,\"start\":208}}]}],\"module\":\"app.api\",\"records\":[{\"field_types\":[{\"arguments\":[],\"identity\":\"T\",\"span\":{\"end\":50,\"start\":49}}],\"fields\":[{\"name\":\"value\",\"ty\":\"T\"}],\"identity\":\"app.api.Visible\",\"name\":\"Visible\",\"span\":{\"end\":51,\"start\":15},\"type_parameters\":[{\"constraints\":[],\"name\":\"T\",\"span\":{\"end\":35,\"start\":34}}]}],\"schema_version\":6,\"semantics_status\":\"checked-ordinary-memory-v1\",\"variants\":[{\"cases\":[{\"name\":\"Some\",\"payloads\":[{\"arguments\":[],\"identity\":\"T\",\"span\":{\"end\":84,\"start\":83}}],\"span\":{\"end\":86,\"start\":78}},{\"name\":\"Empty\",\"payloads\":[],\"span\":{\"end\":96,\"start\":90}}],\"identity\":\"app.api.Choice\",\"name\":\"Choice\",\"span\":{\"end\":96,\"start\":51},\"type_parameters\":[{\"constraints\":[],\"name\":\"T\",\"span\":{\"end\":71,\"start\":70}}]}]},\"imports\":[],\"source\":\"lib.cg\"},{\"api\":{\"functions\":[],\"module\":\"app.main\",\"records\":[],\"schema_version\":6,\"semantics_status\":\"checked-ordinary-memory-v1\",\"variants\":[]},\"imports\":[\"app.api\"],\"source\":\"main.cg\"}],\"package\":{\"binding_lock\":null,\"entry\":\"main.cg\",\"manifest_sha256\":\"427c6885f22ff6e31d2bc74aff42b2dc529412a41e2fe59800cff6176e37367e\",\"source_hashes\":[[\"main.cg\",\"ef1d2cc99057ca720f8299a6d244f6357b82ee176a5c27bd9ef4c24190ec7559\"],[\"lib.cg\",\"801d0d63326a6f704efd246d807629b6bf46d4c5b0adb6a2cf2dc14e1e35f453\"]]},\"provenance_kind\":\"source-bundle-v1\",\"provenance_schema_version\":1,\"public_memory_api_version\":1,\"schema_version\":1,\"summary_scope\":\"public-original-declarations\"}\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "label": "ordinary-package-text",
+      "argv": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/tmp-ordinary-api-visibility/product-product-final-1/ordinary-package"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.011,
+      "stdout_bytes": 613,
+      "stdout_sha256": "2c68a10fd447b3db82232b178841b21b168635a82a2e138f4c1370916138612a",
+      "stdout": "manifest_sha256 427c6885f22ff6e31d2bc74aff42b2dc529412a41e2fe59800cff6176e37367e\nbinding_lock <none>\npackage entry main.cg\nsource lib.cg\nmodule app.api [checked-ordinary-memory-v1]\nvariant app.api.Choice<T> [51, 96)\n    Some(T)\n    Empty()\nrecord app.api.Visible<T> [15, 51)\n    value: T\npub fn exported() -> i64 effects() [inferred] caps() [inferred] [258, 300)\npub fn id<T: Eq + Show>(value: T) -> T effects() [explicit] caps() [explicit] [127, 194)\npub fn unused<T: Eq>(value: T) -> T effects() [explicit] caps() [explicit] [194, 258)\nsource main.cg\nimport app.api\nmodule app.main [checked-ordinary-memory-v1]\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "label": "scalar-package-json",
+      "argv": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "--json",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/tmp-ordinary-api-visibility/product-product-final-1/scalar-package"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.003,
+      "stdout_bytes": 2653,
+      "stdout_sha256": "78c5ad4d48dd4fd8de8bf24204f22a3bcd438a0d3a67b476545be392575b43b6",
+      "stdout": "{\"schema_version\":2,\"name\":\"api\",\"entry\":\"main.cg\",\"imports_supported\":true,\"modules\":[{\"source\":\"lib.cg\",\"api\":{\"schema_version\":7,\"module\":\"app.api\",\"instantiations\":[{\"owner\":\"app.api.exported\",\"callee\":\"app.api.id\",\"type_arguments\":[\"i64\"],\"parameters\":[\"i64\"],\"return_type\":\"i64\",\"span\":{\"start\":288,\"end\":299}}],\"functions\":[{\"name\":\"exported\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":258,\"end\":300},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":279,\"end\":282}},\"effects\":[],\"effects_status\":\"inferred\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"id\",\"parameters\":[{\"name\":\"value\",\"ty\":\"T\"}],\"return_type\":\"T\",\"span\":{\"start\":127,\"end\":194},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":137,\"end\":149}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":158,\"end\":159}}],\"result_type\":{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":164,\"end\":165}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"unused\",\"parameters\":[{\"name\":\"value\",\"ty\":\"T\"}],\"return_type\":\"T\",\"span\":{\"start\":194,\"end\":258},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\"],\"span\":{\"start\":208,\"end\":213}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":222,\"end\":223}}],\"result_type\":{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":228,\"end\":229}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[{\"name\":\"Visible\",\"identity\":\"app.api.Visible\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":34,\"end\":35}}],\"field_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":49,\"end\":50}}],\"fields\":[{\"name\":\"value\",\"ty\":\"T\"}],\"span\":{\"start\":15,\"end\":51}}],\"semantics_status\":\"checked\",\"variants\":[{\"name\":\"Choice\",\"identity\":\"app.api.Choice\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":70,\"end\":71}}],\"span\":{\"start\":51,\"end\":96},\"cases\":[{\"name\":\"Some\",\"span\":{\"start\":78,\"end\":86},\"payloads\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":83,\"end\":84}}]},{\"name\":\"Empty\",\"span\":{\"start\":90,\"end\":96},\"payloads\":[]}]}]},\"imports\":[],\"resolved_public_calls\":[]},{\"source\":\"main.cg\",\"api\":{\"schema_version\":1,\"module\":\"app.main\",\"functions\":[]},\"imports\":[\"app.api\"],\"resolved_public_calls\":[{\"name\":\"app.api.exported\",\"span\":{\"start\":53,\"end\":71}}]}],\"topological_order\":[\"app.api\",\"app.main\"]}\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "label": "scalar-package-text",
+      "argv": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/tmp-ordinary-api-visibility/product-product-final-1/scalar-package"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.003,
+      "stdout_bytes": 646,
+      "stdout_sha256": "1e2a9f95f0053ae8b81c90a25657e1e7bdffe69432af3233bae1feb04d72c857",
+      "stdout": "package api\nschema_version 2\nentry main.cg\nimports_supported true\nsource lib.cg\nmodule app.api [checked]\ninstantiate app.api.id<i64>(i64) -> i64 [checked] [288, 299)\nvariant app.api.Choice<T> [51, 96)\n    Some(T)\n    Empty()\nrecord app.api.Visible<T> [15, 51)\n    value: T\npub fn exported() -> i64 effects() [inferred] caps() [inferred] [258, 300)\npub fn id<T: Eq + Show>(value: T) -> T effects() [explicit] caps() [explicit] [127, 194)\npub fn unused<T: Eq>(value: T) -> T effects() [explicit] caps() [explicit] [194, 258)\nsource main.cg\nimport app.api\ncall app.api.exported [53, 71)\nmodule app.main [checked]\ntopological_order app.api, app.main\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "label": "file:invalid",
+      "argv": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "--diagnostic-format=json",
+        "api",
+        "--json",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/tmp-ordinary-api-visibility/product-product-final-1/invalid.cg"
+      ],
+      "exit": 1,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 228,
+      "stderr_sha256": "d2eb3285c28b4774263cbcb6aae0659acb87be7cd3863844cc5c0c3ac4f64c11",
+      "stderr": "{\"code\":\"CGT003\",\"severity\":\"error\",\"message\":\"expected i64, found Bool\",\"file\":\"/home/john-riley/.codex/worktrees/2f3a/lang/target/tmp-ordinary-api-visibility/product-product-final-1/invalid.cg\",\"span\":{\"start\":570,\"end\":574}}\n"
+    },
+    {
+      "label": "om08-json",
+      "argv": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "--json",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/tmp-ordinary-api-visibility/product-product-final-1/om08.cg"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.003,
+      "stdout_bytes": 1024,
+      "stdout_sha256": "1d8c3f4dee53ff76de25f9d136a434568acc476e766492da3e64c14470ebb592",
+      "stdout": "{\"schema_version\":6,\"module\":null,\"functions\":[{\"name\":\"exported\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":63,\"end\":96},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":84,\"end\":87}},\"effects\":[],\"effects_status\":\"inferred\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[{\"name\":\"PublicBox\",\"identity\":\"PublicBox\",\"type_parameters\":[],\"field_types\":[{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":33,\"end\":36}}],\"fields\":[{\"name\":\"value\",\"ty\":\"i64\"}],\"span\":{\"start\":0,\"end\":37}}],\"semantics_status\":\"checked-ordinary-memory-v1\",\"variants\":[],\"public_memory_api_version\":1,\"summary_scope\":\"public-original-declarations\",\"absent_summary\":\"unknown\",\"provenance_schema_version\":1,\"provenance_kind\":\"source-v1\",\"inputs_sha256\":\"689a2164f5385510f7b458a2575e6e4253c5d4299cc6f0bb215a0189eb866a0d\",\"analysis_sha256\":\"4921e555cc56f634db00836ffa7a68c5f3a6fd900c2a3cb989c4a8090cf9d95e\"}\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "label": "om08-text",
+      "argv": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/tmp-ordinary-api-visibility/product-product-final-1/om08.cg"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.003,
+      "stdout_bytes": 159,
+      "stdout_sha256": "a325c6eed8a2446ba327f47f668eedf0c1479c14f697f183e6c7fba3351d04f9",
+      "stdout": "module <unnamed> [checked-ordinary-memory-v1]\nrecord PublicBox [0, 37)\n    value: i64\npub fn exported() -> i64 effects() [inferred] caps() [inferred] [63, 96)\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "label": "region-json",
+      "argv": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "--json",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/tmp-ordinary-api-visibility/product-product-final-1/region.cg"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.005,
+      "stdout_bytes": 1540,
+      "stdout_sha256": "b3af1124dd80a59904172b8de56212db12fd6b11a9ffd68ff0cf7e7bfb6e8fbe",
+      "stdout": "{\"schema_version\":6,\"module\":null,\"functions\":[{\"name\":\"build\",\"parameters\":[{\"name\":\"r\",\"ty\":\"shared<memory.Region<R>>\"}],\"return_type\":\"Result<memory.Value<R, List<i64>>, AllocationError>\",\"span\":{\"start\":0,\"end\":173},\"type_parameters\":[{\"name\":\"R\",\"constraints\":[\"memory.RegionName\"],\"span\":{\"start\":13,\"end\":33}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"shared\",\"arguments\":[{\"identity\":\"memory.Region\",\"arguments\":[{\"identity\":\"R\",\"arguments\":[],\"span\":{\"start\":59,\"end\":60}}],\"span\":{\"start\":45,\"end\":61}}],\"span\":{\"start\":38,\"end\":62}}],\"result_type\":{\"identity\":\"cgx2.core.Result\",\"arguments\":[{\"identity\":\"memory.Value\",\"arguments\":[{\"identity\":\"R\",\"arguments\":[],\"span\":{\"start\":87,\"end\":88}},{\"identity\":\"List\",\"arguments\":[{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":95,\"end\":98}}],\"span\":{\"start\":90,\"end\":99}}],\"span\":{\"start\":74,\"end\":100}},{\"identity\":\"AllocationError\",\"arguments\":[],\"span\":{\"start\":102,\"end\":117}}],\"span\":{\"start\":67,\"end\":118}},\"effects\":[\"ManagedAlloc\"],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[],\"semantics_status\":\"checked-ordinary-memory-v1\",\"variants\":[],\"public_memory_api_version\":1,\"summary_scope\":\"public-original-declarations\",\"absent_summary\":\"unknown\",\"provenance_schema_version\":1,\"provenance_kind\":\"source-v1\",\"inputs_sha256\":\"7fe91bb2e38f6d7e7cf9fd55eeafa0c25adcec302a912f4f8773730dc0fc3461\",\"analysis_sha256\":\"8b77951f2096ec85eda5bb0188300ae0586692e4c5ac2db29e1ca3e33b2a8c93\"}\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "label": "region-text",
+      "argv": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/tmp-ordinary-api-visibility/product-product-final-1/region.cg"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.005,
+      "stdout_bytes": 235,
+      "stdout_sha256": "25b0384b952812beadb2d1d6634c08398b1cc22e0003c00e948d97162b2aa8aa",
+      "stdout": "module <unnamed> [checked-ordinary-memory-v1]\npub fn build<R: memory.RegionName>(r: shared<memory.Region<R>>) -> cgx2.core.Result<memory.Value<R, List<i64>>, AllocationError> effects(ManagedAlloc) [explicit] caps() [inferred] [0, 173)\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    }
+  ],
+  "failures": [
+    {
+      "case": "file",
+      "error": "AssertionError('equivalent-human')"
+    },
+    {
+      "case": "package",
+      "error": "KeyError('records')"
+    },
+    {
+      "case": "negative",
+      "error": "AssertionError('file:invalid-code')"
+    }
+  ],
+  "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/target/tmp-ordinary-api-visibility/product-product-final-1",
+  "manifest_sha256": "894abc2fbbb98aa89eb75769375e59bcbc7bac64ffca6200101e3456fad97d68",
+  "limits": {
+    "wall_seconds": 35,
+    "cpu_seconds": 30,
+    "address_bytes": 2147483648,
+    "file_bytes": 16777216,
+    "pipe_bytes_per_stream": 1048576
+  },
+  "ordinary-text": "module app.api [checked-ordinary-memory-v1]\nvariant app.api.Choice<T> [51, 96)\n    Some(T)\n    Empty()\nrecord app.api.Visible<T> [15, 51)\n    value: T\npub fn exported() -> i64 effects() [inferred] caps() [inferred] [258, 300)\npub fn id<T: Eq + Show>(value: T) -> T effects() [explicit] caps() [explicit] [127, 194)\npub fn unused<T: Eq>(value: T) -> T effects() [explicit] caps() [explicit] [194, 258)\n",
+  "scalar-text": "module app.api [checked]\ninstantiate app.api.id<i64>(i64) -> i64 [checked] [288, 299)\nvariant app.api.Choice<T> [51, 96)\n    Some(T)\n    Empty()\nrecord app.api.Visible<T> [15, 51)\n    value: T\npub fn exported() -> i64 effects() [inferred] caps() [inferred] [258, 300)\npub fn id<T: Eq + Show>(value: T) -> T effects() [explicit] caps() [explicit] [127, 194)\npub fn unused<T: Eq>(value: T) -> T effects() [explicit] caps() [explicit] [194, 258)\n",
+  "passed": 58,
+  "failed": 3
+}
