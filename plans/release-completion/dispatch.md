@@ -83,3 +83,15 @@ Reviewed base38cce386519832ddaf50460c1e03f38aa6a3c106. Chat01a16b46-2ebe-7c40-9e
 ## S2b foundation reviewed: five repairs ready
 
 Final 414c71f staged as b0900dd, repair-required. Worker 1092 tests / 159 product checks and hashes verified; coordinator workspace compilation passes. Seven concrete defects map to five disjoint repair lanes in s2b-review/README.md. Existing shared representations frozen; full acceptance rerun follows repairs. All later S2b/S3 and external gates remain open. Dispatch outcomes follow.
+
+## Five S2b repair chats running
+
+Common repair base: b595724e1b086c604220cc5b165c141e65a0531f. All five worktree HEADs match; read_thread and wait_threads confirm active implementation. list_threads omitted agent-created chats; read-only local metadata resolved exact worktrees and permanent IDs, then read_thread verified title/lane identity. No duplicates. Queued client IDs and polling cursors are retained in thread-state.json.
+
+| Lane | Chat | Worktree | Status |
+| --- | --- | --- | --- |
+| semantic-resolution | 01a16b7d-3f0a-7412-8753-b981f8e249f7 | /home/john-riley/.codex/worktrees/0e24/lang | running |
+| package-binders | 01a16b7d-3f1f-7563-ae3d-161becff803e | /home/john-riley/.codex/worktrees/b9e0/lang | running |
+| emitted-targets | 01a16b7d-56dc-7a61-b57e-02c4a2f091d1 | /home/john-riley/.codex/worktrees/a9fe/lang | running |
+| interpreter-output | 01a16b7d-6ef8-77e3-984d-b2d4aad4af1a | /home/john-riley/.codex/worktrees/a94c/lang | running |
+| api-visibility | 01a16b7d-83a2-7e63-88c4-b64d9d6d4c16 | /home/john-riley/.codex/worktrees/19b9/lang | running |

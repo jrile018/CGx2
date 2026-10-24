@@ -225,27 +225,57 @@
     {
       "lane": "semantic-resolution",
       "title": "CGx2 S2b constructor resolution repair",
-      "status": "planned"
+      "clientThreadId": "client-new-thread:fd49d44b-fbf3-4f14-801c-2ae5e34eca1b",
+      "threadId": "01a16b7d-3f0a-7412-8753-b981f8e249f7",
+      "hostId": "local",
+      "worktree": "/home/john-riley/.codex/worktrees/0e24/lang",
+      "base": "b595724e1b086c604220cc5b165c141e65a0531f",
+      "status": "running",
+      "afterCursor": "d31a8b2b-f6ab-4099-b92f-668a4c462715:1"
     },
     {
       "lane": "package-binders",
       "title": "CGx2 S2b imported generic binder repair",
-      "status": "planned"
+      "clientThreadId": "client-new-thread:e04d7731-b717-4fa8-9e8d-7b7b22a0962e",
+      "threadId": "01a16b7d-3f1f-7563-ae3d-161becff803e",
+      "hostId": "local",
+      "worktree": "/home/john-riley/.codex/worktrees/b9e0/lang",
+      "base": "b595724e1b086c604220cc5b165c141e65a0531f",
+      "status": "running",
+      "afterCursor": "f9aa21db-ee5a-4a38-bea6-4b692754ecbc:1"
     },
     {
       "lane": "emitted-targets",
       "title": "CGx2 S2b emitted target parity repair",
-      "status": "planned"
+      "clientThreadId": "client-new-thread:d8e90961-ded7-48db-9de5-a907cfb66f6e",
+      "threadId": "01a16b7d-56dc-7a61-b57e-02c4a2f091d1",
+      "hostId": "local",
+      "worktree": "/home/john-riley/.codex/worktrees/a9fe/lang",
+      "base": "b595724e1b086c604220cc5b165c141e65a0531f",
+      "status": "running",
+      "afterCursor": "fc381fe9-b50c-4a32-84d6-d090d2370879:1"
     },
     {
       "lane": "interpreter-output",
       "title": "CGx2 S2b package output bound repair",
-      "status": "planned"
+      "clientThreadId": "client-new-thread:86f1d050-4af0-47ef-85ae-dd0c4397ebe6",
+      "threadId": "01a16b7d-6ef8-77e3-984d-b2d4aad4af1a",
+      "hostId": "local",
+      "worktree": "/home/john-riley/.codex/worktrees/a94c/lang",
+      "base": "b595724e1b086c604220cc5b165c141e65a0531f",
+      "status": "running",
+      "afterCursor": "aef97539-67ac-457b-870c-b3dc7d2dd511:1"
     },
     {
       "lane": "api-visibility",
-      "title": "CGx2 S2b public instantiation metadata repair",
-      "status": "planned"
+      "title": "CGx2 S2b public instantiation metadata\u2026",
+      "clientThreadId": "client-new-thread:755d8a83-0f73-4012-a7ad-c3695db8c4b9",
+      "threadId": "01a16b7d-83a2-7e63-88c4-b64d9d6d4c16",
+      "hostId": "local",
+      "worktree": "/home/john-riley/.codex/worktrees/19b9/lang",
+      "base": "b595724e1b086c604220cc5b165c141e65a0531f",
+      "status": "running",
+      "afterCursor": "542379e9-0feb-4feb-8b47-99b120d89b8a:1"
     }
   ]
 }
