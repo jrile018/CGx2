@@ -1,0 +1,47 @@
+{
+  "argv": [
+    "cargo",
+    "clippy",
+    "-p",
+    "cgx2-sema",
+    "-p",
+    "cgx2-cli",
+    "-p",
+    "cgx2-package",
+    "--all-targets",
+    "--all-features",
+    "--offline",
+    "--locked",
+    "--",
+    "-D",
+    "warnings"
+  ],
+  "cwd": "/home/john-riley/.codex/worktrees/a9af/lang",
+  "environment": {
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/a9af/lang/target/release-ordinary-core-admission",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/a9af/lang/target/tmp-ordinary-core-admission",
+    "CARGO_BUILD_JOBS": "2",
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "bounds": {
+    "wall_seconds": 1800,
+    "cpu_seconds": 1200,
+    "address_space_bytes": 8589934592,
+    "file_size_bytes": 536870912,
+    "retained_bytes_per_stream": 2097152,
+    "aggregate_isolation": false
+  },
+  "exit": 0,
+  "reason": "exit",
+  "signal": null,
+  "overflow_stream": null,
+  "duration_seconds": 1.47,
+  "stdout_bytes": 0,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout": "",
+  "stderr_bytes": 1052,
+  "stderr_sha256": "c36a3d27b1fe8aa64015ef389c0164042ea919d6103e4f32fd348b7846dec6d5",
+  "stderr": "    Checking cgx2-sema v0.1.0 (/home/john-riley/.codex/worktrees/a9af/lang/crates/cgx2-sema)\n    Checking cgx2-api-index v0.1.0 (/home/john-riley/.codex/worktrees/a9af/lang/crates/cgx2-api-index)\n    Checking cgx2-package v0.1.0 (/home/john-riley/.codex/worktrees/a9af/lang/crates/cgx2-package)\n    Checking cgx2-bind v0.1.0 (/home/john-riley/.codex/worktrees/a9af/lang/crates/cgx2-bind)\n    Checking cgx2-emit-rust v0.1.0 (/home/john-riley/.codex/worktrees/a9af/lang/crates/cgx2-emit-rust)\n    Checking cgx2-emit-python v0.1.0 (/home/john-riley/.codex/worktrees/a9af/lang/crates/cgx2-emit-python)\n    Checking cgx2-ffi-native v0.1.0 (/home/john-riley/.codex/worktrees/a9af/lang/crates/cgx2-ffi-native)\n    Checking cgx2c v0.1.0 (/home/john-riley/.codex/worktrees/a9af/lang/crates/cgx2c)\n    Checking cgx2-libtorch v0.1.0 (/home/john-riley/.codex/worktrees/a9af/lang/crates/cgx2-libtorch)\n    Checking cgx2-cli v0.1.0 (/home/john-riley/.codex/worktrees/a9af/lang/crates/cgx2-cli)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.44s\n"
+}

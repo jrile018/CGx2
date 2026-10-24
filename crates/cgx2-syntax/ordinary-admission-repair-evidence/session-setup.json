@@ -1,0 +1,18 @@
+{
+  "base": "7bb7a480119826693db67ed503caaf7f23f6abb2",
+  "initial_status": ["?? .serena/"],
+  "initial_branch": "detached HEAD",
+  "branch_attempt": {
+    "argv": ["git", "switch", "-c", "riley/ordinary-core-admission-repair"],
+    "exit": 128,
+    "stderr": "fatal: cannot lock ref 'refs/heads/riley/ordinary-core-admission-repair': Unable to create '/home/john-riley/projects/lang/.git/refs/heads/riley/ordinary-core-admission-repair.lock': Read-only file system\n"
+  },
+  "branch_retry": {
+    "argv": ["git", "switch", "-c", "riley/ordinary-core-admission-repair"],
+    "sandbox_permissions": "require_escalated",
+    "exit": 0,
+    "stderr": "Switched to new branch 'riley/ordinary-core-admission-repair'\n"
+  },
+  "preexisting_untracked_serena": "left untouched; excluded from commit",
+  "new_tmp_quota_failures": 0
+}

@@ -1,0 +1,41 @@
+{
+  "argv": [
+    "cargo",
+    "test",
+    "-p",
+    "cgx2-sema",
+    "--test",
+    "ordinary_admission_repair",
+    "--all-features",
+    "--offline",
+    "--locked"
+  ],
+  "cwd": "/home/john-riley/.codex/worktrees/a9af/lang",
+  "environment": {
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/a9af/lang/target/release-ordinary-core-admission",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/a9af/lang/target/tmp-ordinary-core-admission",
+    "CARGO_BUILD_JOBS": "2",
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "bounds": {
+    "wall_seconds": 1800,
+    "cpu_seconds": 1200,
+    "address_space_bytes": 8589934592,
+    "file_size_bytes": 536870912,
+    "retained_bytes_per_stream": 2097152,
+    "aggregate_isolation": false
+  },
+  "exit": 101,
+  "reason": "exit",
+  "signal": null,
+  "overflow_stream": null,
+  "duration_seconds": 0.741,
+  "stdout_bytes": 1259,
+  "stdout_sha256": "de2e04b1acd490147f4a8a9522b7903cd4f147b939b9d6a0bbebc230b428a2be",
+  "stdout": "\nrunning 11 tests\ntest user_err_escape_is_rejected_at_exact_utf8_return_span ... ok\ntest malformed_ast_bounds_reject_without_panicking ... FAILED\ntest user_borrow_reproduction_retains_call_semantics ... ok\ntest user_err_whole_graph_survives_fields_and_builtin_results ... ok\ntest shadowed_managed_templates_cannot_erase_region_requirements ... ok\ntest user_managed_names_keep_their_resolved_effects ... ok\ntest imported_shadows_preserve_intrinsic_effect_and_capability_closure ... ok\ntest imported_borrow_and_real_region_borrow_both_work ... ok\ntest user_err_inside_region_and_builtin_scalar_error_are_valid ... ok\ntest legacy_budgets_and_assignment_tags_are_not_expression_indices ... ok\ntest all_allocating_markers_require_managed_alloc_through_callers ... ok\n\nfailures:\n\n---- malformed_ast_bounds_reject_without_panicking stdout ----\n\nthread 'malformed_ast_bounds_reject_without_panicking' (289) panicked at crates/cgx2-sema/tests/ordinary_admission_repair.rs:90:13:\nassertion failed: compile_ast(&module).is_err()\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n\n\nfailures:\n    malformed_ast_bounds_reject_without_panicking\n\ntest result: FAILED. 10 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n",
+  "stderr_bytes": 391,
+  "stderr_sha256": "6b46cf4cd973d15717baf9e9640e3c32ed82bb7ebab87410d669011febc1268b",
+  "stderr": "   Compiling cgx2-sema v0.1.0 (/home/john-riley/.codex/worktrees/a9af/lang/crates/cgx2-sema)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.72s\n     Running tests/ordinary_admission_repair.rs (target/release-ordinary-core-admission/debug/deps/ordinary_admission_repair-33b0dbf1a2798ca2)\nerror: test failed, to rerun pass `-p cgx2-sema --test ordinary_admission_repair`\n"
+}

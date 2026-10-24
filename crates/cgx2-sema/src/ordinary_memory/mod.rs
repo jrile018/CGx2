@@ -326,11 +326,6 @@ impl Rewrite<'_> {
         } else {
             "effects(ManagedAlloc)"
         };
-        let body = if matches!(name, "default_region" | "collect") {
-            body.to_owned()
-        } else {
-            format!("let cgx2_effect = managed.ref(0)\n    {body}")
-        };
         let source = format!(
             "fn {unique}{}({arguments}) -> {result} {declaration}:\n    {body}\n",
             if generic { "<T>" } else { "" }
@@ -345,7 +340,15 @@ impl Rewrite<'_> {
                 .collect::<Vec<_>>()
         })?;
         let mut function = m.functions.remove(0);
-        let identity = format!("$cgx2$ordinary_memory$stub${}", self.stubs.len());
+        // Behavioral requirements belong to this compiler identity, never to
+        // shadowable managed.* calls in a parsed template. The effect closure
+        // seeds these identities even when the template body is graph-free.
+        let requirement = match name {
+            "default_region" => "stub",
+            "collect" => "collect",
+            _ => "alloc",
+        };
+        let identity = format!("$cgx2$ordinary_memory${requirement}${}", self.stubs.len());
         function.name = identity.clone();
         // These parsed template references must target a compiler-only symbol.
         // '$' is not a source identifier, so source cannot call an injected stub.
@@ -526,7 +529,7 @@ impl Rewrite<'_> {
                         "cgx2.core.Result<T, cgx2.core.AllocationError>.Ok(p1)",
                         true,
                     ),
-                    Marker::Collect => ("collect", "Unit", "managed.collect()", false),
+                    Marker::Collect => ("collect", "Unit", "return", false),
                 };
                 let stub = self.stub(short, &arguments, result, body, generic)?;
                 self.markers.insert(stub.clone(), marker);
@@ -542,7 +545,11 @@ impl Rewrite<'_> {
                 };
                 return Ok(());
             }
-            if name == "borrow" && args.len() == 1 && args[0].name.is_none() {
+            if name == "borrow"
+                && provenance::local_name(self.original, &name).is_none()
+                && args.len() == 1
+                && args[0].name.is_none()
+            {
                 let span = e.span;
                 *e = args[0].value.clone();
                 e.span = span;
@@ -877,7 +884,21 @@ fn compile(original: Module, provenance: MemoryProvenanceV1) -> Checked<MemoryPr
     let (module, markers) = rewrite_module(&original, &original)?;
     let typed = crate::check_module(&module)?;
     provenance::validate(&original, &module, &typed, &signatures)?;
-    let concrete = crate::lower_module(&module, &typed)?;
+    let mut concrete = crate::lower_module(&module, &typed)?;
+    // Specialization prunes unused nominal declarations. Keep the compiler's
+    // copied entry-error declarations: the legacy guard admission check also
+    // uses their presence to distinguish this managed producer from ordinary
+    // owned-only functions. No shadowable call or executed allocation is needed.
+    for variant in module.variants.iter().filter(|v| {
+        matches!(
+            v.name.as_str(),
+            "memory.SessionReserveSite" | "memory.SessionEntryError"
+        )
+    }) {
+        if !concrete.variants.iter().any(|v| v.name == variant.name) {
+            concrete.variants.push(variant.clone());
+        }
+    }
     let checked = crate::check_module_with_imports(&concrete, &Default::default())?;
     let (program, types) = crate::default_managed::lower::lower(&concrete, &checked)?;
     let mut operations = BTreeMap::new();

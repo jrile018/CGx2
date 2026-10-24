@@ -43,7 +43,8 @@ pub(super) fn infer(memory: &RuntimeProgram) -> Vec<MemoryEffectsV2> {
         while let Some(s) = statements.pop() {
             match s {
                 Statement::SLet(_, id) | Statement::SExpr(id) => expressions.push(*id),
-                Statement::SAssign(_, a, b) => expressions.extend([*a, *b]),
+                // The middle assignment field is an operation tag, not an ID.
+                Statement::SAssign(_, _, id) => expressions.push(*id),
                 Statement::SReturn(id) => expressions.extend(id),
                 Statement::SIf(id, yes, no) => {
                     expressions.push(*id);
@@ -57,8 +58,14 @@ pub(super) fn infer(memory: &RuntimeProgram) -> Vec<MemoryEffectsV2> {
                     expressions.extend([*a, *b]);
                     statements.extend(body);
                 }
-                Statement::SFor(_, id, body) | Statement::SGuard(id, _, body) => {
+                Statement::SFor(_, id, body) => {
                     expressions.push(*id);
+                    statements.extend(body);
+                }
+                Statement::SGuard(_, _, body) => {
+                    // Legacy guards store a literal byte budget, not an ID.
+                    e.may_enter_guard = true;
+                    e.may_allocate_root_bookkeeping = true;
                     statements.extend(body);
                 }
             }
@@ -120,4 +127,39 @@ pub(super) fn infer(memory: &RuntimeProgram) -> Vec<MemoryEffectsV2> {
         }
     }
     effects
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use cgx2_runtime::default_managed::model::Loc;
+
+    #[test]
+    fn literal_budgets_and_both_assignment_tags_do_not_visit_unrelated_operations() {
+        let program = super::super::compile_source("fn main() -> i64 effects(ManagedAlloc):\n    match memory.try_region(mode: memory.Mode.Manual, limit: 4096):\n        Result.Ok(r):\n            42\n        Result.Err(e):\n            0\n").unwrap();
+        let mut memory = program.runtime().clone();
+        memory.operations.clear();
+        memory.program.expressions[0].op = Op::ECollect;
+        memory.program.expressions[1].op = Op::ECollect;
+        let mut scalar = memory.program.expressions[0].clone();
+        scalar.op = Op::EInt(42);
+        let rhs = memory.program.expressions.len();
+        memory.program.expressions.push(scalar);
+        for f in &mut memory.program.functions {
+            f.requires.clear();
+            f.ensures.clear();
+            f.body.clear();
+            f.effects = Default::default();
+        }
+        memory.program.functions[memory.program.entry].body = vec![Statement::SGuard(
+            1 << 40,
+            Loc { start: 0, end: 0 },
+            vec![Statement::SAssign(0, 0, rhs), Statement::SAssign(0, 1, rhs)],
+        )];
+        let summary = &infer(&memory)[memory.program.entry];
+        assert!(summary.may_enter_guard);
+        assert!(!summary.may_explicitly_collect);
+        assert!(!summary.may_allocate_managed);
+        assert!(!summary.may_transfer_graph);
+    }
 }

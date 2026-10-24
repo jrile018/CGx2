@@ -1,0 +1,38 @@
+{
+  "argv": [
+    "python3",
+    "crates/cgx2-syntax/default-managed-evidence/run.py",
+    "--binary-dir",
+    "target/ordinary-core-admission-freeze/bin",
+    "--output-dir",
+    "target/ordinary-core-admission-default-managed"
+  ],
+  "cwd": "/home/john-riley/.codex/worktrees/a9af/lang",
+  "environment": {
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/a9af/lang/target/release-ordinary-core-admission",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/a9af/lang/target/tmp-ordinary-core-admission",
+    "CARGO_BUILD_JOBS": "2",
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "bounds": {
+    "wall_seconds": 1800,
+    "cpu_seconds": 1200,
+    "address_space_bytes": 8589934592,
+    "file_size_bytes": 536870912,
+    "retained_bytes_per_stream": 2097152,
+    "aggregate_isolation": false
+  },
+  "exit": 0,
+  "reason": "exit",
+  "signal": null,
+  "overflow_stream": null,
+  "duration_seconds": 284.249,
+  "stdout_bytes": 1620,
+  "stdout_sha256": "dbcb9d3999cb8a92cbc6875051a2d0953671f1fa683663bed88f8cdb6ab989a0",
+  "stdout": "budget alloc-0\nbudget alloc-225\nbudget alloc-226\nbudget roots-0\nbudget roots-63\nbudget roots-64\nbudget nested-257\nbudget nested-258\nbudget nonrefund-451\nbudget hidden-scalar\nbudget hidden-package\nsynthetic fault-graph-root-1\nsynthetic fault-graph-root-2\nsynthetic fault-graph-root-3\nsynthetic fault-graph-root-4\nsynthetic fault-graph-root-5\nsynthetic fault-graph-root-6\nsynthetic fault-graph-root-7\nsynthetic fault-graph-root-8\nsynthetic fault-graph-root-9\nsynthetic fault-graph-root-10\nsynthetic fault-graph-root-11\nsynthetic fault-graph-root-12\nsynthetic fault-graph-root-13\nsynthetic fault-graph-root-14\nsynthetic fault-graph-root-15\nsynthetic fault-guard-1\nsynthetic fault-guard-2\nsynthetic fault-guard-3\nsynthetic fault-guard-4\nsynthetic fault-guard-5\nsynthetic fault-guard-6\nsynthetic fault-guard-7\nsynthetic fault-guard-8\nsynthetic fault-guard-9\nsynthetic fault-guard-10\nsynthetic fault-guard-11\nsynthetic fault-guard-12\nsynthetic fault-guard-13\nsynthetic fault-guard-14\nsynthetic fault-guard-15\nreject ref-output-reject\nreject ref-output-utf8\nreject collect-guard-reject\nreject dishonest-package\n{\"passed\": 678, \"failed\": 0, \"checkpoint_complete\": false, \"release_complete\": false}\nstart shapes\nfinish shapes\nstart alias\nfinish alias\nstart cycle\nfinish cycle\nstart pressure\nfinish pressure\nstart unicode\nfinish unicode\nstart recover\nfinish recover\nstart region-limit\nfinish region-limit\nstart hybrid\nfinish hybrid\nstart package\nfinish package\nstart guard-package\nfinish guard-package\nstart namespace-package\nfinish namespace-package\nstart wide\nfinish wide\nstart elements\nfinish elements\nstart nodes\nfinish nodes\n",
+  "stderr_bytes": 0,
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr": ""
+}

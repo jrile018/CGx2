@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "base": "7bb7a480119826693db67ed503caaf7f23f6abb2",
+  "status": "bounded-repair-ready-for-coordinator-review",
+  "ordinary_memory_accepted": false,
+  "release_accepted": false,
+  "checks": {
+    "final-rust-tests": {
+      "argv": [
+        "cargo",
+        "test",
+        "-p",
+        "cgx2-sema",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2-package",
+        "--all-features",
+        "--offline",
+        "--locked"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "duration_seconds": 18.335
+    },
+    "final-build": {
+      "argv": [
+        "cargo",
+        "build",
+        "--workspace",
+        "--all-features",
+        "--offline",
+        "--locked"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "duration_seconds": 21.061
+    },
+    "final-clippy": {
+      "argv": [
+        "cargo",
+        "clippy",
+        "-p",
+        "cgx2-sema",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2-package",
+        "--all-targets",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "duration_seconds": 1.47
+    },
+    "final-fmt": {
+      "argv": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--check"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "duration_seconds": 0.867
+    },
+    "final-owned-diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "duration_seconds": 0.212
+    },
+    "verify-exports": {
+      "argv": [
+        "python3",
+        "crates/cgx2-syntax/ordinary-admission-repair-evidence/verify.py"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "duration_seconds": 0.428
+    }
+  },
+  "rust_tests": {
+    "passed": 361,
+    "failed": 0,
+    "ignored": 0
+  },
+  "product": {
+    "new-repair": {
+      "passed": 196,
+      "failed": 0
+    },
+    "unchanged-ordinary": {
+      "passed": 117,
+      "failed": 0
+    },
+    "default-managed": {
+      "passed": 369,
+      "failed": 0
+    },
+    "managed-repair": {
+      "passed": 678,
+      "failed": 0
+    }
+  },
+  "known_other_lane_defects": [
+    "OM05",
+    "OM06",
+    "OM07",
+    "OM08"
+  ],
+  "unrun": [
+    "optional historical regressions (coordinator scope)",
+    "full workspace tests",
+    "external leak audit",
+    "release performance measurements"
+  ],
+  "retained_attempts": [
+    "baseline-tests",
+    "focused-attempt-2",
+    "focused-attempt-3",
+    "focused-attempt-4",
+    "fmt-before",
+    "product-attempt-1",
+    "product-attempt-2",
+    "product-attempt-3",
+    "product-final",
+    "product-extended-final",
+    "product-complete"
+  ]
+}
