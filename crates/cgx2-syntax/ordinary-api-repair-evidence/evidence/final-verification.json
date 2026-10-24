@@ -1,0 +1,391 @@
+{
+  "frozen_hashes_unchanged": true,
+  "compiler_hash_unchanged": true,
+  "frozen_source_inputs_unchanged": 915,
+  "script_sha256": {
+    "crates/cgx2-syntax/ordinary-api-repair-evidence/command.py": "f423fe6b50b110b9cf29432a602b58f69330f432df2783d73b4992b58c6fabb0",
+    "crates/cgx2-syntax/ordinary-api-repair-evidence/freeze.py": "f474d06b2ce27f8507ef30326ecb097a6fe5b0cad0d4b159f5594288128abd26",
+    "crates/cgx2-syntax/ordinary-api-repair-evidence/replay.py": "97fe13ecff7002338bb48991cabbf5bf35e61cf2f4b6b5b1ac9bf61230fcf4f7",
+    "crates/cgx2-syntax/ordinary-api-repair-evidence/run.py": "11fd1cfb4558ade727a6f6608ead771068d653d8ae754b7b10b46c2aa90920dc",
+    "crates/cgx2-syntax/ordinary-api-repair-evidence/finalize.py": "3801b4467458589c7fc76973164c9ff27f4271375ba0db0abf889c247d21e998",
+    "crates/cgx2-api-index/tests/verify_visibility_cli.py": "9fd543d5f82a083c30594a15b421f606ead4bb5c08d48fd9213416bbe519da6a",
+    "crates/cgx2-sema/tests/source_specialization/run.py": "fa2e3f799130dff5e9dcbb44f18c9d346d2b6d91f4424e6fd58809abbfa09c10"
+  },
+  "archived": [
+    {
+      "original": "replay-visibility/package-debug",
+      "sha256": "056e137c31a959ef40a2bb0bf01c4bd0fec75e87892a8b6ee3bb213eb518a065",
+      "bytes": 5462264,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-visibility/package-debug"
+    },
+    {
+      "original": "replay-visibility/package-release",
+      "sha256": "414312d2692557735fb75a1fd7e8255750dae8bbc48d50095c523beab2879386",
+      "bytes": 4790792,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-visibility/package-release"
+    },
+    {
+      "original": "replay-visibility/package-rust",
+      "sha256": "485d4b0b1db3a56208981c47ba16fbd3a641e263be86a7f95d4188c47594b1fe",
+      "bytes": 5458176,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-visibility/package-rust"
+    },
+    {
+      "original": "replay-visibility/package.rs",
+      "sha256": "e4a04bec309db36a837e9e6bb6da7195b09be20c3bcd8aed6094f4ca86c4c30c",
+      "bytes": 245431,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-visibility/package.rs",
+      "portable_source_archive": "replay-visibility/package.rs.gz"
+    },
+    {
+      "original": "replay-visibility/public-package-debug",
+      "sha256": "c2b9298fb19431f40746e7ae1b8a1b2590b2c5758b2b9e9f6c45031b3e344fba",
+      "bytes": 5442608,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-visibility/public-package-debug"
+    },
+    {
+      "original": "replay-visibility/public-package-release",
+      "sha256": "fd085aecab7482a2f8254319d10d2e903b8a8d34a5efefa1c083d0ee808b5728",
+      "bytes": 4781872,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-visibility/public-package-release"
+    },
+    {
+      "original": "replay-visibility/public-package-rust",
+      "sha256": "5d9ca581f1f1e427dd15e1c5504a0da5a00424c3de47634cfe52367e7e8c8e91",
+      "bytes": 5453928,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-visibility/public-package-rust"
+    },
+    {
+      "original": "replay-visibility/public-package.rs",
+      "sha256": "89b584fd5ad5b4be3b8d48f69a8ff5d135c109b9d0933715099fab1745e04560",
+      "bytes": 240436,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-visibility/public-package.rs",
+      "portable_source_archive": "replay-visibility/public-package.rs.gz"
+    },
+    {
+      "original": "replay-visibility/public-source-debug",
+      "sha256": "1a3791bcac8041a61cee12bcc66973e3b560f419f8df37e3e8e5762bce19f672",
+      "bytes": 5495256,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-visibility/public-source-debug"
+    },
+    {
+      "original": "replay-visibility/public-source-release",
+      "sha256": "a1edde5da75fee02c58f6eabcd41808ad5e318f42956e854216cbe907ec73467",
+      "bytes": 4791264,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-visibility/public-source-release"
+    },
+    {
+      "original": "replay-visibility/public-source-rust",
+      "sha256": "b46684a61e4f5d9acb9a8531d4b5356c42c26e1c96d68a352b01055754064e97",
+      "bytes": 5448192,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-visibility/public-source-rust"
+    },
+    {
+      "original": "replay-visibility/public-source.rs",
+      "sha256": "841411cbe8d5e9689f0a362187db8ef61a884c9e0a673c9d85945927729c6677",
+      "bytes": 239518,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-visibility/public-source.rs",
+      "portable_source_archive": "replay-visibility/public-source.rs.gz"
+    },
+    {
+      "original": "replay-visibility/public-values-debug",
+      "sha256": "a245ce04d8ae1ebdaa169a2bd6f0a055c66c7e59ce1ab7f97a17b2275e30801a",
+      "bytes": 5486736,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-visibility/public-values-debug"
+    },
+    {
+      "original": "replay-visibility/public-values-release",
+      "sha256": "2b1b448c997239dc5f45be8d0c2450ec50e4d97525132efe354e768aa9dcac51",
+      "bytes": 4788696,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-visibility/public-values-release"
+    },
+    {
+      "original": "replay-visibility/public-values-rust",
+      "sha256": "0143b6b5ae25da09b04054b141d98205d1709220eec4e3fb9446cd32fb14cdf2",
+      "bytes": 5438024,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-visibility/public-values-rust"
+    },
+    {
+      "original": "replay-visibility/public-values.rs",
+      "sha256": "841a032b4a3fe9461ca105bfe43248f909581baa8cee8d658627fd6cb9163427",
+      "bytes": 237862,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-visibility/public-values.rs",
+      "portable_source_archive": "replay-visibility/public-values.rs.gz"
+    },
+    {
+      "original": "replay-visibility/source-debug",
+      "sha256": "829b4bad2d2c51a0b7f149819d4d4459b744575ef8be8855f7f237664017fde3",
+      "bytes": 5526184,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-visibility/source-debug"
+    },
+    {
+      "original": "replay-visibility/source-release",
+      "sha256": "e24c00fbfee624d787a73b814ae668737a72e6871c4c6cbee9fc6e1c1b861bd2",
+      "bytes": 4805192,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-visibility/source-release"
+    },
+    {
+      "original": "replay-visibility/source-rust",
+      "sha256": "69376e22a1e5987b532fa3d15a0759be97e7c0d144200abc7af37c10013d3031",
+      "bytes": 5463352,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-visibility/source-rust"
+    },
+    {
+      "original": "replay-visibility/source.rs",
+      "sha256": "afae05fd7c88ea9843fda7866a27cc697513cbc1c8dfa3bcfc34babc12292b1d",
+      "bytes": 246575,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-visibility/source.rs",
+      "portable_source_archive": "replay-visibility/source.rs.gz"
+    },
+    {
+      "original": "replay-specialization-external/collisions-debug",
+      "sha256": "70f28d9339d5e617da50dc290d62de6f0c3ca3c126c550bb7360ea239fc75c48",
+      "bytes": 5474744,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/collisions-debug"
+    },
+    {
+      "original": "replay-specialization-external/collisions-release",
+      "sha256": "b4190c8ed5844b73a19fcd9387b27db82d2ce293917836feabf8bc5023f8184a",
+      "bytes": 4782960,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/collisions-release"
+    },
+    {
+      "original": "replay-specialization-external/collisions-rust",
+      "sha256": "792710e4e3c8af9b56bb56432fc75476d399419e437e9a32c90b48ad8354709d",
+      "bytes": 5414648,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/collisions-rust"
+    },
+    {
+      "original": "replay-specialization-external/collisions.rs",
+      "sha256": "62e6e30ba945ab93e0ddf55e2e1f565dc5d44eebf2a2a9eb32e9f34212399f03",
+      "bytes": 235265,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/collisions.rs",
+      "portable_source_archive": "replay-specialization-external/collisions.rs.gz"
+    },
+    {
+      "original": "replay-specialization-external/nested-private-debug",
+      "sha256": "39df3c0cd627511214d6b199aaf6187d312b7a664f5a5a24ef61c817873e7aef",
+      "bytes": 5482088,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/nested-private-debug"
+    },
+    {
+      "original": "replay-specialization-external/nested-private-release",
+      "sha256": "fd5a010298ae7a9be3c80eafa19ac4c16db9c02c5709bce4bd9d25952b153368",
+      "bytes": 4786120,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/nested-private-release"
+    },
+    {
+      "original": "replay-specialization-external/nested-private-rust",
+      "sha256": "ddf884ee7bb962658dd51e0e4bfcc40ae0d92bfffc6f8cb864503d69707918ad",
+      "bytes": 5422056,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/nested-private-rust"
+    },
+    {
+      "original": "replay-specialization-external/nested-private.rs",
+      "sha256": "2ba6f7476f339abce907b83cd70375c4ae3e145a2565852a3042ac5d3352686d",
+      "bytes": 236634,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/nested-private.rs",
+      "portable_source_archive": "replay-specialization-external/nested-private.rs.gz"
+    },
+    {
+      "original": "replay-specialization-external/package-private-debug",
+      "sha256": "54b56569b551b8d490652ae5f656dfa5e3f5a6aea682ed2e8d498d1ce65870ed",
+      "bytes": 5447488,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/package-private-debug"
+    },
+    {
+      "original": "replay-specialization-external/package-private-release",
+      "sha256": "31d18b562481a5c737decd33ba16c7b44b0a326e2e56b24b0056f88f2a4ced06",
+      "bytes": 4784664,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/package-private-release"
+    },
+    {
+      "original": "replay-specialization-external/package-private-rust",
+      "sha256": "14ede26c69db8f764e6c6f86da45b65110e258c5f19a1c19549f047c3d5c4a2d",
+      "bytes": 5443416,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/package-private-rust"
+    },
+    {
+      "original": "replay-specialization-external/package-private.rs",
+      "sha256": "04a2464618375ec796cde5a2cc18dba79fc0b882154063be71acfa478c347d95",
+      "bytes": 241924,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/package-private.rs",
+      "portable_source_archive": "replay-specialization-external/package-private.rs.gz"
+    },
+    {
+      "original": "replay-specialization-external/public-interfaces-debug",
+      "sha256": "2943feb1ecae7d41faa7b764d0111fe181affd867e0c5ae656c77069aad62e72",
+      "bytes": 5482280,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/public-interfaces-debug"
+    },
+    {
+      "original": "replay-specialization-external/public-interfaces-release",
+      "sha256": "81cdaa2a4e439d81d376642a3b80d70775fba1ddec8e6c4ccf61fae6bdea9d04",
+      "bytes": 4786568,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/public-interfaces-release"
+    },
+    {
+      "original": "replay-specialization-external/public-interfaces-rust",
+      "sha256": "56b14192021ded97c5972e1851616fb0fee97cfdaf5059a682332c8dbec504e0",
+      "bytes": 5422296,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/public-interfaces-rust"
+    },
+    {
+      "original": "replay-specialization-external/public-interfaces.rs",
+      "sha256": "f2e3ea099e5e930657fd3fef5ca7268da20b3c49afdfbc97a185425b4b800723",
+      "bytes": 236920,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/public-interfaces.rs",
+      "portable_source_archive": "replay-specialization-external/public-interfaces.rs.gz"
+    },
+    {
+      "original": "replay-specialization-external/public-package-debug",
+      "sha256": "1686b69623b60d938f40fb82c3ade4e56325eed014534c7706b8e7b1deb7289f",
+      "bytes": 5442624,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/public-package-debug"
+    },
+    {
+      "original": "replay-specialization-external/public-package-release",
+      "sha256": "3905ef7e5ade0fb5f597645a6ff53eb4148105d1f83824b1505f5afb1bf96363",
+      "bytes": 4781896,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/public-package-release"
+    },
+    {
+      "original": "replay-specialization-external/public-package-rust",
+      "sha256": "70b85b5434c9cc5e4161cbdde8256145686e8aae45f80566aa41fd795f42743a",
+      "bytes": 5438592,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/public-package-rust"
+    },
+    {
+      "original": "replay-specialization-external/public-package.rs",
+      "sha256": "89b584fd5ad5b4be3b8d48f69a8ff5d135c109b9d0933715099fab1745e04560",
+      "bytes": 240436,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/public-package.rs",
+      "portable_source_archive": "replay-specialization-external/public-package.rs.gz"
+    },
+    {
+      "original": "replay-specialization-external/public-source-debug",
+      "sha256": "f11511c9c0b4bd3000935cb5efcc6cf67fec47d536d6a3fe75469f269d0df791",
+      "bytes": 5495272,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/public-source-debug"
+    },
+    {
+      "original": "replay-specialization-external/public-source-release",
+      "sha256": "136918978343a21114667499583d64e35a9fd484343b68c99c645292d8610bc3",
+      "bytes": 4791280,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/public-source-release"
+    },
+    {
+      "original": "replay-specialization-external/public-source-rust",
+      "sha256": "6db40153ad48026742ba0b3def03db414f681644c1e36bc1344d31211fd2b404",
+      "bytes": 5434776,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/public-source-rust"
+    },
+    {
+      "original": "replay-specialization-external/public-source.rs",
+      "sha256": "841411cbe8d5e9689f0a362187db8ef61a884c9e0a673c9d85945927729c6677",
+      "bytes": 239518,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/public-source.rs",
+      "portable_source_archive": "replay-specialization-external/public-source.rs.gz"
+    },
+    {
+      "original": "replay-specialization-external/public-values-debug",
+      "sha256": "7c676a8600bccc3e221db01ca3ee951af828de946a5d00c85de9809d186eba09",
+      "bytes": 5486752,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/public-values-debug"
+    },
+    {
+      "original": "replay-specialization-external/public-values-release",
+      "sha256": "60ccefa28a3a4aea352ae98467057e21fe43b9da434d668d50b8d4a1628eb1bd",
+      "bytes": 4788696,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/public-values-release"
+    },
+    {
+      "original": "replay-specialization-external/public-values-rust",
+      "sha256": "bfe725d643e134eddf8ea1ec67105c544fa2929deddf6e2222b4b40e7c9fece4",
+      "bytes": 5426392,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/public-values-rust"
+    },
+    {
+      "original": "replay-specialization-external/public-values.rs",
+      "sha256": "841a032b4a3fe9461ca105bfe43248f909581baa8cee8d658627fd6cb9163427",
+      "bytes": 237862,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/public-values.rs",
+      "portable_source_archive": "replay-specialization-external/public-values.rs.gz"
+    },
+    {
+      "original": "replay-specialization-external/qualified-debug",
+      "sha256": "e1b05acdc318956cb82907adfc5cece1d20585701d5161f755f433bc9fd77407",
+      "bytes": 5469256,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/qualified-debug"
+    },
+    {
+      "original": "replay-specialization-external/qualified-release",
+      "sha256": "8baa402c2395a1492917785e961a1e49f7f006690c3423c01ed4c61ff8830d67",
+      "bytes": 4779832,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/qualified-release"
+    },
+    {
+      "original": "replay-specialization-external/qualified-rust",
+      "sha256": "c74c1777dd48b7a5619884211487a4579911efc1c28a83c7e38f68b74506b32f",
+      "bytes": 5409192,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/qualified-rust"
+    },
+    {
+      "original": "replay-specialization-external/qualified.rs",
+      "sha256": "1d72d0be73ce13f4483d4e7bce10f41d1901929efa91cd9ea92c951f72f00576",
+      "bytes": 233794,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/qualified.rs",
+      "portable_source_archive": "replay-specialization-external/qualified.rs.gz"
+    },
+    {
+      "original": "replay-specialization-external/visibility-package-debug",
+      "sha256": "9072cbdf0392da133536047aa0cafcfc782605e57543e074119ef0c4d9897e64",
+      "bytes": 5462280,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/visibility-package-debug"
+    },
+    {
+      "original": "replay-specialization-external/visibility-package-release",
+      "sha256": "a08c57c2331dc1e5daafd72af5c79b88c03aeb1332531bf11e4ab302bb581825",
+      "bytes": 4790832,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/visibility-package-release"
+    },
+    {
+      "original": "replay-specialization-external/visibility-package-rust",
+      "sha256": "b57b89d9a68175658a54b5022ede1c721a5b67a3dc39025bbdbdc27a89322f1e",
+      "bytes": 5458264,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/visibility-package-rust"
+    },
+    {
+      "original": "replay-specialization-external/visibility-package.rs",
+      "sha256": "e4a04bec309db36a837e9e6bb6da7195b09be20c3bcd8aed6094f4ca86c4c30c",
+      "bytes": 245431,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/visibility-package.rs",
+      "portable_source_archive": "replay-specialization-external/visibility-package.rs.gz"
+    },
+    {
+      "original": "replay-specialization-external/visibility-source-debug",
+      "sha256": "c712cc620fab59c1c1e150b6094285e9ca7c8a122fea683b35d31b0478034085",
+      "bytes": 5526200,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/visibility-source-debug"
+    },
+    {
+      "original": "replay-specialization-external/visibility-source-release",
+      "sha256": "eed1b212342528853c388bd1518b23247bfa9e3b60c9098d94c4c0365c74f655",
+      "bytes": 4805192,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/visibility-source-release"
+    },
+    {
+      "original": "replay-specialization-external/visibility-source-rust",
+      "sha256": "ccaa27dd30fb2100383a3fbd9bef32c5517fc34f95260b3bea0d8deb5b149d54",
+      "bytes": 5465296,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/visibility-source-rust"
+    },
+    {
+      "original": "replay-specialization-external/visibility-source.rs",
+      "sha256": "afae05fd7c88ea9843fda7866a27cc697513cbc1c8dfa3bcfc34babc12292b1d",
+      "bytes": 246575,
+      "retained_path": "/home/john-riley/.codex/worktrees/2f3a/lang/target/retained-ordinary-api-replays/replay-specialization-external/visibility-source.rs",
+      "portable_source_archive": "replay-specialization-external/visibility-source.rs.gz"
+    }
+  ]
+}

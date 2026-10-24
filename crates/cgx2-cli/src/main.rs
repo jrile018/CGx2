@@ -65,8 +65,8 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
     let command = parse_args(args).map_err(|error| vec![error])?;
     if let Command::MemoryEffects { path } = &command {
         let program = if Path::new(path).is_dir() {
-            if let Some(index) = memory_package_index(path)? {
-                println!("{}", index.render_json());
+            if let Some((json, _)) = memory_package_index(path, false)? {
+                println!("{json}");
                 return Ok(());
             }
             let package = cgx2_package::load_checked_package(Path::new(path)).map_err(|ds| {
@@ -164,11 +164,11 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
                     None,
                 )]);
             }
-            if let Some(index) = memory_package_index(path)? {
+            if let Some((json_index, text_index)) = memory_package_index(path, true)? {
                 if *json {
-                    println!("{}", index.render_json());
+                    println!("{json_index}");
                 } else {
-                    print!("{}", index.render_text());
+                    print!("{text_index}");
                 }
                 return Ok(());
             }
@@ -315,7 +315,7 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
                         .map(|d| CliDiagnostic::new(d.code, d.message, path.clone(), Some(d.span)))
                         .collect::<Vec<_>>()
                 })?;
-                let index = cgx2_api_index::build_memory_index_v2(&p).map_err(|e| {
+                let index = cgx2_api_index::build_public_memory_index_v1(&p).map_err(|e| {
                     vec![CliDiagnostic::new(
                         "CGC001",
                         e.to_string(),
@@ -465,7 +465,8 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
 
 fn memory_package_index(
     path: &str,
-) -> Result<Option<cgx2_api_index::ApiMemoryIndexV2>, Vec<CliDiagnostic>> {
+    public_api: bool,
+) -> Result<Option<(String, String)>, Vec<CliDiagnostic>> {
     let convert = |ds: Vec<cgx2_package::PackageDiagnostic>| {
         ds.into_iter()
             .map(|d| {
@@ -484,15 +485,45 @@ fn memory_package_index(
         return Ok(None);
     };
     let p = package.memory_program_v1().map_err(convert)?;
-    let index = cgx2_api_index::build_memory_index_v2(&p).map_err(|e| {
+    let index_error = |e: cgx2_api_index::IndexError| {
         vec![CliDiagnostic::new(
             "CGC001",
             e.to_string(),
             path.into(),
             None,
         )]
-    })?;
-    Ok(Some(index))
+    };
+    let rendered = if public_api {
+        let index = cgx2_api_index::build_public_memory_index_v1(&p).map_err(index_error)?;
+        // The source-bundle view keeps original per-module declarations. Package
+        // accessors supply the separately authenticated manifest/freshness data.
+        let metadata = serde_json::json!({
+            "entry": package.entry(),
+            "manifest_sha256": package.manifest_sha256(),
+            "binding_lock": package.binding_lock(),
+            "source_hashes": package.source_hashes(),
+        });
+        let mut json: serde_json::Value =
+            serde_json::from_str(&index.render_json()).expect("public API renderer produces JSON");
+        json["package"] = metadata;
+        let text = format!(
+            "manifest_sha256 {}\nbinding_lock {}\n{}",
+            package.manifest_sha256(),
+            package
+                .binding_lock()
+                .map_or_else(|| "<none>".into(), |p| p.display().to_string()),
+            index.render_text()
+        );
+        (json.to_string(), text)
+    } else {
+        let index = cgx2_api_index::build_memory_index_v2(&p).map_err(index_error)?;
+        (
+            index.render_json().to_owned(),
+            index.render_text().to_owned(),
+        )
+    };
+    package.verify_unchanged().map_err(convert)?;
+    Ok(Some(rendered))
 }
 
 fn parse_args(args: Vec<String>) -> Result<Command, CliDiagnostic> {

@@ -1,0 +1,1422 @@
+{
+  "kind": "local source/package/target conformance; no release acceptance",
+  "base": "b595724e1b086c604220cc5b165c141e65a0531f",
+  "binary_sha256": "effe844ca96c0a64ed9632feb656080d5b58639e8ca52e126a423b45f637cd61",
+  "fixtures_sha256": {
+    "s2bf-invalid.cg": "cfcbdc2ad61b2e1ffc890162ef94cf0691bb58b329ffdf0a301ec50f0d141150",
+    "s2bf-package/cgx2.toml": "0f2e30397aac6de87ed9401fadf1c9291d525184762782f645269741002cdc9f",
+    "s2bf-package/src/dep.cg": "244c1262cd73a352775d5ca81d0ea9941367c008facbd6c2a97e7b3e6e062276",
+    "s2bf-package/src/main.cg": "6e1a4e4ed4d5a6b310740808e037b2137b840e1f6d8773bf5b45ff8a272eee9e",
+    "s2bf-private.cg": "f99fee0251fae491fe5e39c613fefbc91ca6268b9884cf817dabb629740f054f",
+    "s2bf-public-package/cgx2.toml": "94cc83d917391fc8f196982738a66ea56e7c5a76f3698e15592ab578da02bf5a",
+    "s2bf-public-package/src/dep.cg": "ed6f63b8f1765bdc690e165f6ba5ba1b47f9e8d412cc94c078ce441c55a2c059",
+    "s2bf-public-package/src/main.cg": "41568a6ba19c6259f50ed8bb53eed9590e083035bf3747e486b976674097ef8c",
+    "s2bf-public-values.cg": "2e0800e3653c297f59f5737a42bc4c24f577a9b5f727d6743eec1a5116bb20b6",
+    "s2bf-public.cg": "7975e62491ed41469a166b7de51873629b9de821a857fb8a9ac5b41a3a831622",
+    "s2bf-visibility.cg": "2f4955183912954aba9bae51881d646356bc471e3ca9c11362920b3c55521dd0"
+  },
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/2f3a/lang/target/release-ordinary-api-visibility",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/2f3a/lang/target/tmp-ordinary-api-visibility",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "results": [
+    {
+      "label": "reviewed:text",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-private.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "module api [checked]\npub fn run() -> i64 effects() [inferred] caps() [inferred] [73, 100)\n",
+      "stderr": ""
+    },
+    {
+      "label": "reviewed:text-repeat",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-private.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "module api [checked]\npub fn run() -> i64 effects() [inferred] caps() [inferred] [73, 100)\n",
+      "stderr": ""
+    },
+    {
+      "label": "reviewed:json",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-private.cg",
+        "--json"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "{\"schema_version\":7,\"module\":\"api\",\"instantiations\":[],\"functions\":[{\"name\":\"run\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":73,\"end\":100},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":89,\"end\":92}},\"effects\":[],\"effects_status\":\"inferred\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[],\"semantics_status\":\"checked\",\"variants\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "label": "reviewed:json-repeat",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-private.cg",
+        "--json"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "{\"schema_version\":7,\"module\":\"api\",\"instantiations\":[],\"functions\":[{\"name\":\"run\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":73,\"end\":100},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":89,\"end\":92}},\"effects\":[],\"effects_status\":\"inferred\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[],\"semantics_status\":\"checked\",\"variants\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "label": "reviewed:private-names-absent",
+      "passed": true
+    },
+    {
+      "label": "reviewed:checked-schema7:api",
+      "passed": true
+    },
+    {
+      "label": "reviewed:no-instantiations",
+      "passed": true
+    },
+    {
+      "label": "source:text",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "module api [checked]\ninstantiate api.id<cgx2.core.Option<cgx2.core.Result<List<Array<api.Visible>>, Bool>>>(cgx2.core.Option<cgx2.core.Result<List<Array<api.Visible>>, Bool>>) -> cgx2.core.Option<cgx2.core.Result<List<Array<api.Visible>>, Bool>> [checked] [814, 875)\ninstantiate api.id<api.Wrapper<api.Choice<api.Visible>>>(api.Wrapper<api.Choice<api.Visible>>) -> api.Wrapper<api.Choice<api.Visible>> [checked] [901, 1004)\ninstantiate api.nested<i64>(List<i64>) -> List<i64> [checked] [1028, 1047)\ninstantiate api.id<i64>(i64) -> i64 [checked] [1052, 1062)\ninstantiate api.id<List<api.nested::U>>(List<api.nested::U>) -> List<api.nested::U> [checked] [431, 445)\nvariant api.Choice<T> [189, 226)\n    Value(T)\nrecord api.Visible [116, 151)\n    value: i64\nrecord api.Wrapper<T> [152, 188)\n    value: T\npub fn id<T: Eq + Show>(x: T) -> T effects() [explicit] caps() [explicit] [226, 286)\npub fn main() -> i64 effects() [inferred] caps() [inferred] [447, 1063)\npub fn nested<U: Eq + Show>(x: List<U>) -> List<U> effects() [explicit] caps() [explicit] [358, 447)\n",
+      "stderr": ""
+    },
+    {
+      "label": "source:text-repeat",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "module api [checked]\ninstantiate api.id<cgx2.core.Option<cgx2.core.Result<List<Array<api.Visible>>, Bool>>>(cgx2.core.Option<cgx2.core.Result<List<Array<api.Visible>>, Bool>>) -> cgx2.core.Option<cgx2.core.Result<List<Array<api.Visible>>, Bool>> [checked] [814, 875)\ninstantiate api.id<api.Wrapper<api.Choice<api.Visible>>>(api.Wrapper<api.Choice<api.Visible>>) -> api.Wrapper<api.Choice<api.Visible>> [checked] [901, 1004)\ninstantiate api.nested<i64>(List<i64>) -> List<i64> [checked] [1028, 1047)\ninstantiate api.id<i64>(i64) -> i64 [checked] [1052, 1062)\ninstantiate api.id<List<api.nested::U>>(List<api.nested::U>) -> List<api.nested::U> [checked] [431, 445)\nvariant api.Choice<T> [189, 226)\n    Value(T)\nrecord api.Visible [116, 151)\n    value: i64\nrecord api.Wrapper<T> [152, 188)\n    value: T\npub fn id<T: Eq + Show>(x: T) -> T effects() [explicit] caps() [explicit] [226, 286)\npub fn main() -> i64 effects() [inferred] caps() [inferred] [447, 1063)\npub fn nested<U: Eq + Show>(x: List<U>) -> List<U> effects() [explicit] caps() [explicit] [358, 447)\n",
+      "stderr": ""
+    },
+    {
+      "label": "source:json",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg",
+        "--json"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "{\"schema_version\":7,\"module\":\"api\",\"instantiations\":[{\"owner\":\"api.main\",\"callee\":\"api.id\",\"type_arguments\":[\"cgx2.core.Option<cgx2.core.Result<List<Array<api.Visible>>, Bool>>\"],\"parameters\":[\"cgx2.core.Option<cgx2.core.Result<List<Array<api.Visible>>, Bool>>\"],\"return_type\":\"cgx2.core.Option<cgx2.core.Result<List<Array<api.Visible>>, Bool>>\",\"span\":{\"start\":814,\"end\":875}},{\"owner\":\"api.main\",\"callee\":\"api.id\",\"type_arguments\":[\"api.Wrapper<api.Choice<api.Visible>>\"],\"parameters\":[\"api.Wrapper<api.Choice<api.Visible>>\"],\"return_type\":\"api.Wrapper<api.Choice<api.Visible>>\",\"span\":{\"start\":901,\"end\":1004}},{\"owner\":\"api.main\",\"callee\":\"api.nested\",\"type_arguments\":[\"i64\"],\"parameters\":[\"List<i64>\"],\"return_type\":\"List<i64>\",\"span\":{\"start\":1028,\"end\":1047}},{\"owner\":\"api.main\",\"callee\":\"api.id\",\"type_arguments\":[\"i64\"],\"parameters\":[\"i64\"],\"return_type\":\"i64\",\"span\":{\"start\":1052,\"end\":1062}},{\"owner\":\"api.nested\",\"callee\":\"api.id\",\"type_arguments\":[\"List<api.nested::U>\"],\"parameters\":[\"List<api.nested::U>\"],\"return_type\":\"List<api.nested::U>\",\"span\":{\"start\":431,\"end\":445}}],\"functions\":[{\"name\":\"id\",\"parameters\":[{\"name\":\"x\",\"ty\":\"T\"}],\"return_type\":\"T\",\"span\":{\"start\":226,\"end\":286},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":236,\"end\":248}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":253,\"end\":254}}],\"result_type\":{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":259,\"end\":260}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"main\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":447,\"end\":1063},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":464,\"end\":467}},\"effects\":[],\"effects_status\":\"inferred\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"nested\",\"parameters\":[{\"name\":\"x\",\"ty\":\"List<U>\"}],\"return_type\":\"List<U>\",\"span\":{\"start\":358,\"end\":447},\"type_parameters\":[{\"name\":\"U\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":372,\"end\":384}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"List\",\"arguments\":[{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":394,\"end\":395}}],\"span\":{\"start\":389,\"end\":396}}],\"result_type\":{\"identity\":\"List\",\"arguments\":[{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":406,\"end\":407}}],\"span\":{\"start\":401,\"end\":408}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[{\"name\":\"Visible\",\"identity\":\"api.Visible\",\"type_parameters\":[],\"field_types\":[{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":147,\"end\":150}}],\"fields\":[{\"name\":\"value\",\"ty\":\"i64\"}],\"span\":{\"start\":116,\"end\":151}},{\"name\":\"Wrapper\",\"identity\":\"api.Wrapper\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":171,\"end\":172}}],\"field_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":186,\"end\":187}}],\"fields\":[{\"name\":\"value\",\"ty\":\"T\"}],\"span\":{\"start\":152,\"end\":188}}],\"semantics_status\":\"checked\",\"variants\":[{\"name\":\"Choice\",\"identity\":\"api.Choice\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":208,\"end\":209}}],\"span\":{\"start\":189,\"end\":226},\"cases\":[{\"name\":\"Value\",\"span\":{\"start\":216,\"end\":225},\"payloads\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":222,\"end\":223}}]}]}]}\n",
+      "stderr": ""
+    },
+    {
+      "label": "source:json-repeat",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg",
+        "--json"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "{\"schema_version\":7,\"module\":\"api\",\"instantiations\":[{\"owner\":\"api.main\",\"callee\":\"api.id\",\"type_arguments\":[\"cgx2.core.Option<cgx2.core.Result<List<Array<api.Visible>>, Bool>>\"],\"parameters\":[\"cgx2.core.Option<cgx2.core.Result<List<Array<api.Visible>>, Bool>>\"],\"return_type\":\"cgx2.core.Option<cgx2.core.Result<List<Array<api.Visible>>, Bool>>\",\"span\":{\"start\":814,\"end\":875}},{\"owner\":\"api.main\",\"callee\":\"api.id\",\"type_arguments\":[\"api.Wrapper<api.Choice<api.Visible>>\"],\"parameters\":[\"api.Wrapper<api.Choice<api.Visible>>\"],\"return_type\":\"api.Wrapper<api.Choice<api.Visible>>\",\"span\":{\"start\":901,\"end\":1004}},{\"owner\":\"api.main\",\"callee\":\"api.nested\",\"type_arguments\":[\"i64\"],\"parameters\":[\"List<i64>\"],\"return_type\":\"List<i64>\",\"span\":{\"start\":1028,\"end\":1047}},{\"owner\":\"api.main\",\"callee\":\"api.id\",\"type_arguments\":[\"i64\"],\"parameters\":[\"i64\"],\"return_type\":\"i64\",\"span\":{\"start\":1052,\"end\":1062}},{\"owner\":\"api.nested\",\"callee\":\"api.id\",\"type_arguments\":[\"List<api.nested::U>\"],\"parameters\":[\"List<api.nested::U>\"],\"return_type\":\"List<api.nested::U>\",\"span\":{\"start\":431,\"end\":445}}],\"functions\":[{\"name\":\"id\",\"parameters\":[{\"name\":\"x\",\"ty\":\"T\"}],\"return_type\":\"T\",\"span\":{\"start\":226,\"end\":286},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":236,\"end\":248}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":253,\"end\":254}}],\"result_type\":{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":259,\"end\":260}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"main\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":447,\"end\":1063},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":464,\"end\":467}},\"effects\":[],\"effects_status\":\"inferred\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"nested\",\"parameters\":[{\"name\":\"x\",\"ty\":\"List<U>\"}],\"return_type\":\"List<U>\",\"span\":{\"start\":358,\"end\":447},\"type_parameters\":[{\"name\":\"U\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":372,\"end\":384}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"List\",\"arguments\":[{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":394,\"end\":395}}],\"span\":{\"start\":389,\"end\":396}}],\"result_type\":{\"identity\":\"List\",\"arguments\":[{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":406,\"end\":407}}],\"span\":{\"start\":401,\"end\":408}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[{\"name\":\"Visible\",\"identity\":\"api.Visible\",\"type_parameters\":[],\"field_types\":[{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":147,\"end\":150}}],\"fields\":[{\"name\":\"value\",\"ty\":\"i64\"}],\"span\":{\"start\":116,\"end\":151}},{\"name\":\"Wrapper\",\"identity\":\"api.Wrapper\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":171,\"end\":172}}],\"field_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":186,\"end\":187}}],\"fields\":[{\"name\":\"value\",\"ty\":\"T\"}],\"span\":{\"start\":152,\"end\":188}}],\"semantics_status\":\"checked\",\"variants\":[{\"name\":\"Choice\",\"identity\":\"api.Choice\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":208,\"end\":209}}],\"span\":{\"start\":189,\"end\":226},\"cases\":[{\"name\":\"Value\",\"span\":{\"start\":216,\"end\":225},\"payloads\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":222,\"end\":223}}]}]}]}\n",
+      "stderr": ""
+    },
+    {
+      "label": "source:private-names-absent",
+      "passed": true
+    },
+    {
+      "label": "source:checked-schema7:api",
+      "passed": true
+    },
+    {
+      "label": "source:instance-count",
+      "passed": true
+    },
+    {
+      "label": "source:complete-nested-type",
+      "passed": true
+    },
+    {
+      "label": "source:scoped-owner-binder",
+      "passed": true
+    },
+    {
+      "label": "source:constraints",
+      "passed": true
+    },
+    {
+      "label": "package:text",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-package"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "package visibility\nschema_version 2\nentry src/main.cg\nimports_supported true\nsource src/main.cg\nimport dep\ncall dep.id [131, 150)\ncall dep.id [180, 194)\ncall dep.id [236, 316)\ncall dep.id [334, 374)\ncall dep.id [471, 485)\ncall dep.id [533, 557)\ncall dep.value [545, 556)\nmodule app [checked]\ninstantiate dep.id<dep.Choice<dep.Value>>(dep.Choice<dep.Value>) -> dep.Choice<dep.Value> [checked] [236, 316)\ninstantiate dep.id<cgx2.core.Option<cgx2.core.Result<List<Array<dep.Value>>, Bool>>>(cgx2.core.Option<cgx2.core.Result<List<Array<dep.Value>>, Bool>>) -> cgx2.core.Option<cgx2.core.Result<List<Array<dep.Value>>, Bool>> [checked] [471, 485)\ninstantiate app.wrap<i64>(Array<i64>) -> Array<i64> [checked] [504, 528)\ninstantiate dep.id<i64>(i64) -> i64 [checked] [533, 557)\ninstantiate dep.id<Array<app.wrap::U>>(Array<app.wrap::U>) -> Array<app.wrap::U> [checked] [131, 150)\npub fn main() -> i64 effects() [inferred] caps() [inferred] [196, 558)\npub fn wrap<U: Eq + Show>(x: Array<U>) -> Array<U> effects() [explicit] caps() [explicit] [58, 152)\nsource src/dep.cg\nmodule dep [checked]\ninstantiate dep.id<i64>(i64) -> i64 [checked] [387, 397)\nvariant dep.Choice<T> [47, 84)\n    Value(T)\nrecord dep.Value [12, 46)\n    number: i64\npub fn id<T: Eq + Show>(x: T) -> T effects() [explicit] caps() [explicit] [119, 179)\npub fn value() -> i64 effects() [inferred] caps() [inferred] [256, 398)\ntopological_order dep, app\n",
+      "stderr": ""
+    },
+    {
+      "label": "package:text-repeat",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-package"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "package visibility\nschema_version 2\nentry src/main.cg\nimports_supported true\nsource src/main.cg\nimport dep\ncall dep.id [131, 150)\ncall dep.id [180, 194)\ncall dep.id [236, 316)\ncall dep.id [334, 374)\ncall dep.id [471, 485)\ncall dep.id [533, 557)\ncall dep.value [545, 556)\nmodule app [checked]\ninstantiate dep.id<dep.Choice<dep.Value>>(dep.Choice<dep.Value>) -> dep.Choice<dep.Value> [checked] [236, 316)\ninstantiate dep.id<cgx2.core.Option<cgx2.core.Result<List<Array<dep.Value>>, Bool>>>(cgx2.core.Option<cgx2.core.Result<List<Array<dep.Value>>, Bool>>) -> cgx2.core.Option<cgx2.core.Result<List<Array<dep.Value>>, Bool>> [checked] [471, 485)\ninstantiate app.wrap<i64>(Array<i64>) -> Array<i64> [checked] [504, 528)\ninstantiate dep.id<i64>(i64) -> i64 [checked] [533, 557)\ninstantiate dep.id<Array<app.wrap::U>>(Array<app.wrap::U>) -> Array<app.wrap::U> [checked] [131, 150)\npub fn main() -> i64 effects() [inferred] caps() [inferred] [196, 558)\npub fn wrap<U: Eq + Show>(x: Array<U>) -> Array<U> effects() [explicit] caps() [explicit] [58, 152)\nsource src/dep.cg\nmodule dep [checked]\ninstantiate dep.id<i64>(i64) -> i64 [checked] [387, 397)\nvariant dep.Choice<T> [47, 84)\n    Value(T)\nrecord dep.Value [12, 46)\n    number: i64\npub fn id<T: Eq + Show>(x: T) -> T effects() [explicit] caps() [explicit] [119, 179)\npub fn value() -> i64 effects() [inferred] caps() [inferred] [256, 398)\ntopological_order dep, app\n",
+      "stderr": ""
+    },
+    {
+      "label": "package:json",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-package",
+        "--json"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "{\"schema_version\":2,\"name\":\"visibility\",\"entry\":\"src/main.cg\",\"imports_supported\":true,\"modules\":[{\"source\":\"src/main.cg\",\"api\":{\"schema_version\":7,\"module\":\"app\",\"instantiations\":[{\"owner\":\"app.main\",\"callee\":\"dep.id\",\"type_arguments\":[\"dep.Choice<dep.Value>\"],\"parameters\":[\"dep.Choice<dep.Value>\"],\"return_type\":\"dep.Choice<dep.Value>\",\"span\":{\"start\":236,\"end\":316}},{\"owner\":\"app.main\",\"callee\":\"dep.id\",\"type_arguments\":[\"cgx2.core.Option<cgx2.core.Result<List<Array<dep.Value>>, Bool>>\"],\"parameters\":[\"cgx2.core.Option<cgx2.core.Result<List<Array<dep.Value>>, Bool>>\"],\"return_type\":\"cgx2.core.Option<cgx2.core.Result<List<Array<dep.Value>>, Bool>>\",\"span\":{\"start\":471,\"end\":485}},{\"owner\":\"app.main\",\"callee\":\"app.wrap\",\"type_arguments\":[\"i64\"],\"parameters\":[\"Array<i64>\"],\"return_type\":\"Array<i64>\",\"span\":{\"start\":504,\"end\":528}},{\"owner\":\"app.main\",\"callee\":\"dep.id\",\"type_arguments\":[\"i64\"],\"parameters\":[\"i64\"],\"return_type\":\"i64\",\"span\":{\"start\":533,\"end\":557}},{\"owner\":\"app.wrap\",\"callee\":\"dep.id\",\"type_arguments\":[\"Array<app.wrap::U>\"],\"parameters\":[\"Array<app.wrap::U>\"],\"return_type\":\"Array<app.wrap::U>\",\"span\":{\"start\":131,\"end\":150}}],\"functions\":[{\"name\":\"main\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":196,\"end\":558},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":213,\"end\":216}},\"effects\":[],\"effects_status\":\"inferred\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"wrap\",\"parameters\":[{\"name\":\"x\",\"ty\":\"Array<U>\"}],\"return_type\":\"Array<U>\",\"span\":{\"start\":58,\"end\":152},\"type_parameters\":[{\"name\":\"U\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":70,\"end\":82}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"Array\",\"arguments\":[{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":93,\"end\":94}}],\"span\":{\"start\":87,\"end\":95}}],\"result_type\":{\"identity\":\"Array\",\"arguments\":[{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":106,\"end\":107}}],\"span\":{\"start\":100,\"end\":108}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[],\"semantics_status\":\"checked\",\"variants\":[]},\"imports\":[\"dep\"],\"resolved_public_calls\":[{\"name\":\"dep.id\",\"span\":{\"start\":131,\"end\":150}},{\"name\":\"dep.id\",\"span\":{\"start\":180,\"end\":194}},{\"name\":\"dep.id\",\"span\":{\"start\":236,\"end\":316}},{\"name\":\"dep.id\",\"span\":{\"start\":334,\"end\":374}},{\"name\":\"dep.id\",\"span\":{\"start\":471,\"end\":485}},{\"name\":\"dep.id\",\"span\":{\"start\":533,\"end\":557}},{\"name\":\"dep.value\",\"span\":{\"start\":545,\"end\":556}}]},{\"source\":\"src/dep.cg\",\"api\":{\"schema_version\":7,\"module\":\"dep\",\"instantiations\":[{\"owner\":\"dep.value\",\"callee\":\"dep.id\",\"type_arguments\":[\"i64\"],\"parameters\":[\"i64\"],\"return_type\":\"i64\",\"span\":{\"start\":387,\"end\":397}}],\"functions\":[{\"name\":\"id\",\"parameters\":[{\"name\":\"x\",\"ty\":\"T\"}],\"return_type\":\"T\",\"span\":{\"start\":119,\"end\":179},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":129,\"end\":141}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":146,\"end\":147}}],\"result_type\":{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":152,\"end\":153}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"value\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":256,\"end\":398},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":274,\"end\":277}},\"effects\":[],\"effects_status\":\"inferred\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[{\"name\":\"Value\",\"identity\":\"dep.Value\",\"type_parameters\":[],\"field_types\":[{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":42,\"end\":45}}],\"fields\":[{\"name\":\"number\",\"ty\":\"i64\"}],\"span\":{\"start\":12,\"end\":46}}],\"semantics_status\":\"checked\",\"variants\":[{\"name\":\"Choice\",\"identity\":\"dep.Choice\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":66,\"end\":67}}],\"span\":{\"start\":47,\"end\":84},\"cases\":[{\"name\":\"Value\",\"span\":{\"start\":74,\"end\":83},\"payloads\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":80,\"end\":81}}]}]}]},\"imports\":[],\"resolved_public_calls\":[]}],\"topological_order\":[\"dep\",\"app\"]}\n",
+      "stderr": ""
+    },
+    {
+      "label": "package:json-repeat",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-package",
+        "--json"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "{\"schema_version\":2,\"name\":\"visibility\",\"entry\":\"src/main.cg\",\"imports_supported\":true,\"modules\":[{\"source\":\"src/main.cg\",\"api\":{\"schema_version\":7,\"module\":\"app\",\"instantiations\":[{\"owner\":\"app.main\",\"callee\":\"dep.id\",\"type_arguments\":[\"dep.Choice<dep.Value>\"],\"parameters\":[\"dep.Choice<dep.Value>\"],\"return_type\":\"dep.Choice<dep.Value>\",\"span\":{\"start\":236,\"end\":316}},{\"owner\":\"app.main\",\"callee\":\"dep.id\",\"type_arguments\":[\"cgx2.core.Option<cgx2.core.Result<List<Array<dep.Value>>, Bool>>\"],\"parameters\":[\"cgx2.core.Option<cgx2.core.Result<List<Array<dep.Value>>, Bool>>\"],\"return_type\":\"cgx2.core.Option<cgx2.core.Result<List<Array<dep.Value>>, Bool>>\",\"span\":{\"start\":471,\"end\":485}},{\"owner\":\"app.main\",\"callee\":\"app.wrap\",\"type_arguments\":[\"i64\"],\"parameters\":[\"Array<i64>\"],\"return_type\":\"Array<i64>\",\"span\":{\"start\":504,\"end\":528}},{\"owner\":\"app.main\",\"callee\":\"dep.id\",\"type_arguments\":[\"i64\"],\"parameters\":[\"i64\"],\"return_type\":\"i64\",\"span\":{\"start\":533,\"end\":557}},{\"owner\":\"app.wrap\",\"callee\":\"dep.id\",\"type_arguments\":[\"Array<app.wrap::U>\"],\"parameters\":[\"Array<app.wrap::U>\"],\"return_type\":\"Array<app.wrap::U>\",\"span\":{\"start\":131,\"end\":150}}],\"functions\":[{\"name\":\"main\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":196,\"end\":558},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":213,\"end\":216}},\"effects\":[],\"effects_status\":\"inferred\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"wrap\",\"parameters\":[{\"name\":\"x\",\"ty\":\"Array<U>\"}],\"return_type\":\"Array<U>\",\"span\":{\"start\":58,\"end\":152},\"type_parameters\":[{\"name\":\"U\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":70,\"end\":82}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"Array\",\"arguments\":[{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":93,\"end\":94}}],\"span\":{\"start\":87,\"end\":95}}],\"result_type\":{\"identity\":\"Array\",\"arguments\":[{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":106,\"end\":107}}],\"span\":{\"start\":100,\"end\":108}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[],\"semantics_status\":\"checked\",\"variants\":[]},\"imports\":[\"dep\"],\"resolved_public_calls\":[{\"name\":\"dep.id\",\"span\":{\"start\":131,\"end\":150}},{\"name\":\"dep.id\",\"span\":{\"start\":180,\"end\":194}},{\"name\":\"dep.id\",\"span\":{\"start\":236,\"end\":316}},{\"name\":\"dep.id\",\"span\":{\"start\":334,\"end\":374}},{\"name\":\"dep.id\",\"span\":{\"start\":471,\"end\":485}},{\"name\":\"dep.id\",\"span\":{\"start\":533,\"end\":557}},{\"name\":\"dep.value\",\"span\":{\"start\":545,\"end\":556}}]},{\"source\":\"src/dep.cg\",\"api\":{\"schema_version\":7,\"module\":\"dep\",\"instantiations\":[{\"owner\":\"dep.value\",\"callee\":\"dep.id\",\"type_arguments\":[\"i64\"],\"parameters\":[\"i64\"],\"return_type\":\"i64\",\"span\":{\"start\":387,\"end\":397}}],\"functions\":[{\"name\":\"id\",\"parameters\":[{\"name\":\"x\",\"ty\":\"T\"}],\"return_type\":\"T\",\"span\":{\"start\":119,\"end\":179},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":129,\"end\":141}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":146,\"end\":147}}],\"result_type\":{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":152,\"end\":153}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"value\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":256,\"end\":398},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":274,\"end\":277}},\"effects\":[],\"effects_status\":\"inferred\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[{\"name\":\"Value\",\"identity\":\"dep.Value\",\"type_parameters\":[],\"field_types\":[{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":42,\"end\":45}}],\"fields\":[{\"name\":\"number\",\"ty\":\"i64\"}],\"span\":{\"start\":12,\"end\":46}}],\"semantics_status\":\"checked\",\"variants\":[{\"name\":\"Choice\",\"identity\":\"dep.Choice\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":66,\"end\":67}}],\"span\":{\"start\":47,\"end\":84},\"cases\":[{\"name\":\"Value\",\"span\":{\"start\":74,\"end\":83},\"payloads\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":80,\"end\":81}}]}]}]},\"imports\":[],\"resolved_public_calls\":[]}],\"topological_order\":[\"dep\",\"app\"]}\n",
+      "stderr": ""
+    },
+    {
+      "label": "package:private-names-absent",
+      "passed": true
+    },
+    {
+      "label": "package:checked-schema7:app",
+      "passed": true
+    },
+    {
+      "label": "package:checked-schema7:dep",
+      "passed": true
+    },
+    {
+      "label": "package:instance-count",
+      "passed": true
+    },
+    {
+      "label": "package:complete-nested-type",
+      "passed": true
+    },
+    {
+      "label": "package:scoped-owner-binder",
+      "passed": true
+    },
+    {
+      "label": "package:constraints",
+      "passed": true
+    },
+    {
+      "label": "syntax:text",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg",
+        "--syntax-only"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "module api [syntax-only]\nvariant api.Choice<T> [189, 226)\n    Value(T)\nrecord api.Visible [116, 151)\n    value: i64\nrecord api.Wrapper<T> [152, 188)\n    value: T\npub fn id<T: Eq + Show>(x: T) -> T effects() [unchecked] caps() [unchecked] [226, 286)\npub fn main() -> i64 effects() [unchecked] caps() [unchecked] [447, 1063)\npub fn nested<U: Eq + Show>(x: List<U>) -> List<U> effects() [unchecked] caps() [unchecked] [358, 447)\n",
+      "stderr": ""
+    },
+    {
+      "label": "syntax:json",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg",
+        "--syntax-only",
+        "--json"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "{\"schema_version\":6,\"module\":\"api\",\"functions\":[{\"name\":\"id\",\"parameters\":[{\"name\":\"x\",\"ty\":\"T\"}],\"return_type\":\"T\",\"span\":{\"start\":226,\"end\":286},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":236,\"end\":248}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":253,\"end\":254}}],\"result_type\":{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":259,\"end\":260}},\"effects\":[],\"effects_status\":\"unchecked\",\"capabilities\":[],\"capabilities_status\":\"unchecked\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"main\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":447,\"end\":1063},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":464,\"end\":467}},\"effects\":[],\"effects_status\":\"unchecked\",\"capabilities\":[],\"capabilities_status\":\"unchecked\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"nested\",\"parameters\":[{\"name\":\"x\",\"ty\":\"List<U>\"}],\"return_type\":\"List<U>\",\"span\":{\"start\":358,\"end\":447},\"type_parameters\":[{\"name\":\"U\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":372,\"end\":384}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"List\",\"arguments\":[{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":394,\"end\":395}}],\"span\":{\"start\":389,\"end\":396}}],\"result_type\":{\"identity\":\"List\",\"arguments\":[{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":406,\"end\":407}}],\"span\":{\"start\":401,\"end\":408}},\"effects\":[],\"effects_status\":\"unchecked\",\"capabilities\":[],\"capabilities_status\":\"unchecked\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[{\"name\":\"Visible\",\"identity\":\"api.Visible\",\"type_parameters\":[],\"field_types\":[{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":147,\"end\":150}}],\"fields\":[{\"name\":\"value\",\"ty\":\"i64\"}],\"span\":{\"start\":116,\"end\":151}},{\"name\":\"Wrapper\",\"identity\":\"api.Wrapper\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":171,\"end\":172}}],\"field_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":186,\"end\":187}}],\"fields\":[{\"name\":\"value\",\"ty\":\"T\"}],\"span\":{\"start\":152,\"end\":188}}],\"semantics_status\":\"syntax-only\",\"variants\":[{\"name\":\"Choice\",\"identity\":\"api.Choice\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":208,\"end\":209}}],\"span\":{\"start\":189,\"end\":226},\"cases\":[{\"name\":\"Value\",\"span\":{\"start\":216,\"end\":225},\"payloads\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":222,\"end\":223}}]}]}]}\n",
+      "stderr": ""
+    },
+    {
+      "label": "syntax:json-repeat",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg",
+        "--syntax-only",
+        "--json"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "{\"schema_version\":6,\"module\":\"api\",\"functions\":[{\"name\":\"id\",\"parameters\":[{\"name\":\"x\",\"ty\":\"T\"}],\"return_type\":\"T\",\"span\":{\"start\":226,\"end\":286},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":236,\"end\":248}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":253,\"end\":254}}],\"result_type\":{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":259,\"end\":260}},\"effects\":[],\"effects_status\":\"unchecked\",\"capabilities\":[],\"capabilities_status\":\"unchecked\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"main\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":447,\"end\":1063},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":464,\"end\":467}},\"effects\":[],\"effects_status\":\"unchecked\",\"capabilities\":[],\"capabilities_status\":\"unchecked\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"nested\",\"parameters\":[{\"name\":\"x\",\"ty\":\"List<U>\"}],\"return_type\":\"List<U>\",\"span\":{\"start\":358,\"end\":447},\"type_parameters\":[{\"name\":\"U\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":372,\"end\":384}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"List\",\"arguments\":[{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":394,\"end\":395}}],\"span\":{\"start\":389,\"end\":396}}],\"result_type\":{\"identity\":\"List\",\"arguments\":[{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":406,\"end\":407}}],\"span\":{\"start\":401,\"end\":408}},\"effects\":[],\"effects_status\":\"unchecked\",\"capabilities\":[],\"capabilities_status\":\"unchecked\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[{\"name\":\"Visible\",\"identity\":\"api.Visible\",\"type_parameters\":[],\"field_types\":[{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":147,\"end\":150}}],\"fields\":[{\"name\":\"value\",\"ty\":\"i64\"}],\"span\":{\"start\":116,\"end\":151}},{\"name\":\"Wrapper\",\"identity\":\"api.Wrapper\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":171,\"end\":172}}],\"field_types\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":186,\"end\":187}}],\"fields\":[{\"name\":\"value\",\"ty\":\"T\"}],\"span\":{\"start\":152,\"end\":188}}],\"semantics_status\":\"syntax-only\",\"variants\":[{\"name\":\"Choice\",\"identity\":\"api.Choice\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[],\"span\":{\"start\":208,\"end\":209}}],\"span\":{\"start\":189,\"end\":226},\"cases\":[{\"name\":\"Value\",\"span\":{\"start\":216,\"end\":225},\"payloads\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":222,\"end\":223}}]}]}]}\n",
+      "stderr": ""
+    },
+    {
+      "label": "syntax:text-repeat",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg",
+        "--syntax-only"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "module api [syntax-only]\nvariant api.Choice<T> [189, 226)\n    Value(T)\nrecord api.Visible [116, 151)\n    value: i64\nrecord api.Wrapper<T> [152, 188)\n    value: T\npub fn id<T: Eq + Show>(x: T) -> T effects() [unchecked] caps() [unchecked] [226, 286)\npub fn main() -> i64 effects() [unchecked] caps() [unchecked] [447, 1063)\npub fn nested<U: Eq + Show>(x: List<U>) -> List<U> effects() [unchecked] caps() [unchecked] [358, 447)\n",
+      "stderr": ""
+    },
+    {
+      "label": "syntax:unchecked-schema6",
+      "passed": true
+    },
+    {
+      "label": "source:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "source:interpreter",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "source:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/source-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "cgx2c build metadata: source_sha256=2f4955183912954aba9bae51881d646356bc471e3ca9c11362920b3c55521dd0 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=64cdf0f493fed2fe7240c67e8c011b8d19b448eded401f8808e1c4826aa28b21 output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/source-debug\n",
+      "stderr": ""
+    },
+    {
+      "label": "source:native-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/source-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "source:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/source-release",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "cgx2c build metadata: source_sha256=2f4955183912954aba9bae51881d646356bc471e3ca9c11362920b3c55521dd0 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=64cdf0f493fed2fe7240c67e8c011b8d19b448eded401f8808e1c4826aa28b21 output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/source-release\n",
+      "stderr": ""
+    },
+    {
+      "label": "source:native-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/source-release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "source:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/source.py"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "source:python",
+      "command": [
+        "python3",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/source.py"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "source:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-visibility.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/source.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "source:compile-rust",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/source.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/source-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "source:rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/source-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "package:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-package"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "package:interpreter",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-package"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "package:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-package",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/package-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "cgx2c build metadata: package_manifest_sha256=0f2e30397aac6de87ed9401fadf1c9291d525184762782f645269741002cdc9f package_sources_sha256=[\"src/main.cg:6e1a4e4ed4d5a6b310740808e037b2137b840e1f6d8773bf5b45ff8a272eee9e\", \"src/dep.cg:244c1262cd73a352775d5ca81d0ea9941367c008facbd6c2a97e7b3e6e062276\"] rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/package-debug\n",
+      "stderr": ""
+    },
+    {
+      "label": "package:native-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/package-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "package:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-package",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/package-release",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "cgx2c build metadata: package_manifest_sha256=0f2e30397aac6de87ed9401fadf1c9291d525184762782f645269741002cdc9f package_sources_sha256=[\"src/main.cg:6e1a4e4ed4d5a6b310740808e037b2137b840e1f6d8773bf5b45ff8a272eee9e\", \"src/dep.cg:244c1262cd73a352775d5ca81d0ea9941367c008facbd6c2a97e7b3e6e062276\"] rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/package-release\n",
+      "stderr": ""
+    },
+    {
+      "label": "package:native-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/package-release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "package:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-package",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/package.pyz"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "package:python",
+      "command": [
+        "python3",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/package.pyz"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "package:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-package",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/package.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "package:compile-rust",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/package.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/package-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "package:rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/package-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-source:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-source:interpreter",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-source:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-source-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "cgx2c build metadata: source_sha256=7975e62491ed41469a166b7de51873629b9de821a857fb8a9ac5b41a3a831622 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=64cdf0f493fed2fe7240c67e8c011b8d19b448eded401f8808e1c4826aa28b21 output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-source-debug\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-source:native-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-source-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-source:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-source-release",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "cgx2c build metadata: source_sha256=7975e62491ed41469a166b7de51873629b9de821a857fb8a9ac5b41a3a831622 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=64cdf0f493fed2fe7240c67e8c011b8d19b448eded401f8808e1c4826aa28b21 output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-source-release\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-source:native-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-source-release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-source:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-source.py"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-source:python",
+      "command": [
+        "python3",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-source.py"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-source:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-source.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-source:compile-rust",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-source.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-source-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-source:rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-source-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-package:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public-package"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-package:interpreter",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public-package"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-package:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public-package",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-package-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "cgx2c build metadata: package_manifest_sha256=94cc83d917391fc8f196982738a66ea56e7c5a76f3698e15592ab578da02bf5a package_sources_sha256=[\"src/main.cg:41568a6ba19c6259f50ed8bb53eed9590e083035bf3747e486b976674097ef8c\", \"src/dep.cg:ed6f63b8f1765bdc690e165f6ba5ba1b47f9e8d412cc94c078ce441c55a2c059\"] rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-package-debug\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-package:native-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-package-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-package:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public-package",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-package-release",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "cgx2c build metadata: package_manifest_sha256=94cc83d917391fc8f196982738a66ea56e7c5a76f3698e15592ab578da02bf5a package_sources_sha256=[\"src/main.cg:41568a6ba19c6259f50ed8bb53eed9590e083035bf3747e486b976674097ef8c\", \"src/dep.cg:ed6f63b8f1765bdc690e165f6ba5ba1b47f9e8d412cc94c078ce441c55a2c059\"] rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-package-release\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-package:native-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-package-release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-package:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public-package",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-package.pyz"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-package:python",
+      "command": [
+        "python3",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-package.pyz"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-package:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public-package",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-package.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-package:compile-rust",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-package.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-package-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-package:rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-package-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-values:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public-values.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-values:interpreter",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public-values.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-values:build-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public-values.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-values-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "cgx2c build metadata: source_sha256=2e0800e3653c297f59f5737a42bc4c24f577a9b5f727d6743eec1a5116bb20b6 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=64cdf0f493fed2fe7240c67e8c011b8d19b448eded401f8808e1c4826aa28b21 output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-values-debug\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-values:native-debug",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-values-debug"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-values:build-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public-values.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-values-release",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "cgx2c build metadata: source_sha256=2e0800e3653c297f59f5737a42bc4c24f577a9b5f727d6743eec1a5116bb20b6 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=64cdf0f493fed2fe7240c67e8c011b8d19b448eded401f8808e1c4826aa28b21 output=/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-values-release\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-values:native-release",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-values-release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-values:emit-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public-values.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-values.py"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-values:python",
+      "command": [
+        "python3",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-values.py"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "public-values:emit-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-public-values.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-values.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-values:compile-rust",
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-values.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-values-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "public-values:rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/public-values-rust"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "label": "invalid:api",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-invalid.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-invalid.cg:47..92: public signature exposes a private nominal type\n"
+    },
+    {
+      "label": "invalid:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-invalid.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-invalid.cg:47..92: public signature exposes a private nominal type\n"
+    },
+    {
+      "label": "invalid:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-invalid.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-invalid.cg:47..92: public signature exposes a private nominal type\n"
+    },
+    {
+      "label": "invalid:json",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-invalid.cg",
+        "--json"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-invalid.cg:47..92: public signature exposes a private nominal type\n"
+    },
+    {
+      "label": "invalid:reject-native",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-invalid.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/invalid-reject-native",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-invalid.cg:47..92: public signature exposes a private nominal type\n"
+    },
+    {
+      "label": "invalid:preserved-native",
+      "passed": true
+    },
+    {
+      "label": "invalid:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-invalid.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/invalid-reject-rust",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-invalid.cg:47..92: public signature exposes a private nominal type\n"
+    },
+    {
+      "label": "invalid:preserved-rust",
+      "passed": true
+    },
+    {
+      "label": "invalid:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-invalid.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/invalid-reject-python",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-api-index/tests/fixtures/s2bf-invalid.cg:47..92: public signature exposes a private nominal type\n"
+    },
+    {
+      "label": "invalid:preserved-python",
+      "passed": true
+    },
+    {
+      "label": "private-callee:api",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-callee"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGT009: src/main.cg:61..76: function `dep.dep_private` is private\nCGT001: src/main.cg:61..76: unknown function `dep.dep_private`\n"
+    },
+    {
+      "label": "private-callee:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-callee"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGT009: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-callee/src/main.cg:61..76: function `dep.dep_private` is private\nCGT001: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-callee/src/main.cg:61..76: unknown function `dep.dep_private`\n"
+    },
+    {
+      "label": "private-callee:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-callee"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGT009: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-callee/src/main.cg:61..76: function `dep.dep_private` is private\nCGT001: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-callee/src/main.cg:61..76: unknown function `dep.dep_private`\n"
+    },
+    {
+      "label": "private-callee:json",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-callee",
+        "--json"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGT009: src/main.cg:61..76: function `dep.dep_private` is private\nCGT001: src/main.cg:61..76: unknown function `dep.dep_private`\n"
+    },
+    {
+      "label": "private-callee:reject-native",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-callee",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-callee-reject-native",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGT009: src/main.cg:61..76: function `dep.dep_private` is private\n"
+    },
+    {
+      "label": "private-callee:preserved-native",
+      "passed": true
+    },
+    {
+      "label": "private-callee:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-callee",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-callee-reject-rust",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGT009: src/main.cg:61..76: function `dep.dep_private` is private\n"
+    },
+    {
+      "label": "private-callee:preserved-rust",
+      "passed": true
+    },
+    {
+      "label": "private-callee:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-callee",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-callee-reject-python",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGT009: src/main.cg:61..76: function `dep.dep_private` is private\n"
+    },
+    {
+      "label": "private-callee:preserved-python",
+      "passed": true
+    },
+    {
+      "label": "private-type:api",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-type"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGT022: src/main.cg:68..81: unknown, unavailable or private type `dep.DepSecret`\nCGT022: src/main.cg:83..107: unknown, unavailable or private type `dep.DepSecret`\nCGT040: src/main.cg:61..108: ambiguous type parameter `T`; supply explicit type arguments\n"
+    },
+    {
+      "label": "private-type:check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-type"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-type/src/main.cg:68..81: unknown, unavailable or private type `dep.DepSecret`\nCGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-type/src/main.cg:83..107: unknown, unavailable or private type `dep.DepSecret`\nCGT040: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-type/src/main.cg:61..108: ambiguous type parameter `T`; supply explicit type arguments\n"
+    },
+    {
+      "label": "private-type:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-type"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-type/src/main.cg:68..81: unknown, unavailable or private type `dep.DepSecret`\nCGT022: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-type/src/main.cg:83..107: unknown, unavailable or private type `dep.DepSecret`\nCGT040: /home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-type/src/main.cg:61..108: ambiguous type parameter `T`; supply explicit type arguments\n"
+    },
+    {
+      "label": "private-type:json",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-type",
+        "--json"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGT022: src/main.cg:68..81: unknown, unavailable or private type `dep.DepSecret`\nCGT022: src/main.cg:83..107: unknown, unavailable or private type `dep.DepSecret`\nCGT040: src/main.cg:61..108: ambiguous type parameter `T`; supply explicit type arguments\n"
+    },
+    {
+      "label": "private-type:reject-native",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-type",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-type-reject-native",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGT022: src/main.cg:68..81: unknown, unavailable or private type `dep.DepSecret`\n"
+    },
+    {
+      "label": "private-type:preserved-native",
+      "passed": true
+    },
+    {
+      "label": "private-type:reject-rust",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-type",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-type-reject-rust",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGT022: src/main.cg:68..81: unknown, unavailable or private type `dep.DepSecret`\n"
+    },
+    {
+      "label": "private-type:preserved-rust",
+      "passed": true
+    },
+    {
+      "label": "private-type:reject-python",
+      "command": [
+        "/home/john-riley/.codex/worktrees/2f3a/lang/target/frozen-ordinary-api-final/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-type",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility/private-type-reject-python",
+        "--force"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/2f3a/lang/crates/cgx2-syntax/ordinary-api-repair-evidence/evidence/replay-visibility",
+      "exit_code": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "CGT022: src/main.cg:68..81: unknown, unavailable or private type `dep.DepSecret`\n"
+    },
+    {
+      "label": "private-type:preserved-python",
+      "passed": true
+    }
+  ],
+  "failures": []
+}

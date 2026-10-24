@@ -1,0 +1,4 @@
+pub fn dishonest<T>(x: T) -> i64 effects() caps():
+    arg_count()
+fn main() -> i64:
+    dishonest<i64>(1)

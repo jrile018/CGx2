@@ -1,0 +1,12 @@
+pub record PublicBox:
+    value: i64
+fn secret() -> i64:
+    7
+pub fn exported() -> i64:
+    42
+fn main() -> i64 effects(ManagedAlloc):
+    match memory.try_no_gc(budget: 4096):
+        Result.Ok(guard):
+            exported()
+        Result.Err(error):
+            -1
