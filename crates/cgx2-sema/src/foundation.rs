@@ -193,6 +193,8 @@ pub fn merge_modules(modules: &[&Module], entry: &str) -> Module {
 
 /// Bounded deterministic specialization of a checked finite value module.
 /// Templates are checked symbolically first; this pass does not infer legality.
+/// Every emitted declaration is internal; public source/API evidence belongs to
+/// the unchanged input, rather than the concrete implementation module.
 pub fn lower_module(module: &Module, typed: &TypedModule) -> Result<Module, Vec<TypeDiagnostic>> {
     let checked = crate::check_module_with_imports(module, &Default::default())?;
     if &checked != typed {
@@ -260,6 +262,13 @@ pub fn lower_module(module: &Module, typed: &TypedModule) -> Result<Module, Vec<
             .collect();
         let mut f = original.clone();
         f.name = key.clone();
+        // A concrete instance is internal implementation evidence, not a new
+        // source export. The unchanged template was admitted above, including
+        // its public signature, effects and constraints. Concrete bodies still
+        // undergo ordinary checking, including caller-private substitutions.
+        // This also applies to monomorphic callers: their concrete interfaces
+        // can refer to an internal aggregate instance of a public template.
+        f.public = false;
         f.type_parameters.clear();
         // Publish before traversing calls so ordinary recursion has one instance.
         lower.functions.insert(key.clone(), f.clone());
@@ -309,6 +318,7 @@ pub fn lower_module(module: &Module, typed: &TypedModule) -> Result<Module, Vec<
             {
                 let mut r = original.clone();
                 r.name = key;
+                r.public = false;
                 r.type_parameters.clear();
                 for (field, (_, t)) in r.fields.iter_mut().zip(fields) {
                     let t = lower.concrete(&t);
@@ -329,6 +339,7 @@ pub fn lower_module(module: &Module, typed: &TypedModule) -> Result<Module, Vec<
             {
                 let mut v = original.clone();
                 v.name = key;
+                v.public = false;
                 v.type_parameters.clear();
                 for (c, (_, ts)) in v.cases.iter_mut().zip(cases) {
                     for (p, t) in c.payloads.iter_mut().zip(ts) {

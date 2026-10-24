@@ -1,0 +1,8 @@
+   Compiling cgx2-bind v0.1.0 (/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-bind)
+   Compiling cgx2-emit-rust v0.1.0 (/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-emit-rust)
+   Compiling cgx2-emit-python v0.1.0 (/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-emit-python)
+   Compiling cgx2-ffi-native v0.1.0 (/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-ffi-native)
+   Compiling cgx2-libtorch v0.1.0 (/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-libtorch)
+   Compiling cgx2c v0.1.0 (/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2c)
+   Compiling cgx2-cli v0.1.0 (/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-cli)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.39s

@@ -1,0 +1,44 @@
+   Compiling cgx2-sema v0.1.0 (/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-sema)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s
+     Running tests/specialization.rs (target/release-source-specialization/debug/deps/specialization-39fb9118791a5425)
+
+running 5 tests
+test original_public_privacy_and_effects_still_reject_before_lowering ... ok
+test same_named_module_nominal_and_binder_keep_distinct_identities ... FAILED
+test qualified_concrete_fields_payloads_and_containers_recheck ... FAILED
+test checked_public_templates_generate_internal_functions_and_aggregates ... FAILED
+test integrated_visibility_and_public_source_fixtures_recheck ... FAILED
+
+failures:
+
+---- same_named_module_nominal_and_binder_keep_distinct_identities stdout ----
+
+thread 'same_named_module_nominal_and_binder_keep_distinct_identities' (97) panicked at crates/cgx2-sema/tests/specialization.rs:9:29:
+called `Result::unwrap()` on an `Err` value: [TypeDiagnostic { code: "CGT022", message: "public signature exposes a private nominal type", span: Span { start: 34, end: 82 } }]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- qualified_concrete_fields_payloads_and_containers_recheck stdout ----
+
+thread 'qualified_concrete_fields_payloads_and_containers_recheck' (96) panicked at crates/cgx2-sema/tests/specialization.rs:9:29:
+called `Result::unwrap()` on an `Err` value: [TypeDiagnostic { code: "CGT002", message: "unknown, unavailable or private type `out.main.out.main.Long`", span: Span { start: 130, end: 140 } }]
+
+---- checked_public_templates_generate_internal_functions_and_aggregates stdout ----
+
+thread 'checked_public_templates_generate_internal_functions_and_aggregates' (93) panicked at crates/cgx2-sema/tests/specialization.rs:9:29:
+called `Result::unwrap()` on an `Err` value: [TypeDiagnostic { code: "CGT022", message: "public aggregate exposes a private nominal type", span: Span { start: 110, end: 111 } }, TypeDiagnostic { code: "CGT022", message: "public signature exposes a private nominal type", span: Span { start: 113, end: 161 } }, TypeDiagnostic { code: "CGT022", message: "public signature exposes a private nominal type", span: Span { start: 161, end: 281 } }]
+
+---- integrated_visibility_and_public_source_fixtures_recheck stdout ----
+
+thread 'integrated_visibility_and_public_source_fixtures_recheck' (94) panicked at crates/cgx2-sema/tests/specialization.rs:9:29:
+called `Result::unwrap()` on an `Err` value: [TypeDiagnostic { code: "CGT022", message: "public signature exposes a private nominal type", span: Span { start: 226, end: 286 } }, TypeDiagnostic { code: "CGT022", message: "public signature exposes a private nominal type", span: Span { start: 226, end: 286 } }, TypeDiagnostic { code: "CGT022", message: "public signature exposes a private nominal type", span: Span { start: 226, end: 286 } }, TypeDiagnostic { code: "CGT022", message: "public signature exposes a private nominal type", span: Span { start: 226, end: 286 } }]
+
+
+failures:
+    checked_public_templates_generate_internal_functions_and_aggregates
+    integrated_visibility_and_public_source_fixtures_recheck
+    qualified_concrete_fields_payloads_and_containers_recheck
+    same_named_module_nominal_and_binder_keep_distinct_identities
+
+test result: FAILED. 1 passed; 4 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p cgx2-sema --test specialization`

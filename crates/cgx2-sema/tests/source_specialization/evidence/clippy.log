@@ -1,0 +1,3 @@
+    Blocking waiting for file lock on build directory
+    Checking cgx2-sema v0.1.0 (/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-sema)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.41s

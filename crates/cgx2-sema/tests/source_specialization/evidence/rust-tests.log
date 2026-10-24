@@ -1,0 +1,487 @@
+   Compiling cgx2-sema v0.1.0 (/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-sema)
+   Compiling cgx2-api-index v0.1.0 (/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-api-index)
+   Compiling cgx2-package v0.1.0 (/home/john-riley/.codex/worktrees/c9ae/lang/crates/cgx2-package)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.34s
+     Running unittests src/lib.rs (target/release-source-specialization/debug/deps/cgx2_api_index-9094bddda1410869)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/imported_effects.rs (target/release-source-specialization/debug/deps/imported_effects-22e2b862710e2461)
+
+running 1 test
+test fresh_import_checks_reject_stale_typed_indexes_and_incomplete_evidence ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/index.rs (target/release-source-specialization/debug/deps/index-a72a3e5ed4b77f2d)
+
+running 10 tests
+test private_only_module_has_empty_public_api ... ok
+test lookup_is_exact_and_spans_count_utf8_bytes ... ok
+test native_api_index_exposes_unsafe_binding_and_source_span ... ok
+test public_python_binding_exposes_route_target_and_runtime ... ok
+test rejects_stale_or_mutated_semantic_summaries ... ok
+test empty_public_api_renders_deterministically ... ok
+test stable_text_and_json_schema ... ok
+test json_round_trips_escapes_controls_and_unicode ... ok
+test extracts_only_public_source_signatures ... ok
+test indexes_explicit_declarations_and_runtime_checked_contracts ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/memory_functions.rs (target/release-source-specialization/debug/deps/memory_functions-754e259dd68f72f4)
+
+running 2 tests
+test indexes_public_scalar_signature_and_transitive_memory_capability ... ok
+test indexes_public_memory_function_as_unit_with_declared_effects ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/object_references.rs (target/release-source-specialization/debug/deps/object_references-84de3b697a534719)
+
+running 2 tests
+test rejects_invalid_graph_even_with_previously_checked_summary ... ok
+test indexes_checked_public_graph_function ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/records.rs (target/release-source-specialization/debug/deps/records-2d8a503006d2de00)
+
+running 1 test
+test record_declarations_and_field_types_are_indexed ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s2a.rs (target/release-source-specialization/debug/deps/s2a-9478a75ffd91e529)
+
+running 3 tests
+test next_stage_array_and_loop_contract_metadata_remains_unchecked ... ok
+test syntax_only_api_reports_constraints_without_claiming_semantics ... ok
+test schema_six_preserves_public_qualified_identities_arguments_and_spans ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s2b.rs (target/release-source-specialization/debug/deps/s2b-4c1455df328dade7)
+
+running 2 tests
+test field_type_strings_do_not_capture_same_spelled_nominal_names ... ok
+test schema_seven_records_deterministic_checked_instantiations ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s2bf_visibility.rs (target/release-source-specialization/debug/deps/s2bf_visibility-6d054da59b19afc1)
+
+running 7 tests
+test imported_signature_identities_are_checked_beyond_type_arguments ... ok
+test imported_public_identities_and_owner_binders_are_retained ... ok
+test invalid_or_changed_modules_are_rejected_before_projection ... ok
+test reviewed_private_owner_and_callee_do_not_enter_public_api ... ok
+test unnamed_private_owners_are_filtered ... ok
+test every_container_and_nominal_argument_obeys_visibility ... ok
+test public_projection_preserves_internal_calls_and_complete_public_types ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/tensor.rs (target/release-source-specialization/debug/deps/tensor-3545bad5b0487d50)
+
+running 1 test
+test tensor_api_index_names_unsafe_bounded_profile ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/text.rs (target/release-source-specialization/debug/deps/text-301650a3829ccdaf)
+
+running 5 tests
+test text_uses_stored_statuses_and_preserves_an_unannotated_result ... ok
+test syntax_only_foreign_output_uses_the_stored_unsafe_flag_without_a_binding_id ... ok
+test contracts_distinguish_checked_and_syntax_only_for_the_same_source ... ok
+test syntax_text_preserves_generics_nested_types_loop_annotations_and_unchecked_statuses ... ok
+test checked_text_preserves_nominal_identities_and_effect_statuses ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/release-source-specialization/debug/deps/cgx2_package-9262c6077a8be0be)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin/cgx2-package.rs (target/release-source-specialization/debug/deps/cgx2_package-fabd53ba44e041df)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/binders.rs (target/release-source-specialization/debug/deps/binders-df7f3b6798ed8dc6)
+
+running 8 tests
+test imported_variant_binder_shadows_same_named_local_variant ... ok
+test generic_type_visibility_remains_checked ... ok
+test imported_record_binder_shadows_same_named_local_record ... ok
+test distinct_modules_keep_colliding_generic_identities ... ok
+test imported_generic_constraints_remain_required ... ok
+test imported_binders_still_require_the_declared_argument_types ... ok
+test nested_binders_and_qualified_and_unshadowed_nominals_coexist ... ok
+test changed_generic_dependency_invalidates_snapshot_and_effect_admission ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/bindings.rs (target/release-source-specialization/debug/deps/bindings-bf410d510d31edb2)
+
+running 1 test
+test scalar_v1_and_explicit_binding_v2_manifests ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/package.rs (target/release-source-specialization/debug/deps/package-e370882d37b0b6a4)
+
+running 25 tests
+test outside_symlink_is_rejected_before_source_read ... ok
+test importing_memory_script_is_explicitly_unsupported ... ok
+test cycle_trace_is_stable_and_points_at_closing_import ... ok
+test committed_example_matches_expected_index ... ok
+test manifest_rejects_missing_duplicate_unknown_and_malformed_values ... ok
+test dishonest_dependencies_never_publish_empty_summaries ... ok
+test checked_snapshot_rejects_manifest_and_source_mutations ... ok
+test paths_cannot_escape_and_aliases_cannot_duplicate_sources ... ok
+test imported_local_assignment_retains_mutate_classification ... ok
+test invalid_utf8_and_missing_entry_are_reported ... ok
+test import_failures_are_distinct_and_source_located ... ok
+test source_errors_and_duplicate_module_names_keep_source_locations ... ok
+test three_module_fixture_checks_calls_and_dependency_order ... ok
+test public_imported_record_construction_requires_direct_defining_imports ... ok
+test private_unimported_unknown_and_prefix_matches_cannot_borrow_checked_effects ... ok
+test checked_pure_diamond_keeps_nominal_records_and_explicit_index_statuses ... ok
+test inactive_branches_empty_loops_and_constructor_arguments_keep_effects ... ok
+test two_module_public_call_checks_from_manifest_entry ... ok
+test transitive_argument_effects_capabilities_and_public_upper_bounds_are_truthful ... ok
+test two_modules_have_sorted_public_api_and_stable_rendering ... ok
+test imported_list_signature_is_admitted ... ok
+test public_records_keep_defining_identity_and_visibility ... ok
+test size_limits_and_missing_file_are_explicit ... ok
+test transitive_foreign_and_native_capabilities_are_checked_without_execution ... ok
+test check_command_emits_json_and_fails_on_errors ... ok
+
+test result: ok. 25 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/s2a.rs (target/release-source-specialization/debug/deps/s2a-c26d9538b34b01ab)
+
+running 1 test
+test imported_private_unknown_and_unrelated_types_have_source_diagnostics ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests src/lib.rs (target/release-source-specialization/debug/deps/cgx2_sema-2012f345a0e560e3)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/check.rs (target/release-source-specialization/debug/deps/check-895369a5ca97a4ba)
+
+running 6 tests
+test standalone_check_rejects_import_execution_at_import_span ... ok
+test expressions_and_mutation ... ok
+test contracts_require_pure_bool_scalar_expressions ... ok
+test scoped_names_and_type_table ... ok
+test calls_and_returns ... ok
+test explicit_effects_and_capabilities_gate_direct_and_transitive_calls ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/conditional_memory.rs (target/release-source-specialization/debug/deps/conditional_memory-f92f2e4585f26ee2)
+
+running 7 tests
+test ancestor_temporary_can_be_explicitly_released_in_both_nested_arms ... ok
+test possible_path_transitions_and_inactive_operations_are_checked ... ok
+test independent_arm_names_nested_lifetimes_and_outer_environment ... ok
+test conditional_call_graph_collection_and_region_closure_walkers_recurse ... ok
+test branch_locals_require_explicit_release_on_every_successful_path ... ok
+test unsupported_inactive_declarations_shadowing_and_escapes_stay_rejected ... ok
+test only_exact_bounded_guards_are_admitted_in_both_paths ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/conditionals.rs (target/release-source-specialization/debug/deps/conditionals-374ed8b7df9cc9bf)
+
+running 2 tests
+test both_branches_are_checked_and_scopes_do_not_escape ... ok
+test explicit_returns_infer_and_join_but_branch_tails_are_unit ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/foreign.rs (target/release-source-specialization/debug/deps/foreign-a03d79455bcc9c30)
+
+running 1 test
+test foreign_signatures_and_utf8_call_spans_are_checked ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/imported_effects.rs (target/release-source-specialization/debug/deps/imported_effects-e727319987a263a4)
+
+running 5 tests
+test unicode_qualified_identities_do_not_share_same_named_function_evidence ... ok
+test signatures_annotations_and_partial_evidence_cannot_prove_purity ... ok
+test local_recursive_fixed_point_keeps_pure_and_argument_read_summaries ... ok
+test checked_imports_do_not_supply_contract_termination_or_range_bound_proofs ... ok
+test changed_declarations_or_dependency_bodies_invalidate_older_evidence ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/match_control_flow.rs (target/release-source-specialization/debug/deps/match_control_flow-bed110a4d4c942cb)
+
+running 6 tests
+test empty_arm_has_unit_value_in_existing_ast_contract ... ok
+test loop_return_policy_coverage_and_unreachable_arms_are_preserved ... ok
+test explicit_and_fallthrough_types_are_checked_at_their_source_spans ... ok
+test list_loop_match_returns_are_inferred_but_loop_fallthrough_is_required ... ok
+test inferred_nested_returns_and_no_value_fallthrough_remain_sound ... ok
+test match_values_and_explicit_returns_have_separate_contexts ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/memory.rs (target/release-source-specialization/debug/deps/memory-6015c2500931ffbf)
+
+running 5 tests
+test checks_bounded_memory_script ... ok
+test validates_literal_budgets_and_named_intrinsics ... ok
+test ownership_failures_retain_source_spans ... ok
+test rejects_unmodeled_values_and_calls ... ok
+test checks_direct_promotion_and_copy_with_precise_conversion_errors ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/memory_functions.rs (target/release-source-specialization/debug/deps/memory_functions-8ac5a6db9fe9fc8c)
+
+running 5 tests
+test accepts_local_memory_functions_and_conversions ... ok
+test requires_declared_memory_effects_and_capability ... ok
+test rejects_recursion_and_collect_through_no_gc_call ... ok
+test scalar_parameters_are_checked_at_calls_and_only_admitted_as_byte_sizes ... ok
+test rejects_cross_boundary_handles_and_dynamic_sizes ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/memory_range_loops.rs (target/release-source-specialization/debug/deps/memory_range_loops-ea74a9078f2a1889)
+
+running 5 tests
+test ranges_scopes_conversions_and_borrows ... ok
+test outer_borrows_and_local_names_cannot_escape_or_be_consumed ... ok
+test local_call_walkers_keep_scope_recursion_collection_and_closure_rules ... ok
+test restricted_endpoints_and_immutable_indices ... ok
+test zero_trip_backedge_and_all_paths_are_checked ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/object_references.rs (target/release-source-specialization/debug/deps/object_references-4dc396090a530f0c)
+
+running 3 tests
+test accepts_bounded_same_region_graphs ... ok
+test rejects_dropped_or_escaping_handles_and_hidden_collect ... ok
+test rejects_unbounded_shapes_slots_and_cross_region_edges ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/range_loops.rs (target/release-source-specialization/debug/deps/range_loops-dd3fcecf9c766b40)
+
+running 1 test
+test range_loop_keeps_local_mutation_effect_and_checks_bounds ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/records.rs (target/release-source-specialization/debug/deps/records-4f18ce0b02e15e3a)
+
+running 5 tests
+test public_record_crossing_is_rejected_for_package_imports ... ok
+test nominal_fields_and_nested_function_results_type_check ... ok
+test imported_record_constructors_retain_argument_effects_and_capabilities ... ok
+test local_field_and_qualified_module_call_coexist_and_ambiguity_is_reported ... ok
+test record_diagnostics_have_source_spans ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s2a.rs (target/release-source-specialization/debug/deps/s2a-d4409d6cc0e5ab92)
+
+running 6 tests
+test new_diagnostics_preserve_utf8_payload_and_binding_spans ... ok
+test generic_data_declarations_are_admitted_and_loop_contracts_remain_deferred ... ok
+test rejects_invalid_coverage_payloads_scopes_and_arm_types ... ok
+test private_types_cannot_leak_through_public_aggregates_or_applications ... ok
+test unrelated_nominal_types_never_match_even_with_same_cases ... ok
+test recursive_shapes_and_generic_arity_fail_closed ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s2b.rs (target/release-source-specialization/debug/deps/s2b-53ddc56d9b3be07d)
+
+running 9 tests
+test intrinsic_shadowing_still_propagates_real_user_effects ... ok
+test changed_generic_variant_declarations_invalidate_checked_effects ... ok
+test binders_signatures_and_instantiations_keep_canonical_identity ... ok
+test contextual_inference_uses_later_arguments_and_nested_nonempty_literals ... ok
+test symbolic_constraints_govern_bodies_not_only_observed_instantiations ... ok
+test inference_arity_nominal_arguments_and_ambiguity ... ok
+test new_data_fixtures_are_semantically_checked ... ok
+test expansive_recursion_and_recursive_shapes_reject_before_output ... ok
+test distinct_specializations_have_a_total_count_budget ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+     Running tests/semantic_resolution.rs (target/release-source-specialization/debug/deps/semantic_resolution-f723de361f61932c)
+
+running 8 tests
+test nested_symbolic_bodies_reject_even_without_a_concrete_instantiation ... ok
+test checked_import_evidence_rejects_a_binder_constructor_body ... ok
+test lowering_does_not_turn_record_returning_functions_into_constructors ... ok
+test function_binders_shadow_record_and_variant_constructor_heads ... ok
+test qualified_nominal_head_is_available_beside_a_binder ... ok
+test declaration_binders_do_not_shadow_their_own_nominal_head ... ok
+test qualified_imported_intrinsic_names_keep_nominal_identity ... ok
+test every_data_name_can_still_construct_a_record ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/specialization.rs (target/release-source-specialization/debug/deps/specialization-39fb9118791a5425)
+
+running 7 tests
+test original_public_privacy_and_effects_still_reject_before_lowering ... ok
+test qualified_concrete_fields_payloads_and_containers_recheck ... ok
+test same_named_module_nominal_and_binder_keep_distinct_identities ... ok
+test imported_generic_private_arguments_keep_provenance_and_source_admission ... ok
+test checked_public_templates_generate_internal_functions_and_aggregates ... ok
+test public_concrete_interfaces_keep_source_exports_separate_from_lowered_aggregates ... ok
+test integrated_visibility_and_public_source_fixtures_recheck ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/tensor_f32.rs (target/release-source-specialization/debug/deps/tensor_f32-4671969a801f5b7d)
+
+running 2 tests
+test float32_overflow_underflow_and_shape_errors_are_located ... ok
+test checked_float32_literals_round_and_preserve_subnormals ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/release-source-specialization/debug/deps/cgx2_syntax-ba9763dc6979dbf1)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/conditionals.rs (target/release-source-specialization/debug/deps/conditionals-08fdb4f168ecda54)
+
+running 2 tests
+test malformed_branches_are_source_located_errors ... ok
+test nested_unicode_conditionals_round_trip ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/memory_functions.rs (target/release-source-specialization/debug/deps/memory_functions-e4f154550a50b2c3)
+
+running 1 test
+test parses_and_formats_local_memory_calls_with_nested_guard ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/object_references.rs (target/release-source-specialization/debug/deps/object_references-769fd8ae926ef71a)
+
+running 2 tests
+test object_intrinsics_round_trip_through_formatter ... ok
+test nested_no_gc_object_intrinsics_format_stably ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/records.rs (target/release-source-specialization/debug/deps/records-08f89f1be503f0c6)
+
+running 3 tests
+test public_unicode_records_format_and_keep_utf8_spans ... ok
+test record_field_count_indent_and_duplicate_are_diagnosed ... ok
+test record_round_trip_keeps_fields_and_source_spans ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s2b.rs (target/release-source-specialization/debug/deps/s2b-2fd3c737f9cc7260)
+
+running 1 test
+test generic_calls_collections_and_patterns_round_trip ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s2bf_specialization.rs (target/release-source-specialization/debug/deps/s2bf_specialization-f3d6d21ffe17b5dd)
+
+running 3 tests
+test qualified_paths_in_both_representations_are_idempotent_recursively ... ok
+test lowered_constructor_names_do_not_gain_another_module_prefix ... ok
+test local_names_qualify_once_and_binders_keep_their_scope ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/syntax.rs (target/release-source-specialization/debug/deps/syntax-49c06f171c66ed86)
+
+running 29 tests
+test ignore_comment_only_indentation ... ok
+test foreign_route_and_duplicate_declarations_are_diagnosed ... ok
+test lex_simple_function ... ok
+test lex_nested_indentation ... ok
+test parse_call_and_arithmetic_precedence ... ok
+test negative_range_loop_formatter_round_trips ... ok
+test parse_nested_for_blocks ... ok
+test missing_colon_has_source_diagnostic ... ok
+test parse_specification_functions ... ok
+test contract_header_and_prelude_round_trip ... ok
+test legacy_requires_names_remain_ordinary_expressions ... ok
+test format_four_spaces_and_blank_lines ... ok
+test imports_have_utf8_byte_spans_and_round_trip_in_source_order ... ok
+test invalid_or_duplicate_declarations_are_source_located ... ok
+test named_arguments_and_nested_guards_keep_byte_spans ... ok
+test parse_top_level_script ... ok
+test reject_tab_indentation ... ok
+test reject_mixed_script_and_function_items ... ok
+test reject_tab_on_continuation_line ... ok
+test retain_unicode_byte_spans ... ok
+test python_foreign_declaration_round_trips_with_source_spans ... ok
+test reject_duplicate_labels_and_positional_after_named ... ok
+test formatting_preserves_ast_structure ... ok
+test unexpected_dedent_has_source_diagnostic ... ok
+test rejects_duplicate_late_and_nested_imports ... ok
+test unsafe_native_declaration_round_trips_and_marks_boundary ... ok
+test formatting_is_idempotent ... ok
+test s2a_invalid_pattern_syntax_and_deep_applications_are_bounded ... ok
+test s2a_new_shapes_round_trip_without_losing_children ... ok
+
+test result: ok. 29 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/tensor.rs (target/release-source-specialization/debug/deps/tensor-11133e93f348d76e)
+
+running 2 tests
+test direct_tensor_source_has_one_canonical_parse_and_format ... ok
+test matrix_source_has_one_canonical_parse_and_format ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_api_index
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_package
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_sema
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_syntax
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

@@ -3,12 +3,15 @@ use crate::*;
 use std::collections::BTreeSet;
 
 pub fn qualify_type(ty: &mut TypeSyntax, module: &Module) {
-    if ty.path.segments.len() == 1 && module.records.iter().any(|r| r.name == ty.path.segments[0])
-        || ty.path.segments.len() == 1
-            && module
+    // Lowering can store a complete nominal identity in one path segment.
+    // Such a segment is already qualified, just like a split dotted path.
+    if ty.path.segments.len() == 1
+        && !ty.path.segments[0].contains('.')
+        && (module.records.iter().any(|r| r.name == ty.path.segments[0])
+            || module
                 .variants
                 .iter()
-                .any(|v| v.name == ty.path.segments[0])
+                .any(|v| v.name == ty.path.segments[0]))
     {
         if let Some(name) = &module.name {
             let mut parts = name.segments.clone();
@@ -34,6 +37,7 @@ pub fn canonical_module(module: &Module, known_variants: &BTreeSet<String>) -> M
                 }
                 if let ExprKind::Name(path) = &mut callee.kind {
                     if path.segments.len() == 1
+                        && !path.segments[0].contains('.')
                         && module.records.iter().any(|r| r.name == path.segments[0])
                     {
                         if let Some(name) = &module.name {
