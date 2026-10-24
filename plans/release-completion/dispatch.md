@@ -79,3 +79,7 @@ All three repair commits are reviewed-bounded-delivery; original S2a is accepted
 ## S2b foundation running
 
 Reviewed base38cce386519832ddaf50460c1e03f38aa6a3c106. Chat01a16b46-2ebe-7c40-9efe-4619197003d9, worktree /home/john-riley/.codex/worktrees/2766/lang, is confirmed active and its HEAD matches the base. Queued client ID6c21b475-93b8-4b71-9555-18e231f9dedc and polling cursor are preserved in thread-state.json. The recent-chat list again omitted the worker; read-only local metadata and read_thread verified its identity. No duplicates. One shared core writer; remaining S2b/S3 gates unchanged.
+
+## S2b foundation reviewed: five repairs ready
+
+Final 414c71f staged as b0900dd, repair-required. Worker 1092 tests / 159 product checks and hashes verified; coordinator workspace compilation passes. Seven concrete defects map to five disjoint repair lanes in s2b-review/README.md. Existing shared representations frozen; full acceptance rerun follows repairs. All later S2b/S3 and external gates remain open. Dispatch outcomes follow.

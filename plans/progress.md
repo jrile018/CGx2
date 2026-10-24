@@ -51,3 +51,7 @@ S2a delivered variants, matching and typed Option/Result with 1059 recorded pass
 ## S2a repaired and reviewed
 
 The three fixes pass independent review and combined 1078 Rust tests (six ignored), 166 benchmark tests, 20 documentation harness tests and 39 runnable docs. Original failure repros now pass; API checks preserve unchecked syntax-only status. S2a is accepted as a bounded language/type delivery. S2b foundation is ready, with ordinary memory/foreign/execution/command integrations still explicitly required. External release gates and the absence of a completion percentage are unchanged.
+
+## S2b foundation review
+
+Foundation delivery 414c71f is staged repair-required. Verified worker evidence reports 1092 passing Rust tests and 159 product checks, but coordinator reproductions found seven defects in semantic resolution, package binder qualification, emitted targets, package output bounds and API visibility. Five disjoint bounded repairs are ready; see [review](release-completion/s2b-review/README.md). No R02/R10 closure or release percentage; remaining S2b and external evidence stay open.

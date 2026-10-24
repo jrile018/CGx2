@@ -1,0 +1,4 @@
+schema_version = 1
+name = "app"
+entry = "src/main.cg"
+sources = ["src/main.cg", "src/dep.cg"]

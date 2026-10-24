@@ -1,0 +1,5 @@
+{
+  "exit": 1,
+  "stdout": "",
+  "stderr": "CGT030: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/type-expansion.cg:0..537: type expansion exceeds 4096 nodes or depth 64\nCGT030: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/type-expansion.cg:0..537: type expansion exceeds 4096 nodes or depth 64\nCGT030: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/type-expansion.cg:0..537: type expansion exceeds 4096 nodes or depth 64\nCGT030: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/type-expansion.cg:0..537: type expansion exceeds 4096 nodes or depth 64\nCGT030: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/type-expansion.cg:0..537: type expansion exceeds 4096 nodes or depth 64\nCGT030: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/type-expansion.cg:0..537: type expansion exceeds 4096 nodes or depth 64\nCGT030: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/type-expansion.cg:0..537: type expansion exceeds 4096 nodes or depth 64\n"
+}

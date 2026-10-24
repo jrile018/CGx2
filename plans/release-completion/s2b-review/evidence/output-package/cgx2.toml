@@ -1,0 +1,4 @@
+schema_version = 1
+name = "out"
+entry = "src/main.cg"
+sources = ["src/main.cg"]

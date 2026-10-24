@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24T00:10:30.224Z",
+  "checked_at": "2026-10-24T01:10:30.237Z",
   "original_chats": [
     {
       "lane": "core",
@@ -174,8 +174,10 @@
       "hostId": "local",
       "worktree": "/home/john-riley/.codex/worktrees/2766/lang",
       "base": "38cce386519832ddaf50460c1e03f38aa6a3c106",
-      "status": "running",
-      "afterCursor": "dbe59f76-66d3-4471-998e-70e8a98a72cb:1"
+      "status": "reviewed-repair-required",
+      "afterCursor": "dbe59f76-66d3-4471-998e-70e8a98a72cb:8",
+      "commit": "414c71f0cae8c66c822f0b6fb2be83219c1f4c95",
+      "integrated_commit": "b0900dd20746a6a80ca83bfb02f11f1de2a15230"
     }
   ],
   "s2a_repairs": [
@@ -217,6 +219,33 @@
       "afterCursor": "2e5f6be0-978c-4dcd-aadc-7ef5cf068c9f:2",
       "commit": "7015726f6310f61c6a466b55bf1fc6227d3313a4",
       "integrated_commit": "d2853ba"
+    }
+  ],
+  "s2b_repairs": [
+    {
+      "lane": "semantic-resolution",
+      "title": "CGx2 S2b constructor resolution repair",
+      "status": "planned"
+    },
+    {
+      "lane": "package-binders",
+      "title": "CGx2 S2b imported generic binder repair",
+      "status": "planned"
+    },
+    {
+      "lane": "emitted-targets",
+      "title": "CGx2 S2b emitted target parity repair",
+      "status": "planned"
+    },
+    {
+      "lane": "interpreter-output",
+      "title": "CGx2 S2b package output bound repair",
+      "status": "planned"
+    },
+    {
+      "lane": "api-visibility",
+      "title": "CGx2 S2b public instantiation metadata repair",
+      "status": "planned"
     }
   ]
 }

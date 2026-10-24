@@ -1,0 +1,290 @@
+[
+  {
+    "case": "private-api",
+    "args": [
+      "api",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/private-api.cg",
+      "--json"
+    ],
+    "exit": 0,
+    "stdout": "{\"schema_version\":7,\"module\":\"api\",\"instantiations\":[{\"owner\":\"api.hidden\",\"callee\":\"api.id\",\"type_arguments\":[\"i64\"],\"parameters\":[\"i64\"],\"return_type\":\"i64\",\"span\":{\"start\":62,\"end\":72}}],\"functions\":[{\"name\":\"run\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":73,\"end\":100},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":89,\"end\":92}},\"effects\":[],\"effects_status\":\"inferred\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[],\"semantics_status\":\"checked\",\"variants\":[]}\n",
+    "stderr": ""
+  },
+  {
+    "case": "bad-escape",
+    "args": [
+      "check",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/bad-escape.cg"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "case": "bad-escape",
+    "args": [
+      "run",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/bad-escape.cg"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "CGR009: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/bad-escape.cg:32..38: unsupported string escape\n"
+  },
+  {
+    "case": "bad-escape",
+    "args": [
+      "emit",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/bad-escape.cg",
+      "--target",
+      "rust",
+      "--out",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/bad-escape.rs",
+      "--force"
+    ],
+    "exit": 101,
+    "stdout": "",
+    "stderr": "\nthread 'main' (7) panicked at crates/cgx2-emit-rust/src/lib.rs:1291:44:\nvalidated string\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "case": "bad-escape",
+    "args": [
+      "emit",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/bad-escape.cg",
+      "--target",
+      "python",
+      "--out",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/bad-escape.py",
+      "--force"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "case": "bad-escape",
+    "args": [
+      "python3"
+    ],
+    "exit": 0,
+    "stdout": "A\n",
+    "stderr": ""
+  },
+  {
+    "case": "local-option",
+    "args": [
+      "check",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/local-option.cg"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "case": "local-option",
+    "args": [
+      "run",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/local-option.cg"
+    ],
+    "exit": 0,
+    "stdout": "2\n",
+    "stderr": ""
+  },
+  {
+    "case": "local-option",
+    "args": [
+      "emit",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/local-option.cg",
+      "--target",
+      "rust",
+      "--out",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/local-option.rs",
+      "--force"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "case": "local-option",
+    "args": [
+      "emit",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/local-option.cg",
+      "--target",
+      "python",
+      "--out",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/local-option.py",
+      "--force"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "case": "local-option",
+    "args": [
+      "python3"
+    ],
+    "exit": 0,
+    "stdout": "2\n",
+    "stderr": ""
+  },
+  {
+    "case": "contract-data",
+    "args": [
+      "check",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/contract-data.cg"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "case": "contract-data",
+    "args": [
+      "run",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/contract-data.cg"
+    ],
+    "exit": 0,
+    "stdout": "42\n",
+    "stderr": ""
+  },
+  {
+    "case": "contract-data",
+    "args": [
+      "emit",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/contract-data.cg",
+      "--target",
+      "rust",
+      "--out",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/contract-data.rs",
+      "--force"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "case": "contract-data",
+    "args": [
+      "emit",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/contract-data.cg",
+      "--target",
+      "python",
+      "--out",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/contract-data.py",
+      "--force"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "case": "contract-data",
+    "args": [
+      "python3"
+    ],
+    "exit": 0,
+    "stdout": "42\n",
+    "stderr": ""
+  },
+  {
+    "case": "constructor-shadow",
+    "args": [
+      "check",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/constructor-shadow.cg"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "CGT005: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/constructor-shadow.cg:60..77: length requires 1 positional arguments\nCGT001: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/constructor-shadow.cg:82..89: unknown name `x.value`\n"
+  },
+  {
+    "case": "constructor-shadow",
+    "args": [
+      "run",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/constructor-shadow.cg"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "CGT005: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/constructor-shadow.cg:60..77: length requires 1 positional arguments\nCGT001: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/constructor-shadow.cg:82..89: unknown name `x.value`\n"
+  },
+  {
+    "case": "constructor-shadow",
+    "args": [
+      "emit",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/constructor-shadow.cg",
+      "--target",
+      "rust",
+      "--out",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/constructor-shadow.rs",
+      "--force"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "CGT005: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/constructor-shadow.cg:60..77: length requires 1 positional arguments\n"
+  },
+  {
+    "case": "constructor-shadow",
+    "args": [
+      "emit",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/constructor-shadow.cg",
+      "--target",
+      "python",
+      "--out",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/constructor-shadow.py",
+      "--force"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "CGT005: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/constructor-shadow.cg:60..77: length requires 1 positional arguments\n"
+  },
+  {
+    "case": "binder-constructor",
+    "args": [
+      "check",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/binder-constructor.cg"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "case": "binder-constructor",
+    "args": [
+      "run",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/binder-constructor.cg"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "CGR009: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/binder-constructor.cg:64..65: unknown record type `T`\n"
+  },
+  {
+    "case": "binder-constructor",
+    "args": [
+      "emit",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/binder-constructor.cg",
+      "--target",
+      "rust",
+      "--out",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/binder-constructor.rs",
+      "--force"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "CGT002: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/binder-constructor.cg:64..65: unknown record type `T`\n"
+  },
+  {
+    "case": "binder-constructor",
+    "args": [
+      "emit",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/binder-constructor.cg",
+      "--target",
+      "python",
+      "--out",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/binder-constructor.py",
+      "--force"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "CGT002: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/binder-constructor.cg:64..65: unknown record type `T`\n"
+  }
+]

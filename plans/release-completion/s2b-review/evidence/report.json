@@ -1,0 +1,70 @@
+[
+  {
+    "name": "oversized-package",
+    "command": [
+      "/home/john-riley/.codex/worktrees/2766/lang/target/release-s2b-foundation/debug/cgx2",
+      "run",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/output-package"
+    ],
+    "exit": 0,
+    "stdout_bytes": 1242001,
+    "stdout_sha256": "73a765b1fba06a413b38af934cba91e8dd8cc0a092075951e264884f09c57cb8",
+    "stdout_preview": "[out.main.Longxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "stderr": ""
+  },
+  {
+    "name": "binder-check",
+    "command": [
+      "/home/john-riley/.codex/worktrees/2766/lang/target/release-s2b-foundation/debug/cgx2",
+      "check",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/binder-package"
+    ],
+    "exit": 1,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_preview": "",
+    "stderr": "CGT003: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/binder-package/src/main.cg:85..87: expected app.dep.T, found i64\nCGT003: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/binder-package/src/main.cg:93..100: expected i64, found app.dep.T\n"
+  },
+  {
+    "name": "binder-run",
+    "command": [
+      "/home/john-riley/.codex/worktrees/2766/lang/target/release-s2b-foundation/debug/cgx2",
+      "run",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/binder-package"
+    ],
+    "exit": 1,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_preview": "",
+    "stderr": "CGT003: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/binder-package/src/main.cg:85..87: expected app.dep.T, found i64\nCGT003: /home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/binder-package/src/main.cg:93..100: expected i64, found app.dep.T\n"
+  },
+  {
+    "name": "python-emit",
+    "command": [
+      "/home/john-riley/.codex/worktrees/2766/lang/target/release-s2b-foundation/debug/cgx2",
+      "emit",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/output-package",
+      "--target",
+      "python",
+      "--out",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/output.pyz"
+    ],
+    "exit": 0,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_preview": "",
+    "stderr": ""
+  },
+  {
+    "name": "python-output",
+    "command": [
+      "python3",
+      "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/s2bf-review-08votdem/output.pyz"
+    ],
+    "exit": 1,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_preview": "",
+    "stderr": "CGR010 at 0..0: output limit exceeded\n"
+  }
+]

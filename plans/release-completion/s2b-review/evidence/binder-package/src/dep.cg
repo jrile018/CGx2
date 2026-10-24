@@ -1,0 +1,5 @@
+module app.dep
+pub record T:
+    value: i64
+pub record Box<T>:
+    value: T

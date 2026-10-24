@@ -1,0 +1,7 @@
+{
+  "command": "cargo check --workspace --all-targets --all-features --offline --locked",
+  "status": "passed",
+  "commit": "b0900dd20746a6a80ca83bfb02f11f1de2a15230",
+  "log": "/home/john-riley/projects/lang/target/s2bf-candidate-check.log",
+  "sha256": "341e21c0a0578b237ca297123d13b036b606c6b912496b52cd8eeee3c0046318"
+}
