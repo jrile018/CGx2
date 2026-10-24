@@ -1,0 +1,5 @@
+{
+  "source": "/home/john-riley/.codex/worktrees/5140/lang/target/release-native-constructors/build.log",
+  "sha256": "114249bd5d6d0b646c429a6a759002df12119103413165032c894101fdd5db27",
+  "text": "   Compiling cgx2c v0.1.0 (/home/john-riley/.codex/worktrees/5140/lang/crates/cgx2c)\n   Compiling cgx2-cli v0.1.0 (/home/john-riley/.codex/worktrees/5140/lang/crates/cgx2-cli)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.17s\n"
+}

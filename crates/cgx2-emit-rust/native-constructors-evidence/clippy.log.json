@@ -1,0 +1,5 @@
+{
+  "source": "/home/john-riley/.codex/worktrees/5140/lang/target/release-native-constructors/clippy.log",
+  "sha256": "8c06b617f7f9c041c233e89d4148f9d6512ca396dafa3d9965feb26130c4ca95",
+  "text": "    Checking cgx2-emit-rust v0.1.0 (/home/john-riley/.codex/worktrees/5140/lang/crates/cgx2-emit-rust)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.05s\n"
+}

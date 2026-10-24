@@ -250,6 +250,10 @@ pub(super) fn expression(e: &Expr, module: Option<&str>, typed: &TypedModule) ->
             };
             let n = p.segments.join(".");
             if typed.functions.contains_key(&n)
+                // Lowering has replaced constructor paths and generic records
+                // with their checked concrete nominal identity. Let record
+                // initialization handle these before spelling-based intrinsics.
+                || matches!(t, Some(Type::Record(name)) if name == &n)
                 || !matches!(
                     n.as_str(),
                     "length"
