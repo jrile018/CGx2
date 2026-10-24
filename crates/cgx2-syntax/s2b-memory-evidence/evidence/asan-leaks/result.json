@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "status": "blocked",
+  "scope": "Rust library lifetime and graph storage corpus",
+  "started_utc": "2026-10-24T02:16:15.921889+00:00",
+  "leak_acceptance": true,
+  "toolchain": "1.98.1",
+  "asan_options": "detect_leaks=1",
+  "inherited_asan_options": "",
+  "lsan_options": "",
+  "rustc_bootstrap": "1",
+  "commands": [
+    {
+      "label": "rustc-version",
+      "argv": [
+        "rustc",
+        "-vV"
+      ],
+      "exit_code": 0,
+      "stdout": "rustc-version.stdout",
+      "stderr": "rustc-version.stderr"
+    },
+    {
+      "label": "runtime-build",
+      "argv": [
+        "rustc",
+        "--edition=2021",
+        "--target",
+        "x86_64-unknown-linux-gnu",
+        "-Zsanitizer=address",
+        "-Cdebuginfo=1",
+        "-Copt-level=1",
+        "--cfg",
+        "feature=\"fault-injection\"",
+        "--crate-name",
+        "cgx2_runtime",
+        "--crate-type=lib",
+        "/home/john-riley/.codex/worktrees/fba5/lang/crates/cgx2-runtime/src/lib.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/fba5/lang/target/s2b-asan-leaks/libcgx2_runtime.rlib"
+      ],
+      "exit_code": 0,
+      "stdout": "runtime-build.stdout",
+      "stderr": "runtime-build.stderr"
+    },
+    {
+      "label": "leak-probe-build",
+      "argv": [
+        "rustc",
+        "--edition=2021",
+        "--target",
+        "x86_64-unknown-linux-gnu",
+        "-Zsanitizer=address",
+        "-Cdebuginfo=1",
+        "-Copt-level=1",
+        "--cfg",
+        "feature=\"fault-injection\"",
+        "/home/john-riley/.codex/worktrees/fba5/lang/target/s2b-asan-leaks/leak_probe.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/fba5/lang/target/s2b-asan-leaks/leak-probe"
+      ],
+      "exit_code": 0,
+      "stdout": "leak-probe-build.stdout",
+      "stderr": "leak-probe-build.stderr"
+    },
+    {
+      "label": "leak-probe-run",
+      "argv": [
+        "/home/john-riley/.codex/worktrees/fba5/lang/target/s2b-asan-leaks/leak-probe"
+      ],
+      "exit_code": 1,
+      "stdout": "leak-probe-run.stdout",
+      "stderr": "leak-probe-run.stderr"
+    }
+  ],
+  "source_sha256": {
+    "crates/cgx2-runtime/src/region.rs": "50362a5df6c4469bfb5f03e9a93a3a351853a97d6fc505a322ce6bc5bb9f6077",
+    "crates/cgx2-runtime/src/lib.rs": "21cabbbd18dde37512ff3196e6e12280e86c152e71d7bdcde640f42eec784134",
+    "crates/cgx2-runtime/src/fault.rs": "bc4652355ca094d8e1daca99b76d38e194c35fcc852c25b071593a4dbe9dc252",
+    "crates/cgx2-runtime/src/graph.rs": "325444702e5ac590fd07c57c9ca66ec8dcea2ed9ab05477dcd3d0cd1b11b181a",
+    "crates/cgx2-runtime/src/scope.rs": "bee9e5fc5b2dece62914b1623c7317e4c3a2bbcd4a51375ee08e5640bff62764",
+    "crates/cgx2-runtime/src/budget.rs": "60f2624e6b460270f8dfffed7cd0b0003a26721cce71a68d52e102575be01b69",
+    "crates/cgx2-runtime/src/heap.rs": "f167f13b46866d9999aa3c8f4329f3a7ad5e59e534d9f5b7b789208296351a8f",
+    "crates/cgx2-runtime/src/owned.rs": "08b8c47b10ff55c9174467c623127136f034e314f8b5f2d49010e9c21547c197",
+    "crates/cgx2-runtime/src/report.rs": "4569e7848983a5179c60abdb4cd779f3707512eaae5e614214a50cf8d39ba9aa",
+    "crates/cgx2-runtime/tests/fallible_lifetimes.rs": "da3293cadaf01167be77e94d91e674b98db85b3e68d0b6d3b721ad9f5a563add",
+    "crates/cgx2-runtime/tests/graph_storage.rs": "e958ee6bd15215583abc2b108e1af7fb5a0ac05c0a0cca6f5cc1a5f98876081f",
+    "crates/cgx2-memory-conformance/tests/graph_storage_model.rs": "925f59b7e7e31bdadb1bd72861cd390e63935c71aa13c704ad715142b20a5629",
+    "crates/cgx2-memory-conformance/tests/fallible_lifetime_model.rs": "6b9e043d7cd0a308f461dba8e69eb07e0be4c2108ca188f1281e138bb8eac07b",
+    "crates/cgx2-memory-conformance/corpus/release-lifetimes.csv": "00e35b733a7371b33d8fbcef3f1e152d20c80eb581072b36a7717d57a251d117",
+    "crates/cgx2-memory-conformance/scripts/accept_lifetimes_asan.py": "d5fee94148885c1b5c429c4687c2816bace90b798b996487d4d25f65d63733dd"
+  },
+  "rustc_version": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "target": "x86_64-unknown-linux-gnu",
+  "reason": "host cannot run LeakSanitizer (see negative control diagnostics)"
+}

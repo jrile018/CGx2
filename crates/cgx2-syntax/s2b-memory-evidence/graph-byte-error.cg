@@ -1,0 +1,6 @@
+let r = memory.region(mode: manual, limit: 65536)
+let graph = memory.alloc_graph(r, 1, 257)
+memory.set_graph_reference(graph, 256, graph)
+memory.expect_graph_byte(graph, 0, 42)
+memory.drop(graph)
+memory.close(r)

@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "base": "c110fd5f9ae140aa985188ca1ab526f38e15a7ca",
+  "branch": "riley/s2b-memory",
+  "status": "supporting-implementation-verified",
+  "checkpoint_complete": false,
+  "release_complete": false,
+  "implemented": "checked payloads, traced chunk storage, bulk scoped roots, explicit source graph operations and native runtime integration",
+  "missing": [
+    "ordinary source owner/loan parameter/result/partial-projection CFG lowering and authenticated summaries",
+    "default managed ordinary record/variant/List/Array/String storage and roots",
+    "ordinary source recoverable allocation/region/conversion Result paths and owner preservation",
+    "ordinary package/generic no_gc and cleanup/cancellation integration"
+  ],
+  "workspace": {
+    "passed": 1157,
+    "failed": 0,
+    "ignored": 6,
+    "suites": 254,
+    "command": "cargo test --workspace --all-features --offline --locked",
+    "exit_code": 0
+  },
+  "runtime_no_default_features": {
+    "passed": 86,
+    "failed": 0,
+    "ignored": 0,
+    "command": "cargo test -p cgx2-runtime --no-default-features --offline --locked",
+    "exit_code": 0
+  },
+  "clippy": {
+    "command": "cargo clippy --workspace --all-targets --all-features --offline --locked -- -D warnings",
+    "exit_code": 0
+  },
+  "format": {
+    "command": "cargo fmt --all --check",
+    "exit_code": 0
+  },
+  "diff_check": {
+    "command": "git diff --check",
+    "exit_code": 0
+  },
+  "default_workspace_build": {
+    "command": "cargo build --workspace --offline --locked",
+    "exit_code": 0
+  },
+  "graph_product": {
+    "passed": 99,
+    "source_programs": 5,
+    "successful_programs": 3,
+    "runtime_error_programs": 2,
+    "rejected_source_cases": 6,
+    "targets": [
+      "interpreter",
+      "native debug",
+      "native release",
+      "standalone emitted Rust",
+      "artifact-preserving Python rejection"
+    ]
+  },
+  "foundation_regressions": {
+    "foundation": {
+      "passed": 159,
+      "failed": 0,
+      "report_sha256": "7ffa4d62ce2f345f97e8254dc16c415f61d1523a926ec1dd5140daa000b6e613"
+    },
+    "semantic": {
+      "passed": 278,
+      "failed": 0,
+      "report_sha256": "e99e5978124c31fd1e4a3781894516630ef056975a880201da5bbaa0f0983b7f"
+    },
+    "specialization": {
+      "passed": 207,
+      "failed": 0,
+      "report_sha256": "cd43af096c95b99146c8073c837fd971cb466cf20ee0cbe3b9c5c0b56225907f"
+    },
+    "visibility": {
+      "passed": 118,
+      "failed": 0,
+      "report_sha256": "9b4ac80a2da534bafe79d490fc64af28c8e1eb08a7b8c3b7f7f142391f5b130a"
+    },
+    "binders": {
+      "passed": 88,
+      "failed": 0,
+      "report_sha256": "7d689761ef114172954a89d61a22f823a5b2b52b1985f59677d6c3c1ba216ba7"
+    },
+    "output": {
+      "passed": 31,
+      "failed": 0,
+      "report_sha256": "308e4a2c6eada22d8c994ef8c33d5a0e1c883ace6a99d7d65c8dce74e0991711"
+    },
+    "emitters": {
+      "passed": 104,
+      "failed": 0,
+      "report_sha256": "23fb61f64da90dc70865af41006339f94dcbbc4b2781819d1740761024e71a1a"
+    }
+  },
+  "bench_harness_tests": {
+    "passed": 166,
+    "failed": 0
+  },
+  "docs_harness_tests": {
+    "passed": 20,
+    "failed": 0
+  },
+  "asan_non_leak": {
+    "passed": 23,
+    "exit_code": 0,
+    "leak_acceptance": false,
+    "scope": "runtime unit/lifetime/graph and independent conformance library tests, not ordinary source memory acceptance"
+  },
+  "lsan": {
+    "status": "blocked",
+    "exit_code": 2,
+    "reason": "LeakSanitizer negative control encounters fatal ptrace restriction; leak corpus unrun"
+  },
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/fba5/lang/target/release-s2b-memory",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/fba5/lang/target/tmp-s2b-memory",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "root_files": {
+    "Cargo.toml": {
+      "unchanged_from_base": true,
+      "sha256": "9400b7dfbc400f91b3d648265dbd18001ec96157eb202fe88e3b95a312c9ffd7"
+    },
+    "Cargo.lock": {
+      "unchanged_from_base": true,
+      "sha256": "e4021f7d1ff419ba911a6fc0c0ec4aaae14816389eba91454c12fcb4273762c7"
+    }
+  },
+  "dependency_changes": [],
+  "root_lock_reconciliation": "none",
+  "preliminary_failures": [
+    "initial sandboxed workspace run denied worker lifecycle exec (10 failures); final run used normal child/loopback permissions",
+    "intermediate concurrent build/source changes produced stale-rlib doctest failure; final sequential-source workspace run passed",
+    "Clippy found needless format borrows and item after test module; repaired before final successful run",
+    "initial new graph tests used zero-based fault index and insufficient manual-region capacity; corrected test setup; final suites passed"
+  ],
+  "logs": {
+    "s2b-workspace-tests.log": {
+      "path": "/home/john-riley/.codex/worktrees/fba5/lang/target/s2b-workspace-tests.log",
+      "sha256": "76f17e0557b035f34931981c65c5587a778b0ce9a79667ed61fbc35f9c2498b0"
+    },
+    "s2b-workspace-tests-unrestricted.log": {
+      "path": "/home/john-riley/.codex/worktrees/fba5/lang/target/s2b-workspace-tests-unrestricted.log",
+      "sha256": "8df278aa691849868c728c440f095938e3af72e742cb34d70e087a1e20e95829"
+    },
+    "s2b-workspace-tests-final.log": {
+      "path": "/home/john-riley/.codex/worktrees/fba5/lang/target/s2b-workspace-tests-final.log",
+      "sha256": "485dadc71312d21b5d8fa11ed59dfbd16ef1eb06d625c7077976b438cc2a428c"
+    },
+    "s2b-clippy.log": {
+      "path": "/home/john-riley/.codex/worktrees/fba5/lang/target/s2b-clippy.log",
+      "sha256": "1dcbceb308f650587a1d22d0bf414cb1a5d730e5566ceb5e81a2c0ebd2122d08"
+    },
+    "s2b-clippy-final.log": {
+      "path": "/home/john-riley/.codex/worktrees/fba5/lang/target/s2b-clippy-final.log",
+      "sha256": "958fe128a6bb4bc5301195d44f32c7c950ebe5dddc1ff8f68078460499961f36"
+    },
+    "s2b-fmt.log": {
+      "path": "/home/john-riley/.codex/worktrees/fba5/lang/target/s2b-fmt.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "s2b-diff-check.log": {
+      "path": "/home/john-riley/.codex/worktrees/fba5/lang/target/s2b-diff-check.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "s2b-build-default-final.log": {
+      "path": "/home/john-riley/.codex/worktrees/fba5/lang/target/s2b-build-default-final.log",
+      "sha256": "1661ae5c8e3bcf59b2e5f6bb1619a6e9fc86a9561fa3f3794feb4a82d26006dd"
+    },
+    "s2b-runtime-no-features.log": {
+      "path": "/home/john-riley/.codex/worktrees/fba5/lang/target/s2b-runtime-no-features.log",
+      "sha256": "b5e4101da76777e101106e212ff353b85ba87e1d225c811427713eb023ce0a4b"
+    },
+    "s2b-bench-tests.log": {
+      "path": "/home/john-riley/.codex/worktrees/fba5/lang/target/s2b-bench-tests.log",
+      "sha256": "62347990d5dbafe43097c6aabac6226e4919ef8c36a106095f75606fb2843c6e"
+    },
+    "s2b-docs-tests.log": {
+      "path": "/home/john-riley/.codex/worktrees/fba5/lang/target/s2b-docs-tests.log",
+      "sha256": "15f0984b923ab51dd8eb74a0a6e655117564bba7980f788b778a0db96168fa66"
+    },
+    "s2b-source-tests.log": {
+      "path": "/home/john-riley/.codex/worktrees/fba5/lang/target/s2b-source-tests.log",
+      "sha256": "2b3e44819cb8ba679e83f60eb9c9a2a9fa7c5d418468bf5a8530246cfd7ad79d"
+    },
+    "s2b-exact-tests.log": {
+      "path": "/home/john-riley/.codex/worktrees/fba5/lang/target/s2b-exact-tests.log",
+      "sha256": "3d3e536baf8da8c008dc3b0003aae46011c6d134cfbe4d129c61cdac35237f2b"
+    },
+    "s2b-models.log": {
+      "path": "/home/john-riley/.codex/worktrees/fba5/lang/target/s2b-models.log",
+      "sha256": "cf85f958f20f1c93eb0567ab5948394f1ffda83a7e6c62b327ae7be778b38270"
+    },
+    "s2b-graph-product-final.log": {
+      "path": "/home/john-riley/.codex/worktrees/fba5/lang/target/s2b-graph-product-final.log",
+      "sha256": "8603c2cc4bcd524f20174740d9f95f470056bb62fd5577b3bf236c2a7ff64594"
+    }
+  },
+  "remaining_external_release_gates": [
+    "independent memory safety audit",
+    "leak-enabled capable host",
+    "solver/isolation/performance and paired human/model gates"
+  ],
+  "evidence_log_export": {
+    "normalization": "Terminal empty lines removed from copied logs only; original target logs/hashes remain raw. No code changed.",
+    "normalized_files": [
+      "s2b-runtime-no-features.log",
+      "s2b-workspace-tests-final.log",
+      "asan-no-leaks/graph_storage-run.stdout",
+      "asan-no-leaks/runtime-unit-run.stdout",
+      "asan-no-leaks/fallible_lifetimes-run.stdout",
+      "asan-no-leaks/fallible_lifetime_model-run.stdout",
+      "asan-no-leaks/graph_storage_model-run.stdout"
+    ],
+    "sha256": {
+      "s2b-fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "s2b-docs-tests.log": "15f0984b923ab51dd8eb74a0a6e655117564bba7980f788b778a0db96168fa66",
+      "s2b-runtime-no-features.log": "c96bc566707cbd95467e5cac87c4d0f0e5bf892445b4ed42bf47f0affd42e3fe",
+      "s2b-workspace-tests-final.log": "d916c284c7ce2dd6a019b13cc6797e5be1199384f50597d8840bd6ff3bbd8e45",
+      "s2b-clippy-final.log": "958fe128a6bb4bc5301195d44f32c7c950ebe5dddc1ff8f68078460499961f36",
+      "s2b-bench-tests.log": "62347990d5dbafe43097c6aabac6226e4919ef8c36a106095f75606fb2843c6e",
+      "asan-leaks/leak-probe-run.stderr": "e36fc6d21432e61cacaea18ec6a8283530445b9ce011d05a084458459529dc6e",
+      "asan-leaks/leak-probe-run.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "asan-leaks/runtime-build.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "asan-leaks/rustc-version.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "asan-leaks/leak-probe-build.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "asan-leaks/rustc-version.stdout": "778fbc643a806f0dd123c056e66201d7e8a56a61928ec0a33171be8d6c2d5a37",
+      "asan-leaks/leak-probe-build.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "asan-leaks/runtime-build.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "asan-no-leaks/graph_storage_model-run.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "asan-no-leaks/runtime-unit-build.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "asan-no-leaks/graph_storage-run.stdout": "d5fd33e1753cf794366b4d439f851ff2cdb1f763ed83c9b0081cf6d1ad1d9cef",
+      "asan-no-leaks/runtime-unit-run.stdout": "ef5968f1de71e68a5ce3e46e00c86d7b0edced87f5b717244883f5c0b120a222",
+      "asan-no-leaks/graph_storage-run.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "asan-no-leaks/graph_storage-build.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "asan-no-leaks/fallible_lifetimes-run.stdout": "26b226fa0f77cd27b86864cd56f04d094d9403341f852cc25bb1fec098b5bddf",
+      "asan-no-leaks/runtime-unit-build.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "asan-no-leaks/fallible_lifetime_model-build.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "asan-no-leaks/fallible_lifetime_model-run.stdout": "e7ce0f262dbc10d049551ecad4568826612cf87105923703903b9d7113990627",
+      "asan-no-leaks/fallible_lifetimes-build.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "asan-no-leaks/runtime-build.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "asan-no-leaks/rustc-version.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "asan-no-leaks/fallible_lifetimes-run.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "asan-no-leaks/rustc-version.stdout": "778fbc643a806f0dd123c056e66201d7e8a56a61928ec0a33171be8d6c2d5a37",
+      "asan-no-leaks/runtime-unit-run.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "asan-no-leaks/graph_storage_model-build.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "asan-no-leaks/graph_storage-build.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "asan-no-leaks/graph_storage_model-build.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "asan-no-leaks/fallible_lifetime_model-build.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "asan-no-leaks/fallible_lifetimes-build.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "asan-no-leaks/graph_storage_model-run.stdout": "5a4bd23e422d8a2d5b5e6b86e53e8106015dba2c73b24832cfbd209c7c9b2349",
+      "asan-no-leaks/runtime-build.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "asan-no-leaks/fallible_lifetime_model-run.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+}

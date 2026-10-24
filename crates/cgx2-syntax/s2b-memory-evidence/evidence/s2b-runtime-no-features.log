@@ -1,0 +1,183 @@
+   Compiling cgx2-runtime v0.1.0 (/home/john-riley/.codex/worktrees/fba5/lang/crates/cgx2-runtime)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.10s
+     Running unittests src/lib.rs (target/release-s2b-memory/debug/deps/cgx2_runtime-ff7eb6cb46f1c9e7)
+
+running 5 tests
+test report::tests::pause_histogram_bounds_and_saturating_units ... ok
+test root_census_tests::registration_sum_overflow_is_reported ... ok
+test scope::tests::overflow_and_invalid_handles_leave_scope_empty ... ok
+test scope::tests::identifier_exhaustion_is_fallible_and_does_not_wrap ... ok
+test scope::tests::cleanup_continues_after_corruption_and_preserves_primary_error ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/assurance.rs (target/release-s2b-memory/debug/deps/assurance-c660a3960d006430)
+
+running 4 tests
+test conversion_handles_obey_cross_region_edges_roots_and_close ... ok
+test failed_near_limit_promotion_is_atomic_and_other_region_stays_untouched ... ok
+test failed_nested_promotion_and_copy_do_not_collect_or_consume_source ... ok
+test zero_length_conversion_charges_metadata_and_stales_only_after_collection ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/audit.rs (target/release-s2b-memory/debug/deps/audit-b71ccc269ebf39ec)
+
+running 2 tests
+test closed_region_id_and_handles_remain_stale_after_new_region_is_created ... ok
+test unwinding_nested_guards_does_not_collect_or_leave_a_budget_active ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/automatic_pressure_wave23.rs (target/release-s2b-memory/debug/deps/automatic_pressure_wave23-40fefa044f1eb697)
+
+running 4 tests
+test automatic_pressure::corrupted_oracle_is_rejected ... ok
+test automatic_pressure::rooted_region_limit_failure_can_follow_collection ... ok
+test automatic_pressure::both_nested_budget_orders_and_exit_retry ... ok
+test automatic_pressure::pressure_corpus ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/failure_paths.rs (target/release-s2b-memory/debug/deps/failure_paths-f6bc575f8cbcac8f)
+
+running 7 tests
+test host_capacity_overflow_fails_before_auto_collection ... ok
+test auto_reclaims_on_capacity_pressure_below_trigger ... ok
+test auto_collection_cannot_make_rooted_capacity_available ... ok
+test invalid_and_closed_regions_cannot_collect_or_change_other_regions ... ok
+test manual_failure_waits_for_explicit_collection ... ok
+test nested_guards_exhaust_budget_without_collecting_any_region ... ok
+test overflow_and_intrinsically_oversized_requests_fail_before_auto_collection ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/fallible_lifetimes.rs (target/release-s2b-memory/debug/deps/fallible_lifetimes-5aca67979ddea6b9)
+
+running 5 tests
+test failed_guard_entry_preserves_outer_budget_and_collection_prohibition ... ok
+test root_bookkeeping_budget_failure_preserves_existing_roots ... ok
+test root_bookkeeping_charges_each_guard_and_cleanup_does_not_refund ... ok
+test nested_cleanup_on_early_return_and_unwind_is_region_local ... ok
+test scoped_roots_own_duplicates_without_consuming_manual_registrations ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/graph_storage.rs (target/release-s2b-memory/debug/deps/graph_storage-63f99f12867c62bc)
+
+running 9 tests
+test bulk_roots_count_duplicates_and_validate_all_children_before_registration ... ok
+test exact_graph_budget_includes_temporary_root_bookkeeping ... ok
+test initialized_children_survive_pressure_before_parent_allocation ... ok
+test invalid_regions_children_and_shapes_fail_before_allocation ... ok
+test malformed_headers_links_and_bounds_reject_without_output_or_payload_mutation ... ok
+test nested_no_gc_budgets_charge_roots_and_chunks_across_regions_without_collection ... ok
+test payload_writes_are_checked_atomic_and_do_not_allocate ... ok
+test zeroed_graphs_have_exact_shapes_and_allow_aliases_and_cycles ... ok
+test maximum_collection_and_string_use_traced_chunks_without_reducing_bounds ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+
+     Running tests/objects.rs (target/release-s2b-memory/debug/deps/objects-c3a7f450da74bd84)
+
+running 5 tests
+test bad_updates_and_shape_failures_leave_graph_and_charge_unchanged ... ok
+test closing_one_region_does_not_touch_another_and_invalidates_handles ... ok
+test checked_slots_trace_shared_children_and_reclaim_cycles_after_clear ... ok
+test legacy_links_and_checked_slots_are_both_strong ... ok
+test nested_guard_fails_atomically_and_never_collects_any_region ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/owned.rs (target/release-s2b-memory/debug/deps/owned-b79d9488bbc98226)
+
+running 13 tests
+test copying_stale_handle_returns_invalid_handle ... ok
+test impossible_owned_allocation_fails_without_panicking ... ok
+test invalid_region_failure_returns_unchanged_owned_bytes ... ok
+test managed_copy_is_independent_and_preserves_source_handle ... ok
+test nested_budget_failure_does_not_commit_promotion_or_collect ... ok
+test owned_allocation_charges_active_guard_without_collecting ... ok
+test managed_copy_budget_failure_keeps_source_valid ... ok
+test nested_guards_charge_owned_allocations_without_collection ... ok
+test region_limit_failure_returns_unchanged_owned_bytes ... ok
+test owned_allocation_is_zero_filled_and_can_be_mutated ... ok
+test zero_length_managed_copy_has_empty_owned_payload ... ok
+test zero_length_owned_allocation_is_valid ... ok
+test promotion_moves_bytes_into_region_and_obeys_roots ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/region_graph_wave22.rs (target/release-s2b-memory/debug/deps/region_graph_wave22-8705276932547137)
+
+running 3 tests
+test region_graph_wave22::nested_guard_exhaustion_retry_and_failed_link_then_close ... ok
+test region_graph_wave22::injected_oracle_mismatch_is_detected ... ok
+test region_graph_wave22::deterministic_region_graph_replay ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/regions.rs (target/release-s2b-memory/debug/deps/regions-42b605d310724f2e)
+
+running 20 tests
+test allocation_charges_payload_and_slot_metadata ... ok
+test auto_collects_at_next_allocation_safepoint_after_trigger ... ok
+test budget_failure_is_before_commit_and_preserves_existing_object ... ok
+test cross_region_edges_are_rejected_without_mutation ... ok
+test creating_region_inside_guard_charges_global_budget ... ok
+test duplicate_link_needs_no_budget_or_region_headroom ... ok
+test default_region_uses_auto_limit_and_trigger ... ok
+test explicit_collection_is_forbidden_in_guard_even_for_other_region ... ok
+test growing_edges_inside_guard_charges_full_new_buffer_allocation ... ok
+test guard_drop_after_error_restores_collection ... ok
+test impossible_allocation_counts_as_failure_without_collection ... ok
+test limit_failure_does_not_commit_or_damage_previous_allocation ... ok
+test manual_region_never_collects_during_allocation ... ok
+test named_regions_preserve_mode_and_limit ... ok
+test nested_budgets_charge_each_guard_and_first_exhausted_fails ... ok
+test one_guard_suppresses_two_auto_regions_until_their_next_safepoints ... ok
+test reclaimed_handle_cannot_alias_reused_slot ... ok
+test rooted_cycle_survives_and_unrooted_cycle_is_reclaimed ... ok
+test rooted_region_cannot_close_and_other_region_survives_close ... ok
+test deterministic_graph_operations_preserve_reachability_and_handle_validity ... ok
+
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/report.rs (target/release-s2b-memory/debug/deps/report-cc8be42121c8c639)
+
+running 5 tests
+test collection_pauses_record_only_completed_cycles ... ok
+test limit_failure_and_closed_region_leave_terminal_report_without_aliasing ... ok
+test nested_guards_keep_two_regions_and_pause_counts_stable_on_failure ... ok
+test report_has_stable_order_totals_and_terminal_rows ... ok
+test report_rendering_has_a_versioned_stable_schema ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/root_census.rs (target/release-s2b-memory/debug/deps/root_census-df19827974de7590)
+
+running 2 tests
+test duplicate_registrations_and_failed_unroot_preserve_counts ... ok
+test cycle_collection_close_and_stale_handles_follow_live_slots ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/transfer_replay.rs (target/release-s2b-memory/debug/deps/transfer_replay-8ee1c045a67a1e5c)
+
+running 1 test
+test replay_copy_alias_edge_and_both_close_orders ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/unwind_replay.rs (target/release-s2b-memory/debug/deps/unwind_replay-9fee5da8c502d0e0)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cgx2_runtime
+
+running 1 test
+test crates/cgx2-runtime/src/owned.rs - owned::OwnedBytes (line 11) - compile fail ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s

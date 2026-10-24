@@ -23,6 +23,8 @@ enum Kind {
 struct ObjectShape {
     region: String,
     slots: usize,
+    payload: usize,
+    graph: bool,
 }
 
 #[derive(Default)]
@@ -730,7 +732,19 @@ impl Lowerer {
         if self.loop_depth > 0
             && matches!(
                 operation.as_str(),
-                "region" | "alloc_object" | "reference" | "set_reference" | "clear_reference"
+                "region"
+                    | "alloc_object"
+                    | "alloc_graph"
+                    | "reference"
+                    | "graph_reference"
+                    | "set_reference"
+                    | "clear_reference"
+                    | "set_graph_reference"
+                    | "clear_graph_reference"
+                    | "write_byte"
+                    | "write_graph_byte"
+                    | "expect_byte"
+                    | "expect_graph_byte"
             )
         {
             self.report("region/object/reference declarations and graph mutation are unsupported in memory loops", expr.span);
@@ -810,12 +824,18 @@ impl Lowerer {
                 });
                 Some(Kind::Managed)
             }
-            "alloc_object" if destination.is_some() => {
+            "alloc_object" | "alloc_graph" if destination.is_some() => {
                 let args = self.positional(arguments, 3, expr.span)?;
                 let region = self.reference(args[0], &[Kind::Region])?;
                 let payload = self.bytes(args[1], "payload size")?;
                 let slots = self.bytes(args[2], "reference slots")?;
-                if payload > MAX_OBJECT_PAYLOAD_BYTES || slots > MAX_OBJECT_REFERENCE_SLOTS {
+                let graph = operation == "alloc_graph";
+                let max_slots = if graph {
+                    65_536
+                } else {
+                    MAX_OBJECT_REFERENCE_SLOTS
+                };
+                if payload > MAX_OBJECT_PAYLOAD_BYTES || slots > max_slots {
                     self.argument_error("object shape exceeds runtime limits", expr.span);
                     return None;
                 }
@@ -825,6 +845,8 @@ impl Lowerer {
                     ObjectShape {
                         region: region.clone(),
                         slots,
+                        payload,
+                        graph,
                     },
                 );
                 self.ops.push(Op::CreateManaged {
@@ -834,9 +856,10 @@ impl Lowerer {
                 });
                 Some(Kind::Object)
             }
-            "reference" if destination.is_some() => {
+            "reference" | "graph_reference" if destination.is_some() => {
                 let args = self.positional(arguments, 2, expr.span)?;
-                let (owner, region) = self.object_slot(args[0], args[1])?;
+                let (owner, region) =
+                    self.object_slot(args[0], args[1], operation.contains("graph"))?;
                 self.ops.push(Op::Use {
                     value: owner,
                     span: expr.span,
@@ -845,11 +868,17 @@ impl Lowerer {
                     .insert(destination.unwrap_or_default().to_owned(), region);
                 Some(Kind::Reference)
             }
-            "set_reference" | "clear_reference" if destination.is_none() => {
-                let count = if operation == "set_reference" { 3 } else { 2 };
+            "set_reference"
+            | "clear_reference"
+            | "set_graph_reference"
+            | "clear_graph_reference"
+                if destination.is_none() =>
+            {
+                let count = if operation.starts_with("set_") { 3 } else { 2 };
                 let args = self.positional(arguments, count, expr.span)?;
-                let (owner, region) = self.object_slot(args[0], args[1])?;
-                if operation == "set_reference" {
+                let (owner, region) =
+                    self.object_slot(args[0], args[1], operation.contains("graph"))?;
+                if operation.starts_with("set_") {
                     let target = self.reference(args[2], &[Kind::Object])?;
                     if self.objects[&target].region != region {
                         self.argument_error("reference edge must stay in one region", args[2].span);
@@ -859,6 +888,30 @@ impl Lowerer {
                         value: target,
                         span: expr.span,
                     });
+                }
+                self.ops.push(Op::Use {
+                    value: owner,
+                    span: expr.span,
+                });
+                None
+            }
+            "write_byte" | "expect_byte" | "write_graph_byte" | "expect_graph_byte"
+                if destination.is_none() =>
+            {
+                let args = self.positional(arguments, 3, expr.span)?;
+                let owner = self.reference(args[0], &[Kind::Object])?;
+                let offset = self.bytes(args[1], "payload offset")?;
+                let byte = self.bytes(args[2], "byte value")?;
+                let shape = &self.objects[&owner];
+                if shape.graph != operation.contains("graph")
+                    || offset >= shape.payload
+                    || byte > 255
+                {
+                    self.argument_error(
+                        "byte operation requires matching layout, in-range offset and byte 0..255",
+                        expr.span,
+                    );
+                    return None;
                 }
                 self.ops.push(Op::Use {
                     value: owner,
@@ -944,10 +997,17 @@ impl Lowerer {
         }
     }
 
-    fn object_slot(&mut self, owner: &Expr, index: &Expr) -> Option<(String, String)> {
+    fn object_slot(&mut self, owner: &Expr, index: &Expr, graph: bool) -> Option<(String, String)> {
         let name = self.reference(owner, &[Kind::Object])?;
         let slot = self.bytes(index, "reference index")?;
         let shape = &self.objects[&name];
+        if shape.graph != graph {
+            self.argument_error(
+                "reference operation does not match object/graph layout",
+                owner.span,
+            );
+            return None;
+        }
         if slot >= shape.slots {
             self.argument_error("reference index outside object shape", index.span);
             return None;
@@ -1030,4 +1090,23 @@ impl Lowerer {
         );
         None
     }
+}
+
+/// Versioned graph storage source profile. Legacy script bookkeeping is retained
+/// for existing scripts; graph constructors require fallible session/guard entry.
+pub fn graph_memory_profile(module: &Module) -> bool {
+    let found = std::cell::Cell::new(false);
+    let mut expr = |expression: &Expr| {
+        if let ExprKind::Call { callee, .. } = &expression.kind {
+            if matches!(&callee.kind, ExprKind::Name(path) if path.segments.as_slice() == ["memory", "alloc_graph"])
+            {
+                found.set(true);
+            }
+        }
+    };
+    cgx2_syntax::visit_stmts(&module.statements, &mut |_| {}, &mut expr);
+    for function in &module.functions {
+        cgx2_syntax::visit_stmts(&function.body, &mut |_| {}, &mut expr);
+    }
+    found.get()
 }

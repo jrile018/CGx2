@@ -5,6 +5,7 @@ mod diagnostic;
 mod effects;
 mod imports;
 mod memory;
+pub use memory::graph_memory_profile;
 mod tensor;
 mod types;
 

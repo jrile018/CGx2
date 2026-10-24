@@ -108,7 +108,11 @@ fn graph_snapshot(session: &Session, bindings: &HashMap<String, Binding>) -> Opt
         };
         let live = session.read_bytes(*handle).is_ok();
         let mut references = Vec::new();
-        if live {
+        if live && session.graph_shape(*handle).is_ok() {
+            session
+                .visit_graph_references(*handle, |_, child| references.push(child))
+                .ok()?;
+        } else if live {
             for index in 0..=1024 {
                 match session.reference(*handle, index) {
                     Ok(reference) if index < 1024 => references.push(reference),
@@ -180,16 +184,26 @@ enum Op {
         region: String,
         payload: usize,
         slots: usize,
+        graph: bool,
     },
     SetReference {
         owner: String,
         index: usize,
         target: Option<String>,
+        graph: bool,
     },
     Reference {
         name: String,
         owner: String,
         index: usize,
+        graph: bool,
+    },
+    Byte {
+        owner: String,
+        offset: usize,
+        value: u8,
+        write: bool,
+        graph: bool,
     },
     UseReference {
         name: String,
@@ -492,21 +506,23 @@ fn lower_stmt(
                         size: args[1].clone(),
                     }
                 }
-                "alloc_object" => {
+                "alloc_object" | "alloc_graph" => {
                     let args = positional(arguments, 3, value.span)?;
                     Op::AllocObject {
                         name: dest.clone(),
                         region: scoped_name(args[0], names)?,
                         payload: bytes(args[1])?,
                         slots: bytes(args[2])?,
+                        graph: operation == "alloc_graph",
                     }
                 }
-                "reference" => {
+                "reference" | "graph_reference" => {
                     let args = positional(arguments, 2, value.span)?;
                     Op::Reference {
                         name: dest.clone(),
                         owner: scoped_name(args[0], names)?,
                         index: bytes(args[1])?,
+                        graph: operation == "graph_reference",
                     }
                 }
                 "borrow" | "borrow_mut" => {
@@ -542,18 +558,42 @@ fn lower_stmt(
                 if namespace != "memory" {
                     return Err(unsupported(path.span));
                 }
-                if operation == "set_reference" || operation == "clear_reference" {
-                    let count = if operation == "set_reference" { 3 } else { 2 };
+                if matches!(
+                    operation.as_str(),
+                    "set_reference"
+                        | "clear_reference"
+                        | "set_graph_reference"
+                        | "clear_graph_reference"
+                ) {
+                    let count = if operation.starts_with("set_") { 3 } else { 2 };
                     let args = positional(arguments, count, expr.span)?;
                     return Ok(SpannedOp {
                         op: Op::SetReference {
                             owner: scoped_name(args[0], names)?,
                             index: bytes(args[1])?,
+                            graph: operation.contains("graph"),
                             target: if count == 3 {
                                 Some(scoped_name(args[2], names)?)
                             } else {
                                 None
                             },
+                        },
+                        span: expr.span,
+                    });
+                }
+                if matches!(
+                    operation.as_str(),
+                    "write_byte" | "expect_byte" | "write_graph_byte" | "expect_graph_byte"
+                ) {
+                    let args = positional(arguments, 3, expr.span)?;
+                    return Ok(SpannedOp {
+                        op: Op::Byte {
+                            owner: scoped_name(args[0], names)?,
+                            offset: bytes(args[1])?,
+                            value: u8::try_from(bytes(args[2])?)
+                                .map_err(|_| unsupported(expr.span))?,
+                            write: operation.starts_with("write_"),
+                            graph: operation.contains("graph"),
                         },
                         span: expr.span,
                     });
@@ -643,6 +683,7 @@ fn cleanup_scope(
 }
 
 struct CallContext<'a> {
+    fallible_lifetimes: bool,
     functions: &'a FunctionBodies,
     scalars: &'a HashMap<String, i64>,
 }
@@ -715,6 +756,7 @@ fn execute_with_functions(
                             steps,
                             &CallContext {
                                 functions: context.functions,
+                                fallible_lifetimes: context.fallible_lifetimes,
                                 scalars: &scalars,
                             },
                             failure_state,
@@ -782,6 +824,7 @@ fn execute_with_functions(
                         steps,
                         &CallContext {
                             functions: context.functions,
+                            fallible_lifetimes: context.fallible_lifetimes,
                             scalars: &local_scalars,
                         },
                         failure_state,
@@ -802,7 +845,13 @@ fn execute_with_functions(
                     }
                 }
                 Op::NoGc { budget, body } => {
-                    let mut guard = session.no_gc(*budget);
+                    let mut guard = if context.fallible_lifetimes {
+                        session
+                            .try_no_gc(*budget)
+                            .map_err(|e| allocation(e, *span))?
+                    } else {
+                        session.no_gc(*budget)
+                    };
                     execute_with_functions(
                         body,
                         &mut guard,
@@ -897,11 +946,18 @@ fn execute_with_functions(
                     region: region_name,
                     payload,
                     slots,
+                    graph,
                 } => {
                     let id = region(bindings, region_name, *span)?;
-                    let handle = session
-                        .alloc_object(id, *payload, *slots)
-                        .map_err(|e| allocation(e, *span))?;
+                    let handle = if *graph {
+                        session
+                            .alloc_zeroed_graph(id, *payload, *slots)
+                            .map_err(|e| graph_error(e, *span))?
+                    } else {
+                        session
+                            .alloc_object(id, *payload, *slots)
+                            .map_err(|e| allocation(e, *span))?
+                    };
                     session.root(handle).map_err(|e| runtime(e, *span))?;
                     bindings.insert(name.clone(), Binding::Managed(handle));
                 }
@@ -909,6 +965,7 @@ fn execute_with_functions(
                     owner,
                     index,
                     target,
+                    graph,
                 } => {
                     let Binding::Managed(owner_handle) = binding(bindings, owner, *span)? else {
                         return Err(error("CGR014", "reference owner requires object", *span));
@@ -926,17 +983,72 @@ fn execute_with_functions(
                         }
                         None => None,
                     };
-                    session
-                        .set_reference(*owner_handle, *index, target_handle)
-                        .map_err(|e| runtime(e, *span))?;
+                    if *graph {
+                        session
+                            .set_graph_reference(*owner_handle, *index, target_handle)
+                            .map_err(|e| graph_error(e, *span))?;
+                    } else {
+                        session
+                            .set_reference(*owner_handle, *index, target_handle)
+                            .map_err(|e| runtime(e, *span))?;
+                    }
                 }
-                Op::Reference { name, owner, index } => {
+                Op::Byte {
+                    owner,
+                    offset,
+                    value,
+                    write,
+                    graph,
+                } => {
+                    let Binding::Managed(handle) = binding(bindings, owner, *span)? else {
+                        return Err(unsupported(*span));
+                    };
+                    if *write {
+                        if *graph {
+                            session
+                                .write_graph_bytes(*handle, *offset, &[*value])
+                                .map_err(|e| graph_error(e, *span))?;
+                        } else {
+                            session
+                                .write_bytes(*handle, *offset, &[*value])
+                                .map_err(|e| error("CGR014", format!("{e:?}"), *span))?;
+                        }
+                    } else {
+                        let mut actual = [0];
+                        if *graph {
+                            session
+                                .read_graph_bytes(*handle, *offset, &mut actual)
+                                .map_err(|e| graph_error(e, *span))?;
+                        } else {
+                            actual[0] = *session
+                                .read_bytes(*handle)
+                                .map_err(|e| runtime(e, *span))?
+                                .get(*offset)
+                                .ok_or_else(|| unsupported(*span))?;
+                        }
+                        if actual[0] != *value {
+                            return Err(error("CGR015", "memory byte expectation failed", *span));
+                        }
+                    }
+                }
+                Op::Reference {
+                    name,
+                    owner,
+                    index,
+                    graph,
+                } => {
                     let Binding::Managed(handle) = binding(bindings, owner, *span)? else {
                         return Err(error("CGR014", "reference owner requires object", *span));
                     };
-                    let reference = session
-                        .reference(*handle, *index)
-                        .map_err(|e| runtime(e, *span))?;
+                    let reference = if *graph {
+                        session
+                            .graph_reference(*handle, *index)
+                            .map_err(|e| graph_error(e, *span))?
+                    } else {
+                        session
+                            .reference(*handle, *index)
+                            .map_err(|e| runtime(e, *span))?
+                    };
                     bindings.insert(name.clone(), Binding::Reference(reference));
                 }
                 Op::UseReference { name } => {
@@ -1018,6 +1130,14 @@ fn execute_with_functions(
     Ok(())
 }
 
+fn graph_error(error_value: cgx2_runtime::GraphError, span: Span) -> RunError {
+    match error_value {
+        cgx2_runtime::GraphError::Memory(MemoryError::Allocation(e)) => allocation(e, span),
+        cgx2_runtime::GraphError::Memory(e) => runtime(e, span),
+        e => error("CGR014", format!("{e:?}"), span),
+    }
+}
+
 #[cfg(test)]
 fn execute(
     ops: &[SpannedOp],
@@ -1034,6 +1154,7 @@ fn execute(
         steps,
         &CallContext {
             functions: &functions,
+            fallible_lifetimes: false,
             scalars: &scalars,
         },
         &mut FailureState::default(),
@@ -1072,7 +1193,18 @@ pub(crate) fn run_module_with_failure(
         })
         .collect::<Result<HashMap<_, _>, _>>()
         .map_err(lower_failure)?;
-    let mut session = Session::new();
+    let fallible_lifetimes = cgx2_sema::graph_memory_profile(module);
+    let mut session = if fallible_lifetimes {
+        Session::try_new().map_err(|e| {
+            lower_failure(error(
+                "CGR013",
+                format!("session entry failed: {e:?}"),
+                module.span,
+            ))
+        })?
+    } else {
+        Session::new()
+    };
     #[cfg(feature = "failure-injection-test")]
     if let Some(index) = host_fail_reserve {
         session.inject_host_failure_at_reserve(index);
@@ -1085,6 +1217,7 @@ pub(crate) fn run_module_with_failure(
     let empty_scalars = HashMap::new();
     let context = CallContext {
         functions: &functions,
+        fallible_lifetimes,
         scalars: &empty_scalars,
     };
     let result = if let Some(main) = module

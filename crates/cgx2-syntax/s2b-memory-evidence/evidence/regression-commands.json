@@ -1,0 +1,88 @@
+[
+  {
+    "name": "foundation",
+    "command": [
+      "python3",
+      "crates/cgx2-syntax/s2b-evidence/run.py",
+      "--binary-dir",
+      "/home/john-riley/.codex/worktrees/fba5/lang/target/release-s2b-memory/debug",
+      "--output",
+      "/home/john-riley/.codex/worktrees/fba5/lang/target/s2b-regressions/foundation.json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "semantic",
+    "command": [
+      "python3",
+      "crates/cgx2-sema/tests/semantic_resolution/run.py",
+      "--binary",
+      "/home/john-riley/.codex/worktrees/fba5/lang/target/release-s2b-memory/debug/cgx2",
+      "--output",
+      "/home/john-riley/.codex/worktrees/fba5/lang/target/s2b-regressions/semantic.json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "specialization",
+    "command": [
+      "python3",
+      "crates/cgx2-sema/tests/source_specialization/run.py",
+      "--binary",
+      "/home/john-riley/.codex/worktrees/fba5/lang/target/release-s2b-memory/debug/cgx2",
+      "--output-dir",
+      "/home/john-riley/.codex/worktrees/fba5/lang/target/s2b-regressions/specialization"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "visibility",
+    "command": [
+      "python3",
+      "crates/cgx2-api-index/tests/verify_visibility_cli.py",
+      "--binary",
+      "/home/john-riley/.codex/worktrees/fba5/lang/target/release-s2b-memory/debug/cgx2",
+      "--output-dir",
+      "/home/john-riley/.codex/worktrees/fba5/lang/target/s2b-regressions/visibility"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "binders",
+    "command": [
+      "python3",
+      "crates/cgx2-package/scripts/verify_binders.py",
+      "--binary-dir",
+      "/home/john-riley/.codex/worktrees/fba5/lang/target/release-s2b-memory/debug",
+      "--output",
+      "/home/john-riley/.codex/worktrees/fba5/lang/target/s2b-regressions/binders.json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "output",
+    "command": [
+      "python3",
+      "crates/cgx2-cli/scripts/verify_output_bounds.py",
+      "--binary",
+      "/home/john-riley/.codex/worktrees/fba5/lang/target/release-s2b-memory/debug/cgx2",
+      "--output",
+      "/home/john-riley/.codex/worktrees/fba5/lang/target/s2b-regressions/output.json",
+      "--build-address-space-mib",
+      "4096"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "emitters",
+    "command": [
+      "python3",
+      "crates/cgx2-emit-python/tests/s2b_product.py",
+      "--binary-dir",
+      "/home/john-riley/.codex/worktrees/fba5/lang/target/release-s2b-memory/debug",
+      "--output",
+      "/home/john-riley/.codex/worktrees/fba5/lang/target/s2b-regressions/emitters.json"
+    ],
+    "exit_code": 0
+  }
+]
