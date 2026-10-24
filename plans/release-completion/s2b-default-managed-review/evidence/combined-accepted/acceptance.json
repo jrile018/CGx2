@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-10-24T11:15:19.988789+00:00",
+  "status": "accepted-bounded-default-managed-checkpoint",
+  "compiler_source_commit": "b0f1ccc4ad8130e22419f2a5366fd6a636c4b621",
+  "harness_commit": "0949d5c8f5fabb804bdfb6d37331adbdd5f414bc",
+  "full_managed_accepted": true,
+  "ordinary_memory_complete": false,
+  "release_complete": false,
+  "workspace": {
+    "passed": 1290,
+    "failed": 0,
+    "ignored": 6
+  },
+  "products": {
+    "managed-product": {
+      "passed": 369,
+      "failed": 0
+    },
+    "repair-matrix": {
+      "passed": 678,
+      "failed": 0
+    },
+    "core": {
+      "passed": 116,
+      "failed": 0
+    },
+    "equality": {
+      "passed": 87,
+      "failed": 0
+    }
+  },
+  "evidence_selftests": 16,
+  "all_required_current_regressions": "passed; see combined-b0f1ccc/verification.json.gz",
+  "historical_negative": "Unchanged owned-result runner523passed/1failed, separately retained; obsolete shadow-builtin expectation explicitly superseded by reconciled593/restored17 passes.",
+  "failed_attempt": "First combined managed matrix255passed/1setup failure: multiple historical hashed CLI libraries. Canonical frozen library selection fixed in0949d5c; full matrix rerun678/0 and managed369/0. All failed evidence retained.",
+  "frozen_artifacts_changed": [],
+  "source_changes_since_compiler_build": [
+    "crates/cgx2-syntax/default-managed-evidence/repair_runner.py",
+    "crates/cgx2-syntax/default-managed-evidence/test_repair_runner.py"
+  ],
+  "independent_reviews": [
+    "completion_core: provenance/nominal repair",
+    "completion_runtime: runtime equality",
+    "completion_consumers: evidence inventory, caller migration and canonical library selection"
+  ],
+  "remaining": "Full ordinary ownership, named regions/transfers/entry recovery, foreign/execution/commands, S3/S4 and all required external leak/audit/solver/isolation/library/GPU/performance/paired study gates remain open."
+}

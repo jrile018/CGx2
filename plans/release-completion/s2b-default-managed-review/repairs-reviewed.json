@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "full_managed_accepted": false,
+  "full_managed_accepted": true,
   "release_complete": false,
   "runtime": {
     "worker_commit": "53d37c1d668fe5e928fe396df5b9715bc102786e",
@@ -30,8 +30,22 @@
       "passed": 670,
       "failed": 8
     },
-    "remaining_failure": "All8 are CLI reserve-index1 missing entry span against native debug/release/standalone for graph-root and guard fixtures; final combined core fix must rerun the whole matrix."
+    "remaining_failure": "none in bounded checkpoint; historical670/8 result retained",
+    "combined_matrix": {
+      "passed": 678,
+      "failed": 0
+    }
   },
-  "core": "running; final report/commit pending, obsolete read-only layout test call site to be mechanically reconciled by coordinator without assertion changes",
-  "combined_integration_gate": "pending core delivery, review, test-call reconciliation and full combined checks"
+  "core": {
+    "worker_commit": "a095a136c789ccaed6777cae8ea70e58f7e2b856",
+    "integrated_commit": "91d1bc35483e22cc188fabed698d4220168050f1",
+    "status": "reviewed-bounded-repair",
+    "coordinator_caller_migration": "b0f1ccc4ad8130e22419f2a5366fd6a636c4b621",
+    "independent_core_product": {
+      "passed": 116,
+      "failed": 0
+    }
+  },
+  "combined_integration_gate": "passed; evidence/combined-accepted/acceptance.json",
+  "ordinary_memory_complete": false
 }

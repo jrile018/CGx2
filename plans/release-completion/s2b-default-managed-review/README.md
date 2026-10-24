@@ -32,3 +32,9 @@ R03/R04, full ordinary ownership, named regions/transfers/entry recovery, foreig
 ## Two repairs accepted as bounded deliveries
 
 Runtime53d37c1 and evidence23b050f are independently reviewed and integrated as c287985/1b922e2. Coordinator runtime4+typed2 tests and87target parity pass; evidence14selftests pass. The evidence matrix's670passed/8failed result is intentionally retained: all8 failures await the core Session-entry span repair and combined rerun. Core provenance/nominal delivery is still pending; full managed acceptance remains withheld. Details: repairs-reviewed.json.
+
+## Combined repaired checkpoint accepted
+
+Core a095a13 integrated91d1bc3; independent review accepted authoritative Source/AstOnly/SourceBundle provenance, nominal error compatibility and entry spans. Coordinator b0f1ccc migrated remaining Python AST and package-layout callers, preserving every original layout assertion; independent review found no issue. Combined1290 workspace tests, all quality gates and every current regression pass. First parity attempt retained255/1setup failure from historical hashed libraries; bounded harness0949d5c selects the canonical frozen library and passes16selftests. Full rerun678/0 repair matrix and369/0 managed corpus pass, including all8 previous entry-span failures.116core/87equality outcomes pass. Binary/library hashes unchanged; only the two Python harness files differ from compiler source. See evidence/combined-accepted/acceptance.json.
+
+The bounded default-managed checkpoint is accepted. Earlier failed disposition/attempts above remain historical evidence. Next sole producer is ../s2b-ordinary-memory/plan.md, whose generative region syntax, transfer/error ownership and pre-Session entry contract received independent review. Full ordinary memory, R03/R04 and all remaining release requirements remain open.

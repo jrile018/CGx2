@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24T10:35:01Z",
+  "checked_at": "2026-10-24T11:15:19.988789+00:00",
   "original_chats": [
     {
       "lane": "core",
@@ -219,11 +219,12 @@
       "hostId": "local",
       "worktree": "/home/john-riley/.codex/worktrees/685c/lang",
       "base": "c9d60229ecf3ed2bf76b29525fec0bdda41d0906",
-      "status": "reviewed-repairs-required",
+      "status": "reviewed-bounded-delivery",
       "afterCursor": "306cfc56-28ee-4c5f-ae40-81a6de815086:12",
-      "verification_note": "Three independent reviews and coordinator reproductions found source-provenance, nominal AllocationError, and Result equality defects plus native evidence gaps. Acceptance withheld; common repair plans prepared.",
+      "verification_note": "Combined1290Rust,678repair/369managed product,116core/87equality,16harness selftests and all current regressions pass; full ordinary memory/release remains incomplete.",
       "commit": "bc4ba95e710eaed3816291fdc67de1478e0456f5",
-      "staged_commit": "7643899037c6fd9522534c7b9125b054aab6088c"
+      "staged_commit": "7643899037c6fd9522534c7b9125b054aab6088c",
+      "accepted_code_commit": "0949d5c8f5fabb804bdfb6d37331adbdd5f414bc"
     }
   ],
   "s2a_repairs": [
@@ -441,9 +442,11 @@
       "hostId": "local",
       "worktree": "/home/john-riley/.codex/worktrees/06b4/lang",
       "base": "3c1cfe2aeba2f7135e4069709bf633c082d2aab0",
-      "status": "running",
-      "afterCursor": "97c7b72a-7d85-4dc0-baa3-400d373feba5:5",
-      "plan": "plans/release-completion/s2b-default-managed-review/core-auth/plan.md"
+      "status": "reviewed-bounded-repair",
+      "afterCursor": "97c7b72a-7d85-4dc0-baa3-400d373feba5:6",
+      "plan": "plans/release-completion/s2b-default-managed-review/core-auth/plan.md",
+      "commit": "a095a136c789ccaed6777cae8ea70e58f7e2b856",
+      "integrated_commit": "91d1bc35483e22cc188fabed698d4220168050f1"
     },
     {
       "lane": "runtime-equality",
@@ -472,7 +475,7 @@
       "plan": "plans/release-completion/s2b-default-managed-review/evidence-parity/plan.md",
       "commit": "23b050fad0f49ad7ccfcf1f6404ec5015e6a0f9f",
       "integrated_commit": "1b922e2f708566f51d7df1c1abc6f434e5e3e55f",
-      "acceptance_note": "Harness accepted;8 known core-span assertions still fail, combined rerun required"
+      "acceptance_note": "Harness accepted; combined678/0 repair matrix closes all8 prior core-span failures. Canonical frozen CLI library selection integrated0949d5c."
     }
   ]
 }

@@ -1,5 +1,5 @@
 # CGx2 finite completion plan
-
+Status: S1, S2a, S2b foundation and bounded ordinary-owned/Result/default-managed deliveries and repairs are reviewed. Combined managed acceptance passes1290Rust,678repair/369managed product,116core/87equality and required current regressions. Next sole producer: [ordinary ownership, regions and recoverable entry](s2b-ordinary-memory/plan.md). Full ordinary memory, foreign/execution/commands, S3/S4 and all external release evidence remain open. Updated2026-10-24; coordinator branch riley/release-completion-plan.
 Status: all twelve S1 deliveries, S2a and S2b foundation including repairs reviewed as bounded deliveries. Graph/payload support, both legacy repairs and the first ordinary-owned source slice are reviewed; recoverable allocation and both repairs are reviewed as bounded deliveries; the next source checkpoint is default ordinary managed storage, while full ordinary memory remains incomplete; foreign/execution/command integration and S3 remain gated. See [foundation acceptance](s2b-review/README.md). Updated 2026-10-24. Coordinator branch: riley/release-completion-plan. Full release capabilities and evidence remain required.
 
 ## Answer to “how many more waves?”
@@ -152,3 +152,7 @@ Default managed bc4ba95 is staged for repair, not accepted. Independent review r
 ### Two managed repairs accepted; combined gate pending
 
 Equality and evidence repairs are accepted as bounded deliveries (c287985/1b922e2). The core source-authentication/nominal repair remains running. The stronger matrix retains8 known entry-span failures; core integration, the unchanged-assertion layout-test call-site reconciliation and a full combined rerun remain required. Full managed/R03/R04 acceptance and all release requirements stay open.
+
+### Combined managed checkpoint accepted; remaining memory contract ready
+
+See [combined acceptance](s2b-default-managed-review/evidence/combined-accepted/acceptance.json). All three repairs and coordinator caller/harness fixes are reviewed with unchanged frozen compiler artifacts. Original failed attempts and superseded historical negative are retained. The next connected memory plan freezes region brands, graph copies, owner-preserving failed promotion, aggregate ownership and pre-Session fallback. Only this shared producer is dependency-ready; no S3 fanout. All R01–R15 rows remain required.

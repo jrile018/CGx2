@@ -1,0 +1,238 @@
+{
+  "schema_version": 1,
+  "usage": "Replace literal placeholders in argv without shell interpolation. Relative script paths use SOURCE_ROOT as cwd. Use a new OUTPUT_DIR and frozen BINARY_DIR. Preserve original historical failure separately; all other rows must pass.",
+  "checks": [
+    {
+      "name": "owned-symbol195",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/owned-symbol-compatibility-evidence/run.py",
+        "--binary-dir",
+        "${BINARY_DIR}",
+        "--output",
+        "${OUTPUT_DIR}/owned-symbol195/owned-symbol195.json"
+      ],
+      "expected_exit": 0,
+      "expected_status": "passed"
+    },
+    {
+      "name": "owned-result-original",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/owned-result-evidence/run.py",
+        "--binary-dir",
+        "${BINARY_DIR}",
+        "--output",
+        "${OUTPUT_DIR}/owned-result-original/owned-result-original.json"
+      ],
+      "expected_exit": 1,
+      "expected_status": "known-superseded-negative"
+    },
+    {
+      "name": "owned-result-reconciled",
+      "argv": [
+        "/usr/bin/python3",
+        "plans/release-completion/s2b-owned-result-review/reconcile.py",
+        "--binary-dir",
+        "${BINARY_DIR}",
+        "--output-dir",
+        "${OUTPUT_DIR}/owned-result-reconciled/reconciled"
+      ],
+      "expected_exit": 0,
+      "expected_status": "passed"
+    },
+    {
+      "name": "ordinary256",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/ordinary-owned-evidence/run.py",
+        "--binary-dir",
+        "${BINARY_DIR}",
+        "--output",
+        "${OUTPUT_DIR}/ordinary256/ordinary256.json"
+      ],
+      "expected_exit": 0,
+      "expected_status": "passed"
+    },
+    {
+      "name": "foundation",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/s2b-evidence/run.py",
+        "--binary-dir",
+        "${BINARY_DIR}",
+        "--output",
+        "${OUTPUT_DIR}/foundation/foundation.json"
+      ],
+      "expected_exit": 0,
+      "expected_status": "passed"
+    },
+    {
+      "name": "semantic",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-sema/tests/semantic_resolution/run.py",
+        "--binary",
+        "${BINARY_DIR}/cgx2",
+        "--output",
+        "${OUTPUT_DIR}/semantic/semantic.json"
+      ],
+      "expected_exit": 0,
+      "expected_status": "passed"
+    },
+    {
+      "name": "specialization",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-sema/tests/source_specialization/run.py",
+        "--binary",
+        "${BINARY_DIR}/cgx2",
+        "--output-dir",
+        "${OUTPUT_DIR}/specialization/specialization"
+      ],
+      "expected_exit": 0,
+      "expected_status": "passed"
+    },
+    {
+      "name": "visibility",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-api-index/tests/verify_visibility_cli.py",
+        "--binary",
+        "${BINARY_DIR}/cgx2",
+        "--output-dir",
+        "${OUTPUT_DIR}/visibility/visibility"
+      ],
+      "expected_exit": 0,
+      "expected_status": "passed"
+    },
+    {
+      "name": "binders",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-package/scripts/verify_binders.py",
+        "--binary-dir",
+        "${BINARY_DIR}",
+        "--output",
+        "${OUTPUT_DIR}/binders/binders.json"
+      ],
+      "expected_exit": 0,
+      "expected_status": "passed"
+    },
+    {
+      "name": "output",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-cli/scripts/verify_output_bounds.py",
+        "--binary",
+        "${BINARY_DIR}/cgx2",
+        "--output",
+        "${OUTPUT_DIR}/output/output.json",
+        "--build-address-space-mib",
+        "4096"
+      ],
+      "expected_exit": 0,
+      "expected_status": "passed"
+    },
+    {
+      "name": "emitters",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-emit-python/tests/s2b_product.py",
+        "--binary-dir",
+        "${BINARY_DIR}",
+        "--output",
+        "${OUTPUT_DIR}/emitters/emitters.json"
+      ],
+      "expected_exit": 0,
+      "expected_status": "passed"
+    },
+    {
+      "name": "graph99",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/s2b-memory-evidence/run.py",
+        "--binary-dir",
+        "${BINARY_DIR}",
+        "--output",
+        "${OUTPUT_DIR}/graph99/graph99.json"
+      ],
+      "expected_exit": 0,
+      "expected_status": "passed"
+    },
+    {
+      "name": "guards518",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-emit-rust/tests/graph_guard_parity/run.py",
+        "--binary-dir",
+        "${BINARY_DIR}",
+        "--output",
+        "${OUTPUT_DIR}/guards518/guards518.json"
+      ],
+      "expected_exit": 0,
+      "expected_status": "passed"
+    },
+    {
+      "name": "reports265",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-cli/tests/memory_report_layout/run.py",
+        "--binary",
+        "${BINARY_DIR}/cgx2",
+        "--output",
+        "${OUTPUT_DIR}/reports265/reports265.json"
+      ],
+      "expected_exit": 0,
+      "expected_status": "passed"
+    },
+    {
+      "name": "managed-product",
+      "argv": [
+        "/usr/bin/python3",
+        "${SOURCE_ROOT}/crates/cgx2-syntax/default-managed-evidence/run.py",
+        "--binary-dir",
+        "${BINARY_DIR}",
+        "--output-dir",
+        "${OUTPUT_DIR}/managed-product/managed-product"
+      ],
+      "expected_exit": 0,
+      "expected_status": "passed"
+    },
+    {
+      "name": "equality-product",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/managed-equality-repair-evidence/run.py",
+        "--binary-dir",
+        "${BINARY_DIR}",
+        "--output-dir",
+        "${OUTPUT_DIR}/equality-product"
+      ],
+      "expected_exit": 0,
+      "expected_status": "passed"
+    },
+    {
+      "name": "core-product",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/managed-core-repair-evidence/run.py",
+        "--binary-dir",
+        "${BINARY_DIR}",
+        "--output-dir",
+        "${OUTPUT_DIR}/core-product"
+      ],
+      "expected_exit": 0,
+      "expected_status": "passed"
+    },
+    {
+      "name": "repair-selftests",
+      "argv": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/default-managed-evidence/test_repair_runner.py"
+      ],
+      "expected_exit": 0,
+      "expected_status": "passed"
+    }
+  ]
+}

@@ -193,3 +193,9 @@ Common reviewed repair base3c1cfe2aeba2f7135e4069709bf633c082d2aab0 matches all 
 ## Equality and evidence repairs reviewed; core still running
 
 Runtime53d37c1 accepted/integratedc287985 after independent review plus coordinator4runtime/2typed-source tests and87target-parity passes. Evidence23b050f accepted/integrated1b922e2 after independent review and14selftests;670/8 matrix accurately retains the known core-entry span failures. Core source-auth repair remains active, finishing its report/commit. Its obsolete merged-AST layout test caller will be reconciled by coordinator with original assertions preserved. Full combined checks and managed acceptance remain pending; see s2b-default-managed-review/repairs-reviewed.json. No new consumers or duplicate repairs.
+
+## Combined managed repair wave reviewed; ordinary-memory producer ready
+
+Core a095a13 accepted/integrated91d1bc3, caller migration b0f1ccc independently reviewed. Combined1290Rust tests/quality/current regressions pass. Harness setup failure retained and fixed0949d5c; full frozen-artifact678repair/369managed/116core/87equality checks and16selftests pass. All8 earlier core-span failures closed. Evidence: s2b-default-managed-review/evidence/combined-accepted/acceptance.json.
+
+Next sole dependency-ready producer: s2b-ordinary-memory/plan.md and exact18-command regressions.json. Generative region/default normalization and bootstrap-main contract holes resolved in independent review. No unreviewed interface consumers or release/main merge. Creation outcomes follow after reviewed-base commit.
