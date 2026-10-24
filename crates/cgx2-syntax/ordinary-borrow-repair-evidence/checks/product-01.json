@@ -1,0 +1,38 @@
+{
+  "argv": [
+    "python3",
+    "crates/cgx2-syntax/ordinary-borrow-repair-evidence/run.py",
+    "--binary-dir",
+    "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-819b-7261-a64a-9bf5a9bb1b8f/borrow-nominal-frozen-01",
+    "--output-dir",
+    "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-819b-7261-a64a-9bf5a9bb1b8f/borrow-nominal-product-01"
+  ],
+  "cwd": "/home/john-riley/.codex/worktrees/98b9/lang",
+  "bounds": {
+    "wall_seconds": 1800,
+    "cpu_seconds_per_process": 1200,
+    "address_space_bytes_per_process": 8589934592,
+    "file_bytes": 1073741824,
+    "output_bytes_per_stream": 8388608
+  },
+  "environment": {
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/98b9/lang/target/release-ordinary-borrow-nominal",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/98b9/lang/target/tmp-ordinary-borrow-nominal",
+    "CARGO_BUILD_JOBS": "2",
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "status": "complete",
+  "exit": 0,
+  "reason": "exit",
+  "signal": null,
+  "overflow_stream": null,
+  "duration_seconds": 47.728,
+  "stdout_bytes": 662,
+  "stdout_sha256": "e00bb165c128c21c177b93f6d4ca2cb49b967b6b168ee2be8407f529fec079c5",
+  "stdout": "valid retained-local\nvalid qualified-local\nvalid generic-heap\nvalid inferred-generic\nvalid nested-heap\nvalid nested-borrow\nvalid user-function\nvalid genuine-capability\nvalid imported-simple\nvalid imported-inferred\nvalid imported-record\nvalid contextual-imported\nvalid nested-imported\nvalid imported-function\ninvalid local-field-type\ninvalid generic-field-type\ninvalid nominal-region-escape\ninvalid real-region-escape\ninvalid real-borrow-scalar\ninvalid record-hides-capability\ninvalid record-forges-capability\ninvalid function-forges-capability\ninvalid imported-field-type\ninvalid imported-region-escape\ninvalid imported-cross-region\n{\"passed\": 243, \"failed\": 0}\n",
+  "stderr_bytes": 0,
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr": ""
+}

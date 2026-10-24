@@ -1,0 +1,38 @@
+{
+  "argv": [
+    "python3",
+    "crates/cgx2-syntax/ordinary-admission-repair-evidence/run.py",
+    "--binary-dir",
+    "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-819b-7261-a64a-9bf5a9bb1b8f/borrow-nominal-frozen-01",
+    "--output-dir",
+    "/tmp/cgx2-borrow-nominal-98b9-20261024/borrow-nominal-admission-02"
+  ],
+  "cwd": "/home/john-riley/.codex/worktrees/98b9/lang",
+  "bounds": {
+    "wall_seconds": 1800,
+    "cpu_seconds_per_process": 1200,
+    "address_space_bytes_per_process": 8589934592,
+    "file_bytes": 1073741824,
+    "output_bytes_per_stream": 8388608
+  },
+  "environment": {
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/98b9/lang/target/release-ordinary-borrow-nominal",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/98b9/lang/target/tmp-ordinary-borrow-nominal",
+    "CARGO_BUILD_JOBS": "2",
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "status": "complete",
+  "exit": 1,
+  "reason": "exit",
+  "signal": null,
+  "overflow_stream": null,
+  "duration_seconds": 3.784,
+  "stdout_bytes": 82,
+  "stdout_sha256": "6a732e979875ee84b35dda50c3a6de9aad123b1a03134e5fb6cbf687cedf7726",
+  "stdout": "valid user-borrow\nvalid legacy-guard\nvalid nested-assignment\nvalid user-err-local\n",
+  "stderr_bytes": 640,
+  "stderr_sha256": "a331955bacaa431e2654be287e6704887f70aa7ee08743bae6cffc66f2c78dc4",
+  "stderr": "Traceback (most recent call last):\n  File \"/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-syntax/ordinary-admission-repair-evidence/run.py\", line 227, in <module>\n    sys.exit(main())\n             ~~~~^^\n  File \"/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-syntax/ordinary-admission-repair-evidence/run.py\", line 171, in main\n    sentinel.write_bytes(b\"existing Python artifact\\n\")\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.14/pathlib/__init__.py\", line 797, in write_bytes\n    with self.open(mode='wb') as f:\n         ~~~~~~~~~^^^^^^^^^^^\nOSError: [Errno 122] Disk quota exceeded\n"
+}

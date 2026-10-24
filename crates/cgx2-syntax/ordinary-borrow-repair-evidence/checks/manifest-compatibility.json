@@ -1,0 +1,35 @@
+{
+  "argv": [
+    "python3",
+    "-c",
+    "import json;from pathlib import Path;p=Path(\"/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-819b-7261-a64a-9bf5a9bb1b8f\");m=json.loads((p/\"borrow-nominal-frozen-01/manifest.json\").read_text());d={\"schema_version\":1,\"binary_directory\":m[\"binary_directory\"],\"binary_sha256\":{k:v for k,v in m[\"artifact_sha256\"].items() if not k.endswith(\".rlib\")},\"probe_library_sha256\":{k:v for k,v in m[\"artifact_sha256\"].items() if k.endswith(\".rlib\")}};q=p/\"frozen.json\";assert not q.exists();q.write_text(json.dumps(d,indent=2)+\"\\n\");print(q)"
+  ],
+  "cwd": "/home/john-riley/.codex/worktrees/98b9/lang",
+  "bounds": {
+    "wall_seconds": 1800,
+    "cpu_seconds_per_process": 1200,
+    "address_space_bytes_per_process": 8589934592,
+    "file_bytes": 1073741824,
+    "output_bytes_per_stream": 8388608
+  },
+  "environment": {
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/98b9/lang/target/release-ordinary-borrow-nominal",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/98b9/lang/target/tmp-ordinary-borrow-nominal",
+    "CARGO_BUILD_JOBS": "2",
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "status": "complete",
+  "exit": 0,
+  "reason": "exit",
+  "signal": null,
+  "overflow_stream": null,
+  "duration_seconds": 0.013,
+  "stdout_bytes": 99,
+  "stdout_sha256": "c1026e7719e4e601b5adb196967d872ebbc7275039003f43da771cf5cc16f46b",
+  "stdout": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-819b-7261-a64a-9bf5a9bb1b8f/frozen.json\n",
+  "stderr_bytes": 0,
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr": ""
+}

@@ -305,7 +305,7 @@ impl Analyzer<'_> {
                     )),
                 };
             }
-            if name == "borrow" && local_name(self.module, &name).is_none() && args.len() == 1 {
+            if region_borrow(self.module, &name, args) {
                 return match self.expr(&args[0].value, context)? {
                     Value::Capability {
                         region: Some(r), ..

@@ -1,0 +1,38 @@
+{
+  "argv": [
+    "cargo",
+    "build",
+    "--workspace",
+    "--all-features",
+    "--offline",
+    "--locked"
+  ],
+  "cwd": "/home/john-riley/.codex/worktrees/98b9/lang",
+  "bounds": {
+    "wall_seconds": 1800,
+    "cpu_seconds_per_process": 1200,
+    "address_space_bytes_per_process": 8589934592,
+    "file_bytes": 1073741824,
+    "output_bytes_per_stream": 8388608
+  },
+  "environment": {
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/98b9/lang/target/release-ordinary-borrow-nominal",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/98b9/lang/target/tmp-ordinary-borrow-nominal",
+    "CARGO_BUILD_JOBS": "2",
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "status": "complete",
+  "exit": 0,
+  "reason": "exit",
+  "signal": null,
+  "overflow_stream": null,
+  "duration_seconds": 10.901,
+  "stdout_bytes": 0,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout": "",
+  "stderr_bytes": 2581,
+  "stderr_sha256": "3630c50356742e5fce282ec6f724d674e6d99d5d49b2b857a73655f629f4a758",
+  "stderr": "   Compiling quote v1.0.47\n   Compiling target-lexicon v0.13.5\n   Compiling syn v3.0.6\n   Compiling libc v0.2.189\n   Compiling pyo3-build-config v0.29.2\n   Compiling pyo3-ffi v0.29.2\n   Compiling serde_derive v1.0.229\n   Compiling syn v2.0.119\n   Compiling serde v1.0.229\n   Compiling heck v0.5.0\n   Compiling pyo3-macros-backend v0.29.2\n   Compiling pyo3 v0.29.2\n   Compiling cgx2-bind v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-bind)\n   Compiling once_cell v1.21.4\n   Compiling pyo3-macros v0.29.2\n   Compiling cgx2-ffi-native v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-ffi-native)\n   Compiling cgx2-libtorch v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-libtorch)\n   Compiling base64 v0.22.1\n   Compiling cgx2-notebook-format v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-notebook-format)\n   Compiling cgx2-notebook-session v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-notebook-session)\n   Compiling cgx2-python-bridge v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-python-bridge)\n   Compiling cgx2-foreign v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-foreign)\n   Compiling cgx2-execution-policy v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-execution-policy)\n   Compiling cgx2-cli v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-cli)\n   Compiling cgx2-notebook-kernel v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-notebook-kernel)\n   Compiling cgx2-effect-index v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-effect-index)\n   Compiling getrandom v0.2.17\n   Compiling cgx2-notebook-ui v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-notebook-ui)\n   Compiling cgx2-security v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-security)\n   Compiling cgx2-memory-conformance v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-memory-conformance)\n   Compiling cgx2-interop-worker v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-interop-worker)\n   Compiling cgx2-verify-core v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-verify-core)\n   Compiling cgx2-notebook-cli v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-notebook-cli)\n   Compiling cgx2-verify-cli v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-verify-cli)\n   Compiling cgx2c v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2c)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 10.89s\n"
+}

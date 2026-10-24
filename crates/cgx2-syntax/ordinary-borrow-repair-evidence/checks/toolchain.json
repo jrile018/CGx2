@@ -1,0 +1,34 @@
+{
+  "argv": [
+    "rustc",
+    "-vV"
+  ],
+  "cwd": "/home/john-riley/.codex/worktrees/98b9/lang",
+  "bounds": {
+    "wall_seconds": 1800,
+    "cpu_seconds_per_process": 1200,
+    "address_space_bytes_per_process": 8589934592,
+    "file_bytes": 1073741824,
+    "output_bytes_per_stream": 8388608
+  },
+  "environment": {
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/98b9/lang/target/release-ordinary-borrow-nominal",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/98b9/lang/target/tmp-ordinary-borrow-nominal",
+    "CARGO_BUILD_JOBS": "2",
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "status": "complete",
+  "exit": 0,
+  "reason": "exit",
+  "signal": null,
+  "overflow_stream": null,
+  "duration_seconds": 0.006,
+  "stdout_bytes": 196,
+  "stdout_sha256": "778fbc643a806f0dd123c056e66201d7e8a56a61928ec0a33171be8d6c2d5a37",
+  "stdout": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "stderr_bytes": 0,
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr": ""
+}

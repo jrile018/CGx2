@@ -1,0 +1,38 @@
+{
+  "argv": [
+    "python3",
+    "crates/cgx2-syntax/ordinary-borrow-repair-evidence/run.py",
+    "--binary-dir",
+    "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-819b-7261-a64a-9bf5a9bb1b8f/borrow-nominal-frozen-01",
+    "--output-dir",
+    "/tmp/cgx2-borrow-nominal-98b9-20261024/borrow-nominal-product-02"
+  ],
+  "cwd": "/home/john-riley/.codex/worktrees/98b9/lang",
+  "bounds": {
+    "wall_seconds": 1800,
+    "cpu_seconds_per_process": 1200,
+    "address_space_bytes_per_process": 8589934592,
+    "file_bytes": 1073741824,
+    "output_bytes_per_stream": 8388608
+  },
+  "environment": {
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/98b9/lang/target/release-ordinary-borrow-nominal",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/98b9/lang/target/tmp-ordinary-borrow-nominal",
+    "CARGO_BUILD_JOBS": "2",
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "status": "complete",
+  "exit": 1,
+  "reason": "exit",
+  "signal": null,
+  "overflow_stream": null,
+  "duration_seconds": 4.766,
+  "stdout_bytes": 43,
+  "stdout_sha256": "66b1b223b75c4601688c9dc75af5fe1a615649fd8b1e7f1fa9703ba3f1ec47db",
+  "stdout": "valid retained-local\nvalid qualified-local\n",
+  "stderr_bytes": 1290,
+  "stderr_sha256": "fd6f54cf4816485ba96d7a46f1a7327f945523200b6f7d2d5ac52eccd5ff1010",
+  "stderr": "OSError: [Errno 122] Disk quota exceeded\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-syntax/ordinary-borrow-repair-evidence/run.py\", line 66, in <module>\n    sys.exit(engine.main())\n             ~~~~~~~~~~~^^\n  File \"/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-syntax/ordinary-admission-repair-evidence/run.py\", line 157, in main\n    r = run(name + \":emit\", [binary / \"cgx2c\", \"emit-rust\", *compiler_input(source), \"--out\", rust])\n  File \"/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-syntax/ordinary-admission-repair-evidence/run.py\", line 124, in run\n    save()\n    ~~~~^^\n  File \"/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-syntax/ordinary-admission-repair-evidence/run.py\", line 113, in save\n    (output / \"report.json\").write_text(json.dumps(report, indent=2) + \"\\n\")\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.14/pathlib/__init__.py\", line 810, in write_text\n    with self.open(mode='w', encoding=encoding, errors=errors, newline=newline) as f:\n         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nOSError: [Errno 122] Disk quota exceeded\n"
+}
