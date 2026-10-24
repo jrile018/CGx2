@@ -1,0 +1,139 @@
+{
+  "base": "3e5be4d4907debad1ae5fa8bdc836208255ddb4d",
+  "checkpoint_complete": false,
+  "release_complete": false,
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/6eb0/lang/target/owned-result-runner",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/6eb0/lang/target/tmp-owned-result-runner",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib",
+    "RUSTFLAGS": "-Clink-arg=-Wl,--threads=2"
+  },
+  "checks": [
+    {
+      "name": "selftests",
+      "command": [
+        "/usr/bin/python3",
+        "/home/john-riley/.codex/worktrees/6eb0/lang/crates/cgx2-syntax/owned-result-runner-evidence/selftest.py"
+      ],
+      "log": "selftests.log.gz",
+      "log_encoding": "gzip",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 1.004,
+      "stdout_bytes": 5476,
+      "stdout_sha256": "82f48a2a08f418e232f8bacbfac01259daf80888d525ae61de6f5df539e90398",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "build",
+      "command": [
+        "cargo",
+        "build",
+        "--workspace",
+        "--all-features",
+        "--offline",
+        "--locked"
+      ],
+      "log": "build.log.gz",
+      "log_encoding": "gzip",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.029,
+      "stdout_bytes": 72,
+      "stdout_sha256": "6d77f64dfc8c5325b90fdbe05d8be367bdd578bcccec24f275c5ffee7d03dd6e",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "syntax-tests",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "cgx2-syntax",
+        "--all-features",
+        "--offline",
+        "--locked"
+      ],
+      "log": "syntax-tests.log.gz",
+      "log_encoding": "gzip",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.049,
+      "stdout_bytes": 4914,
+      "stdout_sha256": "45e4880833c7f98c23d9a3278260c05cb4db42c425e01b002ed4fbfd7df5735a",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "owned-result-product",
+      "command": [
+        "/usr/bin/python3",
+        "/home/john-riley/.codex/worktrees/6eb0/lang/crates/cgx2-syntax/owned-result-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/6eb0/lang/target/owned-result-runner/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/6eb0/lang/crates/cgx2-syntax/owned-result-runner-evidence/results/product.json"
+      ],
+      "log": "owned-result-product.log.gz",
+      "log_encoding": "gzip",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 24.764,
+      "stdout_bytes": 76,
+      "stdout_sha256": "299903edb8247103f30434a7df01f56ff0bc7272ec326240cd6e55376bebc92c",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "fmt",
+      "command": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--check"
+      ],
+      "log": "fmt.log.gz",
+      "log_encoding": "gzip",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.671,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "diff",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "log": "diff.log.gz",
+      "log_encoding": "gzip",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.005,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}
