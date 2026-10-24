@@ -1,0 +1,146 @@
+[
+  {
+    "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-819b-7261-a64a-9bf5a9bb1b8f/borrow-nominal-admission-01/outside",
+    "metadata": [
+      {
+        "path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-819b-7261-a64a-9bf5a9bb1b8f/borrow-nominal-admission-01/outside/.git",
+        "exists": false,
+        "empty_directory": false
+      },
+      {
+        "path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-819b-7261-a64a-9bf5a9bb1b8f/borrow-nominal-admission-01/.git",
+        "exists": false,
+        "empty_directory": false
+      },
+      {
+        "path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-819b-7261-a64a-9bf5a9bb1b8f/.git",
+        "exists": false,
+        "empty_directory": false
+      },
+      {
+        "path": "/home/john-riley/.codex/visualizations/2026/10/24/.git",
+        "exists": false,
+        "empty_directory": false
+      },
+      {
+        "path": "/home/john-riley/.codex/visualizations/2026/10/.git",
+        "exists": false,
+        "empty_directory": false
+      },
+      {
+        "path": "/home/john-riley/.codex/visualizations/2026/.git",
+        "exists": false,
+        "empty_directory": false
+      },
+      {
+        "path": "/home/john-riley/.codex/visualizations/.git",
+        "exists": false,
+        "empty_directory": false
+      },
+      {
+        "path": "/home/john-riley/.codex/.git",
+        "exists": false,
+        "empty_directory": false
+      },
+      {
+        "path": "/home/john-riley/.git",
+        "exists": false,
+        "empty_directory": false
+      },
+      {
+        "path": "/home/.git",
+        "exists": false,
+        "empty_directory": false
+      },
+      {
+        "path": "/.git",
+        "exists": false,
+        "empty_directory": false
+      }
+    ],
+    "argv": [
+      "git",
+      "-C",
+      "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-819b-7261-a64a-9bf5a9bb1b8f/borrow-nominal-admission-01/outside",
+      "rev-parse",
+      "--show-toplevel"
+    ],
+    "exit": 128,
+    "stdout": "",
+    "stderr": "fatal: not a git repository (or any of the parent directories): .git\n",
+    "host_outside_sandbox": true,
+    "git_environment_removed": true
+  },
+  {
+    "cwd": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-819b-7261-a64a-9bf5a9bb1b8f/borrow-nominal-product-01/outside",
+    "metadata": [
+      {
+        "path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-819b-7261-a64a-9bf5a9bb1b8f/borrow-nominal-product-01/outside/.git",
+        "exists": false,
+        "empty_directory": false
+      },
+      {
+        "path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-819b-7261-a64a-9bf5a9bb1b8f/borrow-nominal-product-01/.git",
+        "exists": false,
+        "empty_directory": false
+      },
+      {
+        "path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-819b-7261-a64a-9bf5a9bb1b8f/.git",
+        "exists": false,
+        "empty_directory": false
+      },
+      {
+        "path": "/home/john-riley/.codex/visualizations/2026/10/24/.git",
+        "exists": false,
+        "empty_directory": false
+      },
+      {
+        "path": "/home/john-riley/.codex/visualizations/2026/10/.git",
+        "exists": false,
+        "empty_directory": false
+      },
+      {
+        "path": "/home/john-riley/.codex/visualizations/2026/.git",
+        "exists": false,
+        "empty_directory": false
+      },
+      {
+        "path": "/home/john-riley/.codex/visualizations/.git",
+        "exists": false,
+        "empty_directory": false
+      },
+      {
+        "path": "/home/john-riley/.codex/.git",
+        "exists": false,
+        "empty_directory": false
+      },
+      {
+        "path": "/home/john-riley/.git",
+        "exists": false,
+        "empty_directory": false
+      },
+      {
+        "path": "/home/.git",
+        "exists": false,
+        "empty_directory": false
+      },
+      {
+        "path": "/.git",
+        "exists": false,
+        "empty_directory": false
+      }
+    ],
+    "argv": [
+      "git",
+      "-C",
+      "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-819b-7261-a64a-9bf5a9bb1b8f/borrow-nominal-product-01/outside",
+      "rev-parse",
+      "--show-toplevel"
+    ],
+    "exit": 128,
+    "stdout": "",
+    "stderr": "fatal: not a git repository (or any of the parent directories): .git\n",
+    "host_outside_sandbox": true,
+    "git_environment_removed": true
+  }
+]

@@ -1,0 +1,49 @@
+{
+  "argv": [
+    "cargo",
+    "clippy",
+    "-p",
+    "cgx2-sema",
+    "-p",
+    "cgx2-cli",
+    "-p",
+    "cgx2-package",
+    "-p",
+    "cgx2-api-index",
+    "--all-targets",
+    "--all-features",
+    "--offline",
+    "--locked",
+    "--",
+    "-D",
+    "warnings"
+  ],
+  "cwd": "/home/john-riley/.codex/worktrees/98b9/lang",
+  "bounds": {
+    "wall_seconds": 1800,
+    "cpu_seconds_per_process": 1200,
+    "address_space_bytes_per_process": 8589934592,
+    "file_bytes": 1073741824,
+    "output_bytes_per_stream": 8388608
+  },
+  "environment": {
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/98b9/lang/target/release-ordinary-borrow-nominal",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/98b9/lang/target/tmp-ordinary-borrow-nominal",
+    "CARGO_BUILD_JOBS": "2",
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "status": "complete",
+  "exit": 0,
+  "reason": "exit",
+  "signal": null,
+  "overflow_stream": null,
+  "duration_seconds": 4.028,
+  "stdout_bytes": 0,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout": "",
+  "stderr_bytes": 2081,
+  "stderr_sha256": "886ba2fc34e1326080976f3e9827bd44b8fbced25c8cc3353a31ddada47ab22b",
+  "stderr": "    Checking typenum v1.20.1\n    Checking cgx2-syntax v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-syntax)\n    Checking cfg-if v1.0.5\n    Checking cpufeatures v0.2.17\n    Checking generic-array v0.14.7\n    Checking cgx2-ownership v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-ownership)\n    Checking crypto-common v0.1.7\n    Checking block-buffer v0.10.4\n    Checking digest v0.10.7\n    Checking sha2 v0.10.9\n    Checking cgx2-runtime v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-runtime)\n    Checking serde_core v1.0.229\n    Checking cgx2-sema v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-sema)\n    Checking zmij v1.0.23\n    Checking itoa v1.0.18\n    Checking memchr v2.8.3\n    Checking serde_json v1.0.149\n    Checking serde v1.0.229\n    Checking cgx2-api-index v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-api-index)\n    Checking cgx2-ffi-core v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-ffi-core)\n    Checking cgx2-package v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-package)\n    Checking cgx2-python-bridge v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-python-bridge)\n    Checking cgx2-foreign v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-foreign)\n    Checking cgx2-bind v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-bind)\n    Checking cgx2-emit-python v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-emit-python)\n    Checking cgx2-emit-rust v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-emit-rust)\n    Checking cgx2-ffi-native v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-ffi-native)\n    Checking cgx2-libtorch v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-libtorch)\n    Checking cgx2c v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2c)\n    Checking cgx2-cli v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-cli)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 4.00s\n"
+}

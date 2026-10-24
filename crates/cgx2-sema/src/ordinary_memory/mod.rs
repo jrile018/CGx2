@@ -82,6 +82,16 @@ fn nominal(module: &Module, name: &str) -> bool {
             .iter()
             .any(|v| v.name == name || identity(&v.name) == name)
 }
+// User declarations win before the compiler's region-capability shorthand.
+// Use the same resolution in rewriting and provenance analysis so constructors
+// keep both their field type checks and their allocation-region provenance.
+fn region_borrow(module: &Module, name: &str, args: &[CallArg]) -> bool {
+    name == "borrow"
+        && provenance::local_name(module, name).is_none()
+        && !nominal(module, name)
+        && args.len() == 1
+        && args[0].name.is_none()
+}
 pub fn profile(module: &Module) -> bool {
     let found = std::cell::Cell::new(false);
     for body in std::iter::once(&module.statements).chain(module.functions.iter().map(|f| &f.body))
@@ -545,11 +555,7 @@ impl Rewrite<'_> {
                 };
                 return Ok(());
             }
-            if name == "borrow"
-                && provenance::local_name(self.original, &name).is_none()
-                && args.len() == 1
-                && args[0].name.is_none()
-            {
+            if region_borrow(self.original, &name, &args) {
                 let span = e.span;
                 *e = args[0].value.clone();
                 e.span = span;

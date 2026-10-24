@@ -1,0 +1,41 @@
+{
+  "argv": [
+    "cargo",
+    "test",
+    "-p",
+    "cgx2-sema",
+    "--test",
+    "ordinary_borrow_nominal_repair",
+    "--all-features",
+    "--offline",
+    "--locked"
+  ],
+  "cwd": "/home/john-riley/.codex/worktrees/98b9/lang",
+  "bounds": {
+    "wall_seconds": 1800,
+    "cpu_seconds_per_process": 1200,
+    "address_space_bytes_per_process": 8589934592,
+    "file_bytes": 1073741824,
+    "output_bytes_per_stream": 8388608
+  },
+  "environment": {
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/98b9/lang/target/release-ordinary-borrow-nominal",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/98b9/lang/target/tmp-ordinary-borrow-nominal",
+    "CARGO_BUILD_JOBS": "2",
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "status": "complete",
+  "exit": 101,
+  "reason": "exit",
+  "signal": null,
+  "overflow_stream": null,
+  "duration_seconds": 0.152,
+  "stdout_bytes": 4479,
+  "stdout_sha256": "49174b04ddf65e241f00e036694cb16ac5bbfa0264540dc42aec2aa405f6a407",
+  "stdout": "\nrunning 10 tests\ntest generic_borrow_and_nested_heap_fields ... FAILED\ntest named_record_cannot_forge_a_capability ... FAILED\ntest local_nominal_precedes_intrinsic_with_named_or_positional_arguments ... FAILED\ntest nominal_constructor_cannot_erase_named_region_provenance ... FAILED\ntest retained_local_record_borrow ... FAILED\ntest constructor_fields_still_type_check ... FAILED\ntest record_cannot_hide_real_capability ... FAILED\ntest genuine_borrow_still_requires_region_and_preserves_escape_checks ... ok\ntest qualified_imported_record_coexists_with_intrinsic ... FAILED\ntest local_and_imported_user_functions_retain_resolution ... ok\n\nfailures:\n\n---- generic_borrow_and_nested_heap_fields stdout ----\n\nthread 'generic_borrow_and_nested_heap_fields' (85) panicked at crates/cgx2-sema/tests/ordinary_borrow_nominal_repair.rs:9:42:\ncalled `Result::unwrap()` on an `Err` value: [TypeDiagnostic { code: \"CGT021\", message: \"field access requires one record field segment\", span: Span { start: 269, end: 281 } }, TypeDiagnostic { code: \"CGT039\", message: \"unsupported length operand or missing constraint\", span: Span { start: 262, end: 282 } }, TypeDiagnostic { code: \"CGT003\", message: \"expected Unit, found i64\", span: Span { start: 327, end: 329 } }, TypeDiagnostic { code: \"CGT003\", message: \"expected i64, found Unit\", span: Span { start: 104, end: 330 } }]\n\n---- named_record_cannot_forge_a_capability stdout ----\n\nthread 'named_record_cannot_forge_a_capability' (89) panicked at crates/cgx2-sema/tests/ordinary_borrow_nominal_repair.rs:19:5:\nassertion `left == right` failed: [TypeDiagnostic { code: \"CGT003\", message: \"expected borrow, found i64\", span: Span { start: 216, end: 233 } }, TypeDiagnostic { code: \"CGT003\", message: \"expected i64, found borrow\", span: Span { start: 216, end: 233 } }]\n  left: 2\n right: 1\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n\n---- local_nominal_precedes_intrinsic_with_named_or_positional_arguments stdout ----\n\nthread 'local_nominal_precedes_intrinsic_with_named_or_positional_arguments' (88) panicked at crates/cgx2-sema/tests/ordinary_borrow_nominal_repair.rs:9:42:\ncalled `Result::unwrap()` on an `Err` value: [TypeDiagnostic { code: \"CGT095\", message: \"borrow requires a region capability\", span: Span { start: 191, end: 208 } }]\n\n---- nominal_constructor_cannot_erase_named_region_provenance stdout ----\n\nthread 'nominal_constructor_cannot_erase_named_region_provenance' (90) panicked at crates/cgx2-sema/tests/ordinary_borrow_nominal_repair.rs:22:5:\nassertion `left == right` failed\n  left: Span { start: 186, end: 209 }\n right: Span { start: 222, end: 237 }\n\n---- retained_local_record_borrow stdout ----\n\nthread 'retained_local_record_borrow' (93) panicked at crates/cgx2-sema/tests/ordinary_borrow_nominal_repair.rs:9:42:\ncalled `Result::unwrap()` on an `Err` value: [TypeDiagnostic { code: \"CGT095\", message: \"borrow requires a region capability\", span: Span { start: 180, end: 197 } }]\n\n---- constructor_fields_still_type_check stdout ----\n\nthread 'constructor_fields_still_type_check' (84) panicked at crates/cgx2-sema/tests/ordinary_borrow_nominal_repair.rs:20:5:\nassertion `left == right` failed: [TypeDiagnostic { code: \"CGT003\", message: \"expected i64, found Bool\", span: Span { start: 194, end: 198 } }]\n  left: \"CGT003\"\n right: \"CGT001\"\n\n---- record_cannot_hide_real_capability stdout ----\n\nthread 'record_cannot_hide_real_capability' (92) panicked at crates/cgx2-sema/tests/ordinary_borrow_nominal_repair.rs:20:5:\nassertion `left == right` failed: [TypeDiagnostic { code: \"CGT095\", message: \"memory capability has no user fields\", span: Span { start: 209, end: 216 } }]\n  left: \"CGT095\"\n right: \"CGT001\"\n\n---- qualified_imported_record_coexists_with_intrinsic stdout ----\n\nthread 'qualified_imported_record_coexists_with_intrinsic' (91) panicked at crates/cgx2-sema/tests/ordinary_borrow_nominal_repair.rs:47:5:\nassertion `left == right` failed\n  left: Integer(38)\n right: Integer(42)\n\n\nfailures:\n    constructor_fields_still_type_check\n    generic_borrow_and_nested_heap_fields\n    local_nominal_precedes_intrinsic_with_named_or_positional_arguments\n    named_record_cannot_forge_a_capability\n    nominal_constructor_cannot_erase_named_region_provenance\n    qualified_imported_record_coexists_with_intrinsic\n    record_cannot_hide_real_capability\n    retained_local_record_borrow\n\ntest result: FAILED. 2 passed; 8 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n",
+  "stderr_bytes": 406,
+  "stderr_sha256": "b9ae87428d42ed91b5e0a0d7145dd6a2657e1de2b5cbb251e411fa8e903d48ea",
+  "stderr": "   Compiling cgx2-sema v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-sema)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running tests/ordinary_borrow_nominal_repair.rs (target/release-ordinary-borrow-nominal/debug/deps/ordinary_borrow_nominal_repair-537e72f928b46d25)\nerror: test failed, to rerun pass `-p cgx2-sema --test ordinary_borrow_nominal_repair`\n"
+}

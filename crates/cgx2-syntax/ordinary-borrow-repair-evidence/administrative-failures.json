@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "provenance": "Recorded retrospectively from exact tool outputs; these are administrative attempts, not supervised product commands.",
+  "attempts": [
+    {
+      "argv": ["git", "switch", "-c", "riley/ordinary-borrow-nominal-repair"],
+      "exit": 128,
+      "stderr": "fatal: cannot lock ref 'refs/heads/riley/ordinary-borrow-nominal-repair': Unable to create '/home/john-riley/projects/lang/.git/refs/heads/riley/ordinary-borrow-nominal-repair.lock': Read-only file system\n",
+      "resolution": "Identical authorized branch creation succeeded with escalation. No source edits outside the assigned worktree."
+    },
+    {
+      "kind": "sandbox-startup",
+      "exit": 101,
+      "stderr": "\nthread 'main' (2046426) panicked at linux-sandbox/src/linux_run_main.rs:994:25:\nfailed to register synthetic bubblewrap mount target /home/john-riley/.codex/worktrees/98b9/lang/.agents: Quota exceeded (os error 122)\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "command_started": false
+    },
+    {
+      "kind": "host-inspection-shell-heredoc",
+      "stderr": "zsh:1: write failed: disk quota exceeded\n",
+      "resolution": "Read-only inspection rerun with python -c, avoiding shell temporary files; proof in external-host.json."
+    },
+    {
+      "kind": "evidence-export-sandbox-startup",
+      "exit": 101,
+      "stderr": "\nthread 'main' (2065084) panicked at linux-sandbox/src/linux_run_main.rs:994:25:\nfailed to register synthetic bubblewrap mount target /tmp/.git: Quota exceeded (os error 122)\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "command_started": false,
+      "resolution": "Identical export and verification succeeded with escalation, operating only on owned paths."
+    }
+  ]
+}

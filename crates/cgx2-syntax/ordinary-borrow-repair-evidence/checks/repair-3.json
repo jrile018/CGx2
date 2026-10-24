@@ -1,0 +1,41 @@
+{
+  "argv": [
+    "cargo",
+    "test",
+    "-p",
+    "cgx2-sema",
+    "--test",
+    "ordinary_borrow_nominal_repair",
+    "--all-features",
+    "--offline",
+    "--locked"
+  ],
+  "cwd": "/home/john-riley/.codex/worktrees/98b9/lang",
+  "bounds": {
+    "wall_seconds": 1800,
+    "cpu_seconds_per_process": 1200,
+    "address_space_bytes_per_process": 8589934592,
+    "file_bytes": 1073741824,
+    "output_bytes_per_stream": 8388608
+  },
+  "environment": {
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/98b9/lang/target/release-ordinary-borrow-nominal",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/98b9/lang/target/tmp-ordinary-borrow-nominal",
+    "CARGO_BUILD_JOBS": "2",
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "status": "complete",
+  "exit": 0,
+  "reason": "exit",
+  "signal": null,
+  "overflow_stream": null,
+  "duration_seconds": 0.119,
+  "stdout_bytes": 704,
+  "stdout_sha256": "f2ad76622b6c08c8220fb924df24f0d5e154a77ca686b2e0995f9bc7a512633d",
+  "stdout": "\nrunning 10 tests\ntest named_record_cannot_forge_a_capability ... ok\ntest constructor_fields_still_type_check ... ok\ntest record_cannot_hide_real_capability ... ok\ntest nominal_constructor_cannot_erase_named_region_provenance ... ok\ntest retained_local_record_borrow ... ok\ntest generic_borrow_and_nested_heap_fields ... ok\ntest genuine_borrow_still_requires_region_and_preserves_escape_checks ... ok\ntest local_nominal_precedes_intrinsic_with_named_and_qualified_arguments ... ok\ntest qualified_imported_record_coexists_with_intrinsic ... ok\ntest local_and_imported_user_functions_retain_resolution ... ok\n\ntest result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n",
+  "stderr_bytes": 319,
+  "stderr_sha256": "2e146eb3a05e19ef80702a3a4d50c094f88cb902b01903349377dfaa340bc4c2",
+  "stderr": "   Compiling cgx2-sema v0.1.0 (/home/john-riley/.codex/worktrees/98b9/lang/crates/cgx2-sema)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running tests/ordinary_borrow_nominal_repair.rs (target/release-ordinary-borrow-nominal/debug/deps/ordinary_borrow_nominal_repair-537e72f928b46d25)\n"
+}
