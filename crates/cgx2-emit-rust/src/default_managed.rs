@@ -25,7 +25,7 @@ pub fn emit_managed_rust(program: &ManagedProgramV1) -> Result<String, Vec<EmitD
     let print_result = program.types()[program.program().functions[program.program().entry].result]
         != cgx2_sema::Type::Unit;
     Ok(format!(
-        r#"// CGx2 default managed v1; authenticated source sha256: {}; model/root/effects/callee sha256: {}
+        r#"// CGx2 default managed v1; provenance: {}; inputs sha256: {}; original source sha256: {}; model/root/effects/callee sha256: {}
 {runtime}
 use cgx2_runtime::default_managed::model::{{*,Shape::*,Op::*,Statement::*}};
 fn main() {{
@@ -44,7 +44,13 @@ fn main() {{
     match execution.result {{Ok(value)=>{{let shown=value.to_string();if {print_result}{{println!("{{shown}}");}}}},Err(error)=>{{eprintln!("{{}}: {{}} at {{}}..{{}}",error.code,error.message,error.loc.start,error.loc.end);std::process::exit(1)}}}}
 }}
 "#,
-        program.source_sha256(),
+        program.provenance_v1().kind(),
+        program.provenance_v1().identity_sha256(),
+        if program.source_sha256().is_empty() {
+            "unavailable"
+        } else {
+            program.source_sha256()
+        },
         program.analysis_sha256()
     ))
 }
@@ -70,4 +76,54 @@ pub(super) fn embedded_runtime() -> String {
         "#[allow(dead_code,unused_imports)] mod cgx2_runtime {{\n{}\n}}",
         lib.replace("crate::", "crate::cgx2_runtime::")
     )
+}
+
+#[cfg(test)]
+mod auth_tests {
+    #[test]
+    fn source_and_ast_only_emitters_advertise_exact_provenance() {
+        let source = "# café🙂\nfn main() -> String:\n \"héllo🙂\"\n";
+        let program = cgx2_sema::default_managed::compile_source(source).unwrap();
+        let output = super::emit_managed_rust(&program).unwrap();
+        assert!(
+            output
+                .lines()
+                .next()
+                .unwrap()
+                .contains(program.source_sha256())
+        );
+        assert!(
+            output
+                .lines()
+                .next()
+                .unwrap()
+                .contains("provenance: source-v1;")
+        );
+        let module = cgx2_syntax::parse_module(source).unwrap();
+        let checked = cgx2_sema::check_module(&module).unwrap();
+        let output = crate::emit_rust(&module, &checked).unwrap();
+        assert!(
+            output
+                .lines()
+                .next()
+                .unwrap()
+                .contains("provenance: ast-only-v1;")
+        );
+        assert!(
+            output
+                .lines()
+                .next()
+                .unwrap()
+                .contains("original source sha256: unavailable;")
+        );
+        assert!(
+            !output
+                .lines()
+                .next()
+                .unwrap()
+                .contains(program.source_sha256())
+        );
+        let other = cgx2_syntax::parse_module("fn main() -> String:\n \"different\"\n").unwrap();
+        assert!(crate::emit_rust(&other, &checked).is_err());
+    }
 }

@@ -20,5 +20,35 @@ pub fn build_memory_index(program: &ManagedProgramV1) -> Result<ApiMemoryIndexV1
         let e=f.effects;
         format!("{{\"name\":{:?},\"parameters\":[{}],\"return_type\":{:?},\"behavioral_effects\":[{}],\"capabilities\":[{}],\"memory_effects_v1\":{{\"may_allocate_managed\":{},\"may_auto_collect_at_allocation\":{},\"may_explicitly_collect\":{},\"may_allocate_root_bookkeeping\":{}}}}}",p.strings[f.name],parameters,cgx2_sema::type_key(&program.types()[f.result]),effects,caps,e.may_allocate_managed,e.may_auto_collect_at_allocation,e.may_explicitly_collect,e.may_allocate_root_bookkeeping)
     }).collect::<Vec<_>>().join(",");
-    Ok(ApiMemoryIndexV1{json:format!("{{\"schema_version\":1,\"summary_scope\":\"concrete-specializations\",\"absent_summary\":\"unknown\",\"source_sha256\":{:?},\"analysis_sha256\":{:?},\"functions\":[{}]}}",program.source_sha256(),program.analysis_sha256(),functions)})
+    let source = if program.source_sha256().is_empty() {
+        "null".to_owned()
+    } else {
+        format!("{:?}", program.source_sha256())
+    };
+    Ok(ApiMemoryIndexV1{json:format!("{{\"schema_version\":1,\"summary_scope\":\"concrete-specializations\",\"absent_summary\":\"unknown\",\"provenance_schema_version\":1,\"provenance_kind\":{:?},\"inputs_sha256\":{:?},\"source_sha256\":{},\"analysis_sha256\":{:?},\"functions\":[{}]}}",program.provenance_v1().kind(),program.provenance_v1().identity_sha256(),source,program.analysis_sha256(),functions)})
+}
+
+#[cfg(test)]
+mod auth_tests {
+    #[test]
+    fn original_source_hash_is_not_claimed_by_ast_only_index() {
+        let source = "fn main() -> String:\n \"héllo🙂\"\n";
+        let source_program = cgx2_sema::default_managed::compile_source(source).unwrap();
+        let source_json = super::build_memory_index(&source_program).unwrap();
+        assert!(source_json
+            .render_json()
+            .contains(source_program.source_sha256()));
+        assert!(source_json
+            .render_json()
+            .contains("\"provenance_kind\":\"source-v1\""));
+        let program =
+            cgx2_sema::default_managed::compile_ast(&cgx2_syntax::parse_module(source).unwrap())
+                .unwrap();
+        let json = super::build_memory_index(&program).unwrap();
+        assert!(json.render_json().contains("\"source_sha256\":null"));
+        assert!(json
+            .render_json()
+            .contains("\"provenance_kind\":\"ast-only-v1\""));
+        assert!(!json.render_json().contains(source_program.source_sha256()));
+    }
 }

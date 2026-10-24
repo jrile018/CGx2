@@ -1,0 +1,4 @@
+# UTF-8 café🙂 before the entry span
+fn main() -> i64:
+    let values = [42]
+    length(values)

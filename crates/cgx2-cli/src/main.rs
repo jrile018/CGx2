@@ -75,32 +75,18 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
                     .map(|d| CliDiagnostic::new(d.code, d.message, path.clone(), d.span))
                     .collect::<Vec<_>>()
             })?;
-            let entry = package
-                .modules()
-                .iter()
-                .find(|m| m.source() == package.index().entry)
-                .unwrap();
-            let name = entry
-                .syntax()
-                .name
-                .as_ref()
-                .map(|p| p.segments.join("."))
-                .unwrap_or_default();
-            let merged = cgx2_sema::merge_modules(
-                &package
-                    .modules()
-                    .iter()
-                    .map(|m| m.syntax())
-                    .collect::<Vec<_>>(),
-                &name,
-            );
-            let text = package
-                .modules()
-                .iter()
-                .map(|m| m.text())
-                .collect::<Vec<_>>()
-                .join("\n");
-            cgx2_sema::default_managed::compile_module(&merged, &text)
+            Ok(package.managed_program_v1().map_err(|ds| {
+                ds.into_iter()
+                    .map(|d| {
+                        CliDiagnostic::new(
+                            d.code,
+                            d.message,
+                            d.file.to_string_lossy().into_owned(),
+                            d.span,
+                        )
+                    })
+                    .collect::<Vec<_>>()
+            })?)
         } else {
             let text = fs::read_to_string(path).map_err(|e| {
                 vec![CliDiagnostic::new(

@@ -9,6 +9,8 @@ use cgx2_api_index::{build_index_with_imports, ApiIndex, IndexError};
 use cgx2_sema::{collect_public_signatures_with_imports, ImportedSignatures, TypedModule};
 use cgx2_syntax::{parse_module, Expr, ExprKind, Module, Span, Stmt, StmtKind};
 use sha2::{Digest, Sha256};
+#[cfg(test)]
+mod managed_provenance_tests;
 
 pub const MAX_MANIFEST_BYTES: usize = 64 * 1024;
 pub const MAX_SOURCE_BYTES: usize = 1024 * 1024;
@@ -258,6 +260,14 @@ impl CheckedPackage {
     pub fn modules(&self) -> &[CheckedModule] {
         &self.modules
     }
+    /// Authoritative managed source-bundle construction from this checked package.
+    /// Revalidate filesystem provenance before checking the original sources again.
+    pub fn managed_program_v1(
+        &self,
+    ) -> Result<cgx2_sema::default_managed::ManagedProgramV1, Vec<PackageDiagnostic>> {
+        self.verify_unchanged()?;
+        managed_program(&self.modules, &self.index.entry)
+    }
     /// Reject a changed manifest, source bytes, or canonical target after validation.
     pub fn verify_unchanged(&self) -> Result<(), Vec<PackageDiagnostic>> {
         let manifest = self.root.join("cgx2.toml");
@@ -302,6 +312,27 @@ impl CheckedPackage {
         }
         Ok(())
     }
+}
+
+fn managed_program(
+    modules: &[CheckedModule],
+    entry: &Path,
+) -> Result<cgx2_sema::default_managed::ManagedProgramV1, Vec<PackageDiagnostic>> {
+    let sources = modules
+        .iter()
+        .map(|m| {
+            (
+                m.source().to_string_lossy().into_owned(),
+                m.text().to_owned(),
+            )
+        })
+        .collect::<Vec<_>>();
+    cgx2_sema::default_managed::compile_source_bundle_v1(&sources, &entry.to_string_lossy())
+        .map_err(|ds| {
+            ds.into_iter()
+                .map(|d| PackageDiagnostic::new(d.code, d.message, entry, Some(d.span)))
+                .collect()
+        })
 }
 
 fn digest(bytes: &[u8]) -> String {
@@ -796,11 +827,6 @@ pub fn load_checked_package(root: &Path) -> Result<CheckedPackage, Vec<PackageDi
                 .map(|d| PackageDiagnostic::new(d.code, d.message, entry.source(), Some(d.span)))
                 .collect::<Vec<_>>()
         })?;
-        let text = checked_modules
-            .iter()
-            .map(|m| m.text())
-            .collect::<Vec<_>>()
-            .join("\n");
         // Existing type/API snapshots may contain foreign declarations and
         // target-specific invalid escapes. Neither is an executable managed
         // certificate: emitters retain their per-file target preflights.
@@ -808,13 +834,10 @@ pub fn load_checked_package(root: &Path) -> Result<CheckedPackage, Vec<PackageDi
             .iter()
             .any(|m| m.syntax().functions.iter().any(|f| f.foreign.is_some()));
         if !foreign {
-            if let Err(ds) = cgx2_sema::default_managed::compile_module(&merged, &text) {
+            if let Err(ds) = managed_program(&checked_modules, Path::new(&manifest.entry.value)) {
                 let ds = ds
                     .into_iter()
                     .filter(|d| d.code != "CGRS003")
-                    .map(|d| {
-                        PackageDiagnostic::new(d.code, d.message, entry.source(), Some(d.span))
-                    })
                     .collect::<Vec<_>>();
                 if !ds.is_empty() {
                     return Err(ds);

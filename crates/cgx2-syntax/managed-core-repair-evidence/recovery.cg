@@ -1,0 +1,10 @@
+variant AllocationError:
+    Mine(i64)
+
+fn main() -> i64 effects(ManagedAlloc):
+    let value: Result<i64,cgx2.core.AllocationError> = managed.try_alloc(42)
+    match value:
+        Result<i64,cgx2.core.AllocationError>.Ok(x):
+            x
+        Result<i64,cgx2.core.AllocationError>.Err(e):
+            0

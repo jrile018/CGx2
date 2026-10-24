@@ -1,0 +1,7 @@
+module app.lib
+
+pub variant AllocationError<T>:
+    Mine(T)
+
+pub fn echo(x: AllocationError<i64>) -> AllocationError<i64> effects():
+    x

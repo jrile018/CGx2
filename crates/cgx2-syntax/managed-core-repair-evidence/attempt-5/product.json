@@ -1,0 +1,761 @@
+{
+  "schema_version": 1,
+  "checks": [
+    {
+      "label": "pinned-rustc",
+      "command": [
+        "rustup",
+        "which",
+        "rustc"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.003,
+      "stdout_bytes": 78,
+      "stdout_sha256": "66af87d7f5dc56db4094d4257d2ebfd67b77bb8e36e37ef58d69a87d2016117c",
+      "stdout": "/home/john-riley/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/bin/rustc\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "rustc-version",
+      "command": [
+        "/home/john-riley/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/bin/rustc",
+        "-vV"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.005,
+      "stdout_bytes": 196,
+      "stdout_sha256": "778fbc643a806f0dd123c056e66201d7e8a56a61928ec0a33171be8d6c2d5a37",
+      "stdout": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/verified-bin/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/nominal-plain.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.003,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1104,
+      "stderr_sha256": "56015e0aaa666c80c3a3edbe23efd9f8f7c3cabff846daa4a2c1b7bd15b493d0",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":1,\"roots_registered\":3,\"roots_released\":3,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":1,\"graph_writes\":1,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":354,\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain:interpreter",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain:emit",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/verified-bin/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/nominal-plain.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/nominal-plain.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.004,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain:source-hash",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain-False:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/verified-bin/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/nominal-plain.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/nominal-plain-False",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/rustc-bounded-linker"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.584,
+      "stdout_bytes": 535,
+      "stdout_sha256": "178fe37288bbce996ff1aea800cc398802cbd4fe012ac37643a78002270f116e",
+      "stdout": "cgx2c build metadata: source_sha256=1f8fc46c57543cf755d6c593d823c39bc137c0e5961da176c887d3570a2f45ea rustc=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=62e813a32b2d2b4d5db980a18cc5f8b1121c8a1e992c14f4dcf5e43c353f55c4 output=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/nominal-plain-False\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain-False:metadata-source-hash",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain-False:execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/nominal-plain-False"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1104,
+      "stderr_sha256": "56015e0aaa666c80c3a3edbe23efd9f8f7c3cabff846daa4a2c1b7bd15b493d0",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":1,\"roots_registered\":3,\"roots_released\":3,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":1,\"graph_writes\":1,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":354,\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain-False:value",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain-True:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/verified-bin/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/nominal-plain.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/nominal-plain-True",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/rustc-bounded-linker",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 1.924,
+      "stdout_bytes": 536,
+      "stdout_sha256": "5e764dbeabc695d91dc09239c0a4b84130c7e3fcd4109f2c91d1fc80bf32f226",
+      "stdout": "cgx2c build metadata: source_sha256=1f8fc46c57543cf755d6c593d823c39bc137c0e5961da176c887d3570a2f45ea rustc=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=62e813a32b2d2b4d5db980a18cc5f8b1121c8a1e992c14f4dcf5e43c353f55c4 output=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/nominal-plain-True\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain-True:metadata-source-hash",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain-True:execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/nominal-plain-True"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1104,
+      "stderr_sha256": "56015e0aaa666c80c3a3edbe23efd9f8f7c3cabff846daa4a2c1b7bd15b493d0",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":1,\"roots_registered\":3,\"roots_released\":3,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":1,\"graph_writes\":1,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":354,\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain-True:value",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain:standalone-compile",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/rustc-bounded-linker",
+        "--edition=2024",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/nominal-plain.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/nominal-plain-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.298,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain:standalone-execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/nominal-plain-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1104,
+      "stderr_sha256": "56015e0aaa666c80c3a3edbe23efd9f8f7c3cabff846daa4a2c1b7bd15b493d0",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":1,\"roots_registered\":3,\"roots_released\":3,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":1,\"graph_writes\":1,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":354,\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-plain:standalone-value",
+      "passed": true
+    },
+    {
+      "label": "nominal:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/verified-bin/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/nominal.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.003,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1104,
+      "stderr_sha256": "cc7ea463d7250e84dbc0ce99ee2881d84c5bd46ef3c83a295cf19e0af128fee1",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":1,\"roots_registered\":5,\"roots_released\":5,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":1,\"graph_writes\":1,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":514,\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nominal:interpreter",
+      "passed": true
+    },
+    {
+      "label": "nominal:emit",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/verified-bin/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/nominal.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/nominal.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.005,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nominal:source-hash",
+      "passed": true
+    },
+    {
+      "label": "nominal-False:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/verified-bin/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/nominal.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/nominal-False",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/rustc-bounded-linker"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.597,
+      "stdout_bytes": 529,
+      "stdout_sha256": "59a9d7d4032d3b45afb4cb9f98340ae93c9688e13e5826db21c55be2a8a63a94",
+      "stdout": "cgx2c build metadata: source_sha256=0cdf6e6ca3fa9bdc01ba0c09b38ca06d128406943556491daf5cc45f23951c4d rustc=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=62e813a32b2d2b4d5db980a18cc5f8b1121c8a1e992c14f4dcf5e43c353f55c4 output=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/nominal-False\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nominal-False:metadata-source-hash",
+      "passed": true
+    },
+    {
+      "label": "nominal-False:execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/nominal-False"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1104,
+      "stderr_sha256": "cc7ea463d7250e84dbc0ce99ee2881d84c5bd46ef3c83a295cf19e0af128fee1",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":1,\"roots_registered\":5,\"roots_released\":5,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":1,\"graph_writes\":1,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":514,\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-False:value",
+      "passed": true
+    },
+    {
+      "label": "nominal-True:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/verified-bin/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/nominal.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/nominal-True",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/rustc-bounded-linker",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 1.947,
+      "stdout_bytes": 530,
+      "stdout_sha256": "c99e771b336006c706f9e8d1b417923e5b8cac066a2e2066db52938fa6a7d7c6",
+      "stdout": "cgx2c build metadata: source_sha256=0cdf6e6ca3fa9bdc01ba0c09b38ca06d128406943556491daf5cc45f23951c4d rustc=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=62e813a32b2d2b4d5db980a18cc5f8b1121c8a1e992c14f4dcf5e43c353f55c4 output=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/nominal-True\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nominal-True:metadata-source-hash",
+      "passed": true
+    },
+    {
+      "label": "nominal-True:execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/nominal-True"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1104,
+      "stderr_sha256": "cc7ea463d7250e84dbc0ce99ee2881d84c5bd46ef3c83a295cf19e0af128fee1",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":1,\"roots_registered\":5,\"roots_released\":5,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":1,\"graph_writes\":1,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":514,\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-True:value",
+      "passed": true
+    },
+    {
+      "label": "nominal:standalone-compile",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/rustc-bounded-linker",
+        "--edition=2024",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/nominal.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/nominal-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.289,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "nominal:standalone-execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/nominal-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1104,
+      "stderr_sha256": "cc7ea463d7250e84dbc0ce99ee2881d84c5bd46ef3c83a295cf19e0af128fee1",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":1,\"roots_registered\":5,\"roots_released\":5,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":1,\"graph_writes\":1,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":514,\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":194,\"live_bytes\":194,\"peak_bytes\":194,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "nominal:standalone-value",
+      "passed": true
+    },
+    {
+      "label": "recovery:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/verified-bin/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/recovery.cg"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.003,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1106,
+      "stderr_sha256": "f99566734bc5e89e4b50880c44f00be7b176b8ac100e7baa5d630b488ce48b19",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":0,\"roots_registered\":0,\"roots_released\":0,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":0,\"graph_writes\":0,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":0,\"behavioral_effects\":[\"ManagedAlloc\"],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":false,\"may_auto_collect_at_allocation\":false,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":0,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":0,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "recovery:interpreter",
+      "passed": true
+    },
+    {
+      "label": "recovery:emit",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/verified-bin/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/recovery.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/recovery.rs"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.004,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "recovery:source-hash",
+      "passed": true
+    },
+    {
+      "label": "recovery-False:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/verified-bin/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/recovery.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/recovery-False",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/rustc-bounded-linker"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.596,
+      "stdout_bytes": 530,
+      "stdout_sha256": "1ed7f50cc188d431709b4347bde94fa80fb731d53986d79427546b6924d09d66",
+      "stdout": "cgx2c build metadata: source_sha256=c5af834d599a45b1b8a036e32cc52c9c61f9cb71482a6c5f572b7e904c8daf41 rustc=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=62e813a32b2d2b4d5db980a18cc5f8b1121c8a1e992c14f4dcf5e43c353f55c4 output=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/recovery-False\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "recovery-False:metadata-source-hash",
+      "passed": true
+    },
+    {
+      "label": "recovery-False:execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/recovery-False"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1106,
+      "stderr_sha256": "f99566734bc5e89e4b50880c44f00be7b176b8ac100e7baa5d630b488ce48b19",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":0,\"roots_registered\":0,\"roots_released\":0,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":0,\"graph_writes\":0,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":0,\"behavioral_effects\":[\"ManagedAlloc\"],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":false,\"may_auto_collect_at_allocation\":false,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":0,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":0,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "recovery-False:value",
+      "passed": true
+    },
+    {
+      "label": "recovery-True:build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/verified-bin/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/recovery.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/recovery-True",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/rustc-bounded-linker",
+        "--release"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 1.908,
+      "stdout_bytes": 531,
+      "stdout_sha256": "71ebcf2b72c81ea4f774e50f460f3b646d97e78da191a9864a840fead2fbda1b",
+      "stdout": "cgx2c build metadata: source_sha256=c5af834d599a45b1b8a036e32cc52c9c61f9cb71482a6c5f572b7e904c8daf41 rustc=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=62e813a32b2d2b4d5db980a18cc5f8b1121c8a1e992c14f4dcf5e43c353f55c4 output=/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/recovery-True\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "recovery-True:metadata-source-hash",
+      "passed": true
+    },
+    {
+      "label": "recovery-True:execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/recovery-True"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1106,
+      "stderr_sha256": "f99566734bc5e89e4b50880c44f00be7b176b8ac100e7baa5d630b488ce48b19",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":0,\"roots_registered\":0,\"roots_released\":0,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":0,\"graph_writes\":0,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":0,\"behavioral_effects\":[\"ManagedAlloc\"],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":false,\"may_auto_collect_at_allocation\":false,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":0,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":0,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "recovery-True:value",
+      "passed": true
+    },
+    {
+      "label": "recovery:standalone-compile",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/rustc-bounded-linker",
+        "--edition=2024",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/recovery.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/recovery-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.289,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "recovery:standalone-execute",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24/recovery-standalone"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24",
+      "extra_env": {},
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 3,
+      "stdout_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+      "stdout": "42\n",
+      "stderr_bytes": 1106,
+      "stderr_sha256": "f99566734bc5e89e4b50880c44f00be7b176b8ac100e7baa5d630b488ce48b19",
+      "stderr": "CGX2_MANAGED_EVIDENCE {\"schema_version\":1,\"allocations\":0,\"roots_registered\":0,\"roots_released\":0,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":0,\"graph_writes\":0,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":0,\"behavioral_effects\":[\"ManagedAlloc\"],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":false,\"may_auto_collect_at_allocation\":false,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":0,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":0,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n",
+      "passed": true
+    },
+    {
+      "label": "recovery:standalone-value",
+      "passed": true
+    },
+    {
+      "label": "nominal-package:run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair/verified-bin/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/nominal-package"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair/managed-auth-repair-babdn_24",
+      "extra_env": {},
+      "exit": 1,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 184,
+      "stderr_sha256": "efd59826a89ea2daabf6d9e9c06b812666c096399b3f75473737610bdd047405",
+      "stderr": "CGN001: /home/john-riley/.codex/worktrees/06b4/lang/crates/cgx2-syntax/managed-core-repair-evidence/nominal-package: cannot start native helper: No such file or directory (os error 2)\n",
+      "passed": false
+    }
+  ],
+  "release_complete": false,
+  "managed_acceptance": "coordinator-review-required",
+  "full_memory_complete": false,
+  "bounds": {
+    "wall_seconds": 180,
+    "cpu_seconds_per_process": 120,
+    "address_space_bytes_per_process": 4294967296,
+    "file_bytes_per_process": 536870912,
+    "retained_bytes_per_stream": 2097152,
+    "aggregate_cgroup_isolation": false
+  },
+  "binary_sha256": {
+    "cgx2": "652b1555f9130d2679191d4dbb4b4f6184a157b104bae7262a7c646242585c89",
+    "cgx2c": "e0135ed2b0c148f6af52fbb4dd9e6343cb026da6b53a378d9acaa90d225f18fe"
+  },
+  "source_sha256": {
+    "nominal.cg": "0cdf6e6ca3fa9bdc01ba0c09b38ca06d128406943556491daf5cc45f23951c4d",
+    "nominal-plain.cg": "1f8fc46c57543cf755d6c593d823c39bc137c0e5961da176c887d3570a2f45ea",
+    "entry-managed.cg": "0d5a26efe857231629c11ea418280443c9b8111a2c7baf958fd42c782a0749e4",
+    "entry-hybrid.cg": "db60e6fc7bf22591d770e2a6a04f7f86952609802ca135b09daf4ab622d29603",
+    "wrong-error.cg": "a3de47880c346950b9ef84694b349b455bde0b76ea93eef38b7b628537960cc2",
+    "recovery.cg": "c5af834d599a45b1b8a036e32cc52c9c61f9cb71482a6c5f572b7e904c8daf41"
+  },
+  "runner_sha256": "7e555359df2954501eaa11cab30516d21b8af1d64ed129cb32d15ffc1827eebe",
+  "runtime_sha256": {
+    "crates/cgx2-runtime/src/budget.rs": "7bd562dae680c6102598a68d139042fba758ae3b3cb8c0d937778c0f0f13e0e4",
+    "crates/cgx2-runtime/src/fault.rs": "bc4652355ca094d8e1daca99b76d38e194c35fcc852c25b071593a4dbe9dc252",
+    "crates/cgx2-runtime/src/graph.rs": "414f340958245f001927f6d92a5fc48277fda2f8867e1d1259d29d037d8fb7ae",
+    "crates/cgx2-runtime/src/heap.rs": "f167f13b46866d9999aa3c8f4329f3a7ad5e59e534d9f5b7b789208296351a8f",
+    "crates/cgx2-runtime/src/lib.rs": "c297d26243a864fdec4c1ec2707b3002843b971dae750ce08a7f856f446c176b",
+    "crates/cgx2-runtime/src/owned.rs": "08b8c47b10ff55c9174467c623127136f034e314f8b5f2d49010e9c21547c197",
+    "crates/cgx2-runtime/src/region.rs": "50362a5df6c4469bfb5f03e9a93a3a351853a97d6fc505a322ce6bc5bb9f6077",
+    "crates/cgx2-runtime/src/report.rs": "4569e7848983a5179c60abdb4cd779f3707512eaae5e614214a50cf8d39ba9aa",
+    "crates/cgx2-runtime/src/scope.rs": "4cd5fdf4d2d1ddf3044b04fec5347442eecc1374d97c7f8220432b8510264840"
+  },
+  "passed": 47,
+  "failed": 1,
+  "rustc_identity": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "artifact_sha256": {
+    "nominal-plain-False": "e8dc42a08151f14979c66553e379913ef201e271dc742dd153e59b94e6e195e8",
+    "nominal-plain-True": "d3de277bab2d4d69fde7b9b0ee75d1610e0bcd886cd3654715925918708fcdbe",
+    "nominal-plain.rs": "f7c6b4ba611a01793e9a0d18348fd0310ef4dd1b97859f476c4e0787b9804ce1",
+    "nominal-plain-standalone": "d441eca6006769cecf0dbcca44dabe5a138c99d941b9bdbc616f1b4386417b0f",
+    "nominal-False": "aaa30db24b603b0379daad769a10be4640263d34af6ee91b16e1dc978c232e61",
+    "nominal-True": "ed175d28390fefc115b15b87e3d80f32bd984d105ea59f22acd1dba4ee7baba7",
+    "nominal.rs": "8a4304b10b5cf11effdcd4208e02f1636998d8262cda4feddf6f55c09bb79166",
+    "nominal-standalone": "51f9818a4836d2875113c2a594ca1f4c567d1f4cf2f4a14cb15c5559e6ddb1ff",
+    "recovery-False": "686c7bdc97339dc87862757b1561f616aa5db10ac27665c8636d15ec6188a738",
+    "recovery-True": "cc96163f9d61e51dd279be7a266c27ba15630d8d833b566083efdc2a90c61e80",
+    "recovery.rs": "0f4fd6ddd4492f416c4c8c38b2dc2a499a7e4ccef4a301765243050859af5899",
+    "recovery-standalone": "920094cb02b3771e3fedff54e2a2dba714e4c18a18806f1755b52d084b1d3f44"
+  }
+}

@@ -148,12 +148,20 @@ impl HybridProgramV1 {
     pub fn managed(&self) -> &ManagedProgramV1 {
         &self.managed
     }
+    pub fn entry_span(&self) -> Span {
+        let span = self.owned_model.functions[self.owned_model.entry].span;
+        Span {
+            start: span.start,
+            end: span.end,
+        }
+    }
     pub fn authenticate(&self) -> Result<(), Vec<TypeDiagnostic>> {
         let fresh = compile_source(&self.source)?;
         if fresh.analysis_sha256 != self.analysis_sha256
             || fresh.source_sha256 != self.source_sha256
             || fresh.owned_model != self.owned_model
             || fresh.bridges != self.bridges
+            || fresh.managed.analysis_sha256() != self.managed.analysis_sha256()
         {
             return Err(vec![diagnostic(
                 "forged mixed execution envelope",
@@ -269,7 +277,9 @@ pub fn compile_source(source: &str) -> Result<HybridProgramV1, Vec<TypeDiagnosti
         }],
         span,
     });
-    let managed = super::compile_module(&managed_module, source)?;
+    // This is a compiler projection of the authenticated original source, not
+    // that source's parsed AST. The outer envelope authenticates the projection.
+    let managed = super::compile_ast(&managed_module)?;
     if managed.program().functions.iter().any(|f| {
         f.behavioral_effects
             .iter()

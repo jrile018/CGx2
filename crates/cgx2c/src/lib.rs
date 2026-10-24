@@ -111,7 +111,13 @@ pub fn run(args: Vec<OsString>) -> Result<(), CliError> {
     if options.package {
         return run_package(&options);
     }
-    let metadata = fs::metadata(&options.source).map_err(|e| {
+    let source_canonical = fs::canonicalize(&options.source).map_err(|e| {
+        CliError::new(
+            "CGXC002",
+            format!("cannot resolve {}: {e}", options.source.display()),
+        )
+    })?;
+    let metadata = fs::metadata(&source_canonical).map_err(|e| {
         CliError::new(
             "CGXC002",
             format!("cannot read {}: {e}", options.source.display()),
@@ -123,7 +129,7 @@ pub fn run(args: Vec<OsString>) -> Result<(), CliError> {
             "source must be a regular UTF-8 file of at most 4 MiB",
         ));
     }
-    let source = fs::read_to_string(&options.source).map_err(|e| {
+    let source = fs::read_to_string(&source_canonical).map_err(|e| {
         CliError::new(
             "CGXC002",
             format!("cannot read {}: {e}", options.source.display()),
@@ -337,6 +343,7 @@ pub fn run(args: Vec<OsString>) -> Result<(), CliError> {
         )
     })?;
     if options.mode != Mode::Build {
+        verify_source_unchanged(&options.source, &source_canonical, &source)?;
         validate_output(&options)?;
         install(&generated_path, &options.output, options.force)?;
         return Ok(());
@@ -370,6 +377,7 @@ pub fn run(args: Vec<OsString>) -> Result<(), CliError> {
         ));
     }
     // Recheck immediately before installation; Unix rename replaces the entry, not its symlink target.
+    verify_source_unchanged(&options.source, &source_canonical, &source)?;
     validate_output(&options)?;
     install(&binary_path, &options.output, options.force)?;
     let (toolchain, target) = rustc_version(&options.rustc);
@@ -384,6 +392,24 @@ pub fn run(args: Vec<OsString>) -> Result<(), CliError> {
         options.output.display()
     );
     Ok(())
+}
+
+/// The certificate describes an immutable source snapshot. Publication must also
+/// reject filesystem drift during code generation or an external rustc call.
+fn verify_source_unchanged(path: &Path, canonical: &Path, source: &str) -> Result<(), CliError> {
+    let unchanged = fs::canonicalize(path).is_ok_and(|p| p == canonical)
+        && fs::metadata(canonical).is_ok_and(|m| m.is_file() && m.len() == source.len() as u64)
+        && fs::read(canonical).is_ok_and(|bytes| bytes == source.as_bytes());
+    if unchanged {
+        Ok(())
+    } else {
+        let mut error = CliError::new(
+            "CGXC009",
+            "source changed after validation; artifact preserved",
+        );
+        error.file = Some(path.to_path_buf());
+        Err(error)
+    }
 }
 
 fn package_error(root: &Path, errors: Vec<cgx2_package::PackageDiagnostic>) -> CliError {

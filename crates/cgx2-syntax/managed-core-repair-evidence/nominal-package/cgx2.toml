@@ -1,0 +1,4 @@
+schema_version = 1
+name = "managed-nominal-auth"
+entry = "main.cg"
+sources = ["main.cg", "lib.cg"]

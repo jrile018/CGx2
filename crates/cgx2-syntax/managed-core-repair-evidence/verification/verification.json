@@ -1,0 +1,1228 @@
+{
+  "schema_version": 1,
+  "base_commit": "3c1cfe2aeba2f7135e4069709bf633c082d2aab0",
+  "disposition": "bounded-repair-for-coordinator-review",
+  "release_complete": false,
+  "full_memory_complete": false,
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/06b4/lang/target/release-managed-core-repair",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/06b4/lang/target/tmp-managed-core-repair",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib",
+    "cargo_dependencies": "offline locked existing dependencies"
+  },
+  "cargo_bounds": "two Cargo jobs; no claim of aggregate cgroup isolation or uniform limits on existing Rust test subprocesses",
+  "native_bounds": "see each unchanged historical runner and managed-core-repair-evidence/run.py product.json; no signals count as expected failures",
+  "code_sha256": {
+    "crates/cgx2-api-index/src/memory_v1.rs": "a85f7ffee5190e563e8b788f7c28117042c75964f617e7db364fc07fac1bde8d",
+    "crates/cgx2-cli/src/default_managed.rs": "c05ebe4fce9f2cdf8328c74f887cc0a37a3d3f8fbcda67df42acef77f676cf38",
+    "crates/cgx2-cli/src/eval.rs": "90b0b4c1148e7937d0dcbb05d94274d229f736bbe6b9b3a9fb82a70622ea113d",
+    "crates/cgx2-cli/src/main.rs": "27181db2c14aa3ee0b7dcd82e09012b54521274682431ff8a1a1b6de7c954a8c",
+    "crates/cgx2-cli/src/package_eval.rs": "1dbfbf5fe0cf32e005dbf930485719c92ba26a7742892b1ae2abbdb91e290155",
+    "crates/cgx2-emit-rust/src/data.rs": "f98fc238e7c76c90fa58cdb78514c6318cab7865c8c205fef7ff2177a434de0c",
+    "crates/cgx2-emit-rust/src/default_managed.rs": "485c3cabbb46423c60383aef06aa9e27057f48866d052a0a6834b390baf47258",
+    "crates/cgx2-emit-rust/src/hybrid.rs": "7f251549a2a0e9e39a0946fe8a659aa79968908a1901d2b524e2d1b7e811c492",
+    "crates/cgx2-emit-rust/src/lib.rs": "54503c17bf1e0033c85e4c86b9e9505f0f48263a6237bbb761f04f8466efe2e6",
+    "crates/cgx2-package/src/lib.rs": "88b425991dbb43492fe0543ca1b02022b424a552c62a4bb832d906bed28c63d5",
+    "crates/cgx2-package/src/managed_provenance_tests.rs": "fef284d73f5aca3f3953139a858cb12e477683ea8e79e6fa8eba2fda0f3cb76b",
+    "crates/cgx2-sema/src/default_managed/hybrid.rs": "6c40d74e5dc066873eafcfe4a7a21d3c2c7c513f0ed1fd9b7110c078b4722632",
+    "crates/cgx2-sema/src/default_managed/mod.rs": "a3a4981739d0a609a5d13e8b4f3999bcf1ebbb763ae13264ec188e06d70167d9",
+    "crates/cgx2-sema/src/default_managed/provenance.rs": "dd9598cbccb7ddc87bdfda12ef6051364e7dc9d99aa3104efab9e316966d4634",
+    "crates/cgx2-sema/src/nominal.rs": "030b7bdc8d1c3eba5026e3453b5d355b45a122fefc635f764d84c9d643242881",
+    "crates/cgx2-sema/tests/managed_nominal_compat.rs": "573e0f56cde3fd8ef4566e2f9b0d2c6605f05cc80ad063460f454788ba5029f7",
+    "crates/cgx2-sema/tests/managed_source_auth.rs": "7f4aae80f97d5cce115079045f78ae44f606ae2df200b9d0de1c44bfbf5d040e",
+    "crates/cgx2c/src/lib.rs": "423d155b8e13e0e592d72c8ec400bba3e6a203cced4ed19d79a78f4eb2732103"
+  },
+  "root_manifest_sha256": {
+    "Cargo.toml": "9400b7dfbc400f91b3d648265dbd18001ec96157eb202fe88e3b95a312c9ffd7",
+    "Cargo.lock": "ea7678242cb40c8425c2b9875215f7024071c684cab59399d1d8a74a96750e3a"
+  },
+  "binary_sha256": {
+    "cgx2": "6389373e69af41e8871ce4928ec164ca06fd87194aa782942de8c13b7a444874",
+    "cgx2c": "e0135ed2b0c148f6af52fbb4dd9e6343cb026da6b53a378d9acaa90d225f18fe",
+    "cgx2-effect-index": "0b8350bbe78c973dd8660e45602e28511aa360e24555c361111fbe2d9fd0d351",
+    "cgx2-security": "89f742bde80688292e0ed55afaa6d45cfd272f1a5fd3e387f434cdba49159170",
+    "cgx2-verify": "e688648719ae35d8a6bd9c7baecf507e34e99ecdb3f290125cdd6d4770f7c9f6",
+    "cgx2-notebook": "85e35ba7891198fd3852b9cee5cc86209e6652fbee459775d3610141d07f7048"
+  },
+  "checks": [
+    {
+      "label": "affected-tests-attempt1",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "-p",
+        "cgx2-sema",
+        "-p",
+        "cgx2-package",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2-api-index",
+        "-p",
+        "cgx2-emit-rust",
+        "-p",
+        "cgx2c",
+        "--all-features"
+      ],
+      "exit": 101,
+      "signal": null,
+      "stdout_stderr": "affected-tests-attempt1.log.gz",
+      "uncompressed_sha256": "166fb92051b2a41cb1dc91ec28d7f34a83d093a0490d36be71464db35011bcc4",
+      "compressed_sha256": "bb8ab3ac266a377e5d3fbc41a51c9e11c8429c0de1913ad4c20136e77158e47f"
+    },
+    {
+      "label": "affected-tests-attempt2",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "-p",
+        "cgx2-sema",
+        "-p",
+        "cgx2-package",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2-api-index",
+        "-p",
+        "cgx2-emit-rust",
+        "-p",
+        "cgx2c",
+        "--all-features"
+      ],
+      "exit": 101,
+      "signal": null,
+      "stdout_stderr": "affected-tests-attempt2.log.gz",
+      "uncompressed_sha256": "dd27e55efbe085d8483ca39becac912344fefab624b613e0944c284584862476",
+      "compressed_sha256": "f3a583048c56314be3dcf228a5214bf4b2c7e03f85ef32d09912ecee33ec82d1",
+      "test_counts": {
+        "passed": 44,
+        "failed": 1,
+        "ignored": 0,
+        "measured": 0,
+        "filtered_out": 0
+      }
+    },
+    {
+      "label": "affected-tests-attempt3",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "-p",
+        "cgx2-sema",
+        "-p",
+        "cgx2-package",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2-api-index",
+        "-p",
+        "cgx2-emit-rust",
+        "-p",
+        "cgx2c",
+        "--all-features"
+      ],
+      "exit": 101,
+      "signal": null,
+      "stdout_stderr": "affected-tests-attempt3.log.gz",
+      "uncompressed_sha256": "36d396f194cca8e5afd47aff6b3f6b9fe770b800098564d70c1159439e414a5f",
+      "compressed_sha256": "3231460fc875cb98bb8de1af3f9d3c07436cdcbdfc3a70db4449bb24b29cef61",
+      "test_counts": {
+        "passed": 191,
+        "failed": 1,
+        "ignored": 0,
+        "measured": 0,
+        "filtered_out": 0
+      }
+    },
+    {
+      "label": "affected-tests-final",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "-p",
+        "cgx2-sema",
+        "-p",
+        "cgx2-package",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2-api-index",
+        "-p",
+        "cgx2-emit-rust",
+        "-p",
+        "cgx2c",
+        "--all-features",
+        "--",
+        "--skip",
+        "package_record_fields_preserve_complete_nominal_identities"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "affected-tests-final.log.gz",
+      "uncompressed_sha256": "02464753a60b9f425d56d47814cadbafbc6271d205078fb395cec5ed80607d18",
+      "compressed_sha256": "7f476ef367478ebf19c3e044e27c86c1f84374b2bfeb3948867c3923805be24c",
+      "test_counts": {
+        "passed": 433,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered_out": 1
+      }
+    },
+    {
+      "label": "affected-tests-unfiltered-final",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "-p",
+        "cgx2-sema",
+        "-p",
+        "cgx2-package",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2-api-index",
+        "-p",
+        "cgx2-emit-rust",
+        "-p",
+        "cgx2c",
+        "--all-features",
+        "--no-fail-fast"
+      ],
+      "exit": 101,
+      "signal": null,
+      "stdout_stderr": "affected-tests-unfiltered-final.log.gz",
+      "uncompressed_sha256": "953f0ae15e353eab3e948e705e21dba84087b5408b252eb823fb12ae4d570c5b",
+      "compressed_sha256": "59d3fc09d2b1402ca91b3c25a93e3ff86c0631ebc79e1a7108e1c4ccd645589e",
+      "test_counts": {
+        "passed": 433,
+        "failed": 1,
+        "ignored": 0,
+        "measured": 0,
+        "filtered_out": 0
+      }
+    },
+    {
+      "label": "affected-tests-with-known-obsolete-caller-skipped",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "-p",
+        "cgx2-sema",
+        "-p",
+        "cgx2-package",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2-api-index",
+        "-p",
+        "cgx2-emit-rust",
+        "-p",
+        "cgx2c",
+        "--all-features",
+        "--",
+        "--skip",
+        "package_record_fields_preserve_complete_nominal_identities"
+      ],
+      "exit": 101,
+      "signal": null,
+      "stdout_stderr": "affected-tests-with-known-obsolete-caller-skipped.log.gz",
+      "uncompressed_sha256": "fb40b9753fc9764ae656a00b77d443fc82e36c0b977f0ed07f21b76a4325aac4",
+      "compressed_sha256": "3ed52b07e783b336412a4b6e385d9572928b7650b0289821d889114fa16bd036",
+      "test_counts": {
+        "passed": 285,
+        "failed": 1,
+        "ignored": 0,
+        "measured": 0,
+        "filtered_out": 1
+      }
+    },
+    {
+      "label": "build-current",
+      "command": [
+        "cargo",
+        "build",
+        "--offline",
+        "--locked",
+        "-p",
+        "cgx2-sema",
+        "-p",
+        "cgx2-package",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2-api-index",
+        "-p",
+        "cgx2-emit-rust",
+        "-p",
+        "cgx2c",
+        "--all-features"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "build-current.log.gz",
+      "uncompressed_sha256": "621af3074e5fc3b0dca0d053a721cdec4e8593f1fbc71004acc21af6b243cefd",
+      "compressed_sha256": "a9c8caf86b6adb857cef089e5fc81c04c7a0c57f659af81798ed2937e81babca"
+    },
+    {
+      "label": "build-debug-final",
+      "command": [
+        "cargo",
+        "build",
+        "--offline",
+        "--locked",
+        "-p",
+        "cgx2-sema",
+        "-p",
+        "cgx2-package",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2-api-index",
+        "-p",
+        "cgx2-emit-rust",
+        "-p",
+        "cgx2c",
+        "--all-features"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "build-debug-final.log.gz",
+      "uncompressed_sha256": "4c2fb2d963700caaa56e921cf3501863242b0294d953b957c37d1e2c1930610e",
+      "compressed_sha256": "b0294870c9adaa70af1569524d1838db9e6cf3355f7704e41dc7a3f9608a4bfe"
+    },
+    {
+      "label": "build-debug",
+      "command": [
+        "cargo",
+        "build",
+        "--offline",
+        "--locked",
+        "-p",
+        "cgx2-sema",
+        "-p",
+        "cgx2-package",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2-api-index",
+        "-p",
+        "cgx2-emit-rust",
+        "-p",
+        "cgx2c",
+        "--all-features"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "build-debug.log.gz",
+      "uncompressed_sha256": "2107f44081c559efdc4995ecda03f66a585cfbee3f7aeaa74da9f8ca5efa36c9",
+      "compressed_sha256": "c46c9634647888300faa1561a9c6812cd2d337f315fed793912b0d30169984c8"
+    },
+    {
+      "label": "build-final",
+      "command": [
+        "cargo",
+        "build",
+        "--offline",
+        "--locked",
+        "-p",
+        "cgx2-sema",
+        "-p",
+        "cgx2-package",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2-api-index",
+        "-p",
+        "cgx2-emit-rust",
+        "-p",
+        "cgx2c",
+        "--all-features"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "build-final.log.gz",
+      "uncompressed_sha256": "d7d694087e3de6660f08c9f46a9f4f4d8fefda3fc23175600f07394735a82fd2",
+      "compressed_sha256": "760437c5c1199c59fbaa3c0cd63e72afbee427a63a4227fe1270690790f306c4"
+    },
+    {
+      "label": "build-pipeline-compat",
+      "command": [
+        "cargo",
+        "build",
+        "--offline",
+        "--locked",
+        "-p",
+        "cgx2-sema",
+        "-p",
+        "cgx2-package",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2-api-index",
+        "-p",
+        "cgx2-emit-rust",
+        "-p",
+        "cgx2c",
+        "--all-features"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "build-pipeline-compat.log.gz",
+      "uncompressed_sha256": "e571a723c310f5e37c18b9e7dea4a35aaa62ecbcf2a9c8c05286f0faa67b9270",
+      "compressed_sha256": "eaa7d55ba57b0b54bfbea83a84614539e13cdb453cd8abc81f879049380cde4a"
+    },
+    {
+      "label": "cli-post-compat-tests",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "-p",
+        "cgx2-cli",
+        "--all-features"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "cli-post-compat-tests.log.gz",
+      "uncompressed_sha256": "4f4f1ef59b678034fdd271257730f85dd78218017a52faab6ab5be2cb69bcfd4",
+      "compressed_sha256": "bdf6ba501d8029728b741f3e3632138ab94ffb62b31dbc5d475be87e815f75d1",
+      "test_counts": {
+        "passed": 130,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered_out": 0
+      }
+    },
+    {
+      "label": "clippy-attempt1",
+      "command": [
+        "cargo",
+        "clippy",
+        "--offline",
+        "--locked",
+        "-p",
+        "cgx2-sema",
+        "-p",
+        "cgx2-package",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2-api-index",
+        "-p",
+        "cgx2-emit-rust",
+        "-p",
+        "cgx2c",
+        "--all-features",
+        "--all-targets",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit": 101,
+      "signal": null,
+      "stdout_stderr": "clippy-attempt1.log.gz",
+      "uncompressed_sha256": "765dff2cd9fa435426ae989a7a372b1919599d4b8f8dce3c4bd8694aa0dd321c",
+      "compressed_sha256": "450c2c0ad673ae5de7c751ee8d964d07182b1e72ed0acc1c2b242c19127ff66d"
+    },
+    {
+      "label": "clippy-attempt3",
+      "command": [
+        "cargo",
+        "clippy",
+        "--offline",
+        "--locked",
+        "-p",
+        "cgx2-sema",
+        "-p",
+        "cgx2-package",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2-api-index",
+        "-p",
+        "cgx2-emit-rust",
+        "-p",
+        "cgx2c",
+        "--all-features",
+        "--all-targets",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "clippy-attempt3.log.gz",
+      "uncompressed_sha256": "fcd57d2ccdb4bb069a8de3f2aa95f94a5ea893a4261ae60adeb507c772cf52ac",
+      "compressed_sha256": "aa0d49c52102faca31b6e12a576ee9b224bcf1ea8009661ce79eb50676c43190"
+    },
+    {
+      "label": "clippy-current",
+      "command": [
+        "cargo",
+        "clippy",
+        "--offline",
+        "--locked",
+        "-p",
+        "cgx2-sema",
+        "-p",
+        "cgx2-package",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2-api-index",
+        "-p",
+        "cgx2-emit-rust",
+        "-p",
+        "cgx2c",
+        "--all-features",
+        "--all-targets",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "clippy-current.log.gz",
+      "uncompressed_sha256": "21937963697d448005b5e505db495df8be8fca970a6dc7477d1bf95b76ac47b6",
+      "compressed_sha256": "3a36a5c5cd3786d67cb76379d85c6420d26e982c53ef8df9c3dfda24991ea081"
+    },
+    {
+      "label": "clippy-final",
+      "command": [
+        "cargo",
+        "clippy",
+        "--offline",
+        "--locked",
+        "-p",
+        "cgx2-sema",
+        "-p",
+        "cgx2-package",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2-api-index",
+        "-p",
+        "cgx2-emit-rust",
+        "-p",
+        "cgx2c",
+        "--all-features",
+        "--all-targets",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit": 101,
+      "signal": null,
+      "stdout_stderr": "clippy-final.log.gz",
+      "uncompressed_sha256": "ddb4868bfd852963561707075467bcdabc1710b4ac0b3438c415295d7b1b367e",
+      "compressed_sha256": "c03b87179c734f251e731eeecdcdeb0c248fdb6023f1bb45c99ee5ec2f63fc7e"
+    },
+    {
+      "label": "clippy-post-compat",
+      "command": [
+        "cargo",
+        "clippy",
+        "--offline",
+        "--locked",
+        "-p",
+        "cgx2-sema",
+        "-p",
+        "cgx2-package",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2-api-index",
+        "-p",
+        "cgx2-emit-rust",
+        "-p",
+        "cgx2c",
+        "--all-features",
+        "--all-targets",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "clippy-post-compat.log.gz",
+      "uncompressed_sha256": "1a822458e9096a3b3e7100c77664eb646bf0137221ab6e4f7d0f8b9ef1b99c9d",
+      "compressed_sha256": "cb3fd99fa5b885ddca0a6607601e65da31af16194239b1233f2c34b98bfa658e"
+    },
+    {
+      "label": "diff-current",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "diff-current.log.gz",
+      "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compressed_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+    },
+    {
+      "label": "final-managed-hybrid",
+      "command": null,
+      "exit": null,
+      "signal": null,
+      "stdout_stderr": "final-managed-hybrid.log.gz",
+      "uncompressed_sha256": "995b284fff791fadbc62ee671b8aebd909a3372e48521953fd52c54c62365861",
+      "compressed_sha256": "3e57ca4b40490306fe181fc68d6c579793063e4475fd074923958e87b9a8785c"
+    },
+    {
+      "label": "final-managed-namespace-package",
+      "command": null,
+      "exit": null,
+      "signal": null,
+      "stdout_stderr": "final-managed-namespace-package.log.gz",
+      "uncompressed_sha256": "82df9cbf661363178f0bf7d5b1ca70861483f446b987e90c054a9139d0e6011a",
+      "compressed_sha256": "29ae8e2794d4a7d90479d4240c2ed19dde76c08a7a3d588f0aa00db3f0c5866d"
+    },
+    {
+      "label": "final-managed-package",
+      "command": null,
+      "exit": null,
+      "signal": null,
+      "stdout_stderr": "final-managed-package.log.gz",
+      "uncompressed_sha256": "dc07ee4eb47b026669f58fa71aabc3ffdb4942462c1b2123385040e159c7a05c",
+      "compressed_sha256": "e832c8f0fd9abcc9bb0854324e71bd96f4783d2bcdac1ae2d38e3c9bb9821493"
+    },
+    {
+      "label": "final-managed-shapes",
+      "command": null,
+      "exit": null,
+      "signal": null,
+      "stdout_stderr": "final-managed-shapes.log.gz",
+      "uncompressed_sha256": "4fe4a08144902b3feaa634ac9de084a32d73553a85608594d5d8117b06709e0f",
+      "compressed_sha256": "31a16c31ff94076897e815c6e004105da49dd448ebf556a2260e7506cb77bfe2"
+    },
+    {
+      "label": "final-owned-symbol195",
+      "command": null,
+      "exit": null,
+      "signal": null,
+      "stdout_stderr": "final-owned-symbol195.log.gz",
+      "uncompressed_sha256": "eff8f315c5f8b9bd5ad972f538f931d1ccd7dedc85c8ca6bd08cc483bdfc6552",
+      "compressed_sha256": "773f49294a03cc199946e62c93ebc8521dbeb637df879064dd908590515df32e"
+    },
+    {
+      "label": "final-reconciled593-17",
+      "command": null,
+      "exit": null,
+      "signal": null,
+      "stdout_stderr": "final-reconciled593-17.log.gz",
+      "uncompressed_sha256": "f068225e5a8b86e77b1a4ed650448558b912d103000ba06de2fbee05393de6df",
+      "compressed_sha256": "9baf73c5ec2df9642a30faf76cba00fb0bbf452e786222ba0fd6227e1f16d6d3"
+    },
+    {
+      "label": "final-regressions",
+      "command": null,
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "final-regressions.log.gz",
+      "uncompressed_sha256": "e081cbc4675c6ff65486f7bf1e2e5164648edc636f683ae041e1e2b21ebe4c2b",
+      "compressed_sha256": "e3817a140f6a9a9337ae663f1aa42256f919f1e17017d16383bd05fa7e9c7641"
+    },
+    {
+      "label": "fmt-current",
+      "command": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--check"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "fmt-current.log.gz",
+      "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compressed_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+    },
+    {
+      "label": "fmt-write",
+      "command": null,
+      "exit": null,
+      "signal": null,
+      "stdout_stderr": "fmt-write.log.gz",
+      "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compressed_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+    },
+    {
+      "label": "focused-tests-attempt2",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "-p",
+        "cgx2-sema",
+        "--test",
+        "managed_source_auth",
+        "--test",
+        "managed_nominal_compat",
+        "--all-features"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "focused-tests-attempt2.log.gz",
+      "uncompressed_sha256": "2a54cd45722fd0cdc8479c4ca5fec3f81bf73c095f95c8fddf70fb65e714d812",
+      "compressed_sha256": "5dea761183a56fb787db8646e1f6e88aed5094912d5f97ec3d909d4158352fe0",
+      "test_counts": {
+        "passed": 8,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered_out": 0
+      }
+    },
+    {
+      "label": "focused-tests-final",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "-p",
+        "cgx2-sema",
+        "--test",
+        "managed_source_auth",
+        "--test",
+        "managed_nominal_compat",
+        "--all-features"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "focused-tests-final.log.gz",
+      "uncompressed_sha256": "2c5352761194316514501c15037a3bd64147be1309615668dddc54d0137b943c",
+      "compressed_sha256": "ecc47ee533915a93c52cfe9de73ae2d2b5e9b0b905bb8f4be4682478dde72767",
+      "test_counts": {
+        "passed": 8,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered_out": 0
+      }
+    },
+    {
+      "label": "focused-tests",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "-p",
+        "cgx2-sema",
+        "--test",
+        "managed_source_auth",
+        "--test",
+        "managed_nominal_compat",
+        "--all-features"
+      ],
+      "exit": 101,
+      "signal": null,
+      "stdout_stderr": "focused-tests.log.gz",
+      "uncompressed_sha256": "a3095b1f423f711471d8e8e8d95ff224fdb7d475e8e11b6fa51cfa9e21140ec0",
+      "compressed_sha256": "0b638e8e2d44c9d8da3ee110193652bc8772e6bb76d8e402b59842ca95c4dd7c",
+      "test_counts": {
+        "passed": 1,
+        "failed": 2,
+        "ignored": 0,
+        "measured": 0,
+        "filtered_out": 0
+      }
+    },
+    {
+      "label": "historical-owned-symbol195",
+      "command": [
+        "python3",
+        "crates/cgx2-syntax/owned-symbol-compatibility-evidence/run.py",
+        "--binary-dir",
+        "target/release-managed-core-repair/debug",
+        "--output",
+        "target/tmp-managed-core-repair/historical-owned-symbol195/owned-symbol195.json"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "historical-owned-symbol195.log.gz",
+      "uncompressed_sha256": "eff8f315c5f8b9bd5ad972f538f931d1ccd7dedc85c8ca6bd08cc483bdfc6552",
+      "compressed_sha256": "773f49294a03cc199946e62c93ebc8521dbeb637df879064dd908590515df32e"
+    },
+    {
+      "label": "initial-check",
+      "command": [
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "-p",
+        "cgx2-sema",
+        "-p",
+        "cgx2-package",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2-api-index",
+        "-p",
+        "cgx2-emit-rust",
+        "-p",
+        "cgx2c",
+        "--all-features"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "initial-check.log.gz",
+      "uncompressed_sha256": "63eca268bf79b34688a5e5d88a27806dde67720bfdf80dbd0b92697428cd4555",
+      "compressed_sha256": "097caee605cfb3fdebb0315dc3e5c38736af72727021a45f5990ded04388f6a1"
+    },
+    {
+      "label": "lib-tests-final",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "-p",
+        "cgx2-sema",
+        "-p",
+        "cgx2-package",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2-api-index",
+        "-p",
+        "cgx2-emit-rust",
+        "-p",
+        "cgx2c",
+        "--all-features",
+        "--lib"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "lib-tests-final.log.gz",
+      "uncompressed_sha256": "1d451466306c4b77fdaabda9eb4e196c8440665590f5934d00c400a649bfd60e",
+      "compressed_sha256": "a22bfc0fe8012316f1b1a4d9c01317c6f5f9e82eeb6777c98a4c96c28e2670f9",
+      "test_counts": {
+        "passed": 20,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered_out": 0
+      }
+    },
+    {
+      "label": "managed-hybrid",
+      "command": null,
+      "exit": null,
+      "signal": null,
+      "stdout_stderr": "managed-hybrid.log.gz",
+      "uncompressed_sha256": "995b284fff791fadbc62ee671b8aebd909a3372e48521953fd52c54c62365861",
+      "compressed_sha256": "3e57ca4b40490306fe181fc68d6c579793063e4475fd074923958e87b9a8785c"
+    },
+    {
+      "label": "managed-namespace-package",
+      "command": null,
+      "exit": null,
+      "signal": null,
+      "stdout_stderr": "managed-namespace-package.log.gz",
+      "uncompressed_sha256": "82df9cbf661363178f0bf7d5b1ca70861483f446b987e90c054a9139d0e6011a",
+      "compressed_sha256": "29ae8e2794d4a7d90479d4240c2ed19dde76c08a7a3d588f0aa00db3f0c5866d"
+    },
+    {
+      "label": "managed-package",
+      "command": null,
+      "exit": null,
+      "signal": null,
+      "stdout_stderr": "managed-package.log.gz",
+      "uncompressed_sha256": "dc07ee4eb47b026669f58fa71aabc3ffdb4942462c1b2123385040e159c7a05c",
+      "compressed_sha256": "e832c8f0fd9abcc9bb0854324e71bd96f4783d2bcdac1ae2d38e3c9bb9821493"
+    },
+    {
+      "label": "managed-selected",
+      "command": null,
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "managed-selected.log.gz",
+      "uncompressed_sha256": "36909627c6f87eb816988b4dc725aecb6f0f02c0266d5c6e92c09d3a2ef2f3e3",
+      "compressed_sha256": "d98b69262f68d661daab4717ca7b8b79d2e9256e5a40bc6d869c36ffb9c32098"
+    },
+    {
+      "label": "managed-shapes",
+      "command": null,
+      "exit": null,
+      "signal": null,
+      "stdout_stderr": "managed-shapes.log.gz",
+      "uncompressed_sha256": "4fe4a08144902b3feaa634ac9de084a32d73553a85608594d5d8117b06709e0f",
+      "compressed_sha256": "31a16c31ff94076897e815c6e004105da49dd448ebf556a2260e7506cb77bfe2"
+    },
+    {
+      "label": "post-compat-managed-hybrid",
+      "command": null,
+      "exit": null,
+      "signal": null,
+      "stdout_stderr": "post-compat-managed-hybrid.log.gz",
+      "uncompressed_sha256": "995b284fff791fadbc62ee671b8aebd909a3372e48521953fd52c54c62365861",
+      "compressed_sha256": "3e57ca4b40490306fe181fc68d6c579793063e4475fd074923958e87b9a8785c"
+    },
+    {
+      "label": "post-compat-managed-namespace-package",
+      "command": null,
+      "exit": null,
+      "signal": null,
+      "stdout_stderr": "post-compat-managed-namespace-package.log.gz",
+      "uncompressed_sha256": "82df9cbf661363178f0bf7d5b1ca70861483f446b987e90c054a9139d0e6011a",
+      "compressed_sha256": "29ae8e2794d4a7d90479d4240c2ed19dde76c08a7a3d588f0aa00db3f0c5866d"
+    },
+    {
+      "label": "post-compat-managed-package",
+      "command": null,
+      "exit": null,
+      "signal": null,
+      "stdout_stderr": "post-compat-managed-package.log.gz",
+      "uncompressed_sha256": "dc07ee4eb47b026669f58fa71aabc3ffdb4942462c1b2123385040e159c7a05c",
+      "compressed_sha256": "e832c8f0fd9abcc9bb0854324e71bd96f4783d2bcdac1ae2d38e3c9bb9821493"
+    },
+    {
+      "label": "post-compat-managed-shapes",
+      "command": null,
+      "exit": null,
+      "signal": null,
+      "stdout_stderr": "post-compat-managed-shapes.log.gz",
+      "uncompressed_sha256": "4fe4a08144902b3feaa634ac9de084a32d73553a85608594d5d8117b06709e0f",
+      "compressed_sha256": "31a16c31ff94076897e815c6e004105da49dd448ebf556a2260e7506cb77bfe2"
+    },
+    {
+      "label": "post-compat-owned-symbol195",
+      "command": null,
+      "exit": null,
+      "signal": null,
+      "stdout_stderr": "post-compat-owned-symbol195.log.gz",
+      "uncompressed_sha256": "eff8f315c5f8b9bd5ad972f538f931d1ccd7dedc85c8ca6bd08cc483bdfc6552",
+      "compressed_sha256": "773f49294a03cc199946e62c93ebc8521dbeb637df879064dd908590515df32e"
+    },
+    {
+      "label": "post-compat-reconciled593-17",
+      "command": null,
+      "exit": null,
+      "signal": null,
+      "stdout_stderr": "post-compat-reconciled593-17.log.gz",
+      "uncompressed_sha256": "f068225e5a8b86e77b1a4ed650448558b912d103000ba06de2fbee05393de6df",
+      "compressed_sha256": "9baf73c5ec2df9642a30faf76cba00fb0bbf452e786222ba0fd6227e1f16d6d3"
+    },
+    {
+      "label": "post-compat-regressions",
+      "command": null,
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "post-compat-regressions.log.gz",
+      "uncompressed_sha256": "e081cbc4675c6ff65486f7bf1e2e5164648edc636f683ae041e1e2b21ebe4c2b",
+      "compressed_sha256": "e3817a140f6a9a9337ae663f1aa42256f919f1e17017d16383bd05fa7e9c7641"
+    },
+    {
+      "label": "read-only-consumer-build",
+      "command": [
+        "cargo",
+        "build",
+        "--offline",
+        "--locked",
+        "-p",
+        "cgx2-effect-index",
+        "-p",
+        "cgx2-security",
+        "--all-features"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "read-only-consumer-build.log.gz",
+      "uncompressed_sha256": "321ddc7389f93c31c91a6bff58d15b88b1e17ca0a2c5354d61b0498cbce3662e",
+      "compressed_sha256": "4b45203cafe41fc376ce81ec22e407b17d02527e5ef816a329df32074e7ea56f"
+    },
+    {
+      "label": "read-only-consumer-build2",
+      "command": [
+        "cargo",
+        "build",
+        "--offline",
+        "--locked",
+        "-p",
+        "cgx2-verify-cli",
+        "-p",
+        "cgx2-notebook-cli",
+        "--all-features"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "read-only-consumer-build2.log.gz",
+      "uncompressed_sha256": "e86d8cbdc08442c79dcd27be9bc24e8735227da60d0277b433a5f13b07277755",
+      "compressed_sha256": "e6d0766aa6ee1d782b4b5755703c2b3dba6d50f90ef9e4202b1a3776df88c68b"
+    },
+    {
+      "label": "reconciled593-17-attempt2",
+      "command": [
+        "python3",
+        "plans/release-completion/s2b-owned-result-review/reconcile.py",
+        "--binary-dir",
+        "target/release-managed-core-repair/debug",
+        "--output-dir",
+        "target/tmp-managed-core-repair/reconciled593-17-attempt2"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "reconciled593-17-attempt2.log.gz",
+      "uncompressed_sha256": "f068225e5a8b86e77b1a4ed650448558b912d103000ba06de2fbee05393de6df",
+      "compressed_sha256": "9baf73c5ec2df9642a30faf76cba00fb0bbf452e786222ba0fd6227e1f16d6d3"
+    },
+    {
+      "label": "reconciled593-17",
+      "command": [
+        "python3",
+        "plans/release-completion/s2b-owned-result-review/reconcile.py",
+        "--binary-dir",
+        "target/release-managed-core-repair/debug",
+        "--output-dir",
+        "target/tmp-managed-core-repair/reconciled593-17"
+      ],
+      "exit": 1,
+      "signal": null,
+      "stdout_stderr": "reconciled593-17.log.gz",
+      "uncompressed_sha256": "4269a02276f75bb5382936c9685f4bfe24cf11d5d4c19c5760ec1d8fc7c148a2",
+      "compressed_sha256": "d7eabf0f4ca5f582de5d1d9ef76d2ed75793c5b403f434c2e29b87c3b207c146"
+    },
+    {
+      "label": "repair-product-attempt1",
+      "command": [
+        "python3",
+        "crates/cgx2-syntax/managed-core-repair-evidence/run.py",
+        "--binary-dir",
+        "target/release-managed-core-repair/debug",
+        "--output-dir",
+        "crates/cgx2-syntax/managed-core-repair-evidence/attempt-1"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "repair-product-attempt1.log.gz",
+      "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compressed_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+    },
+    {
+      "label": "repair-product-attempt2",
+      "command": [
+        "python3",
+        "crates/cgx2-syntax/managed-core-repair-evidence/run.py",
+        "--binary-dir",
+        "target/release-managed-core-repair/debug",
+        "--output-dir",
+        "crates/cgx2-syntax/managed-core-repair-evidence/attempt-2"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "repair-product-attempt2.log.gz",
+      "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compressed_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+    },
+    {
+      "label": "repair-product-attempt3",
+      "command": [
+        "python3",
+        "crates/cgx2-syntax/managed-core-repair-evidence/run.py",
+        "--binary-dir",
+        "target/release-managed-core-repair/debug",
+        "--output-dir",
+        "crates/cgx2-syntax/managed-core-repair-evidence/attempt-3"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "repair-product-attempt3.log.gz",
+      "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compressed_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+    },
+    {
+      "label": "repair-product-attempt4",
+      "command": [
+        "python3",
+        "crates/cgx2-syntax/managed-core-repair-evidence/run.py",
+        "--binary-dir",
+        "target/release-managed-core-repair/debug",
+        "--output-dir",
+        "crates/cgx2-syntax/managed-core-repair-evidence/attempt-4"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "repair-product-attempt4.log.gz",
+      "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compressed_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+    },
+    {
+      "label": "root-manifests-current",
+      "command": [
+        "git",
+        "diff",
+        "--exit-code",
+        "--",
+        "Cargo.toml",
+        "Cargo.lock"
+      ],
+      "exit": 0,
+      "signal": null,
+      "stdout_stderr": "root-manifests-current.log.gz",
+      "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compressed_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+    }
+  ],
+  "products": [
+    {
+      "private_input": "final-owned-symbol195/owned-symbol195.json",
+      "evidence": "final-owned-symbol195--owned-symbol195.json.gz",
+      "uncompressed_sha256": "d55f65552458e217bc1c44d7f5667dd4421b491c1be68e1059f6fa1bb25a4844"
+    },
+    {
+      "private_input": "historical-owned-symbol195/owned-symbol195.json",
+      "evidence": "historical-owned-symbol195--owned-symbol195.json.gz",
+      "uncompressed_sha256": "0d11369a1b8a616523ac97a6b277d97356ee65c001bd92a9106b08c57786d39e"
+    },
+    {
+      "private_input": "post-compat-owned-symbol195/owned-symbol195.json",
+      "evidence": "post-compat-owned-symbol195--owned-symbol195.json.gz",
+      "uncompressed_sha256": "ba1c6fc5fbd1e68ea5d2cb30369de1c98ca4572843967b0491ceaad421a75d43"
+    },
+    {
+      "private_input": "final-reconciled593-17/reconciled-product.json",
+      "evidence": "final-reconciled593-17--reconciled-product.json.gz",
+      "uncompressed_sha256": "4964642dc1a9effb034ce61f033808e1ae79085c96e7a5d4087c1a7e7d2fc991"
+    },
+    {
+      "private_input": "final-reconciled593-17/restored-shadow.json",
+      "evidence": "final-reconciled593-17--restored-shadow.json.gz",
+      "uncompressed_sha256": "6b61bebbf24ef464afb48f42914f1834c9e42b5ee9ade52be85d75761db27321"
+    },
+    {
+      "private_input": "post-compat-reconciled593-17/reconciled-product.json",
+      "evidence": "post-compat-reconciled593-17--reconciled-product.json.gz",
+      "uncompressed_sha256": "cca4d0ddc0985df33767b89b7ff1eee88f406db5b6045d52cb6d526d73c978be"
+    },
+    {
+      "private_input": "post-compat-reconciled593-17/restored-shadow.json",
+      "evidence": "post-compat-reconciled593-17--restored-shadow.json.gz",
+      "uncompressed_sha256": "2cd2f903065d472d6cda7bbae1026e67858ee2d38a0248c86f01814f13c893f7"
+    },
+    {
+      "private_input": "reconciled593-17/reconciled-product.json",
+      "evidence": "reconciled593-17--reconciled-product.json.gz",
+      "uncompressed_sha256": "a55da6da46519ba225fabef7707ba10796aeac2cfeaff7e1ee91dd74b51d2d17"
+    },
+    {
+      "private_input": "reconciled593-17-attempt2/reconciled-product.json",
+      "evidence": "reconciled593-17-attempt2--reconciled-product.json.gz",
+      "uncompressed_sha256": "727d74ccdfb6df99c11daa1a533f6980607659a944f0d4fe6c6c4225792b761c"
+    },
+    {
+      "private_input": "reconciled593-17-attempt2/restored-shadow.json",
+      "evidence": "reconciled593-17-attempt2--restored-shadow.json.gz",
+      "uncompressed_sha256": "2c890f0a10e54d68c0eaf199674c51d231ac233fe25fdc2b3251b60d90986944"
+    },
+    {
+      "private_input": "final-managed-hybrid/product.json",
+      "evidence": "final-managed-hybrid--product.json.gz",
+      "uncompressed_sha256": "529968a7ab70a6354495eb10a947e2c807e0fcd4baf9033da2eb66bb105737d0"
+    },
+    {
+      "private_input": "final-managed-namespace-package/product.json",
+      "evidence": "final-managed-namespace-package--product.json.gz",
+      "uncompressed_sha256": "51c03860038ed47afa8a3318f5c22b4a58d51e72eaf9fcb14ece45a9b3bc4a63"
+    },
+    {
+      "private_input": "final-managed-package/product.json",
+      "evidence": "final-managed-package--product.json.gz",
+      "uncompressed_sha256": "f2eeb73c2cadc555f93e98d0e585c62a292336ec57003b191869d45169054110"
+    },
+    {
+      "private_input": "final-managed-shapes/product.json",
+      "evidence": "final-managed-shapes--product.json.gz",
+      "uncompressed_sha256": "3ca035d655f6c28178ada450fa6de5875f26504b7dff7c584fb74ae3ac61b007"
+    },
+    {
+      "private_input": "managed-hybrid/product.json",
+      "evidence": "managed-hybrid--product.json.gz",
+      "uncompressed_sha256": "396250afb632aac4cc218a039298ca72bc6730682f30781264edc8f2838bce36"
+    },
+    {
+      "private_input": "managed-namespace-package/product.json",
+      "evidence": "managed-namespace-package--product.json.gz",
+      "uncompressed_sha256": "c2f4a6040827a99f1aacb109b024ede8782fad7c2f90c4362601968afbae53f1"
+    },
+    {
+      "private_input": "managed-package/product.json",
+      "evidence": "managed-package--product.json.gz",
+      "uncompressed_sha256": "9e3a1aac8f6ae3ef3707603f7f678e7741d21153d3d93c754e98ba4841dbcd19"
+    },
+    {
+      "private_input": "managed-shapes/product.json",
+      "evidence": "managed-shapes--product.json.gz",
+      "uncompressed_sha256": "055fd8d2f28d1c989bca3a9a7ebfde865d728af6134eeed9d0e2f845eb73a9fa"
+    },
+    {
+      "private_input": "post-compat-managed-hybrid/product.json",
+      "evidence": "post-compat-managed-hybrid--product.json.gz",
+      "uncompressed_sha256": "7abca01ea64518e104c1736b5d1ee7b457ba04d2f3e5a1f96fdc155d98d7342f"
+    },
+    {
+      "private_input": "post-compat-managed-namespace-package/product.json",
+      "evidence": "post-compat-managed-namespace-package--product.json.gz",
+      "uncompressed_sha256": "313f2d07330a1b8ef91947d5fbc502a6ad6798e68a242ee89674330de4dc7b2a"
+    },
+    {
+      "private_input": "post-compat-managed-package/product.json",
+      "evidence": "post-compat-managed-package--product.json.gz",
+      "uncompressed_sha256": "fd469f55db1a015c8161423f3a20b41287629d8064a7b67950f867c273985dcc"
+    },
+    {
+      "private_input": "post-compat-managed-shapes/product.json",
+      "evidence": "post-compat-managed-shapes--product.json.gz",
+      "uncompressed_sha256": "416a9e73805c344dc8ec387c3261fca537fcee32de790daa773e43f88e29fd1b"
+    },
+    {
+      "private_input": "final-regressions.json",
+      "evidence": "final-regressions.json.gz",
+      "uncompressed_sha256": "0dab07fbe9f8051538cc04b3539afb20e7379c63fcb4132497d03bcffd9c7db7"
+    },
+    {
+      "private_input": "post-compat-regressions.json",
+      "evidence": "post-compat-regressions.json.gz",
+      "uncompressed_sha256": "2f624b770bad0665cb7965cd79452f5ca5ec22fb0df34e2be01a53153957e9a1"
+    },
+    {
+      "private_input": "managed-selected.json",
+      "evidence": "managed-selected.json.gz",
+      "uncompressed_sha256": "8eb882930b09c7ab471cd39a038f261c9eea84f8077ddaf1221071b57c3d3eec"
+    }
+  ],
+  "known_failure": {
+    "path": "crates/cgx2-emit-rust/tests/s2a_record_identities.rs",
+    "line": 49,
+    "reason": "historical merged-AST/concatenated-source call now correctly rejects CGT090; caller migration is outside this lane and assigned to coordinator",
+    "temporary_experiment": "run.py replaces only constructor setup with CheckedPackage::managed_program_v1; every original assertion passes"
+  },
+  "unrun": [
+    "combined three-lane integration",
+    "full workspace gate",
+    "leak-enabled external audit",
+    "release performance measurements",
+    "release acceptance"
+  ]
+}

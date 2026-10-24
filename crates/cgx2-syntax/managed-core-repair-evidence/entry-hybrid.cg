@@ -1,0 +1,11 @@
+# UTF-8 café🙂 before the entry span
+record R:
+    value: i64
+
+fn heap() -> i64:
+    let values = [42]
+    length(values)
+
+fn main() -> i64:
+    let old = owned(R(value: 7))
+    heap() + old.value
