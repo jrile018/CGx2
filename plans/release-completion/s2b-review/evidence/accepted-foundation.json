@@ -1,0 +1,1297 @@
+{
+  "schema_version": 1,
+  "stage": "S2b foundation only",
+  "release_complete": false,
+  "passed": 159,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "application.cg:interpreter",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "application.cg:native-debug",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "application.cg:native-release",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "application.cg:python",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "package:interpreter",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "package:native-debug",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "package:native-release",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "package:python",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "selected.cg:interpreter",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "selected.cg:native-debug",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "selected.cg:native-release",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "selected.cg:python",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "early.cg:interpreter",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "early.cg:native-debug",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "early.cg:native-release",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "early.cg:python",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "index-once.cg:interpreter",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "index-once.cg:native-debug",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "index-once.cg:native-release",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "index-once.cg:python",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "scrutinee-once.cg:interpreter",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "scrutinee-once.cg:native-debug",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "scrutinee-once.cg:native-release",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "scrutinee-once.cg:python",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "equality.cg:interpreter",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "true\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "equality.cg:native-debug",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "true\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "equality.cg:native-release",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "true\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "equality.cg:python",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "true\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "boundaries.cg:interpreter",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "0:2:Array[7]:[4, 5]:[4, 5]:cgx2.core.Option<List<i64>>.Some([9, 5]):cgx2.core.Option<i64>.Some(4):cgx2.core.Option<i64>.Some(5):cgx2.core.Option<i64>.None():cgx2.core.Option<i64>.None():cgx2.core.Option<i64>.None():3:cgx2.core.Option<String>.Some(🙂):cgx2.core.Option<String>.None():cgx2.core.Option<String>.Some(🙂中):cgx2.core.Option<String>.None():cgx2.core.Option<String>.None():cgx2.core.Result<i64, String>.Ok(-9223372036854775808):cgx2.core.Result<i64, String>.Err(invalid integer):cgx2.core.Result<i64, String>.Err(invalid integer):0:cgx2.core.Option<String>.None():cgx2.core.Option<String>.Some():cgx2.core.Option<i64>.Some(7):cgx2.core.Option<i64>.None():cgx2.core.Option<Array<i64>>.None()\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "boundaries.cg:native-debug",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "0:2:Array[7]:[4, 5]:[4, 5]:cgx2.core.Option<List<i64>>.Some([9, 5]):cgx2.core.Option<i64>.Some(4):cgx2.core.Option<i64>.Some(5):cgx2.core.Option<i64>.None():cgx2.core.Option<i64>.None():cgx2.core.Option<i64>.None():3:cgx2.core.Option<String>.Some(🙂):cgx2.core.Option<String>.None():cgx2.core.Option<String>.Some(🙂中):cgx2.core.Option<String>.None():cgx2.core.Option<String>.None():cgx2.core.Result<i64, String>.Ok(-9223372036854775808):cgx2.core.Result<i64, String>.Err(invalid integer):cgx2.core.Result<i64, String>.Err(invalid integer):0:cgx2.core.Option<String>.None():cgx2.core.Option<String>.Some():cgx2.core.Option<i64>.Some(7):cgx2.core.Option<i64>.None():cgx2.core.Option<Array<i64>>.None()\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "boundaries.cg:native-release",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "0:2:Array[7]:[4, 5]:[4, 5]:cgx2.core.Option<List<i64>>.Some([9, 5]):cgx2.core.Option<i64>.Some(4):cgx2.core.Option<i64>.Some(5):cgx2.core.Option<i64>.None():cgx2.core.Option<i64>.None():cgx2.core.Option<i64>.None():3:cgx2.core.Option<String>.Some(🙂):cgx2.core.Option<String>.None():cgx2.core.Option<String>.Some(🙂中):cgx2.core.Option<String>.None():cgx2.core.Option<String>.None():cgx2.core.Result<i64, String>.Ok(-9223372036854775808):cgx2.core.Result<i64, String>.Err(invalid integer):cgx2.core.Result<i64, String>.Err(invalid integer):0:cgx2.core.Option<String>.None():cgx2.core.Option<String>.Some():cgx2.core.Option<i64>.Some(7):cgx2.core.Option<i64>.None():cgx2.core.Option<Array<i64>>.None()\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "boundaries.cg:python",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "0:2:Array[7]:[4, 5]:[4, 5]:cgx2.core.Option<List<i64>>.Some([9, 5]):cgx2.core.Option<i64>.Some(4):cgx2.core.Option<i64>.Some(5):cgx2.core.Option<i64>.None():cgx2.core.Option<i64>.None():cgx2.core.Option<i64>.None():3:cgx2.core.Option<String>.Some(🙂):cgx2.core.Option<String>.None():cgx2.core.Option<String>.Some(🙂中):cgx2.core.Option<String>.None():cgx2.core.Option<String>.None():cgx2.core.Result<i64, String>.Ok(-9223372036854775808):cgx2.core.Result<i64, String>.Err(invalid integer):cgx2.core.Result<i64, String>.Err(invalid integer):0:cgx2.core.Option<String>.None():cgx2.core.Option<String>.Some():cgx2.core.Option<i64>.Some(7):cgx2.core.Option<i64>.None():cgx2.core.Option<Array<i64>>.None()\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "empty-string.cg:interpreter",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "empty-string.cg:native-debug",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "empty-string.cg:native-release",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "empty-string.cg:python",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "unit.cg:interpreter",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "unit.cg:native-debug",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "unit.cg:native-release",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "unit.cg:python",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "constraints.cg:interpreter",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "Point<i64>(value: 42):different\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "constraints.cg:native-debug",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "Point<i64>(value: 42):different\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "constraints.cg:native-release",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "Point<i64>(value: 42):different\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "constraints.cg:python",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "Point<i64>(value: 42):different\n",
+      "error_class": null,
+      "stderr": ""
+    },
+    {
+      "name": "runtime-depth.cg:interpreter",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGR011",
+      "stderr": ""
+    },
+    {
+      "name": "runtime-depth.cg:native-debug",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGR011",
+      "stderr": ""
+    },
+    {
+      "name": "runtime-depth.cg:native-release",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGR011",
+      "stderr": ""
+    },
+    {
+      "name": "runtime-depth.cg:python",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGR011",
+      "stderr": ""
+    },
+    {
+      "name": "runtime-overflow.cg:interpreter",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGR005",
+      "stderr": ""
+    },
+    {
+      "name": "runtime-overflow.cg:native-debug",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGR005",
+      "stderr": ""
+    },
+    {
+      "name": "runtime-overflow.cg:native-release",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGR005",
+      "stderr": ""
+    },
+    {
+      "name": "runtime-overflow.cg:python",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGR005",
+      "stderr": ""
+    },
+    {
+      "name": "runtime-division.cg:interpreter",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGR006",
+      "stderr": ""
+    },
+    {
+      "name": "runtime-division.cg:native-debug",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGR006",
+      "stderr": ""
+    },
+    {
+      "name": "runtime-division.cg:native-release",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGR006",
+      "stderr": ""
+    },
+    {
+      "name": "runtime-division.cg:python",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGR006",
+      "stderr": ""
+    },
+    {
+      "name": "runtime-contract.cg:interpreter",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGR015",
+      "stderr": ""
+    },
+    {
+      "name": "runtime-contract.cg:native-debug",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGR015",
+      "stderr": ""
+    },
+    {
+      "name": "runtime-contract.cg:native-release",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGR015",
+      "stderr": ""
+    },
+    {
+      "name": "runtime-contract.cg:python",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGR015",
+      "stderr": ""
+    },
+    {
+      "name": "runtime-work.cg:interpreter",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGR010",
+      "stderr": ""
+    },
+    {
+      "name": "runtime-work.cg:native-debug",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGR010",
+      "stderr": ""
+    },
+    {
+      "name": "runtime-work.cg:native-release",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGR010",
+      "stderr": ""
+    },
+    {
+      "name": "runtime-work.cg:python",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGR010",
+      "stderr": ""
+    },
+    {
+      "name": "call-arity:check",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT031",
+      "stderr": ""
+    },
+    {
+      "name": "call-arity:rust:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT031",
+      "stderr": ""
+    },
+    {
+      "name": "call-arity:python:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT031",
+      "stderr": ""
+    },
+    {
+      "name": "call-arity:native:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT031",
+      "stderr": ""
+    },
+    {
+      "name": "duplicate-binder:check",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGS113",
+      "stderr": ""
+    },
+    {
+      "name": "duplicate-binder:rust:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGS113",
+      "stderr": ""
+    },
+    {
+      "name": "duplicate-binder:python:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGS113",
+      "stderr": ""
+    },
+    {
+      "name": "duplicate-binder:native:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGS113",
+      "stderr": ""
+    },
+    {
+      "name": "constraint:check",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT039",
+      "stderr": ""
+    },
+    {
+      "name": "constraint:rust:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT039",
+      "stderr": ""
+    },
+    {
+      "name": "constraint:python:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT039",
+      "stderr": ""
+    },
+    {
+      "name": "constraint:native:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT039",
+      "stderr": ""
+    },
+    {
+      "name": "unsatisfied:check",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT039",
+      "stderr": ""
+    },
+    {
+      "name": "unsatisfied:rust:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT039",
+      "stderr": ""
+    },
+    {
+      "name": "unsatisfied:python:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT039",
+      "stderr": ""
+    },
+    {
+      "name": "unsatisfied:native:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT039",
+      "stderr": ""
+    },
+    {
+      "name": "illegal-operation:check",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT003",
+      "stderr": ""
+    },
+    {
+      "name": "illegal-operation:rust:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT003",
+      "stderr": ""
+    },
+    {
+      "name": "illegal-operation:python:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT003",
+      "stderr": ""
+    },
+    {
+      "name": "illegal-operation:native:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT003",
+      "stderr": ""
+    },
+    {
+      "name": "missing-show:check",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT039",
+      "stderr": ""
+    },
+    {
+      "name": "missing-show:rust:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT039",
+      "stderr": ""
+    },
+    {
+      "name": "missing-show:python:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT039",
+      "stderr": ""
+    },
+    {
+      "name": "missing-show:native:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT039",
+      "stderr": ""
+    },
+    {
+      "name": "arity:check",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT031",
+      "stderr": ""
+    },
+    {
+      "name": "arity:rust:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT031",
+      "stderr": ""
+    },
+    {
+      "name": "arity:python:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT031",
+      "stderr": ""
+    },
+    {
+      "name": "arity:native:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT031",
+      "stderr": ""
+    },
+    {
+      "name": "unknown-binder:check",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT002",
+      "stderr": ""
+    },
+    {
+      "name": "unknown-binder:rust:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT002",
+      "stderr": ""
+    },
+    {
+      "name": "unknown-binder:python:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT002",
+      "stderr": ""
+    },
+    {
+      "name": "unknown-binder:native:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT002",
+      "stderr": ""
+    },
+    {
+      "name": "ambiguous:check",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT040",
+      "stderr": ""
+    },
+    {
+      "name": "ambiguous:rust:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT040",
+      "stderr": ""
+    },
+    {
+      "name": "ambiguous:python:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT040",
+      "stderr": ""
+    },
+    {
+      "name": "ambiguous:native:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT040",
+      "stderr": ""
+    },
+    {
+      "name": "conflict:check",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT003",
+      "stderr": ""
+    },
+    {
+      "name": "conflict:rust:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT003",
+      "stderr": ""
+    },
+    {
+      "name": "conflict:python:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT003",
+      "stderr": ""
+    },
+    {
+      "name": "conflict:native:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT003",
+      "stderr": ""
+    },
+    {
+      "name": "nominal:check",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT003",
+      "stderr": ""
+    },
+    {
+      "name": "nominal:rust:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT003",
+      "stderr": ""
+    },
+    {
+      "name": "nominal:python:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT003",
+      "stderr": ""
+    },
+    {
+      "name": "nominal:native:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT003",
+      "stderr": ""
+    },
+    {
+      "name": "private:check",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT022",
+      "stderr": ""
+    },
+    {
+      "name": "private:rust:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT022",
+      "stderr": ""
+    },
+    {
+      "name": "private:python:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT022",
+      "stderr": ""
+    },
+    {
+      "name": "private:native:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT022",
+      "stderr": ""
+    },
+    {
+      "name": "recursive-shape:check",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT030",
+      "stderr": ""
+    },
+    {
+      "name": "recursive-shape:rust:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT030",
+      "stderr": ""
+    },
+    {
+      "name": "recursive-shape:python:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT030",
+      "stderr": ""
+    },
+    {
+      "name": "recursive-shape:native:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT030",
+      "stderr": ""
+    },
+    {
+      "name": "polymorphic-recursion:check",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT030",
+      "stderr": ""
+    },
+    {
+      "name": "polymorphic-recursion:rust:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT030",
+      "stderr": ""
+    },
+    {
+      "name": "polymorphic-recursion:python:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT030",
+      "stderr": ""
+    },
+    {
+      "name": "polymorphic-recursion:native:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT030",
+      "stderr": ""
+    },
+    {
+      "name": "mixed:check",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT003",
+      "stderr": ""
+    },
+    {
+      "name": "mixed:rust:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT003",
+      "stderr": ""
+    },
+    {
+      "name": "mixed:python:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT003",
+      "stderr": ""
+    },
+    {
+      "name": "mixed:native:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT003",
+      "stderr": ""
+    },
+    {
+      "name": "empty:check",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT040",
+      "stderr": ""
+    },
+    {
+      "name": "empty:rust:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT040",
+      "stderr": ""
+    },
+    {
+      "name": "empty:python:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT040",
+      "stderr": ""
+    },
+    {
+      "name": "empty:native:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT040",
+      "stderr": ""
+    },
+    {
+      "name": "unavailable:check",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT002",
+      "stderr": ""
+    },
+    {
+      "name": "unavailable:rust:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT002",
+      "stderr": ""
+    },
+    {
+      "name": "unavailable:python:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT002",
+      "stderr": ""
+    },
+    {
+      "name": "unavailable:native:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT002",
+      "stderr": ""
+    },
+    {
+      "name": "owned-element:check",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT002",
+      "stderr": ""
+    },
+    {
+      "name": "owned-element:rust:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT002",
+      "stderr": ""
+    },
+    {
+      "name": "owned-element:python:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT002",
+      "stderr": ""
+    },
+    {
+      "name": "owned-element:native:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT002",
+      "stderr": ""
+    },
+    {
+      "name": "array-growth:check",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT039",
+      "stderr": ""
+    },
+    {
+      "name": "array-growth:rust:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT039",
+      "stderr": ""
+    },
+    {
+      "name": "array-growth:python:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT039",
+      "stderr": ""
+    },
+    {
+      "name": "array-growth:native:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT039",
+      "stderr": ""
+    },
+    {
+      "name": "collection-size:check",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT030",
+      "stderr": ""
+    },
+    {
+      "name": "collection-size:rust:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT030",
+      "stderr": ""
+    },
+    {
+      "name": "collection-size:python:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT030",
+      "stderr": ""
+    },
+    {
+      "name": "collection-size:native:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT030",
+      "stderr": ""
+    },
+    {
+      "name": "package-constraint:check",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT039",
+      "stderr": ""
+    },
+    {
+      "name": "package-constraint:rust:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT039",
+      "stderr": ""
+    },
+    {
+      "name": "package-constraint:python:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT039",
+      "stderr": ""
+    },
+    {
+      "name": "package-constraint:native:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT039",
+      "stderr": ""
+    },
+    {
+      "name": "package-private:check",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT022",
+      "stderr": ""
+    },
+    {
+      "name": "package-private:rust:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT022",
+      "stderr": ""
+    },
+    {
+      "name": "package-private:python:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT022",
+      "stderr": ""
+    },
+    {
+      "name": "package-private:native:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT022",
+      "stderr": ""
+    },
+    {
+      "name": "package-import:check",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT008",
+      "stderr": ""
+    },
+    {
+      "name": "package-import:rust:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT008",
+      "stderr": ""
+    },
+    {
+      "name": "package-import:python:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT008",
+      "stderr": ""
+    },
+    {
+      "name": "package-import:native:preserves-artifact",
+      "passed": true,
+      "exit_code": 1,
+      "stdout": "",
+      "error_class": "CGT008",
+      "stderr": ""
+    },
+    {
+      "name": "checked-api-deterministic-public-instantiations",
+      "passed": true
+    },
+    {
+      "name": "syntax-api-generic-status",
+      "passed": true
+    },
+    {
+      "name": "standalone-emitted-rust",
+      "passed": true,
+      "exit_code": 0,
+      "stdout": "42\n",
+      "error_class": null,
+      "stderr": ""
+    }
+  ],
+  "fixture_sha256": {
+    "application.cg": "a44b61871c0e508fc5da410c74424513691793af7e00d89fe9ff473f8e7ac3b5",
+    "boundaries.cg": "c884450df722007c88e0a4ee0f7d37e22610d3463a2baf53edde735c1998156b",
+    "constraints.cg": "d936099078450e143eb7651c4c2c0293d9623a8190e8a229c3ef0747213c0acb",
+    "early.cg": "d54d4550b6939ef3bf25da35ec13f20a7783c5540d6b199f5224b380fefed6d0",
+    "empty-string.cg": "cebf8f947a660b1c6867fbbdc5522bf51445dfcdf3a4093e30fdc1886ca11724",
+    "equality.cg": "3dd69ac7e6baf0b9d667bab1241155901387e22bbd68ccfa433dfac5e1a50805",
+    "index-once.cg": "a9b3a826c8796e1e9b08236a66fd7d27da59b71c83144b705b94904f788fb3cb",
+    "package/cgx2.toml": "9d9ce894f50fe49418dcb878c3ec7429bc2ade7247d019759a6430a95db73477",
+    "package/src/left.cg": "51afe0575fb5e448a331ac9337681e24c26f600b22c0fca25fa71dfe977d6e31",
+    "package/src/main.cg": "832b0411dd806ced26d4cf59eedd5b16eb7eacd320489ca3b31261af35461b3b",
+    "package/src/right.cg": "dd39673e71d9b119fbe86f2ce60aec3070c25e97639854baf73495223d43c755",
+    "runtime-contract.cg": "78f304c0274f42769cdb9e2252c1a3be138b2dca775767023e6a565d9347fd96",
+    "runtime-depth.cg": "7ba8df6d3e5ea0d504b598e7c74e412f6ea172703e614daecc92417f96ee80dc",
+    "runtime-division.cg": "d184187364e6e6600fc700b7a956162a7dd28c6ca259d84e0f0047723fd00087",
+    "runtime-overflow.cg": "60a2c59b5b34e50067cdf237b0792e0bbdba4a6a691a17954fb17eb9129b2686",
+    "runtime-work.cg": "f6ccab8a0237ced9d1495353eb75d57b29aeeede1dc127a788c3c7a35e0485ec",
+    "scrutinee-once.cg": "56cd3e214748109f724a67006fe887091b5be5d159ab0285aecc399f7d0d7d84",
+    "selected.cg": "d2a8a68fb5a5c3a4227d35d9123b854d4d76bc1dcb46f80395edcecea5563fec",
+    "unit.cg": "2b5c30dfc5e294609862c07fb8a4c8226e72dffc1afd6aa39481776b6e8e1ea3"
+  },
+  "implementation_tree_sha256": "157f18b0c37150ff13b41648ff0afecefa930919bc193b671123a5368564ade3",
+  "runner_sha256": "30cc07f4aa2b219811428788fcccf34546e9bc1fe2d1aef3c760a305e10dd25d",
+  "external_acceptance": "unrun; remaining S2b source integrations open"
+}

@@ -41,3 +41,19 @@ Coordinator rechecked imported binder returns 42, binder-shadowed constructor re
 3. Valid public generic calls with caller-private type arguments fail internal specialization rechecking with CGT022; genuine source public-signature privacy must still reject.
 
 The last two share the source-specialization owner; the first belongs to native-constructors. Both bounded plans preserve shared layouts and use the integrated base. Actual dispatch outcomes are in ../dispatch.md and ../thread-state.json. No consumer feature fan-out or additional busywork; remaining S2b/R02/R10 and all external gates stay open. Full final acceptance including docs/bench/readiness still follows successful defect closure.
+
+## Foundation accepted after follow-up repairs — 2026-10-24 01:50 UTC
+
+Source-specialization 74d1116 → fb7649e and native-constructors ce7880d → c233dd6 are independently reviewed and integrated. Changes respect assigned paths and preserve original-source privacy/effect/trust validation; concrete implementation declarations are internal. No root manifest/lock/dependency reconciliation needed.
+
+Combined evidence on c233dd63742ccd2b36cc5870881961b54dd71c84:
+- Workspace **1141 passed, 0 failed, 6 ignored** across 251 suites; all-target/all-feature Clippy -D warnings, fmt, default workspace binaries pass.
+- Product suites: foundation 159; semantic resolution 278; source specialization 207; public API visibility 118; package binders 88; output bounds 31; emitters 104. **All pass.** Actual interpreted/native debug/native release/standalone Rust/Python/package executions include original and expanded regressions; rejected artifacts remain preserved.
+- Benchmark harness 166/166 and docs harness 20/20 pass. Executable docs 39 pass, 0 fail, 6 blocked, 7 future; acceptance_complete=false.
+- Public syntax readiness source-tree pin refreshed from 15078906 to 9200f0f after stale-pin failure; compiler/Cargo executable pins and Cargo.lock hash unchanged. All 6 reference checks pass; model traces 0, human review unrun, scored isolation unsupported.
+
+Copied immutable reports are evidence/accepted-*.json. accepted-integration.json records actual integrated source commit, counts, logs/hashes, preliminary invocation/configuration issues and their successful reruns. Earlier failed historical reports remain untouched.
+
+**Foundation accepted as a bounded source capability checkpoint.** R02 generic/data implementation is reviewed; broader R10 portability/readability, ordinary memory, foreign/package/execution, commands, S3 integrations and external release evidence remain mandatory and open. No whole-S2b/release completion.
+
+Next dependency-ready deliverable is [ordinary function memory](../s2b-memory/plan.md): one core/runtime owner implements actual owned loans and default managed graphs, regions, recoverable errors and session-wide no_gc in ordinary functions/packages. No other implementation lane is ready against reviewed memory interfaces. This is executable source/runtime work, not a proposal-only handoff.

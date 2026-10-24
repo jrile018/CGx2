@@ -108,3 +108,7 @@ Base c2a039db3ea0b4e457a9f2e0c7626db77094d313 is confirmed at both worktree HEAD
 | --- | --- | --- | --- |
 | native-constructors | 01a16b8d-e2be-7142-b1f5-3d5c6810e806 | /home/john-riley/.codex/worktrees/5140/lang | running |
 | source-specialization | 01a16b8d-d23c-7a20-a84b-50ade10292b6 | /home/john-riley/.codex/worktrees/c9ae/lang | running |
+
+## Foundation accepted; ordinary function memory ready
+
+Both follow-up repairs are reviewed-bounded-delivery. Combined 1141 Rust tests, all seven product suites,166 benchmark tests,20 docs tests and39 runnable docs pass; blocked/future/external rows remain open. See s2b-review/README.md and evidence/accepted-integration.json. The sole dependency-ready implementation is s2b-memory/plan.md; all source/runtime ownership and acceptance obligations are concrete. Dispatch outcome follows.

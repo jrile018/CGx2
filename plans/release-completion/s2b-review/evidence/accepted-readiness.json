@@ -1,0 +1,132 @@
+{
+  "candidate_isolation_probe": {
+    "reason": "cgroup_controllers_not_delegated:cpu,memory,pids",
+    "status": "unsupported_isolation"
+  },
+  "compiler_build": {
+    "compiler_sha256": "69cd919dacdd7ff69e945c3ebae0060515293b88c17ba5b97004a6f211ddf470",
+    "status": "supplied"
+  },
+  "improvement_claim": "none",
+  "independent_human_review": "unrun",
+  "paired_model_traces": {
+    "all_task_charges": {
+      "brace": {
+        "runs": 0,
+        "seconds": 0,
+        "tokens": 0
+      },
+      "indent": {
+        "runs": 0,
+        "seconds": 0,
+        "tokens": 0
+      }
+    },
+    "brace_over_indent_output_token_ratio": null,
+    "brace_over_indent_total_token_ratio": null,
+    "claim": "none",
+    "genuine_paired_traces": 0,
+    "paired_successes": 0,
+    "validated_paired_traces": 0,
+    "validated_traces": 0
+  },
+  "schema_version": 1,
+  "scope": "public_syntax_pilot_only",
+  "task_equivalence": {
+    "case_count": 6,
+    "cases": [
+      {
+        "brace_source_bytes": 33,
+        "compiler_check": "pass",
+        "indent_sha256": "038c46ceca255ebb9a993c146d4c75dfa194d649e0f1ceee5af69aca08515a60",
+        "indent_source_bytes": 29,
+        "normalized_sha256": "038c46ceca255ebb9a993c146d4c75dfa194d649e0f1ceee5af69aca08515a60",
+        "private_reference_parity": true,
+        "same_semantic_units": true,
+        "starter_parity": true,
+        "task_id": "precedence"
+      },
+      {
+        "brace_source_bytes": 99,
+        "compiler_check": "pass",
+        "indent_sha256": "2881edf7c5091667d53fe113818b881b529cd76eaa852faf8c480ac22a4f6834",
+        "indent_source_bytes": 91,
+        "normalized_sha256": "2881edf7c5091667d53fe113818b881b529cd76eaa852faf8c480ac22a4f6834",
+        "private_reference_parity": true,
+        "same_semantic_units": true,
+        "starter_parity": true,
+        "task_id": "calls"
+      },
+      {
+        "brace_source_bytes": 8,
+        "compiler_check": "pass",
+        "indent_sha256": "623ae1ce610047cbddac951bf9999e679babc6521d41de3dea0f04af04bf9c89",
+        "indent_source_bytes": 7,
+        "normalized_sha256": "623ae1ce610047cbddac951bf9999e679babc6521d41de3dea0f04af04bf9c89",
+        "private_reference_parity": true,
+        "same_semantic_units": true,
+        "starter_parity": true,
+        "task_id": "mutation"
+      },
+      {
+        "brace_source_bytes": 75,
+        "compiler_check": "pass",
+        "indent_sha256": "3d663fa70e954a17a7fcbe886af80b77d5dba86811a1d7b14d5f73724457337a",
+        "indent_source_bytes": 67,
+        "normalized_sha256": "3d663fa70e954a17a7fcbe886af80b77d5dba86811a1d7b14d5f73724457337a",
+        "private_reference_parity": true,
+        "same_semantic_units": true,
+        "starter_parity": true,
+        "task_id": "argument_count"
+      },
+      {
+        "brace_source_bytes": 8,
+        "compiler_check": "pass",
+        "indent_sha256": "623ae1ce610047cbddac951bf9999e679babc6521d41de3dea0f04af04bf9c89",
+        "indent_source_bytes": 7,
+        "normalized_sha256": "623ae1ce610047cbddac951bf9999e679babc6521d41de3dea0f04af04bf9c89",
+        "private_reference_parity": true,
+        "same_semantic_units": true,
+        "starter_parity": true,
+        "task_id": "argument_text"
+      },
+      {
+        "brace_source_bytes": 8,
+        "compiler_check": "pass",
+        "indent_sha256": "623ae1ce610047cbddac951bf9999e679babc6521d41de3dea0f04af04bf9c89",
+        "indent_source_bytes": 7,
+        "normalized_sha256": "623ae1ce610047cbddac951bf9999e679babc6521d41de3dea0f04af04bf9c89",
+        "private_reference_parity": true,
+        "same_semantic_units": true,
+        "starter_parity": true,
+        "task_id": "overflow"
+      }
+    ],
+    "findings": [],
+    "independent_human_review": "unrun",
+    "shared_context_budget_tokens": 8192,
+    "shared_time_budget_seconds": 120,
+    "shared_token_budget": 4096,
+    "status": "pass"
+  },
+  "toolchain": {
+    "build_recipe": "cargo build --offline --locked -p cgx2c --target-dir /home/john-riley/projects/lang/target",
+    "frozen_hashes": {
+      "cargo_lock_sha256": "e4021f7d1ff419ba911a6fc0c0ec4aaae14816389eba91454c12fcb4273762c7",
+      "cargo_sha256": "da77c8b33849312255ccde3179198ada4c8deb370488d050286146b1d1b27e14",
+      "cargo_version": "cargo 1.98.1 (797e8a9bc 2026-08-05)",
+      "compiler_source_git_tree": "9200f0f95c06db99170adf9490eba9f475cb62d5",
+      "rustc_sha256": "859254978c0a0402c32f949f6de0d99aee73be8d15f45aac00ae1448aac51e74",
+      "rustc_version": "rustc 1.98.1 (48a229cea 2026-09-01)"
+    },
+    "observed": {
+      "cargo_lock_sha256": "e4021f7d1ff419ba911a6fc0c0ec4aaae14816389eba91454c12fcb4273762c7",
+      "cargo_sha256": "da77c8b33849312255ccde3179198ada4c8deb370488d050286146b1d1b27e14",
+      "cargo_version": "cargo 1.98.1 (797e8a9bc 2026-08-05)",
+      "compiler_source_git_tree": "9200f0f95c06db99170adf9490eba9f475cb62d5",
+      "rustc_sha256": "859254978c0a0402c32f949f6de0d99aee73be8d15f45aac00ae1448aac51e74",
+      "rustc_version": "rustc 1.98.1 (48a229cea 2026-09-01)"
+    },
+    "status": "pass"
+  }
+}

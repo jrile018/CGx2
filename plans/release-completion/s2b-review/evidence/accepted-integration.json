@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "scope": "S2b executable generic/data foundation only",
+  "status": "accepted-bounded-delivery",
+  "code_commit": "c233dd63742ccd2b36cc5870881961b54dd71c84",
+  "workspace": {
+    "passed": 1141,
+    "failed": 0,
+    "ignored": 6,
+    "suites": 251
+  },
+  "clippy": "passed",
+  "format": "passed",
+  "default_workspace_build": "passed",
+  "benchmark_unit_tests": {
+    "passed": 166,
+    "failed": 0
+  },
+  "docs_unit_tests": {
+    "passed": 20,
+    "failed": 0
+  },
+  "docs_examples": {
+    "passed": 39,
+    "failed": 0,
+    "blocked": 6,
+    "future": 7,
+    "acceptance_complete": false
+  },
+  "product_counts": {
+    "foundation": 159,
+    "semantic": 278,
+    "specialization": 207,
+    "visibility": 118,
+    "binders": 88,
+    "output": 31,
+    "emitters": 104
+  },
+  "product_failed": 0,
+  "release_complete": false,
+  "remaining": "ordinary memory; typed foreign/package/execution; commands/targets; S3 adapters; external evidence",
+  "logs": {
+    "s2bf-final-bench-rechecked.log": {
+      "path": "/home/john-riley/projects/lang/target/s2bf-final-bench-rechecked.log",
+      "sha256": "a41d4f6c0e0a47a38ef7851ffd1d3e9a9c75c37dfd1798038c3f4413a6772e2b"
+    },
+    "s2bf-final-bench.log": {
+      "path": "/home/john-riley/projects/lang/target/s2bf-final-bench.log",
+      "sha256": "ffda37853dc390f231a2ebe5b0b45617d31824858882e9ef7d92a93779dd53c8"
+    },
+    "s2bf-final-build.log": {
+      "path": "/home/john-riley/projects/lang/target/s2bf-final-build.log",
+      "sha256": "0a6fc6db965be48757985df9a962ec0b6975b8fbbb3f373f018b0acd0d18f9fd"
+    },
+    "s2bf-final-clippy.log": {
+      "path": "/home/john-riley/projects/lang/target/s2bf-final-clippy.log",
+      "sha256": "5a47f304a14f8a53301f9903e3b05c2a6b2c20eff5f1f8c70e9db66b64b116eb"
+    },
+    "s2bf-final-docs-rechecked.log": {
+      "path": "/home/john-riley/projects/lang/target/s2bf-final-docs-rechecked.log",
+      "sha256": "9b10ac0ae243aa74af4056e53d4729f427e4d62b219bf422032494e197d82594"
+    },
+    "s2bf-final-docs-unit.log": {
+      "path": "/home/john-riley/projects/lang/target/s2bf-final-docs-unit.log",
+      "sha256": "54997a8e10c7079891db7ce7d91936d853685a874ad4b144e5a6fcfc3e3f8645"
+    },
+    "s2bf-final-docs.log": {
+      "path": "/home/john-riley/projects/lang/target/s2bf-final-docs.log",
+      "sha256": "676f271c48c428e8126e6895ffc2c9c6973bfb168c60b6cb9e4ce85ebf8636d5"
+    },
+    "s2bf-final-fmt.log": {
+      "path": "/home/john-riley/projects/lang/target/s2bf-final-fmt.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "s2bf-final-readiness.log": {
+      "path": "/home/john-riley/projects/lang/target/s2bf-final-readiness.log",
+      "sha256": "61397dc4638e27653f8e8c8d385a37831959a7252345a39745e53ccd3c0fe041"
+    },
+    "s2bf-final-rust.log": {
+      "path": "/home/john-riley/projects/lang/target/s2bf-final-rust.log",
+      "sha256": "78312e2916f3dd9994a47082b7d89b52581b4f36ab5510c5e2ea006d21e9e9d4"
+    },
+    "s2bf-accepted-binders.log": {
+      "path": "/home/john-riley/projects/lang/target/s2bf-accepted-binders.log",
+      "sha256": "956c7973abd74fd91382e4da556c78eebc8f698f2fa0c61c1111e8a55c2dd1c2"
+    },
+    "s2bf-accepted-emitters-rechecked.log": {
+      "path": "/home/john-riley/projects/lang/target/s2bf-accepted-emitters-rechecked.log",
+      "sha256": "2620de15c25b6017d1e70477b0c9b9468613eaba3b3a94d83c34c36017f42eb2"
+    },
+    "s2bf-accepted-emitters.log": {
+      "path": "/home/john-riley/projects/lang/target/s2bf-accepted-emitters.log",
+      "sha256": "a05f0bc4fe8e36d92acaa25b7a4c0c67717a57ed931e5c122876b46963c4d798"
+    },
+    "s2bf-accepted-foundation.log": {
+      "path": "/home/john-riley/projects/lang/target/s2bf-accepted-foundation.log",
+      "sha256": "91adaa26ac56b550d1e84483cc1229283a3b9f7a60e70bc9e0ab8fb7d7f26e63"
+    },
+    "s2bf-accepted-output.log": {
+      "path": "/home/john-riley/projects/lang/target/s2bf-accepted-output.log",
+      "sha256": "eb1a6089eb7bdd7a005d7de27510fd7a7660f242399a66f115de0a4d38737b8f"
+    },
+    "s2bf-accepted-semantic.log": {
+      "path": "/home/john-riley/projects/lang/target/s2bf-accepted-semantic.log",
+      "sha256": "e4db6ae5c0ec9375767e16c4779338b9a11ef6a05ed0e58e10b42d064c87b578"
+    },
+    "s2bf-accepted-specialization.log": {
+      "path": "/home/john-riley/projects/lang/target/s2bf-accepted-specialization.log",
+      "sha256": "c727497e41be718a60be0db3ecb9d8954f06543d2a7934cce2cdf459da11feb7"
+    },
+    "s2bf-accepted-visibility.log": {
+      "path": "/home/john-riley/projects/lang/target/s2bf-accepted-visibility.log",
+      "sha256": "cbd543737321b525b99de8402d7ba2b6f67af44038d9065d1de950804cfe8e34"
+    }
+  },
+  "notes": [
+    "Worker report base fields remain historical; this summary supplies actual integrated code commit and new executable hashes in copied reports.",
+    "Benchmark initial run failed solely stale cgx2c source tree pin15078906ea1ae6e6e8fe6c111e780e2f76962216; refreshed to9200f0f95c06db99170adf9490eba9f475cb62d5. Rust/Cargo executable pins and Cargo.lock unchanged. Rechecked166 pass; all6 readiness reference cases pass. Human/model trials unrun and cgroup unsupported.",
+    "Docs first invocation lacked pre-existing work-root directory; created private directory and reran with identical reviewed tool pins;39/0/6/7.",
+    "Emitter product first invocation supplied binary file to binary-dir argument; corrected directory and reran104 pass. Initial invocation logs retained.",
+    "Output runner uses4096MiB compiler cap and512MiB execution cap; no release timing claim.",
+    "Original seven defects and three residual defects covered by combined regression/unit/product suites; no unresolved foundation defect found."
+  ]
+}

@@ -1,6 +1,6 @@
 # CGx2 finite completion plan
 
-Status: all twelve Stage 1 deliveries and three repairs reviewed as bounded deliveries; S2a and all three repairs reviewed as bounded deliveries; five S2b foundation repairs reviewed and integrated; three residual defects assigned to two follow-up repair lanes; remaining S2b integrations and S3 still gated. See [current review](s1-review/README.md). Updated 2026-10-24. Coordinator branch: `riley/release-completion-plan`. This replaces open-ended two-lane continuation after Wave 28. It does not change the release contract or claim release readiness.
+Status: all twelve S1 deliveries, S2a and S2b foundation including repairs reviewed as bounded deliveries. Ordinary function memory is the next dependency-ready S2b checkpoint; foreign/execution/command integration and S3 remain gated. See [foundation acceptance](s2b-review/README.md). Updated 2026-10-24. Coordinator branch: riley/release-completion-plan. Full release capabilities and evidence remain required.
 
 ## Answer to “how many more waves?”
 
@@ -63,7 +63,7 @@ Start only after S1 changes to exhaustive AST consumers have been integrated and
 
 ### S2b finite implementation checkpoints
 
-The reviewed S2a work exposed overlapping missing representations for generics/data, ownership and typed foreign values. Keep one core writer until each compatibility checkpoint is reviewed. The next bounded plan is [S2b foundation](s2b-foundation/plan.md), covering executable generic functions/records/variants, real named-constraint checking, List/Array/String/indexing and portable value-target semantics. Its proposed remaining envelopes are not source implementation evidence.
+The reviewed S2a work exposed overlapping missing representations for generics/data, ownership and typed foreign values. Keep one core writer until each compatibility checkpoint is reviewed. The accepted bounded delivery is [S2b foundation](s2b-foundation/plan.md), covering executable generic functions/records/variants, real named-constraint checking, List/Array/String/indexing and portable value-target semantics. Its proposed remaining envelopes are not source implementation evidence. The next executable plan is [ordinary function memory](s2b-memory/plan.md), with one core/runtime owner and no proposal-only stop.
 
 The following requirements remain mandatory inside S2b after foundation; none is reassigned to a vague later wave:
 

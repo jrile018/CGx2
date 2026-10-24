@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24T01:30:30.426Z",
+  "checked_at": "2026-10-24T01:50:30.443Z",
   "original_chats": [
     {
       "lane": "core",
@@ -174,10 +174,17 @@
       "hostId": "local",
       "worktree": "/home/john-riley/.codex/worktrees/2766/lang",
       "base": "38cce386519832ddaf50460c1e03f38aa6a3c106",
-      "status": "reviewed-repair-required",
+      "status": "reviewed-bounded-delivery",
       "afterCursor": "dbe59f76-66d3-4471-998e-70e8a98a72cb:8",
       "commit": "414c71f0cae8c66c822f0b6fb2be83219c1f4c95",
-      "integrated_commit": "b0900dd20746a6a80ca83bfb02f11f1de2a15230"
+      "integrated_commit": "b0900dd20746a6a80ca83bfb02f11f1de2a15230",
+      "accepted_code_commit": "c233dd63742ccd2b36cc5870881961b54dd71c84",
+      "acceptance": "foundation only; R10 study and remaining S2b gates open"
+    },
+    {
+      "lane": "s2b-memory",
+      "title": "CGx2 S2b ordinary function memory",
+      "status": "planned"
     }
   ],
   "s2a_repairs": [
@@ -296,9 +303,11 @@
       "hostId": "local",
       "worktree": "/home/john-riley/.codex/worktrees/5140/lang",
       "base": "c2a039db3ea0b4e457a9f2e0c7626db77094d313",
-      "status": "running",
+      "status": "reviewed-bounded-delivery",
       "clientThreadId": "client-new-thread:3d5ae9d9-8533-4271-8d42-4bd008a98c93",
-      "afterCursor": "09e2b643-4673-4e6f-ad95-ba1276890128:1"
+      "afterCursor": "09e2b643-4673-4e6f-ad95-ba1276890128:2",
+      "commit": "ce7880dbc8b7f7c368e4a32433d5c24e940e3540",
+      "integrated_commit": "c233dd63742ccd2b36cc5870881961b54dd71c84"
     },
     {
       "lane": "source-specialization",
@@ -307,9 +316,11 @@
       "hostId": "local",
       "worktree": "/home/john-riley/.codex/worktrees/c9ae/lang",
       "base": "c2a039db3ea0b4e457a9f2e0c7626db77094d313",
-      "status": "running",
+      "status": "reviewed-bounded-delivery",
       "clientThreadId": "client-new-thread:752abd13-608e-4512-a3c8-c3fb93563421",
-      "afterCursor": "c34b85e0-24f7-4dbc-a5b9-c6ed28caf29b:1"
+      "afterCursor": "c34b85e0-24f7-4dbc-a5b9-c6ed28caf29b:2",
+      "commit": "74d1116b36a80a44d3d97e3d5a331a1c3026fe94",
+      "integrated_commit": "fb7649e55484fc553eccdbb716061a3435a35423"
     }
   ]
 }

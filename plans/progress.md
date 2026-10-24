@@ -59,3 +59,7 @@ Foundation delivery 414c71f is staged repair-required. Verified worker evidence 
 ## S2b first repairs integrated
 
 Five bounded fixes are reviewed and integrated. Combined 1126 Rust tests (six ignored), Clippy, formatting, binaries and 159 foundation product checks pass. Expanded tests still reproduce native constructor dispatch and two source-specialization defects; two exclusive repair plans address them. R02/R10 foundation acceptance remains failed, with the full remaining S2b, S3 and external evidence ledger preserved. See [review](release-completion/s2b-review/README.md).
+
+## S2b foundation accepted
+
+The final source-specialization and native-constructor fixes are reviewed and integrated. Combined 1141 Rust tests (six ignored), seven product suites,166 benchmark tests,20 docs harness tests and39 runnable docs pass with no failures. Foundation generic/data capability is accepted; this does not close ordinary memory, foreign/execution/commands, S3 or external evidence. Next is the [ordinary function memory source checkpoint](release-completion/s2b-memory/plan.md). No release percentage is asserted.
