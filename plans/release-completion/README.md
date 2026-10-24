@@ -140,3 +140,7 @@ Both repairs and the bounded Result/no_gc delivery are accepted with1237Rust/292
 ### Managed verification infrastructure update
 
 At the 2026-10-24 07:50 UTC heartbeat, default managed implementation remains running and unreviewed. A temporary-directory quota interruption was relieved by clearing an inactive Rust incremental cache; this is infrastructure recovery only, with no new acceptance result. R03/R04 and every remaining release requirement retain their current open status. See dispatch.md for the precise cleanup and worker identity.
+
+### Managed native boundary acceptance remains open
+
+At 2026-10-24 08:50 UTC the worker reports native compilation of the required 65,536-element fixture exceeded the runner 4 GiB compiler bound, despite interpreter checking/execution passing. The existing producer is repairing emitted model size and retaining the failed evidence. No native boundary pass or managed delivery has been accepted; the full release ledger is unchanged.
