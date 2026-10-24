@@ -25,6 +25,10 @@ pub enum Value {
         name: String,
         fields: Vec<(String, Value)>,
     },
+    Sequence {
+        ty: cgx2_sema::Type,
+        values: Vec<Value>,
+    },
     Unit,
 }
 
@@ -58,6 +62,19 @@ impl fmt::Display for Value {
                     write!(f, "{field}: {value}")?;
                 }
                 f.write_str(")")
+            }
+            Self::Sequence { ty, values } => {
+                if matches!(ty, cgx2_sema::Type::Array(_)) {
+                    f.write_str("Array")?;
+                }
+                f.write_str("[")?;
+                for (i, v) in values.iter().enumerate() {
+                    if i > 0 {
+                        f.write_str(", ")?;
+                    }
+                    write!(f, "{v}")?;
+                }
+                f.write_str("]")
             }
             Self::Unit => Ok(()),
         }
@@ -112,6 +129,8 @@ enum Flow {
 }
 
 struct Evaluator<'a> {
+    typed: Option<cgx2_sema::TypedModule>,
+    owner: String,
     module: &'a Module,
     args: &'a [String],
     steps: usize,
@@ -121,6 +140,26 @@ struct Evaluator<'a> {
 }
 
 pub(crate) fn run_module(module: &Module, args: &[String]) -> Result<RunResult, RunError> {
+    std::thread::scope(|scope| {
+        std::thread::Builder::new()
+            .stack_size(16 * 1024 * 1024)
+            .spawn_scoped(scope, || run_module_inner(module, args))
+            .map_err(|_| error("CGR010", "cannot allocate evaluator stack", module.span))?
+            .join()
+            .unwrap_or_else(|_| Err(error("CGR009", "evaluator failed", module.span)))
+    })
+}
+fn run_module_inner(module: &Module, args: &[String]) -> Result<RunResult, RunError> {
+    let prepared = prepare_data(module)?;
+    let module = prepared.as_ref().unwrap_or(module);
+    let typed = if prepared.is_some() {
+        Some(
+            cgx2_sema::check_module(module)
+                .map_err(|e| error("CGR009", e[0].message.clone(), e[0].span))?,
+        )
+    } else {
+        None
+    };
     let known = module
         .variants
         .iter()
@@ -151,6 +190,8 @@ pub(crate) fn run_module(module: &Module, args: &[String]) -> Result<RunResult, 
     }
     reject_unsupported(&module.statements)?;
     let mut evaluator = Evaluator {
+        typed,
+        owner: String::new(),
         module,
         args,
         steps: 0,
@@ -181,6 +222,10 @@ pub(crate) fn run_module(module: &Module, args: &[String]) -> Result<RunResult, 
             [first, ..] => return Err(error("CGR008", "ambiguous main definitions", first.span)),
         }
     };
+    check_value_bound(&value, module.span)?;
+    if value.to_string().len() > 1048576 {
+        return Err(error("CGR010", "output exceeds 1048576 bytes", module.span));
+    }
     Ok(RunResult { value })
 }
 
@@ -189,12 +234,32 @@ pub(crate) fn run_package_module(
     args: &[String],
     origins: &BTreeMap<String, std::path::PathBuf>,
 ) -> (Result<RunResult, RunError>, Option<std::path::PathBuf>) {
+    let prepared = match prepare_data(module) {
+        Ok(p) => p,
+        Err(e) => return (Err(e), None),
+    };
+    let module = prepared.as_ref().unwrap_or(module);
+    let typed = if prepared.is_some() {
+        match cgx2_sema::check_module(module) {
+            Ok(t) => Some(t),
+            Err(es) => {
+                return (
+                    Err(error("CGR009", es[0].message.clone(), es[0].span)),
+                    None,
+                )
+            }
+        }
+    } else {
+        None
+    };
     for function in &module.functions {
         if let Err(error) = reject_unsupported(&function.body) {
             return (Err(error), origins.get(&function.name).cloned());
         }
     }
     let mut evaluator = Evaluator {
+        typed,
+        owner: String::new(),
         module,
         args,
         steps: 0,
@@ -381,6 +446,41 @@ impl Evaluator<'_> {
                     iter,
                     body,
                 } => {
+                    if !matches!(&iter.kind,ExprKind::Call{callee,..} if matches!(&callee.kind,ExprKind::Name(p) if p.segments.as_slice()==["range"]))
+                    {
+                        let values = match self.eval_expr(iter, scope)? {
+                            Value::Sequence { values, .. } => values,
+                            Value::String(s) => {
+                                s.chars().map(|c| Value::String(c.to_string())).collect()
+                            }
+                            _ => {
+                                return Err(error(
+                                    "CGR009",
+                                    "invalid collection iterator",
+                                    iter.span,
+                                ))
+                            }
+                        };
+                        for value in values {
+                            self.step(stmt.span)?;
+                            scope.push();
+                            scope.insert(
+                                binding.clone(),
+                                Binding {
+                                    value,
+                                    mutable: false,
+                                    annotation: None,
+                                },
+                            );
+                            let flow = self.eval_block(body, scope);
+                            scope.pop();
+                            if let Flow::Return(v) = flow? {
+                                return Ok(Flow::Return(v));
+                            }
+                        }
+                        tail = Value::Unit;
+                        continue;
+                    }
                     let ExprKind::Call { arguments, .. } = &iter.kind else {
                         unreachable!("checked range")
                     };
@@ -431,6 +531,19 @@ impl Evaluator<'_> {
 
     fn eval_expr(&mut self, expr: &Expr, scope: &Scope) -> Result<Value, RunError> {
         self.step(expr.span)?;
+        let value = self.eval_expr_inner(expr, scope)?;
+        check_value_bound(&value, expr.span)?;
+        if self.typed.as_ref().is_some_and(|t| t.finite_values) {
+            let (nodes, bytes) = value_size(&value);
+            let work = nodes.saturating_add(bytes);
+            if self.steps.saturating_add(work) > STEP_LIMIT {
+                return Err(error("CGR010", "execution work budget exceeded", expr.span));
+            }
+            self.steps += work;
+        }
+        Ok(value)
+    }
+    fn eval_expr_inner(&mut self, expr: &Expr, scope: &Scope) -> Result<Value, RunError> {
         match &expr.kind {
             ExprKind::Constructor {
                 ty,
@@ -458,11 +571,27 @@ impl Evaluator<'_> {
                     payloads: payloads?,
                 })
             }
-            ExprKind::Collection(_) | ExprKind::Index { .. } => Err(error(
-                "CGR009",
-                "collections/indexing require S2b",
-                expr.span,
-            )),
+            ExprKind::Collection(items) => {
+                let values = items
+                    .iter()
+                    .map(|e| self.eval_expr(e, scope))
+                    .collect::<Result<Vec<_>, _>>()?;
+                let ty = self
+                    .expression_type(expr.span)
+                    .cloned()
+                    .ok_or_else(|| error("CGR009", "collection lacks checked type", expr.span))?;
+                let v = Value::Sequence { ty, values };
+                check_value_bound(&v, expr.span)?;
+                Ok(v)
+            }
+            ExprKind::Index { collection, index } => {
+                let xs = self.eval_expr(collection, scope)?;
+                let i = self.eval_expr(index, scope)?;
+                let Value::I64(i) = i else {
+                    return Err(error("CGR004", "index requires i64", index.span));
+                };
+                self.option(expr.span, access(&xs, i))
+            }
             ExprKind::Integer(raw) => raw
                 .replace('_', "")
                 .parse::<i64>()
@@ -551,6 +680,13 @@ impl Evaluator<'_> {
                         .map(|a| self.eval_expr(&a.value, scope))
                         .collect::<Result<Vec<_>, _>>()?;
                     return comparison_values(name, &values, expr.span);
+                }
+                if is_data_call(name) && !self.module.functions.iter().any(|f| f.name == name) {
+                    let values = arguments
+                        .iter()
+                        .map(|a| self.eval_expr(&a.value, scope))
+                        .collect::<Result<Vec<_>, _>>()?;
+                    return self.data_call(name, values, expr.span);
                 }
                 let function = if matches!(name, "arg" | "arg_count") {
                     None
@@ -653,7 +789,7 @@ impl Evaluator<'_> {
                 Value::I64(value) => ScalarValue::I64(value),
                 Value::Bool(value) => ScalarValue::Bool(value),
                 Value::String(value) => ScalarValue::String(value),
-                Value::Record { .. } | Value::Variant { .. } => {
+                Value::Record { .. } | Value::Variant { .. } | Value::Sequence { .. } => {
                     unreachable!("checked scalar argument")
                 }
                 Value::Unit => unreachable!("checked scalar argument"),
@@ -701,6 +837,7 @@ impl Evaluator<'_> {
             ));
         }
         self.depth += 1;
+        let prior_owner = std::mem::replace(&mut self.owner, function.name.clone());
         let mut scope = Scope::new();
         for (param, value) in function.parameters.iter().zip(args) {
             check_type(self.module, &param.ty, &value)?;
@@ -741,6 +878,7 @@ impl Evaluator<'_> {
             Ok(value)
         })();
         self.depth -= 1;
+        self.owner = prior_owner;
         if result.is_err() && self.failure_file.is_none() {
             self.failure_file = self.origins.get(&function.name).cloned();
         }
@@ -788,14 +926,15 @@ fn reject_unsupported(statements: &[Stmt]) -> Result<(), RunError> {
             ));
         }
         if let StmtKind::For { iter, body, .. } = &stmt.kind {
-            let valid = matches!(&iter.kind, ExprKind::Call { callee, arguments }
-                if matches!(&callee.kind, ExprKind::Name(path) if path.segments.as_slice() == ["range"])
-                && arguments.len() == 2 && arguments.iter().all(|arg| arg.name.is_none()));
+            let valid = !matches!(
+                iter.kind,
+                ExprKind::Integer(_) | ExprKind::Boolean(_) | ExprKind::Binary { .. }
+            );
             if !valid {
                 return Err(error(
                     "CGR009",
                     "only range(start, end) loops execute in the scalar preview",
-                    iter.span,
+                    stmt.span,
                 ));
             }
             reject_unsupported(body)?;
@@ -864,7 +1003,11 @@ fn expr_has_memory(expr: &Expr) -> bool {
 }
 
 fn validate_type(ty: &TypeSyntax) -> Result<(), RunError> {
-    if ty.arguments.is_empty() || matches!(ty.path.segments.join(".").as_str(), "Option" | "Result")
+    if ty.arguments.is_empty()
+        || matches!(
+            ty.path.segments.join(".").as_str(),
+            "Option" | "Result" | "List" | "Array"
+        )
     {
         for argument in &ty.arguments {
             validate_type(argument)?;
@@ -890,6 +1033,9 @@ fn check_type(module: &Module, ty: &TypeSyntax, value: &Value) -> Result<(), Run
         | (cgx2_sema::Type::Unit, Value::Unit) => true,
         (cgx2_sema::Type::Record(expected), Value::Record { name, .. }) => expected == name,
         (cgx2_sema::Type::Variant { .. }, Value::Variant { ty: actual, .. }) => actual == &resolved,
+        (cgx2_sema::Type::List(_) | cgx2_sema::Type::Array(_), Value::Sequence { ty, .. }) => {
+            ty == &resolved
+        }
         _ => false,
     };
     if valid {
@@ -949,6 +1095,13 @@ fn binary_values(left: &Value, right: &Value, op: BinaryOp, span: Span) -> Resul
 
 fn comparison_values(name: &str, values: &[Value], span: Span) -> Result<Value, RunError> {
     expect_arity(name, 2, values.len(), span)?;
+    if matches!(name, "$cgx2_cmp_eq" | "$cgx2_cmp_ne") {
+        return Ok(Value::Bool(if name == "$cgx2_cmp_eq" {
+            values[0] == values[1]
+        } else {
+            values[0] != values[1]
+        }));
+    }
     let outcome = match (&values[0], &values[1]) {
         (Value::I64(a), Value::I64(b)) => match name {
             "$cgx2_cmp_eq" => a == b,
@@ -1000,3 +1153,5 @@ fn decode_string(raw: &str, span: Span) -> Result<String, RunError> {
     }
     Ok(result)
 }
+
+include!("data_eval.rs");

@@ -1,0 +1,38 @@
+// Copied finite sequences; no aliasing or unchecked index operations.
+#[derive(Clone,PartialEq,Eq)] struct Cgx2List<T>(Vec<T>);
+#[derive(Clone,PartialEq,Eq)] struct Cgx2Array<T>(Vec<T>);
+trait Cgx2Show { fn cg_show(&self)->String; fn cg_nodes(&self)->usize{1} fn cg_bytes(&self)->usize{0} }
+impl Cgx2Show for i64 { fn cg_show(&self)->String{self.to_string()} }
+impl Cgx2Show for bool { fn cg_show(&self)->String{self.to_string()} }
+impl Cgx2Show for String { fn cg_show(&self)->String{self.clone()} fn cg_bytes(&self)->usize{self.len()} }
+impl Cgx2Show for () { fn cg_show(&self)->String{String::new()} }
+fn cgx2_show<T:Cgx2Show>(v:&T)->String{v.cg_show()}
+fn cgx2_sequence_show<T:Cgx2Show>(values:&[T],prefix:&str)->String{format!("{prefix}[{}]",values.iter().map(Cgx2Show::cg_show).collect::<Vec<_>>().join(", "))}
+impl<T:Cgx2Show> Cgx2Show for Cgx2List<T>{fn cg_show(&self)->String{cgx2_sequence_show(&self.0,"")} fn cg_nodes(&self)->usize{self.0.iter().fold(1usize,|n,v|n.saturating_add(v.cg_nodes()))} fn cg_bytes(&self)->usize{self.0.iter().fold(0usize,|n,v|n.saturating_add(v.cg_bytes()))}}
+impl<T:Cgx2Show> Cgx2Show for Cgx2Array<T>{fn cg_show(&self)->String{cgx2_sequence_show(&self.0,"Array")} fn cg_nodes(&self)->usize{self.0.iter().fold(1usize,|n,v|n.saturating_add(v.cg_nodes()))} fn cg_bytes(&self)->usize{self.0.iter().fold(0usize,|n,v|n.saturating_add(v.cg_bytes()))}}
+impl<T:Cgx2Show> std::fmt::Display for Cgx2List<T>{fn fmt(&self,f:&mut std::fmt::Formatter<'_>)->std::fmt::Result{f.write_str(&self.cg_show())}}
+impl<T:Cgx2Show> std::fmt::Display for Cgx2Array<T>{fn fmt(&self,f:&mut std::fmt::Formatter<'_>)->std::fmt::Result{f.write_str(&self.cg_show())}}
+trait Cgx2Sequence {type Item:Clone;fn cg_len(&self)->usize;fn cg_get(&self,i:usize)->Option<Self::Item>;fn cg_items(self)->Vec<Self::Item>;}
+impl<T:Clone> Cgx2Sequence for Cgx2List<T>{type Item=T;fn cg_len(&self)->usize{self.0.len()}fn cg_get(&self,i:usize)->Option<T>{self.0.get(i).cloned()}fn cg_items(self)->Vec<T>{self.0}}
+impl<T:Clone> Cgx2Sequence for Cgx2Array<T>{type Item=T;fn cg_len(&self)->usize{self.0.len()}fn cg_get(&self,i:usize)->Option<T>{self.0.get(i).cloned()}fn cg_items(self)->Vec<T>{self.0}}
+impl Cgx2Sequence for String{type Item=String;fn cg_len(&self)->usize{self.chars().count()}fn cg_get(&self,i:usize)->Option<String>{self.chars().nth(i).map(|c|c.to_string())}fn cg_items(self)->Vec<String>{self.chars().map(|c|c.to_string()).collect()}}
+fn cgx2_length<T:Cgx2Sequence>(v:&T)->Result<i64,String>{i64::try_from(v.cg_len()).map_err(|_|"CGR005: length overflow".into())}
+fn cgx2_get<T:Cgx2Sequence>(v:&T,i:i64)->Option<T::Item>{usize::try_from(i).ok().and_then(|i|v.cg_get(i))}
+fn cgx2_items<T:Cgx2Sequence>(v:T)->Vec<T::Item>{v.cg_items()}
+trait Cgx2Update: Cgx2Sequence+Sized{fn cg_update(self,i:usize,v:Self::Item)->Option<Self>;}
+impl<T:Clone> Cgx2Update for Cgx2List<T>{fn cg_update(mut self,i:usize,v:T)->Option<Self>{*self.0.get_mut(i)?=v;Some(self)}}
+impl<T:Clone> Cgx2Update for Cgx2Array<T>{fn cg_update(mut self,i:usize,v:T)->Option<Self>{*self.0.get_mut(i)?=v;Some(self)}}
+fn cgx2_updated<T:Cgx2Update>(v:T,i:i64,item:T::Item)->Option<T>{usize::try_from(i).ok().and_then(|i|v.cg_update(i,item))}
+fn cgx2_append<T>(mut v:Cgx2List<T>,item:T)->Result<Cgx2List<T>,String>{if v.0.len()>=65536{return Err("CGR010: collection length exceeds 65536".into());}v.0.try_reserve(1).map_err(|_|"CGR010: allocation failed".to_owned())?;v.0.push(item);Ok(v)}
+fn cgx2_checked_string(s:String)->Result<String,String>{if s.len()>1048576{Err("CGR010: string byte limit exceeds 1048576".into())}else{Ok(s)}}
+fn cgx2_concat(mut a:String,b:String)->Result<String,String>{if a.len().checked_add(b.len()).is_none_or(|n|n>1048576){return Err("CGR010: string byte limit exceeds 1048576".into());}a.try_reserve(b.len()).map_err(|_|"CGR010: allocation failed".to_owned())?;a.push_str(&b);Ok(a)}
+fn cgx2_slice(s:&str,a:i64,b:i64)->Option<String>{let(a,b)=(usize::try_from(a).ok()?,usize::try_from(b).ok()?);if a>b||b>s.chars().count(){return None;}Some(s.chars().skip(a).take(b-a).collect())}
+fn cgx2_parse(s:&str)->Result<i64,String>{let bytes=s.as_bytes();let digits=if bytes.first()==Some(&b'-')||bytes.first()==Some(&b'+'){&bytes[1..]}else{bytes};if digits.is_empty()||!digits.iter().all(u8::is_ascii_digit){return Err("invalid integer".into());}s.parse().map_err(|_|"invalid integer".into())}
+
+fn cgx2_charge<T:Cgx2Show>(ctx:&mut Cgx2Context,v:&T,a:usize,b:usize)->Result<(),String>{
+ let nodes=v.cg_nodes();let bytes=v.cg_bytes();
+ if nodes>65537||bytes>1048576{return Err(format!("CGR010 at {a}..{b}: finite value exceeds size budget"));}
+ let work=nodes.saturating_add(bytes);
+ if ctx.steps.saturating_add(work)>1000000{return Err(format!("CGR010 at {a}..{b}: execution work budget exceeded"));}
+ ctx.steps+=work;Ok(())
+}

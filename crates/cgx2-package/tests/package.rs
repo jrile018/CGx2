@@ -408,7 +408,7 @@ fn check_command_emits_json_and_fails_on_errors() {
 }
 
 #[test]
-fn imported_list_signature_is_outside_scalar_profile() {
+fn imported_list_signature_is_admitted() {
     let f = Fixture::new();
     f.manifest(MANIFEST);
     f.write("src/main.cg", "module app.main\nimport app.math\npub fn run(xs: List<i64>) -> i64:\n    app.math.size(xs)\n");
@@ -416,7 +416,8 @@ fn imported_list_signature_is_outside_scalar_profile() {
         "src/math.cg",
         "module app.math\npub fn size(xs: List<i64>) -> i64:\n    1\n",
     );
-    assert!(codes(&f).contains(&"CGT010"));
+    let index = load_package(f.root()).unwrap();
+    assert_eq!(index.modules.len(), 2);
 }
 
 #[test]

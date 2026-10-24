@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "delivery": "S2b generic/data foundation only",
+  "review_status": "pending user/coordinator review",
+  "base_commit": "38cce386519832ddaf50460c1e03f38aa6a3c106",
+  "branch": "riley/s2b-foundation",
+  "toolchain": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "$WORKTREE/target/release-s2b-foundation",
+    "TMPDIR": "$WORKTREE/target/tmp-s2b-foundation",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "workspace": {
+    "command": "cargo test --workspace --all-features --offline --locked --no-fail-fast",
+    "status": "passed",
+    "suites": 243,
+    "passed": 1092,
+    "failed": 0,
+    "ignored": 6
+  },
+  "clippy": {
+    "command": "cargo clippy --workspace --all-targets --all-features --offline --locked -- -D warnings",
+    "status": "passed"
+  },
+  "format": {
+    "command": "cargo fmt --all -- --check",
+    "status": "passed"
+  },
+  "diff": {
+    "command": "git diff --check; git diff 38cce386519832ddaf50460c1e03f38aa6a3c106 --check; git diff --cached --check",
+    "status": "passed"
+  },
+  "default_feature_build": {
+    "command": "cargo build -p cgx2-cli -p cgx2c --offline --locked",
+    "status": "passed"
+  },
+  "product": {
+    "command": "python3 crates/cgx2-syntax/s2b-evidence/run.py",
+    "passed": 159,
+    "failed": 0,
+    "report": "report.json"
+  },
+  "implementation_tree_sha256": "553a62230e821c0b593dbdaab6ef8b1fe0f83ce248f7f10e157d5778a77ba1b4",
+  "cargo_lock_sha256": "e4021f7d1ff419ba911a6fc0c0ec4aaae14816389eba91454c12fcb4273762c7",
+  "root_manifest_sha256": "9400b7dfbc400f91b3d648265dbd18001ec96157eb202fe88e3b95a312c9ffd7",
+  "root_manifest_or_lock_changes": false,
+  "new_dependencies": [],
+  "coordinator_lock_reconciliation": "none",
+  "source_target_matrix": {
+    "source_package_check": "generic functions/records/variants, real Eq/Show, copied homogeneous data and checked access",
+    "interpreter": "passed finite value fixtures and error classes",
+    "native_debug": "passed and actually executed",
+    "native_release": "passed and actually executed",
+    "portable_python": "passed and actually executed, including standalone package archive",
+    "emitted_rust": "compiled and executed standalone outside repository-relative assumptions",
+    "notebook_verifier_advisory": "conservative admission/rejection retained; S3 remains open"
+  },
+  "sandbox_note": "Initial restricted HTTP binding and child lifecycle/exec fixtures were denied; final workspace run used their normal local permissions. No host security settings changed.",
+  "mechanical_consumer_change": "cgx2-notebook-kernel exhaustively rejects Value::Sequence at its existing CGNK026 S3-N boundary",
+  "remaining_s2b": [
+    "ordinary function ownership/regions/loans and authenticated cleanup summaries",
+    "typed foreign/package/tensor routes and retained handle lifetimes",
+    "owned map/zip source lowering and structured execution reports",
+    "remaining installed test/verify/notebook/bind command routing and complete target closure"
+  ],
+  "external_acceptance": "R10 readability study and R13-R15 safety/resource/model/human/release gates remain unrun/open; no S2b completion or release claim",
+  "logs_sha256": {
+    "s2b-final-tests.log": "1fff8cc91a9a78d943c2d797fd7cc70953f3c805e999fa28e0c11b1da209d069",
+    "s2b-clippy.log": "8a7448fdbca6266663d938e0132cfe7af0c27d73f36077d6031cf5d5012525c4",
+    "s2b-build.log": "b26b1761377860c8931b061a5a1e2210e3bc3df76aaac61580b1c1c5bd241227",
+    "s2b-product.log": "91adaa26ac56b550d1e84483cc1229283a3b9f7a60e70bc9e0ab8fb7d7f26e63"
+  },
+  "post_suite_normalization": "Removed one trailing blank line from the generated Python runtime template after workspace tests. Rebuilt the binaries and reran all 159 product checks, Clippy, formatting and diff checks; no behavior or AST change."
+}

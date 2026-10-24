@@ -28,7 +28,7 @@ fn schema_six_preserves_public_qualified_identities_arguments_and_spans() {
 fn syntax_only_api_reports_constraints_without_claiming_semantics() {
     let module =
         parse_module("module app.generic\npub variant Box<T: Eq + Show>:\n    Value(T)\n").unwrap();
-    assert!(cgx2_sema::check_module(&module).is_err());
+    assert!(cgx2_sema::check_module(&module).is_ok());
     let index = cgx2_api_index::build_syntax_index(&module);
     assert_eq!(index.semantics_status, "syntax-only");
     assert_eq!(

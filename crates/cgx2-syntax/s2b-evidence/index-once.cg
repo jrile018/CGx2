@@ -1,0 +1,12 @@
+fn probe() -> i64:
+    let mut value = 0
+    for i in range(0, 130000):
+        value += 1
+    value - 130000
+fn main() -> i64:
+    let values = [42]
+    match values[probe()]:
+        Option.Some(value):
+            value
+        Option.None:
+            0

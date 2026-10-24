@@ -1152,7 +1152,7 @@ fn decode_string(raw: &str) -> Option<String> {
     Some(result)
 }
 
-fn quote_python(value: &str) -> String {
+pub(crate) fn quote_python(value: &str) -> String {
     let mut result = String::from("\"");
     for ch in value.chars() {
         match ch {

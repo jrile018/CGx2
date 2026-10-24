@@ -673,10 +673,26 @@ pub fn load_checked_package(root: &Path) -> Result<CheckedPackage, Vec<PackageDi
                 errors.extend(diagnostics.into_iter().map(|d| {
                     let mut diagnostic =
                         PackageDiagnostic::new(d.code, d.message, &source.listed, Some(d.span));
-                    if matches!(d.code, "CGT003" | "CGT005" | "CGT010" | "CGT012" | "CGT013") {
+                    if matches!(
+                        d.code,
+                        "CGT003"
+                            | "CGT005"
+                            | "CGT010"
+                            | "CGT012"
+                            | "CGT013"
+                            | "CGT031"
+                            | "CGT039"
+                            | "CGT040"
+                    ) {
                         let mut calls = Vec::new();
                         collect_calls(&source.module, &public_names, &mut calls);
-                        if let Some(call) = calls.iter().find(|call| call.span == d.span) {
+                        if let Some(call) = calls
+                            .iter()
+                            .filter(|call| {
+                                call.span.start <= d.span.start && call.span.end >= d.span.end
+                            })
+                            .min_by_key(|call| call.span.end - call.span.start)
+                        {
                             diagnostic.related =
                                 declarations.get(&call.name).cloned().map(Box::new);
                         }
@@ -732,6 +748,33 @@ pub fn load_checked_package(root: &Path) -> Result<CheckedPackage, Vec<PackageDi
     }
     modules.sort_by(|a, b| a.name.cmp(&b.name).then(a.source.cmp(&b.source)));
     checked_modules.sort_by_key(|module| source_order[&module.source]);
+    if checked_modules
+        .iter()
+        .any(|m| cgx2_sema::foundation_profile(m.syntax()))
+    {
+        let entry = checked_modules
+            .iter()
+            .find(|m| m.source() == Path::new(&manifest.entry.value))
+            .expect("validated entry");
+        let name = entry
+            .syntax()
+            .name
+            .as_ref()
+            .map(|p| p.segments.join("."))
+            .unwrap_or_default();
+        let merged = cgx2_sema::merge_modules(
+            &checked_modules
+                .iter()
+                .map(|m| m.syntax())
+                .collect::<Vec<_>>(),
+            &name,
+        );
+        cgx2_sema::check_module(&merged).map_err(|ds| {
+            ds.into_iter()
+                .map(|d| PackageDiagnostic::new(d.code, d.message, entry.source(), Some(d.span)))
+                .collect::<Vec<_>>()
+        })?;
+    }
     Ok(CheckedPackage {
         root: canonical_root,
         manifest_canonical_path: canonical_manifest,
@@ -826,7 +869,18 @@ fn contains_memory_script(module: &Module) -> bool {
 fn collect_calls(module: &Module, public: &BTreeSet<String>, out: &mut Vec<ResolvedCall>) {
     fn expr(node: &Expr, public: &BTreeSet<String>, out: &mut Vec<ResolvedCall>) {
         match &node.kind {
-            ExprKind::Constructor { arguments, .. } => {
+            ExprKind::Constructor {
+                ty,
+                case,
+                arguments,
+            } => {
+                let name = ty.path.segments.join(".");
+                if case.is_empty() && public.contains(&name) {
+                    out.push(ResolvedCall {
+                        name,
+                        span: node.span,
+                    });
+                }
                 for arg in arguments {
                     expr(&arg.value, public, out);
                 }

@@ -54,7 +54,8 @@ pub fn canonical_module(module: &Module, known_variants: &BTreeSet<String>) -> M
                             span: path.span,
                         };
                         qualify_type(&mut ty, module);
-                        if known.contains(&ty.path.segments.join("."))
+                        if matches!(ty.path.segments.join(".").as_str(), "Option" | "Result")
+                            || known.contains(&ty.path.segments.join("."))
                             || module
                                 .variants
                                 .iter()
@@ -138,28 +139,49 @@ pub fn canonical_module(module: &Module, known_variants: &BTreeSet<String>) -> M
         }
     }
     for record in &mut result.records {
+        let mut scope = module.clone();
+        scope
+            .records
+            .retain(|r| !record.type_parameters.iter().any(|p| p.name == r.name));
+        scope
+            .variants
+            .retain(|v| !record.type_parameters.iter().any(|p| p.name == v.name));
         for field in &mut record.fields {
-            qualify_type(&mut field.ty, module);
+            qualify_type(&mut field.ty, &scope);
         }
     }
     for variant in &mut result.variants {
+        let mut scope = module.clone();
+        scope
+            .records
+            .retain(|r| !variant.type_parameters.iter().any(|p| p.name == r.name));
+        scope
+            .variants
+            .retain(|v| !variant.type_parameters.iter().any(|p| p.name == v.name));
         for case in &mut variant.cases {
             for payload in &mut case.payloads {
-                qualify_type(payload, module);
+                qualify_type(payload, &scope);
             }
         }
     }
     for function in &mut result.functions {
+        let mut scope = module.clone();
+        scope
+            .records
+            .retain(|r| !function.type_parameters.iter().any(|p| p.name == r.name));
+        scope
+            .variants
+            .retain(|v| !function.type_parameters.iter().any(|p| p.name == v.name));
         for parameter in &mut function.parameters {
-            qualify_type(&mut parameter.ty, module);
+            qualify_type(&mut parameter.ty, &scope);
         }
         if let Some(ty) = &mut function.return_type {
-            qualify_type(ty, module);
+            qualify_type(ty, &scope);
         }
         for condition in function.requires.iter_mut().chain(&mut function.ensures) {
-            rewrite_expr(condition, module, known_variants);
+            rewrite_expr(condition, &scope, known_variants);
         }
-        block(&mut function.body, module, known_variants);
+        block(&mut function.body, &scope, known_variants);
     }
     block(&mut result.statements, module, known_variants);
     result

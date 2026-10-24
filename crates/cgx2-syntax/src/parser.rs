@@ -1114,10 +1114,10 @@ impl Parser {
                             TokenKind::RAngle => {
                                 depth = depth.saturating_sub(1);
                                 if depth == 0 {
-                                    generic_constructor = self
-                                        .tokens
-                                        .get(self.pos + offset + 1)
-                                        .is_some_and(|t| matches!(t.kind, TokenKind::Dot));
+                                    generic_constructor =
+                                        self.tokens.get(self.pos + offset + 1).is_some_and(|t| {
+                                            matches!(t.kind, TokenKind::Dot | TokenKind::LParen)
+                                        });
                                     break;
                                 }
                             }
@@ -1128,12 +1128,11 @@ impl Parser {
                     if generic_constructor {
                         self.pos = saved;
                         let ty = self.parse_type()?;
-                        self.expect(
-                            &TokenKind::Dot,
-                            "CGS114",
-                            "expected . before constructor case",
-                        )?;
-                        let (case, _) = self.name()?;
+                        let case = if self.eat(&TokenKind::Dot).is_some() {
+                            self.name()?.0
+                        } else {
+                            String::new()
+                        };
                         self.expect(
                             &TokenKind::LParen,
                             "CGS114",

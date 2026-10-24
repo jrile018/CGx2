@@ -23,7 +23,25 @@ struct Site {
 
 fn expr_sites(expr: &Expr, sites: &mut Vec<Site>) {
     match &expr.kind {
-        ExprKind::Constructor { arguments, .. } => {
+        ExprKind::Constructor {
+            ty,
+            case,
+            arguments,
+        } => {
+            if case.is_empty() {
+                let call = Expr {
+                    kind: ExprKind::Call {
+                        callee: Box::new(Expr {
+                            kind: ExprKind::Name(ty.path.clone()),
+                            span: ty.span,
+                        }),
+                        arguments: arguments.clone(),
+                    },
+                    span: expr.span,
+                };
+                expr_sites(&call, sites);
+                return;
+            }
             for arg in arguments {
                 expr_sites(&arg.value, sites);
             }
@@ -164,6 +182,13 @@ pub(crate) fn analyze_with_imports(
             stmt_sites(stmt, &mut observations);
         }
         observations.retain(|site| {
+            if site
+                .target
+                .as_deref()
+                .is_some_and(|n| data_intrinsic(n) && !module.functions.iter().any(|f| f.name == n))
+            {
+                return false;
+            }
             !site.target.as_ref().is_some_and(|name| {
                 records.contains(name)
                     || module.records.iter().any(|record| record.name == *name)
@@ -181,7 +206,9 @@ pub(crate) fn analyze_with_imports(
         });
         for site in &mut observations {
             if let Some(target) = &site.target {
-                if imported_effects.contains_key(target) {
+                if imported_effects.contains_key(target)
+                    || module.functions.iter().any(|f| f.name == *target)
+                {
                     site.callee = Some(target.clone());
                     site.effect = None;
                     site.capability = None;
@@ -349,7 +376,8 @@ fn check_site(
 
 fn local_constructor(site: &Site, module: &Module) -> bool {
     site.target.as_deref().is_some_and(|name| {
-        module.records.iter().any(|r| r.name == name)
+        (data_intrinsic(name) && !module.functions.iter().any(|f| f.name == name))
+            || module.records.iter().any(|r| r.name == name)
             || name.rsplit_once('.').is_some_and(|(ty, case)| {
                 module
                     .variants
@@ -430,4 +458,20 @@ pub(crate) fn contract_calls_are_safe(
     pending
         .iter()
         .all(|name| visit(name, summaries, module, &mut active, &mut done, 0))
+}
+
+fn data_intrinsic(n: &str) -> bool {
+    matches!(
+        n,
+        "length"
+            | "show"
+            | "get"
+            | "updated"
+            | "append"
+            | "array"
+            | "list"
+            | "concat"
+            | "slice"
+            | "parse_i64"
+    )
 }

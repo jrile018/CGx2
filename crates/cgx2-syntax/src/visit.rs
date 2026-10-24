@@ -116,6 +116,11 @@ pub fn s2a_feature_span(module: &Module) -> Option<Span> {
         _ => {}
     };
     let mut expr_visitor = |expr: &Expr| {
+        if matches!(&expr.kind,ExprKind::Call{callee,..} if matches!(&callee.kind,ExprKind::Name(p) if !module.functions.iter().any(|f|f.name==p.segments.join(".")) && matches!(p.segments.join(".").as_str(),"length"|"get"|"updated"|"append"|"array"|"list"|"concat"|"slice"|"parse_i64"|"show")))
+        {
+            spans.borrow_mut().push(expr.span);
+        }
+
         if matches!(
             expr.kind,
             ExprKind::Constructor { .. } | ExprKind::Collection(_) | ExprKind::Index { .. }

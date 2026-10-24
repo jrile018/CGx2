@@ -113,6 +113,74 @@ pub(crate) fn run(
     package: &CheckedPackage,
     args: &[String],
 ) -> Result<RunResult, Vec<NativeDiagnostic>> {
+    if package
+        .modules()
+        .iter()
+        .any(|m| cgx2_sema::foundation_profile(m.syntax()))
+    {
+        package.verify_unchanged().map_err(|ds| {
+            ds.into_iter()
+                .map(|d| NativeDiagnostic {
+                    code: d.code.into(),
+                    message: d.message,
+                    file: d.file,
+                    span: d.span,
+                })
+                .collect::<Vec<_>>()
+        })?;
+        let entry = package
+            .modules()
+            .iter()
+            .find(|m| m.source() == package.index().entry)
+            .expect("checked entry");
+        let name = entry
+            .syntax()
+            .name
+            .as_ref()
+            .map(|p| p.segments.join("."))
+            .unwrap_or_default();
+        let merged = cgx2_sema::merge_modules(
+            &package
+                .modules()
+                .iter()
+                .map(|m| m.syntax())
+                .collect::<Vec<_>>(),
+            &name,
+        );
+        let origins = package
+            .modules()
+            .iter()
+            .flat_map(|m| {
+                m.syntax().functions.iter().map(|f| {
+                    (
+                        if f.name == "main" && m.source() == entry.source() {
+                            "main".into()
+                        } else {
+                            format!(
+                                "{}.{}",
+                                m.syntax()
+                                    .name
+                                    .as_ref()
+                                    .map(|p| p.segments.join("."))
+                                    .unwrap_or_default(),
+                                f.name
+                            )
+                        },
+                        m.source().to_path_buf(),
+                    )
+                })
+            })
+            .collect();
+        let (result, file) = eval::run_package_module(&merged, args, &origins);
+        return result.map_err(|e| {
+            vec![NativeDiagnostic {
+                code: e.code.into(),
+                message: e.message,
+                file: file.unwrap_or_else(|| entry.source().to_path_buf()),
+                span: e.span,
+            }]
+        });
+    }
     for source in package.modules() {
         if source.syntax().name.is_none() {
             return Err(vec![NativeDiagnostic {

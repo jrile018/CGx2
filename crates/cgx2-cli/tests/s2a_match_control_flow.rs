@@ -1,4 +1,4 @@
-use cgx2_cli::{Value, run_checked_source};
+use cgx2_cli::{run_checked_source, Value};
 use std::{fs, process::Command};
 
 #[test]

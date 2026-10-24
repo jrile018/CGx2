@@ -21,12 +21,15 @@ fn source_python_foreign_binding_is_not_silently_emitted() {
     );
 }
 
+static NEXT_EMISSION: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
+
 fn run(source: &str, args: &[&str]) -> std::process::Output {
     let (module, typed) = checked(source);
     let python = emit_python(&module, &typed).unwrap();
     let path = std::env::temp_dir().join(format!(
-        "cgx2-emitter-{}-{}.py",
+        "cgx2-emitter-{}-{}-{}.py",
         std::process::id(),
+        NEXT_EMISSION.fetch_add(1, std::sync::atomic::Ordering::Relaxed),
         std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
             .unwrap()

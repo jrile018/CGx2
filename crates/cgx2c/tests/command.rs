@@ -343,8 +343,8 @@ fn diagnostics_and_failing_compiler_do_not_replace_output() {
         ("let =\n", "CGS"),
         ("unknown\n", "CGT"),
         (
-            "fn f(xs: List<i64>) -> i64:\n    for x in xs:\n        x\n    0\n\nfn main() -> i64:\n    0\n",
-            "CGRS001",
+            "fn f(xs: List<i64>) -> i64:\n    xs[0]\n\nfn main() -> i64:\n    0\n",
+            "CGT003",
         ),
         (
             "let r = memory.region(mode: manual, limit: 256)\nlet x = memory.alloc_bytes(r, 8)\nfor y in x:\n    memory.use(y)\n",

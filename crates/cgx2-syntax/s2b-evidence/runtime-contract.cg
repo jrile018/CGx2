@@ -1,0 +1,6 @@
+fn positive(value: i64) -> i64:
+    requires value > 0
+    value
+fn main() -> i64:
+    let values = [0]
+    positive(length(values) - 1)

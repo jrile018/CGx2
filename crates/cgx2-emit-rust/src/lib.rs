@@ -1,5 +1,6 @@
 //! Readable, standalone Rust output for checked CGx2 scalar programs.
 
+mod data;
 mod memory;
 mod variants;
 use variants::{emit_variants, syntax_type};
@@ -29,6 +30,9 @@ pub struct PackageEmitDiagnostic {
 
 /// Emit one standalone Rust program from a checked, immutable local package snapshot.
 pub fn emit_package_rust(package: &CheckedPackage) -> Result<String, Vec<PackageEmitDiagnostic>> {
+    if package.modules().iter().any(|m| m.typed().finite_values) {
+        return data::package(package);
+    }
     let known_variants = package
         .modules()
         .iter()
@@ -256,6 +260,7 @@ pub fn emit_package_rust(package: &CheckedPackage) -> Result<String, Vec<Package
         return Err(errors);
     }
     let mut out = String::from(PRELUDE);
+    out.push_str(include_str!("data_runtime.rs.txt"));
     emit_variants(
         &package
             .modules()
@@ -301,7 +306,7 @@ pub fn emit_package_rust(package: &CheckedPackage) -> Result<String, Vec<Package
                 rust_type(&signature.return_type)
             ));
             out.push_str("    ctx.enter()?;\n    let result = (|| -> Result<_, String> {\n");
-            emit_function_body(function, 2, &mut out, Some(name));
+            emit_function_body(function, 2, &mut out, Some(name), source.typed());
             out.push_str("    })();\n    ctx.leave();\n    result\n}\n\n");
         }
     }
@@ -351,6 +356,9 @@ impl EmitDiagnostic {
 
 /// Emit a standalone Rust 2024 program from a checked scalar module.
 pub fn emit_rust(module: &Module, checked: &TypedModule) -> Result<String, Vec<EmitDiagnostic>> {
+    if checked.finite_values {
+        return data::emit(module, checked);
+    }
     if memory::is_memory_script(module) {
         return memory::emit_memory_rust(module, checked);
     }
@@ -449,6 +457,7 @@ pub fn emit_rust(module: &Module, checked: &TypedModule) -> Result<String, Vec<E
         }
     }
     let mut out = String::from(PRELUDE);
+    out.push_str(include_str!("data_runtime.rs.txt"));
     emit_variants(&[(module, checked)], &mut out);
     let mut records = module.records.clone();
     if let Some(name) = &module.name {
@@ -472,7 +481,7 @@ pub fn emit_rust(module: &Module, checked: &TypedModule) -> Result<String, Vec<E
         ));
         out.push_str("    ctx.enter()?;\n");
         out.push_str("    let result = (|| -> Result<_, String> {\n");
-        emit_function_body(function, 2, &mut out, None);
+        emit_function_body(function, 2, &mut out, None, checked);
         out.push_str("    })();\n    ctx.leave();\n    result\n}\n\n");
     }
     if module.functions.is_empty() {
@@ -481,7 +490,7 @@ pub fn emit_rust(module: &Module, checked: &TypedModule) -> Result<String, Vec<E
             "fn cgx2_script(ctx: &mut Cgx2Context, args: &[String]) -> Result<{}, String> {{\n",
             rust_type(&ty)
         ));
-        emit_block(&module.statements, 1, &mut out);
+        emit_block(&module.statements, 1, &mut out, checked);
         out.push_str("}\n\n");
     }
     let entry = if module.functions.is_empty() {
@@ -507,7 +516,7 @@ pub fn emit_rust(module: &Module, checked: &TypedModule) -> Result<String, Vec<E
     Ok(out)
 }
 
-const PRELUDE: &str = r#"// Generated from CGx2's checked scalar profile.
+const PRELUDE: &str = r#"// Generated from CGx2's checked scalar and concrete finite value profiles.
 // This file compiles with rustc --edition=2024 and has no external dependencies.
 #[derive(Default)]
 struct Cgx2Context { steps: usize, depth: usize }
@@ -519,7 +528,7 @@ impl Cgx2Context {
         Ok(())
     }
     fn enter(&mut self) -> Result<(), String> {
-        if self.depth >= 64 { return Err("function call depth limit of 64 exceeded".into()); }
+        if self.depth >= 64 { return Err("CGR011: function call depth limit of 64 exceeded".into()); }
         self.depth += 1;
         Ok(())
     }
@@ -949,7 +958,11 @@ fn rust_type(ty: &Type) -> String {
         Type::Bool => "bool".into(),
         Type::String => "String".into(),
         Type::Unit => "()".into(),
-        Type::List(_) => unreachable!("validated scalar type"),
+        Type::List(t) => format!("Cgx2List<{}>", rust_type(t)),
+        Type::Array(t) => format!("Cgx2Array<{}>", rust_type(t)),
+        Type::AppliedRecord { .. } | Type::Parameter { .. } => {
+            unreachable!("specialized generic type")
+        }
         Type::Record(name) => rust_name(name),
         Type::Variant { .. } => rust_name(&ty.to_string()),
     }
@@ -963,9 +976,9 @@ fn emit_records(records: &[Record], out: &mut String) {
             .iter()
             .all(|f| matches!(syntax_type(&f.ty), Type::I64 | Type::Bool | Type::Unit))
         {
-            "Clone, Copy"
+            "Clone, Copy, PartialEq, Eq"
         } else {
-            "Clone"
+            "Clone, PartialEq, Eq"
         };
         out.push_str(&format!("#[derive({derive})]\nstruct {name} {{\n"));
         for field in &record.fields {
@@ -990,6 +1003,21 @@ fn emit_records(records: &[Record], out: &mut String) {
             ));
         }
         out.push_str("        write!(f, \")\")\n    }\n}\n\n");
+        out.push_str(&format!("impl Cgx2Show for {name} {{ fn cg_show(&self)->String {{format!(\"{{}}\",self)}} fn cg_nodes(&self)->usize {{ 1usize"));
+        for field in &record.fields {
+            out.push_str(&format!(
+                ".saturating_add(self.{}.cg_nodes())",
+                rust_name(&field.name)
+            ));
+        }
+        out.push_str(" } fn cg_bytes(&self)->usize { 0usize");
+        for field in &record.fields {
+            out.push_str(&format!(
+                ".saturating_add(self.{}.cg_bytes())",
+                rust_name(&field.name)
+            ));
+        }
+        out.push_str(" } }\n");
     }
 }
 
@@ -1007,26 +1035,32 @@ fn tail_type(stmts: &[Stmt], typed: &TypedModule) -> Type {
     }
 }
 
-fn emit_block(stmts: &[Stmt], indent: usize, out: &mut String) {
-    emit_block_context(stmts, indent, out, None, true);
+fn emit_block(stmts: &[Stmt], indent: usize, out: &mut String, typed: &TypedModule) {
+    emit_block_context(stmts, indent, out, None, true, typed);
 }
 
-fn emit_function_body(function: &Function, indent: usize, out: &mut String, module: Option<&str>) {
+fn emit_function_body(
+    function: &Function,
+    indent: usize,
+    out: &mut String,
+    module: Option<&str>,
+    typed: &TypedModule,
+) {
     if function.requires.is_empty() && function.ensures.is_empty() {
-        emit_block_context(&function.body, indent, out, module, true);
+        emit_block_context(&function.body, indent, out, module, true, typed);
         return;
     }
     let pad = "    ".repeat(indent);
     for condition in &function.requires {
         out.push_str(&format!(
             "{pad}if !({}?) {{ return Err(\"CGR015 at {}..{}: requires condition failed\".into()); }}\n",
-            emit_expr_context(condition, module), condition.span.start, condition.span.end
+            emit_expr_context(condition, module, typed), condition.span.start, condition.span.end
         ));
     }
     out.push_str(&format!(
         "{pad}let cgx2_value = (|| -> Result<_, String> {{\n"
     ));
-    emit_block_context(&function.body, indent + 1, out, module, true);
+    emit_block_context(&function.body, indent + 1, out, module, true, typed);
     out.push_str(&format!(
         "{pad}}})();\n{pad}let cgx2_value = cgx2_value?;\n"
     ));
@@ -1038,7 +1072,7 @@ fn emit_function_body(function: &Function, indent: usize, out: &mut String, modu
         for condition in &function.ensures {
             out.push_str(&format!(
                 "{pad}if !({}?) {{ return Err(\"CGR016 at {}..{}: ensures condition failed\".into()); }}\n",
-                emit_expr_context(condition, module), condition.span.start, condition.span.end
+                emit_expr_context(condition, module, typed), condition.span.start, condition.span.end
             ));
         }
     }
@@ -1051,6 +1085,7 @@ fn emit_block_context(
     out: &mut String,
     module: Option<&str>,
     return_tail: bool,
+    typed: &TypedModule,
 ) {
     let pad = "    ".repeat(indent);
     for (index, stmt) in stmts.iter().enumerate() {
@@ -1063,7 +1098,7 @@ fn emit_block_context(
             StmtKind::Match { scrutinee, arms } => {
                 out.push_str(&format!(
                     "{pad}match {}? {{\n",
-                    emit_expr_context(scrutinee, module)
+                    emit_expr_context(scrutinee, module, typed)
                 ));
                 for arm in arms {
                     let pattern = match &arm.pattern {
@@ -1095,7 +1130,14 @@ fn emit_block_context(
                         }
                     };
                     out.push_str(&format!("{pad}    {pattern} => {{\n"));
-                    emit_block_context(&arm.body, indent + 2, out, module, last && return_tail);
+                    emit_block_context(
+                        &arm.body,
+                        indent + 2,
+                        out,
+                        module,
+                        last && return_tail,
+                        typed,
+                    );
                     out.push_str(&format!("{pad}    }},\n"));
                 }
                 out.push_str(&format!("{pad}}}\n"));
@@ -1108,11 +1150,11 @@ fn emit_block_context(
             } => {
                 out.push_str(&format!(
                     "{pad}if {}? {{\n",
-                    emit_expr_context(condition, module)
+                    emit_expr_context(condition, module, typed)
                 ));
-                emit_block_context(then_body, indent + 1, out, module, false);
+                emit_block_context(then_body, indent + 1, out, module, false, typed);
                 out.push_str(&format!("{pad}}} else {{\n"));
-                emit_block_context(else_body, indent + 1, out, module, false);
+                emit_block_context(else_body, indent + 1, out, module, false, typed);
                 out.push_str(&format!("{pad}}}\n"));
             }
             StmtKind::Let {
@@ -1122,10 +1164,16 @@ fn emit_block_context(
                 ..
             } => {
                 out.push_str(&format!(
-                    "{pad}let {}{} = {}?;\n",
+                    "{pad}let {}{}: {} = {}?;\n",
                     if *mutable { "mut " } else { "" },
                     rust_name(name),
-                    emit_expr_context(value, module)
+                    rust_type(
+                        typed
+                            .expressions
+                            .get(value.span)
+                            .expect("checked binding type")
+                    ),
+                    emit_expr_context(value, module, typed)
                 ));
             }
             StmtKind::Assign { target, op, value } => {
@@ -1133,34 +1181,47 @@ fn emit_block_context(
                 match op {
                     AssignOp::Set => out.push_str(&format!(
                         "{pad}{name} = {}?;\n",
-                        emit_expr_context(value, module)
+                        emit_expr_context(value, module, typed)
                     )),
                     AssignOp::Add => out.push_str(&format!(
                         "{pad}let cgx2_rhs = {}?;\n{pad}{name} = cgx2_add({name}, cgx2_rhs).map_err(|e| cgx2_at(e, {}, {}))?;\n",
-                        emit_expr_context(value, module), stmt.span.start, stmt.span.end
+                        emit_expr_context(value, module, typed), stmt.span.start, stmt.span.end
                     )),
                 }
             }
             StmtKind::Return(Some(expr)) => out.push_str(&format!(
                 "{pad}return Ok({}?);\n",
-                emit_expr_context(expr, module)
+                emit_expr_context(expr, module, typed)
             )),
             StmtKind::Return(None) => out.push_str(&format!("{pad}return Ok(());\n")),
             StmtKind::Expr(expr) if last && return_tail => out.push_str(&format!(
                 "{pad}return Ok({}?);\n",
-                emit_expr_context(expr, module)
+                emit_expr_context(expr, module, typed)
             )),
             StmtKind::Expr(expr) => out.push_str(&format!(
                 "{pad}let _ = {}?;\n",
-                emit_expr_context(expr, module)
+                emit_expr_context(expr, module, typed)
             )),
             StmtKind::For {
                 binding,
                 iter,
                 body,
             } => {
+                if !matches!(&iter.kind, ExprKind::Call {callee,..} if matches!(&callee.kind,ExprKind::Name(p) if p.segments.as_slice()==["range"]))
+                {
+                    out.push_str(&format!(
+                        "{pad}for {} in cgx2_items({}?) {{\n{pad}    ctx.step({}, {})?;\n",
+                        rust_name(binding),
+                        emit_expr_context(iter, module, typed),
+                        stmt.span.start,
+                        stmt.span.end
+                    ));
+                    emit_block_context(body, indent + 1, out, module, false, typed);
+                    out.push_str(&format!("{pad}}}\n"));
+                    continue;
+                }
                 let ExprKind::Call { arguments, .. } = &iter.kind else {
-                    unreachable!("validated range")
+                    unreachable!("checked range")
                 };
                 out.push_str(&format!(
                     "{pad}{{\n{pad}    ctx.step({}, {})?;\n",
@@ -1168,11 +1229,11 @@ fn emit_block_context(
                 ));
                 out.push_str(&format!(
                     "{pad}    let cgx2_range_start = {}?;\n",
-                    emit_expr_context(&arguments[0].value, module)
+                    emit_expr_context(&arguments[0].value, module, typed)
                 ));
                 out.push_str(&format!(
                     "{pad}    let cgx2_range_end = {}?;\n",
-                    emit_expr_context(&arguments[1].value, module)
+                    emit_expr_context(&arguments[1].value, module, typed)
                 ));
                 out.push_str(&format!("{pad}    for cgx2_range_index in cgx2_range_start..cgx2_range_end {{\n{pad}        ctx.step({}, {})?;\n", stmt.span.start, stmt.span.end));
                 out.push_str(&format!(
@@ -1182,7 +1243,7 @@ fn emit_block_context(
                 out.push_str(&format!(
                     "{pad}        let _ = (|| -> Result<_, String> {{\n"
                 ));
-                emit_block_context(body, indent + 3, out, module, true);
+                emit_block_context(body, indent + 3, out, module, true, typed);
                 out.push_str(&format!("{pad}        }})()?;\n{pad}    }}\n{pad}}}\n"));
             }
             StmtKind::NoGc { .. } => unreachable!("validated source"),
@@ -1202,13 +1263,16 @@ fn emit_block_context(
     }
 }
 
-fn emit_expr_context(expr: &Expr, module: Option<&str>) -> String {
+fn emit_expr_context(expr: &Expr, module: Option<&str>, typed: &TypedModule) -> String {
+    if let Some(value) = data::expression(expr, module, typed) {
+        return data::account(expr, value, typed.finite_values);
+    }
     let value = match &expr.kind {
         ExprKind::Constructor {
             ty,
             case,
             arguments,
-        } => variants::constructor(ty, case, arguments, module),
+        } => variants::constructor(ty, case, arguments, module, typed),
         ExprKind::Collection(_) | ExprKind::Index { .. } => {
             unreachable!("validated collection rejection")
         }
@@ -1236,8 +1300,8 @@ fn emit_expr_context(expr: &Expr, module: Option<&str>) -> String {
             };
             format!(
                 "{{ let left = {}?; let right = {}?; {helper}(left, right).map_err(|e| cgx2_at(e, {}, {})) }}",
-                emit_expr_context(left, module),
-                emit_expr_context(right, module),
+                emit_expr_context(left, module, typed),
+                emit_expr_context(right, module, typed),
                 expr.span.start,
                 expr.span.end
             )
@@ -1250,7 +1314,7 @@ fn emit_expr_context(expr: &Expr, module: Option<&str>) -> String {
             for (index, arg) in arguments.iter().enumerate() {
                 prefix.push_str(&format!(
                     "let cgx2_arg_{index} = {}?; ",
-                    emit_expr_context(&arg.value, module)
+                    emit_expr_context(&arg.value, module, typed)
                 ));
             }
             let args = (0..arguments.len())
@@ -1312,10 +1376,7 @@ fn emit_expr_context(expr: &Expr, module: Option<&str>) -> String {
             format!("{{ {prefix}{call} }}")
         }
     };
-    format!(
-        "{{ ctx.step({}, {})?; {value} }}",
-        expr.span.start, expr.span.end
-    )
+    data::account(expr, value, typed.finite_values)
 }
 
 fn decode_string(raw: &str) -> Option<String> {

@@ -1,0 +1,13 @@
+{
+  "application.cg": "42\n",
+  "package": "42\n",
+  "selected.cg": "42\n",
+  "early.cg": "42\n",
+  "index-once.cg": "42\n",
+  "scrutinee-once.cg": "42\n",
+  "equality.cg": "true\n",
+  "boundaries.cg": "0:2:Array[7]:[4, 5]:[4, 5]:cgx2.core.Option<List<i64>>.Some([9, 5]):cgx2.core.Option<i64>.Some(4):cgx2.core.Option<i64>.Some(5):cgx2.core.Option<i64>.None():cgx2.core.Option<i64>.None():cgx2.core.Option<i64>.None():3:cgx2.core.Option<String>.Some(🙂):cgx2.core.Option<String>.None():cgx2.core.Option<String>.Some(🙂中):cgx2.core.Option<String>.None():cgx2.core.Option<String>.None():cgx2.core.Result<i64, String>.Ok(-9223372036854775808):cgx2.core.Result<i64, String>.Err(invalid integer):cgx2.core.Result<i64, String>.Err(invalid integer):0:cgx2.core.Option<String>.None():cgx2.core.Option<String>.Some():cgx2.core.Option<i64>.Some(7):cgx2.core.Option<i64>.None():cgx2.core.Option<Array<i64>>.None()\n",
+  "empty-string.cg": "\n",
+  "unit.cg": "",
+  "constraints.cg": "Point<i64>(value: 42):different\n"
+}

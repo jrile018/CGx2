@@ -1,0 +1,10 @@
+fn first<T>(values: List<T>) -> Option<T>:
+    for value in values:
+        return Option<T>.Some(value)
+    Option<T>.None()
+fn main() -> i64:
+    match first([42, 43]):
+        Option.Some(value):
+            return value
+        Option.None:
+            return 0

@@ -78,10 +78,11 @@ fn scrutinee_is_evaluated_once_and_unselected_arm_is_not_evaluated() {
 }
 
 #[test]
-fn portable_python_rejects_variants_at_source_location() {
+fn portable_python_executes_variants() {
     let module = parse_module(FIXTURE).unwrap();
     let typed = cgx2_sema::check_module(&module).unwrap();
     // Exercise the product command so no extra test dependency is needed.
+    let path = std::env::temp_dir().join(format!("cgx2-variant-{}.py", std::process::id()));
     let output = std::process::Command::new(env!("CARGO_BIN_EXE_cgx2"))
         .args([
             "emit",
@@ -89,12 +90,26 @@ fn portable_python_rejects_variants_at_source_location() {
             "--target",
             "python",
             "--out",
-            "unused-s2a.py",
+            path.to_str().unwrap(),
+            "--force",
         ])
         .output()
         .unwrap();
-    assert!(!output.status.success());
-    assert!(String::from_utf8_lossy(&output.stderr).contains("CGE006"));
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let python = std::process::Command::new("python3")
+        .arg(&path)
+        .output()
+        .unwrap();
+    assert!(
+        python.status.success(),
+        "{}",
+        String::from_utf8_lossy(&python.stderr)
+    );
+    std::fs::remove_file(path).unwrap();
     assert!(!typed.expressions.iter().collect::<Vec<_>>().is_empty());
 }
 

@@ -1,0 +1,10 @@
+module foundation.left
+pub record Box<T: Eq + Show>:
+    value: T
+pub variant Choice<T>:
+    Value(T)
+    Empty
+pub fn identity<T: Eq + Show>(x: T) -> T effects() caps():
+    x
+pub fn equal<T: Eq>(a: T, b: T) -> Bool effects() caps():
+    a == b

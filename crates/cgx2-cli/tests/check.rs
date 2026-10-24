@@ -144,7 +144,7 @@ fn memory_check_fmt_and_run_share_checked_contract() {
 }
 
 #[test]
-fn run_preserves_arguments_and_reports_unsupported_for() {
+fn run_preserves_arguments_and_admits_collection_functions() {
     let args = SourceFile::new("arg(0)\n");
     for command in [Some("run"), None] {
         let mut argv = Vec::new();
@@ -170,12 +170,15 @@ fn run_preserves_arguments_and_reports_unsupported_for() {
     assert_eq!(output.stdout, b"2\n");
 
     let for_loop = SourceFile::new("fn unused(xs: List<i64>) -> i64:\n    for x in xs:\n        x\n    0\nfn main() -> i64:\n    1\n");
-    // The static checker accepts this function; execution rejects the preview's for syntax.
+    // Collection function bodies are admitted by the executable value profile.
     assert!(invoke(&["check", for_loop.path()]).status.success());
     let output = invoke(&["run", for_loop.path()]);
-    assert_eq!(output.status.code(), Some(1));
-    assert!(output.stdout.is_empty());
-    assert!(String::from_utf8(output.stderr).unwrap().contains("CGR009"));
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    assert_eq!(output.stdout, b"1\n");
 }
 
 #[derive(Debug, PartialEq, Eq)]

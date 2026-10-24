@@ -284,7 +284,7 @@ fn bool_and_string_entries_match_native_output() {
 }
 
 #[test]
-fn imported_nonscalar_public_signature_is_rejected_at_its_source() {
+fn imported_collection_public_signature_is_admitted() {
     let scratch = Scratch::new();
     let root = fixture("package_two", &scratch);
     let math = fs::read_to_string(root.join("src/math.cg")).unwrap();
@@ -293,10 +293,15 @@ fn imported_nonscalar_public_signature_is_rejected_at_its_source() {
         &format!("{math}pub fn extra(xs: List<i64>) -> i64:\n    1\n"),
     );
     let package = load_checked_package(&root).unwrap();
-    let diagnostics = emit_package_python(&package).unwrap_err();
-    assert!(diagnostics
-        .iter()
-        .any(|d| d.code == "CGE005" && d.file == Path::new("src/math.cg") && d.span.is_some()));
+    let output = scratch.0.join("python-values");
+    write_package_python(&package, &output).unwrap();
+    let result = run_python(&output, &[]);
+    assert!(
+        result.status.success(),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    assert_eq!(result.stdout, b"41\n");
 }
 
 #[test]
