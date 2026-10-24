@@ -1,6 +1,6 @@
 # CGx2 finite completion plan
 
-Status: all twelve S1 deliveries, S2a and S2b foundation including repairs reviewed as bounded deliveries. Graph/payload support, both legacy repairs and the first ordinary-owned source slice are reviewed; recoverable allocation delivery is reviewed repair-required (schema1 symbol compatibility and evidence-runner output bounds), while full ordinary memory remains incomplete; foreign/execution/command integration and S3 remain gated. See [foundation acceptance](s2b-review/README.md). Updated 2026-10-24. Coordinator branch: riley/release-completion-plan. Full release capabilities and evidence remain required.
+Status: all twelve S1 deliveries, S2a and S2b foundation including repairs reviewed as bounded deliveries. Graph/payload support, both legacy repairs and the first ordinary-owned source slice are reviewed; recoverable allocation and both repairs are reviewed as bounded deliveries; the next source checkpoint is default ordinary managed storage, while full ordinary memory remains incomplete; foreign/execution/command integration and S3 remain gated. See [foundation acceptance](s2b-review/README.md). Updated 2026-10-24. Coordinator branch: riley/release-completion-plan. Full release capabilities and evidence remain required.
 
 ## Answer to “how many more waves?”
 
@@ -132,3 +132,7 @@ The user subsequently authorized a 20-minute heartbeat to review completed work 
 ## Owned Result review update
 
 The recoverable allocation delivery is staged and existing integration checks pass, but source compatibility and runner output bounds fail review. See [review and repair plans](s2b-owned-result-review/README.md). R03/R04 and the full release requirement ledger remain open; implementation and acceptance are tracked separately.
+
+## Owned Result repaired acceptance
+
+Both repairs and the bounded Result/no_gc delivery are accepted with1237Rust/2928 current product checks, exact historical-negative reconciliation and evidence. The next sole shared producer is [default ordinary managed heap](s2b-default-managed/plan.md). R03/R04/full memory remain open; all release rows stay required.

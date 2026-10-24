@@ -1,5 +1,5 @@
 {
-  "status": "repair-required",
+  "status": "bounded-delivery-accepted-after-repairs",
   "worker_commit": "d88b57acd14cd299b029a46b197259bb2ec32079",
   "integrated_commit": "d8253431a9ab5ab571b9e7e8841242f7667b0a28",
   "workspace": {
@@ -496,9 +496,10 @@
   "failures": [
     {
       "id": "owned-symbol-compatibility",
-      "status": "failed",
+      "status": "passed",
       "evidence": "compatibility/reproduction.json",
-      "detail": "Four previously accepted owned source programs print42 at base, now CGT082; unconditional new symbol reservations/type/call resolution."
+      "detail": "Four previously accepted owned source programs print42 at base, now CGT082; unconditional new symbol reservations/type/call resolution.",
+      "acceptance": "accepted-repairs/acceptance.json"
     },
     {
       "id": "owned-runner-output",

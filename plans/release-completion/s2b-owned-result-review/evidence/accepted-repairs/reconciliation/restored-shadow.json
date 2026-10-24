@@ -1,0 +1,320 @@
+{
+  "status": "coordinator-reconciliation",
+  "historical_files_modified": false,
+  "superseded_negative": {
+    "code": "CGT082",
+    "span": {
+      "start": 33,
+      "end": 47
+    },
+    "slice": "try_owned: i64"
+  },
+  "superseded_negative_count": 9,
+  "historical_fixture_sha256": "ecf093780ce97109549849081e2bd69241fbf2a527cbb8cde7c62b2b550917e4",
+  "runner_sha256": "c37b78d64081b295c0b99aaf873f096426f0b33a7787d1b42a129749fe95427a",
+  "new_negative_expectations": {
+    "reserved-owned": {
+      "code": "CGT082",
+      "span": {
+        "start": 33,
+        "end": 43
+      },
+      "slice": "owned: i64"
+    },
+    "ambiguous-error": {
+      "code": "CGT081",
+      "span": {
+        "start": 81,
+        "end": 114
+      },
+      "slice": "Result<owned<R>, AllocationError>"
+    }
+  },
+  "checks": [
+    {
+      "label": "restored-shadow:check",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/owned-result-evidence/fixtures/shadow-builtin.cg"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow:interpreter",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/owned-result-evidence/fixtures/shadow-builtin.cg"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 2,
+      "stdout_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "stdout": "0\n",
+      "stderr_bytes": 157,
+      "stderr_sha256": "854bb80924ab0cdcc972fad55f6f82ac50b5cef866b09f0765644731b6d56a65",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":0,\"releases\":0,\"live_bytes\":0,\"allocated_bytes\":0,\"released_bytes\":0,\"peak_live_bytes\":0,\"reads\":0,\"writes\":0}\n",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow:value-cleanup",
+      "passed": true
+    },
+    {
+      "label": "pinned-rustc",
+      "command": [
+        "rustup",
+        "which",
+        "rustc"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.003,
+      "stdout_bytes": 78,
+      "stdout_sha256": "66af87d7f5dc56db4094d4257d2ebfd67b77bb8e36e37ef58d69a87d2016117c",
+      "stdout": "/home/john-riley/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/bin/rustc\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow-False:build",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/owned-result-evidence/fixtures/shadow-builtin.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/reconciled-result-ym23ppv9/restored-shadow-False",
+        "--rustc",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/reconciled-result-ym23ppv9/rustc-linker"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.246,
+      "stdout_bytes": 483,
+      "stdout_sha256": "0347458cccc65d63140648106b6cc3322709c8d245d75ac768f44caaa6998980",
+      "stdout": "cgx2c build metadata: source_sha256=ecf093780ce97109549849081e2bd69241fbf2a527cbb8cde7c62b2b550917e4 rustc=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/reconciled-result-ym23ppv9/rustc-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/reconciled-result-ym23ppv9/restored-shadow-False\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow-False:execute",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/reconciled-result-ym23ppv9/restored-shadow-False"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 2,
+      "stdout_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "stdout": "0\n",
+      "stderr_bytes": 157,
+      "stderr_sha256": "854bb80924ab0cdcc972fad55f6f82ac50b5cef866b09f0765644731b6d56a65",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":0,\"releases\":0,\"live_bytes\":0,\"allocated_bytes\":0,\"released_bytes\":0,\"peak_live_bytes\":0,\"reads\":0,\"writes\":0}\n",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow-False:parity",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow-True:build",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/owned-result-evidence/fixtures/shadow-builtin.cg",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/reconciled-result-ym23ppv9/restored-shadow-True",
+        "--rustc",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/reconciled-result-ym23ppv9/rustc-linker",
+        "--release"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.652,
+      "stdout_bytes": 484,
+      "stdout_sha256": "8bcb624df3034c320438a615618b7cd57bacdd33e60d739dedabe478c82435c9",
+      "stdout": "cgx2c build metadata: source_sha256=ecf093780ce97109549849081e2bd69241fbf2a527cbb8cde7c62b2b550917e4 rustc=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/reconciled-result-ym23ppv9/rustc-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/reconciled-result-ym23ppv9/restored-shadow-True\n",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow-True:execute",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/reconciled-result-ym23ppv9/restored-shadow-True"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 2,
+      "stdout_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "stdout": "0\n",
+      "stderr_bytes": 157,
+      "stderr_sha256": "854bb80924ab0cdcc972fad55f6f82ac50b5cef866b09f0765644731b6d56a65",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":0,\"releases\":0,\"live_bytes\":0,\"allocated_bytes\":0,\"released_bytes\":0,\"peak_live_bytes\":0,\"reads\":0,\"writes\":0}\n",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow-True:parity",
+      "passed": true
+    },
+    {
+      "label": "standalone-runtime",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/reconciled-result-ym23ppv9/rustc-linker",
+        "--edition=2021",
+        "--crate-name",
+        "cgx2_runtime",
+        "--crate-type",
+        "rlib",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/reconciled-result-ym23ppv9/runtime/lib.rs",
+        "-o",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/reconciled-result-ym23ppv9/libcgx2_runtime.rlib"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.11,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow:emit-rust",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/owned-result-evidence/fixtures/shadow-builtin.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/reconciled-result-ym23ppv9/restored-shadow.rs"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.002,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow:standalone-compile",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/reconciled-result-ym23ppv9/rustc-linker",
+        "--edition=2024",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/reconciled-result-ym23ppv9/restored-shadow.rs",
+        "--extern",
+        "cgx2_runtime=/home/john-riley/projects/lang/target/cgx2-wave21-tmp/reconciled-result-ym23ppv9/libcgx2_runtime.rlib",
+        "-o",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/reconciled-result-ym23ppv9/restored-shadow-standalone"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.12,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow:standalone-execute",
+      "command": [
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/reconciled-result-ym23ppv9/restored-shadow-standalone"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.001,
+      "stdout_bytes": 2,
+      "stdout_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "stdout": "0\n",
+      "stderr_bytes": 157,
+      "stderr_sha256": "854bb80924ab0cdcc972fad55f6f82ac50b5cef866b09f0765644731b6d56a65",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":0,\"releases\":0,\"live_bytes\":0,\"allocated_bytes\":0,\"released_bytes\":0,\"peak_live_bytes\":0,\"reads\":0,\"writes\":0}\n",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow:standalone-parity",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow:python-reject",
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/owned-result-evidence/fixtures/shadow-builtin.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/projects/lang/target/cgx2-wave21-tmp/reconciled-result-ym23ppv9/restored-shadow.py",
+        "--force"
+      ],
+      "exit": 1,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.006,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr_bytes": 212,
+      "stderr_sha256": "fe94c08ec5a96a0d8e5b1f5353213c159984afb53f115cef622246f91f605e73",
+      "stderr": "CGE006: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/crates/cgx2-syntax/owned-result-evidence/fixtures/shadow-builtin.cg:52..60: ordinary owned storage and loans are outside the Python target\n",
+      "passed": true
+    },
+    {
+      "label": "restored-shadow:python-preserved",
+      "passed": true
+    }
+  ],
+  "passed": 17,
+  "failed": 0,
+  "release_complete": false
+}

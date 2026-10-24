@@ -1,0 +1,183 @@
+{
+  "status": "bounded-owned-result-and-repairs-accepted",
+  "original_worker_commit": "d88b57acd14cd299b029a46b197259bb2ec32079",
+  "symbol_worker_commit": "03e35bf809e6a068f1280d59257a0d5145057f32",
+  "runner_worker_commit": "cc69d8d2212529f5caf7fd2442bce317b6e880d0",
+  "integrated_code_commit": "938c911593c89e78ec90a990709a764b23ed320e",
+  "workspace": {
+    "passed": 1237,
+    "failed": 0,
+    "ignored": 6,
+    "suites": 266
+  },
+  "build": "passed",
+  "clippy": "passed",
+  "fmt": "passed",
+  "diff": "passed",
+  "product_counts": {
+    "reconciled_result": 593,
+    "restored_shadow": 17,
+    "symbol_compatibility": 195,
+    "ordinary": 256,
+    "graph": 99,
+    "guards": 518,
+    "reports": 265,
+    "foundation": 159,
+    "semantic": 278,
+    "specialization": 207,
+    "visibility": 118,
+    "binders": 88,
+    "output": 31,
+    "emitters": 104
+  },
+  "total_current_product_checks": 2928,
+  "historical_negative": {
+    "unchanged_runner_exit": 1,
+    "failed_label": "shadow-builtin:reject",
+    "actual_exit": 0,
+    "resolution": "Original fixture valid schema1. Historical files unchanged; coordinator reconcile.py runs staged manifest replacing9 obsolete rejections with18 true reserved-owned/nominal-error-ambiguity rejection checks, plus17 restored-source target/cleanup checks."
+  },
+  "review": {
+    "core": "bounded acceptance, no API/ownership blockers",
+    "consumers": "147 hashes/20 raw logs/52 fixture hashes and runtime inventories verified",
+    "runtime": "original bounded runtime accepted; repair production change is private symbol resolution only"
+  },
+  "dependencies": "none; Cargo.lock/Cargo.toml unchanged",
+  "files": {
+    "binders.json": {
+      "sha256": "df8571744c83f81edfaa1cacbe029d5e8cba8cc80989984fb380442297bddec6",
+      "original_sha256": "df8571744c83f81edfaa1cacbe029d5e8cba8cc80989984fb380442297bddec6"
+    },
+    "binders.log.gz": {
+      "sha256": "0bd224f34acef62259f668a1cf88a894a8906d43f5808504e30c9a525e242a41",
+      "original_sha256": "27e021c5024981aad08ccdd6c05377bed7d5cc5d171f1d619f7297c8142d76f2"
+    },
+    "build.log.gz": {
+      "sha256": "8e232de87e61ce8c8b656b07de25b40d9a88ad94dcd87cc0e73568605e0161e7",
+      "original_sha256": "d2003f3263b437d1f89b5133b645133e07f631d34d2d7dd443e64b38c72fbfe3"
+    },
+    "clippy.log.gz": {
+      "sha256": "11e0cbc515e6d6a5fa9a5ca71e4507cfda6aa81c93240ceb184d19b86d52fc95",
+      "original_sha256": "303ee1fb40364516697e3b155d6ecebbab334bd040c852f90a5a354385c905c1"
+    },
+    "compatibility-product.json": {
+      "sha256": "b6f4af6624683738261c5ef4d6f534b8bb28d71ff805110f20fd2ce8fdec84da",
+      "original_sha256": "b6f4af6624683738261c5ef4d6f534b8bb28d71ff805110f20fd2ce8fdec84da"
+    },
+    "diff.log.gz": {
+      "sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "emitters.json": {
+      "sha256": "e87c260ad550ac5f4b760e4d91e49e7906b12fbbf17ccb902c96452547a2b49b",
+      "original_sha256": "e87c260ad550ac5f4b760e4d91e49e7906b12fbbf17ccb902c96452547a2b49b"
+    },
+    "emitters.log.gz": {
+      "sha256": "d40f10baca099082fcbd79170a02b1b845c38e75d3516c4db8d55403f8561692",
+      "original_sha256": "2620de15c25b6017d1e70477b0c9b9468613eaba3b3a94d83c34c36017f42eb2"
+    },
+    "format.log.gz": {
+      "sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "foundation.json": {
+      "sha256": "81542b0a33c2fe459538cec68706da3d54beb4cbd15385949afad65113eea5ea",
+      "original_sha256": "81542b0a33c2fe459538cec68706da3d54beb4cbd15385949afad65113eea5ea"
+    },
+    "foundation.log.gz": {
+      "sha256": "9ea86ca6a70025064959d27305485fcb43283676da6757abb79e9ec74dad7634",
+      "original_sha256": "91adaa26ac56b550d1e84483cc1229283a3b9f7a60e70bc9e0ab8fb7d7f26e63"
+    },
+    "legacy-graph99.json": {
+      "sha256": "ab819d81ba537e059aabffb036c64b82c8ccae1d2c4506b5a3fc61efef324467",
+      "original_sha256": "ab819d81ba537e059aabffb036c64b82c8ccae1d2c4506b5a3fc61efef324467"
+    },
+    "legacy-graph99.log.gz": {
+      "sha256": "3ff241b602cad1dea43103748b75ba361f24fc01c45830ed628e19e561f70832",
+      "original_sha256": "eaebe02018663dcbc7102520a5625f5e793a240fdc477c1b6afa9f0cee1ab3f8"
+    },
+    "native-guards518.json": {
+      "sha256": "d5fb1964a9f0cea5384a01bfc555cce52d486dca7020eb5abe011ce7c6973d1c",
+      "original_sha256": "d5fb1964a9f0cea5384a01bfc555cce52d486dca7020eb5abe011ce7c6973d1c"
+    },
+    "native-guards518.log.gz": {
+      "sha256": "0893c84cf05fad22682c00d4be406a025d1c90dab8c43712d894842b0b707715",
+      "original_sha256": "88de176cf1b58a8fbe70fe536d7ac1e75a8436000b3e74e62eafaeb26a2c0f01"
+    },
+    "ordinary-product.json": {
+      "sha256": "5f439f48b8a64949ff70353e2e5f260d7e65af2db5ff8f4f5ede041f9dbb615b",
+      "original_sha256": "5f439f48b8a64949ff70353e2e5f260d7e65af2db5ff8f4f5ede041f9dbb615b"
+    },
+    "ordinary-product.log.gz": {
+      "sha256": "94c5a645f05957a5b93c5bf345f43bd62e7d3df70889b6e9293fda0036437f24",
+      "original_sha256": "eac7a823e60dc4922bb955dde1af4379e8b81184461e3f67d3fb8dc4c578d82c"
+    },
+    "output.json": {
+      "sha256": "1b22be4c3a30fa11cf89845df1152e9ac9e547a4840e863e7de02438c0ff3d50",
+      "original_sha256": "1b22be4c3a30fa11cf89845df1152e9ac9e547a4840e863e7de02438c0ff3d50"
+    },
+    "output.log.gz": {
+      "sha256": "c817ff32bc6b9d5dbcabb84e0ec90cb60a660cda1c60a9061fa1f23b03009511",
+      "original_sha256": "eb1a6089eb7bdd7a005d7de27510fd7a7660f242399a66f115de0a4d38737b8f"
+    },
+    "owned-result-product.json": {
+      "sha256": "2fe66e59746ad870b8c17437483fb60e921e73f17d5e382c50e5b38112060551",
+      "original_sha256": "2fe66e59746ad870b8c17437483fb60e921e73f17d5e382c50e5b38112060551"
+    },
+    "owned-result-product.log.gz": {
+      "sha256": "41e0fa531e6959a21c3a46929d1bb65df6ff5a72ab305a355f1620483e0065b6",
+      "original_sha256": "53dd8291f36c139e2e59d1993ae599d5b2c3225e6371c293975a28286d8dca20"
+    },
+    "reconciliation/reconciled-product.json": {
+      "sha256": "86521520f651fde2f2f102dca926135a32514a8677137ff8b6204bf29e5acc3e",
+      "original_sha256": "86521520f651fde2f2f102dca926135a32514a8677137ff8b6204bf29e5acc3e"
+    },
+    "reconciliation/restored-shadow.json": {
+      "sha256": "367daf7699ec21eb7dbda9a474d4917a346dc366914fbfcbd404c41bcaec9994",
+      "original_sha256": "367daf7699ec21eb7dbda9a474d4917a346dc366914fbfcbd404c41bcaec9994"
+    },
+    "report-layouts265.json": {
+      "sha256": "8925ea3b5a634c4b75aee652f215a9fecd94be242c73ec7034f20349606d4c15",
+      "original_sha256": "8925ea3b5a634c4b75aee652f215a9fecd94be242c73ec7034f20349606d4c15"
+    },
+    "report-layouts265.log.gz": {
+      "sha256": "e31b411199bb70442fdb5414a5f795400a6f72788eb984768f1787a9c5853e38",
+      "original_sha256": "97d9f2f87c2438386b802a2194219c86a50571065aa3603720f3e87314d1d9fc"
+    },
+    "semantic.json": {
+      "sha256": "e29ad9f80958596df6ce1ee0c9a03f0705aff4556b5e24cfcf480a4cf6f9c7d3",
+      "original_sha256": "e29ad9f80958596df6ce1ee0c9a03f0705aff4556b5e24cfcf480a4cf6f9c7d3"
+    },
+    "semantic.log.gz": {
+      "sha256": "3b520fc16eba43c3eff7239e9733977981cbcbf05ac7a62bb2b11fed54f9913a",
+      "original_sha256": "e4db6ae5c0ec9375767e16c4779338b9a11ef6a05ed0e58e10b42d064c87b578"
+    },
+    "specialization/report.json": {
+      "sha256": "cfe5d236e65130050c38b1c1657f66d239cfbfbb2f6cf3bf792215b98e07b646",
+      "original_sha256": "cfe5d236e65130050c38b1c1657f66d239cfbfbb2f6cf3bf792215b98e07b646"
+    },
+    "specialization.log.gz": {
+      "sha256": "6af744d7525183b8bd6ca526cf7e9f5814f06a4d3e03b4724c8bc549657b327f",
+      "original_sha256": "c727497e41be718a60be0db3ecb9d8954f06543d2a7934cce2cdf459da11feb7"
+    },
+    "verification.json": {
+      "sha256": "17a7986d107d5d08e67e5e350456c190cf338bef61c549c8d0e4d3436f58991f",
+      "original_sha256": "17a7986d107d5d08e67e5e350456c190cf338bef61c549c8d0e4d3436f58991f"
+    },
+    "visibility/report.json": {
+      "sha256": "873860c61530a69c7cbbe781498355bf37a14317cd13bd88a5cfc4a0e05fc6d3",
+      "original_sha256": "873860c61530a69c7cbbe781498355bf37a14317cd13bd88a5cfc4a0e05fc6d3"
+    },
+    "visibility.log.gz": {
+      "sha256": "4787f76be21a1437803509551f3d647262b96793b96475bb71b4f0244825603c",
+      "original_sha256": "7ccdadff8e663453ce9afca1a1252278c072d800b01335351f7a96ebe33582d4"
+    },
+    "workspace-tests.log.gz": {
+      "sha256": "271a7cbf136c9f19df61c753902073758a5c8175f4d6f6d9f8fd11883e671e9e",
+      "original_sha256": "c2ec630a82a6114253340d4919fa4dc38f99fe8c70c74fcd5622e03b8c8a6197"
+    }
+  },
+  "ordinary_memory_complete": false,
+  "release_complete": false,
+  "remaining": "Full default managed memory/roots/aliases/cycles; named regions/transfers/entry recovery; generic/package/recursive/partial/reborrow ownership; foreign/execution/command closure; S3/S4 and every external/R01-R15 gate remain mandatory."
+}

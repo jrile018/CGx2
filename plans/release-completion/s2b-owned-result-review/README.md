@@ -16,3 +16,9 @@ Result/no_gc source implementation exists but acceptance is failed pending these
 ## Runner repair accepted
 
 Worker cc69d8d integrated as3cdb63c after independent source/evidence review and coordinator10 harness/584 unchanged product checks. Live pipe capture bounds both streams, preserves failure evidence and kills the process group. Evidence: runner-accepted/acceptance.json. Only direct child is waitable; escaped sessions and aggregate cgroups are outside its documented guarantee. Rust unchanged; no full workspace rerun claimed. Symbol compatibility remains running and full allocation acceptance stays repair-required.
+
+## Both repairs accepted; default managed checkpoint ready
+
+Symbol03e35bf integrated938c911 after independent core/evidence reviews. Combined1237Rust/0failed/6ignored266suites; build/Clippy/fmt/diff and2928 current product checks pass. Full evidence: evidence/accepted-repairs/acceptance.json. Original historical runner retains one obsolete shadow-builtin failure (actual check success); separate coordinator reconcile.py stages inputs without editing historical files, replaces9 obsolete rejections with18 genuine reserved-owned/ambiguous-error checks, and executes17 restored-source checks. Reconciled Result593 + restored17 + symbol195 + prior2123 =2928. Neither historical failure nor skipped checks are called passes. Automatic review declined modifying historical runner paths; the separate harness is its approved safer alternative.
+
+Both repairs are reviewed bounded deliveries. The next single shared producer plan is ../s2b-default-managed/plan.md: default ordinary heap allfive shapes, roots, explicit reference aliases/cycles, checked allocation boundary and honest resource effects. Full ordinary memory, regions/transfers and all R01-R15/S3/S4/external acceptance remain open.

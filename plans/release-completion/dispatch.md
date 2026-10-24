@@ -159,3 +159,7 @@ Common repair base3e5be4d4907debad1ae5fa8bdc836208255ddb4d matches both worktree
 ## Runner repair reviewed; symbol repair remains running
 
 cc69d8d accepted/integrated3cdb63c: independent review plus coordinator10harness/584product checks pass. Cursor/status and exact evidence saved. Symbol repair remains active with195 new source/target checks reported; its original shadow-builtin negative encodes the old-name regression and will need transparent coordinator expectation reconciliation after delivered code review. No additional safe consumer dispatch or duplicate chats.
+
+## Owned Result repairs accepted; default managed source ready
+
+Both repair chats reviewed-bounded-delivery. Combined code938c911 passes1237Rust/2928current product checks with explicit separate historical-negative reconciliation; see s2b-owned-result-review/evidence/accepted-repairs/acceptance.json. Next single shared producer plan s2b-default-managed/plan.md covers allfive foundation heap shapes, roots, reference aliases/cycles, recovery and resource effects. No unreviewed consumer fan-out. Actual setup outcomes follow.
