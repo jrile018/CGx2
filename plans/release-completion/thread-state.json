@@ -184,7 +184,13 @@
     {
       "lane": "s2b-memory",
       "title": "CGx2 S2b ordinary function memory",
-      "status": "planned"
+      "threadId": "01a16ba1-fa9a-7613-b05c-ec7612ca5734",
+      "hostId": "local",
+      "worktree": "/home/john-riley/.codex/worktrees/fba5/lang",
+      "base": "c110fd5f9ae140aa985188ca1ab526f38e15a7ca",
+      "status": "running",
+      "clientThreadId": "client-new-thread:38e3ea4c-e9ef-42a5-84be-01232ecc9733",
+      "afterCursor": "4f9d43a2-a812-405e-8339-8e18a8790794:1"
     }
   ],
   "s2a_repairs": [

@@ -111,4 +111,8 @@ Base c2a039db3ea0b4e457a9f2e0c7626db77094d313 is confirmed at both worktree HEAD
 
 ## Foundation accepted; ordinary function memory ready
 
-Both follow-up repairs are reviewed-bounded-delivery. Combined 1141 Rust tests, all seven product suites,166 benchmark tests,20 docs tests and39 runnable docs pass; blocked/future/external rows remain open. See s2b-review/README.md and evidence/accepted-integration.json. The sole dependency-ready implementation is s2b-memory/plan.md; all source/runtime ownership and acceptance obligations are concrete. Dispatch outcome follows.
+Both follow-up repairs are reviewed-bounded-delivery. Combined 1141 Rust tests, all seven product suites, 166 benchmark tests, 20 docs tests and 39 runnable docs pass; blocked/future/external rows remain open. See s2b-review/README.md and evidence/accepted-integration.json. The sole dependency-ready implementation is s2b-memory/plan.md; all source/runtime ownership and acceptance obligations are concrete. Dispatch outcome follows.
+
+## Ordinary function memory running
+
+Reviewed base c110fd5f9ae140aa985188ca1ab526f38e15a7ca. Chat 01a16ba1-fa9a-7613-b05c-ec7612ca5734 (CGx2 S2b ordinary function memory), worktree /home/john-riley/.codex/worktrees/fba5/lang, is confirmed active; HEAD matches the base. Queued client ID and polling cursor are in thread-state.json. Recent-chat listing omitted the agent-created chat; read-only exact worktree metadata plus read_thread/wait_threads verified identity and running status. No duplicates. One core/runtime owner is the full safe dependency frontier; no consumer is launched against proposed memory interfaces.

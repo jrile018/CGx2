@@ -62,4 +62,4 @@ Five bounded fixes are reviewed and integrated. Combined 1126 Rust tests (six ig
 
 ## S2b foundation accepted
 
-The final source-specialization and native-constructor fixes are reviewed and integrated. Combined 1141 Rust tests (six ignored), seven product suites,166 benchmark tests,20 docs harness tests and39 runnable docs pass with no failures. Foundation generic/data capability is accepted; this does not close ordinary memory, foreign/execution/commands, S3 or external evidence. Next is the [ordinary function memory source checkpoint](release-completion/s2b-memory/plan.md). No release percentage is asserted.
+The final source-specialization and native-constructor fixes are reviewed and integrated. Combined 1141 Rust tests (six ignored), seven product suites, 166 benchmark tests, 20 docs harness tests and 39 runnable docs pass with no failures. Foundation generic/data capability is accepted; this does not close ordinary memory, foreign/execution/commands, S3 or external evidence. Next is the [ordinary function memory source checkpoint](release-completion/s2b-memory/plan.md). No release percentage is asserted.
