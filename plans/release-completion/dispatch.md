@@ -207,3 +207,14 @@ Reviewed common base0d321d3d1b0341121b8363a5a87eeaf674c20eec. Chat01a16da0-0923-
 ## Ordinary-memory partial delivery reviewed; repairs required
 
 a3b98d7 staged32032fd after three independent reviews and coordinator reproductions.1327 workspace tests and quality gates pass, but8 source/runtime/API defects block acceptance and broad ownership/promotion/v3/static dependency diagnostics remain incomplete. See s2b-ordinary-memory-review/README.md for exact findings and four disjoint repair plans. No S3 fanout or main merge. Actual setup outcomes follow after common-base commit.
+
+## Four ordinary-memory repair chats running
+
+Common reviewed repair base7bb7a480119826693db67ed503caaf7f23f6abb2 matches allfour worktree HEADs. App read_thread and compact wait_threads confirm each active. list_threads omitted these agent-created chats; exact read-only metadata and app reads resolved IDs without duplication. Queued IDs and cursors saved in thread-state.json. Independent baseline1327Rust/8selftests/136product/22standalone passes; initial standalone quota failure and partial-record retention gap remain preserved. Eight defects and full source ownership requirements keep acceptance failed.
+
+| Lane | Chat | Worktree | Status |
+| --- | --- | --- | --- |
+| core-admission | 01a16e6c-b9bf-76c3-8096-5aafc5441506 | /home/john-riley/.codex/worktrees/a9af/lang | running |
+| runtime-roots | 01a16e6c-b9bf-76c3-8096-5a9f6fbac892 | /home/john-riley/.codex/worktrees/c0c1/lang | running |
+| api-visibility | 01a16e6c-cd2a-74e0-854c-ba26c9418640 | /home/john-riley/.codex/worktrees/2f3a/lang | running |
+| evidence-parity | 01a16e6c-e179-79f0-bdff-73791dd80661 | /home/john-riley/.codex/worktrees/e7e8/lang | running |

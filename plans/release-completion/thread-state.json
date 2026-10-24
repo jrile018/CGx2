@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24T14:37:00.728Z",
+  "checked_at": "2026-10-24T15:00:57.479246+00:00",
   "original_chats": [
     {
       "lane": "core",
@@ -493,6 +493,60 @@
       "commit": "23b050fad0f49ad7ccfcf1f6404ec5015e6a0f9f",
       "integrated_commit": "1b922e2f708566f51d7df1c1abc6f434e5e3e55f",
       "acceptance_note": "Harness accepted; combined678/0 repair matrix closes all8 prior core-span failures. Canonical frozen CLI library selection integrated0949d5c."
+    }
+  ],
+  "s2b_ordinary_memory_repairs": [
+    {
+      "lane": "core-admission",
+      "title": "CGx2 ordinary source admission repair",
+      "clientThreadId": "client-new-thread:b6941a14-a874-4643-816b-e8818df32f4d",
+      "hostId": "local",
+      "base": "7bb7a480119826693db67ed503caaf7f23f6abb2",
+      "status": "running",
+      "plan": "plans/release-completion/s2b-ordinary-memory-review/core-admission/plan.md",
+      "threadId": "01a16e6c-b9bf-76c3-8096-5aafc5441506",
+      "worktree": "/home/john-riley/.codex/worktrees/a9af/lang",
+      "afterCursor": "9aa16c60-ecc2-44a0-9fe3-12fc5a04ddd7:1",
+      "setup_verified": "Exact worktree HEAD matches common base; app read_thread and wait_threads confirm active. list_threads omitted agent-created chats; read-only metadata plus app reads resolved IDs without duplication."
+    },
+    {
+      "lane": "runtime-roots",
+      "title": "CGx2 ordinary runtime roots repair",
+      "clientThreadId": "client-new-thread:06dfa984-9ab5-4c23-af64-701bc19d78ec",
+      "hostId": "local",
+      "base": "7bb7a480119826693db67ed503caaf7f23f6abb2",
+      "status": "running",
+      "plan": "plans/release-completion/s2b-ordinary-memory-review/runtime-roots/plan.md",
+      "threadId": "01a16e6c-b9bf-76c3-8096-5a9f6fbac892",
+      "worktree": "/home/john-riley/.codex/worktrees/c0c1/lang",
+      "afterCursor": "5f07147a-53ff-4ac6-816f-210c9dd90697:1",
+      "setup_verified": "Exact worktree HEAD matches common base; app read_thread and wait_threads confirm active. list_threads omitted agent-created chats; read-only metadata plus app reads resolved IDs without duplication."
+    },
+    {
+      "lane": "api-visibility",
+      "title": "CGx2 ordinary public API repair",
+      "clientThreadId": "client-new-thread:33375f42-ac2b-4988-974d-1b2734e2b942",
+      "hostId": "local",
+      "base": "7bb7a480119826693db67ed503caaf7f23f6abb2",
+      "status": "running",
+      "plan": "plans/release-completion/s2b-ordinary-memory-review/api-visibility/plan.md",
+      "threadId": "01a16e6c-cd2a-74e0-854c-ba26c9418640",
+      "worktree": "/home/john-riley/.codex/worktrees/2f3a/lang",
+      "afterCursor": "97a16d77-c77e-49cf-b401-d66bcabb491d:1",
+      "setup_verified": "Exact worktree HEAD matches common base; app read_thread and wait_threads confirm active. list_threads omitted agent-created chats; read-only metadata plus app reads resolved IDs without duplication."
+    },
+    {
+      "lane": "evidence-parity",
+      "title": "CGx2 ordinary memory evidence repair",
+      "clientThreadId": "client-new-thread:5f836cce-17a3-426e-9115-9c039294e7b1",
+      "hostId": "local",
+      "base": "7bb7a480119826693db67ed503caaf7f23f6abb2",
+      "status": "running",
+      "plan": "plans/release-completion/s2b-ordinary-memory-review/evidence-parity/plan.md",
+      "threadId": "01a16e6c-e179-79f0-bdff-73791dd80661",
+      "worktree": "/home/john-riley/.codex/worktrees/e7e8/lang",
+      "afterCursor": "095f0dcc-7958-450d-bbab-529482f0d2ec:1",
+      "setup_verified": "Exact worktree HEAD matches common base; app read_thread and wait_threads confirm active. list_threads omitted agent-created chats; read-only metadata plus app reads resolved IDs without duplication."
     }
   ]
 }
