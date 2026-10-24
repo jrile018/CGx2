@@ -47,3 +47,7 @@ All twelve implementation chats and three bounded repairs are integrated and rev
 ## S2a language/type review
 
 S2a delivered variants, matching and typed Option/Result with 1059 recorded passing Rust tests. Coordinator review reproduced missing match-return inference, package record native type qualification, and misleading/incomplete human API output. Three bounded independent repairs are required; S2b/S3 remain gated. See [review and repair plans](release-completion/s2a-review/README.md). No release gate closure is inferred.
+
+## S2a repaired and reviewed
+
+The three fixes pass independent review and combined 1078 Rust tests (six ignored), 166 benchmark tests, 20 documentation harness tests and 39 runnable docs. Original failure repros now pass; API checks preserve unchecked syntax-only status. S2a is accepted as a bounded language/type delivery. S2b foundation is ready, with ordinary memory/foreign/execution/command integrations still explicitly required. External release gates and the absence of a completion percentage are unchanged.

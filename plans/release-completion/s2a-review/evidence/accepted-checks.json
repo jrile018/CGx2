@@ -1,0 +1,67 @@
+{
+  "code_commit": "d2853ba60f4cb76a903f26288ceb31af47ecc682",
+  "rust": {
+    "passed": 1078,
+    "failed": 0,
+    "ignored": 6,
+    "suites": 238
+  },
+  "bench": {
+    "initial_failed": 1,
+    "reason": "old compiler source pin",
+    "final_passed": 166
+  },
+  "docs_unit_passed": 20,
+  "docs": {
+    "passed": 39,
+    "failed": 0,
+    "blocked": 6,
+    "future": 7
+  },
+  "entrypoints": 10,
+  "api_checks": 33,
+  "original_repros": 6,
+  "release_complete": false,
+  "logs": {
+    "workspace": {
+      "path": "/home/john-riley/projects/lang/target/s2a-repairs-workspace.log",
+      "sha256": "c41cc576a3b5fc64f040f6317e81a621fb408daab4b246d6b1d2331d769f70d3"
+    },
+    "clippy": {
+      "path": "/home/john-riley/projects/lang/target/s2a-repairs-clippy.log",
+      "sha256": "d60eec38b05ac8f13f9b8e0991a8276f01508a766d8da99a076af4bf0f3bf161"
+    },
+    "build": {
+      "path": "/home/john-riley/projects/lang/target/s2a-repairs-build.log",
+      "sha256": "9c35c3621666fc9d5b3f2f45800dfa1c9bdbd1ab9b3ddedf7727b2194ac8a523"
+    },
+    "bench": {
+      "path": "/home/john-riley/projects/lang/target/s2a-repairs-bench.log",
+      "sha256": "06c70eea1382991eb38b9fcb52ac8b5f5218937d48286fe56a9aaaf4c6304f53"
+    },
+    "bench-final": {
+      "path": "/home/john-riley/projects/lang/target/s2a-repairs-bench-final.log",
+      "sha256": "8016627249cbea941d64e11bceeb1813a623c8741ed93dfd67b4cad54f02489d"
+    },
+    "docs-unit": {
+      "path": "/home/john-riley/projects/lang/target/s2a-repairs-docs-unit.log",
+      "sha256": "05c76888e0e9d82754ecb4c2634fdfdf41e0df43635ed9152a44004813da6436"
+    },
+    "docs-run": {
+      "path": "/home/john-riley/projects/lang/target/s2a-repairs-docs-run.log",
+      "sha256": "d61bbbfc98f7aa8b398e61c6f1fe514306612a9ad9bf59eead54fb57070cb7e9"
+    },
+    "readiness": {
+      "path": "/home/john-riley/projects/lang/target/s2a-repairs-readiness.log",
+      "sha256": "45a42e83dda585808893d6fe90bf7751db232e74e46b45c4fbeab780a557fe9a"
+    },
+    "entrypoints": {
+      "path": "/home/john-riley/projects/lang/target/s2a-repairs-entrypoints.log",
+      "sha256": "12d2894273fb1510c4e46fa4de9a5cd70351088d544c3f76d0653ee817edf8ec"
+    },
+    "api-cli": {
+      "path": "/home/john-riley/projects/lang/target/s2a-repairs-api-cli.log",
+      "sha256": "19c824f34402e49b4afe71cd9262695775ab79737fb6a06f9e672c6a13c255a2"
+    }
+  }
+}

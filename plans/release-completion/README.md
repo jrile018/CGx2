@@ -1,12 +1,12 @@
 # CGx2 finite completion plan
 
-Status: all twelve Stage 1 deliveries and three repairs reviewed as bounded deliveries; S2a delivered and staged with three bounded repair lanes; S2b/S3 gated on repair acceptance. See [current review](s1-review/README.md). Updated 2026-10-23. Coordinator branch: `riley/release-completion-plan`. This replaces open-ended two-lane continuation after Wave 28. It does not change the release contract or claim release readiness.
+Status: all twelve Stage 1 deliveries and three repairs reviewed as bounded deliveries; S2a and all three repairs reviewed as bounded deliveries; S2b foundation ready; remaining S2b integrations and S3 still gated. See [current review](s1-review/README.md). Updated 2026-10-23. Coordinator branch: `riley/release-completion-plan`. This replaces open-ended two-lane continuation after Wave 28. It does not change the release contract or claim release readiness.
 
 ## Answer to “how many more waves?”
 
 There are **four dependency stages**, with **12 independent chats ready in Stage 1**. These are dependency stages, not a promise of four short coding waves. Stage 2 contains the shared language and compiler work; Stage 3 reconnects independent consumers; Stage 4 runs the actual acceptance gates. The critical path is S1 → S2a → S2b → S3 → S4. Work may require repair iterations, but every remaining requirement below has a named owner, exit condition and dependency. Do not invent additional waves without linking them to an unmet acceptance row.
 
-Planning range: S1 is one substantial deliverable per chat; S2 is two coordinated compiler deliveries; S3 is one integration delivery per applicable consumer/adapter; S4 is one release-candidate evidence/review cycle plus repairs tied to failing checks. There is no defensible calendar ETA until S1 outputs and external runner/study availability are known. Budget roughly 20–30% of implementation effort for cross-component integration and review. No “92%” metric or completed-chat count substitutes for release gates.
+Planning range: S1 is one substantial deliverable per chat; S2 comprises the reviewed language/type delivery, executable generic/data foundation, and the remaining named source integration checkpoints; S3 is one integration delivery per applicable consumer/adapter; S4 is one release-candidate evidence/review cycle plus repairs tied to failing checks. There is no defensible calendar ETA until S1 outputs and external runner/study availability are known. Budget roughly 20–30% of implementation effort for cross-component integration and review. No “92%” metric or completed-chat count substitutes for release gates.
 
 ## Frozen baseline and immediate dispatch
 
@@ -60,6 +60,21 @@ Start only after S1 changes to exhaustive AST consumers have been integrated and
 **S2a — language and type representation.** Specify and implement nominal variants, payload constructors, exhaustive matching, Option/Result and public qualified identity. Freeze generic declaration/constraint, collection/array and loop-contract syntax before downstream work. Include explicit diagnostic treatment of unsupported constructs in every consumer; do not hide missing semantics under wildcard matches. Deliver parser, typed representation, formatter/API and interpreter/native tests. Generic/type shapes must be accepted by a documented compatibility commit before consumer chats restart.
 
 **S2b — complete source semantics and command surface.** Implement generics/named constraints, supported standard data/checked indexing, ordinary managed/owned aggregates and function lifetimes via the S1 ownership/runtime APIs. Integrate explicit capabilities and typed foreign/tensor calls, pinned package environments and reviewed native/Python routes. Expose bounded owned-input map/zip with S1 execution policies and structured performance reports; auto remains sequential without valid evidence. Add test discovery/properties convention and installed test/verify/notebook/bind commands. Complete Rust output and documented portable Python semantics. Each subrequirement above must have source-level acceptance; a Rust library API alone is insufficient.
+
+### S2b finite implementation checkpoints
+
+The reviewed S2a work exposed overlapping missing representations for generics/data, ownership and typed foreign values. Keep one core writer until each compatibility checkpoint is reviewed. The next bounded plan is [S2b foundation](s2b-foundation/plan.md), covering executable generic functions/records/variants, real named-constraint checking, List/Array/String/indexing and portable value-target semantics. Its proposed remaining envelopes are not source implementation evidence.
+
+The following requirements remain mandatory inside S2b after foundation; none is reassigned to a vague later wave:
+
+| Checkpoint | Required source outcome | Requirements |
+| --- | --- | --- |
+| Foundation | Generic substitution/inference/constraints, usable standard data and checked indexing across packages and admitted targets | R02/R10 |
+| Ordinary function memory | Managed/owned aggregates, borrowing/projections, region provenance, transfer, auto/manual/no_gc and failure/cancel cleanup via reviewed S1 APIs | R03/R04 |
+| Typed package/foreign/execution integration | Authenticated effects/grants/pins, ordinary native/Python/tensor values and calls, explicit routes; owned map/zip and structured decisions with safe Auto fallback | R04/R06/R07/R08/R12 |
+| Command/target closure | Installed test/verify/notebook/bind and property conventions, complete admitted Rust support and stated Python profile, source/target parity | R05/R10 |
+
+A checkpoint may span several coherent commits. Additional parallel adapters are dispatched only for demonstrated missing library work against reviewed immutable envelopes. The S3 consumer fan-out follows the complete S2 interface gate.
 
 S2 integration may split into commits, but the R01–R08/R10/R12 acceptance checklist is fixed. A failed check creates a linked repair item, not a new vague “wave”.
 

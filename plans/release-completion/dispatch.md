@@ -71,3 +71,7 @@ Common repair base: `8902cbd92533b81e801bf2c5bea725f5508fe3e2`. All three worktr
 | match-flow | `01a16b31-6c0c-7d23-86e6-39703eb67696` | /home/john-riley/.codex/worktrees/0020/lang | running |
 | native-records | `01a16b31-71b6-71c0-bca5-fac3df7e31c2` | /home/john-riley/.codex/worktrees/7f73/lang | running |
 | api-text | `01a16b31-80af-7cd1-ac39-090aae87c699` | /home/john-riley/.codex/worktrees/8386/lang | running |
+
+## S2a accepted after repair review
+
+All three repair commits are reviewed-bounded-delivery; original S2a is accepted with its documented source/target limits. Integrated 1078 Rust tests, 166 benchmark tests, 20 docs harness tests, 39 runnable documentation cases, 10 S2a and 33 API product checks pass; details in s2a-review/README.md. S2b foundation is the single dependency-ready core task. Remaining S2b source integrations stay explicit in README.md. Dispatch outcome follows.

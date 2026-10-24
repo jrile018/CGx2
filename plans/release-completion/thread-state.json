@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-23T23:50:30.225Z",
+  "checked_at": "2026-10-24T00:10:30.224Z",
   "original_chats": [
     {
       "lane": "core",
@@ -161,7 +161,7 @@
       "hostId": "local",
       "worktree": "/home/john-riley/.codex/worktrees/88c6/lang",
       "base": "18b82a381c9f70278fad9373ad3db044b8a57693",
-      "status": "repair-required",
+      "status": "reviewed-bounded-delivery",
       "afterCursor": "e8048631-e2ae-4980-b91f-fab9395a9eaa:7",
       "commit": "16028e7d4c78f3974c9e4a2f24878debeec56612",
       "integrated_commit": "ca46bb35bc301b5b3282aee3a1af550b47a6773c"
@@ -176,8 +176,10 @@
       "threadId": "01a16b31-6c0c-7d23-86e6-39703eb67696",
       "worktree": "/home/john-riley/.codex/worktrees/0020/lang",
       "base": "8902cbd92533b81e801bf2c5bea725f5508fe3e2",
-      "status": "running",
-      "afterCursor": "2af6c517-5239-4024-9a8d-19e8ea14a3e4:1"
+      "status": "reviewed-bounded-delivery",
+      "afterCursor": "2af6c517-5239-4024-9a8d-19e8ea14a3e4:2",
+      "commit": "03f760761d473b3783a827d97ac4cb90d486a111",
+      "integrated_commit": "38b5ff0"
     },
     {
       "lane": "native-records",
@@ -187,8 +189,10 @@
       "threadId": "01a16b31-71b6-71c0-bca5-fac3df7e31c2",
       "worktree": "/home/john-riley/.codex/worktrees/7f73/lang",
       "base": "8902cbd92533b81e801bf2c5bea725f5508fe3e2",
-      "status": "running",
-      "afterCursor": "3e93edc5-7ec4-4add-8a20-f5ad3f153b40:1"
+      "status": "reviewed-bounded-delivery",
+      "afterCursor": "3e93edc5-7ec4-4add-8a20-f5ad3f153b40:2",
+      "commit": "d4e61ba127ad103985ee112ea954ee9f78fd07fb",
+      "integrated_commit": "35839ad"
     },
     {
       "lane": "api-text",
@@ -198,8 +202,10 @@
       "threadId": "01a16b31-80af-7cd1-ac39-090aae87c699",
       "worktree": "/home/john-riley/.codex/worktrees/8386/lang",
       "base": "8902cbd92533b81e801bf2c5bea725f5508fe3e2",
-      "status": "running",
-      "afterCursor": "2e5f6be0-978c-4dcd-aadc-7ef5cf068c9f:1"
+      "status": "reviewed-bounded-delivery",
+      "afterCursor": "2e5f6be0-978c-4dcd-aadc-7ef5cf068c9f:2",
+      "commit": "7015726f6310f61c6a466b55bf1fc6227d3313a4",
+      "integrated_commit": "d2853ba"
     }
   ]
 }

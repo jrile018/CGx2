@@ -1,0 +1,68 @@
+{
+  "binary": "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+  "sha256": "e0f326c7a92da860b369507bcd05b0b56cfe95e3d9b04cdbee304365b067ad80",
+  "passed": true,
+  "checks": [
+    {
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/plans/release-completion/s2a-review/evidence/nontail.cg"
+      ],
+      "exit": 0,
+      "stdout": "42\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/plans/release-completion/s2a-review/evidence/inferred.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT003: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/plans/release-completion/s2a-review/evidence/inferred.cg:45..197: expected Bool, found i64\nCGT003: /home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/plans/release-completion/s2a-review/evidence/inferred.cg:219..230: arithmetic requires i64 operands\n"
+    },
+    {
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/plans/release-completion/s2a-review/evidence/package"
+      ],
+      "exit": 0,
+      "stdout": "42\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/plans/release-completion/s2a-review/evidence/package",
+        "--out",
+        "/home/john-riley/projects/lang/target/s2a-repairs-repro/native"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: package_manifest_sha256=c4d964c9e5ed5bf3c9f8ee5db15d40f3bddff33fe8cb57eee73565275d70126d package_sources_sha256=[\"src/main.cg:e8d9486eeefbee21887dd79c414f939c5a78149db1b776b794241f6ea74a5241\", \"src/left.cg:427bd223eae25649dc107d1c7e45fd7b4776a814f82be717ef5eb8504a71d51b\", \"src/right.cg:f49f115c8ade97bd9a595af56005eb93194cf28113a35b1a22e0ae699bb5da5b\"] rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug output=/home/john-riley/projects/lang/target/s2a-repairs-repro/native\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/projects/lang/target/s2a-repairs-repro/native"
+      ],
+      "exit": 0,
+      "stdout": "42\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/projects/lang/target/release-plan-review/debug/cgx2",
+        "api",
+        "--syntax-only",
+        "/home/john-riley/.codex/worktrees/wave21-coordinator-review/lang/plans/release-completion/s2a-review/evidence/api.cg"
+      ],
+      "exit": 0,
+      "stdout": "module <unnamed> [syntax-only]\nvariant Wrap [0, 55)\n    Value(cgx2.core.Option<cgx2.core.Result<i64, Bool>>)\npub fn id<T: Eq + Show>(x: T) -> T effects() [unchecked] caps() [unchecked] [55, 132)\n    requires true [unchecked]\n    ensures true [unchecked]\n",
+      "stderr": ""
+    }
+  ]
+}
