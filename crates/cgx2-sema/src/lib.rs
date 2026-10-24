@@ -6,6 +6,7 @@ mod effects;
 mod imports;
 mod memory;
 pub use memory::graph_memory_profile;
+pub mod default_managed;
 pub mod ordinary_owned;
 mod tensor;
 mod types;

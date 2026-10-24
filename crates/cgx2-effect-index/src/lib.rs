@@ -116,7 +116,9 @@ pub fn index_source(source: &str, syntax_only: bool) -> Result<Index, Vec<Diagno
             })
             .collect::<Vec<_>>()
     })?;
-    if let Some(span) = cgx2_syntax::ordinary_owned_span(&module) {
+    if let Some(span) = cgx2_syntax::ordinary_owned_span(&module)
+        .or_else(|| cgx2_syntax::managed_feature_span(&module))
+    {
         return Err(vec![Diagnostic {
             stage: "admission",
             code: "CGI006".into(),

@@ -10,3 +10,6 @@ pub use index::{
     ApiFunction, ApiIndex, ApiInstantiation, ApiLoopContract, ApiParameter, ApiRecord, ApiType,
     ApiTypeParameter, ApiVariant, ApiVariantCase,
 };
+
+mod memory_v1;
+pub use memory_v1::{build_memory_index, ApiMemoryIndexV1};

@@ -1,0 +1,5 @@
+module app
+import dep
+pub fn main() -> i64:
+    let hidden = dep.id<dep.DepSecret>(dep.DepSecret(number: 1))
+    7

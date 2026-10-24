@@ -547,7 +547,9 @@ pub fn parse_with_expansion(
             span: error.span,
         }
     })?;
-    if let Some(span) = cgx2_syntax::ordinary_owned_span(&module) {
+    if let Some(span) = cgx2_syntax::ordinary_owned_span(&module)
+        .or_else(|| cgx2_syntax::managed_feature_span(&module))
+    {
         return Err(Diagnostic::unsupported(
             "ordinary ownership proof semantics are unsupported; no proof claimed",
             span,

@@ -456,7 +456,8 @@ fn fault_option_is_explicit_and_absent_from_ordinary_release_build() {
         .unwrap();
     assert!(!rejected.status.success());
     assert!(!emitted.exists());
-    let scalar = Path::new(env!("CARGO_MANIFEST_DIR")).join("examples/hello.cg");
+    let scalar = case.path("scalar.cg");
+    fs::write(&scalar, "let x = 1\nx\n").unwrap();
     let scalar_binary = case.path("scalar");
     let rejected = build(&scalar, &scalar_binary, true, Some(1));
     assert!(!rejected.status.success());

@@ -1,0 +1,4 @@
+record Secret:
+    value: i64
+pub variant Leak<T>:
+    Value(Secret)

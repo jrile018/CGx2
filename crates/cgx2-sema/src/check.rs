@@ -140,7 +140,9 @@ pub fn check_module_with_imports(
     module: &Module,
     imported: &ImportedSignatures,
 ) -> Result<TypedModule, Vec<TypeDiagnostic>> {
-    if let Some(span) = cgx2_syntax::ordinary_owned_span(module) {
+    if let Some(span) = cgx2_syntax::ordinary_owned_span(module)
+        .filter(|_| !crate::default_managed::explicit(module))
+    {
         return Err(vec![TypeDiagnostic::new("CGT080", "ordinary ownership requires the authenticated OwnedProgram v1 source path; this copied-value/package consumer is unsupported".into(), span)]);
     }
     crate::tensor::tensor_profile(module)?;
@@ -319,7 +321,9 @@ pub fn check_module_with_imports(
     if !foreign_errors.is_empty() {
         return Err(foreign_errors);
     }
-    if let Some(result) = crate::memory::check_memory_module(module) {
+    if let Some(result) = crate::memory::check_memory_module(module)
+        .filter(|_| !crate::default_managed::explicit(module))
+    {
         if let Some(span) = cgx2_syntax::s2a_feature_span(module) {
             return Err(vec![TypeDiagnostic::new(
                 "CGT023",
@@ -666,6 +670,7 @@ impl Checker {
             .collect();
         fn dependencies(ty: &Type, out: &mut Vec<String>) {
             match ty {
+                Type::AppliedRecord { name, .. } if name == "cgx2.managed.Ref" => {}
                 Type::Record(n) => out.push(n.clone()),
                 Type::Variant { name, arguments } | Type::AppliedRecord { name, arguments } => {
                     out.push(name.clone());
@@ -1397,9 +1402,30 @@ impl Checker {
                 }
                 if matches!(&iter.kind, ExprKind::Call { callee, .. }
                     if matches!(&callee.kind, ExprKind::Name(path) if path.segments.as_slice() == ["range"]))
+                    && !crate::default_managed::explicit(&self.module)
                 {
                     self.check_range_body_policy(body);
                 }
+                self.check_block_hint(body, expected, None);
+                self.scopes.pop();
+                Some((Type::Unit, statement.span))
+            }
+            StmtKind::NoGc { budget, body } if crate::default_managed::explicit(&self.module) => {
+                self.diagnostics.extend(effects::guard_diagnostics(
+                    body,
+                    &self.module,
+                    &self.imported,
+                    &self.effect_summaries,
+                ));
+                if !matches!(&budget.kind, ExprKind::Integer(n) if n.replace('_', "").parse::<usize>().is_ok())
+                {
+                    self.report(
+                        "CGT090",
+                        "no_gc budget requires a nonnegative usize integer literal",
+                        budget.span,
+                    );
+                }
+                self.scopes.push(BTreeMap::new());
                 self.check_block_hint(body, expected, None);
                 self.scopes.pop();
                 Some((Type::Unit, statement.span))

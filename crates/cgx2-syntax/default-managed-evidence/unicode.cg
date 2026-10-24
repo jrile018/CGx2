@@ -1,0 +1,5 @@
+fn main() -> i64 effects(Mutate):
+    let mut text = "🙂"
+    for i in range(0, 18):
+        text = concat(text, text)
+    length(text)

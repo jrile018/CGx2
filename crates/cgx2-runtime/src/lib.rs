@@ -9,6 +9,7 @@ mod owned;
 mod region;
 mod report;
 mod scope;
+pub use graph::default_managed;
 
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::Instant;

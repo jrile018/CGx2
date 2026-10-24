@@ -89,6 +89,7 @@ struct Engine<'a, 's> {
     storage: &'s mut Vec<Option<(usize, OwnedBytes)>>,
     evidence: &'s mut Evidence,
     steps: &'s mut usize,
+    bridge: &'s mut dyn ManagedBridge,
 }
 type Eval<T> = Result<T, Failure>;
 fn fail(span: SourceSpan, message: impl Into<String>) -> Failure {
@@ -111,15 +112,46 @@ pub(super) fn run(model: &Model) -> Execution {
     }
 }
 pub(super) fn run_with_session(model: &Model, mut session: Session) -> Execution {
+    run_with_bridge(model, &mut session, &mut NoBridge)
+}
+pub trait ManagedBridge {
+    fn invoke(
+        &mut self,
+        name: &str,
+        arguments: &[Scalar],
+        session: &mut Session,
+        remaining_steps: usize,
+        depth: usize,
+    ) -> Option<(Result<Scalar, Failure>, usize)>;
+}
+struct NoBridge;
+impl ManagedBridge for NoBridge {
+    fn invoke(
+        &mut self,
+        _: &str,
+        _: &[Scalar],
+        _: &mut Session,
+        _: usize,
+        _: usize,
+    ) -> Option<(Result<Scalar, Failure>, usize)> {
+        None
+    }
+}
+pub fn run_with_bridge(
+    model: &Model,
+    session: &mut Session,
+    bridge: &mut dyn ManagedBridge,
+) -> Execution {
     let mut storage = vec![];
     let mut evidence = Evidence::default();
     let mut steps = 0;
     let mut e = Engine {
         model,
-        session: &mut session,
+        session,
         storage: &mut storage,
         evidence: &mut evidence,
         steps: &mut steps,
+        bridge,
     };
     let result = e.call(model.entry, vec![], 0).and_then(|v| match v {
         Value::Scalar(v) => Ok(v),
@@ -170,6 +202,25 @@ impl Engine<'_, '_> {
     }
     fn call(&mut self, id: usize, arguments: Vec<Value>, depth: usize) -> Eval<Value> {
         let f = &self.model.functions[id];
+        let copied = arguments
+            .iter()
+            .map(|v| match v {
+                Value::Scalar(v) => Some(v.clone()),
+                _ => None,
+            })
+            .collect::<Option<Vec<_>>>();
+        if let Some(arguments) = copied {
+            if let Some((result, used)) = self.bridge.invoke(
+                &f.name,
+                &arguments,
+                self.session,
+                1_000_000usize.saturating_sub(*self.steps),
+                depth,
+            ) {
+                *self.steps = self.steps.saturating_add(used);
+                return result.map(Value::Scalar);
+            }
+        }
         if depth >= 64 {
             return Err(fail(f.span, "ordinary call depth limit"));
         }
@@ -214,6 +265,7 @@ impl Engine<'_, '_> {
                             storage: self.storage,
                             evidence: self.evidence,
                             steps: self.steps,
+                            bridge: self.bridge,
                         }
                         .block(body, slots, depth);
                         drop(guard);
@@ -585,6 +637,7 @@ mod tests {
             storage: &mut vec![Some((0, storage))],
             evidence: &mut Evidence::default(),
             steps: &mut 0,
+            bridge: &mut NoBridge,
         };
         let span = model.layouts[0].span;
         engine.write(0, 0, 0, &Scalar::I64(i64::MIN), span).unwrap();

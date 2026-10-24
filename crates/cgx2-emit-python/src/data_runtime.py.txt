@@ -2,6 +2,7 @@
 import sys as _cgx2_sys
 _cgx2_steps = 0
 _cgx2_depth = 0
+_cgx2_utf8_work = 0
 
 def _cgx2_fail(code, message, start=0, end=0):
     error = RuntimeError(f'{code} at {start}..{end}: {message}')
@@ -18,10 +19,11 @@ def _cgx2_expr(thunk, start, end):
     _cgx2_step(start, end)
     value = thunk()
     nodes, size = _cgx2_bound(value)
-    global _cgx2_steps
-    if _cgx2_steps + nodes + size > 1000000:
+    global _cgx2_steps, _cgx2_utf8_work
+    if _cgx2_steps + nodes > 1000000 or _cgx2_utf8_work + size > 268435456:
         _cgx2_fail('CGR010', 'execution work budget exceeded', start, end)
-    _cgx2_steps += nodes + size
+    _cgx2_steps += nodes
+    _cgx2_utf8_work += size
     return value
 
 def _cgx2_range(thunk, start, end):

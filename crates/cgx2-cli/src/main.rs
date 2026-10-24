@@ -31,6 +31,9 @@ enum Command {
         path: String,
         json: bool,
     },
+    MemoryEffects {
+        path: String,
+    },
     FailureReport {
         path: String,
     },
@@ -60,6 +63,71 @@ fn main() -> ExitCode {
 fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
     let json = matches!(DiagnosticFormat::from_args(&args), DiagnosticFormat::Json);
     let command = parse_args(args).map_err(|error| vec![error])?;
+    if let Command::MemoryEffects { path } = &command {
+        let program = if Path::new(path).is_dir() {
+            let package = cgx2_package::load_checked_package(Path::new(path)).map_err(|ds| {
+                ds.into_iter()
+                    .map(|d| CliDiagnostic::new(d.code, d.message, path.clone(), d.span))
+                    .collect::<Vec<_>>()
+            })?;
+            package.verify_unchanged().map_err(|ds| {
+                ds.into_iter()
+                    .map(|d| CliDiagnostic::new(d.code, d.message, path.clone(), d.span))
+                    .collect::<Vec<_>>()
+            })?;
+            let entry = package
+                .modules()
+                .iter()
+                .find(|m| m.source() == package.index().entry)
+                .unwrap();
+            let name = entry
+                .syntax()
+                .name
+                .as_ref()
+                .map(|p| p.segments.join("."))
+                .unwrap_or_default();
+            let merged = cgx2_sema::merge_modules(
+                &package
+                    .modules()
+                    .iter()
+                    .map(|m| m.syntax())
+                    .collect::<Vec<_>>(),
+                &name,
+            );
+            let text = package
+                .modules()
+                .iter()
+                .map(|m| m.text())
+                .collect::<Vec<_>>()
+                .join("\n");
+            cgx2_sema::default_managed::compile_module(&merged, &text)
+        } else {
+            let text = fs::read_to_string(path).map_err(|e| {
+                vec![CliDiagnostic::new(
+                    "CGC001",
+                    e.to_string(),
+                    path.clone(),
+                    None,
+                )]
+            })?;
+            cgx2_sema::default_managed::compile_source(&text)
+        }
+        .map_err(|ds| {
+            ds.into_iter()
+                .map(|d| CliDiagnostic::new(d.code, d.message, path.clone(), Some(d.span)))
+                .collect::<Vec<_>>()
+        })?;
+        let index = cgx2_api_index::build_memory_index(&program).map_err(|e| {
+            vec![CliDiagnostic::new(
+                "CGC001",
+                e.to_string(),
+                path.clone(),
+                None,
+            )]
+        })?;
+        println!("{}", index.render_json());
+        return Ok(());
+    }
     if let Command::Compile { path, args } = command {
         return cgx2c::run(args).map_err(|error| {
             vec![CliDiagnostic::new(
@@ -120,6 +188,7 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
         | Command::Api { path, .. }
         | Command::Run { path, .. }
         | Command::MemoryReport { path, .. }
+        | Command::MemoryEffects { path }
         | Command::FailureReport { path }
         | Command::Fmt { path } => path,
     };
@@ -276,6 +345,7 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
                 print!("{}", report.to_text());
             }
         }
+        Command::MemoryEffects { .. } => unreachable!("handled before source routing"),
         Command::FailureReport { path } => match run_checked_source_with_failure(&source, &[]) {
             Ok((_, Some(_))) => (),
             Ok((_, None)) => {
@@ -376,6 +446,14 @@ fn parse_args(args: Vec<String>) -> Result<Command, CliDiagnostic> {
     if matches!(filtered.first().map(String::as_str), Some("build" | "emit")) {
         return parse_compile(&filtered)
             .map_err(|message| CliDiagnostic::new("CGC001", message, "<command>".into(), None));
+    }
+    if filtered.first().map(String::as_str) == Some("memory-effects") {
+        if filtered.len() != 2 {
+            return Err(usage());
+        }
+        return Ok(Command::MemoryEffects {
+            path: filtered[1].clone(),
+        });
     }
     if filtered.first().map(String::as_str) == Some("api") {
         let json = filtered.iter().any(|arg| arg == "--json");

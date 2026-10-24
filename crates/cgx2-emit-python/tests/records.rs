@@ -3,6 +3,8 @@ use cgx2_emit_python::emit_python;
 use cgx2_sema::{check_module, collect_public_signatures};
 use cgx2_syntax::parse_module;
 use std::process::Command;
+use std::sync::atomic::{AtomicUsize, Ordering};
+static NEXT_RECORD_FIXTURE: AtomicUsize = AtomicUsize::new(0);
 
 fn checked_python(source: &str) -> String {
     let module = parse_module(source).unwrap();
@@ -13,8 +15,9 @@ fn checked_python(source: &str) -> String {
 fn run_python(source: &str) -> std::process::Output {
     let python = checked_python(source);
     let path = std::env::temp_dir().join(format!(
-        "cgx2-record-{}-{}.py",
+        "cgx2-record-{}-{}-{}.py",
         std::process::id(),
+        NEXT_RECORD_FIXTURE.fetch_add(1, Ordering::Relaxed),
         std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
             .unwrap()

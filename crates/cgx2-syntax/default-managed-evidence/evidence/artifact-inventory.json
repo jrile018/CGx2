@@ -1,0 +1,1352 @@
+[
+  {
+    "path": "asan-final/asan-no-leaks/fallible_lifetime_model",
+    "bytes": 9993688,
+    "sha256": "d6ae0d6b2a95b474ea90801c8f78ba9962ce5aa21de3a92ff27b86a7c0030582",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/fallible_lifetimes",
+    "bytes": 9976512,
+    "sha256": "cbd6a8c3bc2823362d9b3806504d72e995848403c5f0b4268538ea436f34e891",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/graph_storage",
+    "bytes": 10077904,
+    "sha256": "514d7504ba0c9d3af4b81ae77f05ff8b99d64017e17fa8789bc5cea3b2d9ec29",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/graph_storage_model",
+    "bytes": 9873336,
+    "sha256": "d816360ae61f7f92e9c0543b3ab13135fd3afd0ab1c0efe12b717be0dd9cfc2b",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/libcgx2_runtime.rlib",
+    "bytes": 8568960,
+    "sha256": "b164d8d86301e3fb364619d6455552cbc79ebdfb1d226f6e9d5c49bad386a17a",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/runtime-unit",
+    "bytes": 8617528,
+    "sha256": "79c9080e5af108146c868d4ff13b1ef57115fed52806750e9e955c9e2cdbcc87",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "asan-leaks-final/asan-leaks/leak-probe",
+    "bytes": 5733960,
+    "sha256": "ec2bcc24c489ac1480a62a85df44158d22a3bb36c8c7a98c8a3dfda86383cb12",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "asan-leaks-final/asan-leaks/libcgx2_runtime.rlib",
+    "bytes": 8568960,
+    "sha256": "b164d8d86301e3fb364619d6455552cbc79ebdfb1d226f6e9d5c49bad386a17a",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "asan-roots-final/asan-roots-no-leaks/libcgx2_runtime.rlib",
+    "bytes": 8560954,
+    "sha256": "117477392f7ab3b2114eec120d51a2478ad7005d63c0633e9a6e2ed751b2b62d",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "asan-roots-final/asan-roots-no-leaks/runtime-unit",
+    "bytes": 8617528,
+    "sha256": "281566894a5e19b8e2c5ca641d7a129bc4f820f9fc4c2009486da7d712d072fa",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "asan-roots-final2/asan-roots-no-leaks/default_managed_roots",
+    "bytes": 9898768,
+    "sha256": "c1c12fa6e3758027dd940c41328cc242ba870b48c1641194e446797e68753b8b",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "asan-roots-final2/asan-roots-no-leaks/libcgx2_runtime.rlib",
+    "bytes": 8568928,
+    "sha256": "8b08a9582e5a79fdc955b0cfb3cdb2522f191055d9d1756a1c6abb9f6389d56e",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "asan-roots-final2/asan-roots-no-leaks/runtime-unit",
+    "bytes": 8617528,
+    "sha256": "05c717a870c7556850271e31f8a7da93303fe3ff7bff78b433671a1fbf9f36f6",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "asan-roots-leaks-final/asan-roots-leaks/leak-probe",
+    "bytes": 5733984,
+    "sha256": "74a47a429c434834be92deece50170c99c44056dd48a184f53491b5ef4decffb",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "asan-roots-leaks-final/asan-roots-leaks/libcgx2_runtime.rlib",
+    "bytes": 8560954,
+    "sha256": "d2733a9b1224447de8207da9c131113ab20ebb37269a7577edb8f61419044e37",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "asan-roots-leaks-final2/asan-roots-leaks/leak-probe",
+    "bytes": 5733984,
+    "sha256": "fcac0ac68edde7a0c44f5fb399f1e9201ef899dea08a5b15579389ea710dc6c4",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "asan-roots-leaks-final2/asan-roots-leaks/libcgx2_runtime.rlib",
+    "bytes": 8568928,
+    "sha256": "8b08a9582e5a79fdc955b0cfb3cdb2522f191055d9d1756a1c6abb9f6389d56e",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/collisions-debug",
+    "bytes": 5319032,
+    "sha256": "efd724b0724ab62f0e60e39aaf25392746881652fe01008b533e4549fdba4013",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/collisions-release",
+    "bytes": 4733472,
+    "sha256": "bd325eba5ad281f76d357a211c59fca73750e11b2ef2f688cf3dae82d3d36744",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/collisions-rust",
+    "bytes": 5267512,
+    "sha256": "a9d29131ada3637bc83c8282b8e051254e16b3582a5687950e2ef9fb4396a27c",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/collisions.rs",
+    "bytes": 185180,
+    "sha256": "a8724638ec48ba9154f4597ab9ca4e08810a196e1670babb201292f2ebc83c7e",
+    "retained": "regressions-complete/specialization/collisions.rs.gz"
+  },
+  {
+    "path": "regressions-complete/specialization/nested-private-debug",
+    "bytes": 5326656,
+    "sha256": "12d0796a72a2a03c739a9103686886490d5638e2eb0f189dea62d1c15159412a",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/nested-private-release",
+    "bytes": 4739216,
+    "sha256": "94b05dd8d9ac3cb38031ec4e75fcdea6f5be7bd88361088fb8f5f49b21ccb1e1",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/nested-private-rust",
+    "bytes": 5274816,
+    "sha256": "8040bec0ee128312d7bc2c6d6b0cce1b0a3793b32225f5aa96008a880f38936f",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/nested-private.rs",
+    "bytes": 186549,
+    "sha256": "449e36da26ca3db6f6dfedb78497bdb295617fb911c61e6d9d8c465a83cff533",
+    "retained": "regressions-complete/specialization/nested-private.rs.gz"
+  },
+  {
+    "path": "regressions-complete/specialization/package-private-debug",
+    "bytes": 5299808,
+    "sha256": "e28ac851aafde140106ff4bfa9fd5f2344e820768b5a93ed901ef689b265f01b",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/package-private-release",
+    "bytes": 4750216,
+    "sha256": "7c99dd4c09596b17ca1ca4eda2fe269aab7ecbdc69b38b50203ca27ef1e314dd",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/package-private-rust",
+    "bytes": 5296360,
+    "sha256": "ef03f501d2663e925e78f4e7bde8954a6daa597e19e03cb55a1108823ab6e5e7",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/package-private.rs",
+    "bytes": 191885,
+    "sha256": "d5433a4cf3b7d145205a73d210719fcf3907380d0078bb6e8178a6ce335233d2",
+    "retained": "regressions-complete/specialization/package-private.rs.gz"
+  },
+  {
+    "path": "regressions-complete/specialization/public-interfaces-debug",
+    "bytes": 5326848,
+    "sha256": "ddf9a217ffd4d1b582d560ed87b4c9e83f5dbdcdb9ea158f21269e4a362ea43d",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/public-interfaces-release",
+    "bytes": 4739696,
+    "sha256": "0eab0d3fc128905314e21d3518f3718e211c5449c8418f6ed65a75a92ec7d931",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/public-interfaces-rust",
+    "bytes": 5274992,
+    "sha256": "31dc3479dab8b72fa061904ee62ec3738317f43f601e99e86d289655919144f7",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/public-interfaces.rs",
+    "bytes": 186835,
+    "sha256": "dba90aad88c39dc29de6373ba78212c830384d196876e7617431c39c960ecb59",
+    "retained": "regressions-complete/specialization/public-interfaces.rs.gz"
+  },
+  {
+    "path": "regressions-complete/specialization/public-package-debug",
+    "bytes": 5294920,
+    "sha256": "7b8addffe49d046df477c9cbba9e8871491a6872a6ebd72aafe3fe8d4ee5ef70",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/public-package-release",
+    "bytes": 4747424,
+    "sha256": "96ef1e0f1168768ca1e8c5a8284e8c67025de21451c0f8de5851dc2dfab41176",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/public-package-rust",
+    "bytes": 5291416,
+    "sha256": "12e225939daba7d42546f852e0e8da233c5d898667e63a3626d594e103f4dd59",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/public-package.rs",
+    "bytes": 190397,
+    "sha256": "443d7b8b17d31c0c84c5985a01590b528601180f42bad5ec10a343f67d4118fc",
+    "retained": "regressions-complete/specialization/public-package.rs.gz"
+  },
+  {
+    "path": "regressions-complete/specialization/public-source-debug",
+    "bytes": 5339600,
+    "sha256": "3262eb76205e6cc7bf56d117d7f5fdbc25e1143f1d482bb6dabffcd2371165df",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/public-source-release",
+    "bytes": 4745768,
+    "sha256": "6653cc9fd4a726287846755ca9dd42d4e79927859f8309b1b3aabe2e55215b53",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/public-source-rust",
+    "bytes": 5287616,
+    "sha256": "8f72431b0899b3d8afd29d6be3a7d124eef4888a676dff30cf0c27da02be2512",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/public-source.rs",
+    "bytes": 189433,
+    "sha256": "958f79bda5357171b9518b3c939b82bb30cf6399918834790ebf80fcccd85789",
+    "retained": "regressions-complete/specialization/public-source.rs.gz"
+  },
+  {
+    "path": "regressions-complete/specialization/public-values-debug",
+    "bytes": 5331352,
+    "sha256": "5dc92ca3c4f9e6c612461a74497b84fec825ab79654d8d99b6b9389f56868fef",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/public-values-release",
+    "bytes": 4741832,
+    "sha256": "0e943c13718f1f1e494c73cadce17d54b6465fa3ab76b5a4c564b83a15c0803c",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/public-values-rust",
+    "bytes": 5279336,
+    "sha256": "7cacb7e24c30d3efc420a55163cf9d0f34fa0b16b8254cac204bdb56b5a3646e",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/public-values.rs",
+    "bytes": 187777,
+    "sha256": "9e01ab5ad85e49d38cc0b03fc29e4c7e35fca749ee36cfa674afdeb6c0281f67",
+    "retained": "regressions-complete/specialization/public-values.rs.gz"
+  },
+  {
+    "path": "regressions-complete/specialization/qualified-debug",
+    "bytes": 5313512,
+    "sha256": "2d08984ef4fc8f62e123552933a2f7ae9d84c8b89dacf21e3319a277a25eaef2",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/qualified-release",
+    "bytes": 4731184,
+    "sha256": "a3d6e33bf2db90672f3bc1dc80a72be2ed00858bda20ccdf2cbe8a9ff3f17001",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/qualified-rust",
+    "bytes": 5262192,
+    "sha256": "a59f4b09e2b889c669efe6578b786dba8e7d83c207c79b937d204fbf8ea48495",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/qualified.rs",
+    "bytes": 183709,
+    "sha256": "1ad1e385736127016d5ef58c91b867f6f85437ea84d0781045d3cb8ae13f92fe",
+    "retained": "regressions-complete/specialization/qualified.rs.gz"
+  },
+  {
+    "path": "regressions-complete/specialization/visibility-package-debug",
+    "bytes": 5314664,
+    "sha256": "be6232c66d2def5167316939e993a022a251a29fe698dc506f263a8bf44baa14",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/visibility-package-release",
+    "bytes": 4756360,
+    "sha256": "7a8230c83878f4f262b2b22dfc61ab58a673eae731bc605e5970b22233ff4cb4",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/visibility-package-rust",
+    "bytes": 5311144,
+    "sha256": "2014f9e6323c98ddc37895366b907a7a25429356ab03c29c4a708514d955cd73",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/visibility-package.rs",
+    "bytes": 195392,
+    "sha256": "2dd28f920e0d5e3a965480f9f2fedbea9e52db6b72c2343a09b3f8ad077b8509",
+    "retained": "regressions-complete/specialization/visibility-package.rs.gz"
+  },
+  {
+    "path": "regressions-complete/specialization/visibility-source-debug",
+    "bytes": 5370536,
+    "sha256": "4a47c1cc2aad2e1e870bdce8da83eac0b63e1fb234a7a0110f45df7ad06a52ca",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/visibility-source-release",
+    "bytes": 4759680,
+    "sha256": "dec9e4074de0ce337e7bf3854fbfe5126ed80e32306ac482cb4639bb9c2a4e0d",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/visibility-source-rust",
+    "bytes": 5318168,
+    "sha256": "c8f4585ed686dab1bbf6a39176dd43f8eac65143736e6e6d45d356ead880c52c",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/specialization/visibility-source.rs",
+    "bytes": 196490,
+    "sha256": "44d91fd683d687a8d042610a6e8a7a4b8bd9fe710155768fefb559125c504dee",
+    "retained": "regressions-complete/specialization/visibility-source.rs.gz"
+  },
+  {
+    "path": "regressions-complete/visibility/package-debug",
+    "bytes": 5314648,
+    "sha256": "ca10692504ec476f645db1ffa69242f63f20a741387c2abdee52e98242f31191",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/visibility/package-release",
+    "bytes": 4756344,
+    "sha256": "d290efd41aed78c159e3a318e0c44122347b00c128e35b4eca1bdabc2573df14",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/visibility/package-rust",
+    "bytes": 5311096,
+    "sha256": "45b1cd354cdf2b13fec4d97c6222a52015b70e013a582bf10a72bcdc9ab42533",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/visibility/package.rs",
+    "bytes": 195392,
+    "sha256": "2dd28f920e0d5e3a965480f9f2fedbea9e52db6b72c2343a09b3f8ad077b8509",
+    "retained": "regressions-complete/visibility/package.rs.gz"
+  },
+  {
+    "path": "regressions-complete/visibility/public-package-debug",
+    "bytes": 5294904,
+    "sha256": "a2db90686046a151d029304a6c5bfb7b09c897314d03abaadb8133e02675ae13",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/visibility/public-package-release",
+    "bytes": 4747408,
+    "sha256": "2946d9eab7a42dc106af4122ab3642319c46fb4952d1bec6a25bf5cefc31bddc",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/visibility/public-package-rust",
+    "bytes": 5304432,
+    "sha256": "aa11b80dd74aa78105cd75e678b6f22e6fafd173a74b34e5b15f773ffaee0e6b",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/visibility/public-package.rs",
+    "bytes": 190397,
+    "sha256": "443d7b8b17d31c0c84c5985a01590b528601180f42bad5ec10a343f67d4118fc",
+    "retained": "regressions-complete/visibility/public-package.rs.gz"
+  },
+  {
+    "path": "regressions-complete/visibility/public-source-debug",
+    "bytes": 5339584,
+    "sha256": "dddaad21dc8bc50df24c81acce77fb9db8c6cbad0dd189a93999178f23b362b5",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/visibility/public-source-release",
+    "bytes": 4745776,
+    "sha256": "37443482abba3c8dae4f39d1c09562f249585f12dfa5ee32fb312a3c0d00b06c",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/visibility/public-source-rust",
+    "bytes": 5299016,
+    "sha256": "07dedce5124c168f754fb72485b93cd66cf633dfca03e1c63aaa82fac82410a7",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/visibility/public-source.rs",
+    "bytes": 189433,
+    "sha256": "958f79bda5357171b9518b3c939b82bb30cf6399918834790ebf80fcccd85789",
+    "retained": "regressions-complete/visibility/public-source.rs.gz"
+  },
+  {
+    "path": "regressions-complete/visibility/public-values-debug",
+    "bytes": 5331336,
+    "sha256": "4024a02947932baa9547d0b138aab482c92a344363952c27ba25c3ecee983a36",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/visibility/public-values-release",
+    "bytes": 4741824,
+    "sha256": "cedb8e40d71412e4434de4810034a54bd47cc7d38d5c793dcef149e0af9e067b",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/visibility/public-values-rust",
+    "bytes": 5289088,
+    "sha256": "8fb18c9d9b6d07e0893423c4d3ece1c9732166d9f636ccdad13a450ad696e794",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/visibility/public-values.rs",
+    "bytes": 187777,
+    "sha256": "9e01ab5ad85e49d38cc0b03fc29e4c7e35fca749ee36cfa674afdeb6c0281f67",
+    "retained": "regressions-complete/visibility/public-values.rs.gz"
+  },
+  {
+    "path": "regressions-complete/visibility/source-debug",
+    "bytes": 5370520,
+    "sha256": "c56f5cacab422cb97ec41c026c54c8415169e2c579046ad5b740bfd55ab2fdf6",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/visibility/source-release",
+    "bytes": 4759672,
+    "sha256": "e8e08bbcbe62cc52e1fbf5386b022d069230b0d50b06e0e74420ccdf124d43a6",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/visibility/source-rust",
+    "bytes": 5316632,
+    "sha256": "99afe7110b0fb9a044a2202a56e1b43c4057910932fc47427cbbe29afcdf11fe",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "regressions-complete/visibility/source.rs",
+    "bytes": 196490,
+    "sha256": "44d91fd683d687a8d042610a6e8a7a4b8bd9fe710155768fefb559125c504dee",
+    "retained": "regressions-complete/visibility/source.rs.gz"
+  },
+  {
+    "path": "required-final/asan-leaks/leak-probe",
+    "bytes": 5733952,
+    "sha256": "7cd7c2ffcb68eeb54119d7d84d0f4373bedcbf905c3336f0fd8c08cc2f34c583",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/asan-leaks/libcgx2_runtime.rlib",
+    "bytes": 8568960,
+    "sha256": "b164d8d86301e3fb364619d6455552cbc79ebdfb1d226f6e9d5c49bad386a17a",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/asan-no-leaks/libcgx2_runtime.rlib",
+    "bytes": 8568928,
+    "sha256": "8b08a9582e5a79fdc955b0cfb3cdb2522f191055d9d1756a1c6abb9f6389d56e",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/asan-no-leaks/runtime-unit",
+    "bytes": 8617528,
+    "sha256": "79c9080e5af108146c868d4ff13b1ef57115fed52806750e9e955c9e2cdbcc87",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/collisions-debug",
+    "bytes": 5318856,
+    "sha256": "9b98fa63292872faeb656519222ac3fc5f8ce566983abe383ca295f323e7f30b",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/collisions-release",
+    "bytes": 4733296,
+    "sha256": "47b06d42c6df2124aa3401a4230672ddc7d7ec1f10baa4152309d18365f048f8",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/collisions-rust",
+    "bytes": 5267352,
+    "sha256": "7d1aac7ed0a249cff13dd985db0646693066a82c3e5a2924947147a21c44d06a",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/collisions.rs",
+    "bytes": 184941,
+    "sha256": "1f06cd0f2e81a1f829cf820acc948b76710f6ee99ccfa5d20f1b3c76430f4ed9",
+    "retained": "required-final/specialization/collisions.rs.gz"
+  },
+  {
+    "path": "required-final/specialization/nested-private-debug",
+    "bytes": 5326480,
+    "sha256": "607b54611f3bb2f7f81c142a303e9f672f9c0779c43d144aaf999a4c49e9f19f",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/nested-private-release",
+    "bytes": 4739048,
+    "sha256": "fd32dedc0ca025f1f0854e059033caa6a66fa17bffda805e151d8a6c21c30d36",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/nested-private-rust",
+    "bytes": 5274640,
+    "sha256": "443cebfcef5acb836fad2bcd7720376c7c96ccc576b5c826ce8a0425470b5395",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/nested-private.rs",
+    "bytes": 186310,
+    "sha256": "dd1b72c8a2342e3dc14ae5a044532fbb1215969887f60ad44708428a38e953f7",
+    "retained": "required-final/specialization/nested-private.rs.gz"
+  },
+  {
+    "path": "required-final/specialization/package-private-debug",
+    "bytes": 5299632,
+    "sha256": "62f2318377edcd52ad888b85da68016d6b8562d2eab18de3d4bc13e82f95703f",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/package-private-release",
+    "bytes": 4750032,
+    "sha256": "e8191991783032709522af359e10ca1add66da88589520b9f93761a5593f7a91",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/package-private-rust",
+    "bytes": 5296184,
+    "sha256": "9add7324d0eea32a446cf9bd8b88100bb17664810fa30dadbb7542904093c8e6",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/package-private.rs",
+    "bytes": 191646,
+    "sha256": "6033ff4bdd479b13bbb5504eeb284461f9860ce650accb1f2e7ee2de568a0390",
+    "retained": "required-final/specialization/package-private.rs.gz"
+  },
+  {
+    "path": "required-final/specialization/public-interfaces-debug",
+    "bytes": 5326672,
+    "sha256": "88a146507822b077898fa636cf113e12c8aac65697a14da3d635abd428dff576",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/public-interfaces-release",
+    "bytes": 4739528,
+    "sha256": "48b3378dbe82df2cc6b55ec45405d0f222fdccf7ac766914ff033aa38dd1ef96",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/public-interfaces-rust",
+    "bytes": 5274832,
+    "sha256": "a0efd6642283dfd59890b28200eea514d2af29aac34fe491b68b1a9b7e722dff",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/public-interfaces.rs",
+    "bytes": 186596,
+    "sha256": "4540dd52dd3b7be5c6c6989784994fcd5946e21bb3c9266a35f9d52834679fa3",
+    "retained": "required-final/specialization/public-interfaces.rs.gz"
+  },
+  {
+    "path": "required-final/specialization/public-package-debug",
+    "bytes": 5294744,
+    "sha256": "4e276ebf00e1affdd042817e1c2a52073e5fe87d346dbccd42719b8772af7984",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/public-package-release",
+    "bytes": 4747248,
+    "sha256": "cdd22e6ff7c0e507842cdb467dce96171368ce4437caddbce9e758d0782c46cb",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/public-package-rust",
+    "bytes": 5291240,
+    "sha256": "6f813e868a7d13b3479ee3c577435667934c4992eaed4dc67e6409a38801a22a",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/public-package.rs",
+    "bytes": 190158,
+    "sha256": "df634d6a0ed63bbfea018d9eac8cdcb82efe1f2886e2a9426aee774a85cd8c47",
+    "retained": "required-final/specialization/public-package.rs.gz"
+  },
+  {
+    "path": "required-final/specialization/public-source-debug",
+    "bytes": 5339408,
+    "sha256": "aa9b79e2c8b38daed5cb05a1ee1d6e7b309b70bfcc2fabfc734b619fe019c5a4",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/public-source-release",
+    "bytes": 4745600,
+    "sha256": "11a41e0b414efb485836f0b53c78c80706b7f73f0cfd2703669a2429d73aa142",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/public-source-rust",
+    "bytes": 5287440,
+    "sha256": "3dfdcd61ef6f992987db6806237d531f2065bcf37a66e6c641f389d539bac781",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/public-source.rs",
+    "bytes": 189194,
+    "sha256": "41f67c98708eb4e89fb7fa8e95f35d601c0661dda902b262e8c2e13d4038db9b",
+    "retained": "required-final/specialization/public-source.rs.gz"
+  },
+  {
+    "path": "required-final/specialization/public-values-debug",
+    "bytes": 5331160,
+    "sha256": "b4bf979dd1a4b7e9bf175918077a291a481fdc1c492971a318eb27f02b3302cc",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/public-values-release",
+    "bytes": 4741648,
+    "sha256": "4f5ff9baa183a90f543cc8c2d4d8c3ca4f18b648e3fec84c7b52b23b3ced05a3",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/public-values-rust",
+    "bytes": 5279160,
+    "sha256": "37259ce1c92b7a25de6e2ec018f3b2211862eb49f625a710785c0b37ae389abd",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/public-values.rs",
+    "bytes": 187538,
+    "sha256": "bce51359eefb67e423e75d34764da7ebcc007ccf6cc84eacf4d152fec8e02c00",
+    "retained": "required-final/specialization/public-values.rs.gz"
+  },
+  {
+    "path": "required-final/specialization/qualified-debug",
+    "bytes": 5313320,
+    "sha256": "5d8ce543dde86ba4e0f448044af69591821e76f6b3795b1e6f62e8176d6a4110",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/qualified-release",
+    "bytes": 4730992,
+    "sha256": "001f7c1d5e8118289be96ee761af6ce3fad851cb83334e1731497524a5e89af0",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/qualified-rust",
+    "bytes": 5262032,
+    "sha256": "d58ead5e151a592c552bd3dcbb1098c19fd755e8f2263ca5d131f026902f7a38",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/qualified.rs",
+    "bytes": 183470,
+    "sha256": "3249751d86a149a43cee3fb1a39d5105a5c5951ca9ca72df0d899ba8990107d5",
+    "retained": "required-final/specialization/qualified.rs.gz"
+  },
+  {
+    "path": "required-final/specialization/visibility-package-debug",
+    "bytes": 5314472,
+    "sha256": "c92119c7932d171d09dcf728e84fe84c1448cf0c31e0e423d3768e09aeabe445",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/visibility-package-release",
+    "bytes": 4756176,
+    "sha256": "5b3751a691796ea2cdf3027eccac84ea84157c9f07b1c68d8245f33de94feae6",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/visibility-package-rust",
+    "bytes": 5310968,
+    "sha256": "851ad85ecb2ba1f0ede5fd5efcce762b53371486ef3f9c645713a3595eaa35fa",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/visibility-package.rs",
+    "bytes": 195153,
+    "sha256": "a00b57c9023718d00bb98925ccdcfaf2347eeaa880cdf449797c0b56d2573d8e",
+    "retained": "required-final/specialization/visibility-package.rs.gz"
+  },
+  {
+    "path": "required-final/specialization/visibility-source-debug",
+    "bytes": 5370344,
+    "sha256": "3e0bf42f4a6427584baec1f1c6a8a1124a376994eeb40e2c8e103774c31ff522",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/visibility-source-release",
+    "bytes": 4759512,
+    "sha256": "66bdbff8486f807f6bbb9360d9c0a93d9290f2f06c9dfb81608ed0fd1f2f4f43",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/visibility-source-rust",
+    "bytes": 5318008,
+    "sha256": "fbe61690934d1a0094159b8baae866127492c91f0b9d88ad3313bb56ea021dd1",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/specialization/visibility-source.rs",
+    "bytes": 196251,
+    "sha256": "47052e8829597de2ef741a2860999371d39e9f4a1136bc5fb0f1333aaf91b9be",
+    "retained": "required-final/specialization/visibility-source.rs.gz"
+  },
+  {
+    "path": "required-final/visibility/package-debug",
+    "bytes": 5314472,
+    "sha256": "86c41bf99cc85c2579a38d9ba42fb621f31490c9c1a49aa8fb9d32aa280a5319",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/visibility/package-release",
+    "bytes": 4756160,
+    "sha256": "3e8f248856ecc17dfc2b10ca099a5ce3fcc34470630edfb6f14e9d0ec419cf49",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/visibility/package-rust",
+    "bytes": 5310936,
+    "sha256": "f59c1d233b5bae77f6632977574f880b8218bcc12eb0bcd29a741f4732e1944d",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/visibility/package.rs",
+    "bytes": 195153,
+    "sha256": "a00b57c9023718d00bb98925ccdcfaf2347eeaa880cdf449797c0b56d2573d8e",
+    "retained": "required-final/visibility/package.rs.gz"
+  },
+  {
+    "path": "required-final/visibility/public-package-debug",
+    "bytes": 5294744,
+    "sha256": "de049d655457ed53919ff5f1e6bb590420a9d6f69aec9a47e3fa7432ccd85b37",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/visibility/public-package-release",
+    "bytes": 4747232,
+    "sha256": "2f8adf37a1ef3377617519767b96ed423cbb5358907dece2c09daba0fc5dd9a9",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/visibility/public-package-rust",
+    "bytes": 5304272,
+    "sha256": "90b0c64675a79da093aa6441ec1cbe3121fbb95bddc56740c97cb85789e4cb6f",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/visibility/public-package.rs",
+    "bytes": 190158,
+    "sha256": "df634d6a0ed63bbfea018d9eac8cdcb82efe1f2886e2a9426aee774a85cd8c47",
+    "retained": "required-final/visibility/public-package.rs.gz"
+  },
+  {
+    "path": "required-final/visibility/public-source-debug",
+    "bytes": 5339408,
+    "sha256": "0182bd26a5847660921a3fbfe4a34de1cfdf225eb7d6aa8aa957f6c0fe19ee4f",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/visibility/public-source-release",
+    "bytes": 4745600,
+    "sha256": "764c43f22afb99a9e6db762d5850034cfbed0c827d295cc5805467f12c075962",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/visibility/public-source-rust",
+    "bytes": 5298840,
+    "sha256": "d4316c3df193dc532355f392d1b90fb00e69b768b85b0209f0e19034288c5187",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/visibility/public-source.rs",
+    "bytes": 189194,
+    "sha256": "41f67c98708eb4e89fb7fa8e95f35d601c0661dda902b262e8c2e13d4038db9b",
+    "retained": "required-final/visibility/public-source.rs.gz"
+  },
+  {
+    "path": "required-final/visibility/public-values-debug",
+    "bytes": 5331160,
+    "sha256": "16a616b3fd2cfeca474b93c3c7d82e5622cffc5e7c9e94ca87a146b3be2731cc",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/visibility/public-values-release",
+    "bytes": 4741656,
+    "sha256": "c323bf04120dd3abc842af6b2fcc3e4f15317bd2102cb5e76b35a9a605deb97a",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/visibility/public-values-rust",
+    "bytes": 5288928,
+    "sha256": "c6bd2198051c66c125e87c3acc0616c293965d781c54e356e0de53cef5b70bd6",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/visibility/public-values.rs",
+    "bytes": 187538,
+    "sha256": "bce51359eefb67e423e75d34764da7ebcc007ccf6cc84eacf4d152fec8e02c00",
+    "retained": "required-final/visibility/public-values.rs.gz"
+  },
+  {
+    "path": "required-final/visibility/source-debug",
+    "bytes": 5370344,
+    "sha256": "cbd444095e77a64a093117f9aa740d89a5592b5a85497fe08f0896d899d662b4",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/visibility/source-release",
+    "bytes": 4759504,
+    "sha256": "5a58164ce5169e090d1875e9a47a059a0cb3273e95b926930a67a33f6dc5559a",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/visibility/source-rust",
+    "bytes": 5316456,
+    "sha256": "081bb773230de23e43a3e29f725fd38987437bc6abbc842c4bebf93beaa5079c",
+    "retained": "hash-only; reproducible generated ELF/archive"
+  },
+  {
+    "path": "required-final/visibility/source.rs",
+    "bytes": 196251,
+    "sha256": "47052e8829597de2ef741a2860999371d39e9f4a1136bc5fb0f1333aaf91b9be",
+    "retained": "required-final/visibility/source.rs.gz"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/fallible_lifetime_model-build.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-final/asan-no-leaks/fallible_lifetime_model-build.stderr.gz"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/fallible_lifetime_model-build.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-final/asan-no-leaks/fallible_lifetime_model-build.stdout.gz"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/fallible_lifetime_model-run.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-final/asan-no-leaks/fallible_lifetime_model-run.stderr.gz"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/fallible_lifetime_model-run.stdout",
+    "bytes": 171,
+    "sha256": "285544b4971dfdefc87cdd02ca2125ee9d8607f08aeda499fc42dfbfa5be880a",
+    "retained": "asan-final/asan-no-leaks/fallible_lifetime_model-run.stdout.gz"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/fallible_lifetimes-build.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-final/asan-no-leaks/fallible_lifetimes-build.stderr.gz"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/fallible_lifetimes-build.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-final/asan-no-leaks/fallible_lifetimes-build.stdout.gz"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/fallible_lifetimes-run.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-final/asan-no-leaks/fallible_lifetimes-run.stderr.gz"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/fallible_lifetimes-run.stdout",
+    "bytes": 555,
+    "sha256": "81e0060b1167eb3d425601c86cc75c4efda7014b7c42ef3ee7fd4b0efa0da955",
+    "retained": "asan-final/asan-no-leaks/fallible_lifetimes-run.stdout.gz"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/graph_storage-build.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-final/asan-no-leaks/graph_storage-build.stderr.gz"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/graph_storage-build.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-final/asan-no-leaks/graph_storage-build.stdout.gz"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/graph_storage-run.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-final/asan-no-leaks/graph_storage-run.stderr.gz"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/graph_storage-run.stdout",
+    "bytes": 909,
+    "sha256": "495c94f1570ac852d4c581321865b45784041043c12b9481ca170345c6a12d0e",
+    "retained": "asan-final/asan-no-leaks/graph_storage-run.stdout.gz"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/graph_storage_model-build.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-final/asan-no-leaks/graph_storage_model-build.stderr.gz"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/graph_storage_model-build.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-final/asan-no-leaks/graph_storage_model-build.stdout.gz"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/graph_storage_model-run.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-final/asan-no-leaks/graph_storage_model-run.stderr.gz"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/graph_storage_model-run.stdout",
+    "bytes": 198,
+    "sha256": "414a95a4bd54b20e2b7b8e9fc019126a5a6d04ee1fdd0215e43ebd1ae31d877b",
+    "retained": "asan-final/asan-no-leaks/graph_storage_model-run.stdout.gz"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/runtime-build.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-final/asan-no-leaks/runtime-build.stderr.gz"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/runtime-build.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-final/asan-no-leaks/runtime-build.stdout.gz"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/runtime-unit-build.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-final/asan-no-leaks/runtime-unit-build.stderr.gz"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/runtime-unit-build.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-final/asan-no-leaks/runtime-unit-build.stdout.gz"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/runtime-unit-run.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-final/asan-no-leaks/runtime-unit-run.stderr.gz"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/runtime-unit-run.stdout",
+    "bytes": 493,
+    "sha256": "8628a0c0ca945e8f24fd097c907b9c9f4ea11f2448528e1ca1cde101e1c1c671",
+    "retained": "asan-final/asan-no-leaks/runtime-unit-run.stdout.gz"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/rustc-version.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-final/asan-no-leaks/rustc-version.stderr.gz"
+  },
+  {
+    "path": "asan-final/asan-no-leaks/rustc-version.stdout",
+    "bytes": 196,
+    "sha256": "778fbc643a806f0dd123c056e66201d7e8a56a61928ec0a33171be8d6c2d5a37",
+    "retained": "asan-final/asan-no-leaks/rustc-version.stdout.gz"
+  },
+  {
+    "path": "asan-leaks-final/asan-leaks/leak-probe-build.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-leaks-final/asan-leaks/leak-probe-build.stderr.gz"
+  },
+  {
+    "path": "asan-leaks-final/asan-leaks/leak-probe-build.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-leaks-final/asan-leaks/leak-probe-build.stdout.gz"
+  },
+  {
+    "path": "asan-leaks-final/asan-leaks/leak-probe-run.stderr",
+    "bytes": 222,
+    "sha256": "3e310f7ae9f506511f3e00b33dd700631a0aea963bb544a43b4e906d36834382",
+    "retained": "asan-leaks-final/asan-leaks/leak-probe-run.stderr.gz"
+  },
+  {
+    "path": "asan-leaks-final/asan-leaks/leak-probe-run.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-leaks-final/asan-leaks/leak-probe-run.stdout.gz"
+  },
+  {
+    "path": "asan-leaks-final/asan-leaks/runtime-build.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-leaks-final/asan-leaks/runtime-build.stderr.gz"
+  },
+  {
+    "path": "asan-leaks-final/asan-leaks/runtime-build.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-leaks-final/asan-leaks/runtime-build.stdout.gz"
+  },
+  {
+    "path": "asan-leaks-final/asan-leaks/rustc-version.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-leaks-final/asan-leaks/rustc-version.stderr.gz"
+  },
+  {
+    "path": "asan-leaks-final/asan-leaks/rustc-version.stdout",
+    "bytes": 196,
+    "sha256": "778fbc643a806f0dd123c056e66201d7e8a56a61928ec0a33171be8d6c2d5a37",
+    "retained": "asan-leaks-final/asan-leaks/rustc-version.stdout.gz"
+  },
+  {
+    "path": "asan-roots-final/asan-roots-no-leaks/runtime-build.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-roots-final/asan-roots-no-leaks/runtime-build.stderr.gz"
+  },
+  {
+    "path": "asan-roots-final/asan-roots-no-leaks/runtime-build.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-roots-final/asan-roots-no-leaks/runtime-build.stdout.gz"
+  },
+  {
+    "path": "asan-roots-final/asan-roots-no-leaks/runtime-unit-build.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-roots-final/asan-roots-no-leaks/runtime-unit-build.stderr.gz"
+  },
+  {
+    "path": "asan-roots-final/asan-roots-no-leaks/runtime-unit-build.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-roots-final/asan-roots-no-leaks/runtime-unit-build.stdout.gz"
+  },
+  {
+    "path": "asan-roots-final/asan-roots-no-leaks/runtime-unit-run.stderr",
+    "bytes": 247,
+    "sha256": "d2cb0378d68d644f85170e1a5f0aad2d64c28a6f74c6b8cfe393fc31c5eaf3ff",
+    "retained": "asan-roots-final/asan-roots-no-leaks/runtime-unit-run.stderr.gz"
+  },
+  {
+    "path": "asan-roots-final/asan-roots-no-leaks/runtime-unit-run.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-roots-final/asan-roots-no-leaks/runtime-unit-run.stdout.gz"
+  },
+  {
+    "path": "asan-roots-final/asan-roots-no-leaks/rustc-version.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-roots-final/asan-roots-no-leaks/rustc-version.stderr.gz"
+  },
+  {
+    "path": "asan-roots-final/asan-roots-no-leaks/rustc-version.stdout",
+    "bytes": 196,
+    "sha256": "778fbc643a806f0dd123c056e66201d7e8a56a61928ec0a33171be8d6c2d5a37",
+    "retained": "asan-roots-final/asan-roots-no-leaks/rustc-version.stdout.gz"
+  },
+  {
+    "path": "asan-roots-final2/asan-roots-no-leaks/default_managed_roots-build.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-roots-final2/asan-roots-no-leaks/default_managed_roots-build.stderr.gz"
+  },
+  {
+    "path": "asan-roots-final2/asan-roots-no-leaks/default_managed_roots-build.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-roots-final2/asan-roots-no-leaks/default_managed_roots-build.stdout.gz"
+  },
+  {
+    "path": "asan-roots-final2/asan-roots-no-leaks/default_managed_roots-run.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-roots-final2/asan-roots-no-leaks/default_managed_roots-run.stderr.gz"
+  },
+  {
+    "path": "asan-roots-final2/asan-roots-no-leaks/default_managed_roots-run.stdout",
+    "bytes": 352,
+    "sha256": "becfb980904f037ea2f12d57f2207daaf266a5d33ba0344710b024d225cddb81",
+    "retained": "asan-roots-final2/asan-roots-no-leaks/default_managed_roots-run.stdout.gz"
+  },
+  {
+    "path": "asan-roots-final2/asan-roots-no-leaks/runtime-build.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-roots-final2/asan-roots-no-leaks/runtime-build.stderr.gz"
+  },
+  {
+    "path": "asan-roots-final2/asan-roots-no-leaks/runtime-build.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-roots-final2/asan-roots-no-leaks/runtime-build.stdout.gz"
+  },
+  {
+    "path": "asan-roots-final2/asan-roots-no-leaks/runtime-unit-build.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-roots-final2/asan-roots-no-leaks/runtime-unit-build.stderr.gz"
+  },
+  {
+    "path": "asan-roots-final2/asan-roots-no-leaks/runtime-unit-build.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-roots-final2/asan-roots-no-leaks/runtime-unit-build.stdout.gz"
+  },
+  {
+    "path": "asan-roots-final2/asan-roots-no-leaks/runtime-unit-run.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-roots-final2/asan-roots-no-leaks/runtime-unit-run.stderr.gz"
+  },
+  {
+    "path": "asan-roots-final2/asan-roots-no-leaks/runtime-unit-run.stdout",
+    "bytes": 493,
+    "sha256": "8628a0c0ca945e8f24fd097c907b9c9f4ea11f2448528e1ca1cde101e1c1c671",
+    "retained": "asan-roots-final2/asan-roots-no-leaks/runtime-unit-run.stdout.gz"
+  },
+  {
+    "path": "asan-roots-final2/asan-roots-no-leaks/rustc-version.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-roots-final2/asan-roots-no-leaks/rustc-version.stderr.gz"
+  },
+  {
+    "path": "asan-roots-final2/asan-roots-no-leaks/rustc-version.stdout",
+    "bytes": 196,
+    "sha256": "778fbc643a806f0dd123c056e66201d7e8a56a61928ec0a33171be8d6c2d5a37",
+    "retained": "asan-roots-final2/asan-roots-no-leaks/rustc-version.stdout.gz"
+  },
+  {
+    "path": "asan-roots-leaks-final/asan-roots-leaks/leak-probe-build.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-roots-leaks-final/asan-roots-leaks/leak-probe-build.stderr.gz"
+  },
+  {
+    "path": "asan-roots-leaks-final/asan-roots-leaks/leak-probe-build.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-roots-leaks-final/asan-roots-leaks/leak-probe-build.stdout.gz"
+  },
+  {
+    "path": "asan-roots-leaks-final/asan-roots-leaks/leak-probe-run.stderr",
+    "bytes": 247,
+    "sha256": "3c14ca58a8a29eb052f28d462aa8314dc31189dcfe5c27019f8847a8f7094a15",
+    "retained": "asan-roots-leaks-final/asan-roots-leaks/leak-probe-run.stderr.gz"
+  },
+  {
+    "path": "asan-roots-leaks-final/asan-roots-leaks/leak-probe-run.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-roots-leaks-final/asan-roots-leaks/leak-probe-run.stdout.gz"
+  },
+  {
+    "path": "asan-roots-leaks-final/asan-roots-leaks/runtime-build.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-roots-leaks-final/asan-roots-leaks/runtime-build.stderr.gz"
+  },
+  {
+    "path": "asan-roots-leaks-final/asan-roots-leaks/runtime-build.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-roots-leaks-final/asan-roots-leaks/runtime-build.stdout.gz"
+  },
+  {
+    "path": "asan-roots-leaks-final/asan-roots-leaks/rustc-version.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-roots-leaks-final/asan-roots-leaks/rustc-version.stderr.gz"
+  },
+  {
+    "path": "asan-roots-leaks-final/asan-roots-leaks/rustc-version.stdout",
+    "bytes": 196,
+    "sha256": "778fbc643a806f0dd123c056e66201d7e8a56a61928ec0a33171be8d6c2d5a37",
+    "retained": "asan-roots-leaks-final/asan-roots-leaks/rustc-version.stdout.gz"
+  },
+  {
+    "path": "asan-roots-leaks-final2/asan-roots-leaks/leak-probe-build.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-roots-leaks-final2/asan-roots-leaks/leak-probe-build.stderr.gz"
+  },
+  {
+    "path": "asan-roots-leaks-final2/asan-roots-leaks/leak-probe-build.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-roots-leaks-final2/asan-roots-leaks/leak-probe-build.stdout.gz"
+  },
+  {
+    "path": "asan-roots-leaks-final2/asan-roots-leaks/leak-probe-run.stderr",
+    "bytes": 222,
+    "sha256": "3e310f7ae9f506511f3e00b33dd700631a0aea963bb544a43b4e906d36834382",
+    "retained": "asan-roots-leaks-final2/asan-roots-leaks/leak-probe-run.stderr.gz"
+  },
+  {
+    "path": "asan-roots-leaks-final2/asan-roots-leaks/leak-probe-run.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-roots-leaks-final2/asan-roots-leaks/leak-probe-run.stdout.gz"
+  },
+  {
+    "path": "asan-roots-leaks-final2/asan-roots-leaks/runtime-build.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-roots-leaks-final2/asan-roots-leaks/runtime-build.stderr.gz"
+  },
+  {
+    "path": "asan-roots-leaks-final2/asan-roots-leaks/runtime-build.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-roots-leaks-final2/asan-roots-leaks/runtime-build.stdout.gz"
+  },
+  {
+    "path": "asan-roots-leaks-final2/asan-roots-leaks/rustc-version.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "asan-roots-leaks-final2/asan-roots-leaks/rustc-version.stderr.gz"
+  },
+  {
+    "path": "asan-roots-leaks-final2/asan-roots-leaks/rustc-version.stdout",
+    "bytes": 196,
+    "sha256": "778fbc643a806f0dd123c056e66201d7e8a56a61928ec0a33171be8d6c2d5a37",
+    "retained": "asan-roots-leaks-final2/asan-roots-leaks/rustc-version.stdout.gz"
+  },
+  {
+    "path": "required-final/asan-leaks/leak-probe-build.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "required-final/asan-leaks/leak-probe-build.stderr.gz"
+  },
+  {
+    "path": "required-final/asan-leaks/leak-probe-build.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "required-final/asan-leaks/leak-probe-build.stdout.gz"
+  },
+  {
+    "path": "required-final/asan-leaks/leak-probe-run.stderr",
+    "bytes": 257,
+    "sha256": "8f0b44074d23357597ce50058fbacf3edc25343b1ef8228aed9daa7d61fc2059",
+    "retained": "required-final/asan-leaks/leak-probe-run.stderr.gz"
+  },
+  {
+    "path": "required-final/asan-leaks/leak-probe-run.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "required-final/asan-leaks/leak-probe-run.stdout.gz"
+  },
+  {
+    "path": "required-final/asan-leaks/runtime-build.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "required-final/asan-leaks/runtime-build.stderr.gz"
+  },
+  {
+    "path": "required-final/asan-leaks/runtime-build.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "required-final/asan-leaks/runtime-build.stdout.gz"
+  },
+  {
+    "path": "required-final/asan-leaks/rustc-version.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "required-final/asan-leaks/rustc-version.stderr.gz"
+  },
+  {
+    "path": "required-final/asan-leaks/rustc-version.stdout",
+    "bytes": 196,
+    "sha256": "778fbc643a806f0dd123c056e66201d7e8a56a61928ec0a33171be8d6c2d5a37",
+    "retained": "required-final/asan-leaks/rustc-version.stdout.gz"
+  },
+  {
+    "path": "required-final/asan-no-leaks/runtime-build.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "required-final/asan-no-leaks/runtime-build.stderr.gz"
+  },
+  {
+    "path": "required-final/asan-no-leaks/runtime-build.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "required-final/asan-no-leaks/runtime-build.stdout.gz"
+  },
+  {
+    "path": "required-final/asan-no-leaks/runtime-unit-build.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "required-final/asan-no-leaks/runtime-unit-build.stderr.gz"
+  },
+  {
+    "path": "required-final/asan-no-leaks/runtime-unit-build.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "required-final/asan-no-leaks/runtime-unit-build.stdout.gz"
+  },
+  {
+    "path": "required-final/asan-no-leaks/runtime-unit-run.stderr",
+    "bytes": 257,
+    "sha256": "4ee97638b5199ad340306d277b33d1d6d3b7ba1b8c078e58afa056ecf62b4cb8",
+    "retained": "required-final/asan-no-leaks/runtime-unit-run.stderr.gz"
+  },
+  {
+    "path": "required-final/asan-no-leaks/runtime-unit-run.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "required-final/asan-no-leaks/runtime-unit-run.stdout.gz"
+  },
+  {
+    "path": "required-final/asan-no-leaks/rustc-version.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained": "required-final/asan-no-leaks/rustc-version.stderr.gz"
+  },
+  {
+    "path": "required-final/asan-no-leaks/rustc-version.stdout",
+    "bytes": 196,
+    "sha256": "778fbc643a806f0dd123c056e66201d7e8a56a61928ec0a33171be8d6c2d5a37",
+    "retained": "required-final/asan-no-leaks/rustc-version.stdout.gz"
+  }
+]

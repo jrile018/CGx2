@@ -1,0 +1,13 @@
+record Box:
+    value: i64
+
+fn churn() -> i64 effects():
+    for i in range(0, 20000):
+        let discarded = Box(value: i)
+    42
+
+fn combine(earlier: Box, later: i64) -> i64 effects():
+    earlier.value + later
+
+fn main() -> i64 effects():
+    combine(Box(value: 10), churn())

@@ -11,6 +11,24 @@ pub use error::EmitDiagnostic;
 pub use package::{emit_package_python, write_package_python, PackageEmitDiagnostic};
 
 pub fn emit_python(module: &Module, typed: &TypedModule) -> Result<String, Vec<EmitDiagnostic>> {
+    if cgx2_sema::default_managed::resolved_explicit(module, typed) {
+        cgx2_sema::default_managed::compile_module(module, &format!("{module:?}")).map_err(
+            |ds| {
+                ds.into_iter()
+                    .map(|d| EmitDiagnostic {
+                        code: d.code,
+                        message: d.message,
+                        span: d.span,
+                    })
+                    .collect::<Vec<_>>()
+            },
+        )?;
+        return Err(vec![EmitDiagnostic {
+            code: "CGE006",
+            message: "explicit managed observables are unsupported by Python".into(),
+            span: module.span,
+        }]);
+    }
     if let Some(span) = cgx2_syntax::ordinary_owned_span(module) {
         return Err(vec![EmitDiagnostic::new(
             "CGE006",

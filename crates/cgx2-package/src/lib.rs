@@ -677,7 +677,10 @@ pub fn load_checked_package(root: &Path) -> Result<CheckedPackage, Vec<PackageDi
             .unwrap_or(0)
     });
     for source in parsed_sources {
-        if !source.module.imports.is_empty() && contains_memory_script(&source.module) {
+        if !source.module.imports.is_empty()
+            && contains_memory_script(&source.module)
+            && !cgx2_sema::default_managed::explicit(&source.module)
+        {
             errors.push(PackageDiagnostic::new(
                 "CGM001",
                 "imports in memory scripts are unsupported",
@@ -769,7 +772,7 @@ pub fn load_checked_package(root: &Path) -> Result<CheckedPackage, Vec<PackageDi
     checked_modules.sort_by_key(|module| source_order[&module.source]);
     if checked_modules
         .iter()
-        .any(|m| cgx2_sema::foundation_profile(m.syntax()))
+        .any(|m| cgx2_sema::default_managed::profile(m.syntax()))
     {
         let entry = checked_modules
             .iter()
@@ -793,6 +796,36 @@ pub fn load_checked_package(root: &Path) -> Result<CheckedPackage, Vec<PackageDi
                 .map(|d| PackageDiagnostic::new(d.code, d.message, entry.source(), Some(d.span)))
                 .collect::<Vec<_>>()
         })?;
+        let text = checked_modules
+            .iter()
+            .map(|m| m.text())
+            .collect::<Vec<_>>()
+            .join("\n");
+        // Existing type/API snapshots may contain foreign declarations and
+        // target-specific invalid escapes. Neither is an executable managed
+        // certificate: emitters retain their per-file target preflights.
+        let foreign = checked_modules
+            .iter()
+            .any(|m| m.syntax().functions.iter().any(|f| f.foreign.is_some()));
+        if !foreign {
+            if let Err(ds) = cgx2_sema::default_managed::compile_module(&merged, &text) {
+                let ds = ds
+                    .into_iter()
+                    .filter(|d| d.code != "CGRS003")
+                    .map(|d| {
+                        PackageDiagnostic::new(d.code, d.message, entry.source(), Some(d.span))
+                    })
+                    .collect::<Vec<_>>();
+                if !ds.is_empty() {
+                    return Err(ds);
+                }
+            }
+        } else if checked_modules
+            .iter()
+            .any(|m| cgx2_sema::default_managed::resolved_explicit(m.syntax(), m.typed()))
+        {
+            return Err(vec![PackageDiagnostic::new("CGT090","managed observables with foreign execution require the later typed foreign integration",entry.source(),Some(entry.syntax().span))]);
+        }
     }
     Ok(CheckedPackage {
         root: canonical_root,

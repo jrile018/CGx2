@@ -1,0 +1,8 @@
+module T
+record T:
+    value: i64
+pub fn id<T>(x: T) -> T effects() caps():
+    x
+fn main() -> i64:
+    let hidden = id<T>(T(value: 4))
+    id<i64>(7)

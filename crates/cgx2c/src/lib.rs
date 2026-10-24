@@ -142,7 +142,46 @@ pub fn run(args: Vec<OsString>) -> Result<(), CliError> {
             d.span.end,
         )
     })?;
-    let ordinary = if cgx2_syntax::ordinary_owned_span(&module).is_some() {
+    let hybrid = if cgx2_sema::default_managed::hybrid::is_hybrid(&module) {
+        Some(
+            cgx2_sema::default_managed::hybrid::compile_source(&source).map_err(|ds| {
+                let d = &ds[0];
+                source_error(
+                    &options.source,
+                    d.code,
+                    &d.message,
+                    d.span.start,
+                    d.span.end,
+                )
+            })?,
+        )
+    } else {
+        None
+    };
+    let managed = if hybrid.is_none() && cgx2_sema::default_managed::profile(&module) {
+        Some(
+            cgx2_sema::default_managed::compile_source(&source).map_err(|ds| {
+                let d = &ds[0];
+                source_error(
+                    &options.source,
+                    if d.code == "CGRS003" && options.mode == Mode::EmitPython {
+                        "CGE003"
+                    } else {
+                        d.code
+                    },
+                    &d.message,
+                    d.span.start,
+                    d.span.end,
+                )
+            })?,
+        )
+    } else {
+        None
+    };
+    let ordinary = if hybrid.is_none()
+        && managed.is_none()
+        && cgx2_syntax::ordinary_owned_span(&module).is_some()
+    {
         Some(
             cgx2_sema::ordinary_owned::compile_source_v2(&source).map_err(|errors| {
                 let d = &errors[0];
@@ -158,7 +197,7 @@ pub fn run(args: Vec<OsString>) -> Result<(), CliError> {
     } else {
         None
     };
-    let checked = if ordinary.is_none() {
+    let checked = if ordinary.is_none() && hybrid.is_none() {
         Some(check_module(&module).map_err(|errors| {
             let d = &errors[0];
             source_error(
@@ -172,14 +211,72 @@ pub fn run(args: Vec<OsString>) -> Result<(), CliError> {
     } else {
         None
     };
-    let needs_runtime = ordinary.is_some() || is_memory_script(&module);
+    let needs_runtime =
+        hybrid.is_some() || managed.is_some() || ordinary.is_some() || is_memory_script(&module);
     if options.test_fail_reserve.is_some() && !needs_runtime {
         return Err(CliError::new(
             "CGXC001",
             "--test-fail-reserve requires a memory script",
         ));
     }
-    let generated = if let Some(program) = &ordinary {
+    let generated = if let Some(program) = &hybrid {
+        if options.mode == Mode::EmitPython {
+            return Err(source_error(
+                &options.source,
+                "CGE006",
+                "mixed owned/managed execution is unsupported by Python",
+                module.span.start,
+                module.span.end,
+            ));
+        }
+        cgx2_emit_rust::emit_hybrid_rust(program).map_err(|ds| {
+            let d = &ds[0];
+            source_error(
+                &options.source,
+                d.code,
+                &d.message,
+                d.span.start,
+                d.span.end,
+            )
+        })?
+    } else if let Some(program) = &managed {
+        if options.mode == Mode::EmitPython
+            && checked
+                .as_ref()
+                .is_some_and(|t| cgx2_sema::default_managed::resolved_explicit(&module, t))
+        {
+            return Err(source_error(
+                &options.source,
+                "CGE006",
+                "explicit managed observables are unsupported by Python",
+                module.span.start,
+                module.span.end,
+            ));
+        }
+        if options.mode == Mode::EmitPython {
+            cgx2_emit_python::emit_python(&module, checked.as_ref().unwrap()).map_err(|ds| {
+                let d = &ds[0];
+                source_error(
+                    &options.source,
+                    d.code,
+                    &d.message,
+                    d.span.start,
+                    d.span.end,
+                )
+            })?
+        } else {
+            cgx2_emit_rust::emit_managed_rust(program).map_err(|ds| {
+                let d = &ds[0];
+                source_error(
+                    &options.source,
+                    d.code,
+                    &d.message,
+                    d.span.start,
+                    d.span.end,
+                )
+            })?
+        }
+    } else if let Some(program) = &ordinary {
         if options.mode == Mode::EmitPython {
             let s = cgx2_syntax::ordinary_owned_span(&module).unwrap();
             return Err(source_error(

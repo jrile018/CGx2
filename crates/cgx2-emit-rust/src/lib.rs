@@ -1,6 +1,10 @@
 //! Readable, standalone Rust output for checked CGx2 scalar programs.
 
 mod data;
+mod default_managed;
+mod hybrid;
+pub use default_managed::emit_managed_rust;
+pub use hybrid::emit_hybrid_rust;
 mod memory;
 mod ordinary_owned;
 mod variants;
@@ -32,7 +36,11 @@ pub struct PackageEmitDiagnostic {
 
 /// Emit one standalone Rust program from a checked, immutable local package snapshot.
 pub fn emit_package_rust(package: &CheckedPackage) -> Result<String, Vec<PackageEmitDiagnostic>> {
-    if package.modules().iter().any(|m| m.typed().finite_values) {
+    if package
+        .modules()
+        .iter()
+        .any(|m| m.typed().finite_values || cgx2_sema::default_managed::profile(m.syntax()))
+    {
         return data::package(package);
     }
     let known_variants = package
@@ -358,6 +366,28 @@ impl EmitDiagnostic {
 
 /// Emit a standalone Rust 2024 program from a checked scalar module.
 pub fn emit_rust(module: &Module, checked: &TypedModule) -> Result<String, Vec<EmitDiagnostic>> {
+    if cgx2_sema::default_managed::profile(module) {
+        let fresh = check_module(module).map_err(|ds| {
+            ds.into_iter()
+                .map(|d| EmitDiagnostic::new(d.code, d.message, d.span))
+                .collect::<Vec<_>>()
+        })?;
+        if fresh != *checked {
+            return Err(vec![EmitDiagnostic::new(
+                "CGRS001",
+                "stale managed typed module",
+                module.span,
+            )]);
+        }
+        let program = cgx2_sema::default_managed::compile_module(module, &format!("{module:?}"))
+            .map_err(|ds| {
+                ds.into_iter()
+                    .map(|d| EmitDiagnostic::new(d.code, d.message, d.span))
+                    .collect::<Vec<_>>()
+            })?;
+        return emit_managed_rust(&program);
+    }
+
     if let Some(span) = cgx2_syntax::ordinary_owned_span(module) {
         return Err(vec![EmitDiagnostic::new(
             "CGT080",

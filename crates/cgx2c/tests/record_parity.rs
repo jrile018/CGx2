@@ -58,8 +58,9 @@ fn package_debug_release_matches_source_result_and_error_class() {
             String::from_utf8_lossy(&emitted_result.stderr)
         );
         let generated = fs::read_to_string(&rust).unwrap();
-        assert!(generated.contains("#[derive(Clone, Copy, PartialEq, Eq)]"));
-        assert!(generated.contains("struct cgx2_user_"));
+        assert!(generated.contains("alloc_graph"));
+        assert!(generated.contains("ScopedRoots"));
+        assert!(generated.contains("root_maps:"));
         let source_result = run_checked_source(&source, &[]);
         if let Some(code) = error_class {
             assert_eq!(source_result.unwrap_err()[0].code, code);

@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "base": "c9d60229ecf3ed2bf76b29525fec0bdda41d0906",
+  "checks": [
+    {
+      "name": "asan-roots-leaks",
+      "command": [
+        "/usr/bin/python3",
+        "/home/john-riley/.codex/worktrees/685c/lang/crates/cgx2-syntax/default-managed-evidence/asan_roots.py",
+        "--output",
+        "/home/john-riley/.codex/worktrees/685c/lang/crates/cgx2-syntax/default-managed-evidence/evidence/asan-roots-leaks-final/asan-roots-leaks"
+      ],
+      "exit": 2,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 1.665,
+      "stdout_bytes": 218,
+      "stdout_sha256": "4246d8cc6fca3900f771613d6727c124b202d2d8f5e76fb18d5e96cbd30594d0",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "asan-roots-leaks.log.gz",
+      "log_sha256": "4246d8cc6fca3900f771613d6727c124b202d2d8f5e76fb18d5e96cbd30594d0",
+      "status": "blocked"
+    }
+  ],
+  "checkpoint_complete": false,
+  "release_complete": false,
+  "dependency_reconciliation": "none; root Cargo files unchanged",
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/685c/lang/target/release-default-managed",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/685c/lang/target/tmp-default-managed",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "bounds": {
+    "wall_seconds": 900,
+    "cpu_seconds_per_process": 900,
+    "address_space_bytes_per_process": 4294967296,
+    "retained_combined_bytes": 8388608,
+    "aggregate_cgroup_isolation": false
+  },
+  "external_audit_performance": "unrun"
+}

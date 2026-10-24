@@ -1,0 +1,17 @@
+module dep.library
+record Secret:
+    value: i64
+pub record Wrapper<T>:
+    value: T
+pub variant Choice<T>:
+    Value(T)
+pub fn id<T>(x: T) -> T effects() caps():
+    let hidden = arg_count()
+    x
+pub fn nested<U>(x: U) -> Wrapper<Choice<U>> effects() caps():
+    Wrapper<Choice<U>>(value: Choice<U>.Value(id<U>(x)))
+pub fn unused<T>(x: i64) -> i64 effects() caps():
+    x
+pub fn value() -> i64 effects() caps():
+    let defining_private = nested<Secret>(Secret(value: 1))
+    unused<Secret>(7)

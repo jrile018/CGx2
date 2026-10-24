@@ -94,7 +94,22 @@ pub(super) fn package(package: &CheckedPackage) -> Result<String, Vec<PackageEmi
             })
             .collect::<Vec<_>>()
     })?;
-    emit(&merged, &typed).map_err(|ds| {
+    let source = package
+        .modules()
+        .iter()
+        .map(|m| m.text())
+        .collect::<Vec<_>>()
+        .join("\n");
+    let program = cgx2_sema::default_managed::compile_module(&merged, &source).map_err(|ds| {
+        ds.into_iter()
+            .map(|d| PackageEmitDiagnostic {
+                file: entry.source().to_path_buf(),
+                diagnostic: EmitDiagnostic::new(d.code, d.message, d.span),
+            })
+            .collect::<Vec<_>>()
+    })?;
+    let _ = typed;
+    crate::emit_managed_rust(&program).map_err(|ds| {
         ds.into_iter()
             .map(|diagnostic| PackageEmitDiagnostic {
                 file: entry.source().to_path_buf(),

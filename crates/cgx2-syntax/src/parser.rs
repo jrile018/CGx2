@@ -711,7 +711,13 @@ impl Parser {
             let valid = if effects {
                 matches!(
                     name.as_str(),
-                    "ReadArgs" | "ManagedAlloc" | "Collect" | "Mutate" | "Foreign" | "Unknown"
+                    "ReadManaged"
+                        | "ReadArgs"
+                        | "ManagedAlloc"
+                        | "Collect"
+                        | "Mutate"
+                        | "Foreign"
+                        | "Unknown"
                 )
             } else {
                 matches!(

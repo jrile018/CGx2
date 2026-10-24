@@ -1,0 +1,7 @@
+module app.lib
+
+pub record Box<T>:
+    value: T
+
+pub fn wrap<T>(x: T) -> Box<T> effects():
+    Box<T>(value: x)

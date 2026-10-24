@@ -1,0 +1,386 @@
+[
+  {
+    "source": "target/tmp-default-managed/asan-final.log",
+    "retained": "asan-final.log.gz",
+    "bytes": 50,
+    "sha256": "5a7740728465260a3a8617282e7dcc53003c0350f5c1ce6e444f1d33308dc273"
+  },
+  {
+    "source": "target/tmp-default-managed/asan-leaks-final.log",
+    "retained": "asan-leaks-final.log.gz",
+    "bytes": 45,
+    "sha256": "63cede350ba31373250c5558cae76633b5162810d4fc74d022b0e0de903efcaf"
+  },
+  {
+    "source": "target/tmp-default-managed/asan-roots-final.log",
+    "retained": "asan-roots-final.log.gz",
+    "bytes": 62,
+    "sha256": "dccc54a81b17cf6536c23985e7335c12e7ac654a17e0944d561ba054f4dd0df1"
+  },
+  {
+    "source": "target/tmp-default-managed/asan-roots-final2.log",
+    "retained": "asan-roots-final2.log.gz",
+    "bytes": 62,
+    "sha256": "d0591ec74e1c62382896734fdf79c11fc77aac22aff651e5f6b551c732a2fd13"
+  },
+  {
+    "source": "target/tmp-default-managed/asan-roots-leaks-final.log",
+    "retained": "asan-roots-leaks-final.log.gz",
+    "bytes": 57,
+    "sha256": "b03598cdbc736ff3c429b4efbfc2621f4e77bee9172a38895e8459378c375c1a"
+  },
+  {
+    "source": "target/tmp-default-managed/asan-roots-leaks-final2.log",
+    "retained": "asan-roots-leaks-final2.log.gz",
+    "bytes": 57,
+    "sha256": "b03598cdbc736ff3c429b4efbfc2621f4e77bee9172a38895e8459378c375c1a"
+  },
+  {
+    "source": "target/tmp-default-managed/build-boundary.log",
+    "retained": "build-boundary.log.gz",
+    "bytes": 1052,
+    "sha256": "0b2659e0917b317368980dce0fbf3f5b7f56480a458a564e9f72d622a438437c"
+  },
+  {
+    "source": "target/tmp-default-managed/build-elements-final.log",
+    "retained": "build-elements-final.log.gz",
+    "bytes": 1052,
+    "sha256": "b3be3840dd2c67a2cab13afa57afe9561f37fde2a2e447e4109c2764f8410344"
+  },
+  {
+    "source": "target/tmp-default-managed/build-final.log",
+    "retained": "build-final.log.gz",
+    "bytes": 1151,
+    "sha256": "64d9af2187eb7d1e31e66ea289468809559ef56226aff5b79774939d4d2f7540"
+  },
+  {
+    "source": "target/tmp-default-managed/build-product.log",
+    "retained": "build-product.log.gz",
+    "bytes": 1151,
+    "sha256": "503652e60dc63b51aad7091a80205202b9b9beadc5dda467083f09a6ed8913b1"
+  },
+  {
+    "source": "target/tmp-default-managed/build-required2.log",
+    "retained": "build-required2.log.gz",
+    "bytes": 1819,
+    "sha256": "28a9b7c9ef7fb76c030bf8e1fd0c7f78290ae0a37ebecbb3d802e1c5fb21e023"
+  },
+  {
+    "source": "target/tmp-default-managed/build-required3.log",
+    "retained": "build-required3.log.gz",
+    "bytes": 1918,
+    "sha256": "e38ab4fb016c80462470f0a7cd4bde0fe6bfe5edba8c9c2d4c4db5dca03cd45d"
+  },
+  {
+    "source": "target/tmp-default-managed/build-required4.log",
+    "retained": "build-required4.log.gz",
+    "bytes": 1918,
+    "sha256": "c50188ea3e6ee9f811b31b5f1de5598336cfda4b357ab7cd17c6036e801cfdc2"
+  },
+  {
+    "source": "target/tmp-default-managed/build-required5.log",
+    "retained": "build-required5.log.gz",
+    "bytes": 1518,
+    "sha256": "bfab2dd6b4707ef5b656dcad005dcc36361f11cb83e35f0cbfc7cb6900493a4b"
+  },
+  {
+    "source": "target/tmp-default-managed/build-required6.log",
+    "retained": "build-required6.log.gz",
+    "bytes": 807,
+    "sha256": "d6bd0cca4cdec73f580717250ec3fe60678d39a86bf27acad6b3a5060e1663fe"
+  },
+  {
+    "source": "target/tmp-default-managed/build-required7.log",
+    "retained": "build-required7.log.gz",
+    "bytes": 700,
+    "sha256": "f0e9a1558d125275e910fa93fa62e1a428e6d0a453f2641102fbe27892b31ee2"
+  },
+  {
+    "source": "target/tmp-default-managed/build-wire.log",
+    "retained": "build-wire.log.gz",
+    "bytes": 1151,
+    "sha256": "9f7d12c0ec9ef4ca67345ca6c185279e3a3e466ba9cda4dca5de0ed68e01ccba"
+  },
+  {
+    "source": "target/tmp-default-managed/check-final.log",
+    "retained": "check-final.log.gz",
+    "bytes": 1590,
+    "sha256": "f1f6c278e5c3c57808fdab25b22ac6b4d355d73f3f0f72eb8972eadffe44fee8"
+  },
+  {
+    "source": "target/tmp-default-managed/cli-compat.log",
+    "retained": "cli-compat.log.gz",
+    "bytes": 3101,
+    "sha256": "40ab393b1359055c645ad0f70d4bf6c8dfdb7f0ce2e14e257918578d1b00cb43"
+  },
+  {
+    "source": "target/tmp-default-managed/clippy-final.log",
+    "retained": "clippy-final.log.gz",
+    "bytes": 2288,
+    "sha256": "3365679cba86729deb6385b91729146d4adfa0f5e27c28bc409ae77cf50aedea"
+  },
+  {
+    "source": "target/tmp-default-managed/clippy-final2.log",
+    "retained": "clippy-final2.log.gz",
+    "bytes": 2340,
+    "sha256": "c4b30d56654f3658c1de8e584a37d2daf1b1054c3793dbccad9f45074f31205e"
+  },
+  {
+    "source": "target/tmp-default-managed/clippy-first.log",
+    "retained": "clippy-first.log.gz",
+    "bytes": 1120,
+    "sha256": "3542062a9bc85b9636083def2db7d8033abe0583841134b8cd3b235b29809676"
+  },
+  {
+    "source": "target/tmp-default-managed/clippy-fourth.log",
+    "retained": "clippy-fourth.log.gz",
+    "bytes": 3386,
+    "sha256": "93a481ffd042c186af8c5b16e4e57e4cf163b8c828782c988e009e087dbb8c95"
+  },
+  {
+    "source": "target/tmp-default-managed/clippy-required.log",
+    "retained": "clippy-required.log.gz",
+    "bytes": 36,
+    "sha256": "262ff011a94cdea2f18bd94c432e448776e21f63100723301071c86e5ab81051"
+  },
+  {
+    "source": "target/tmp-default-managed/clippy-second.log",
+    "retained": "clippy-second.log.gz",
+    "bytes": 1639,
+    "sha256": "b456ff212ada39f377f74c56fd00162e88fdb9e96d4c7a65faec529ecd3d9977"
+  },
+  {
+    "source": "target/tmp-default-managed/clippy-third.log",
+    "retained": "clippy-third.log.gz",
+    "bytes": 3141,
+    "sha256": "bbb797ef1ddca5555883dce233dbb9e857a5e74291bd4f4cd2794eb7f5489476"
+  },
+  {
+    "source": "target/tmp-default-managed/compat-final.log",
+    "retained": "compat-final.log.gz",
+    "bytes": 4400,
+    "sha256": "1ded651331e758d6e99f24559719adf570a6366b11938f25134b6f4f23c76eb0"
+  },
+  {
+    "source": "target/tmp-default-managed/compat-third.log",
+    "retained": "compat-third.log.gz",
+    "bytes": 6870,
+    "sha256": "bfbc5b9a609dcd255a90690649f4d219920a142cf727424f3a66f43fd2ad3628"
+  },
+  {
+    "source": "target/tmp-default-managed/dishonest-final.log",
+    "retained": "dishonest-final.log.gz",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "target/tmp-default-managed/emitter-compat.log",
+    "retained": "emitter-compat.log.gz",
+    "bytes": 5193,
+    "sha256": "7a5d5287cdfa6c552c241cf1d9f475c9909603b696b9aaa843b8792c0a594e21"
+  },
+  {
+    "source": "target/tmp-default-managed/emitter-final.log",
+    "retained": "emitter-final.log.gz",
+    "bytes": 40,
+    "sha256": "f36079c46eb1ef79a455b372bb282902e4cc66953cc658f0f90e7673bd045d49"
+  },
+  {
+    "source": "target/tmp-default-managed/emitter-final2.log",
+    "retained": "emitter-final2.log.gz",
+    "bytes": 40,
+    "sha256": "f36079c46eb1ef79a455b372bb282902e4cc66953cc658f0f90e7673bd045d49"
+  },
+  {
+    "source": "target/tmp-default-managed/emitter-final3.log",
+    "retained": "emitter-final3.log.gz",
+    "bytes": 40,
+    "sha256": "514612b2b3def51fbeaf14f3b62f48b00e769f1f75c6143e09f0cc297b5b069b"
+  },
+  {
+    "source": "target/tmp-default-managed/final-quality.log",
+    "retained": "final-quality.log.gz",
+    "bytes": 36,
+    "sha256": "262ff011a94cdea2f18bd94c432e448776e21f63100723301071c86e5ab81051"
+  },
+  {
+    "source": "target/tmp-default-managed/foundation-final.log",
+    "retained": "foundation-final.log.gz",
+    "bytes": 44,
+    "sha256": "153e9f4f3635a071e44355fefe735aabbb82cabe89bfe6103342563d22471258"
+  },
+  {
+    "source": "target/tmp-default-managed/guard-package-final.log",
+    "retained": "guard-package-final.log.gz",
+    "bytes": 1571,
+    "sha256": "52ebd61de51cdccb17ab38f6dab5e600068e460903826b1da69d81731ec2a5ca"
+  },
+  {
+    "source": "target/tmp-default-managed/guard-package-final2.log",
+    "retained": "guard-package-final2.log.gz",
+    "bytes": 41,
+    "sha256": "0a59818072b0f83586f878d886a4d200a199ea65d6d6773bac3d2296b65779e1"
+  },
+  {
+    "source": "target/tmp-default-managed/managed-all-second.log",
+    "retained": "managed-all-second.log.gz",
+    "bytes": 1377,
+    "sha256": "ab91a58941fe4fb8a9cc699f499ff17c9dd3abb28b160a11abece9bca1121d21"
+  },
+  {
+    "source": "target/tmp-default-managed/managed-all.log",
+    "retained": "managed-all.log.gz",
+    "bytes": 2180,
+    "sha256": "b62a0693c99dc8498519376a690e40bbbd0962d2687408aadcb51f83feaebc46"
+  },
+  {
+    "source": "target/tmp-default-managed/managed-budgets-second.log",
+    "retained": "managed-budgets-second.log.gz",
+    "bytes": 1350,
+    "sha256": "10ea193896ae12129b11b07c0ae50d277917890136ff74372964137c2e0d74d9"
+  },
+  {
+    "source": "target/tmp-default-managed/managed-budgets.log",
+    "retained": "managed-budgets.log.gz",
+    "bytes": 1498,
+    "sha256": "7dd6d64bff1ae1c4b36a9fde26e7565bf321a13be82d0d25caf1d44b3c0ceb29"
+  },
+  {
+    "source": "target/tmp-default-managed/managed-closure.log",
+    "retained": "managed-closure.log.gz",
+    "bytes": 2990,
+    "sha256": "6d5145fbe90015dc3082812f9985859bd0d39fd51d9e7d9ff160e4b6156bbe9a"
+  },
+  {
+    "source": "target/tmp-default-managed/managed-final.log",
+    "retained": "managed-final.log.gz",
+    "bytes": 3769,
+    "sha256": "561d0486ea22b4b7425d31bc99ec5ed9be643104a794a76bd3e503cd414239ed"
+  },
+  {
+    "source": "target/tmp-default-managed/managed-final2.log",
+    "retained": "managed-final2.log.gz",
+    "bytes": 2419,
+    "sha256": "67b9f2606f11b5e3613c65a01900a880778a4c5b1c24102ed9cddaf4f682ef50"
+  },
+  {
+    "source": "target/tmp-default-managed/managed-final3.log",
+    "retained": "managed-final3.log.gz",
+    "bytes": 2027,
+    "sha256": "43432ddb8463be2c494a33267d208d2bda75de629643bb9ab4eb40cebc9d880f"
+  },
+  {
+    "source": "target/tmp-default-managed/managed-final4.log",
+    "retained": "managed-final4.log.gz",
+    "bytes": 2876,
+    "sha256": "95c78d5b69992d82bd214fd9d72c9f9c0a7268c82b98eac46741a1a5aec77417"
+  },
+  {
+    "source": "target/tmp-default-managed/managed-final5.log",
+    "retained": "managed-final5.log.gz",
+    "bytes": 1905,
+    "sha256": "5b0dd6f95a3bb3fda924637a991be84bffa99575d5ef55b08e9ad779996d7b58"
+  },
+  {
+    "source": "target/tmp-default-managed/managed-source.log",
+    "retained": "managed-source.log.gz",
+    "bytes": 1395,
+    "sha256": "1fedf21077f3959b93a097fc1707ed288c643549a45de9f818a193c04980496c"
+  },
+  {
+    "source": "target/tmp-default-managed/namespace-final.log",
+    "retained": "namespace-final.log.gz",
+    "bytes": 1741,
+    "sha256": "99d90d46aeb5d8c5e7d4c665e4263766c0e2c4e55c60166145c8b8a603f3b134"
+  },
+  {
+    "source": "target/tmp-default-managed/namespace-final2.log",
+    "retained": "namespace-final2.log.gz",
+    "bytes": 49,
+    "sha256": "82df9cbf661363178f0bf7d5b1ca70861483f446b987e90c054a9139d0e6011a"
+  },
+  {
+    "source": "target/tmp-default-managed/product-acceptance-complete.log",
+    "retained": "product-acceptance-complete.log.gz",
+    "bytes": 54,
+    "sha256": "00443b267d85d541053048abe11552ba755be4d398dc420fa9b49d2e65bfe904"
+  },
+  {
+    "source": "target/tmp-default-managed/product-complete.log",
+    "retained": "product-complete.log.gz",
+    "bytes": 54,
+    "sha256": "00443b267d85d541053048abe11552ba755be4d398dc420fa9b49d2e65bfe904"
+  },
+  {
+    "source": "target/tmp-default-managed/product-final.log",
+    "retained": "product-final.log.gz",
+    "bytes": 54,
+    "sha256": "2d5dd2cbca29c54a3a9779f4c927cb7374107f261356e52e2ac9232fefc12f51"
+  },
+  {
+    "source": "target/tmp-default-managed/product-final2.log",
+    "retained": "product-final2.log.gz",
+    "bytes": 54,
+    "sha256": "00443b267d85d541053048abe11552ba755be4d398dc420fa9b49d2e65bfe904"
+  },
+  {
+    "source": "target/tmp-default-managed/product-final3.log",
+    "retained": "product-final3.log.gz",
+    "bytes": 54,
+    "sha256": "00443b267d85d541053048abe11552ba755be4d398dc420fa9b49d2e65bfe904"
+  },
+  {
+    "source": "target/tmp-default-managed/product-provenance-complete.log",
+    "retained": "product-provenance-complete.log.gz",
+    "bytes": 54,
+    "sha256": "00443b267d85d541053048abe11552ba755be4d398dc420fa9b49d2e65bfe904"
+  },
+  {
+    "source": "target/tmp-default-managed/quality-complete.log",
+    "retained": "quality-complete.log.gz",
+    "bytes": 132,
+    "sha256": "fca934803b0451795b4094ef68cd3950363f50b84bb365b5afacdf1e0e3711c3"
+  },
+  {
+    "source": "target/tmp-default-managed/quality-final.log",
+    "retained": "quality-final.log.gz",
+    "bytes": 36,
+    "sha256": "262ff011a94cdea2f18bd94c432e448776e21f63100723301071c86e5ab81051"
+  },
+  {
+    "source": "target/tmp-default-managed/regressions-complete.log",
+    "retained": "regressions-complete.log.gz",
+    "bytes": 673,
+    "sha256": "29d80ffc424d2e42706afccfe294b9b16768f56101849445e50091c66e649516"
+  },
+  {
+    "source": "target/tmp-default-managed/required-final.log",
+    "retained": "required-final.log.gz",
+    "bytes": 1010,
+    "sha256": "86165d12624bb32aaa3259b80150d13e4c05b4870784e3beaee4115b69828b8a"
+  },
+  {
+    "source": "target/tmp-default-managed/sema-first.log",
+    "retained": "sema-first.log.gz",
+    "bytes": 1460,
+    "sha256": "f87907cb4649a206349296052c2fd9e3df36c318c9ff0202d138fbbfa528b1c8"
+  },
+  {
+    "source": "target/tmp-default-managed/workspace-complete.log",
+    "retained": "workspace-complete.log.gz",
+    "bytes": 54,
+    "sha256": "05417ae27d70e9afff51c67a3d34c8972752fdf40e88029c01b72d11531225c1"
+  },
+  {
+    "source": "target/tmp-default-managed/workspace-final.log",
+    "retained": "workspace-final.log.gz",
+    "bytes": 54,
+    "sha256": "05417ae27d70e9afff51c67a3d34c8972752fdf40e88029c01b72d11531225c1"
+  },
+  {
+    "source": "target/tmp-default-managed/workspace-first.log",
+    "retained": "workspace-first.log.gz",
+    "bytes": 172421,
+    "sha256": "1173ad213c6ca1df1ad29d74da727d62f7e53e3b5a89b8ce641c6d75b2972dfc"
+  }
+]

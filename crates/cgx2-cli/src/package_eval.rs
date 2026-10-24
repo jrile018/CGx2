@@ -116,7 +116,7 @@ pub(crate) fn run(
     if package
         .modules()
         .iter()
-        .any(|m| cgx2_sema::foundation_profile(m.syntax()))
+        .any(|m| cgx2_sema::default_managed::profile(m.syntax()))
     {
         package.verify_unchanged().map_err(|ds| {
             ds.into_iter()

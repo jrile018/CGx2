@@ -1,0 +1,12 @@
+module app
+import lib
+
+fn main() -> i64 effects(ManagedAlloc):
+    no_gc(budget: 0):
+        let result = managed.try_alloc(lib.heap())
+        match result:
+            Result.Ok(value):
+                return 0
+            Result.Err(error):
+                return 42
+    0

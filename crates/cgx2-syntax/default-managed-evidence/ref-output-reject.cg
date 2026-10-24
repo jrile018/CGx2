@@ -1,0 +1,2 @@
+fn main() -> managed.Ref<i64> effects(ManagedAlloc):
+    managed.ref(1)

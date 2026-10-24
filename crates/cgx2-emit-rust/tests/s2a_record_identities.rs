@@ -4,23 +4,19 @@ use std::path::Path;
 
 // The public output names encode the entire defining identity, including type
 // arguments. Checking field declarations catches errors hidden by scalar output.
-fn emitted_type(identity: &str) -> String {
-    format!(
-        "cgx2_user_hex_{}",
-        identity
-            .bytes()
-            .map(|b| format!("{b:02x}"))
-            .collect::<String>()
-    )
-}
-
-fn assert_field(generated: &str, field: &str, identity: &str) {
+fn assert_field(
+    program: &cgx2_sema::default_managed::ManagedProgramV1,
+    field: &str,
+    identity: &str,
+) {
+    let p = program.program();
     assert!(
-        generated.contains(&format!(
-            "cgx2_user_{}_{field}: {},",
-            field.len(),
-            emitted_type(identity)
-        )),
+        p.layouts.iter().any(|layout| match &layout.shape {
+            cgx2_sema::default_managed::model::Shape::KRecord(fields) =>
+                fields.iter().any(|(n, t)| p.strings[*n] == field
+                    && cgx2_sema::type_key(&program.types()[*t]) == identity),
+            _ => false,
+        }),
         "missing canonical field {field}: {identity}"
     );
 }
@@ -30,6 +26,28 @@ fn package_record_fields_preserve_complete_nominal_identities() {
     for fixture in ["s2a-local", "s2a-imports"] {
         let package = load_checked_package(&Path::new("tests/fixtures").join(fixture)).unwrap();
         let generated = emit_package_rust(&package).unwrap();
+        let entry = package
+            .modules()
+            .iter()
+            .find(|m| m.source() == package.index().entry)
+            .unwrap();
+        let name = entry.syntax().name.as_ref().unwrap().segments.join(".");
+        let merged = cgx2_sema::merge_modules(
+            &package
+                .modules()
+                .iter()
+                .map(|m| m.syntax())
+                .collect::<Vec<_>>(),
+            &name,
+        );
+        let text = package
+            .modules()
+            .iter()
+            .map(|m| m.text())
+            .collect::<Vec<_>>()
+            .join("\n");
+        let program = cgx2_sema::default_managed::compile_module(&merged, &text).unwrap();
+        assert!(generated.contains(&program.rust_data().unwrap()));
         assert_eq!(generated, emit_package_rust(&package).unwrap());
         let modules: &[&str] = if fixture == "s2a-local" {
             &["app.main"]
@@ -37,47 +55,56 @@ fn package_record_fields_preserve_complete_nominal_identities() {
             &["app.left", "app.right"]
         };
         for module in modules {
-            assert_field(&generated, "flag", &format!("{module}.Flag"));
-            assert_field(&generated, "point", &format!("{module}.Point"));
+            assert_field(&program, "flag", &format!("{module}.Flag"));
+            assert_field(&program, "point", &format!("{module}.Point"));
             assert_field(
-                &generated,
+                &program,
                 "nested",
                 &format!("cgx2.core.Option<cgx2.core.Result<{module}.Point, {module}.Flag>>"),
             );
-            assert!(generated.contains(&format!(
-                "{}({}),",
-                "cgx2_user_5_Value",
-                emitted_type(&format!("{module}.Point"))
-            )));
+            assert!(
+                program
+                    .program()
+                    .layouts
+                    .iter()
+                    .any(|layout| match &layout.shape {
+                        cgx2_sema::default_managed::model::Shape::KVariant(cases) => cases
+                            .iter()
+                            .any(|(n, ts)| program.program().strings[*n] == "Value"
+                                && ts.iter().any(|t| cgx2_sema::type_key(&program.types()[*t])
+                                    == format!("{module}.Point"))),
+                        _ => false,
+                    })
+            );
         }
         if fixture == "s2a-local" {
-            assert_field(&generated, "maybe", "cgx2.core.Option<app.main.Flag>");
+            assert_field(&program, "maybe", "cgx2.core.Option<app.main.Flag>");
             assert_field(
-                &generated,
+                &program,
                 "outcome",
                 "cgx2.core.Result<app.main.Point, app.main.Flag>",
             );
             assert_field(
-                &generated,
+                &program,
                 "reversed",
                 "cgx2.core.Result<cgx2.core.Option<app.main.Point>, app.main.Flag>",
             );
         } else {
-            assert_field(&generated, "left", "app.left.Holder");
-            assert_field(&generated, "right", "app.right.Holder");
-            assert_field(&generated, "maybe", "cgx2.core.Option<app.left.Flag>");
+            assert_field(&program, "left", "app.left.Holder");
+            assert_field(&program, "right", "app.right.Holder");
+            assert_field(&program, "maybe", "cgx2.core.Option<app.left.Flag>");
             assert_field(
-                &generated,
+                &program,
                 "outcome",
                 "cgx2.core.Result<app.right.Point, app.left.Flag>",
             );
             assert_field(
-                &generated,
+                &program,
                 "nested",
                 "cgx2.core.Option<cgx2.core.Result<app.left.Point, app.right.Flag>>",
             );
             assert_field(
-                &generated,
+                &program,
                 "reversed",
                 "cgx2.core.Result<cgx2.core.Option<app.right.Point>, app.left.Flag>",
             );

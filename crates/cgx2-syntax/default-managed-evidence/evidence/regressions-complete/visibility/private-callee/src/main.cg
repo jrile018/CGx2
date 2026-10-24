@@ -1,0 +1,5 @@
+module app
+import dep
+pub fn main() -> i64:
+    let hidden = dep.dep_private<i64>(1)
+    7
