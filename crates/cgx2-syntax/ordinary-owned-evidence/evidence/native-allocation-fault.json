@@ -1,0 +1,61 @@
+{
+  "synthetic": true,
+  "scope": "source-driven native injected allocation fault; debug and release",
+  "records": [
+    {
+      "label": "build",
+      "release": false,
+      "command": [
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/release-ordinary-owned/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/bd1f/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/arithmetic-failure.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/tmp-ordinary-owned/owned-alloc-fault-False",
+        "--force",
+        "--test-fail-reserve",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=a3c3b51275e0485a3a31857f8d3211bbdfe473ed8627ea3fe5fe189ff0fd1047 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=a37defc304a70d0c96ea183e73c3228258b1e80aac23779f7a32fab29e8fd593 output=/home/john-riley/.codex/worktrees/bd1f/lang/target/tmp-ordinary-owned/owned-alloc-fault-False\n",
+      "stderr": ""
+    },
+    {
+      "label": "run",
+      "release": false,
+      "command": [
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/tmp-ordinary-owned/owned-alloc-fault-False"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":9,\"released_bytes\":9,\"peak_live_bytes\":9,\"reads\":0,\"writes\":2}\nCGR080: owned allocation failed: HostAllocation at 103..137\n"
+    },
+    {
+      "label": "build",
+      "release": true,
+      "command": [
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/release-ordinary-owned/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/bd1f/lang/crates/cgx2-syntax/ordinary-owned-evidence/fixtures/arithmetic-failure.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/tmp-ordinary-owned/owned-alloc-fault-True",
+        "--force",
+        "--test-fail-reserve",
+        "3",
+        "--release"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=a3c3b51275e0485a3a31857f8d3211bbdfe473ed8627ea3fe5fe189ff0fd1047 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=a37defc304a70d0c96ea183e73c3228258b1e80aac23779f7a32fab29e8fd593 output=/home/john-riley/.codex/worktrees/bd1f/lang/target/tmp-ordinary-owned/owned-alloc-fault-True\n",
+      "stderr": ""
+    },
+    {
+      "label": "run",
+      "release": true,
+      "command": [
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/tmp-ordinary-owned/owned-alloc-fault-True"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":9,\"released_bytes\":9,\"peak_live_bytes\":9,\"reads\":0,\"writes\":2}\nCGR080: owned allocation failed: HostAllocation at 103..137\n"
+    }
+  ]
+}

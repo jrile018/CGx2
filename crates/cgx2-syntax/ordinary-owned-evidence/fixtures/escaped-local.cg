@@ -1,0 +1,8 @@
+# UTF-8 π: spans are bytes
+record R:
+    x: i64
+fn escape(input: shared<R>) -> shared<R>:
+    let p = owned(R(x: 1))
+    borrow(p)
+fn main() -> i64:
+    0

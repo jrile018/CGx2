@@ -1,0 +1,10 @@
+record R:
+    x: i64
+    yes: Bool
+
+fn copied(label: R, p: owned<R>, flag: Bool) -> R:
+    R(yes: flag, x: label.x + p.x)
+
+fn main() -> R:
+    let p = owned(R(x: 2, yes: false))
+    copied(R(x: 1, yes: false), p, true)

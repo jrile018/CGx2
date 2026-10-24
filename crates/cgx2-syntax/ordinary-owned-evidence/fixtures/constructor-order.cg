@@ -1,0 +1,7 @@
+record R:
+    first: i64
+    second: i64
+
+fn main() -> i64:
+    let p = owned(R(second: 1 / 0, first: 9223372036854775807 + 1))
+    p.first

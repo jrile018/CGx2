@@ -1,0 +1,8 @@
+# UTF-8 π: spans are bytes
+record R:
+    x: i64
+fn bad(p: shared<R>) -> Unit:
+    p.x = 2
+fn main() -> i64:
+    let p = owned(R(x: 1))
+    0

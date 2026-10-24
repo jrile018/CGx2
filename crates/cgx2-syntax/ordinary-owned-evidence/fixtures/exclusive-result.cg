@@ -1,0 +1,14 @@
+record R:
+    x: i64
+
+fn lend(n: i64, p: exclusive<R>) -> exclusive<R>:
+    p
+
+fn main() -> i64:
+    let p = owned(R(x: -9223372036854775808))
+    if true:
+        let writer = lend(0, borrow_mut(p))
+        writer.x = 42
+    else:
+        0
+    p.x

@@ -1,0 +1,513 @@
+{
+  "schema_version": 1,
+  "checkpoint_complete": false,
+  "release_complete": false,
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/bd1f/lang/target/release-ordinary-owned",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/bd1f/lang/target/tmp-ordinary-owned",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "checks": [
+    {
+      "name": "build",
+      "command": [
+        "cargo",
+        "build",
+        "--workspace",
+        "--offline",
+        "--locked"
+      ],
+      "exit": 0,
+      "log": "build.log",
+      "log_sha256": "82f512bcac96f3b39b08795069452fd357426b0b9cb000f5b85ee961e61cf987",
+      "duration_seconds": 1.768,
+      "export": {
+        "path": "build.log.gz",
+        "sha256": "82f512bcac96f3b39b08795069452fd357426b0b9cb000f5b85ee961e61cf987",
+        "gzip_sha256": "a967697239bbf13dfe8d33e6b9c824aba0fe72a6bd591574f2b4d6608201c44c"
+      }
+    },
+    {
+      "name": "ordinary-product",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/ordinary-owned-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/release-ordinary-owned/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/tmp-ordinary-owned/verified-2/ordinary-product.json"
+      ],
+      "exit": 0,
+      "log": "ordinary-product.log",
+      "log_sha256": "eac7a823e60dc4922bb955dde1af4379e8b81184461e3f67d3fb8dc4c578d82c",
+      "duration_seconds": 7.623,
+      "export": {
+        "path": "ordinary-product.log.gz",
+        "sha256": "eac7a823e60dc4922bb955dde1af4379e8b81184461e3f67d3fb8dc4c578d82c",
+        "gzip_sha256": "94c5a645f05957a5b93c5bf345f43bd62e7d3df70889b6e9293fda0036437f24"
+      }
+    },
+    {
+      "name": "workspace-tests",
+      "command": [
+        "cargo",
+        "test",
+        "--workspace",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--no-fail-fast"
+      ],
+      "exit": 0,
+      "log": "workspace-tests.log",
+      "log_sha256": "e45b3c4e06355220604b4616a70c0b7431865b81fbd1086825f14ce82c941874",
+      "duration_seconds": 87.891,
+      "suites": 258,
+      "passed": 1173,
+      "failed": 0,
+      "ignored": 6,
+      "export": {
+        "path": "workspace-tests.log.gz",
+        "sha256": "e45b3c4e06355220604b4616a70c0b7431865b81fbd1086825f14ce82c941874",
+        "gzip_sha256": "4cbd68a37edb8183c1c619a2549b3fd5b8352c97bba9f8ecd5f223ff200d54e0"
+      }
+    },
+    {
+      "name": "clippy",
+      "command": [
+        "cargo",
+        "clippy",
+        "--workspace",
+        "--all-targets",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit": 0,
+      "log": "clippy.log",
+      "log_sha256": "18fa753e68868aebcb5866b0be76d0fbb2c9c39836b3774e02a30d96afb289ae",
+      "duration_seconds": 5.021,
+      "export": {
+        "path": "clippy.log.gz",
+        "sha256": "18fa753e68868aebcb5866b0be76d0fbb2c9c39836b3774e02a30d96afb289ae",
+        "gzip_sha256": "6ebbc358da5a6d99069869a21404b1ebffb48c7a9fdcbf48e36d0edb3a59048b"
+      }
+    },
+    {
+      "name": "format",
+      "command": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--check"
+      ],
+      "exit": 0,
+      "log": "format.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.614,
+      "export": {
+        "path": "format.log.gz",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "gzip_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+      }
+    },
+    {
+      "name": "diff",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit": 0,
+      "log": "diff.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.007,
+      "export": {
+        "path": "diff.log.gz",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "gzip_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+      }
+    },
+    {
+      "name": "foundation",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/s2b-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/release-ordinary-owned/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/tmp-ordinary-owned/verified-2/foundation.json"
+      ],
+      "exit": 0,
+      "log": "foundation.log",
+      "log_sha256": "91adaa26ac56b550d1e84483cc1229283a3b9f7a60e70bc9e0ab8fb7d7f26e63",
+      "duration_seconds": 5.57,
+      "export": {
+        "path": "foundation.log.gz",
+        "sha256": "91adaa26ac56b550d1e84483cc1229283a3b9f7a60e70bc9e0ab8fb7d7f26e63",
+        "gzip_sha256": "9ea86ca6a70025064959d27305485fcb43283676da6757abb79e9ec74dad7634"
+      }
+    },
+    {
+      "name": "semantic",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-sema/tests/semantic_resolution/run.py",
+        "--binary",
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/release-ordinary-owned/debug/cgx2",
+        "--output",
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/tmp-ordinary-owned/verified-2/semantic.json"
+      ],
+      "exit": 0,
+      "log": "semantic.log",
+      "log_sha256": "e4db6ae5c0ec9375767e16c4779338b9a11ef6a05ed0e58e10b42d064c87b578",
+      "duration_seconds": 5.52,
+      "export": {
+        "path": "semantic.log.gz",
+        "sha256": "e4db6ae5c0ec9375767e16c4779338b9a11ef6a05ed0e58e10b42d064c87b578",
+        "gzip_sha256": "3b520fc16eba43c3eff7239e9733977981cbcbf05ac7a62bb2b11fed54f9913a"
+      }
+    },
+    {
+      "name": "specialization",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-sema/tests/source_specialization/run.py",
+        "--binary",
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/release-ordinary-owned/debug/cgx2",
+        "--output-dir",
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/tmp-ordinary-owned/verified-2/specialization"
+      ],
+      "exit": 0,
+      "log": "specialization.log",
+      "log_sha256": "c727497e41be718a60be0db3ecb9d8954f06543d2a7934cce2cdf459da11feb7",
+      "duration_seconds": 3.869,
+      "export": {
+        "path": "specialization.log.gz",
+        "sha256": "c727497e41be718a60be0db3ecb9d8954f06543d2a7934cce2cdf459da11feb7",
+        "gzip_sha256": "6af744d7525183b8bd6ca526cf7e9f5814f06a4d3e03b4724c8bc549657b327f"
+      }
+    },
+    {
+      "name": "visibility",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-api-index/tests/verify_visibility_cli.py",
+        "--binary",
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/release-ordinary-owned/debug/cgx2",
+        "--output-dir",
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/tmp-ordinary-owned/verified-2/visibility"
+      ],
+      "exit": 0,
+      "log": "visibility.log",
+      "log_sha256": "0acf24467bae23b1de480c565646b18eb7d7cc85480cd2273b285fa0f30944d3",
+      "duration_seconds": 2.367,
+      "export": {
+        "path": "visibility.log.gz",
+        "sha256": "0acf24467bae23b1de480c565646b18eb7d7cc85480cd2273b285fa0f30944d3",
+        "gzip_sha256": "d26a0db199a0f18aae5700f0da97af5a8c63a1103935455f7069653a38e18824"
+      }
+    },
+    {
+      "name": "binders",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-package/scripts/verify_binders.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/release-ordinary-owned/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/tmp-ordinary-owned/verified-2/binders.json"
+      ],
+      "exit": 0,
+      "log": "binders.log",
+      "log_sha256": "301cd82b719e5b9f7ba8e3c30fb22b30355a2b461aab7231e1f627387ede385d",
+      "duration_seconds": 1.115,
+      "export": {
+        "path": "binders.log.gz",
+        "sha256": "301cd82b719e5b9f7ba8e3c30fb22b30355a2b461aab7231e1f627387ede385d",
+        "gzip_sha256": "cc3e24f2c81f284810db89f2f37cfffcba67c396abf91e63d91bd04affb6a043"
+      }
+    },
+    {
+      "name": "output",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-cli/scripts/verify_output_bounds.py",
+        "--binary",
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/release-ordinary-owned/debug/cgx2",
+        "--output",
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/tmp-ordinary-owned/verified-2/output.json",
+        "--build-address-space-mib",
+        "4096"
+      ],
+      "exit": 0,
+      "log": "output.log",
+      "log_sha256": "eb1a6089eb7bdd7a005d7de27510fd7a7660f242399a66f115de0a4d38737b8f",
+      "duration_seconds": 144.792,
+      "export": {
+        "path": "output.log.gz",
+        "sha256": "eb1a6089eb7bdd7a005d7de27510fd7a7660f242399a66f115de0a4d38737b8f",
+        "gzip_sha256": "c817ff32bc6b9d5dbcabb84e0ec90cb60a660cda1c60a9061fa1f23b03009511"
+      }
+    },
+    {
+      "name": "emitters",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-emit-python/tests/s2b_product.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/release-ordinary-owned/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/tmp-ordinary-owned/verified-2/emitters.json"
+      ],
+      "exit": 0,
+      "log": "emitters.log",
+      "log_sha256": "2620de15c25b6017d1e70477b0c9b9468613eaba3b3a94d83c34c36017f42eb2",
+      "duration_seconds": 4.068,
+      "export": {
+        "path": "emitters.log.gz",
+        "sha256": "2620de15c25b6017d1e70477b0c9b9468613eaba3b3a94d83c34c36017f42eb2",
+        "gzip_sha256": "d40f10baca099082fcbd79170a02b1b845c38e75d3516c4db8d55403f8561692"
+      }
+    },
+    {
+      "name": "legacy-graph99",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/s2b-memory-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/release-ordinary-owned/debug",
+        "--output",
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/tmp-ordinary-owned/verified-2/legacy-graph99.json"
+      ],
+      "exit": 0,
+      "log": "legacy-graph99.log",
+      "log_sha256": "8603c2cc4bcd524f20174740d9f95f470056bb62fd5577b3bf236c2a7ff64594",
+      "duration_seconds": 5.921,
+      "export": {
+        "path": "legacy-graph99.log.gz",
+        "sha256": "8603c2cc4bcd524f20174740d9f95f470056bb62fd5577b3bf236c2a7ff64594",
+        "gzip_sha256": "615b81b1a700f4381e5541981d02996b70ad9c642989617f86b6cf60ea597a82"
+      }
+    }
+  ],
+  "base": "9fcefbbb201f1f73f387f43672bc9b4f9d23eeb7",
+  "branch": "riley/s2b-ordinary-owned",
+  "review_status": "awaiting-user-review",
+  "all_required_checks_passed": true,
+  "product": {
+    "passed": 256,
+    "failed": 0,
+    "source_cases": 7,
+    "rejected_source_cases": 15,
+    "path": "product.json",
+    "sha256": "1a0a466eeb0ca3beba13e15991ee58c20105a90dbebbf4873a66daaaa34d7bd3"
+  },
+  "foundation_regressions": {
+    "foundation": {
+      "passed": 159,
+      "failed": 0,
+      "export": {
+        "path": "foundation.json.gz",
+        "sha256": "c37dca80d1b4ebd605cb72b5738b31e624862622ac2bb48477be70bea67eaf1d",
+        "gzip_sha256": "0d77968edc68a5218da013ad978b1f793c58764302c4250af7f32ec05f5b1469"
+      }
+    },
+    "semantic": {
+      "passed": 278,
+      "failed": 0,
+      "export": {
+        "path": "semantic.json.gz",
+        "sha256": "dde42a81ef39b879b90a988b5c00475d3aba14cf7e8406149635040c95938123",
+        "gzip_sha256": "f9cad2e726c6229aac84b862205bb2f1ec71c3cedc5b50bd0bd19b72838c2172"
+      }
+    },
+    "specialization": {
+      "passed": 207,
+      "failed": 0,
+      "export": {
+        "path": "specialization.json.gz",
+        "sha256": "6bc14db45bfb868c72e9ccca8a4958e8f591090ee03e696e36ed553c456e79bd",
+        "gzip_sha256": "371a648af8d70545fb2152f95001332f82ccdf8f784c33c82807671d4e533460"
+      }
+    },
+    "visibility": {
+      "passed": 118,
+      "failed": 0,
+      "export": {
+        "path": "visibility.json.gz",
+        "sha256": "d7358df39338c035c80b7a3d5f4d9286e78020fdbda235d70f5f291a670eb0bb",
+        "gzip_sha256": "8b219adfbaf6bec64624b53b86724bf95db140ef6ed4e7a523013bf5906380cf"
+      }
+    },
+    "binders": {
+      "passed": 88,
+      "failed": 0,
+      "export": {
+        "path": "binders.json.gz",
+        "sha256": "6d7aed593bf4125e6fdcce77c69f3a0faa7929ff63e606f850ad659dec8ddb00",
+        "gzip_sha256": "17b83ad938be037c10d3889607adf14d488a6f97d4d9f454d758aeb9e73bdfd9"
+      }
+    },
+    "output": {
+      "passed": 31,
+      "failed": 0,
+      "export": {
+        "path": "output.json.gz",
+        "sha256": "54a64d95d821b50439819b3904f47820c720cca7c3a2ca16e94c3e0aa4b8319d",
+        "gzip_sha256": "339fcdb7466afe90c719edd4e6831443950de5ac10fdb7aeb98a94c5a5cafde7"
+      }
+    },
+    "emitters": {
+      "passed": 104,
+      "failed": 0,
+      "export": {
+        "path": "emitters.json.gz",
+        "sha256": "1f6e0fa8ef6b41c0d2c8aa62139cd04531eed3f8643a39d6607c63389ce2d8f3",
+        "gzip_sha256": "da861d09a116fb9fdd815a58e6e52e3e6337794373672671a27f31931475d485"
+      }
+    }
+  },
+  "legacy_graph99": {
+    "passed": 99,
+    "scope": "unchanged legacy supporting runner; known review repros remain defects",
+    "export": {
+      "path": "legacy-graph99.json.gz",
+      "sha256": "84f9a85eb26a1fdf93b381a1054029093f9019c48b85f91b6584d09e87fdd6e9",
+      "gzip_sha256": "45b7700be0e03a7b8341013b1602a2b82c74c0cd6628017d75095e2f7329d077"
+    }
+  },
+  "known_legacy_defects": [
+    "nested-zero: interpreter CGR013 vs native exit 0",
+    "forged-layout: snapshot rooted_handles=2, rooted_edges=0 despite one source edge"
+  ],
+  "additional_source_fault_check": "native-allocation-fault.json: injected reserve 3 fails at source owned allocation; debug/release release the earlier owner",
+  "preliminary_failures": [
+    {
+      "label": "linker-default-threads",
+      "reason": "default linker thread creation exceeded the initial capped process; final runner uses two linker threads and 2 GiB address space",
+      "export": {
+        "path": "preliminary-linker-default-threads.json.gz",
+        "sha256": "ad617d3b3cbc4d9461a569756cf449df85459513820459b937f1f97caf2b1aac",
+        "gzip_sha256": "8424fec0ec90fb046a63c465be946253c75cc8e59d3386ee2435346cfcc97c10"
+      }
+    },
+    {
+      "label": "test-api-and-format",
+      "reason": "new test used the wrong existing checked API result shape; corrected without changing public interfaces",
+      "export": {
+        "path": "preliminary-test-api-and-format.log.gz",
+        "sha256": "a78bc7646630d848cb34015c2d667936ebf67fad13d2dc9e9cb06ecbd0a304e2",
+        "gzip_sha256": "a10a9c5a3f8be601df6b65bdaa5a5b88ada8aa73c696f3dc7a841feb0846a86b"
+      }
+    },
+    {
+      "label": "foundation-rejection",
+      "reason": "preserved CGT002 for the existing unsupported List<owned<i64>> fixture",
+      "export": {
+        "path": "preliminary-foundation-rejection.log.gz",
+        "sha256": "ce97ffea140ec6a4bd605e0f128336af32e93d2f634416ee760341cf0691ee02",
+        "gzip_sha256": "245741afbf4a3c123bb5158496e1d6a5ca6a28fc8317010b27cd1f6b09c1669d"
+      }
+    },
+    {
+      "label": "format-initial",
+      "reason": "formatted each file with its crate edition",
+      "export": {
+        "path": "preliminary-format-initial.log.gz",
+        "sha256": "bd3abafe1ddb7a288ce3f3ca55e0c5f2dff022659f5327089bad9cbcc86ad6e5",
+        "gzip_sha256": "a8bfc10119084e5bd3c1c528b416bbd282eda6d0d76fdc8fad03011754c6e56a"
+      }
+    },
+    {
+      "label": "output-2gib-cap",
+      "reason": "optimized rustc exhausted the existing runner 2 GiB cap; unchanged runner passes with supported 4 GiB build cap",
+      "export": {
+        "path": "preliminary-output-2gib-cap.json.gz",
+        "sha256": "88cbb9c911f582cf0e29baf5a3f1c94e28036ea84cd09bb5ca745a2621e5130c",
+        "gzip_sha256": "df0f781d22b4ea3320e5e600ef3119d013661be212790f2cb70c1d5a8af53fc8"
+      }
+    }
+  ],
+  "root_files": {
+    "manifest_sha256": "9400b7dfbc400f91b3d648265dbd18001ec96157eb202fe88e3b95a312c9ffd7",
+    "committed_lock_sha256": "e4021f7d1ff419ba911a6fc0c0ec4aaae14816389eba91454c12fcb4273762c7",
+    "verification_local_reconciled_lock_sha256": "ea7678242cb40c8425c2b9875215f7024071c684cab59399d1d8a74a96750e3a",
+    "root_manifest_changed": false,
+    "root_lock_committed": false
+  },
+  "dependency_reconciliation": {
+    "required": [
+      "cgx2-sema -> cgx2-runtime",
+      "cgx2-sema -> sha2 (existing 0.10 lock version)"
+    ],
+    "patch": "../lock-reconciliation.patch",
+    "downloads": false
+  },
+  "implementation_files_sha256": {
+    "crates/cgx2-cli/src/lib.rs": "ebc385a0a42294addbc46245f57707fc5e497794ff4af79cffda08917487778e",
+    "crates/cgx2-cli/src/main.rs": "abc721fb6566eb4e176e35b0d9412c8d3a6bdc064b30ca1d5100f753d94add7c",
+    "crates/cgx2-cli/src/ordinary_owned.rs": "ba636caaa152be8ee06358458095857ab8dd6d14be560f293d56021bac626207",
+    "crates/cgx2-cli/tests/ordinary_owned.rs": "35e626f22f8829785baf8fffc7705266a3b8ce607714999864778be2669db30d",
+    "crates/cgx2-effect-index/src/lib.rs": "9ac8e7c4ab2103973f8d9d3356bae8189b963347f0d56b70eaa2001b266e0cfe",
+    "crates/cgx2-emit-python/src/lib.rs": "88b61db8d9969c27855551c3a32ce2200304545cf768fc44761298f386577445",
+    "crates/cgx2-emit-python/tests/ordinary_owned.rs": "eeb37611f68984c7c6e66417f2626d3935ee78ac3cec6c3e1f440b23b3d55ea7",
+    "crates/cgx2-emit-rust/src/lib.rs": "13f99572e11a3b2967dd107be40bc7d234e21565104f0e2b0334d5b2b7ab0a0c",
+    "crates/cgx2-emit-rust/src/ordinary_owned.rs": "7c23286255cb49f3bf8487ddac98b4de4dd679fac6663f4e3474e5b90e263628",
+    "crates/cgx2-emit-rust/tests/ordinary_owned.rs": "41eead551657a83745fc0c1ee2331e45e5cfeb68c39e998e39f57e6b1db7e9d3",
+    "crates/cgx2-notebook-kernel/src/lib.rs": "5ec6cd7b223904d995aef4c28ac5e4862cf2d41c15f45922c442f087c419b47b",
+    "crates/cgx2-sema/Cargo.toml": "34a02a6a6e0ea34bead2abbd3c79c68198bc00b46077afe52a6a97c0b2a27e16",
+    "crates/cgx2-sema/src/check.rs": "b373088f91602b441d5bad21c2ba906c157902acb5715f5f6c36fff8e0fdeff4",
+    "crates/cgx2-sema/src/lib.rs": "e350cfb08fc55c91716cd7e588184640cb217488953cca25f85e800e6cc797ac",
+    "crates/cgx2-sema/src/ordinary_owned.rs": "ec1152eeed47160fd7ec41d4fc52b5b20047cfa5bb2781ab13ac4078826d2faf",
+    "crates/cgx2-sema/src/ordinary_owned/engine.rs": "2376b00420886b44a2a3f649ed265e0314c23b57eeff9ef13676224ec040061d",
+    "crates/cgx2-sema/src/ordinary_owned/lower.rs": "d34d0dfa67b68fbbc29e659476d4855336380c2a2dcf8581b8ffb99f27aa84e1",
+    "crates/cgx2-sema/src/ordinary_owned/model.rs": "e6c282c855878cd3db3ef32e7aacaa7ef5c6407cbfc76faa32c3a61f164fea45",
+    "crates/cgx2-sema/tests/ordinary_owned.rs": "b0d0a493cb4586e73fda95bd7260e0a95292fdd227012885e7d1256445321cd3",
+    "crates/cgx2-syntax/ordinary-owned-evidence/fixtures/ambiguous-result.cg": "641176c7f24927a67f88b5dcb73b7a9fef1cb1853bfd202aabcd7c57f88a3ebd",
+    "crates/cgx2-syntax/ordinary-owned-evidence/fixtures/argument-move-order.cg": "d9089982da22ddbf7ee90de0c0548b99c7beb497766dbfff0b74328b7f64ab3e",
+    "crates/cgx2-syntax/ordinary-owned-evidence/fixtures/arithmetic-failure.cg": "a3c3b51275e0485a3a31857f8d3211bbdfe473ed8627ea3fe5fe189ff0fd1047",
+    "crates/cgx2-syntax/ordinary-owned-evidence/fixtures/conflicting-loans.cg": "dcb2cbd00965f900802829902f8e75a9dff2c9504e0f01a28782941feefd1257",
+    "crates/cgx2-syntax/ordinary-owned-evidence/fixtures/constructor-order.cg": "cc9f6e7e7058255d36cf668cd9b42c089a1cabb40dd3e55cb6d6b4b8b586bab0",
+    "crates/cgx2-syntax/ordinary-owned-evidence/fixtures/copied-record.cg": "b74b0a8763acfafa622020d5517866e41fcf987047f118a2eb8b259037eb58e6",
+    "crates/cgx2-syntax/ordinary-owned-evidence/fixtures/escaped-local.cg": "9b5e6cdcab1ffde8aaff424d5ee384076275135d7078296523c0867009b43d2d",
+    "crates/cgx2-syntax/ordinary-owned-evidence/fixtures/exclusive-alias.cg": "fb3fa35f36bca04e4bf9c43ffaf2f68f3b1ed7b739244c304259528428685857",
+    "crates/cgx2-syntax/ordinary-owned-evidence/fixtures/exclusive-result.cg": "f9c1454df042a50f84461063634c39a3972646305e02919203788ed9d3d2233e",
+    "crates/cgx2-syntax/ordinary-owned-evidence/fixtures/functions.cg": "81331537f821f68e3643db7581f66312290a1b09bbc0e503f3fa9b5cf0d73188",
+    "crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-field.cg": "8469905deac72ea7494984a39cfabc17fb0f5c9e6c781870f3e91bfd7115977f",
+    "crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-layout.cg": "f20ddf981a5610b7a11b3d73bf38676dbd22752404c3b7e9235c9f7c53e326f0",
+    "crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-parameter.cg": "a0aa337739e467cd294b02d176ee52bc0244ec4bfa94de75803cbfcdac5d7951",
+    "crates/cgx2-syntax/ordinary-owned-evidence/fixtures/invalid-result.cg": "63be31b584fbbc9cb9b02a8c289359bd3a2aa96834a74e4e877475552cf8a068",
+    "crates/cgx2-syntax/ordinary-owned-evidence/fixtures/mapping.cg": "ca2a4069fd9bffb4277f8e93e9f27674edf038f21698c1bda7a3ad1678aecf13",
+    "crates/cgx2-syntax/ordinary-owned-evidence/fixtures/move-with-live-loan.cg": "5b28a524eb1590d1bdbcb99abfc579db5118eee0a7f1ecc40ee3b6f80e7ba85c",
+    "crates/cgx2-syntax/ordinary-owned-evidence/fixtures/owner-result-as-loan.cg": "49ff76b930834fde58a4fa135e02bf2d9a7ee99d469f6fc592768589f598f2cd",
+    "crates/cgx2-syntax/ordinary-owned-evidence/fixtures/repeated.cg": "a3e07c4251063ae643eeced9cd9c0a9c9c580b663046ae0fcc815cc51c377de6",
+    "crates/cgx2-syntax/ordinary-owned-evidence/fixtures/reserved-shadow.cg": "7cf86652a6fdfdbd386cb3e742f8e11861bd75ccbceb5931aea203d395e99973",
+    "crates/cgx2-syntax/ordinary-owned-evidence/fixtures/shared-write.cg": "45060260f06f4e1a5767366ffdeee64722be542335ec5b04705d1a1ab90e4ef7",
+    "crates/cgx2-syntax/ordinary-owned-evidence/fixtures/unsupported-reborrow.cg": "d0d270bf8d54470a520992ba6311ec64ee54a610341f63d17ac84d3a070c195b",
+    "crates/cgx2-syntax/ordinary-owned-evidence/fixtures/use-after-move.cg": "2c9ca6f8dd80bbbc83a66d6f0c10358cfd4e1da6a4cb853357d89eb3ce09e72f",
+    "crates/cgx2-syntax/ordinary-owned-evidence/run.py": "ca4ba4f352a470c98b8eee0b033ac561ebcadb007f276b80dd438ce373b7788b",
+    "crates/cgx2-syntax/ordinary-owned-evidence/verify.py": "96ef10d23f6293bb34b67a6614afbcc9c1126a9236ca72b1d0fa6c144f383779",
+    "crates/cgx2-syntax/src/lib.rs": "cde77071bb5c0ee06e1589ad44288738d86479da330f24aced873088132ce138",
+    "crates/cgx2-syntax/src/ordinary_owned.rs": "3650c30dd1b7d623b55234fc9e43e4999772987cb8eb7ef855a183c8f9e264d5",
+    "crates/cgx2-verify-cli/src/source.rs": "7dfc3a844e961873c05326158d6ad5ac862f2fd4f6eec1e2a31a670440664966",
+    "crates/cgx2c/src/lib.rs": "a35add3de17cfcfef94284c2687021771047772b481c15d911f3287a645dba1c"
+  },
+  "remaining_mandatory": [
+    "generic/recursive/package ownership summaries",
+    "loops/matching/partial moves/reborrows",
+    "ownership-bearing Result provenance and recoverable transfers",
+    "default managed records/variants/List/Array/String, aliases/cycles/root safepoints",
+    "named regions, explicit conversions and full session no_gc accounting",
+    "contract/allocation/fault/cancellation/unwind cleanup closure",
+    "source/target and consumer closure",
+    "external leak-enabled acceptance and independent safety audit",
+    "R01-R15, typed foreign/package/tensor/execution, command closure, S3 and S4"
+  ],
+  "smallest_next_memory_step": "versioned success-owned/failure-Unit allocation Result summaries, followed by recoverable source allocation for the same scalar record layouts"
+}

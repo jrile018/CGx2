@@ -3,6 +3,11 @@ name = "cgx2-sema"
 version = "0.1.0"
 edition = "2021"
 
+[features]
+failure-injection-test = ["cgx2-runtime/fault-injection"]
+
 [dependencies]
 cgx2-syntax = { path = "../cgx2-syntax" }
 cgx2-ownership = { path = "../cgx2-ownership" }
+cgx2-runtime = { path = "../cgx2-runtime" }
+sha2 = "0.10"

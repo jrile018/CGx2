@@ -1,0 +1,41 @@
+{
+  "status": "known-unrepaired-base-defect",
+  "source_sha256": "6379e34244550096a26c33a8aacbc3009160d364861b6a87768e532fcee9210d",
+  "commands": [
+    {
+      "label": "source",
+      "command": [
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/release-ordinary-owned/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/bd1f/lang/plans/release-completion/s2b-memory-review/evidence/nested-zero.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGR013: /home/john-riley/.codex/worktrees/bd1f/lang/plans/release-completion/s2b-memory-review/evidence/nested-zero.cg:179..251: memory allocation failed: BudgetExceeded\n"
+    },
+    {
+      "label": "build",
+      "command": [
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/release-ordinary-owned/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/bd1f/lang/plans/release-completion/s2b-memory-review/evidence/nested-zero.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/tmp-ordinary-owned/legacy-zero-native",
+        "--force"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=6379e34244550096a26c33a8aacbc3009160d364861b6a87768e532fcee9210d rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=a37defc304a70d0c96ea183e73c3228258b1e80aac23779f7a32fab29e8fd593 output=/home/john-riley/.codex/worktrees/bd1f/lang/target/tmp-ordinary-owned/legacy-zero-native\n",
+      "stderr": ""
+    },
+    {
+      "label": "native",
+      "command": [
+        "/home/john-riley/.codex/worktrees/bd1f/lang/target/tmp-ordinary-owned/legacy-zero-native"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "expected_baseline_discrepancy": true
+}

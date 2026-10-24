@@ -190,13 +190,13 @@ impl Selected {
                         other => {
                             return Err(AuditError::Unsupported(format!(
                                 "source ensures: {other:?}"
-                            )))
+                            )));
                         }
                     }
                 }
                 Err(EvalError::Overflow) => overflow = true,
                 Err(error) => {
-                    return Err(AuditError::Unsupported(format!("source body: {error:?}")))
+                    return Err(AuditError::Unsupported(format!("source body: {error:?}")));
                 }
             }
         }
@@ -454,7 +454,10 @@ fn lower_body(
         ));
     }
     if !rest.is_empty() {
-        return Err(Diagnostic::unsupported("only immutable locals followed by a scalar return/conditional, or the explicit literal accumulator profile, are supported", statement.span));
+        return Err(Diagnostic::unsupported(
+            "only immutable locals followed by a scalar return/conditional, or the explicit literal accumulator profile, are supported",
+            statement.span,
+        ));
     }
     if depth != 0 || matches!(statement.kind, StmtKind::If { .. }) {
         *nodes += 1;
@@ -468,11 +471,39 @@ fn lower_body(
     match &statement.kind {
         StmtKind::Expr(expression) if depth == 0 => lower(expression, None, nodes),
         StmtKind::Return(Some(expression)) => lower(expression, None, nodes),
-        StmtKind::If { condition, then_body, else_body } => {
-            if depth >= SOURCE_CONDITIONAL_DEPTH_LIMIT { return Err(Diagnostic::unsupported("conditional nesting exceeds verification depth limit (32)", statement.span)); }
-            Ok(Expr::If(Box::new(lower(condition, None, nodes)?), Box::new(lower_body(then_body, depth + 1, nodes, statement.span, expansion)?), Box::new(lower_body(else_body, depth + 1, nodes, statement.span, expansion)?)))
+        StmtKind::If {
+            condition,
+            then_body,
+            else_body,
+        } => {
+            if depth >= SOURCE_CONDITIONAL_DEPTH_LIMIT {
+                return Err(Diagnostic::unsupported(
+                    "conditional nesting exceeds verification depth limit (32)",
+                    statement.span,
+                ));
+            }
+            Ok(Expr::If(
+                Box::new(lower(condition, None, nodes)?),
+                Box::new(lower_body(
+                    then_body,
+                    depth + 1,
+                    nodes,
+                    statement.span,
+                    expansion,
+                )?),
+                Box::new(lower_body(
+                    else_body,
+                    depth + 1,
+                    nodes,
+                    statement.span,
+                    expansion,
+                )?),
+            ))
         }
-        _ => Err(Diagnostic::unsupported("arrays, invariants, general loops, mutation, variants and generic types are outside the scalar proof profile", statement.span)),
+        _ => Err(Diagnostic::unsupported(
+            "arrays, invariants, general loops, mutation, variants and generic types are outside the scalar proof profile",
+            statement.span,
+        )),
     }
 }
 
@@ -516,6 +547,12 @@ pub fn parse_with_expansion(
             span: error.span,
         }
     })?;
+    if let Some(span) = cgx2_syntax::ordinary_owned_span(&module) {
+        return Err(Diagnostic::unsupported(
+            "ordinary ownership proof semantics are unsupported; no proof claimed",
+            span,
+        ));
+    }
     if let Some(span) = cgx2_syntax::s2a_feature_span(&module) {
         return Err(Diagnostic::unsupported(
             "S2a variant/generic/collection/loop-contract proof semantics are deferred to S3-V",
@@ -603,7 +640,7 @@ pub fn parse_with_expansion(
                 return Err(Diagnostic::unsupported(
                     "only i64 and Bool parameters are modeled",
                     parameter.span,
-                ))
+                ));
             }
         };
         parameters.push(Parameter::new(&parameter.name, sort));

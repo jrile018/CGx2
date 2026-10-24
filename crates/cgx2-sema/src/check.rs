@@ -140,6 +140,9 @@ pub fn check_module_with_imports(
     module: &Module,
     imported: &ImportedSignatures,
 ) -> Result<TypedModule, Vec<TypeDiagnostic>> {
+    if let Some(span) = cgx2_syntax::ordinary_owned_span(module) {
+        return Err(vec![TypeDiagnostic::new("CGT080", "ordinary ownership requires the authenticated OwnedProgram v1 source path; this copied-value/package consumer is unsupported".into(), span)]);
+    }
     crate::tensor::tensor_profile(module)?;
     let mut foreign_errors = Vec::new();
     for function in &module.functions {

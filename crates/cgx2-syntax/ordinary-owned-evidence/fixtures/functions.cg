@@ -1,0 +1,47 @@
+module owned_demo
+
+record Packet:
+    x: i64
+    ready: Bool
+
+fn read(prefix: i64, p: shared<Packet>, suffix: i64) -> i64:
+    if p.ready:
+        return prefix + p.x + suffix
+    else:
+        return 0
+
+fn lend(tag: i64, p: shared<Packet>, flag: Bool) -> shared<Packet>:
+    if flag:
+        return p
+    else:
+        return p
+
+fn update(n: i64, p: exclusive<Packet>, ok: Bool) -> Unit:
+    p.x += n
+    p.ready = ok
+
+fn identity(n: i64, p: owned<Packet>, flag: Bool) -> owned<Packet>:
+    if flag:
+        return p
+    else:
+        return p
+
+fn round(n: i64) -> i64:
+    let p = owned(Packet(ready: true, x: n))
+    if true:
+        let writer = borrow_mut(p)
+        writer.x += 1
+    else:
+        0
+    update(2, borrow_mut(p), true)
+    let reader = lend(0, borrow(p), true)
+    read(1, reader, 3)
+
+fn relay(p: owned<Packet>, n: i64) -> owned<Packet>:
+    identity(n, p, false)
+
+fn main() -> i64:
+    let p = owned(Packet(x: -5, ready: true))
+    let q = relay(p, 0)
+    let first = read(0, borrow(q), 0)
+    first + round(5) + round(7) + round(9)

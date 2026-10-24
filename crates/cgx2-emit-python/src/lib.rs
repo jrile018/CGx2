@@ -11,6 +11,13 @@ pub use error::EmitDiagnostic;
 pub use package::{emit_package_python, write_package_python, PackageEmitDiagnostic};
 
 pub fn emit_python(module: &Module, typed: &TypedModule) -> Result<String, Vec<EmitDiagnostic>> {
+    if let Some(span) = cgx2_syntax::ordinary_owned_span(module) {
+        return Err(vec![EmitDiagnostic::new(
+            "CGE006",
+            "ordinary owned storage and loans are outside the Python target",
+            span,
+        )]);
+    }
     if typed.finite_values
         || cgx2_syntax::s2a_feature_span(module).is_some()
         || cgx2_sema::foundation_profile(module)

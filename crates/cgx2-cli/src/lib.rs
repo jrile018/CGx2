@@ -4,6 +4,8 @@ mod eval;
 mod memory;
 mod native;
 mod native_eval;
+mod ordinary_owned;
+pub use ordinary_owned::validate_owned_source;
 
 pub use cgx2_runtime::MemoryReport;
 pub use check::{check_source, CheckDiagnostic};
@@ -115,6 +117,11 @@ fn execute_with_failure(
                 .into(),
             span: Some(function.span),
         })]);
+    }
+    if cgx2_syntax::ordinary_owned_span(&module).is_some() {
+        return ordinary_owned::run(source, host_fail_reserve)
+            .map(|result| (result, None))
+            .map_err(|errors| errors.into_iter().map(no_report).collect());
     }
     let is_memory = module.statements.iter().any(eval::stmt_has_memory)
         || module

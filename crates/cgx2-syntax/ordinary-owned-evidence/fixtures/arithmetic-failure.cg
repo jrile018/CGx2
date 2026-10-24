@@ -1,0 +1,11 @@
+record Packet:
+    x: i64
+    ready: Bool
+
+fn fail(p: owned<Packet>, n: i64) -> i64:
+    let scratch = owned(Packet(x: 10, ready: false))
+    p.x / n
+
+fn main() -> i64:
+    let p = owned(Packet(x: 7, ready: true))
+    fail(p, 0)

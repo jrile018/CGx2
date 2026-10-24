@@ -142,25 +142,66 @@ pub fn run(args: Vec<OsString>) -> Result<(), CliError> {
             d.span.end,
         )
     })?;
-    let checked = check_module(&module).map_err(|errors| {
-        let d = &errors[0];
-        source_error(
-            &options.source,
-            d.code,
-            &d.message,
-            d.span.start,
-            d.span.end,
+    let ordinary = if cgx2_syntax::ordinary_owned_span(&module).is_some() {
+        Some(
+            cgx2_sema::ordinary_owned::compile_source(&source).map_err(|errors| {
+                let d = &errors[0];
+                source_error(
+                    &options.source,
+                    d.code,
+                    &d.message,
+                    d.span.start,
+                    d.span.end,
+                )
+            })?,
         )
-    })?;
-    let needs_runtime = is_memory_script(&module);
+    } else {
+        None
+    };
+    let checked = if ordinary.is_none() {
+        Some(check_module(&module).map_err(|errors| {
+            let d = &errors[0];
+            source_error(
+                &options.source,
+                d.code,
+                &d.message,
+                d.span.start,
+                d.span.end,
+            )
+        })?)
+    } else {
+        None
+    };
+    let needs_runtime = ordinary.is_some() || is_memory_script(&module);
     if options.test_fail_reserve.is_some() && !needs_runtime {
         return Err(CliError::new(
             "CGXC001",
             "--test-fail-reserve requires a memory script",
         ));
     }
-    let generated = if options.mode == Mode::EmitPython {
-        cgx2_emit_python::emit_python(&module, &checked).map_err(|errors| {
+    let generated = if let Some(program) = &ordinary {
+        if options.mode == Mode::EmitPython {
+            let s = cgx2_syntax::ordinary_owned_span(&module).unwrap();
+            return Err(source_error(
+                &options.source,
+                "CGE006",
+                "ordinary owned storage and loans are outside the Python target",
+                s.start,
+                s.end,
+            ));
+        }
+        cgx2_emit_rust::emit_owned_rust(program).map_err(|errors| {
+            let d = &errors[0];
+            source_error(
+                &options.source,
+                d.code,
+                &d.message,
+                d.span.start,
+                d.span.end,
+            )
+        })?
+    } else if options.mode == Mode::EmitPython {
+        cgx2_emit_python::emit_python(&module, checked.as_ref().unwrap()).map_err(|errors| {
             let d = &errors[0];
             source_error(
                 &options.source,
@@ -171,7 +212,7 @@ pub fn run(args: Vec<OsString>) -> Result<(), CliError> {
             )
         })?
     } else {
-        emit_rust(&module, &checked).map_err(|errors| {
+        emit_rust(&module, checked.as_ref().unwrap()).map_err(|errors| {
             let d = &errors[0];
             source_error(
                 &options.source,
