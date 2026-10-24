@@ -1,0 +1,9 @@
+module app.main
+import app.dep
+fn main() -> i64:
+    let choice = app.dep.Choice<i64>.Value(42)
+    match choice:
+        app.dep.Choice.Value(value):
+            value
+        app.dep.Choice.Empty:
+            0

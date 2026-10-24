@@ -1,0 +1,6 @@
+module app.dep
+pub variant T:
+    Nominal(i64)
+pub variant Choice<T>:
+    Value(T)
+    Empty

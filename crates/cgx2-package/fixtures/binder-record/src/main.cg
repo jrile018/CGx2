@@ -1,0 +1,5 @@
+module app.main
+import app.dep
+fn main() -> i64:
+    let b = app.dep.Box<i64>(value: 42)
+    b.value

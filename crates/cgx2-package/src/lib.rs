@@ -308,6 +308,23 @@ fn digest(bytes: &[u8]) -> String {
     format!("{:x}", Sha256::digest(bytes))
 }
 
+/// Match syntax canonicalization: declaration binders shadow local nominals,
+/// including inside nested type arguments. Explicit qualified names still resolve.
+fn generic_type_scope(module: &Module, parameters: &[cgx2_syntax::TypeParameter]) -> Module {
+    let mut scope = module.clone();
+    scope.records.retain(|record| {
+        !parameters
+            .iter()
+            .any(|parameter| parameter.name == record.name)
+    });
+    scope.variants.retain(|variant| {
+        !parameters
+            .iter()
+            .any(|parameter| parameter.name == variant.name)
+    });
+    scope
+}
+
 /// Load only manifest-listed `.cg` files under a canonical package root.
 /// No source is read until all listed paths have passed containment checks.
 pub fn load_package(root: &Path) -> Result<PackageIndex, Vec<PackageDiagnostic>> {
@@ -510,11 +527,12 @@ pub fn load_checked_package(root: &Path) -> Result<CheckedPackage, Vec<PackageDi
             for variant in &source.module.variants {
                 let identity = format!("{name}.{}", variant.name);
                 if variant.public {
+                    let scope = generic_type_scope(&source.module, &variant.type_parameters);
                     let mut variant = variant.clone();
                     variant.name = identity.clone();
                     for case in &mut variant.cases {
                         for payload in &mut case.payloads {
-                            cgx2_syntax::qualify_type(payload, &source.module);
+                            cgx2_syntax::qualify_type(payload, &scope);
                         }
                     }
                     imported.public_variants.insert(identity, variant);
@@ -525,10 +543,11 @@ pub fn load_checked_package(root: &Path) -> Result<CheckedPackage, Vec<PackageDi
             for record in &source.module.records {
                 let identity = format!("{name}.{}", record.name);
                 if record.public {
+                    let scope = generic_type_scope(&source.module, &record.type_parameters);
                     let mut record = record.clone();
                     record.name = identity.clone();
                     for field in &mut record.fields {
-                        cgx2_syntax::qualify_type(&mut field.ty, &source.module);
+                        cgx2_syntax::qualify_type(&mut field.ty, &scope);
                     }
                     imported.public_records.insert(identity, record);
                 } else {

@@ -1,0 +1,32 @@
+module app.main
+import app.left
+import app.right
+fn main() -> i64:
+    let left = app.left.Box<i64>(value: 42)
+    let right = app.right.Box<i64>(value: [left.value])
+    let data: Option<Result<List<Array<i64>>, String>> = Option.Some(Result.Ok([array(right.value)]))
+    let nominal = app.left.T(value: 1)
+    let tag = app.left.Tag(value: 2)
+    let envelope = app.left.Envelope<i64>(value: data, nominal: nominal, tag: tag)
+    let choice = app.left.Choice<i64>.Value(envelope.value, nominal, tag)
+    let other = app.right.Choice<i64>.Value(right.value, app.right.T.Nominal(true))
+    match other:
+        app.right.Choice.Value(values, marker):
+            match choice:
+                app.left.Choice.Value(payload, first, second):
+                    match payload:
+                        Option.Some(result):
+                            match result:
+                                Result.Ok(arrays):
+                                    if app.left.equal(left.value, app.left.identity<i64>(42)):
+                                        return left.value
+                                    else:
+                                        return 0
+                                Result.Err(message):
+                                    0
+                        Option.None:
+                            0
+                app.left.Choice.Empty:
+                    0
+        app.right.Choice.Empty:
+            0
