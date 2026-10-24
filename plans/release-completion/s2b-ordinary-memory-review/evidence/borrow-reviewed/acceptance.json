@@ -1,0 +1,33 @@
+{
+  "worker_commit": "35a8618996c2f89fadd3b89fa8f4a123765688e6",
+  "integrated_commit": "6ffbf161880c6d9abef6f711a74c751d70c43bb4",
+  "accepted_scope": "OM04 nominal borrow compatibility and true external standalone evidence",
+  "ordinary_memory_accepted": false,
+  "source_inputs_matching_coordinator": 795,
+  "frozen_artifacts_verified": 11,
+  "frozen_dependencies_verified": 243,
+  "coordinator_product": {
+    "passed": 243,
+    "failed": 0
+  },
+  "worker_evidence_independently_verified": {
+    "rust_passed": 425,
+    "new_product_passed": 243,
+    "admission_passed": 196,
+    "ordinary_passed": 117,
+    "api_passed": 96,
+    "audit_passed": 2289,
+    "standalone_programs": 23,
+    "exported_files": 328,
+    "stream_pairs": 1360,
+    "retained_executables": 113,
+    "quota_archive_files": 45
+  },
+  "notes": [
+    "Coordinator reused exact verified frozen compiler inputs and ran243 new parity assertions; no independent Cargo rebuild is claimed.",
+    "API96 is74unchanged semantic checks plus22artifact hashes for11artifacts; historical84 used5artifacts.",
+    "Old in-repository standalone attempts remain emitted-Rust parity only; both new external cwd independently verified.",
+    "Failed Rust/harness/guard-mount and quota attempts remain retained; truncated partial report tail explicitly unavailable and not counted.",
+    "Recovery/harness chats still running; full combined follow-up acceptance remains pending."
+  ]
+}

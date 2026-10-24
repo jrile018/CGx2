@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24T16:07:30.799Z",
+  "checked_at": "2026-10-24T16:32:42.491822+00:00",
   "original_chats": [
     {
       "lane": "core",
@@ -571,9 +571,12 @@
       "hostId": "local",
       "threadId": "01a16ea8-819b-7261-a64a-9bf5a9bb1b8f",
       "worktree": "/home/john-riley/.codex/worktrees/98b9/lang",
-      "status": "running",
-      "afterCursor": "a5321c40-bb99-42dd-a355-c88414e5b0ce:2",
-      "setup_verified": "Worktree HEAD equals89464a76c9bd84a3b090ec58a14ca6be0043c6ea; app read_thread and compact wait confirm active. list_threads omitted agent-created chats; exact read-only local metadata and app reads resolved identities. No duplicates."
+      "status": "reviewed-bounded-repair",
+      "afterCursor": "a5321c40-bb99-42dd-a355-c88414e5b0ce:3",
+      "setup_verified": "Worktree HEAD equals89464a76c9bd84a3b090ec58a14ca6be0043c6ea; app read_thread and compact wait confirm active. list_threads omitted agent-created chats; exact read-only local metadata and app reads resolved identities. No duplicates.",
+      "commit": "35a8618996c2f89fadd3b89fa8f4a123765688e6",
+      "integrated_commit": "6ffbf161880c6d9abef6f711a74c751d70c43bb4",
+      "acceptance_note": "OM04 nominal compatibility and external standalone gap accepted after two independent reviews and coordinator243product replay with all795source/11artifact/243dependency hashes matched. Broad memory/release gates stay open."
     },
     {
       "lane": "recovery-roots",
@@ -585,7 +588,7 @@
       "threadId": "01a16ea8-81b2-7323-a1ed-602c72630fe9",
       "worktree": "/home/john-riley/.codex/worktrees/2b95/lang",
       "status": "running",
-      "afterCursor": "6aeabcc6-9be3-4965-94f9-251878fe752c:2",
+      "afterCursor": "6aeabcc6-9be3-4965-94f9-251878fe752c:4",
       "setup_verified": "Worktree HEAD equals89464a76c9bd84a3b090ec58a14ca6be0043c6ea; app read_thread and compact wait confirm active. list_threads omitted agent-created chats; exact read-only local metadata and app reads resolved identities. No duplicates."
     },
     {
@@ -598,7 +601,7 @@
       "threadId": "01a16ea8-bbf7-7381-8599-5953d15d1757",
       "worktree": "/home/john-riley/.codex/worktrees/97d1/lang",
       "status": "running",
-      "afterCursor": "ea5db0ca-9d6e-48d2-845e-748bfe81768a:2",
+      "afterCursor": "ea5db0ca-9d6e-48d2-845e-748bfe81768a:4",
       "setup_verified": "Worktree HEAD equals89464a76c9bd84a3b090ec58a14ca6be0043c6ea; app read_thread and compact wait confirm active. list_threads omitted agent-created chats; exact read-only local metadata and app reads resolved identities. No duplicates."
     }
   ]

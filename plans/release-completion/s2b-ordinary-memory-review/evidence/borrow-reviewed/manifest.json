@@ -1,0 +1,452 @@
+[
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-borrow-coordinator-review-20261024/product.log.gz",
+    "retained": "coordinator/product.log.gz",
+    "raw_sha256": "0a1a66aa8d4a7ed5ffbf4bfb22624903d134e266a5ce4d4b90ed3adfd8a2042f",
+    "retained_sha256": "0a1a66aa8d4a7ed5ffbf4bfb22624903d134e266a5ce4d4b90ed3adfd8a2042f"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-borrow-coordinator-review-20261024/verification.json",
+    "retained": "coordinator/verification.json.gz",
+    "raw_sha256": "ad5385f30a28fc3a52dd03aa8a848a24eec759c1249881c54d74a96b4dc59eec",
+    "retained_sha256": "453c76c50cf3ab0e2c00e817f7f192a8b2ec771bec9c4e5578bfceb354eb9070"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/contextual-imported.py",
+    "retained": "product/contextual-imported.py.gz",
+    "raw_sha256": "aaa96dbd10ef2129ec925bf2fcf5ab9c2857b512b78218c5ba07292b4640375c",
+    "retained_sha256": "70843027d433e2ec33c7b1d310cd100526529e137501ed9cfbb15b2b5f9502fb"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/contextual-imported/cgx2.toml",
+    "retained": "product/fixtures/contextual-imported/cgx2.toml.gz",
+    "raw_sha256": "43444e9e7515707f0d80e90b0c677d3c490ca6ae3e75409fa2f464e4ddc25353",
+    "retained_sha256": "831b6c4869815fadd6aa20de87084d40ee667afc83dc90292c7e351585499657"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/contextual-imported/main.cg",
+    "retained": "product/fixtures/contextual-imported/main.cg.gz",
+    "raw_sha256": "870e85aac2f5257146bfe81a0a173aafe3c8c2f118c5d69122faa139eb15f847",
+    "retained_sha256": "e5cf0f84502fdb954f7f146d1808a3bea5ee95f1267804d38e3e9034795c293a"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/contextual-imported/util.cg",
+    "retained": "product/fixtures/contextual-imported/util.cg.gz",
+    "raw_sha256": "7e2c9a8c40f65d74aaa1ca50b9fb3652aca491ca759c3f4a2e981d72e500b62f",
+    "retained_sha256": "9bcedcce63ca102e8e07afab1ec67d70601ec0634d37e6f7f13d1243896c04c8"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/function-forges-capability.cg",
+    "retained": "product/fixtures/function-forges-capability.cg.gz",
+    "raw_sha256": "dafa64c6934b38e9f7f074ab4a4197f5f1ada2c57d5159b352c83af8b679b1ef",
+    "retained_sha256": "72829ce4bef6742b5fc7d6ca7e033ddd10c58e973fbcb9eda712323658750ac5"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/generic-field-type.cg",
+    "retained": "product/fixtures/generic-field-type.cg.gz",
+    "raw_sha256": "fc91f1f1ab7600e282e669118cf24b7638d5e7dbda063a6eb7f560ec8d125754",
+    "retained_sha256": "8162ab575f7c38270ed0c2aef21efb7a99fe744373d3d0a9540886e9f5d78b3b"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/generic-heap.cg",
+    "retained": "product/fixtures/generic-heap.cg.gz",
+    "raw_sha256": "098857a9d2d799b4e63972ec346234a7ed5779425014929abf42492ba23759e3",
+    "retained_sha256": "2eac74ccfe29db187cb7143a78cb5a3adfd8fd3d42c8391124f7e236b2f7d5e0"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/genuine-capability.cg",
+    "retained": "product/fixtures/genuine-capability.cg.gz",
+    "raw_sha256": "e6fe9728830b2d2c4ddabd663ad67f15ba7a26a97468f9aaf086ffbeeb767818",
+    "retained_sha256": "05e33bcec48ac6a8f902995d254eb3868e89b82c248d9e2765967898f70a9915"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/imported-cross-region/cgx2.toml",
+    "retained": "product/fixtures/imported-cross-region/cgx2.toml.gz",
+    "raw_sha256": "43444e9e7515707f0d80e90b0c677d3c490ca6ae3e75409fa2f464e4ddc25353",
+    "retained_sha256": "831b6c4869815fadd6aa20de87084d40ee667afc83dc90292c7e351585499657"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/imported-cross-region/main.cg",
+    "retained": "product/fixtures/imported-cross-region/main.cg.gz",
+    "raw_sha256": "aa6d399ba1931c58ea06bcf73934440e6c8c427318e9008d0fec9ad88354ef66",
+    "retained_sha256": "55807198198c4c52958379bfa48bde1c4a10606bd839d319d8c31514f8a15494"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/imported-cross-region/util.cg",
+    "retained": "product/fixtures/imported-cross-region/util.cg.gz",
+    "raw_sha256": "7e2c9a8c40f65d74aaa1ca50b9fb3652aca491ca759c3f4a2e981d72e500b62f",
+    "retained_sha256": "9bcedcce63ca102e8e07afab1ec67d70601ec0634d37e6f7f13d1243896c04c8"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/imported-field-type/cgx2.toml",
+    "retained": "product/fixtures/imported-field-type/cgx2.toml.gz",
+    "raw_sha256": "43444e9e7515707f0d80e90b0c677d3c490ca6ae3e75409fa2f464e4ddc25353",
+    "retained_sha256": "831b6c4869815fadd6aa20de87084d40ee667afc83dc90292c7e351585499657"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/imported-field-type/main.cg",
+    "retained": "product/fixtures/imported-field-type/main.cg.gz",
+    "raw_sha256": "5cecf43fb1280d63c971bdda57da3e763ce9ce0dad73e04ade226c623889d41b",
+    "retained_sha256": "f9ca5a244cc8f1a6f1b3ec0906ba7124fd23b2b74a20eaa28f5abaefb79a928d"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/imported-field-type/util.cg",
+    "retained": "product/fixtures/imported-field-type/util.cg.gz",
+    "raw_sha256": "7e2c9a8c40f65d74aaa1ca50b9fb3652aca491ca759c3f4a2e981d72e500b62f",
+    "retained_sha256": "9bcedcce63ca102e8e07afab1ec67d70601ec0634d37e6f7f13d1243896c04c8"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/imported-function/cgx2.toml",
+    "retained": "product/fixtures/imported-function/cgx2.toml.gz",
+    "raw_sha256": "43444e9e7515707f0d80e90b0c677d3c490ca6ae3e75409fa2f464e4ddc25353",
+    "retained_sha256": "831b6c4869815fadd6aa20de87084d40ee667afc83dc90292c7e351585499657"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/imported-function/main.cg",
+    "retained": "product/fixtures/imported-function/main.cg.gz",
+    "raw_sha256": "2a62090d212f6991c1c06fe6943a85e2ba7c3473da045c8eaf2502800578f6fe",
+    "retained_sha256": "9ee98b2e1f5695a9ae57ca5886911c4b7ebacb0445622944ecd50bc052d1b028"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/imported-function/util.cg",
+    "retained": "product/fixtures/imported-function/util.cg.gz",
+    "raw_sha256": "ad06f13ad23b939f3e72107eaef8ddde5d92222e7b332bd049f79472645418b7",
+    "retained_sha256": "0a78dc238914a8eed090b4f3b33a6adb4c8816470c1487e67dcd36ff2a2e46bb"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/imported-inferred/cgx2.toml",
+    "retained": "product/fixtures/imported-inferred/cgx2.toml.gz",
+    "raw_sha256": "43444e9e7515707f0d80e90b0c677d3c490ca6ae3e75409fa2f464e4ddc25353",
+    "retained_sha256": "831b6c4869815fadd6aa20de87084d40ee667afc83dc90292c7e351585499657"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/imported-inferred/main.cg",
+    "retained": "product/fixtures/imported-inferred/main.cg.gz",
+    "raw_sha256": "89215e96a8c18d25758171146e8339daa13583c96eef51408c1efea2bfa8c521",
+    "retained_sha256": "6101a64ba22b45b1a66210d71a4fe6e2a109721e40e5080a1d403a3c4411502a"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/imported-inferred/util.cg",
+    "retained": "product/fixtures/imported-inferred/util.cg.gz",
+    "raw_sha256": "7e2c9a8c40f65d74aaa1ca50b9fb3652aca491ca759c3f4a2e981d72e500b62f",
+    "retained_sha256": "9bcedcce63ca102e8e07afab1ec67d70601ec0634d37e6f7f13d1243896c04c8"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/imported-record/cgx2.toml",
+    "retained": "product/fixtures/imported-record/cgx2.toml.gz",
+    "raw_sha256": "43444e9e7515707f0d80e90b0c677d3c490ca6ae3e75409fa2f464e4ddc25353",
+    "retained_sha256": "831b6c4869815fadd6aa20de87084d40ee667afc83dc90292c7e351585499657"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/imported-record/main.cg",
+    "retained": "product/fixtures/imported-record/main.cg.gz",
+    "raw_sha256": "652afce1c595e46674c7b2b1f62192d7bef8ba9b479cee8b5846c3ee4e202eb8",
+    "retained_sha256": "847817d4db79b0d1e624a4cc8f184d80de6385cb7598f165b9bc59ad30d9808e"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/imported-record/util.cg",
+    "retained": "product/fixtures/imported-record/util.cg.gz",
+    "raw_sha256": "7e2c9a8c40f65d74aaa1ca50b9fb3652aca491ca759c3f4a2e981d72e500b62f",
+    "retained_sha256": "9bcedcce63ca102e8e07afab1ec67d70601ec0634d37e6f7f13d1243896c04c8"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/imported-region-escape/cgx2.toml",
+    "retained": "product/fixtures/imported-region-escape/cgx2.toml.gz",
+    "raw_sha256": "43444e9e7515707f0d80e90b0c677d3c490ca6ae3e75409fa2f464e4ddc25353",
+    "retained_sha256": "831b6c4869815fadd6aa20de87084d40ee667afc83dc90292c7e351585499657"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/imported-region-escape/main.cg",
+    "retained": "product/fixtures/imported-region-escape/main.cg.gz",
+    "raw_sha256": "47c46ff2ddb48da56b737814cf082f9e2b3c492023fe22e4890c375144c7c0e1",
+    "retained_sha256": "238cafa8795eaaa5acd0b14fb4858d5c4776493eb317b5cbc121cbaefe51238a"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/imported-region-escape/util.cg",
+    "retained": "product/fixtures/imported-region-escape/util.cg.gz",
+    "raw_sha256": "7e2c9a8c40f65d74aaa1ca50b9fb3652aca491ca759c3f4a2e981d72e500b62f",
+    "retained_sha256": "9bcedcce63ca102e8e07afab1ec67d70601ec0634d37e6f7f13d1243896c04c8"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/imported-simple/cgx2.toml",
+    "retained": "product/fixtures/imported-simple/cgx2.toml.gz",
+    "raw_sha256": "43444e9e7515707f0d80e90b0c677d3c490ca6ae3e75409fa2f464e4ddc25353",
+    "retained_sha256": "831b6c4869815fadd6aa20de87084d40ee667afc83dc90292c7e351585499657"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/imported-simple/main.cg",
+    "retained": "product/fixtures/imported-simple/main.cg.gz",
+    "raw_sha256": "015795e55c46b0617176e0862173f1e7148bddff0d6a01bec3dca172f0ed3220",
+    "retained_sha256": "dfcae5035344cd03efa7c038d1dfbe3df561010b991cc7d3ad54dc7ffdf6b4b1"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/imported-simple/util.cg",
+    "retained": "product/fixtures/imported-simple/util.cg.gz",
+    "raw_sha256": "3499df9306668e8048ea19a76e62f2218267589d82e2f0f0b406bef5c0c8e344",
+    "retained_sha256": "75443bdc88aa3a04726b18c7c6796ee3258caf2476e1c9a521459d73e940184d"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/inferred-generic.cg",
+    "retained": "product/fixtures/inferred-generic.cg.gz",
+    "raw_sha256": "7b93e255f62fbb69b65627fe9606ba3938f244d09ab705e29e7ed639db38062d",
+    "retained_sha256": "0544a0ad700af1913772782d0995eef3ff4a567b4a6e4c782fdf2ed46372d342"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/local-field-type.cg",
+    "retained": "product/fixtures/local-field-type.cg.gz",
+    "raw_sha256": "14849c9fbd451d3cb05b9fe80495145e1861bc13609f2ce66a3ebbb6a4949fd2",
+    "retained_sha256": "160e463c4dc14042455681954caa40a852b3463aa5d4a7248a69e4f03ce11566"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/nested-borrow.cg",
+    "retained": "product/fixtures/nested-borrow.cg.gz",
+    "raw_sha256": "15a1e60bf555f6c1a5ef087e936e995a24431f825a9b7fbc692da55d35d7e032",
+    "retained_sha256": "0f7e64cb2083c026fc2d3f7649a0fe54ebce9896446bf90acefca14944190bde"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/nested-heap.cg",
+    "retained": "product/fixtures/nested-heap.cg.gz",
+    "raw_sha256": "eae6a7c19c9a493414351f0a2151a773fd8983e15cd096bad6b83508438ecfca",
+    "retained_sha256": "f1ba72db029efc7bf7b650a7955a51f5d7661bfdb575dd505b2f42d038fe7d41"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/nested-imported/cgx2.toml",
+    "retained": "product/fixtures/nested-imported/cgx2.toml.gz",
+    "raw_sha256": "43444e9e7515707f0d80e90b0c677d3c490ca6ae3e75409fa2f464e4ddc25353",
+    "retained_sha256": "831b6c4869815fadd6aa20de87084d40ee667afc83dc90292c7e351585499657"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/nested-imported/main.cg",
+    "retained": "product/fixtures/nested-imported/main.cg.gz",
+    "raw_sha256": "65aff02e19587cb0140fd814b6dfbc12f6ab03208c91b63944e5e92ee48b8451",
+    "retained_sha256": "ac80c92de928f4ddc915c1c56e3c51c2882dd22f7ee0bbf96ce32cb168856887"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/nested-imported/util.cg",
+    "retained": "product/fixtures/nested-imported/util.cg.gz",
+    "raw_sha256": "9aa792984fa5c6ff24ee01dfc4c4dc2e0b3bb0b73273197baf3cc8a83ded55c1",
+    "retained_sha256": "2515b7f5c57eb62b530588a7c3ef73d16ba5ac7a7934451a106a1d6df03c3a29"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/nominal-region-escape.cg",
+    "retained": "product/fixtures/nominal-region-escape.cg.gz",
+    "raw_sha256": "8f7bdb548ea820e03e5ebc8ded43535c4ab9f10ee32c1aa35801ad9a453d6a8f",
+    "retained_sha256": "8a001b2d77495f4e6645ad19083ddd7a0e26d0dfa6e0a94693d1b0a5078f4e8e"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/qualified-local.cg",
+    "retained": "product/fixtures/qualified-local.cg.gz",
+    "raw_sha256": "de16fe3a840b72be2746ed30ae7a8e4a49ab20d149b349b37729e0ccf3666e70",
+    "retained_sha256": "3ae214b7eb9490a19efb8b394c01f3333a0b661bfa3737d542591f418651a0c6"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/real-borrow-scalar.cg",
+    "retained": "product/fixtures/real-borrow-scalar.cg.gz",
+    "raw_sha256": "8a71a84fb668fd1f1a8fb66a81d668f25cd93d649f04d7890897cfb95c29ccd4",
+    "retained_sha256": "38417fd954f92cc964e5861c0ecfadafa9556ef4b3cbe1377ce62bd30e3fd633"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/real-region-escape.cg",
+    "retained": "product/fixtures/real-region-escape.cg.gz",
+    "raw_sha256": "02fb0e2d666697e3510924102c2bce1eea007e898d6a4b401883a8c6741146bd",
+    "retained_sha256": "39c4c884899ad9f107714062caa75181cc1e5a8b32f24ac4bab0d30e55763bad"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/record-forges-capability.cg",
+    "retained": "product/fixtures/record-forges-capability.cg.gz",
+    "raw_sha256": "cb76a4f4c2933986120b31e1a9dd0790290da023faca108cb94b903e8c24ea41",
+    "retained_sha256": "025dfb65b7af1560f2a01af87b8a602f2395669e97a22c21793692dd2c08244d"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/record-hides-capability.cg",
+    "retained": "product/fixtures/record-hides-capability.cg.gz",
+    "raw_sha256": "fd9a7af9e732cc5686962f32f0028db36d70cdd33c053ea925d1be72ed9f9d9b",
+    "retained_sha256": "4392797b3ad720550aad8916bcd1642ceb55e78e6b36ec0b14ed40b285dcbf5c"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/retained-local.cg",
+    "retained": "product/fixtures/retained-local.cg.gz",
+    "raw_sha256": "4715ebd0a2c073bdf9b5c81787996638daff4b57852ba5682eb11cf8095e3849",
+    "retained_sha256": "0e56396541714433ec4aac60150d80b85f58707108afc0ae49c24b263d144037"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/fixtures/user-function.cg",
+    "retained": "product/fixtures/user-function.cg.gz",
+    "raw_sha256": "235c6222b8028276a8c5966e5b8e456e50583785d6cd1696b9a226ba4c13f3c0",
+    "retained_sha256": "52f6611c0c7055b98026e491985820589e30a31511e472b8eaf3e0c9c1128776"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/generic-heap.py",
+    "retained": "product/generic-heap.py.gz",
+    "raw_sha256": "aaa96dbd10ef2129ec925bf2fcf5ab9c2857b512b78218c5ba07292b4640375c",
+    "retained_sha256": "70843027d433e2ec33c7b1d310cd100526529e137501ed9cfbb15b2b5f9502fb"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/genuine-capability.py",
+    "retained": "product/genuine-capability.py.gz",
+    "raw_sha256": "aaa96dbd10ef2129ec925bf2fcf5ab9c2857b512b78218c5ba07292b4640375c",
+    "retained_sha256": "70843027d433e2ec33c7b1d310cd100526529e137501ed9cfbb15b2b5f9502fb"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/imported-function.py",
+    "retained": "product/imported-function.py.gz",
+    "raw_sha256": "aaa96dbd10ef2129ec925bf2fcf5ab9c2857b512b78218c5ba07292b4640375c",
+    "retained_sha256": "70843027d433e2ec33c7b1d310cd100526529e137501ed9cfbb15b2b5f9502fb"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/imported-inferred.py",
+    "retained": "product/imported-inferred.py.gz",
+    "raw_sha256": "aaa96dbd10ef2129ec925bf2fcf5ab9c2857b512b78218c5ba07292b4640375c",
+    "retained_sha256": "70843027d433e2ec33c7b1d310cd100526529e137501ed9cfbb15b2b5f9502fb"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/imported-record.py",
+    "retained": "product/imported-record.py.gz",
+    "raw_sha256": "aaa96dbd10ef2129ec925bf2fcf5ab9c2857b512b78218c5ba07292b4640375c",
+    "retained_sha256": "70843027d433e2ec33c7b1d310cd100526529e137501ed9cfbb15b2b5f9502fb"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/imported-simple.py",
+    "retained": "product/imported-simple.py.gz",
+    "raw_sha256": "aaa96dbd10ef2129ec925bf2fcf5ab9c2857b512b78218c5ba07292b4640375c",
+    "retained_sha256": "70843027d433e2ec33c7b1d310cd100526529e137501ed9cfbb15b2b5f9502fb"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/inferred-generic.py",
+    "retained": "product/inferred-generic.py.gz",
+    "raw_sha256": "aaa96dbd10ef2129ec925bf2fcf5ab9c2857b512b78218c5ba07292b4640375c",
+    "retained_sha256": "70843027d433e2ec33c7b1d310cd100526529e137501ed9cfbb15b2b5f9502fb"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/nested-borrow.py",
+    "retained": "product/nested-borrow.py.gz",
+    "raw_sha256": "aaa96dbd10ef2129ec925bf2fcf5ab9c2857b512b78218c5ba07292b4640375c",
+    "retained_sha256": "70843027d433e2ec33c7b1d310cd100526529e137501ed9cfbb15b2b5f9502fb"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/nested-heap.py",
+    "retained": "product/nested-heap.py.gz",
+    "raw_sha256": "aaa96dbd10ef2129ec925bf2fcf5ab9c2857b512b78218c5ba07292b4640375c",
+    "retained_sha256": "70843027d433e2ec33c7b1d310cd100526529e137501ed9cfbb15b2b5f9502fb"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/nested-imported.py",
+    "retained": "product/nested-imported.py.gz",
+    "raw_sha256": "aaa96dbd10ef2129ec925bf2fcf5ab9c2857b512b78218c5ba07292b4640375c",
+    "retained_sha256": "70843027d433e2ec33c7b1d310cd100526529e137501ed9cfbb15b2b5f9502fb"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/outside/contextual-imported.rs",
+    "retained": "product/outside/contextual-imported.rs.gz",
+    "raw_sha256": "3189d88ab397d9fb9dcc7c711d0bda7090e8f6f7ee8a877e3bd2e4aa801e18b7",
+    "retained_sha256": "56822ec3585729ee3980c3e2c588428ae063afe877de514dc10abbd754c83ebf"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/outside/generic-heap.rs",
+    "retained": "product/outside/generic-heap.rs.gz",
+    "raw_sha256": "703abaac58ab591c4f378bba6ebfbb2d3550c33aa1c73f1ff06a54f7afb3d201",
+    "retained_sha256": "59164aec28ec6456baa9dae7e0a9b8e1a5e21143eb7645713a299c202beede35"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/outside/genuine-capability.rs",
+    "retained": "product/outside/genuine-capability.rs.gz",
+    "raw_sha256": "a3bc69d0358e6392471c4dda79ab935531a2277b00f99fe754336bb8f0658555",
+    "retained_sha256": "902047263cd639ac2f24bee22748bd4173a431475c7c30c4485e2d5fd9ccfe18"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/outside/imported-function.rs",
+    "retained": "product/outside/imported-function.rs.gz",
+    "raw_sha256": "219150705c34687d7f4ad24cd9e7f24e9af452b3c2178e483a7d277a5f7f6c72",
+    "retained_sha256": "3551efb5f0dcf4190a9bf4442b00d90429227c32623e24ec921c04784f7a023b"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/outside/imported-inferred.rs",
+    "retained": "product/outside/imported-inferred.rs.gz",
+    "raw_sha256": "8b0bf88d9b7974b88d813522b4d7e0468ef0361bfdf9f15aa979fa6488cda42e",
+    "retained_sha256": "9fa45efd39a28fa65a842d788ce9c5dcb04d57e6b29d034bdb1b7a33c8e21d64"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/outside/imported-record.rs",
+    "retained": "product/outside/imported-record.rs.gz",
+    "raw_sha256": "669abd02ac567b4ff296103f8e6b0a94f55fea51424438fa3f6bf771bd06e1ed",
+    "retained_sha256": "8c54252f7e89ff5e307d055ad2999b561ea9ce97fceb998980fca00043a24d86"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/outside/imported-simple.rs",
+    "retained": "product/outside/imported-simple.rs.gz",
+    "raw_sha256": "cf200fef6bb18a635d2bf58080e8c1953de2b76c1760aa3a3e960e9e5da0b17a",
+    "retained_sha256": "26e405dc8e4f671b15ea996b61d7de0364d54d616140bd8f6af362b89f2e15af"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/outside/inferred-generic.rs",
+    "retained": "product/outside/inferred-generic.rs.gz",
+    "raw_sha256": "041e59fcaa3350e24c32f60253b7ec47a6b6c75afd75502ff5b772061f50492d",
+    "retained_sha256": "0d1eaa906f30010285d36279fbe9d2376676bf7e373f2491918490062e4ca8ae"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/outside/nested-borrow.rs",
+    "retained": "product/outside/nested-borrow.rs.gz",
+    "raw_sha256": "e9d1aec5b77e650d162b84e91165d853ddf34a2fc8af281ddf4d2582431bc771",
+    "retained_sha256": "ec61ac9f0d7510535d25a8d1defce64501819a5f0521493a17b5434b59202f04"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/outside/nested-heap.rs",
+    "retained": "product/outside/nested-heap.rs.gz",
+    "raw_sha256": "1fd77df701d3f727b3d9976c01a9a43e9ab0111a6a060691614ad6386733d84c",
+    "retained_sha256": "b0da23c15cbdf8e9648154d2b07f8dcb8242be876a2fc1886f7f71d58b806537"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/outside/nested-imported.rs",
+    "retained": "product/outside/nested-imported.rs.gz",
+    "raw_sha256": "608b3cec4db4695986f203e62f3086eec158b2a9774cbcff4bf2a1cd43310ab3",
+    "retained_sha256": "315d7a5abc78ff0e924e2f700f0919d9ce79a8b732690f727f658f1bcbc9d11a"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/outside/qualified-local.rs",
+    "retained": "product/outside/qualified-local.rs.gz",
+    "raw_sha256": "b26cd64ca41398be1fa88acdc88d97307838c9d50f83f3e9fcb9c6149eed207d",
+    "retained_sha256": "863bb43aade358034a16681439bae8450316e160b8d6e5d539ab3db0d22323db"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/outside/retained-local.rs",
+    "retained": "product/outside/retained-local.rs.gz",
+    "raw_sha256": "dc23d5ecdb71957b30dbd9b27cfc69e08486de6bfd39875c9b8589a62bcbaf58",
+    "retained_sha256": "1cab21c14cbe40bcfefb1326e6567788f5a03fc4d32981f03fea2d8b91eb3a82"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/outside/user-function.rs",
+    "retained": "product/outside/user-function.rs.gz",
+    "raw_sha256": "242e78110b54a06f6dca65f050958cbb4f68b9a00fdcebf7b3e4e726f353ab99",
+    "retained_sha256": "6914108102dc60bf596fc5cb5d9dd502ecde4e9d9c447c7aa6525793944423d7"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/qualified-local.py",
+    "retained": "product/qualified-local.py.gz",
+    "raw_sha256": "aaa96dbd10ef2129ec925bf2fcf5ab9c2857b512b78218c5ba07292b4640375c",
+    "retained_sha256": "70843027d433e2ec33c7b1d310cd100526529e137501ed9cfbb15b2b5f9502fb"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/report.json",
+    "retained": "product/report.json.gz",
+    "raw_sha256": "de43c8ff3a01ff20116e0f49df0b6a69e573bff39068fb864b220a639af3472e",
+    "retained_sha256": "cf93424e5242891a4e36b091048023e57567a2db6149cf4c5fd1ac3f3f41a9d0"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/retained-local.py",
+    "retained": "product/retained-local.py.gz",
+    "raw_sha256": "aaa96dbd10ef2129ec925bf2fcf5ab9c2857b512b78218c5ba07292b4640375c",
+    "retained_sha256": "70843027d433e2ec33c7b1d310cd100526529e137501ed9cfbb15b2b5f9502fb"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/runner-snapshot.py",
+    "retained": "product/runner-snapshot.py.gz",
+    "raw_sha256": "3d2dccc749853f27d73f6ca802d6ec4d6c800cec8ad8901af627bf601406c32a",
+    "retained_sha256": "e47e33ecb10356bc674a189282c2870cf116e241f5a875ab99b4d60c54388074"
+  },
+  {
+    "original": "/home/john-riley/.codex/visualizations/2026/10/23/01a167e4-6669-7803-b925-af52f00fe0f7/ordinary-borrow-coordinator-review/user-function.py",
+    "retained": "product/user-function.py.gz",
+    "raw_sha256": "aaa96dbd10ef2129ec925bf2fcf5ab9c2857b512b78218c5ba07292b4640375c",
+    "retained_sha256": "70843027d433e2ec33c7b1d310cd100526529e137501ed9cfbb15b2b5f9502fb"
+  }
+]

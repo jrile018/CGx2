@@ -236,3 +236,7 @@ Reviewed common base89464a76c9bd84a3b090ec58a14ca6be0043c6ea matches all three w
 | borrow-nominal | 01a16ea8-819b-7261-a64a-9bf5a9bb1b8f | /home/john-riley/.codex/worktrees/98b9/lang | running |
 | recovery-roots | 01a16ea8-81b2-7323-a1ed-602c72630fe9 | /home/john-riley/.codex/worktrees/2b95/lang | running |
 | harness-hardening | 01a16ea8-bbf7-7381-8599-5953d15d1757 | /home/john-riley/.codex/worktrees/97d1/lang | running |
+
+## Nominal constructor repair reviewed; recovery and harness active
+
+35a8618 accepted/integrated6ffbf16 after two independent reviews and coordinator243/0 product replay with795 compiler inputs and all frozen artifact/dependency hashes matched. Worker425Rust and23 actual external standalone programs independently verified. Full attempt history retained; narrow OM04 and external-evidence gap closed. Runtime recovery and harness chats still running; saved cursors in thread-state.json. No new consumer or duplicate repair dispatch.
