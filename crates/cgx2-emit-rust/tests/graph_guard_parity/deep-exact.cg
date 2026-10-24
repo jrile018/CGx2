@@ -1,0 +1,9 @@
+fn main() -> Unit effects(ManagedAlloc, Mutate):
+    let r = memory.region(mode: manual, limit: 1048576)
+    let graph = memory.alloc_graph(r, 1, 0)
+    no_gc(budget: 80):
+        no_gc(budget: 48):
+            no_gc(budget: 0):
+                memory.expect_graph_byte(graph, 0, 0)
+    memory.drop(graph)
+    memory.close(r)

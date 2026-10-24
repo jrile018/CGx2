@@ -1,0 +1,10 @@
+{
+  "encoding": "UTF-8",
+  "original_sha256": "272b8e51c7a56c4528a0271419dc102864756cf84bd322686aa4c37baacf56a0",
+  "combined_output_lines": [
+    "    Checking cgx2-emit-rust v0.1.0 (/home/john-riley/.codex/worktrees/58d1/lang/crates/cgx2-emit-rust)\n",
+    "    Checking cgx2c v0.1.0 (/home/john-riley/.codex/worktrees/58d1/lang/crates/cgx2c)\n",
+    "    Checking cgx2-cli v0.1.0 (/home/john-riley/.codex/worktrees/58d1/lang/crates/cgx2-cli)\n",
+    "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.24s\n"
+  ]
+}

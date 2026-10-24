@@ -1,0 +1,7 @@
+{
+  "encoding": "UTF-8",
+  "original_sha256": "8603c2cc4bcd524f20174740d9f95f470056bb62fd5577b3bf236c2a7ff64594",
+  "combined_output_lines": [
+    "{\"status\": \"passed\", \"checkpoint_complete\": false, \"scope\": \"explicit graph/payload source operations only\", \"ordinary_ownership_lowering\": \"incomplete\", \"ordinary_default_managed_values\": \"incomplete\", \"source_recoverable_transfers\": \"incomplete\", \"runtime_sha256\": \"a37defc304a70d0c96ea183e73c3228258b1e80aac23779f7a32fab29e8fd593\", \"source_cases\": 5, \"rejected_source_cases\": 6, \"passed\": 99}\n"
+  ]
+}

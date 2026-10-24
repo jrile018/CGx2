@@ -196,11 +196,17 @@ fn emit_checked_statement(out: &mut String, pad: &str, statement: &str) {
     ));
 }
 
+// Fixed once for the whole checked module, including scalar-only callees.
+struct MemoryEmitContext<'a> {
+    functions: BTreeMap<&'a str, (usize, usize)>,
+    graph_profile: bool,
+}
+
 fn emit_block(
     stmts: &[Stmt],
     out: &mut String,
     indent: usize,
-    functions: &BTreeMap<&str, (usize, usize)>,
+    context: &MemoryEmitContext<'_>,
     parameters: &BTreeMap<&str, usize>,
     names: &mut BTreeMap<String, String>,
     in_branch: bool,
@@ -231,7 +237,7 @@ fn emit_block(
                     body,
                     out,
                     indent + 3,
-                    functions,
+                    context,
                     &scoped,
                     &mut names.clone(),
                     true,
@@ -249,7 +255,7 @@ fn emit_block(
                     then_body,
                     out,
                     indent + 3,
-                    functions,
+                    context,
                     parameters,
                     &mut names.clone(),
                     true,
@@ -259,7 +265,7 @@ fn emit_block(
                     else_body,
                     out,
                     indent + 3,
-                    functions,
+                    context,
                     parameters,
                     &mut names.clone(),
                     true,
@@ -268,17 +274,19 @@ fn emit_block(
             }
             StmtKind::NoGc { budget, body } => {
                 let budget = size(budget)?;
-                out.push_str(&format!("{pad}{{\n{pad}    let mut cgx2_guard = session.no_gc({budget});\n{pad}    let session = &mut *cgx2_guard;\n"));
-                emit_block(
-                    body,
-                    out,
-                    indent + 1,
-                    functions,
-                    parameters,
-                    names,
-                    in_branch,
-                )?;
-                out.push_str(&format!("{pad}}}\n"));
+                if context.graph_profile {
+                    // Finish the guard's borrow before observing an entry failure.
+                    // Body failures retain their earlier snapshot before scope cleanup.
+                    out.push_str(&format!("{pad}let cgx2_before = graph_snapshot(session, &bindings);\n{pad}let cgx2_guard_result = (|| -> Result<(), String> {{\n{pad}    let mut cgx2_guard = session.try_no_gc({budget}).map_err(|e| allocation(e, {span}))?;\n{pad}    let session = &mut *cgx2_guard;\n"));
+                } else {
+                    out.push_str(&format!("{pad}{{\n{pad}    let mut cgx2_guard = session.no_gc({budget});\n{pad}    let session = &mut *cgx2_guard;\n"));
+                }
+                emit_block(body, out, indent + 1, context, parameters, names, in_branch)?;
+                if context.graph_profile {
+                    out.push_str(&format!("{pad}    Ok(())\n{pad}}})();\n{pad}if let Err(message) = cgx2_guard_result {{ record_rollback(cgx2_before, session, &bindings); return Err(message); }}\n"));
+                } else {
+                    out.push_str(&format!("{pad}}}\n"));
+                }
             }
             StmtKind::Let {
                 mutable: false,
@@ -395,7 +403,7 @@ fn emit_block(
                     && let ExprKind::Name(path) = &callee.kind
                     && let [local] = path.segments.as_slice()
                 {
-                    let Some(&(index, arity)) = functions.get(local.as_str()) else {
+                    let Some(&(index, arity)) = context.functions.get(local.as_str()) else {
                         return Err(unsupported(
                             format!("unknown local memory function `{local}`"),
                             callee.span,
@@ -523,16 +531,20 @@ pub(crate) fn emit_memory_rust(
             )]);
         }
     }
-    let functions: BTreeMap<&str, (usize, usize)> = module
+    let functions = module
         .functions
         .iter()
         .enumerate()
         .map(|(index, function)| (function.name.as_str(), (index, function.parameters.len())))
         .collect();
+    let context = MemoryEmitContext {
+        functions,
+        graph_profile: cgx2_sema::graph_memory_profile(module),
+    };
     let mut out = String::from("// Generated CGx2 native memory program. Requires cgx2-runtime.\n");
     out.push_str(&format!(
         "const CGX2_GRAPH_PROFILE: bool = {};\n",
-        cgx2_sema::graph_memory_profile(module)
+        context.graph_profile
     ));
     out.push_str(include_str!("memory_runtime.rs.txt"));
     out.push_str(include_str!("memory_report.rs.txt"));
@@ -553,7 +565,7 @@ pub(crate) fn emit_memory_rust(
             &function.body,
             &mut out,
             2,
-            &functions,
+            &context,
             &parameters,
             &mut BTreeMap::new(),
             false,
@@ -567,7 +579,7 @@ pub(crate) fn emit_memory_rust(
             &module.statements,
             &mut out,
             2,
-            &functions,
+            &context,
             &BTreeMap::new(),
             &mut BTreeMap::new(),
             false,
@@ -584,7 +596,7 @@ pub(crate) fn emit_memory_rust(
                     module.span,
                 )]
             })?;
-        let index = functions["main"].0;
+        let index = context.functions["main"].0;
         let span = format!("({}, {})", main.span.start, main.span.end);
         out.push_str(&format!(
             "        step(steps, {span})?;\n        cgx2_memory_function_{index}(session, steps, iterations, {span})?;\n"

@@ -1,0 +1,5 @@
+let r = memory.region(mode: manual, limit: 256)
+no_gc(budget: 96):
+    let value = memory.alloc_bytes(r, 32)
+    memory.drop(value)
+memory.close(r)

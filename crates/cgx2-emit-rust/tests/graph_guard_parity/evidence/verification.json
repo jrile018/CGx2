@@ -1,0 +1,333 @@
+{
+  "status": "native repair verified; Python CGE006 acceptance row incomplete",
+  "base_commit": "9fcefbbb201f1f73f387f43672bc9b4f9d23eeb7",
+  "branch": "riley/s2b-native-guards",
+  "worktree": "/home/john-riley/.codex/worktrees/58d1/lang",
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/58d1/lang/target/release-native-guards",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/58d1/lang/target/tmp-native-guards",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "toolchain": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 22.1.8\ncargo 1.98.1 (797e8a9bc 2026-08-05)\n",
+  "source_sha256": {
+    "crates/cgx2-emit-rust/src/memory.rs": "546d18adc2149010a53ec8956eff7ddc8706d13c5bcf65e173b34d5d3e4516df",
+    "crates/cgx2-emit-rust/tests/graph_guard_parity.rs": "475e35853da01486f39459ffb3d1314aeaf120e9b02e77abceb769f577b0b6b4",
+    "crates/cgx2-emit-rust/tests/graph_guard_parity/README.md": "dfcc487b12854f1d51b923a914960f53746db101b9948f313b6354b54c53b2f6",
+    "crates/cgx2-emit-rust/tests/graph_guard_parity/body-failure.cg": "73f4f5f48db312a7a419961301f58589eb1e5b6a407141d8612d4207f52c2290",
+    "crates/cgx2-emit-rust/tests/graph_guard_parity/branch-loop-zero.cg": "8adcb49edf1149da29051fa9130af0a1b86d7dae48033aa1c3ae8416315fa2d3",
+    "crates/cgx2-emit-rust/tests/graph_guard_parity/call-exact.cg": "69344f69cf910b186b08655fff0c2666f8c07363ee4cbc48de499dfcfc14dba3",
+    "crates/cgx2-emit-rust/tests/graph_guard_parity/call-inner-under.cg": "af2c277255c57ede06f85c30bee04fc5fd5478cb06af04c05525fcaa6dcdc18b",
+    "crates/cgx2-emit-rust/tests/graph_guard_parity/call-outer-under.cg": "7cd79ac46e7e7453f9b5fe1241641e21d4b801bca3371680fdb7447132459a00",
+    "crates/cgx2-emit-rust/tests/graph_guard_parity/callee-zero.cg": "e2e78ef6e0e9b0309165629dd805a39e916fa02025bc163477614906756c0cca",
+    "crates/cgx2-emit-rust/tests/graph_guard_parity/caller-zero.cg": "1022d50d4257c50df45c365fbd78b9bdc600f1612b32c85114bb2f2902b9ee36",
+    "crates/cgx2-emit-rust/tests/graph_guard_parity/deep-exact.cg": "c40e23c97e93682dbf049053de7b3ca2c8df5bd3c330506a0efb7351aa031815",
+    "crates/cgx2-emit-rust/tests/graph_guard_parity/deep-inner-under.cg": "44791fa7aed54da9fd68350bdcf5f8e57be9f6296c29a9fb363c2c8eb28b8a2e",
+    "crates/cgx2-emit-rust/tests/graph_guard_parity/deep-outer-under.cg": "dd4948be8529b6367d85f0ae9a330f9a307950957b7a024b211323163a322382",
+    "crates/cgx2-emit-rust/tests/graph_guard_parity/fault_harness.rs.txt": "0e63551ecf87e84bd37ba2c1d1533f87f7ff18c15e62f37c799cf58543c7fb36",
+    "crates/cgx2-emit-rust/tests/graph_guard_parity/inner-zero.cg": "7273957523e871bc602e20486f5a3f90882d2a63ec7c9c10c4b344551ce43fa7",
+    "crates/cgx2-emit-rust/tests/graph_guard_parity/legacy-exact.cg": "d81659b9395e465c273b2b2faf869b6ba7e312cf4403973e8e65d9d6beb1e91d",
+    "crates/cgx2-emit-rust/tests/graph_guard_parity/legacy-nested-zero.cg": "e4605c4a052fbaeda4ab77f52e311edf46064a6f47476e3b6ac2d8c407cb98b5",
+    "crates/cgx2-emit-rust/tests/graph_guard_parity/legacy-one-under.cg": "7cf9fa9e395c39c6684fd4b6e0e2aaa866b1cc72467a1e1c2e6af920776a9d6e",
+    "crates/cgx2-emit-rust/tests/graph_guard_parity/nested-zero.cg": "6379e34244550096a26c33a8aacbc3009160d364861b6a87768e532fcee9210d",
+    "crates/cgx2-emit-rust/tests/graph_guard_parity/outer-one-under.cg": "43bd4c75dbb98cd6227dac58e206c7a853112d6d319abb04f2869d660409af98",
+    "crates/cgx2-emit-rust/tests/graph_guard_parity/outer-zero.cg": "dbc2c138838d79b23dc1b09949561736f62bfa08046299176b2e3498277359d8",
+    "crates/cgx2-emit-rust/tests/graph_guard_parity/run.py": "af07c50e9eac5ef0764e29860c7b063ec68c8b418d9f61218907f8d422da6281"
+  },
+  "checks": [
+    {
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "cgx2-emit-rust",
+        "--all-features",
+        "--offline",
+        "--locked"
+      ],
+      "exit_code": 0,
+      "log": "emitter-tests.log",
+      "log_sha256": "0027f2fcb09b3e2a52e6322523d58f8ab5d4d872b54c8377618648a0a9074192",
+      "passed_tests": 26,
+      "failed_tests": 0,
+      "ignored_tests": 0,
+      "raw_capture_sha256": "3bd771dd7318a38e29605502024dd0dbdeb6e9cb2b5ababd1df4a868bfd3f7a8"
+    },
+    {
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "cgx2-emit-rust",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--test",
+        "graph_guard_parity",
+        "--",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "log": "guard-faults.log",
+      "log_sha256": "a317cd760e893f9383f231e0363d7efecefc52f187fbf42610e15ec5fb2f8965",
+      "passed_tests": 3,
+      "failed_tests": 0,
+      "ignored_tests": 0,
+      "raw_capture_sha256": "5d5387c6bbe94c574b9ccd7464a8b90df14ad3c53d966ed63696972d492940d5"
+    },
+    {
+      "command": [
+        "cargo",
+        "build",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2c",
+        "--offline",
+        "--locked"
+      ],
+      "exit_code": 0,
+      "log": "build.log",
+      "log_sha256": "1f85f2c1b2c0844e6461103b8dc117389010230c0cc32e6c64f749784356fbe2",
+      "raw_capture_sha256": "1962a33349cb70843fa53f80c7944a22ac6498838ba2774d5f184af6788bc1be"
+    },
+    {
+      "command": [
+        "python3",
+        "crates/cgx2-emit-rust/tests/graph_guard_parity/run.py",
+        "--binary-dir",
+        "target/release-native-guards/debug",
+        "--output",
+        "crates/cgx2-emit-rust/tests/graph_guard_parity/evidence/product.json"
+      ],
+      "exit_code": 0,
+      "log": "product.log",
+      "log_sha256": "2721f43afe493fe5ca4b00982d921317d5ecd72b279728c538612a5ac2224c1e",
+      "raw_capture_sha256": "88de176cf1b58a8fbe70fe536d7ac1e75a8436000b3e74e62eafaeb26a2c0f01"
+    },
+    {
+      "command": [
+        "python3",
+        "crates/cgx2-syntax/s2b-memory-evidence/run.py",
+        "--binary-dir",
+        "target/release-native-guards/debug",
+        "--output",
+        "crates/cgx2-emit-rust/tests/graph_guard_parity/evidence/graph-product.json"
+      ],
+      "exit_code": 0,
+      "log": "graph-product.log",
+      "log_sha256": "6e6a2e89c1366085d750318053fa459339b82a459e3c82420b0880b97bdbaa0e",
+      "raw_capture_sha256": "8603c2cc4bcd524f20174740d9f95f470056bb62fd5577b3bf236c2a7ff64594"
+    },
+    {
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "cgx2-cli",
+        "--all-features",
+        "--offline",
+        "--locked"
+      ],
+      "exit_code": 0,
+      "log": "cli-tests.log",
+      "log_sha256": "39d957651a8cce9e9725945764d4c368a4502278ae794bc874581be67db34513",
+      "passed_tests": 124,
+      "failed_tests": 0,
+      "ignored_tests": 0,
+      "raw_capture_sha256": "766b938b223baef141eaf5cc95ce861c59e1d2f85bf0d9cd54e2b10176cc8d6d"
+    },
+    {
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "cgx2c",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--test",
+        "native_memory_functions",
+        "--test",
+        "native_memory_reports",
+        "--test",
+        "memory_release_parity",
+        "--test",
+        "failure_report_parity",
+        "--test",
+        "source_graph_commands"
+      ],
+      "exit_code": 0,
+      "log": "compiler-memory-tests.log",
+      "log_sha256": "253e154089379bfda0848e3e5781461a13ead5861f1fb5135ad8fb9577b3e71a",
+      "passed_tests": 19,
+      "failed_tests": 0,
+      "ignored_tests": 0,
+      "raw_capture_sha256": "a1249650087a3f0406497529ac63bd9c2a268c0a11257e22d27ebc2849548991"
+    },
+    {
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "cgx2-runtime",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--test",
+        "fallible_lifetimes"
+      ],
+      "exit_code": 0,
+      "log": "runtime-lifetimes.log",
+      "log_sha256": "24fd792c8585317b2402c894cfab075a7a65011e1d8eb460bf93313f03c9f633",
+      "passed_tests": 6,
+      "failed_tests": 0,
+      "ignored_tests": 0,
+      "raw_capture_sha256": "9e04e8e3e234829f6ccac06a93d0079b64544f4aefa7bec000315d600853c2bb"
+    },
+    {
+      "command": [
+        "cargo",
+        "clippy",
+        "-p",
+        "cgx2-emit-rust",
+        "--all-targets",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit_code": 0,
+      "log": "clippy.log",
+      "log_sha256": "9b5efc50d0a50f012dfe7b2c305fe03bb5b6e8625ba54b401eb46692691434f6",
+      "raw_capture_sha256": "272b8e51c7a56c4528a0271419dc102864756cf84bd322686aa4c37baacf56a0"
+    },
+    {
+      "command": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--check"
+      ],
+      "exit_code": 0,
+      "log": "fmt.log",
+      "log_sha256": "62feb072edb1e5fb92e489829ccd76f4da5b3c2791cc07b6e6ad32301c58b3b6",
+      "raw_capture_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "log": "diff.log",
+      "log_sha256": "62feb072edb1e5fb92e489829ccd76f4da5b3c2791cc07b6e6ad32301c58b3b6",
+      "raw_capture_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "exit_code": 0,
+      "note": "Passed after byte-preserving log envelopes; exact raw log bytes retained."
+    }
+  ],
+  "product_checks": 518,
+  "graph_regression_checks": 99,
+  "source_fixtures": 17,
+  "real_execution_routes_per_fixture": 4,
+  "regression_before": {
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "cgx2-emit-rust",
+      "--all-features",
+      "--offline",
+      "--locked",
+      "--test",
+      "graph_guard_parity",
+      "synthetic_guard_reserve_faults_use_real_generated_code_and_runtime_hooks",
+      "--",
+      "--nocapture"
+    ],
+    "exit_code": 101,
+    "source": "HEAD original memory.rs temporarily restored; fixed bytes restored in finally",
+    "expected_failure": "0 GuardBudgets failures versus 3 required",
+    "log": "regression-before.log",
+    "log_sha256": "f01f5eee951c6fbb10615299342484d54fceb2d0a42ffda5bdb11566f71bf064",
+    "raw_capture_sha256": "575eb3c98ec363ac838380960d96de4e1629310dec49998f3aa7256386f9e44e"
+  },
+  "synthetic_faults": {
+    "reserve_site": "ReserveSiteV2::GuardBudgets",
+    "indices": [
+      6,
+      7,
+      8
+    ],
+    "source_spans": [
+      [
+        153,
+        287
+      ],
+      [
+        180,
+        287
+      ],
+      [
+        211,
+        287
+      ]
+    ],
+    "profiles": [
+      "debug",
+      "optimized"
+    ],
+    "generated_runtime_tests": 2,
+    "classification": "synthetic supported runtime fault hooks; no real exhaustion or leak claim"
+  },
+  "python": {
+    "required": "CGE006",
+    "observed": "CGE001",
+    "status": "incomplete: frozen legacy Python emitter is outside lane ownership",
+    "normal_exit_and_artifact_preservation": "checked for all fixtures"
+  },
+  "limitations": [
+    "ordinary memory checkpoint incomplete",
+    "Python CGE006 row requires authorized change outside native lane",
+    "separate report-layout repair not consumed",
+    "no full workspace rerun required by this bounded plan; owned suites and applicable consumers checked",
+    "no external leak-enabled assurance, independent audit, solver, performance or human/model evidence",
+    "all remaining S2b/S3/S4 and R01-R15 gates remain mandatory"
+  ],
+  "dependency_reconciliation": "none; no manifests or root Cargo files changed",
+  "evidence_sha256": {
+    "build.log": "1f85f2c1b2c0844e6461103b8dc117389010230c0cc32e6c64f749784356fbe2",
+    "cli-tests.log": "39d957651a8cce9e9725945764d4c368a4502278ae794bc874581be67db34513",
+    "clippy.log": "9b5efc50d0a50f012dfe7b2c305fe03bb5b6e8625ba54b401eb46692691434f6",
+    "compiler-memory-tests.log": "253e154089379bfda0848e3e5781461a13ead5861f1fb5135ad8fb9577b3e71a",
+    "diff.log": "62feb072edb1e5fb92e489829ccd76f4da5b3c2791cc07b6e6ad32301c58b3b6",
+    "emitter-tests.log": "0027f2fcb09b3e2a52e6322523d58f8ab5d4d872b54c8377618648a0a9074192",
+    "environment.log": "f3f468ff382e7ee55dabff76af7fcdfc4a74b3b05f06730d5989a912a3fe6169",
+    "fmt.log": "62feb072edb1e5fb92e489829ccd76f4da5b3c2791cc07b6e6ad32301c58b3b6",
+    "graph-product.json": "e0e6530e851b3435deb8711c22ec4eb5f2bdeb9575d15ba7c563277da7006a12",
+    "graph-product.log": "6e6a2e89c1366085d750318053fa459339b82a459e3c82420b0880b97bdbaa0e",
+    "guard-faults.log": "a317cd760e893f9383f231e0363d7efecefc52f187fbf42610e15ec5fb2f8965",
+    "product.json": "82a2c906d6ede030cde5419b2bf6180349ea766922189e91f13d72718ff9e07b",
+    "product.log": "2721f43afe493fe5ca4b00982d921317d5ecd72b279728c538612a5ac2224c1e",
+    "regression-before.log": "f01f5eee951c6fbb10615299342484d54fceb2d0a42ffda5bdb11566f71bf064",
+    "runtime-lifetimes.log": "24fd792c8585317b2402c894cfab075a7a65011e1d8eb460bf93313f03c9f633"
+  },
+  "log_encoding": "Each .log is a JSON envelope; concatenating combined_output_lines reconstructs exact stdout/stderr bytes. original_sha256 authenticates the unmodified capture, including trailing whitespace.",
+  "staged_diff_attempt": {
+    "exit_code": 2,
+    "reason": "unmodified captured Cargo logs contain trailing whitespace/blank EOF; stored exact bytes in JSON envelopes for clean source diffs"
+  }
+}
