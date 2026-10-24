@@ -1,0 +1,27 @@
+{
+  "canonical_library_sha256": "006b2570639b788d01bfcabc7a63cdb44b42b3eaac80f72dce3cc36a5c15cb63",
+  "compile": {
+    "command": [
+      "rustc",
+      "--edition=2021",
+      "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/repros/copy-root.rs",
+      "--extern",
+      "cgx2_runtime=/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/frozen/deps/libcgx2_runtime-e0f6aebee34e3ee0.rlib",
+      "-L",
+      "dependency=/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/frozen/deps",
+      "-o",
+      "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/repros/copy-root"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "run": {
+    "command": [
+      "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/repros/copy-root"
+    ],
+    "exit": 0,
+    "stdout": "source=Err(InvalidHandle), copied=Ok([42, 0, 0, 0, 0, 0, 0, 0]), collections=1\n",
+    "stderr": ""
+  }
+}

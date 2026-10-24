@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24T14:17:00.717Z",
+  "checked_at": "2026-10-24T14:37:00.728Z",
   "original_chats": [
     {
       "lane": "core",
@@ -234,11 +234,14 @@
       "hostId": "local",
       "worktree": "/home/john-riley/.codex/worktrees/4836/lang",
       "base": "0d321d3d1b0341121b8363a5a87eeaf674c20eec",
-      "status": "running",
-      "afterCursor": "9a64eb13-4087-480b-808c-6ba54eb87c2d:11",
+      "status": "reviewed-incomplete-repairs-required",
+      "afterCursor": "9a64eb13-4087-480b-808c-6ba54eb87c2d:12",
       "plan": "plans/release-completion/s2b-ordinary-memory/plan.md",
       "setup_verified": "worktree HEAD equals reviewed base; read_thread and wait_threads active; list_threads omitted agent-created chat, exact read-only local metadata resolved without duplication",
-      "progress_note": "Active, uncommitted; replay reached graph/guard suites. Required aggregate ownership/source promotion/full cleanup matrix still incomplete. Worker reports first exploratory interface compile log overwritten by immediate rerun; final logs intact and retention gap documented. No delivered commit or reviewed acceptance."
+      "progress_note": "Stopped clean. Three independent reviews and coordinator reproductions confirm8 defects; staged only as repair base. General source ownership/promote/v3 authentication/static dependency paths/full parity incomplete. Four bounded disjoint repairs prepared; no consumer fanout.",
+      "commit": "a3b98d7374de8aea90a610a73c99b04deb8857a1",
+      "staged_commit": "32032fd3c34d1a1f71e5229ec3e72dcbf0c462a6",
+      "verification_note": "Independent1327Rust/0failed/6ignored,8selftests,136product/22standalone pass. Initial standalone quota failure and missing partial logs retained; directory-only retry. Eight reproduced defects/full source ownership gaps keep acceptance failed."
     }
   ],
   "s2a_repairs": [

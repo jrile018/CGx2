@@ -1,0 +1,5 @@
+module managed
+pub fn ref(value: i64) -> i64 effects():
+    value
+pub fn collect() -> Unit effects():
+    return

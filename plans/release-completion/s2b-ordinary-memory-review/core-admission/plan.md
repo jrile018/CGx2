@@ -1,0 +1,25 @@
+# Ordinary-memory source admission repair
+
+## Exclusive ownership
+- crates/cgx2-sema/src/ordinary_memory/**
+- crates/cgx2-sema/src/effects.rs (resolved behavioral effect/capability closure only)
+- New crates/cgx2-sema/tests/ordinary_admission_repair.rs
+- New crates/cgx2-syntax/ordinary-admission-repair-evidence/** and S2B-ORDINARY-ADMISSION-REPAIR.md
+No other source files. If an unavoidable semantic producer dependency exists, report the exact additional path/contract; do not modify it without coordinator reassignment.
+
+## Required result
+1. OM01: enforce ManagedAlloc for actual region/guard/session/allocation/transfer operations, and Collect/MemoryCollect for explicit collection, through compiler-owned semantic identities or direct authenticated requirements. Never derive authority from shadowable source template managed.ref/collect. Preserve user namespaces and call resolution; no rejection of all managed-named user modules as a shortcut. Verify imported/user shadowing, both effect/capability dimensions and transitive callers; correct declarations must pass. Compiler-owned intrinsic requirements must survive resolved-call closure independently of source spellings. User managed.ref/managed.collect functions retain their own resolved effects/capabilities; do not conservatively misclassify all such user functions as intrinsics. The ordinary_memory-local semantic requirement pass or explicitly owned effects.rs may implement this frozen behavior; no other public signature/model change.
+2. OM02: traverse every statement by its actual field semantics. Legacy SGuard literal budget and SAssign operation tag are not expression IDs. Check normal and large budgets, assignments, nested scopes and malformed checked input boundaries; no panic or spurious effect inference. Preserve legacy behavior.
+3. OM03: classify builtin recovery carriers by resolved identity; user Err payload retains whole-graph brand through match/return/fields/Results. Existing builtin allocation error is scalar only because its actual payload is scalar. Reject escapes statically with stable code/UTF-8 span; valid user Err inside its lifetime works.
+4. OM04: preserve ordinary user borrow function behavior and reserve capability borrowing only for resolved intrinsic usage. Cover local/imported functions and genuine region borrow.
+
+## Verification
+Run sema offline all-feature tests, affected CLI/package read-only tests, all-target/all-feature Clippy -D warnings for sema/CLI/package, cargo fmt --all --check and git diff --check. Add focused Rust tests and source/package interpreter/native debug/native release/standalone parity for valid repros and exact diagnostic rejection/artifact preservation for invalid ones. Run unchanged ordinary-memory product corpus using its run.py (regressions may be left to coordinator) and default-managed corpus; preserve unrelated runtime/API failures as open. Do not weaken or edit historical tests. Own report must distinguish repairs passing from pre-existing known failures.
+
+## Common worker contract
+
+Read AGENTS.md, docs/language-design.md, docs/validation-plan.md, plans/roadmap.md, plans/wave28/{README,REVIEW}.md and plans/release-completion/{README,contracts,worker-rules,dispatch}.md, s2b-ordinary-memory/plan.md and this review README before coding. Follow MegaMemory overview/query/record and Serena initial instructions. Work only in your attached worktree on a riley/ branch. No delegation, other chats, merges, follow-on tasks, publication, package installation, external spending/contact or security changes.
+
+Use private CARGO_TARGET_DIR=$PWD/target/release-ordinary-LANE and TMPDIR=$PWD/target/tmp-ordinary-LANE (substitute lane), CARGO_BUILD_JOBS=2, RUSTUP_TOOLCHAIN=1.98.1, PYTHONDONTWRITEBYTECODE=1 and existing LIBRARY_PATH=/tmp/cgx2-wave22-lib when required. Create directories; offline/locked dependencies. No release performance measurements. Other lane paths, root Cargo.toml/Cargo.lock, shared design and all coordinator plans are read-only. Preserve historical evidence. Freeze final binaries/probe libraries before product runs and verify hashes afterwards; do not build Cargo during frozen verification. Use canonical top-level probe libraries, never an arbitrary stale hashed dependency. Retain every failed attempt, bounded stdout/stderr, wall/CPU/address/file limits, argv/exit/signal, sources and toolchain/compiler/runtime hashes. Existing output supervisor and freeze helper are available read-only.
+
+Finish the bounded deliverable, run assigned checks, record specific APIs/limits/evidence in MegaMemory, commit owned files/report and stop for review. Report commit, changed paths, exact counts, failed/blocked/unrun rows and limitations. Passing this repair never accepts full ordinary memory or release. General aggregate ownership, source copy_owned/promote with failed-owner continuation, complete authenticated v3 summaries and static dependency-file attribution remain assigned to a later sole producer. Do not implement or silently waive them here.

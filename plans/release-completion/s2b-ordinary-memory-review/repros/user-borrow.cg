@@ -1,0 +1,8 @@
+fn borrow(value: i64) -> i64 effects():
+    value + 1
+fn main() -> i64 effects(ManagedAlloc):
+    match memory.try_region(mode: memory.Mode.Manual, limit: 4096):
+        Result.Ok(r):
+            borrow(41)
+        Result.Err(error):
+            -1

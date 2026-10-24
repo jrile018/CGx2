@@ -1,0 +1,16 @@
+variant Message:
+    Err(String)
+fn leak() -> String effects(ManagedAlloc):
+    match memory.try_region(mode: memory.Mode.Manual, limit: 4096):
+        Result.Ok(r):
+            match memory.try_in(borrow(r), Message.Err("secret")):
+                Result.Ok(value):
+                    match value:
+                        Message.Err(text):
+                            return text
+                Result.Err(error):
+                    return "allocation failed"
+        Result.Err(error):
+            return "region failed"
+fn main() -> String effects(ManagedAlloc):
+    leak()

@@ -203,3 +203,7 @@ Next sole dependency-ready producer: s2b-ordinary-memory/plan.md and exact18-com
 ## Ordinary aggregate ownership, regions and entry producer running
 
 Reviewed common base0d321d3d1b0341121b8363a5a87eeaf674c20eec. Chat01a16da0-0923-75c3-9e49-0d0383043782 (CGx2 ordinary ownership regions and…) in /home/john-riley/.codex/worktrees/4836/lang is active via read_thread and compact wait_threads; worktree HEAD matches base. Queued client-new-thread:4fe31f5c-6a38-4f88-a1ab-6269ceb6e405 resolved through exact read-only local metadata after list_threads omitted it. Saved cursor in thread-state.json; no duplicate chat. Sole producer owns the connected source/runtime interface frontier; later consumers remain gated. Full ordinary-memory and release acceptance remain open.
+
+## Ordinary-memory partial delivery reviewed; repairs required
+
+a3b98d7 staged32032fd after three independent reviews and coordinator reproductions.1327 workspace tests and quality gates pass, but8 source/runtime/API defects block acceptance and broad ownership/promotion/v3/static dependency diagnostics remain incomplete. See s2b-ordinary-memory-review/README.md for exact findings and four disjoint repair plans. No S3 fanout or main merge. Actual setup outcomes follow after common-base commit.

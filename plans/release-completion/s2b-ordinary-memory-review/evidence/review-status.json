@@ -1,0 +1,256 @@
+{
+  "reviewed_delivery": "a3b98d7374de8aea90a610a73c99b04deb8857a1",
+  "staged_repair_commit": "32032fd3c34d1a1f71e5229ec3e72dcbf0c462a6",
+  "implementation_identical_to_reviewed_delivery": true,
+  "checks": [
+    {
+      "name": "workspace",
+      "command": [
+        "cargo",
+        "test",
+        "--workspace",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--no-fail-fast"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 218.359,
+      "stdout_bytes": 161600,
+      "stdout_sha256": "d1d081da10c13b12bcb34a2014fdff2878be200db30c1f99f3f329d3c9d1016e",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "workspace.log.gz",
+      "log_sha256": "d1d081da10c13b12bcb34a2014fdff2878be200db30c1f99f3f329d3c9d1016e",
+      "passed": true,
+      "test_counts": {
+        "passed": 1327,
+        "failed": 0,
+        "ignored": 6
+      }
+    },
+    {
+      "name": "clippy",
+      "command": [
+        "cargo",
+        "clippy",
+        "--workspace",
+        "--all-targets",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 8.506,
+      "stdout_bytes": 2998,
+      "stdout_sha256": "1804982ec23810c7003387692426aa80f3387a8df6aef9f444128995c98330ba",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "clippy.log.gz",
+      "log_sha256": "1804982ec23810c7003387692426aa80f3387a8df6aef9f444128995c98330ba",
+      "passed": true
+    },
+    {
+      "name": "fmt",
+      "command": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--check"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.721,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "fmt.log.gz",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "passed": true
+    },
+    {
+      "name": "diff",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.002,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "diff.log.gz",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "passed": true
+    },
+    {
+      "name": "evidence-selftests",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/ordinary-memory-evidence/test_run.py"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.032,
+      "stdout_bytes": 106,
+      "stdout_sha256": "f8f7b0ac7f2b53ac4e96000f166430c488f2c37e059ad5502b09d60f29d363b8",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "evidence-selftests.log.gz",
+      "log_sha256": "f8f7b0ac7f2b53ac4e96000f166430c488f2c37e059ad5502b09d60f29d363b8",
+      "passed": true
+    },
+    {
+      "name": "build",
+      "command": [
+        "cargo",
+        "build",
+        "--workspace",
+        "--all-features",
+        "--offline",
+        "--locked"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.05,
+      "stdout_bytes": 72,
+      "stdout_sha256": "736e2582f563605dd272e5fb977840b0c0767377d27b6940c440caf75eec7157",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "build.log.gz",
+      "log_sha256": "736e2582f563605dd272e5fb977840b0c0767377d27b6940c440caf75eec7157",
+      "passed": true
+    },
+    {
+      "name": "freeze",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/managed-core-repair-evidence/freeze.py",
+        "--binary-dir",
+        "/home/john-riley/projects/lang/target/release-plan-review/debug",
+        "--output-dir",
+        "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/frozen",
+        "--manifest",
+        "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/frozen.json"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 1.225,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "freeze.log.gz",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "passed": true
+    },
+    {
+      "name": "product",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/ordinary-memory-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/frozen",
+        "--output-dir",
+        "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/product",
+        "--regressions"
+      ],
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 779.633,
+      "stdout_bytes": 64,
+      "stdout_sha256": "a64d009ed474e2735eec34d5f1e3fde464b6fe2846392c0a076f73ae1bda2169",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "product.log.gz",
+      "log_sha256": "a64d009ed474e2735eec34d5f1e3fde464b6fe2846392c0a076f73ae1bda2169",
+      "passed": true
+    },
+    {
+      "name": "standalone",
+      "command": [
+        "/usr/bin/python3",
+        "crates/cgx2-syntax/ordinary-memory-evidence/standalone.py",
+        "--product-dir",
+        "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/product",
+        "--output-dir",
+        "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/standalone"
+      ],
+      "exit": 1,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 2.567,
+      "stdout_bytes": 1303,
+      "stdout_sha256": "cace2a0bc1f1f025f684236f343a2ee508245e40133ec3185204860f6ef6a42d",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "standalone.log.gz",
+      "log_sha256": "cace2a0bc1f1f025f684236f343a2ee508245e40133ec3185204860f6ef6a42d",
+      "passed": false
+    }
+  ],
+  "frozen_artifact_changes": [],
+  "ordinary_memory_accepted": false,
+  "release_complete": false,
+  "disposition": "Repair base only: OM01-OM08 reproduced; general source ownership/promotion/v3 authentication/static dependency-file diagnostics/full parity still incomplete. Four disjoint repair lanes; no consumer fanout.",
+  "retention_notes": [
+    "Worker first exploratory interface diagnostics overwritten; first scratch cleanup audit failed. Not recovered by final successful runs.",
+    "Coordinator initial shadow package --package argv failures retained; corrected positional package reruns reproduce bypass."
+  ],
+  "frozen_artifact_changes_after_retry": [],
+  "standalone_retry": {
+    "command": [
+      "/usr/bin/python3",
+      "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/standalone-outside-retry.py",
+      "--product-dir",
+      "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/product",
+      "--output-dir",
+      "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/standalone-retry"
+    ],
+    "exit": 0,
+    "reason": "exit",
+    "signal": null,
+    "overflow_stream": null,
+    "duration_seconds": 2.667,
+    "stdout_bytes": 28,
+    "stdout_sha256": "59db6ad2accbfc965451ee5285270d3fe725c280877ca060c9b1b38cefd9f7af",
+    "stderr_bytes": 0,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "passed": true,
+    "log_sha256": "59db6ad2accbfc965451ee5285270d3fe725c280877ca060c9b1b38cefd9f7af",
+    "directory_substitution_only": true,
+    "original_runner_sha256": "cc3e8b09ea2a6998c28ec2aacff87ad4562a91be1037badbc4a7b88cd8742ebf",
+    "wrapper_sha256": "68abecca7fe26b036cf353a71a66db23ae9ddd330e30e83f76198fb8a601d001"
+  },
+  "standalone_retry_counts": {
+    "passed": 22,
+    "failed": 0
+  },
+  "baseline_verification": "Workspace1327/0/6; quality/selftests8; product136/0; initial standalone quota failure retained, directory-only retry22/0. No semantic repair acceptance."
+}

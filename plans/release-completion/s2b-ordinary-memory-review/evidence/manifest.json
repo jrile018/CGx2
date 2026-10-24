@@ -1,0 +1,247 @@
+[
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/build.log.gz",
+    "retained": "build.log.gz",
+    "bytes": 91,
+    "sha256": "296c2980c4ed5f26ed50d2566f2563b9e22827370e691e7ec480bc5cd7903462",
+    "retained_sha256": "296c2980c4ed5f26ed50d2566f2563b9e22827370e691e7ec480bc5cd7903462"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/clippy.log.gz",
+    "retained": "clippy.log.gz",
+    "bytes": 456,
+    "sha256": "6a396f6814f3823a210195d8696f0a33702c4029c5b391000a95ad73220ce1d5",
+    "retained_sha256": "6a396f6814f3823a210195d8696f0a33702c4029c5b391000a95ad73220ce1d5"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/diff.log.gz",
+    "retained": "diff.log.gz",
+    "bytes": 20,
+    "sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
+    "retained_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/evidence-selftests.log.gz",
+    "retained": "evidence-selftests.log.gz",
+    "bytes": 54,
+    "sha256": "65bdc770132a1c5e0dc22f1b7dcbe9b2a2733be88d501f674e7f1ecdc186a804",
+    "retained_sha256": "65bdc770132a1c5e0dc22f1b7dcbe9b2a2733be88d501f674e7f1ecdc186a804"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/failed-standalone-scratch-audit.json",
+    "retained": "failed-standalone-scratch-audit.json.gz",
+    "bytes": 4752,
+    "sha256": "712affa657988aef47285e44909871902d0ecc5be8ae284faa770b13dbb8bd5f",
+    "retained_sha256": "b007d360d03d62c22d10d6f8f7cb24b59784d44b04a34866efdf471543e0c56b"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/fmt.log.gz",
+    "retained": "fmt.log.gz",
+    "bytes": 20,
+    "sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
+    "retained_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/freeze.log.gz",
+    "retained": "freeze.log.gz",
+    "bytes": 20,
+    "sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
+    "retained_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/frozen.json",
+    "retained": "frozen.json.gz",
+    "bytes": 1297,
+    "sha256": "f388625508a1d4dfbaf017e1d761f04738d42b7ce3a70ed73502f99eb7b753e8",
+    "retained_sha256": "6bb4fe57b5c09aa0ff25881d2fa1dd97ddd08df0d1ef136f578f20967d4c6f58"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/product/product.json",
+    "retained": "product/product.json.gz",
+    "bytes": 155049,
+    "sha256": "2f6e5b63d3eb058847ea310eee6cbc984b1cf390fab2923e25f861c4b3a1d8ee",
+    "retained_sha256": "bc220fb929978988ebae2a94547de4aeb96a2125acdea90db4e49a4bad6c605d"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/product/regressions/binders/binders.json",
+    "retained": "product/regressions/binders/binders.json.gz",
+    "bytes": 52458,
+    "sha256": "ee5756203fbd269af3746a8ba62f5711beb65eb1c07ab4e7f179000e6467828d",
+    "retained_sha256": "732766fffae758fc8770e6f962d96f886bec4c26b67d0227887284084e46c6b3"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/product/regressions/core-product/product.json",
+    "retained": "product/regressions/core-product/product.json.gz",
+    "bytes": 99464,
+    "sha256": "05c080a2c7f9479be9038d24048c65ee35e7c75d024fdaad9d6bb079c4853d49",
+    "retained_sha256": "dacb6a1fc820df0f7077759def8becfab17e48585d5e614fdc6e99a553bb9a88"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/product/regressions/emitters/emitters.json",
+    "retained": "product/regressions/emitters/emitters.json.gz",
+    "bytes": 50028,
+    "sha256": "1eaee3fe6701e0ed276b06d2af453b9494c3675f2f76b1ca90dd0b895c1f9375",
+    "retained_sha256": "2d78d9aabbd0b52c4d42c37e82907672a18096f6c17df1354e09024a56343740"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/product/regressions/equality-product/product.json",
+    "retained": "product/regressions/equality-product/product.json.gz",
+    "bytes": 63076,
+    "sha256": "99ba13280f77cdf845fcd75790ee07ccf5f8c70b832f9332906acd8f087d7c18",
+    "retained_sha256": "af1fca737e1f60009a02a48090880fdaf6655afb53c828233174f0ed49913231"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/product/regressions/foundation/foundation.json",
+    "retained": "product/regressions/foundation/foundation.json.gz",
+    "bytes": 32622,
+    "sha256": "6de487ed73ca8bd128621ee0881fe6ae791f39b87084d646d8d8090cfecce291",
+    "retained_sha256": "7a248d69dc8729f88153fbd967f85758b686052c4ff8cc1126b697f8cf977d65"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/product/regressions/graph99/graph99.json",
+    "retained": "product/regressions/graph99/graph99.json.gz",
+    "bytes": 95710,
+    "sha256": "9f75a386a2d143f7535c4cf62e123490a2b857357029458e71a6fa3446d12c28",
+    "retained_sha256": "68eb8d88da8f81d843b20b4562f9dc25e9e05fe0c9269275f3b69b100636cc7b"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/product/regressions/guards518/guards518.json",
+    "retained": "product/regressions/guards518/guards518.json.gz",
+    "bytes": 1077626,
+    "sha256": "ce295c746b5da38460e761fc31ac66da02ad464fef28c8807fe86309fbd1ba28",
+    "retained_sha256": "cb23089437b4f93e2ead960b646b2f385d8ce943250eeb16d71b6c06dcf49467"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/product/regressions/managed-product/managed-product/product.json",
+    "retained": "product/regressions/managed-product/managed-product/product.json.gz",
+    "bytes": 344464,
+    "sha256": "230e43f0e9417ee7c7be4f3855589d7c2a4e21d09649d9d04e890f7b83c27f1c",
+    "retained_sha256": "7482ba8bd59f561a3f488aa6b8fd24dadba304147904b116c562fd9c386c6904"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/product/regressions/managed-product/managed-product/repair/repair.json",
+    "retained": "product/regressions/managed-product/managed-product/repair/repair.json.gz",
+    "bytes": 2050771,
+    "sha256": "2f986f3a262eb08d9db5f33eb9816c9b091ac49472d9e4bd5ab6b986de08d5f4",
+    "retained_sha256": "23b90c57eedbe263b386769da1c305b7633b7944fae7221cb5d5b6ebe0680e89"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/product/regressions/ordinary256/ordinary256.json",
+    "retained": "product/regressions/ordinary256/ordinary256.json.gz",
+    "bytes": 120327,
+    "sha256": "44fb100a45debe59e4425cbe7c2b63ed2ec825c2d5bc1208c80d5919ca50aaf3",
+    "retained_sha256": "e01e6df9f5c2063fa94f2534aefe9dc350bca94f3fdf58318fd48104a724788f"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/product/regressions/output/output.json",
+    "retained": "product/regressions/output/output.json.gz",
+    "bytes": 21033,
+    "sha256": "d8a51f3993a377f2e7029e259ec51080692aa6b811c97756716591365575cf55",
+    "retained_sha256": "859c5dc131d4d20964b65291d4d37119ac12b8ab86db6d7465109788ed3754a8"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/product/regressions/owned-result-original/owned-result-original.json",
+    "retained": "product/regressions/owned-result-original/owned-result-original.json.gz",
+    "bytes": 363269,
+    "sha256": "0de70dc5d92ae2a039fa73b72079164f3f5cd94f76b8cf7cc5cbb1391860423d",
+    "retained_sha256": "c5c9c1be407a4f0920d6a27ee463c510409c6f1fb336b5d9a77caae502420aa5"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/product/regressions/owned-result-reconciled/reconciled/reconciled-product.json",
+    "retained": "product/regressions/owned-result-reconciled/reconciled/reconciled-product.json.gz",
+    "bytes": 410210,
+    "sha256": "cf5f07f22b8ea1b05b0cd08ebb59675eaa76ce40da1f756115ac67b380f1a82b",
+    "retained_sha256": "b431056424bd1dbd0062ffc7930f382e81237faf8633d5cee28071db20dee5d4"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/product/regressions/owned-result-reconciled/reconciled/restored-shadow.json",
+    "retained": "product/regressions/owned-result-reconciled/reconciled/restored-shadow.json.gz",
+    "bytes": 13013,
+    "sha256": "e3dd5f04e3773492465ce1d193b5cc953142074248ab66a7c1ae035bb1b135a5",
+    "retained_sha256": "438681ee7a9784924f8db8763036f7b68568a3759f6bd18ea072bf0d82f7d877"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/product/regressions/owned-symbol195/owned-symbol195.json",
+    "retained": "product/regressions/owned-symbol195/owned-symbol195.json.gz",
+    "bytes": 115327,
+    "sha256": "b500c8b0dbb14b13637840b560870281cb5285d9c288cbd827807ad11a10d71b",
+    "retained_sha256": "9aa43ecad2522d7d61c45ac7219841b755664b1269d446f48e1656ac28132ea9"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/product/regressions/reports265/reports265.json",
+    "retained": "product/regressions/reports265/reports265.json.gz",
+    "bytes": 329586,
+    "sha256": "3f0487ef1029a5b5712a0a66c34542bcf120f5441f59cad7d99df5fd61909b69",
+    "retained_sha256": "0396c0bc3de2b0d269ddea7db802d549a2f0023380dd96acf48d1c3ccbe2c306"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/product/regressions/semantic/semantic.json",
+    "retained": "product/regressions/semantic/semantic.json.gz",
+    "bytes": 143685,
+    "sha256": "cb7cb9771d700fb8edbd4f383adb520b005dbffd443a31c9bccf8cd2d2efdef6",
+    "retained_sha256": "759f17cce34a2b4847398d6482661d1fb439c402db083004b18ee7708adf6abb"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/product/regressions/specialization/specialization/report.json",
+    "retained": "product/regressions/specialization/specialization/report.json.gz",
+    "bytes": 154545,
+    "sha256": "3a9f051807eae881effbd140a9c0d55b3c3f5eea669581840a83f37d9f73d20d",
+    "retained_sha256": "33893a12635183002117a58ec1b947516aa719103c723d2d60b9cf7981913361"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/product/regressions/visibility/visibility/report.json",
+    "retained": "product/regressions/visibility/visibility/report.json.gz",
+    "bytes": 97906,
+    "sha256": "4d2a20897cc702a8cb901e15fe63e87ff00ed3c3d06152f04a52d28b9f7c0327",
+    "retained_sha256": "bf36ca367c2985883b74f84e782e48570c510450be40b33c79c23aa81addf0b6"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/product.log.gz",
+    "retained": "product.log.gz",
+    "bytes": 77,
+    "sha256": "931eb712ea7f89fdb67ce8690ecc3797ddd134a9536c5dab54d0beedaa17097d",
+    "retained_sha256": "931eb712ea7f89fdb67ce8690ecc3797ddd134a9536c5dab54d0beedaa17097d"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/standalone-retry/standalone.json",
+    "retained": "standalone-retry/standalone.json.gz",
+    "bytes": 25083,
+    "sha256": "57a94e902a326db64d694b235806a7045c6e367decae567ac4a78c2c1987e384",
+    "retained_sha256": "c160f0b3db1edf5ad3ec376ce7a903cbf25587a650cda9d875eb804e15f9adfe"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/standalone-retry-verification.json",
+    "retained": "standalone-retry-verification.json.gz",
+    "bytes": 1044,
+    "sha256": "3eb6a68c08c4c68caf96258642845ac66d174ded32fbf03c8388de65383ad3ad",
+    "retained_sha256": "1703ee77d16573c70cf33a2a992d3b1ae766265a14a3ab3b8c209a03e9f49311"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/standalone-retry.log.gz",
+    "retained": "standalone-retry.log.gz",
+    "bytes": 44,
+    "sha256": "262114b80956f339112c1a448149dd0cec7ec4c454d3ffef74e9c680a59e80a9",
+    "retained_sha256": "262114b80956f339112c1a448149dd0cec7ec4c454d3ffef74e9c680a59e80a9"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/standalone.log.gz",
+    "retained": "standalone.log.gz",
+    "bytes": 528,
+    "sha256": "edc19951efbbf0dc42f736c503488432dd3973f52b096fe5baed2b382b23c507",
+    "retained_sha256": "edc19951efbbf0dc42f736c503488432dd3973f52b096fe5baed2b382b23c507"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/verification.json",
+    "retained": "verification.json.gz",
+    "bytes": 7559,
+    "sha256": "81c9d223562dccac123ef4029e2ec2ea952f4b0f883d4b630b86d0f64d299f63",
+    "retained_sha256": "ec853f0691511ce1dd8b379b27846e195c7202208f5c4bb9314c04b8f72d7f79"
+  },
+  {
+    "original": "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/workspace.log.gz",
+    "retained": "workspace.log.gz",
+    "bytes": 33526,
+    "sha256": "ededa0dbf1553a6ab3a534bd6cc5f4f8eb0531bf014cfdad941764c68bdb93fe",
+    "retained_sha256": "ededa0dbf1553a6ab3a534bd6cc5f4f8eb0531bf014cfdad941764c68bdb93fe"
+  }
+]

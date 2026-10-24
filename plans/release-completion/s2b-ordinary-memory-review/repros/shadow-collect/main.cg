@@ -1,0 +1,9 @@
+module app
+import managed
+fn main() -> i64 effects() caps():
+    match memory.try_region(mode: memory.Mode.Manual, limit: 4096):
+        Result.Ok(r):
+            memory.collect(borrow(r))
+            42
+        Result.Err(error):
+            -1

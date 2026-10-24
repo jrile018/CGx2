@@ -1,0 +1,102 @@
+{
+  "binary_sha256": "b96eeec69eeb615d7ba5933cfdc696ff329e6066cca859409ee25ecbffa35353",
+  "commands": [
+    {
+      "command": [
+        "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/frozen/cgx2",
+        "check",
+        "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/repros/user-borrow.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT095: /home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/repros/user-borrow.cg:196..206: borrow requires a region capability\n"
+    },
+    {
+      "command": [
+        "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/frozen/cgx2",
+        "api",
+        "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/repros/api-private.cg",
+        "--json"
+      ],
+      "exit": 0,
+      "stdout": "{\"schema_version\":2,\"memory_model_version\":1,\"summary_scope\":\"concrete-specializations\",\"declaration_types\":\"original-source-syntax\",\"absent_summary\":\"unknown\",\"provenance_schema_version\":1,\"provenance_kind\":\"source-v1\",\"inputs_sha256\":\"689a2164f5385510f7b458a2575e6e4253c5d4299cc6f0bb215a0189eb866a0d\",\"source_sha256\":\"b8ecb78eedcfdb71efd29326ba76a9cebc633ade6615836b33080e93be27b46d\",\"analysis_sha256\":\"4921e555cc56f634db00836ffa7a68c5f3a6fd900c2a3cb989c4a8090cf9d95e\",\"entry_policy\":\"implicit\",\"declarations\":[{\"name\":\"secret\",\"region_parameters\":[],\"parameters\":[],\"result\":\"i64\"},{\"name\":\"exported\",\"region_parameters\":[],\"parameters\":[],\"result\":\"i64\"},{\"name\":\"main\",\"region_parameters\":[],\"parameters\":[],\"result\":\"i64\"}],\"functions\":[{\"name\":\"exported\",\"parameters\":[],\"return_type\":\"i64\",\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v2\":{\"may_allocate_managed\":false,\"may_auto_collect_at_allocation\":false,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":false,\"may_enter_session\":false,\"may_create_region\":false,\"may_enter_guard\":false,\"may_allocate_owned\":false,\"may_transfer_graph\":false}},{\"name\":\"main\",\"parameters\":[],\"return_type\":\"i64\",\"behavioral_effects\":[\"ManagedAlloc\"],\"capabilities\":[],\"memory_effects_v2\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true,\"may_enter_session\":false,\"may_create_region\":false,\"may_enter_guard\":true,\"may_allocate_owned\":false,\"may_transfer_graph\":false}},{\"name\":\"secret\",\"parameters\":[],\"return_type\":\"i64\",\"behavioral_effects\":[],\"capabilities\":[],\"memory_effects_v2\":{\"may_allocate_managed\":false,\"may_auto_collect_at_allocation\":false,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":false,\"may_enter_session\":false,\"may_create_region\":false,\"may_enter_guard\":false,\"may_allocate_owned\":false,\"may_transfer_graph\":false}}]}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/frozen/cgx2",
+        "api",
+        "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/repros/api-private.cg",
+        "--json",
+        "--syntax-only"
+      ],
+      "exit": 0,
+      "stdout": "{\"schema_version\":6,\"module\":null,\"functions\":[{\"name\":\"exported\",\"parameters\":[],\"return_type\":\"i64\",\"span\":{\"start\":63,\"end\":96},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":84,\"end\":87}},\"effects\":[],\"effects_status\":\"unchecked\",\"capabilities\":[],\"capabilities_status\":\"unchecked\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[{\"name\":\"PublicBox\",\"identity\":\"PublicBox\",\"type_parameters\":[],\"field_types\":[{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":33,\"end\":36}}],\"fields\":[{\"name\":\"value\",\"ty\":\"i64\"}],\"span\":{\"start\":0,\"end\":37}}],\"semantics_status\":\"syntax-only\",\"variants\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/frozen/cgx2",
+        "check",
+        "--package",
+        "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/repros/shadow-collect"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGC001: <command>: usage: cgx2 [--diagnostic-format=json] check FILE.cg|PACKAGE | cgx2 [--diagnostic-format=json] run FILE.cg|PACKAGE [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 api [--json] [--syntax-only] FILE.cg|PACKAGE | cgx2 build FILE.cg|PACKAGE --out BINARY [--release] [--force] [--rustc PATH] | cgx2 emit FILE.cg|PACKAGE --target rust|python --out FILE [--force] | cgx2 memory report FILE.cg [--format=json] | cgx2 memory failure-report FILE.cg | cgx2 fmt FILE.cg\ncheck validates syntax, generic constraints, copied finite values, and the bounded memory/ownership script subset; a PACKAGE directory can run checked value functions through cgx2-native; schema 2 also supports bounded pinned native C calls; memory report shows CGx2 allocations only\n"
+    },
+    {
+      "command": [
+        "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/frozen/cgx2",
+        "run",
+        "--package",
+        "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/repros/shadow-collect"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGC001: <command>: usage: cgx2 [--diagnostic-format=json] check FILE.cg|PACKAGE | cgx2 [--diagnostic-format=json] run FILE.cg|PACKAGE [-- ARGS] | cgx2 FILE.cg [-- ARGS] | cgx2 api [--json] [--syntax-only] FILE.cg|PACKAGE | cgx2 build FILE.cg|PACKAGE --out BINARY [--release] [--force] [--rustc PATH] | cgx2 emit FILE.cg|PACKAGE --target rust|python --out FILE [--force] | cgx2 memory report FILE.cg [--format=json] | cgx2 memory failure-report FILE.cg | cgx2 fmt FILE.cg\ncheck validates syntax, generic constraints, copied finite values, and the bounded memory/ownership script subset; a PACKAGE directory can run checked value functions through cgx2-native; schema 2 also supports bounded pinned native C calls; memory report shows CGx2 allocations only\n"
+    },
+    {
+      "command": [
+        "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/frozen/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/4836/lang/crates/cgx2-syntax/ordinary-memory-evidence/fixtures/copy-cycle.cg"
+      ],
+      "exit": 0,
+      "stdout": "42\n",
+      "stderr": "CGX2_MEMORY_EVIDENCE {\"schema_version\":1,\"allocations\":5,\"roots_registered\":25,\"roots_released\":26,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":16,\"graph_writes\":7,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":4681,\"behavioral_effects\":[\"ManagedAlloc\", \"Mutate\", \"ReadManaged\"],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":698,\"live_bytes\":698,\"peak_bytes\":698,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}},{\"region_id\":{\"session\":1,\"index\":1},\"is_open\":false,\"mode\":\"manual\",\"trigger_bytes\":null,\"limit_bytes\":16384,\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":698,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":698,\"live_bytes\":698,\"peak_bytes\":1396,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\n"
+    },
+    {
+      "command": [
+        "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/frozen/cgx2",
+        "check",
+        "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/repros/shadow-collect"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/frozen/cgx2",
+        "run",
+        "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/repros/shadow-collect"
+      ],
+      "exit": 0,
+      "stdout": "42\n",
+      "stderr": ""
+    }
+  ],
+  "source_hashes": {
+    "copy-root.rs": "d8fb01287b0bd701ec17be92517807e7efc0598739cb0bfbbb729d20da8f382d",
+    "user-err-region-escape.cg": "d929db1715a29b68d4d6beafacbb179d81432ac3bb6a2f4dd1f3a7a174f96e51",
+    "outer-root-assignment.cg": "3ae14d4cbfd538a3ea8ca417563bce6d24e900d5a35504fef47efc8d9ed5dfb6",
+    "api-private.cg": "b8ecb78eedcfdb71efd29326ba76a9cebc633ade6615836b33080e93be27b46d",
+    "legacy-guard-panic.cg": "40582a9cd0e65f295c1573c3b03e077618d8913a682e9f9cf989ac7c346f837f",
+    "user-borrow.cg": "235c6222b8028276a8c5966e5b8e456e50583785d6cd1696b9a226ba4c13f3c0",
+    "shadow-collect/cgx2.toml": "74fb9bc0ed767af1d9bf1980b7c07b49540edd16ac1b35fe1244c72b99b3aa17",
+    "shadow-collect/main.cg": "804942c7b3480ecbe21701272d22d2887221b83b62c2d873cbddb80a537d5d16",
+    "shadow-collect/lib.cg": "5bc25340be65dff0eca0bba53fbf98dc46ec1ed061bc76381e5ef71848faf4c0"
+  },
+  "note": "Initial --package argv was invalid for cgx2 CLI; retained as invocation failures. Correct positional package reruns follow."
+}

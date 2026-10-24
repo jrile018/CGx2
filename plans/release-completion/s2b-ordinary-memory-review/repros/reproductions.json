@@ -1,0 +1,85 @@
+{
+  "worker_commit": "a3b98d7374de8aea90a610a73c99b04deb8857a1",
+  "binary_sha256": "b96eeec69eeb615d7ba5933cfdc696ff329e6066cca859409ee25ecbffa35353",
+  "observations": [
+    {
+      "name": "user-err-region-escape",
+      "op": "check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/verification-final-7/frozen/cgx2",
+        "check",
+        "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/repros/user-err-region-escape.cg"
+      ],
+      "source_sha256": "d929db1715a29b68d4d6beafacbb179d81432ac3bb6a2f4dd1f3a7a174f96e51",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "user-err-region-escape",
+      "op": "run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/verification-final-7/frozen/cgx2",
+        "run",
+        "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/repros/user-err-region-escape.cg"
+      ],
+      "source_sha256": "d929db1715a29b68d4d6beafacbb179d81432ac3bb6a2f4dd1f3a7a174f96e51",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGX2_MEMORY_EVIDENCE {\"schema_version\":1,\"allocations\":2,\"roots_registered\":6,\"roots_released\":6,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":1,\"graph_writes\":2,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":1056,\"behavioral_effects\":[\"ManagedAlloc\"],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":0,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}},{\"region_id\":{\"session\":1,\"index\":1},\"is_open\":false,\"mode\":\"manual\",\"trigger_bytes\":null,\"limit_bytes\":4096,\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":320,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":320,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\nCGR091: /home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/repros/user-err-region-escape.cg:574..580: named region result escaped its scope\n"
+    },
+    {
+      "name": "outer-root-assignment",
+      "op": "check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/verification-final-7/frozen/cgx2",
+        "check",
+        "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/repros/outer-root-assignment.cg"
+      ],
+      "source_sha256": "3ae14d4cbfd538a3ea8ca417563bce6d24e900d5a35504fef47efc8d9ed5dfb6",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "outer-root-assignment",
+      "op": "run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/verification-final-7/frozen/cgx2",
+        "run",
+        "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/repros/outer-root-assignment.cg"
+      ],
+      "source_sha256": "3ae14d4cbfd538a3ea8ca417563bce6d24e900d5a35504fef47efc8d9ed5dfb6",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGX2_MEMORY_EVIDENCE {\"schema_version\":1,\"allocations\":2,\"roots_registered\":2,\"roots_released\":2,\"cleanup_failures\":0,\"recovered\":0,\"guard_entries\":0,\"guard_exits\":0,\"guard_entry_failures\":0,\"graph_reads\":0,\"graph_writes\":2,\"baseline_roots\":0,\"final_roots\":0,\"charged_bytes\":644,\"behavioral_effects\":[\"ManagedAlloc\", \"Mutate\"],\"capabilities\":[],\"memory_effects_v1\":{\"may_allocate_managed\":true,\"may_auto_collect_at_allocation\":true,\"may_explicitly_collect\":false,\"may_allocate_root_bookkeeping\":true},\"memory\":{\"schema_version\":1,\"regions\":[{\"region_id\":{\"session\":1,\"index\":0},\"is_open\":true,\"mode\":\"auto\",\"trigger_bytes\":1048576,\"limit_bytes\":67108864,\"committed_bytes\":388,\"live_bytes\":388,\"peak_bytes\":388,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}},{\"region_id\":{\"session\":1,\"index\":1},\"is_open\":false,\"mode\":\"manual\",\"trigger_bytes\":null,\"limit_bytes\":4096,\"committed_bytes\":0,\"live_bytes\":0,\"peak_bytes\":0,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0,\"pause\":{\"sample_count\":0,\"total_ns\":0,\"min_ns\":0,\"max_ns\":0,\"buckets\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}],\"totals\":{\"committed_bytes\":388,\"live_bytes\":388,\"peak_bytes\":388,\"allocation_failures\":0,\"collection_count\":0,\"total_collected_bytes\":0}}}\nCGR091: /home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/repros/outer-root-assignment.cg:0..250: managed memory invariant: NotRooted\n"
+    },
+    {
+      "name": "legacy-guard-panic",
+      "op": "check",
+      "command": [
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/verification-final-7/frozen/cgx2",
+        "check",
+        "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/repros/legacy-guard-panic.cg"
+      ],
+      "source_sha256": "40582a9cd0e65f295c1573c3b03e077618d8913a682e9f9cf989ac7c346f837f",
+      "exit": 101,
+      "stdout": "",
+      "stderr": "\nthread 'main' (7) panicked at crates/cgx2-sema/src/ordinary_memory/effects.rs:93:33:\nindex out of bounds: the len is 10 but the index is 1024\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "name": "legacy-guard-panic",
+      "op": "run",
+      "command": [
+        "/home/john-riley/.codex/worktrees/4836/lang/target/tmp-ordinary-memory/verification-final-7/frozen/cgx2",
+        "run",
+        "/home/john-riley/projects/lang/target/ordinary-memory-review-20261024/a3b98d7/repros/legacy-guard-panic.cg"
+      ],
+      "source_sha256": "40582a9cd0e65f295c1573c3b03e077618d8913a682e9f9cf989ac7c346f837f",
+      "exit": 101,
+      "stdout": "",
+      "stderr": "\nthread 'main' (8) panicked at crates/cgx2-sema/src/ordinary_memory/effects.rs:93:33:\nindex out of bounds: the len is 10 but the index is 1024\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    }
+  ],
+  "acceptance": false
+}
