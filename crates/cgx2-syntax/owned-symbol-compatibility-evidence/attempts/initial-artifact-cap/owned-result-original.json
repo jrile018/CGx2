@@ -1,0 +1,97 @@
+{
+  "schema_version": 2,
+  "checkpoint_complete": false,
+  "release_complete": false,
+  "scope": "recoverable owned Result and bounded no_gc",
+  "commands": [
+    {
+      "label": "pinned-rustc",
+      "command": [
+        "rustup",
+        "which",
+        "rustc"
+      ],
+      "exit": 0,
+      "stdout": "/home/john-riley/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/bin/rustc\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "label": "standalone-runtime",
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/owned-result-jwmfczdc/rustc-bounded-linker",
+        "--edition=2021",
+        "--crate-name",
+        "cgx2_runtime",
+        "--crate-type",
+        "rlib",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/owned-result-jwmfczdc/runtime/lib.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/owned-result-jwmfczdc/libcgx2_runtime.rlib"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    }
+  ],
+  "fixture_sha256": {
+    "after-arm.cg": "946c55a9e39e175ccf13b9f911c51ddaf80c814fc80f731e9f654cac522c29fb",
+    "argument-failure.cg": "552418d46575489aabdefda92741d69e70cc3a6ca873ce1b596ca211b62e9273",
+    "arm-failure.cg": "e1b73d8b1e6d366e41d005ea477ca508ae25840f9015c96ac3d8d26c7ca79975",
+    "bool-budget.cg": "3adb9b28d8fd7cd69d665552ea00b887ceec9c2111f430e69aef323356ea4ead",
+    "conditional-move.cg": "889c05613e70cbe1094f4d380be94bd987bdf7e992238f2fbbd5fe8c37d99f31",
+    "constructor-order.cg": "4c0422c7f3d5735016a9ec35144bdcd5631f99fc2d3f3a0b59d887f777ccb196",
+    "constructor.cg": "ed852aaaa596e77ef836011e01c6f7306a043920c9b99e4159991ed58435a451",
+    "copied-error.cg": "c35c1cc3278119733c1a155fa7cf97d6f8ece3c46467135c55ff34aaf24cb68f",
+    "cumulative.cg": "fdbd7ab6da286fe35173ac1fe7627335da36a00fc98ae1a89e3f8e2fbf27cf0c",
+    "dynamic-budget.cg": "8571b3ff28efe8c7f3dbd073efffa1d9527e1fe14e666012a5e2897f27cc9c39",
+    "err-sees-ok.cg": "6b8111574200b89772f7cac399f90f9dce621636180d51b45e63808ac55642d4",
+    "exact.cg": "d144c84456555bebd9eecbe90a46503b68b9209b393ce0b1c8a376c97f1bcd9c",
+    "guard-0.cg": "bd50a5100fcd8ca74d3a1e706b75884ff9a3f69647357b2f5d0773d3e31309b6",
+    "guard-31.cg": "387ec645fe203fce17703aadeff9bbef9c58e12e8eca796b985ca7a312ebaab5",
+    "guard-32.cg": "c32c6fbb4adea4f5354886b7ace04ecc8f62dd1a6f67ea40444408082205ce22",
+    "host-recovery.cg": "d144c84456555bebd9eecbe90a46503b68b9209b393ce0b1c8a376c97f1bcd9c",
+    "loan-to-result.cg": "4d47f586aae1eecceab10a5279281b602f5184951617c6a6ee9c6af9ed885916",
+    "match-twice.cg": "8a2e288a1036f27a043e226ba325c6f4cc334b1c0e7e6cf932556484a0a3a7c0",
+    "max-nesting.cg": "a92b5a17b61f2493262a98517c85264c9e085df6a64ed7c1564231debf704829",
+    "mixed.cg": "0cf4dd23e63b88d0b1ca3208d12308100d476f6adcb5afa59d097f56b86a40a4",
+    "negative-budget.cg": "fce5fe5739299ba699760113d1299aea58509ed6303ef55e5bf7d7717e92a9e6",
+    "nested-71.cg": "f3a199af582bd72b519f094ff573967ea9beec1603e945eac2afd6925505e6ed",
+    "nested-72.cg": "be92ac5ceb1b76506a2b7561899f51257552e34418717054edf7755d7691aeef",
+    "nonexhaustive-error.cg": "7c1bb78d8f2f428b2cbf8c3449d11f38331307b2583ff2f8470485109c782377",
+    "nonexhaustive-result.cg": "df840f945e9a131ab80049a31bc86b2d3d85231ea21b581acb75727598ef25a9",
+    "one-under.cg": "6237f9f994a826c33e7c643359e7572e9607c7bbb1e7623818a040cdc0780a04",
+    "ordinary-symbol.cg": "1ebed98ca3296d5405abba4842d54a68894e5fb523f33f5c46f5388dfa26eea8",
+    "over-nesting.cg": "d5b047c11a13056cbe0fcd9e45d1e86d336bf5bc412b4d456ace3e360f366a4a",
+    "overflow-budget.cg": "b7a7c70a9c1e8e15ce1ad6c7f554769355e38be1a7a40d9dff713dcda1a652f5",
+    "payload-twice.cg": "6585e24df00b95ce6a5161ed62216dc8b454d70c2a1c184a178c326260399b82",
+    "prior.cg": "bf83cb1313397065cde304e3a3765984f5f7fb2abe15a7d31ba754b245341594",
+    "reborrow.cg": "1d59dcaeedb9688c662341db5df49061f2aa9c8e7a62465fec17e93e1378ced7",
+    "recover.cg": "e72b7b558bf5f41d5ebf266726d386c35b5fe5c312f4d601addd93bf5e8a8fd8",
+    "shadow-builtin.cg": "ecf093780ce97109549849081e2bd69241fbf2a527cbb8cde7c62b2b550917e4",
+    "success.cg": "664ea6223c82bc3e3d9e8d37cd523f01089add12e9e749b4c6d8b60ee1afb168",
+    "sum-twice.cg": "b0b725573c566f0875e085e81584d2c171e2b2ec4683e0b3b7e26024fb605868",
+    "tail-match-ok.cg": "34d01c1aa0697a6885320231d74ac3c79c76ef3c0057170d79e6df95f04f6f60",
+    "tail-match.cg": "a6d5ecadbd16166e90f0a8c2531d5419494635c081fcdc2061d7c5b290852ee3",
+    "wrong-call.cg": "10ca10c4c5ad48225c13a403f3de5cc7ac8e58138c74f36f57dfb354d88a032c",
+    "wrong-pattern.cg": "74f52ce2308ab3ca63d8de5b9b1d382b9a7c81a17ac3f6e127a6d2fe9075f1f3"
+  },
+  "compiler": {
+    "path": "/home/john-riley/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/bin/rustc",
+    "linker_threads": 2
+  },
+  "runtime_inventory_sha256": {
+    "lib.rs": "1002a5bc1b347ac383ff903d7ea1f79fca3f55284f2af1f6d0ea8f195720c9c6",
+    "budget.rs": "7bd562dae680c6102598a68d139042fba758ae3b3cb8c0d937778c0f0f13e0e4",
+    "heap.rs": "f167f13b46866d9999aa3c8f4329f3a7ad5e59e534d9f5b7b789208296351a8f",
+    "graph.rs": "325444702e5ac590fd07c57c9ca66ec8dcea2ed9ab05477dcd3d0cd1b11b181a",
+    "scope.rs": "bee9e5fc5b2dece62914b1623c7317e4c3a2bbcd4a51375ee08e5640bff62764",
+    "fault.rs": "bc4652355ca094d8e1daca99b76d38e194c35fcc852c25b071593a4dbe9dc252",
+    "owned.rs": "08b8c47b10ff55c9174467c623127136f034e314f8b5f2d49010e9c21547c197",
+    "region.rs": "50362a5df6c4469bfb5f03e9a93a3a351853a97d6fc505a322ce6bc5bb9f6077",
+    "report.rs": "4569e7848983a5179c60abdb4cd779f3707512eaae5e614214a50cf8d39ba9aa"
+  },
+  "passed": 2,
+  "failed": 0
+}

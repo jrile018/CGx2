@@ -1,0 +1,7 @@
+record try_owned:
+    x: i64
+fn copy(value: try_owned) -> try_owned:
+    value
+fn main() -> i64:
+    let p = owned(copy(try_owned(x: 42)))
+    p.x

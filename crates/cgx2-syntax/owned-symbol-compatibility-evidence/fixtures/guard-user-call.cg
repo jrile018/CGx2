@@ -1,0 +1,8 @@
+record Result:
+    x: i64
+fn try_owned(value: Result) -> Result:
+    value
+fn main() -> i64:
+    no_gc(budget: 40):
+        let p = owned(try_owned(Result(x: 42)))
+        return p.x

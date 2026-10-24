@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "repair_base": "3e5be4d4907debad1ae5fa8bdc836208255ddb4d",
+  "authoritative_results": {
+    "compatibility_product": {
+      "passed": 195,
+      "failed": 0,
+      "fixtures": 12,
+      "report": "evidence/compatibility-product-rerun.json"
+    },
+    "owned_result": {
+      "original_check_count": 584,
+      "unchanged_runner_exit": 1,
+      "reason": "shadow-builtin:reject now correctly exits 0 for an old valid parameter; historical evidence unchanged",
+      "explicitly_superseded_rejections": 9,
+      "replayed_passed": 575,
+      "replayed_failed": 0,
+      "report": "evidence/owned-result-replay-rerun.json",
+      "command_record": "evidence/owned-result-replay-rerun-command.json"
+    },
+    "ordinary_owned": {
+      "passed": 256,
+      "failed": 0,
+      "report": "evidence/ordinary-product.json"
+    },
+    "foundation": {
+      "source": 159,
+      "semantic": 278,
+      "specialization": 207,
+      "visibility": 118,
+      "binders": 88,
+      "output": 31,
+      "emitters": 104
+    },
+    "legacy": {
+      "graph": 99,
+      "native_guards": 518,
+      "report_layouts": 265
+    },
+    "workspace": {
+      "passed": 1237,
+      "failed": 0,
+      "ignored": 6,
+      "suites": 266,
+      "report": "evidence/workspace-host-rerun/verification.json"
+    },
+    "clippy": "passed: workspace all targets/all features offline locked, -D warnings",
+    "fmt": "passed",
+    "diff": "passed"
+  },
+  "attempts": [
+    "attempts/initial-artifact-cap: initial 8 MiB inherited file cap truncated compiler rlibs (SIGXFSZ); missing-binary follow-on failures are consequences, not compiler regressions. Corrected to 512 MiB artifact hard cap with live sampled 8 MiB log / 1 MiB descendant output monitoring.",
+    "attempts/plain-foundation-reservation: initial plain copied fixture declared reserved foundation nominal Result and was not a prior valid copied program. Replaced with existing valid user try_owned fixture; no foundation semantics changed.",
+    "evidence/verification.json preserves initial product failure, adapter indentation failure and sandbox workspace run (1203 passed, 34 permission failures, six ignored). Corrected product/adapter reruns and permitted host workspace rerun above are authoritative.",
+    "Initial adapter text estimated 11 shadow checks; actual original loop contains nine. No original fixture, expectation or runner changed."
+  ],
+  "generated_artifacts": "Specialization/visibility outputs moved into private target/tmp-owned-symbol-compatibility/first-run-artifacts. Only report JSON and exact artifact hashes exported; no binaries committed.",
+  "dependency_reconciliation": "none; offline --locked builds pass; root Cargo.toml and Cargo.lock unchanged",
+  "unchanged_historical_runner_sha256": "ef91a3bb207110d774d3c850d5e417f31df36aa4fb666e30f4fb96d2ce69005e",
+  "root_lock_sha256": "ea7678242cb40c8425c2b9875215f7024071c684cab59399d1d8a74a96750e3a",
+  "open_gates": [
+    "full ordinary memory",
+    "R01-R15",
+    "S3/S4",
+    "external leak-enabled acceptance",
+    "independent safety audit",
+    "performance and human/model studies"
+  ],
+  "release_complete": false
+}

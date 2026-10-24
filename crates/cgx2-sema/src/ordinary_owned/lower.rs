@@ -11,14 +11,7 @@ fn err(message: impl Into<String>, span: s::Span) -> TypeDiagnostic {
 fn reserved(n: &str) -> bool {
     matches!(
         n,
-        "owned"
-            | "shared"
-            | "exclusive"
-            | "try_owned"
-            | "AllocationError"
-            | "Result"
-            | "borrow"
-            | "borrow_mut"
+        "owned" | "shared" | "exclusive" | "borrow" | "borrow_mut"
     )
 }
 fn name(n: &str, at: s::Span) -> Check<()> {
@@ -36,6 +29,14 @@ fn name(n: &str, at: s::Span) -> Check<()> {
 }
 fn ty(t: &s::TypeSyntax, layouts: &[Layout]) -> Check<Ty> {
     let n = t.path.segments.join(".");
+    // Bare nominal names keep their schema-1 meaning. Only the parameterized
+    // Result spelling selects the additive builtin; AllocationError is a
+    // builtin type only when no local record resolves that name.
+    if t.arguments.is_empty() && matches!(n.as_str(), "Result" | "AllocationError") {
+        if let Some(layout) = layouts.iter().position(|l| l.name == n) {
+            return Ok(Ty::Record(layout));
+        }
+    }
     if n == "Result" {
         if t.arguments.len() != 2 || ty(&t.arguments[1], layouts)? != Ty::AllocationError {
             return Err(err(
@@ -152,13 +153,17 @@ pub(super) fn lower(module: &s::Module, source: &str) -> Check<Lowered> {
     }
     // New source expansion bounds apply only to the additive profile. Schema-1
     // copied-only bodies retain their prior source/runtime bounds.
-    fn conditional_type(t: &s::TypeSyntax) -> bool {
-        (t.path.segments == ["Result"] || t.path.segments == ["AllocationError"])
-            || t.arguments.iter().any(conditional_type)
+    fn conditional_type(t: &s::TypeSyntax, module: &s::Module) -> bool {
+        (t.path.segments == ["Result"] && !t.arguments.is_empty())
+            || (t.path.segments == ["AllocationError"]
+                && !module.records.iter().any(|r| r.name == "AllocationError"))
+            || t.arguments.iter().any(|t| conditional_type(t, module))
     }
     let new_profile = std::cell::Cell::new(module.functions.iter().any(|f| {
-        f.parameters.iter().any(|p| conditional_type(&p.ty))
-            || f.return_type.as_ref().is_some_and(conditional_type)
+        f.parameters.iter().any(|p| conditional_type(&p.ty, module))
+            || f.return_type
+                .as_ref()
+                .is_some_and(|t| conditional_type(t, module))
     }));
     let mut nodes = 0usize;
     let mut expressions = 0usize;
@@ -170,10 +175,21 @@ pub(super) fn lower(module: &s::Module, source: &str) -> Check<Lowered> {
                 if matches!(stmt.kind, S::NoGc { .. }) {
                     new_profile.set(true);
                 }
+                if let S::Let {
+                    annotation: Some(t),
+                    ..
+                } = &stmt.kind
+                {
+                    if conditional_type(t, module) {
+                        new_profile.set(true);
+                    }
+                }
             },
             &mut |expr| {
                 expressions = expressions.saturating_add(1);
                 if matches!(&expr.kind, E::Call {callee, ..} if matches!(&callee.kind, E::Name(p) if p.segments == ["try_owned"]))
+                    && !module.functions.iter().any(|f| f.name == "try_owned")
+                    && !module.records.iter().any(|r| r.name == "try_owned")
                 {
                     new_profile.set(true);
                 }
@@ -776,7 +792,10 @@ impl<'a> Lower<'a> {
         if n.starts_with("Result.") || n.starts_with("AllocationError.") {
             return Err(err("direct Result/AllocationError constructors are excluded; propagate try_owned results", at));
         }
-        if matches!(n, "owned" | "try_owned" | "borrow" | "borrow_mut") {
+        if matches!(n, "owned" | "try_owned" | "borrow" | "borrow_mut")
+            && !(n == "try_owned"
+                && (self.functions.contains_key(n) || self.layouts.iter().any(|l| l.name == n)))
+        {
             if args.len() != 1 || args[0].name.is_some() {
                 return Err(err("ownership intrinsic requires one positional value", at));
             }

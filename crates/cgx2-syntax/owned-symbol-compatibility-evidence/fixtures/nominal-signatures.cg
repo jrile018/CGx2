@@ -1,0 +1,13 @@
+record Result:
+    x: i64
+record AllocationError:
+    x: i64
+fn result(value: Result) -> Result:
+    value
+fn error(value: AllocationError) -> AllocationError:
+    value
+fn main() -> i64:
+    let Result: Result = result(Result(x: 20))
+    let AllocationError: AllocationError = error(AllocationError(x: 22))
+    let try_owned = owned(Result)
+    try_owned.x + AllocationError.x

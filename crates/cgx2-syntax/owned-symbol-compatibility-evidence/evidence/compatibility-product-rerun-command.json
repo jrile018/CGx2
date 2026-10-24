@@ -1,0 +1,20 @@
+{
+  "command": [
+    "python3",
+    "crates/cgx2-syntax/owned-symbol-compatibility-evidence/run.py",
+    "--binary-dir",
+    "target/release-owned-symbol-compatibility/debug",
+    "--output",
+    "crates/cgx2-syntax/owned-symbol-compatibility-evidence/evidence/compatibility-product-rerun.json"
+  ],
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "$PWD/target/release-owned-symbol-compatibility",
+    "TMPDIR": "$PWD/target/tmp-owned-symbol-compatibility",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "exit": 0,
+  "stdout": "symbol compatibility: 195 passed, 0 failed\n",
+  "recorded_from_tool_session": 53055
+}

@@ -1,0 +1,1792 @@
+{
+  "schema_version": 1,
+  "checks": [
+    {
+      "command": [
+        "rustup",
+        "which",
+        "rustc"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "0.log",
+      "log_sha256": "66af87d7f5dc56db4094d4257d2ebfd67b77bb8e36e37ef58d69a87d2016117c",
+      "duration_seconds": 0.051,
+      "label": "pinned-rustc",
+      "output": "/home/john-riley/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/bin/rustc\n",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker",
+        "--edition=2021",
+        "--crate-name",
+        "cgx2_runtime",
+        "--crate-type",
+        "rlib",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/runtime/lib.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/libcgx2_runtime.rlib"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "1.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.152,
+      "label": "standalone-runtime",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/fields-parameters.cg"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "2.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.051,
+      "label": "fields-parameters:check",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/fields-parameters.cg"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "3.log",
+      "log_sha256": "8155c0b8bd576c61d4971374d6c7ed9bf2f4acce4fc9a411cfe36d98db7c554d",
+      "duration_seconds": 0.051,
+      "label": "fields-parameters:interpreter",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":24,\"released_bytes\":24,\"peak_live_bytes\":24,\"reads\":3,\"writes\":3}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "fields-parameters:value",
+      "passed": true
+    },
+    {
+      "label": "fields-parameters:cleanup",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/fields-parameters.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/fields-parameters-False",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "6.log",
+      "log_sha256": "8ed978bcfcaafaae5098366217b19ee26b76eec1158df1dd104dfb188c8b9370",
+      "duration_seconds": 0.252,
+      "label": "fields-parameters-False:build",
+      "output": "cgx2c build metadata: source_sha256=438953fd02df38c36686e5eac3eb4199bb3a27e32eb066a8199ea695bce41be5 rustc=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/fields-parameters-False\n",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/fields-parameters-False"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "7.log",
+      "log_sha256": "8155c0b8bd576c61d4971374d6c7ed9bf2f4acce4fc9a411cfe36d98db7c554d",
+      "duration_seconds": 0.051,
+      "label": "fields-parameters-False:run",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":24,\"released_bytes\":24,\"peak_live_bytes\":24,\"reads\":3,\"writes\":3}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "fields-parameters-False:parity",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/fields-parameters.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/fields-parameters-True",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker",
+        "--release"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "9.log",
+      "log_sha256": "a15b59275b24e363b93bf84ed6c3c8a82416e0255892681ef563d6124e824503",
+      "duration_seconds": 0.655,
+      "label": "fields-parameters-True:build",
+      "output": "cgx2c build metadata: source_sha256=438953fd02df38c36686e5eac3eb4199bb3a27e32eb066a8199ea695bce41be5 rustc=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/fields-parameters-True\n",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/fields-parameters-True"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "10.log",
+      "log_sha256": "8155c0b8bd576c61d4971374d6c7ed9bf2f4acce4fc9a411cfe36d98db7c554d",
+      "duration_seconds": 0.051,
+      "label": "fields-parameters-True:run",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":24,\"released_bytes\":24,\"peak_live_bytes\":24,\"reads\":3,\"writes\":3}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "fields-parameters-True:parity",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/fields-parameters.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/fields-parameters.rs"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "12.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.051,
+      "label": "fields-parameters:emit-rust",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/fields-parameters.rs",
+        "--edition=2024",
+        "--extern",
+        "cgx2_runtime=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/libcgx2_runtime.rlib",
+        "-o",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/fields-parameters-standalone"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "13.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.152,
+      "label": "fields-parameters:standalone-compile",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/fields-parameters-standalone"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "14.log",
+      "log_sha256": "8155c0b8bd576c61d4971374d6c7ed9bf2f4acce4fc9a411cfe36d98db7c554d",
+      "duration_seconds": 0.051,
+      "label": "fields-parameters:standalone-run",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":24,\"released_bytes\":24,\"peak_live_bytes\":24,\"reads\":3,\"writes\":3}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "fields-parameters:standalone-parity",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/fields-parameters.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/fields-parameters.py",
+        "--force"
+      ],
+      "exit": 1,
+      "limit": null,
+      "log": "16.log",
+      "log_sha256": "8adf519ab097c5f1bd70c79d37604e5aa2e11e623fc612c45185944212b8a43f",
+      "duration_seconds": 0.051,
+      "label": "fields-parameters:python-reject",
+      "output": "CGE006: /home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/fields-parameters.cg:207..262: ordinary owned storage and loans are outside the Python target\n",
+      "passed": true
+    },
+    {
+      "label": "fields-parameters:python-preserved",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/function-AllocationError.cg"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "18.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.051,
+      "label": "function-AllocationError:check",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/function-AllocationError.cg"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "19.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "function-AllocationError:interpreter",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "function-AllocationError:value",
+      "passed": true
+    },
+    {
+      "label": "function-AllocationError:cleanup",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/function-AllocationError.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/function-AllocationError-False",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "22.log",
+      "log_sha256": "e0b319dc9bb1101d5e4b3816e06de9b1aa8c05b27c5251477d7432bf2bce2c43",
+      "duration_seconds": 0.252,
+      "label": "function-AllocationError-False:build",
+      "output": "cgx2c build metadata: source_sha256=c67c53faa0cfc6aea2e3ed5a39688a786d81fe62ff00faa10b066a28daf185f9 rustc=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/function-AllocationError-False\n",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/function-AllocationError-False"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "23.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "function-AllocationError-False:run",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "function-AllocationError-False:parity",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/function-AllocationError.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/function-AllocationError-True",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker",
+        "--release"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "25.log",
+      "log_sha256": "ec8d57cafc373da68bd78d8dc4765efc30a4829449033ab407dea3852ad57e38",
+      "duration_seconds": 0.655,
+      "label": "function-AllocationError-True:build",
+      "output": "cgx2c build metadata: source_sha256=c67c53faa0cfc6aea2e3ed5a39688a786d81fe62ff00faa10b066a28daf185f9 rustc=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/function-AllocationError-True\n",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/function-AllocationError-True"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "26.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "function-AllocationError-True:run",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "function-AllocationError-True:parity",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/function-AllocationError.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/function-AllocationError.rs"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "28.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.051,
+      "label": "function-AllocationError:emit-rust",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/function-AllocationError.rs",
+        "--edition=2024",
+        "--extern",
+        "cgx2_runtime=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/libcgx2_runtime.rlib",
+        "-o",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/function-AllocationError-standalone"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "29.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.152,
+      "label": "function-AllocationError:standalone-compile",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/function-AllocationError-standalone"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "30.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "function-AllocationError:standalone-run",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "function-AllocationError:standalone-parity",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/function-AllocationError.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/function-AllocationError.py",
+        "--force"
+      ],
+      "exit": 1,
+      "limit": null,
+      "log": "32.log",
+      "log_sha256": "793eab2c522cc2510080de94d18cb7306868805c237c460b8e3b589656cea0de",
+      "duration_seconds": 0.051,
+      "label": "function-AllocationError:python-reject",
+      "output": "CGE006: /home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/function-AllocationError.cg:106..121: ordinary owned storage and loans are outside the Python target\n",
+      "passed": true
+    },
+    {
+      "label": "function-AllocationError:python-preserved",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/function-Result.cg"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "34.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.051,
+      "label": "function-Result:check",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/function-Result.cg"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "35.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "function-Result:interpreter",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "function-Result:value",
+      "passed": true
+    },
+    {
+      "label": "function-Result:cleanup",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/function-Result.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/function-Result-False",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "38.log",
+      "log_sha256": "31cc8e858fcf5e8e43f6f1efaceab0a9dd8f41b26aa899b5477829821a9e7839",
+      "duration_seconds": 0.252,
+      "label": "function-Result-False:build",
+      "output": "cgx2c build metadata: source_sha256=c01c4f7a2f7f7f2b9b1df84f7f9ef57857e326faff3d24a8d0ef1831dac9ee9b rustc=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/function-Result-False\n",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/function-Result-False"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "39.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "function-Result-False:run",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "function-Result-False:parity",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/function-Result.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/function-Result-True",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker",
+        "--release"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "41.log",
+      "log_sha256": "ea3ca8f146d3f1c28b31ae7a242fef10cd6649d5c728136f5b3616a7655f17ee",
+      "duration_seconds": 0.654,
+      "label": "function-Result-True:build",
+      "output": "cgx2c build metadata: source_sha256=c01c4f7a2f7f7f2b9b1df84f7f9ef57857e326faff3d24a8d0ef1831dac9ee9b rustc=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/function-Result-True\n",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/function-Result-True"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "42.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "function-Result-True:run",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "function-Result-True:parity",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/function-Result.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/function-Result.rs"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "44.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.051,
+      "label": "function-Result:emit-rust",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/function-Result.rs",
+        "--edition=2024",
+        "--extern",
+        "cgx2_runtime=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/libcgx2_runtime.rlib",
+        "-o",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/function-Result-standalone"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "45.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.152,
+      "label": "function-Result:standalone-compile",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/function-Result-standalone"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "46.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "function-Result:standalone-run",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "function-Result:standalone-parity",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/function-Result.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/function-Result.py",
+        "--force"
+      ],
+      "exit": 1,
+      "limit": null,
+      "log": "48.log",
+      "log_sha256": "d1ccd02d923b4eb001cfe382c1077ed00fdbd6def738c5bff92e961cd6d285ae",
+      "duration_seconds": 0.051,
+      "label": "function-Result:python-reject",
+      "output": "CGE006: /home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/function-Result.cg:115..130: ordinary owned storage and loans are outside the Python target\n",
+      "passed": true
+    },
+    {
+      "label": "function-Result:python-preserved",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/guard-user-call.cg"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "50.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.051,
+      "label": "guard-user-call:check",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/guard-user-call.cg"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "51.log",
+      "log_sha256": "49b8f0b5af8445aa1ab4323b5a0605ab44f229528843ec2af9a6bfe947df17ef",
+      "duration_seconds": 0.051,
+      "label": "guard-user-call:interpreter",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":2,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1,\"result_ok\":0,\"result_err\":0,\"allocation_failures\":0,\"guard_entries\":1,\"guard_exits\":1,\"guard_failures\":0,\"charged_bytes\":56,\"owned_charged_bytes\":40,\"guard_charged_bytes\":16,\"collection_count\":0,\"active_guards_at_exit\":0}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "guard-user-call:value",
+      "passed": true
+    },
+    {
+      "label": "guard-user-call:cleanup",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/guard-user-call.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/guard-user-call-False",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "54.log",
+      "log_sha256": "5a8a6c620251ce7fe41cda6268089bf0db7170a3fe913a21dd489cdfb4fe9eed",
+      "duration_seconds": 0.252,
+      "label": "guard-user-call-False:build",
+      "output": "cgx2c build metadata: source_sha256=967e77e4d3bc21264d1ecca3747fc23fcf196d2c4e7df30eb3d3fca596f802c6 rustc=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/guard-user-call-False\n",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/guard-user-call-False"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "55.log",
+      "log_sha256": "49b8f0b5af8445aa1ab4323b5a0605ab44f229528843ec2af9a6bfe947df17ef",
+      "duration_seconds": 0.051,
+      "label": "guard-user-call-False:run",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":2,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1,\"result_ok\":0,\"result_err\":0,\"allocation_failures\":0,\"guard_entries\":1,\"guard_exits\":1,\"guard_failures\":0,\"charged_bytes\":56,\"owned_charged_bytes\":40,\"guard_charged_bytes\":16,\"collection_count\":0,\"active_guards_at_exit\":0}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "guard-user-call-False:parity",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/guard-user-call.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/guard-user-call-True",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker",
+        "--release"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "57.log",
+      "log_sha256": "b014028b819bff1cdc0457152b1ea49020d3e7f5c823ae664dc3688feda99f7c",
+      "duration_seconds": 0.654,
+      "label": "guard-user-call-True:build",
+      "output": "cgx2c build metadata: source_sha256=967e77e4d3bc21264d1ecca3747fc23fcf196d2c4e7df30eb3d3fca596f802c6 rustc=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/guard-user-call-True\n",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/guard-user-call-True"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "58.log",
+      "log_sha256": "49b8f0b5af8445aa1ab4323b5a0605ab44f229528843ec2af9a6bfe947df17ef",
+      "duration_seconds": 0.051,
+      "label": "guard-user-call-True:run",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":2,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1,\"result_ok\":0,\"result_err\":0,\"allocation_failures\":0,\"guard_entries\":1,\"guard_exits\":1,\"guard_failures\":0,\"charged_bytes\":56,\"owned_charged_bytes\":40,\"guard_charged_bytes\":16,\"collection_count\":0,\"active_guards_at_exit\":0}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "guard-user-call-True:parity",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/guard-user-call.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/guard-user-call.rs"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "60.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.051,
+      "label": "guard-user-call:emit-rust",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/guard-user-call.rs",
+        "--edition=2024",
+        "--extern",
+        "cgx2_runtime=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/libcgx2_runtime.rlib",
+        "-o",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/guard-user-call-standalone"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "61.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.152,
+      "label": "guard-user-call:standalone-compile",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/guard-user-call-standalone"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "62.log",
+      "log_sha256": "49b8f0b5af8445aa1ab4323b5a0605ab44f229528843ec2af9a6bfe947df17ef",
+      "duration_seconds": 0.051,
+      "label": "guard-user-call:standalone-run",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":2,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1,\"result_ok\":0,\"result_err\":0,\"allocation_failures\":0,\"guard_entries\":1,\"guard_exits\":1,\"guard_failures\":0,\"charged_bytes\":56,\"owned_charged_bytes\":40,\"guard_charged_bytes\":16,\"collection_count\":0,\"active_guards_at_exit\":0}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "guard-user-call:standalone-parity",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/guard-user-call.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/guard-user-call.py",
+        "--force"
+      ],
+      "exit": 1,
+      "limit": null,
+      "log": "64.log",
+      "log_sha256": "ed46165033160d286ce124e58d3cf53efb5f06821294fa34ca13ebe47f34e8eb",
+      "duration_seconds": 0.051,
+      "label": "guard-user-call:python-reject",
+      "output": "CGE006: /home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/guard-user-call.cg:132..163: ordinary owned storage and loans are outside the Python target\n",
+      "passed": true
+    },
+    {
+      "label": "guard-user-call:python-preserved",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/local-name.cg"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "66.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.051,
+      "label": "local-name:check",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/local-name.cg"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "67.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "local-name:interpreter",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "local-name:value",
+      "passed": true
+    },
+    {
+      "label": "local-name:cleanup",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/local-name.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/local-name-False",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "70.log",
+      "log_sha256": "c09defd59413580b3ac4b1decb81ebc0cd3215da504f0cea7bb3d5507174add3",
+      "duration_seconds": 0.252,
+      "label": "local-name-False:build",
+      "output": "cgx2c build metadata: source_sha256=8b1e0751a4e383d3561a460ca1ec9e4b7180883aa07ad407ede411323f0d9e6a rustc=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/local-name-False\n",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/local-name-False"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "71.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "local-name-False:run",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "local-name-False:parity",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/local-name.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/local-name-True",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker",
+        "--release"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "73.log",
+      "log_sha256": "92a21ccddc2bf6592a8f9acaca3ba66d908741de46ca836673fc0e18dd0281d8",
+      "duration_seconds": 0.655,
+      "label": "local-name-True:build",
+      "output": "cgx2c build metadata: source_sha256=8b1e0751a4e383d3561a460ca1ec9e4b7180883aa07ad407ede411323f0d9e6a rustc=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/local-name-True\n",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/local-name-True"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "74.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "local-name-True:run",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "local-name-True:parity",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/local-name.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/local-name.rs"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "76.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.051,
+      "label": "local-name:emit-rust",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/local-name.rs",
+        "--edition=2024",
+        "--extern",
+        "cgx2_runtime=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/libcgx2_runtime.rlib",
+        "-o",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/local-name-standalone"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "77.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.152,
+      "label": "local-name:standalone-compile",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/local-name-standalone"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "78.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "local-name:standalone-run",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "local-name:standalone-parity",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/local-name.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/local-name.py",
+        "--force"
+      ],
+      "exit": 1,
+      "limit": null,
+      "log": "80.log",
+      "log_sha256": "05e8d405344efc8d142f079cc414d40e69e2f0271cf13ae7aa24cf20c5a8ac29",
+      "duration_seconds": 0.051,
+      "label": "local-name:python-reject",
+      "output": "CGE006: /home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/local-name.cg:51..66: ordinary owned storage and loans are outside the Python target\n",
+      "passed": true
+    },
+    {
+      "label": "local-name:python-preserved",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-error.cg"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "82.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.051,
+      "label": "nominal-error:check",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-error.cg"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "83.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "nominal-error:interpreter",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-error:value",
+      "passed": true
+    },
+    {
+      "label": "nominal-error:cleanup",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-error.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-error-False",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "86.log",
+      "log_sha256": "4afef03b3f2f57dbdecbcd3b30a00391f07c0879793a0b0d992c1332d4a04c72",
+      "duration_seconds": 0.252,
+      "label": "nominal-error-False:build",
+      "output": "cgx2c build metadata: source_sha256=4b4bb924ce1fdf35862649376c89ba0cab9c255708ae119abc455983f1782ab0 rustc=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-error-False\n",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-error-False"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "87.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "nominal-error-False:run",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-error-False:parity",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-error.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-error-True",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker",
+        "--release"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "89.log",
+      "log_sha256": "12c4617600fdcbdeec7e440cc14e259424238b34e30b43910315801dedbb6899",
+      "duration_seconds": 0.654,
+      "label": "nominal-error-True:build",
+      "output": "cgx2c build metadata: source_sha256=4b4bb924ce1fdf35862649376c89ba0cab9c255708ae119abc455983f1782ab0 rustc=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-error-True\n",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-error-True"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "90.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "nominal-error-True:run",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-error-True:parity",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-error.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-error.rs"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "92.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.051,
+      "label": "nominal-error:emit-rust",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-error.rs",
+        "--edition=2024",
+        "--extern",
+        "cgx2_runtime=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/libcgx2_runtime.rlib",
+        "-o",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-error-standalone"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "93.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.152,
+      "label": "nominal-error:standalone-compile",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-error-standalone"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "94.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "nominal-error:standalone-run",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-error:standalone-parity",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-error.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-error.py",
+        "--force"
+      ],
+      "exit": 1,
+      "limit": null,
+      "log": "96.log",
+      "log_sha256": "bf3a8f088e496335d7bdf63c78c7db28d693f9ba8850431c8e808da6ae06c8eb",
+      "duration_seconds": 0.051,
+      "label": "nominal-error:python-reject",
+      "output": "CGE006: /home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-error.cg:65..94: ordinary owned storage and loans are outside the Python target\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-error:python-preserved",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-result.cg"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "98.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.051,
+      "label": "nominal-result:check",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-result.cg"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "99.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "nominal-result:interpreter",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-result:value",
+      "passed": true
+    },
+    {
+      "label": "nominal-result:cleanup",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-result.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-result-False",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "102.log",
+      "log_sha256": "8185d14597739fdb9c3786a241b9e9cffff4682c047c6779b5b666e37240e6f5",
+      "duration_seconds": 0.252,
+      "label": "nominal-result-False:build",
+      "output": "cgx2c build metadata: source_sha256=9c6746e3a355009e1ecaef683c444b9dbbd842fe88d52cbc86952de5e292db2e rustc=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-result-False\n",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-result-False"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "103.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "nominal-result-False:run",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-result-False:parity",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-result.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-result-True",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker",
+        "--release"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "105.log",
+      "log_sha256": "f471629e4451c6599bb02cd59a2fd1c31f30147c67a055399030e431552490ec",
+      "duration_seconds": 0.654,
+      "label": "nominal-result-True:build",
+      "output": "cgx2c build metadata: source_sha256=9c6746e3a355009e1ecaef683c444b9dbbd842fe88d52cbc86952de5e292db2e rustc=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-result-True\n",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-result-True"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "106.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "nominal-result-True:run",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-result-True:parity",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-result.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-result.rs"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "108.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.051,
+      "label": "nominal-result:emit-rust",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-result.rs",
+        "--edition=2024",
+        "--extern",
+        "cgx2_runtime=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/libcgx2_runtime.rlib",
+        "-o",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-result-standalone"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "109.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.152,
+      "label": "nominal-result:standalone-compile",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-result-standalone"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "110.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "nominal-result:standalone-run",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-result:standalone-parity",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-result.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-result.py",
+        "--force"
+      ],
+      "exit": 1,
+      "limit": null,
+      "log": "112.log",
+      "log_sha256": "643bf1cf1fad7b8137658aa1d6406795cccaa4a1ccbf56992233cdc33541d4b5",
+      "duration_seconds": 0.051,
+      "label": "nominal-result:python-reject",
+      "output": "CGE006: /home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-result.cg:56..76: ordinary owned storage and loans are outside the Python target\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-result:python-preserved",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-signatures.cg"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "114.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.051,
+      "label": "nominal-signatures:check",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-signatures.cg"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "115.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "nominal-signatures:interpreter",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-signatures:value",
+      "passed": true
+    },
+    {
+      "label": "nominal-signatures:cleanup",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-signatures.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-signatures-False",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "118.log",
+      "log_sha256": "2b3442963b7852974a294ddea4ec5a6efcb02d2d524ca9c27e388ed19cf485c6",
+      "duration_seconds": 0.355,
+      "label": "nominal-signatures-False:build",
+      "output": "cgx2c build metadata: source_sha256=7c6e8e846d528077901cd51137231a2b57e23f1939fb630ea4f1cdd2a2955a5b rustc=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-signatures-False\n",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-signatures-False"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "119.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "nominal-signatures-False:run",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-signatures-False:parity",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-signatures.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-signatures-True",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker",
+        "--release"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "121.log",
+      "log_sha256": "d0ec9d242fe24837503bf71f4ea391361bfb079edd050066849caada3a3914ef",
+      "duration_seconds": 0.655,
+      "label": "nominal-signatures-True:build",
+      "output": "cgx2c build metadata: source_sha256=7c6e8e846d528077901cd51137231a2b57e23f1939fb630ea4f1cdd2a2955a5b rustc=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-signatures-True\n",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-signatures-True"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "122.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "nominal-signatures-True:run",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-signatures-True:parity",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-signatures.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-signatures.rs"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "124.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.051,
+      "label": "nominal-signatures:emit-rust",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-signatures.rs",
+        "--edition=2024",
+        "--extern",
+        "cgx2_runtime=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/libcgx2_runtime.rlib",
+        "-o",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-signatures-standalone"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "125.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.152,
+      "label": "nominal-signatures:standalone-compile",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-signatures-standalone"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "126.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "nominal-signatures:standalone-run",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-signatures:standalone-parity",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-signatures.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-signatures.py",
+        "--force"
+      ],
+      "exit": 1,
+      "limit": null,
+      "log": "128.log",
+      "log_sha256": "777b4ce74689ef5859f84e177c6d740c3263ce1c4a5d9cdc91373a69f70826e7",
+      "duration_seconds": 0.051,
+      "label": "nominal-signatures:python-reject",
+      "output": "CGE006: /home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-signatures.cg:328..341: ordinary owned storage and loans are outside the Python target\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-signatures:python-preserved",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-try-owned.cg"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "130.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.051,
+      "label": "nominal-try-owned:check",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-try-owned.cg"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "131.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "nominal-try-owned:interpreter",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-try-owned:value",
+      "passed": true
+    },
+    {
+      "label": "nominal-try-owned:cleanup",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-try-owned.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-try-owned-False",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "134.log",
+      "log_sha256": "88a4b7cdcb643e0cbd5ee4e0b8ec919a9ac5e228a37c1490d5b97b479a0ad9e0",
+      "duration_seconds": 0.252,
+      "label": "nominal-try-owned-False:build",
+      "output": "cgx2c build metadata: source_sha256=67b04249faec8c063cc0eb458dc40f59838d2364a83aacb10fe300ef59d62103 rustc=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-try-owned-False\n",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-try-owned-False"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "135.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "nominal-try-owned-False:run",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-try-owned-False:parity",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-try-owned.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-try-owned-True",
+        "--rustc",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker",
+        "--release"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "137.log",
+      "log_sha256": "26f69bdbf8ff88801b72fdd2f51541cae36033f9a4ff709a386c3b27881f23dc",
+      "duration_seconds": 0.654,
+      "label": "nominal-try-owned-True:build",
+      "output": "cgx2c build metadata: source_sha256=67b04249faec8c063cc0eb458dc40f59838d2364a83aacb10fe300ef59d62103 rustc=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=release runtime_sha256=5a24111dda1ecb6ac3fa91e49adc180b1ad024dab1f7568f7f9349cc6190c910 output=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-try-owned-True\n",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-try-owned-True"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "138.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "nominal-try-owned-True:run",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-try-owned-True:parity",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-try-owned.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-try-owned.rs"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "140.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.051,
+      "label": "nominal-try-owned:emit-rust",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/rustc-bounded-linker",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-try-owned.rs",
+        "--edition=2024",
+        "--extern",
+        "cgx2_runtime=/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/libcgx2_runtime.rlib",
+        "-o",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-try-owned-standalone"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "141.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.152,
+      "label": "nominal-try-owned:standalone-compile",
+      "output": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-try-owned-standalone"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "142.log",
+      "log_sha256": "c7f67d8a3c33d5b08f1a39574fd05b83c46acdd2e4b9363088fa0e4472157433",
+      "duration_seconds": 0.051,
+      "label": "nominal-try-owned:standalone-run",
+      "output": "CGX2_OWNED_EVIDENCE {\"schema\":1,\"allocations\":1,\"releases\":1,\"live_bytes\":0,\"allocated_bytes\":8,\"released_bytes\":8,\"peak_live_bytes\":8,\"reads\":1,\"writes\":1}\n42\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-try-owned:standalone-parity",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-try-owned.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-7l8whqh_/nominal-try-owned.py",
+        "--force"
+      ],
+      "exit": 1,
+      "limit": null,
+      "log": "144.log",
+      "log_sha256": "e83e8d63b78a5795a3af536fe50d249e438654edd2d00680802d9bc3b0330472",
+      "duration_seconds": 0.051,
+      "label": "nominal-try-owned:python-reject",
+      "output": "CGE006: /home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/nominal-try-owned.cg:109..138: ordinary owned storage and loans are outside the Python target\n",
+      "passed": true
+    },
+    {
+      "label": "nominal-try-owned:python-preserved",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/plain-symbols.cg"
+      ],
+      "exit": 1,
+      "limit": null,
+      "log": "146.log",
+      "log_sha256": "f75fab7f31bcd69bd29102bcde9d5bc9b552eaab9783cad30f513b417560a270",
+      "duration_seconds": 0.051,
+      "label": "plain-symbols:check",
+      "output": "CGT017: /home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/plain-symbols.cg:0..59: duplicate or reserved nominal type `Result`\nCGT031: /home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/plain-symbols.cg:89..95: type `Result` requires 2 type arguments, found 0\nCGT031: /home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/plain-symbols.cg:100..106: type `Result` requires 2 type arguments, found 0\nCGT001: /home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/plain-symbols.cg:112..127: unknown name `AllocationError`\nCGT031: /home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/plain-symbols.cg:173..214: type `Result` requires 2 type arguments, found 0\nCGT003: /home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/plain-symbols.cg:163..215: callee result needs an annotation\nCGT001: /home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/plain-symbols.cg:220..242: unknown name `Result.AllocationError`\nCGT001: /home/john-riley/.codex/worktrees/aa9e/lang/crates/cgx2-syntax/owned-symbol-compatibility-evidence/fixtures/plain-symbols.cg:245..261: unknown name `Result.try_owned`\n",
+      "passed": false
+    }
+  ],
+  "release_complete": false,
+  "sources_sha256": {
+    "fields-parameters.cg": "438953fd02df38c36686e5eac3eb4199bb3a27e32eb066a8199ea695bce41be5",
+    "function-AllocationError.cg": "c67c53faa0cfc6aea2e3ed5a39688a786d81fe62ff00faa10b066a28daf185f9",
+    "function-Result.cg": "c01c4f7a2f7f7f2b9b1df84f7f9ef57857e326faff3d24a8d0ef1831dac9ee9b",
+    "guard-user-call.cg": "967e77e4d3bc21264d1ecca3747fc23fcf196d2c4e7df30eb3d3fca596f802c6",
+    "local-name.cg": "8b1e0751a4e383d3561a460ca1ec9e4b7180883aa07ad407ede411323f0d9e6a",
+    "nominal-error.cg": "4b4bb924ce1fdf35862649376c89ba0cab9c255708ae119abc455983f1782ab0",
+    "nominal-result.cg": "9c6746e3a355009e1ecaef683c444b9dbbd842fe88d52cbc86952de5e292db2e",
+    "nominal-signatures.cg": "7c6e8e846d528077901cd51137231a2b57e23f1939fb630ea4f1cdd2a2955a5b",
+    "nominal-try-owned.cg": "67b04249faec8c063cc0eb458dc40f59838d2364a83aacb10fe300ef59d62103",
+    "plain-symbols.cg": "f41461f730d3b58e0445615c915e1ac56d1b756606a6721a6bc0525235e93834",
+    "user-function.cg": "47560c627f482999a224d8e869d425acbdc7d2f2b29d8c38d470164e9f9550c1",
+    "user-owned-call.cg": "ecdf4b8725a37eb63998649d95bfa4e110c0de2cf16d70144a75f94c98a1b030"
+  },
+  "runtime_inventory_sha256": {
+    "lib.rs": "1002a5bc1b347ac383ff903d7ea1f79fca3f55284f2af1f6d0ea8f195720c9c6",
+    "budget.rs": "7bd562dae680c6102598a68d139042fba758ae3b3cb8c0d937778c0f0f13e0e4",
+    "heap.rs": "f167f13b46866d9999aa3c8f4329f3a7ad5e59e534d9f5b7b789208296351a8f",
+    "graph.rs": "325444702e5ac590fd07c57c9ca66ec8dcea2ed9ab05477dcd3d0cd1b11b181a",
+    "scope.rs": "bee9e5fc5b2dece62914b1623c7317e4c3a2bbcd4a51375ee08e5640bff62764",
+    "fault.rs": "bc4652355ca094d8e1daca99b76d38e194c35fcc852c25b071593a4dbe9dc252",
+    "owned.rs": "08b8c47b10ff55c9174467c623127136f034e314f8b5f2d49010e9c21547c197",
+    "region.rs": "50362a5df6c4469bfb5f03e9a93a3a351853a97d6fc505a322ce6bc5bb9f6077",
+    "report.rs": "4569e7848983a5179c60abdb4cd779f3707512eaae5e614214a50cf8d39ba9aa"
+  }
+}

@@ -135,3 +135,38 @@ Schema 2 additionally bounds admitted lexical control/block nesting and admitted
 expression nesting to 32 before typed/CFG expansion. This keeps nested guards
 and emitted Rust data within a shared source/target envelope. Function call depth
 remains 64 at runtime; schema-1 copied bodies retain their original bounds.
+
+## Reviewed symbol compatibility repair
+
+Bare local records named `Result` and `AllocationError` retain their schema-1
+nominal identity in declarations, annotations, copied parameters/results and
+ownership wrappers. `try_owned` resolves to a declared local function or record
+before the fallible intrinsic. Ordinary locals, parameters and scalar fields
+may use all three names, including in a module that also calls `owned` or uses
+the additive guard/Result profile. Calls retain the existing separate local
+function/record lookup; a copied local is not a first-class callable value.
+The original `owned`, `shared`, `exclusive`, `borrow` and `borrow_mut`
+reservations remain unchanged.
+
+`Result<owned<R>, AllocationError>` selects the additive builtin when its error
+argument resolves to the builtin error. Bare `AllocationError` resolves to that
+builtin only in the absence of a nominal record with the same name. A module
+with such a record can still use its old owned/copy operations; an explicit
+conditional type using that record as the error argument rejects `CGT081`.
+A nominal `Result` may coexist with the parameterized builtin because the type
+arguments distinguish them. Direct builtin constructors remain excluded, and
+unresolved `try_owned` still uses checked version-2 allocation/arm provenance.
+
+Profile expansion bounds follow resolved constructs: parameterized `Result`,
+unshadowed builtin error types (including local annotations), unresolved
+`try_owned` calls, and ordinary `no_gc` select the additive limits. Old nominal
+signatures and resolved user `try_owned` calls do not acquire those limits.
+Schema-1 projections and authentication remain required for all old shapes;
+version-2 checking and authentication remain required before execution/emission.
+
+Reproduction is in `owned-symbol-compatibility-evidence/`. Historical
+`owned-result-evidence` files remain unchanged. Its `shadow-builtin` negative
+expects `CGT082` for an old valid `try_owned: i64` parameter and is explicitly
+superseded by this repair. The evidence records the unchanged runner's failure
+and separately replays the remaining checks; it does not report that obsolete
+rejection as a pass. All broader memory and release gates remain open.

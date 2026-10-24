@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "base": "3e5be4d4907debad1ae5fa8bdc836208255ddb4d",
+  "checks": [
+    {
+      "command": [
+        "cargo",
+        "test",
+        "--workspace",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--no-fail-fast"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "workspace-tests.log",
+      "log_sha256": "81105a0a24e5ebfedbd9d3f171386bbcba4b668815495803948d6815e1c3cf19",
+      "duration_seconds": 80.644,
+      "name": "workspace-tests",
+      "suites": 266,
+      "passed": 1237,
+      "failed": 0,
+      "ignored": 6,
+      "expected_obsolete_failure": false
+    }
+  ],
+  "dependency_reconciliation": "none; root Cargo.lock unchanged",
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/aa9e/lang/target/release-owned-symbol-compatibility",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib",
+    "RUSTFLAGS": "-Clink-arg=-Wl,--threads=2"
+  },
+  "bounds": {
+    "wall_seconds": 900,
+    "cpu_seconds": 900,
+    "address_space_bytes": 4294967296,
+    "inherited_file_hard_cap_bytes": 536870912,
+    "descendant_live_output_cap_bytes": 1048576,
+    "aggregate_live_log_cap_bytes": 8388608,
+    "monitor_seconds": 0.05,
+    "process_tree_count": 128
+  },
+  "known_superseded_expectation": "Original 584-check runner expects CGT082 for a valid schema-1 try_owned parameter. Replay excludes its 9 rejection checks explicitly.",
+  "release_complete": false
+}

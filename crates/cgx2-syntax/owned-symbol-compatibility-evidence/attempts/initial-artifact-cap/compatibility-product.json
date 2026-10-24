@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "checks": [
+    {
+      "command": [
+        "rustup",
+        "which",
+        "rustc"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "0.log",
+      "log_sha256": "66af87d7f5dc56db4094d4257d2ebfd67b77bb8e36e37ef58d69a87d2016117c",
+      "duration_seconds": 0.051,
+      "label": "pinned-rustc",
+      "output": "/home/john-riley/.rustup/toolchains/1.98.1-x86_64-unknown-linux-gnu/bin/rustc\n",
+      "passed": true
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-306qww9l/rustc-bounded-linker",
+        "--edition=2021",
+        "--crate-name",
+        "cgx2_runtime",
+        "--crate-type",
+        "rlib",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-306qww9l/runtime/lib.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/aa9e/lang/target/tmp-owned-symbol-compatibility/symbol-parity-306qww9l/libcgx2_runtime.rlib"
+      ],
+      "exit": 0,
+      "limit": null,
+      "log": "1.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "duration_seconds": 0.152,
+      "label": "standalone-runtime",
+      "output": "",
+      "passed": true
+    }
+  ],
+  "release_complete": false,
+  "sources_sha256": {
+    "fields-parameters.cg": "438953fd02df38c36686e5eac3eb4199bb3a27e32eb066a8199ea695bce41be5",
+    "function-AllocationError.cg": "c67c53faa0cfc6aea2e3ed5a39688a786d81fe62ff00faa10b066a28daf185f9",
+    "function-Result.cg": "c01c4f7a2f7f7f2b9b1df84f7f9ef57857e326faff3d24a8d0ef1831dac9ee9b",
+    "guard-user-call.cg": "967e77e4d3bc21264d1ecca3747fc23fcf196d2c4e7df30eb3d3fca596f802c6",
+    "local-name.cg": "8b1e0751a4e383d3561a460ca1ec9e4b7180883aa07ad407ede411323f0d9e6a",
+    "nominal-error.cg": "4b4bb924ce1fdf35862649376c89ba0cab9c255708ae119abc455983f1782ab0",
+    "nominal-result.cg": "9c6746e3a355009e1ecaef683c444b9dbbd842fe88d52cbc86952de5e292db2e",
+    "nominal-signatures.cg": "7c6e8e846d528077901cd51137231a2b57e23f1939fb630ea4f1cdd2a2955a5b",
+    "nominal-try-owned.cg": "67b04249faec8c063cc0eb458dc40f59838d2364a83aacb10fe300ef59d62103",
+    "plain-symbols.cg": "f41461f730d3b58e0445615c915e1ac56d1b756606a6721a6bc0525235e93834",
+    "user-function.cg": "47560c627f482999a224d8e869d425acbdc7d2f2b29d8c38d470164e9f9550c1",
+    "user-owned-call.cg": "ecdf4b8725a37eb63998649d95bfa4e110c0de2cf16d70144a75f94c98a1b030"
+  },
+  "runtime_inventory_sha256": {
+    "lib.rs": "1002a5bc1b347ac383ff903d7ea1f79fca3f55284f2af1f6d0ea8f195720c9c6",
+    "budget.rs": "7bd562dae680c6102598a68d139042fba758ae3b3cb8c0d937778c0f0f13e0e4",
+    "heap.rs": "f167f13b46866d9999aa3c8f4329f3a7ad5e59e534d9f5b7b789208296351a8f",
+    "graph.rs": "325444702e5ac590fd07c57c9ca66ec8dcea2ed9ab05477dcd3d0cd1b11b181a",
+    "scope.rs": "bee9e5fc5b2dece62914b1623c7317e4c3a2bbcd4a51375ee08e5640bff62764",
+    "fault.rs": "bc4652355ca094d8e1daca99b76d38e194c35fcc852c25b071593a4dbe9dc252",
+    "owned.rs": "08b8c47b10ff55c9174467c623127136f034e314f8b5f2d49010e9c21547c197",
+    "region.rs": "50362a5df6c4469bfb5f03e9a93a3a351853a97d6fc505a322ce6bc5bb9f6077",
+    "report.rs": "4569e7848983a5179c60abdb4cd779f3707512eaae5e614214a50cf8d39ba9aa"
+  }
+}
