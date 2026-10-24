@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24T11:16:46.229954+00:00",
+  "checked_at": "2026-10-24T11:17:00.668Z",
   "original_chats": [
     {
       "lane": "core",
@@ -235,7 +235,7 @@
       "worktree": "/home/john-riley/.codex/worktrees/4836/lang",
       "base": "0d321d3d1b0341121b8363a5a87eeaf674c20eec",
       "status": "running",
-      "afterCursor": "9a64eb13-4087-480b-808c-6ba54eb87c2d:1",
+      "afterCursor": "9a64eb13-4087-480b-808c-6ba54eb87c2d:2",
       "plan": "plans/release-completion/s2b-ordinary-memory/plan.md",
       "setup_verified": "worktree HEAD equals reviewed base; read_thread and wait_threads active; list_threads omitted agent-created chat, exact read-only local metadata resolved without duplication"
     }
