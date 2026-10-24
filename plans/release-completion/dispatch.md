@@ -218,3 +218,7 @@ Common reviewed repair base7bb7a480119826693db67ed503caaf7f23f6abb2 matches allf
 | runtime-roots | 01a16e6c-b9bf-76c3-8096-5a9f6fbac892 | /home/john-riley/.codex/worktrees/c0c1/lang | running |
 | api-visibility | 01a16e6c-cd2a-74e0-854c-ba26c9418640 | /home/john-riley/.codex/worktrees/2f3a/lang | running |
 | evidence-parity | 01a16e6c-e179-79f0-bdff-73791dd80661 | /home/john-riley/.codex/worktrees/e7e8/lang | running |
+
+## Ordinary public API repair accepted; admission repair reviewing
+
+OM08 delivery21452c2 accepted/integrated64a71e7 after independent source/evidence review plus coordinator175Rust/84product passes and quality checks. Frozen/source hashes verified; worker118visibility/207specialization replays verified. Core9330300 has delivered and is under review; runtime roots and evidence remain active. No combined acceptance or new consumer frontier. See s2b-ordinary-memory-review/evidence/api-reviewed/.

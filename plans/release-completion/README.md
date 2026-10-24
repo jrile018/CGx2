@@ -160,3 +160,7 @@ See [combined acceptance](s2b-default-managed-review/evidence/combined-accepted/
 ### Ordinary-memory delivery incomplete; bounded repairs required
 
 [Review and four repair plans](s2b-ordinary-memory-review/README.md) record8 reproduced source/runtime/API defects in a3b98d7, staged32032fd solely as a repair base. Passing1327 workspace tests does not accept it. Full aggregate ownership, source copy_owned/promote, authenticated v3 summaries, static dependency-file attribution and required fault/cleanup/parity remain open. R01–R15 are preserved; no S3 consumers or release.
+
+### Ordinary API repair accepted; combined memory gate pending
+
+OM08 public API projection is accepted as bounded repair64a71e7 with independent175Rust/84product checks and reviewed historical evidence. Admission/core review and runtime/evidence deliveries are still required. All broader memory and R01–R15 requirements remain open and unchanged.

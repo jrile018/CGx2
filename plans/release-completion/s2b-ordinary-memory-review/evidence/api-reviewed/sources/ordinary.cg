@@ -1,0 +1,22 @@
+module app.api
+pub record Visible<T>:
+    value: T
+pub variant Choice<T>:
+    Some(T)
+    Empty
+record Secret:
+    hidden: i64
+pub fn id<T: Eq + Show>(value: T) -> T effects() caps():
+    value
+pub fn unused<T: Eq>(value: T) -> T effects() caps():
+    value
+pub fn exported() -> i64:
+    id<i64>(42)
+fn private_helper() -> i64 effects(ManagedAlloc):
+    match memory.try_no_gc(budget: 4096):
+        Result.Ok(guard):
+            exported()
+        Result.Err(error):
+            -1
+fn main() -> i64 effects(ManagedAlloc):
+    private_helper()

@@ -1,0 +1,56 @@
+[
+  {
+    "original_path": "/home/john-riley/projects/lang/target/ordinary-api-review-20261024/21452c2/verification.json",
+    "retained": "verification.json.gz",
+    "raw_sha256": "6368543c914cde46ca52fbfc4243dce951c3e2cf30a5021d38597d33a0e1045c",
+    "retained_sha256": "7a64a1be05475ecefff593f36550b2a38675080ebb8627bd18b93eba7db10f27"
+  },
+  {
+    "original_path": "/home/john-riley/projects/lang/target/ordinary-api-review-20261024/21452c2/product/report.json",
+    "retained": "product/report.json.gz",
+    "raw_sha256": "21ff30c735b78040e33b0062996ef8335781690751bb6629b91d8574307d4f82",
+    "retained_sha256": "a6e8503bdcb5f39ed0eaee2a155745b26d59e0dbb91a3b7cecd35dd07b51bc23"
+  },
+  {
+    "original_path": "/home/john-riley/projects/lang/target/ordinary-api-review-20261024/21452c2/frozen/manifest.json",
+    "retained": "frozen/manifest.json.gz",
+    "raw_sha256": "90d14c4ad78c7bf967e66c054431bd7322f17af3a3fbab2ad2568955d89aa1e1",
+    "retained_sha256": "730cc354746462aba44a82703a230306b745766b4f5a7b76d6ff8652e0a4147d"
+  },
+  {
+    "original_path": "/home/john-riley/projects/lang/target/ordinary-api-review-20261024/21452c2/build.log.gz",
+    "retained": "build.log.gz",
+    "raw_sha256": "da1cc04b65b213755ce05b02d9392738f7ddf4e3e69ee51449d886a84e334ec6",
+    "retained_sha256": "da1cc04b65b213755ce05b02d9392738f7ddf4e3e69ee51449d886a84e334ec6"
+  },
+  {
+    "original_path": "/home/john-riley/projects/lang/target/ordinary-api-review-20261024/21452c2/product.log.gz",
+    "retained": "product.log.gz",
+    "raw_sha256": "c885163d8c56a23d21e913e89471ae1fc424207c659ce10a35092d1bcf1d3945",
+    "retained_sha256": "c885163d8c56a23d21e913e89471ae1fc424207c659ce10a35092d1bcf1d3945"
+  },
+  {
+    "original_path": "/home/john-riley/projects/lang/target/ordinary-api-review-20261024/21452c2/tests.log.gz",
+    "retained": "tests.log.gz",
+    "raw_sha256": "e0b3fe3e0ca337bbb9d1147bfdd9dae2ee23c2bb8c88761616e9e3651bdb1b29",
+    "retained_sha256": "e0b3fe3e0ca337bbb9d1147bfdd9dae2ee23c2bb8c88761616e9e3651bdb1b29"
+  },
+  {
+    "original_path": "/home/john-riley/projects/lang/target/ordinary-api-review-20261024/21452c2/fmt.log.gz",
+    "retained": "fmt.log.gz",
+    "raw_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
+    "retained_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+  },
+  {
+    "original_path": "/home/john-riley/projects/lang/target/ordinary-api-review-20261024/21452c2/diff.log.gz",
+    "retained": "diff.log.gz",
+    "raw_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
+    "retained_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+  },
+  {
+    "original_path": "/home/john-riley/projects/lang/target/ordinary-api-review-20261024/21452c2/clippy.log.gz",
+    "retained": "clippy.log.gz",
+    "raw_sha256": "c25af6ceec9d907e40a952326812a090055397a2ae0b4dd9e68870de7689d5e3",
+    "retained_sha256": "c25af6ceec9d907e40a952326812a090055397a2ae0b4dd9e68870de7689d5e3"
+  }
+]
