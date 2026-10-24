@@ -1,0 +1,4 @@
+module <unnamed> [syntax-only]
+pub fn identity(x: i64) -> i64 effects() [unchecked] caps() [unchecked] [0, 99)
+    requires x >= 0 [unchecked]
+    ensures result >= x [unchecked]

@@ -1,0 +1,23 @@
+module app.checked
+
+pub record Point:
+    x: i64
+
+pub variant Reply:
+    Empty
+    Value(Option<Result<i64, Bool>>, Point)
+
+record HiddenRecord:
+    secret: i64
+
+variant HiddenVariant:
+    Secret
+
+fn hidden() -> i64:
+    0
+
+pub fn identity(p: Point) -> Point effects() caps():
+    p
+
+pub fn make() -> Reply:
+    Reply.Empty()

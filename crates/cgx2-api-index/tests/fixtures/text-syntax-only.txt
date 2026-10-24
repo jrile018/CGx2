@@ -1,0 +1,12 @@
+module app.generic [syntax-only]
+variant app.generic.Wrap<T: Eq + Show> [86, 197)
+    Empty()
+    Value(cgx2.core.Option<cgx2.core.Result<T, Bool>>, app.generic.Box<T, Bool>, external.api.Item)
+record app.generic.Box<T: Eq + Show, U> [20, 85)
+    value: cgx2.core.Option<cgx2.core.Result<T, U>>
+pub fn identity<T: Eq + Show>(x: app.generic.Box<T, Bool>) -> app.generic.Box<T, Bool> effects() [unchecked] caps() [unchecked] [309, 432)
+    requires true [unchecked]
+    ensures true [unchecked]
+pub fn sample<T: Eq + Show>(values: Array<T>) -> T effects() [unchecked] caps() [unchecked] [432, 591)
+    invariant i >= 0 [unchecked] [518, 535)
+    decreases 1 - i [unchecked] [543, 559)

@@ -1,0 +1,8 @@
+module app.checked [checked]
+variant app.checked.Reply [50, 124)
+    Empty()
+    Value(cgx2.core.Option<cgx2.core.Result<i64, Bool>>, app.checked.Point)
+record app.checked.Point [20, 49)
+    x: i64
+pub fn identity(p: app.checked.Point) -> app.checked.Point effects() [explicit] caps() [explicit] [224, 284)
+pub fn make() -> app.checked.Reply effects() [inferred] caps() [inferred] [284, 326)

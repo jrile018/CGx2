@@ -34,12 +34,12 @@ A public `foreign python pub fn` entry in schema 3 carries `foreign.route`, `for
 {"schema_version":2,"module":"app.math","functions":[{"name":"double","parameters":[{"name":"x","ty":"i64"}],"return_type":"i64","span":{"start":17,"end":59},"effects":[],"effects_status":"inferred","capabilities":[],"capabilities_status":"inferred","requires":[],"ensures":[]}]}
 ```
 
-Modules without any effect, capability, or contract annotations keep the exact version 1 JSON and text rendering. Version 2 adds the fields shown above. The `ApiFunction` Rust object exposes `inferred` status even for a legacy module, while its version 1 JSON keeps the old shape. `module` is `null` if undeclared; `functions` is `[]` if no public functions
+Modules without any effect, capability, or contract annotations keep the exact version 1 JSON rendering. Version 2 adds the fields shown above. The `ApiFunction` Rust object exposes `inferred` status even for a legacy module, while its version 1 JSON keeps the old shape. `module` is `null` if undeclared; `functions` is `[]` if no public functions
 exist. A span is a zero-based, half-open UTF-8 byte range in the source passed
 to the parser. The renderer escapes JSON control characters, quotes, and
 backslashes; other Unicode text remains UTF-8. `render_text()` starts with
-`module NAME` (or `module <unnamed>`), then writes one sorted signature per
-line as `pub fn NAME(PARAM: TYPE) -> TYPE effects(...) [STATUS] caps(...) [STATUS] [START, END)`, followed by contract summaries labeled `runtime-checked`.
+`module NAME [checked]` (or `module <unnamed> [checked]`), then writes one sorted signature per
+line as `pub fn NAME(PARAM: TYPE) -> TYPE effects(...) [STATUS] caps(...) [STATUS] [START, END)`, followed by contract summaries labeled with their stored status.
 
 Explicit effect/capability lists retain declared names; omitted lists contain conservative inferred names and use status `inferred`. Contracts carry canonical expression text, source span, and `runtime-checked` status; none is labeled proved. `cgx2 api FILE.cg --json` renders this checked per-module index. Documentation comments are not indexed.
 
@@ -47,3 +47,27 @@ Explicit effect/capability lists retain declared names; omitted lists contain co
 A checked public memory function exposes its declared `i64` scalar parameters, `Unit` result, and explicit or transitive effects and capabilities in schema 2. Memory handles cannot cross call boundaries. For example, `pub fn allocate(size: i64) -> Unit effects(ManagedAlloc)` has `{"name":"size","ty":"i64"}` in `parameters`.
 
 Checked object-reference operations stay within local memory functions. The index records `ManagedAlloc`, `Mutate`, and `Collect` effects and `MemoryCollect` capability when required; it never exposes object handles as API parameters or results. `build_index` rechecks bounded object shape and same-region rules, returning `IndexError::InvalidModule` for invalid source.
+
+## Human output and syntax-only indexing
+
+Human output always includes the stored `semantics_status` in the module header.
+Checked indexes use `[checked]`; `build_syntax_index` uses `[syntax-only]`, with
+unchecked effect, capability, and function-contract metadata. Checked contracts
+retain `runtime-checked`; this describes runtime enforcement, not execution of
+the indexed function or a proof. Loop annotations retain their own stored
+status (currently `unchecked`, even in a checked index) and half-open byte spans.
+
+Schema 6 retains nominal record/variant identities, recursive applied types,
+generic type parameters and named constraints, loop annotations, and semantic
+status. Human declarations use qualified aggregate identities and complete
+types such as `cgx2.core.Option<cgx2.core.Result<i64, Bool>>`. Type parameters
+render as `<T: Eq + Show, U>`; parameter/field names and source declaration order
+are preserved. Only public declarations enter the index, sorted deterministically
+by the existing builders. An unannotated result retains the model's result
+string (`<inferred>` in syntax-only mode). Foreign declarations show their stored
+unsafe flag independently of optional checked binding metadata.
+
+These human-format changes do not alter JSON bytes, schema selection, public
+model shapes, or semantic admission. Older JSON versions continue to omit
+fields outside their schema. Golden JSON fixtures in `tests/fixtures/text-*.json`
+were captured from the repair baseline before changing the text renderer.

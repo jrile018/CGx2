@@ -14,5 +14,5 @@ fn record_declarations_and_field_types_are_indexed() {
     assert!(index
         .render_json()
         .contains("\"records\":[{\"name\":\"Point\""));
-    assert!(index.render_text().contains("record Point"));
+    assert!(index.render_text().contains("record sample.Point"));
 }

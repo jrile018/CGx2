@@ -190,7 +190,7 @@ fn stable_text_and_json_schema() {
     assert_eq!(
         index.render_text(),
         format!(
-            "module app.math\npub fn alpha(x: i64) -> i64 [{}, {})\npub fn zebra(a: String, b: List<i64>) -> Bool [{}, {})\n",
+            "module app.math [checked]\npub fn alpha(x: i64) -> i64 [{}, {})\npub fn zebra(a: String, b: List<i64>) -> Bool [{}, {})\n",
             alpha.start, alpha.end, zebra.start, zebra.end
         )
     );
@@ -268,7 +268,7 @@ fn public_python_binding_exposes_route_target_and_runtime() {
 fn empty_public_api_renders_deterministically() {
     let module = parse_module("fn helper():\n    4\n").unwrap();
     let index = build_index(&module, &check_module(&module).unwrap()).unwrap();
-    assert_eq!(index.render_text(), "module <unnamed>\n");
+    assert_eq!(index.render_text(), "module <unnamed> [checked]\n");
     assert_eq!(
         index.render_json(),
         "{\"schema_version\":1,\"module\":null,\"functions\":[]}"

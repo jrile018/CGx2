@@ -1,0 +1,4 @@
+pub fn main() -> i64 effects() caps():
+    requires true
+    ensures result == 7
+    7

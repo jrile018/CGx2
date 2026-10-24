@@ -220,11 +220,18 @@ impl ApiIndex {
 
     /// Render one public signature per line, with half-open byte spans.
     pub fn render_text(&self) -> String {
-        let mut out = format!("module {}\n", self.module.as_deref().unwrap_or("<unnamed>"));
+        let mut out = format!(
+            "module {} [{}]\n",
+            self.module.as_deref().unwrap_or("<unnamed>"),
+            self.semantics_status
+        );
         for variant in &self.variants {
             out.push_str(&format!(
-                "variant {} [{}, {})\n",
-                variant.identity, variant.span.start, variant.span.end
+                "variant {}{} [{}, {})\n",
+                variant.identity,
+                text_type_parameters(&variant.type_parameters),
+                variant.span.start,
+                variant.span.end
             ));
             for case in &variant.cases {
                 out.push_str(&format!(
@@ -232,7 +239,7 @@ impl ApiIndex {
                     case.name,
                     case.payloads
                         .iter()
-                        .map(|t| t.identity.as_str())
+                        .map(text_type)
                         .collect::<Vec<_>>()
                         .join(", ")
                 ));
@@ -240,16 +247,24 @@ impl ApiIndex {
         }
         for record in &self.records {
             out.push_str(&format!(
-                "record {} [{}, {})\n",
-                record.name, record.span.start, record.span.end
+                "record {}{} [{}, {})\n",
+                record.identity,
+                text_type_parameters(&record.type_parameters),
+                record.span.start,
+                record.span.end
             ));
-            for field in &record.fields {
-                out.push_str(&format!("    {}: {}\n", field.name, field.ty));
+            for (index, field) in record.fields.iter().enumerate() {
+                let ty = record
+                    .field_types
+                    .get(index)
+                    .map_or_else(|| field.ty.clone(), text_type);
+                out.push_str(&format!("    {}: {}\n", field.name, ty));
             }
         }
         for function in &self.functions {
             out.push_str("pub fn ");
             out.push_str(&function.name);
+            out.push_str(&text_type_parameters(&function.type_parameters));
             out.push('(');
             for (index, parameter) in function.parameters.iter().enumerate() {
                 if index > 0 {
@@ -257,10 +272,18 @@ impl ApiIndex {
                 }
                 out.push_str(&parameter.name);
                 out.push_str(": ");
-                out.push_str(&parameter.ty);
+                if let Some(ty) = function.parameter_types.get(index) {
+                    out.push_str(&text_type(ty));
+                } else {
+                    out.push_str(&parameter.ty);
+                }
             }
             out.push_str(") -> ");
-            out.push_str(&function.return_type);
+            if let Some(ty) = &function.result_type {
+                out.push_str(&text_type(ty));
+            } else {
+                out.push_str(&function.return_type);
+            }
             if self.schema_version >= 2 {
                 out.push_str(" effects(");
                 out.push_str(&function.effects.join(", "));
@@ -282,13 +305,23 @@ impl ApiIndex {
                 for contract in &function.requires {
                     out.push_str("    requires ");
                     out.push_str(&contract.expression);
-                    out.push_str(" [runtime-checked]\n");
+                    out.push_str(&format!(" [{}]\n", contract.status));
                 }
                 for contract in &function.ensures {
                     out.push_str("    ensures ");
                     out.push_str(&contract.expression);
-                    out.push_str(" [runtime-checked]\n");
+                    out.push_str(&format!(" [{}]\n", contract.status));
                 }
+            }
+            for contract in &function.loop_contracts {
+                out.push_str(&format!(
+                    "    {} {} [{}] [{}, {})\n",
+                    contract.kind,
+                    contract.expression,
+                    contract.status,
+                    contract.span.start,
+                    contract.span.end
+                ));
             }
             if let Some(foreign) = &function.foreign {
                 out.push_str("    foreign route=");
@@ -299,8 +332,11 @@ impl ApiIndex {
                 out.push_str(&foreign.ownership);
                 out.push_str(" runtime=");
                 out.push_str(&foreign.runtime);
+                if foreign.unsafe_call {
+                    out.push_str(" unsafe=true");
+                }
                 if let Some(id) = &foreign.binding_id {
-                    out.push_str(" unsafe=true binding_id=");
+                    out.push_str(" binding_id=");
                     out.push_str(id);
                 }
                 if let Some(profile) = &foreign.profile {
@@ -312,6 +348,40 @@ impl ApiIndex {
         }
         out
     }
+}
+
+fn text_type(ty: &crate::ApiType) -> String {
+    let mut out = ty.identity.clone();
+    if !ty.arguments.is_empty() {
+        out.push('<');
+        out.push_str(
+            &ty.arguments
+                .iter()
+                .map(text_type)
+                .collect::<Vec<_>>()
+                .join(", "),
+        );
+        out.push('>');
+    }
+    out
+}
+
+fn text_type_parameters(parameters: &[crate::ApiTypeParameter]) -> String {
+    if parameters.is_empty() {
+        return String::new();
+    }
+    let declarations = parameters
+        .iter()
+        .map(|parameter| {
+            if parameter.constraints.is_empty() {
+                parameter.name.clone()
+            } else {
+                format!("{}: {}", parameter.name, parameter.constraints.join(" + "))
+            }
+        })
+        .collect::<Vec<_>>()
+        .join(", ");
+    format!("<{declarations}>")
 }
 
 fn push_json_array(out: &mut String, values: &[String]) {
