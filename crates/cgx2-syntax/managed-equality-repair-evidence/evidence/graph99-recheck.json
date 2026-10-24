@@ -1,0 +1,38 @@
+{
+  "command": [
+    "python3",
+    "crates/cgx2-syntax/s2b-memory-evidence/run.py",
+    "--binary-dir",
+    "target/release-managed-equality-repair/debug",
+    "--output",
+    "crates/cgx2-syntax/managed-equality-repair-evidence/evidence/graph99-product.json"
+  ],
+  "cwd": "/home/john-riley/.codex/worktrees/d1b5/lang",
+  "exit": 0,
+  "reason": "exit",
+  "signal": null,
+  "overflow_stream": null,
+  "duration_seconds": 10.385,
+  "stdout_bytes": 396,
+  "stdout_sha256": "75894b8d5b03f18e292c5ae39033383447901ea8dbb8aa6ed508819f87e7bd84",
+  "stderr_bytes": 0,
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "passed": true,
+  "log": "graph99-recheck.log.gz",
+  "log_sha256": "75894b8d5b03f18e292c5ae39033383447901ea8dbb8aa6ed508819f87e7bd84",
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/d1b5/lang/target/release-managed-equality-repair",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/d1b5/lang/target/tmp-managed-equality-repair",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "bounds": {
+    "wall_seconds": 900,
+    "cpu_seconds_per_process": 900,
+    "address_space_bytes_per_process": 4294967296,
+    "retained_combined_bytes": 8388608,
+    "aggregate_cgroup_isolation": false
+  },
+  "runtime_graph_sha256": "67390805f719b39281cabde1e0e0bf3add3ae8614629bdb2a128a023c752efd0"
+}

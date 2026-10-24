@@ -1,0 +1,41 @@
+fn fail() -> Result<List<i64>, AllocationError> effects(ManagedAlloc):
+    no_gc(budget: 0):
+        return managed.try_alloc([1, 2])
+    Result<List<i64>, AllocationError>.Ok([])
+
+fn main() -> i64 effects(ManagedAlloc):
+    let carrier = fail()
+    match carrier:
+        Result.Err(error):
+            let ordinary = Result<List<i64>, AllocationError>.Err(error)
+            if carrier != ordinary:
+                return 1
+            else:
+                0
+            if ordinary != carrier:
+                return 2
+            else:
+                0
+            if (carrier == ordinary) == false:
+                return 3
+            else:
+                0
+            if (ordinary == carrier) == false:
+                return 4
+            else:
+                0
+            if carrier == Result<List<i64>, AllocationError>.Ok([1, 2]):
+                return 5
+            else:
+                0
+            if Result<List<i64>, AllocationError>.Ok([1, 2]) == carrier:
+                return 6
+            else:
+                0
+            if fail() != carrier:
+                return 7
+            else:
+                0
+            42
+        Result.Ok(value):
+            0

@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "base": "3c1cfe2aeba2f7135e4069709bf633c082d2aab0",
+  "status": "bounded repair delivered for review",
+  "gates": {
+    "build": {
+      "status": "passed",
+      "record": "evidence/build.json"
+    },
+    "affected-tests": {
+      "status": "passed",
+      "record": "evidence/affected-tests.json"
+    },
+    "typed-negative-corrected": {
+      "status": "passed",
+      "record": "evidence/typed-negative-corrected.json"
+    },
+    "final-clippy": {
+      "status": "passed",
+      "record": "evidence/final-clippy.json"
+    },
+    "final-fmt": {
+      "status": "passed",
+      "record": "evidence/final-fmt.json"
+    },
+    "final-diff": {
+      "status": "passed",
+      "record": "evidence/final-diff.json"
+    },
+    "equality-product-final": {
+      "status": "passed",
+      "record": "evidence/equality-product-final.json"
+    },
+    "managed-product": {
+      "status": "passed",
+      "record": "evidence/managed-product.json"
+    },
+    "graph99-recheck": {
+      "status": "passed",
+      "record": "evidence/graph99-recheck.json"
+    },
+    "guards518-recheck": {
+      "status": "passed",
+      "record": "evidence/guards518-recheck.json"
+    },
+    "reports265-recheck": {
+      "status": "passed",
+      "record": "evidence/reports265-recheck.json"
+    },
+    "parity-final/product": {
+      "status": "passed",
+      "checks": 87,
+      "record": "evidence/parity-final/product.json"
+    },
+    "managed-product/product": {
+      "status": "passed",
+      "checks": 328,
+      "record": "evidence/managed-product/product.json"
+    },
+    "graph99-product": {
+      "status": "passed",
+      "checks": 99,
+      "record": "evidence/graph99-product.json"
+    },
+    "guards518-product": {
+      "status": "passed",
+      "checks": 518,
+      "record": "evidence/guards518-product.json"
+    },
+    "reports265-product": {
+      "status": "passed",
+      "checks": 265,
+      "record": "evidence/reports265-product.json"
+    }
+  },
+  "manifests": {
+    "Cargo.toml": {
+      "sha256": "9400b7dfbc400f91b3d648265dbd18001ec96157eb202fe88e3b95a312c9ffd7",
+      "unchanged_from_base": true
+    },
+    "Cargo.lock": {
+      "sha256": "ea7678242cb40c8425c2b9875215f7024071c684cab59399d1d8a74a96750e3a",
+      "unchanged_from_base": true
+    }
+  },
+  "sources_sha256": {
+    "crates/cgx2-runtime/src/graph.rs": "67390805f719b39281cabde1e0e0bf3add3ae8614629bdb2a128a023c752efd0",
+    "crates/cgx2-runtime/tests/managed_result_equality.rs": "0dea868ae24adca9f067e43dcda8fa9c0b96131ebb5ddb2f5fbd4b8d2aad02eb",
+    "crates/cgx2-sema/tests/managed_result_equality.rs": "1ca3454e2e9b2583d8dff3e240567226aec407ba16f644e6f0c0c795d86968f1",
+    "crates/cgx2-syntax/MANAGED-EQUALITY-REPAIR.md": "7358bfbec05761d682fb9874bd260be1b20a4e91540c6f26877a35223c4b9f2f",
+    "crates/cgx2-syntax/managed-equality-repair-evidence/check.py": "dff8ec02f62d8fd1b5ccfdc8d8360ba70b817398f02046c09c3c65fa3cdd2675",
+    "crates/cgx2-syntax/managed-equality-repair-evidence/run.py": "70ca01111d24c26e3cd740d464f85cc1716cf725d25bf7cb4fb470cbde55c587",
+    "crates/cgx2-syntax/managed-equality-repair-evidence/summarize.py": "96931b5b90051d86f381ffc37950f8279148ec9c5a2656f40643fc4d7ede028d",
+    "crates/cgx2-syntax/managed-equality-repair-evidence/err.cg": "b8422588ef6ebdfe0d48aa274ba42a6593060bbcfc8bbb175ee922c9ff3da26b",
+    "crates/cgx2-syntax/managed-equality-repair-evidence/nested-err.cg": "774044cb5a2ef590e77fb81c9c6238a8fd7958ff8e447887a0560faf7a2e6d4e",
+    "crates/cgx2-syntax/managed-equality-repair-evidence/nested.cg": "de84ac9859af9889cf1c560ebe2743329612141583944a8843db28fd8a64e481",
+    "crates/cgx2-syntax/managed-equality-repair-evidence/ok.cg": "e7dcd6b53d485272dd6297b67621948e1554ac8b9d1a41edcfe12c92798a3acc"
+  },
+  "retained_failed_attempts": [
+    {
+      "record": "evidence/baseline-sema-compiled.json",
+      "exit": 101,
+      "reason": "exit",
+      "signal": null
+    },
+    {
+      "record": "evidence/baseline-sema-repro.json",
+      "exit": 101,
+      "reason": "exit",
+      "signal": null
+    },
+    {
+      "record": "evidence/baseline-sema-valid.json",
+      "exit": 101,
+      "reason": "exit",
+      "signal": null
+    },
+    {
+      "record": "evidence/baseline-sema.json",
+      "exit": 101,
+      "reason": "exit",
+      "signal": null
+    },
+    {
+      "record": "evidence/baseline-valid-cgx2-runtime.json",
+      "exit": 101,
+      "reason": "exit",
+      "signal": null
+    },
+    {
+      "record": "evidence/baseline-valid-cgx2-sema.json",
+      "exit": 101,
+      "reason": "exit",
+      "signal": null
+    },
+    {
+      "record": "evidence/repaired-sema-first.json",
+      "exit": 101,
+      "reason": "exit",
+      "signal": null
+    },
+    {
+      "record": "evidence/runtime-new-first.json",
+      "exit": 101,
+      "reason": "exit",
+      "signal": null
+    },
+    {
+      "record": "evidence/typed-negative-precise.json",
+      "exit": 101,
+      "reason": "exit",
+      "signal": null
+    }
+  ],
+  "attempt_notes": [
+    "Early test attempts failed to compile or used invalid fixture syntax; retained raw logs are not product defect evidence.",
+    "baseline-valid-cgx2-{runtime,sema} run valid regressions on unchanged graph.rs: runtime 3 failures and sema 1 failure reproduce the defect.",
+    "runtime-new-first has a Rust test child SIGABRT (6) from evaluator stack exhaustion in the initial deeply nested test setup. It is a failure, not expected success. Local bindings replaced the recursive setup; runtime-new-bounded and affected-tests pass the equality depth bound.",
+    "The first graph99/guards518/reports265 wrapper attempts used the same path for child product JSON and recorder JSON. The recorder raised after child success; original product JSON remains intact. The outer orchestration exited 1. Recheck attempts use distinct paths and retain complete command/log evidence.",
+    "typed-negative-precise detected a parser rejection in a new negative fixture. Corrected record/variant indentation now requires CGT039; typed-negative-corrected passes."
+  ],
+  "managed_delivery_accepted": false,
+  "full_memory_complete": false,
+  "release_complete": false,
+  "external_leak_audit_performance": "unrun; existing host limitations remain open",
+  "scope": "Only graph.rs equality and owned new tests/evidence; no interfaces or manifests changed."
+}
