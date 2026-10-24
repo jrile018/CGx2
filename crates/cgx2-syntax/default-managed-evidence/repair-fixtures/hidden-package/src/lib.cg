@@ -1,0 +1,5 @@
+module lib
+
+pub fn heap() -> i64:
+    let values = [1, 2]
+    length(values)

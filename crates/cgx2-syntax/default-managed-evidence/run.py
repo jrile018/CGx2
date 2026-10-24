@@ -34,7 +34,13 @@ def main():
     parser.add_argument("--binary-dir", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--only", help="Run one fixture while retaining all command outcomes")
+    parser.add_argument("--repair-only", action="store_true", help="Run the bounded repair matrix, retaining every failed row")
     args = parser.parse_args()
+    from repair_runner import main as repair_main
+    repair_args = ["--binary-dir", str(args.binary_dir), "--output-dir", str(args.output_dir if args.repair_only else args.output_dir / "repair")]
+    if args.repair_only:
+        return repair_main(repair_args)
+    repair_status = repair_main(repair_args) if not args.only else 0
     output = args.output_dir.resolve()
     output.mkdir(parents=True, exist_ok=True)
     binary = args.binary_dir.resolve() / "cgx2"
@@ -45,6 +51,7 @@ def main():
               "release_complete": False, "external_leak_audit_performance": "unrun",
               "bounds": {"wall_seconds": 180, "cpu_seconds_per_process": 120,
                          "address_space_bytes_per_process": 4 * 1024**3,
+                         "file_size_bytes_per_process": 512 * 1024**2,
                          "retained_bytes_per_stream": 2 * 1024**2,
                          "aggregate_cgroup_isolation": False},
               "binary_sha256": digest(binary), "runner_sha256": digest(Path(__file__)),
@@ -180,19 +187,27 @@ def main():
             command(name + ":standalone-compile", [wrapper, "--edition=2024", emitted, "-o", artifact], work)
             native = command(name + ":standalone-error", [artifact], work, rc=1, code=code)
             assertion(name + ":standalone-primary-and-memory-parity", message in native["stderr"] and stable(accounting(native)) == stable(observed))
-        for name in ["ref-output-reject", "collect-guard-reject", "dishonest-package"]:
+        from repair_runner import rejection_cases, rejection_matches, SENTINEL, preserved
+        for name, source, expected in rejection_cases():
             if args.only and args.only != name:
                 continue
-            source = HERE / name if name.endswith("-package") else HERE / (name + ".cg")
             if source.is_file(): report["sources_sha256"][name] = digest(source)
-            command(name + ":check-reject", [binary, "check", source], work, rc=1)
-            for target in ["rust", "python"]:
-                artifact = work / (name + (".rs" if target == "rust" else ".pyz" if source.is_dir() else ".py"))
-                artifact.write_bytes(b"previous artifact\n")
-                command(name + ":" + target + "-reject", [binary, "emit", source, "--target", target, "--out", artifact, "--force"], work, rc=1)
-                assertion(name + ":" + target + "-artifact-preserved", artifact.read_bytes() == b"previous artifact\n")
+            rejected = command(name + ":check-reject", [binary, "--diagnostic-format=json", "check", source], work, rc=1)
+            assertion(name + ":exact-check-diagnostic", rejection_matches(rejected, expected))
+            for target in ["native-debug", "native-release", "rust", "python"]:
+                artifact = work / (name + "-" + target)
+                artifact.write_bytes(SENTINEL)
+                argv = [binary, "--diagnostic-format=json"]
+                if target.startswith("native"):
+                    argv += ["build", source, "--rustc", wrapper] + (["--release"] if target.endswith("release") else [])
+                else:
+                    argv += ["emit", source, "--target", target]
+                rejected = command(name + ":" + target + "-reject", argv + ["--out", artifact, "--force"], work, rc=1)
+                target_expected = expected[:1] if name == "dishonest-package" else expected
+                assertion(name + ":" + target + "-exact-diagnostic", rejection_matches(rejected, target_expected))
+                assertion(name + ":" + target + "-artifact-preserved", preserved(artifact))
         save()
-    return 0
+    return repair_status
 
 
 if __name__ == "__main__":

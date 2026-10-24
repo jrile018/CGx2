@@ -1,0 +1,23 @@
+fn heap() -> i64:
+    let values = [1, 2]
+    length(values)
+
+fn main() -> i64 effects(ManagedAlloc):
+    no_gc(budget: 0):
+        let outcome = managed.try_alloc(heap())
+        match outcome:
+            Result.Ok(value):
+                return 7
+            Result.Err(error):
+                match error:
+                    AllocationError.BudgetExceeded:
+                        return 42
+                    AllocationError.HostAllocation:
+                        return 43
+                    AllocationError.RegionLimit:
+                        return 44
+                    AllocationError.InvalidRegion:
+                        return 45
+                    AllocationError.ShapeLimit:
+                        return 46
+    0

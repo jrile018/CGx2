@@ -1,0 +1,60 @@
+{
+  "base": "3c1cfe2aeba2f7135e4069709bf633c082d2aab0",
+  "status": "bounded harness delivered; session-entry parity remains failed",
+  "checkpoint_complete": false,
+  "release_complete": false,
+  "complete_matrix": {
+    "path": "repair-attempts/final-verification-v3/managed-product/repair.json.gz",
+    "passed": 670,
+    "failed": 8
+  },
+  "real_budget_executions_passed": 44,
+  "required_synthetic_2_through_15_outcomes": 112,
+  "supplementary_session_entry_1_outcomes": 8,
+  "final_quality": [
+    {
+      "name": "build",
+      "status": "passed"
+    },
+    {
+      "name": "repair-selftests",
+      "status": "passed"
+    },
+    {
+      "name": "python-syntax",
+      "status": "passed"
+    },
+    {
+      "name": "rustfmt-driver",
+      "status": "passed"
+    },
+    {
+      "name": "diff",
+      "status": "passed"
+    }
+  ],
+  "source_span_blocker": "CLI RunError.span=None for injected SessionRegions failure; native/standalone 0..592 and 0..687",
+  "root_manifests_sha256": {
+    "Cargo.toml": "9400b7dfbc400f91b3d648265dbd18001ec96157eb202fe88e3b95a312c9ffd7",
+    "Cargo.lock": "ea7678242cb40c8425c2b9875215f7024071c684cab59399d1d8a74a96750e3a"
+  },
+  "root_manifests_unchanged": true,
+  "historical_shadow_negative": {
+    "path": "summary.json",
+    "status": "known-superseded-negative; unchanged; not rerun"
+  },
+  "leak_negative_control": "historical host-blocked; not rerun",
+  "external_audit_performance": "unrun",
+  "final_budget_format": {
+    "path": "repair-attempts/final-budget-format/repair.json.gz",
+    "passed": 167,
+    "failed": 0
+  },
+  "formatted_adapter_samples": {
+    "path": "repair-attempts/final-formatted-driver/repair.json.gz",
+    "passed": 17,
+    "failed": 2,
+    "limitation": "known CLI session-entry span omission"
+  },
+  "final_quality_path": "repair-attempts/final-quality-v2/verification.json"
+}
