@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24T15:00:57.479246+00:00",
+  "checked_at": "2026-10-24T15:01:30.732Z",
   "original_chats": [
     {
       "lane": "core",
@@ -506,7 +506,7 @@
       "plan": "plans/release-completion/s2b-ordinary-memory-review/core-admission/plan.md",
       "threadId": "01a16e6c-b9bf-76c3-8096-5aafc5441506",
       "worktree": "/home/john-riley/.codex/worktrees/a9af/lang",
-      "afterCursor": "9aa16c60-ecc2-44a0-9fe3-12fc5a04ddd7:1",
+      "afterCursor": "9aa16c60-ecc2-44a0-9fe3-12fc5a04ddd7:2",
       "setup_verified": "Exact worktree HEAD matches common base; app read_thread and wait_threads confirm active. list_threads omitted agent-created chats; read-only metadata plus app reads resolved IDs without duplication."
     },
     {
@@ -519,7 +519,7 @@
       "plan": "plans/release-completion/s2b-ordinary-memory-review/runtime-roots/plan.md",
       "threadId": "01a16e6c-b9bf-76c3-8096-5a9f6fbac892",
       "worktree": "/home/john-riley/.codex/worktrees/c0c1/lang",
-      "afterCursor": "5f07147a-53ff-4ac6-816f-210c9dd90697:1",
+      "afterCursor": "5f07147a-53ff-4ac6-816f-210c9dd90697:2",
       "setup_verified": "Exact worktree HEAD matches common base; app read_thread and wait_threads confirm active. list_threads omitted agent-created chats; read-only metadata plus app reads resolved IDs without duplication."
     },
     {
@@ -532,7 +532,7 @@
       "plan": "plans/release-completion/s2b-ordinary-memory-review/api-visibility/plan.md",
       "threadId": "01a16e6c-cd2a-74e0-854c-ba26c9418640",
       "worktree": "/home/john-riley/.codex/worktrees/2f3a/lang",
-      "afterCursor": "97a16d77-c77e-49cf-b401-d66bcabb491d:1",
+      "afterCursor": "97a16d77-c77e-49cf-b401-d66bcabb491d:2",
       "setup_verified": "Exact worktree HEAD matches common base; app read_thread and wait_threads confirm active. list_threads omitted agent-created chats; read-only metadata plus app reads resolved IDs without duplication."
     },
     {
@@ -545,7 +545,7 @@
       "plan": "plans/release-completion/s2b-ordinary-memory-review/evidence-parity/plan.md",
       "threadId": "01a16e6c-e179-79f0-bdff-73791dd80661",
       "worktree": "/home/john-riley/.codex/worktrees/e7e8/lang",
-      "afterCursor": "095f0dcc-7958-450d-bbab-529482f0d2ec:1",
+      "afterCursor": "095f0dcc-7958-450d-bbab-529482f0d2ec:2",
       "setup_verified": "Exact worktree HEAD matches common base; app read_thread and wait_threads confirm active. list_threads omitted agent-created chats; read-only metadata plus app reads resolved IDs without duplication."
     }
   ]
