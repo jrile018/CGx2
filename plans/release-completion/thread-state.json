@@ -210,6 +210,17 @@
       "integrated_commit": "d8253431a9ab5ab571b9e7e8841242f7667b0a28",
       "acceptance": "Bounded Result/no_gc accepted with both repairs,1237Rust/2928current product checks. Historical obsolete negative superseded explicitly; full memory remains incomplete.",
       "accepted_code_commit": "938c911593c89e78ec90a990709a764b23ed320e"
+    },
+    {
+      "lane": "s2b-default-managed",
+      "title": "CGx2 default ordinary managed heap",
+      "threadId": "01a16ca5-fff7-7a70-b960-e86e6714b71e",
+      "clientThreadId": "client-new-thread:6a37512e-ee9e-498e-ae81-995c71663b27",
+      "hostId": "local",
+      "worktree": "/home/john-riley/.codex/worktrees/685c/lang",
+      "base": "c9d60229ecf3ed2bf76b29525fec0bdda41d0906",
+      "status": "running",
+      "afterCursor": "306cfc56-28ee-4c5f-ae40-81a6de815086:1"
     }
   ],
   "s2a_repairs": [

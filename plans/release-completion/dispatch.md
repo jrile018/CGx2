@@ -163,3 +163,7 @@ cc69d8d accepted/integrated3cdb63c: independent review plus coordinator10harness
 ## Owned Result repairs accepted; default managed source ready
 
 Both repair chats reviewed-bounded-delivery. Combined code938c911 passes1237Rust/2928current product checks with explicit separate historical-negative reconciliation; see s2b-owned-result-review/evidence/accepted-repairs/acceptance.json. Next single shared producer plan s2b-default-managed/plan.md covers allfive foundation heap shapes, roots, reference aliases/cycles, recovery and resource effects. No unreviewed consumer fan-out. Actual setup outcomes follow.
+
+## Default ordinary managed source running
+
+Reviewed basec9d60229ecf3ed2bf76b29525fec0bdda41d0906. Chat01a16ca5-fff7-7a70-b960-e86e6714b71e (CGx2 default ordinary managed heap), worktree/home/john-riley/.codex/worktrees/685c/lang, is confirmed active by read_thread/wait_threads; HEAD matches base. Queued client6a37512e-ee9e-498e-ae81-995c71663b27 and cursor are saved. list_threads omitted agent-created chat; exact read-only local metadata plus app reads resolved identity without duplicate. Sole shared producer; consumers wait for reviewed implementation. Full memory/release gates remain open.
