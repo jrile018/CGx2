@@ -1,0 +1,10 @@
+variant V:
+    A
+    B
+fn main() -> i64:
+    match V.A():
+        V.A:
+            true
+        V.B:
+            false
+    42

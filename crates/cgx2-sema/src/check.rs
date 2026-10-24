@@ -862,14 +862,16 @@ impl Checker {
                     }
                 }
             }
-            if let Some((branch, branch_span)) = self.check_block(&arm.body, expected) {
+            // `expected` constrains explicit returns anywhere in the arm. Only
+            // fallthrough values participate in the match's own value join;
+            // the enclosing block checks its final value against the function.
+            let tail = self.check_block(&arm.body, expected);
+            if !block_returns(&arm.body) {
+                let (branch, branch_span) = tail.unwrap_or((Type::Unit, arm.span));
                 if let Some(result) = &result {
                     self.expect_type(&branch, result, branch_span);
                 } else {
-                    result = Some(branch.clone());
-                }
-                if let Some(expected) = expected {
-                    self.expect_type(&branch, expected, branch_span);
+                    result = Some(branch);
                 }
             }
             self.scopes.pop();
@@ -1052,6 +1054,12 @@ impl Checker {
                         returns(then_body, types, out);
                         returns(else_body, types, out);
                     }
+                    StmtKind::Match { arms, .. } => {
+                        for arm in arms {
+                            returns(&arm.body, types, out);
+                        }
+                    }
+                    StmtKind::For { body, .. } => returns(body, types, out),
                     _ => {}
                 }
             }
