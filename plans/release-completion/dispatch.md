@@ -179,3 +179,13 @@ The existing sole producer reports the 65,536-element fixture passes interpreter
 ## Managed delivery reviewed; three bounded repairs prepared
 
 Delivery bc4ba95e710eaed3816291fdc67de1478e0456f5 is stopped, clean and reviewed. Staged as7643899037c6fd9522534c7b9125b054aab6088c for a common repair base; acceptance remains failed. Three reviews and coordinator probes reproduced source/AST authentication mismatch, schema1 user AllocationError variant regression, and intrinsic-vs-ordinary Result equality failure. Native budget/fault parity and exact rejection/artifact evidence also need repair. See s2b-default-managed-review/README.md and its three disjoint plans. Full release ledger preserved; no new language consumers. Actual repair creation outcomes follow after common-base commit.
+
+## Three managed repair chats running
+
+Common reviewed repair base3c1cfe2aeba2f7135e4069709bf633c082d2aab0 matches all three worktree HEADs. Compact wait_threads confirms each active. list_threads omitted agent-created chats; exact read-only local metadata plus app read_thread verified permanent identities, titles and paths without duplicates. Queued client IDs and cursors are preserved in thread-state.json. Independent baseline1268Rust/328managed product and required current regressions pass, but the reviewed correctness/evidence defects keep acceptance failed.
+
+| Lane | Chat | Worktree | Status |
+| --- | --- | --- | --- |
+| core-auth | 01a16d5f-04e4-72b0-818f-d3cd2a19621f | /home/john-riley/.codex/worktrees/06b4/lang | running |
+| runtime-equality | 01a16d5f-04f6-7142-97ef-27e4e39ccf5c | /home/john-riley/.codex/worktrees/d1b5/lang | running |
+| evidence-parity | 01a16d5f-1615-7fb3-a8ca-f8467c61488c | /home/john-riley/.codex/worktrees/00f8/lang | running |

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24T09:50:30.650Z",
+  "checked_at": "2026-10-24 10:05:56 UTC",
   "original_chats": [
     {
       "lane": "core",
@@ -430,6 +430,44 @@
       "afterCursor": "58e15982-3e8c-405d-a92f-c8ae4c8ad4d3:2",
       "commit": "cc69d8d2212529f5caf7fd2442bce317b6e880d0",
       "integrated_commit": "3cdb63c6f65e79bf30a2e8b27cb9892fd9badd82"
+    }
+  ],
+  "s2b_default_managed_repairs": [
+    {
+      "lane": "core-auth",
+      "title": "CGx2 managed source authentication repair",
+      "threadId": "01a16d5f-04e4-72b0-818f-d3cd2a19621f",
+      "clientThreadId": "client-new-thread:9ee0f966-98c1-4e3f-a470-cb07e8cb338f",
+      "hostId": "local",
+      "worktree": "/home/john-riley/.codex/worktrees/06b4/lang",
+      "base": "3c1cfe2aeba2f7135e4069709bf633c082d2aab0",
+      "status": "running",
+      "afterCursor": "97c7b72a-7d85-4dc0-baa3-400d373feba5:1",
+      "plan": "plans/release-completion/s2b-default-managed-review/core-auth/plan.md"
+    },
+    {
+      "lane": "runtime-equality",
+      "title": "CGx2 managed Result equality repair",
+      "threadId": "01a16d5f-04f6-7142-97ef-27e4e39ccf5c",
+      "clientThreadId": "client-new-thread:71084616-a743-4416-b864-76a69c82920b",
+      "hostId": "local",
+      "worktree": "/home/john-riley/.codex/worktrees/d1b5/lang",
+      "base": "3c1cfe2aeba2f7135e4069709bf633c082d2aab0",
+      "status": "running",
+      "afterCursor": "bd48213e-aa0a-4041-bdf1-3887918b9dc5:1",
+      "plan": "plans/release-completion/s2b-default-managed-review/runtime-equality/plan.md"
+    },
+    {
+      "lane": "evidence-parity",
+      "title": "CGx2 managed acceptance parity repair",
+      "threadId": "01a16d5f-1615-7fb3-a8ca-f8467c61488c",
+      "clientThreadId": "client-new-thread:81f59510-cafe-42ad-a79c-cb2afc3bc516",
+      "hostId": "local",
+      "worktree": "/home/john-riley/.codex/worktrees/00f8/lang",
+      "base": "3c1cfe2aeba2f7135e4069709bf633c082d2aab0",
+      "status": "running",
+      "afterCursor": "9d6879bb-1456-4ec7-9697-a11f91973d90:1",
+      "plan": "plans/release-completion/s2b-default-managed-review/evidence-parity/plan.md"
     }
   ]
 }
