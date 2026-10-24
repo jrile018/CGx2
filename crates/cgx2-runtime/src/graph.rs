@@ -1900,16 +1900,9 @@ pub mod default_managed {
                         } else {
                             Ok(value)
                         };
-                        match copied {
-                            Ok(value) => value.wrap(e.ty, 0),
-                            Err(GraphError::Memory(MemoryError::Allocation(error))) => {
-                                self.memory_error_value(e.ty, error)
-                            }
-                            Err(GraphError::ShapeLimit) => {
-                                self.memory_error_value(e.ty, AllocationError::ShapeLimit)
-                            }
-                            Err(error) => Err(error.into()),
-                        }
+                        // expr owns the recovery boundary, including argument
+                        // evaluation and publication of the final result root.
+                        copied.map_err(Fault::from)?.wrap(e.ty, 0)
                     }
                     M::Collect { region } => {
                         let region = self.memory_region(*region, env, roots)?;
@@ -2306,23 +2299,48 @@ pub mod default_managed {
                                     }
                                 }
                                 let v = self.expr(*e, env, roots)?;
-                                let (case, children) = self.parts(v, roots)?;
-                                let arm = arms
-                                    .iter()
-                                    .find(|a| a.case.is_none_or(|c| c == case))
-                                    .ok_or_else(|| invariant("nonexhaustive runtime match"))?;
-                                env.0.push(HashMap::new());
+                                let mut transferred = false;
                                 let branch = (|| {
-                                    for (n, v) in arm.bindings.iter().zip(children) {
-                                        root(roots, v, &mut self.evidence)?;
-                                        self.bind(env, roots, *n, v)?;
+                                    let (case, children) = self.parts(v, roots)?;
+                                    let arm = arms
+                                        .iter()
+                                        .find(|a| a.case.is_none_or(|c| c == case))
+                                        .ok_or_else(|| invariant("nonexhaustive runtime match"))?;
+                                    // An inline carrier owns exactly its payload's
+                                    // registration. Heap aggregates still need the
+                                    // parent protected while children are rooted.
+                                    let inline = v.depth > 0
+                                        && arm.bindings.len() == 1
+                                        && children.len() == 1
+                                        && v.handle().is_some()
+                                        && v.handle() == children[0].handle();
+                                    env.0.push(HashMap::new());
+                                    let branch = (|| {
+                                        for (n, child) in arm.bindings.iter().zip(children) {
+                                            if !inline {
+                                                root(roots, child, &mut self.evidence)?;
+                                            }
+                                            self.bind(env, roots, *n, child)?;
+                                            transferred = inline;
+                                        }
+                                        self.block(&arm.body, env, roots, false)
+                                    })();
+                                    let popped = env.pop(roots, &mut self.evidence);
+                                    match branch {
+                                        Err(error) => Err(error),
+                                        Ok(value) => {
+                                            popped?;
+                                            Ok(value)
+                                        }
                                     }
-                                    self.block(&arm.body, env, roots, false)
                                 })();
-                                let popped = env.pop(roots, &mut self.evidence);
-                                release(roots, v, &mut self.evidence)?;
+                                let released = if transferred {
+                                    Ok(()) // The binding's env.pop owns this release.
+                                } else {
+                                    release(roots, v, &mut self.evidence)
+                                };
                                 let (v, ret) = branch?;
-                                popped?;
+                                released?;
                                 if ret {
                                     return Ok((v, true));
                                 }
@@ -2431,8 +2449,8 @@ pub mod default_managed {
                 self.step(e.loc)?;
                 let checkpoint = roots.checkpoint();
                 let operation = self.memory.and_then(|m| m.operations.get(&id)).cloned();
-                let evaluated = if let Some(operation) = operation {
-                    self.memory_expr(e, &operation, env, roots)
+                let evaluated = if let Some(operation) = &operation {
+                    self.memory_expr(e, operation, env, roots)
                 } else {
                     self.expr_inner(e, env, roots)
                 };
@@ -2444,7 +2462,15 @@ pub mod default_managed {
                     }
                     Ok(v)
                 });
-                if matches!(e.op, Op::ETry(_)) {
+                if matches!(
+                    operation,
+                    Some(crate::ordinary_memory::MemoryOpV1::CopyTo { .. })
+                ) {
+                    if let Err(Fault::AllocationAt(error, _, _)) = result {
+                        self.evidence.recovered += 1;
+                        result = self.memory_error_value(e.ty, error);
+                    }
+                } else if matches!(e.op, Op::ETry(_)) {
                     if let Err(Fault::AllocationAt(error, _, _)) = result {
                         self.evidence.recovered += 1;
                         let error_ty = match &self.p.layouts[e.ty].shape {

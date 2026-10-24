@@ -1,0 +1,12 @@
+fn main() -> i64 effects(ManagedAlloc):
+    let xs = [20, 22]
+    let alias = xs
+    match memory.try_region(mode: memory.Mode.Auto, limit: 0, trigger: 1):
+        Result.Ok(r):
+            match memory.copy_to(borrow(r), xs):
+                Result.Ok(copy):
+                    -5
+                Result.Err(error):
+                    length(xs) + length(alias) + 38
+        Result.Err(error):
+            -1

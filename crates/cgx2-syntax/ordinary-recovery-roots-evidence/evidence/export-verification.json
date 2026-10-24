@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "manifest_sha256": "814c1a547dcf97f7db19d958dc52501bdd8e386032e53cc599189cba94fb4738",
+  "verified_payloads": 852,
+  "stored_payload_bytes": 19800935,
+  "archive_backed_external_references": 8,
+  "result": "Every stored gzip hash, decompressed original byte count and original SHA256 matched. Exact copied tar archive hash also matched.",
+  "ordinary_memory_accepted": false,
+  "release_accepted": false
+}

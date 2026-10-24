@@ -1,0 +1,21 @@
+{
+  "scope": "Tool-launch failures that occurred before an owned invocation journal could be created; raw product and test failures are in the exported journals.",
+  "events": [
+    {
+      "operation": "Read owned replay progress after initial standalone copy quota failure",
+      "outcome": "Sandbox launcher failed before command execution",
+      "diagnostic": "failed to register synthetic bubblewrap mount target /tmp/.git: Quota exceeded (os error 122)"
+    },
+    {
+      "operation": "Read/update owned retry tooling using zsh heredoc",
+      "outcome": "zsh could not write its temporary heredoc; retried using bash without a heredoc",
+      "diagnostic": "zsh:1: write failed: disk quota exceeded"
+    },
+    {
+      "operation": "Launch legacy_audit.py --output-dir target/tmp-ordinary-recovery-roots/legacy-reconciliation-01",
+      "outcome": "Sandbox launcher exit101 before command execution; the same command was then executed with the required local filesystem access",
+      "diagnostic": "failed to register synthetic bubblewrap mount target /home/john-riley/.codex/worktrees/2b95/lang/.agents: Quota exceeded (os error 122)"
+    }
+  ],
+  "response": "Preserved the quota-failed product attempt and exact partial-copy bytes. Archived and hash-verified only completed files owned by this lane before removing those copies from /tmp. Retried standalone execution in the calling chat's writable visualization directory, verified outside Git. No other task scratch, host quota, security policy or runtime allocation charge was changed."
+}
