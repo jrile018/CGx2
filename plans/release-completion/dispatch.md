@@ -75,3 +75,7 @@ Common repair base: `8902cbd92533b81e801bf2c5bea725f5508fe3e2`. All three worktr
 ## S2a accepted after repair review
 
 All three repair commits are reviewed-bounded-delivery; original S2a is accepted with its documented source/target limits. Integrated 1078 Rust tests, 166 benchmark tests, 20 docs harness tests, 39 runnable documentation cases, 10 S2a and 33 API product checks pass; details in s2a-review/README.md. S2b foundation is the single dependency-ready core task. Remaining S2b source integrations stay explicit in README.md. Dispatch outcome follows.
+
+## S2b foundation running
+
+Reviewed base38cce386519832ddaf50460c1e03f38aa6a3c106. Chat01a16b46-2ebe-7c40-9efe-4619197003d9, worktree /home/john-riley/.codex/worktrees/2766/lang, is confirmed active and its HEAD matches the base. Queued client ID6c21b475-93b8-4b71-9555-18e231f9dedc and polling cursor are preserved in thread-state.json. The recent-chat list again omitted the worker; read-only local metadata and read_thread verified its identity. No duplicates. One shared core writer; remaining S2b/S3 gates unchanged.

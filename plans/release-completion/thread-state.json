@@ -165,6 +165,17 @@
       "afterCursor": "e8048631-e2ae-4980-b91f-fab9395a9eaa:7",
       "commit": "16028e7d4c78f3974c9e4a2f24878debeec56612",
       "integrated_commit": "ca46bb35bc301b5b3282aee3a1af550b47a6773c"
+    },
+    {
+      "lane": "s2b-foundation",
+      "title": "CGx2 S2b generics and standard data",
+      "threadId": "01a16b46-2ebe-7c40-9efe-4619197003d9",
+      "clientThreadId": "client-new-thread:6c21b475-93b8-4b71-9555-18e231f9dedc",
+      "hostId": "local",
+      "worktree": "/home/john-riley/.codex/worktrees/2766/lang",
+      "base": "38cce386519832ddaf50460c1e03f38aa6a3c106",
+      "status": "running",
+      "afterCursor": "dbe59f76-66d3-4471-998e-70e8a98a72cb:1"
     }
   ],
   "s2a_repairs": [
