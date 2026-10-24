@@ -1,0 +1,18 @@
+module app.left
+pub record T:
+    value: i64
+pub record Tag:
+    value: i64
+pub record Box<T>:
+    value: T
+pub record Envelope<T>:
+    value: Option<Result<List<Array<T>>, String>>
+    nominal: app.left.T
+    tag: Tag
+pub variant Choice<T>:
+    Value(Option<Result<List<Array<T>>, String>>, app.left.T, Tag)
+    Empty
+pub fn identity<T: Eq + Show>(value: T) -> T effects() caps():
+    value
+pub fn equal<T: Eq>(left: T, right: T) -> Bool effects() caps():
+    left == right

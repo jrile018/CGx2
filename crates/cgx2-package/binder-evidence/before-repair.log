@@ -1,0 +1,47 @@
+
+running 8 tests
+test generic_type_visibility_remains_checked ... ok
+test imported_record_binder_shadows_same_named_local_record ... FAILED
+test imported_variant_binder_shadows_same_named_local_variant ... FAILED
+test changed_generic_dependency_invalidates_snapshot_and_effect_admission ... FAILED
+test distinct_modules_keep_colliding_generic_identities ... ok
+test imported_generic_constraints_remain_required ... ok
+test nested_binders_and_qualified_and_unshadowed_nominals_coexist ... FAILED
+test imported_binders_still_require_the_declared_argument_types ... ok
+
+failures:
+
+---- imported_record_binder_shadows_same_named_local_record stdout ----
+
+thread 'imported_record_binder_shadows_same_named_local_record' (288) panicked at crates/cgx2-package/tests/binders.rs:40:39:
+called `Result::unwrap()` on an `Err` value: [PackageDiagnostic { code: "CGT003", message: "expected app.dep.T, found i64", file: "/home/john-riley/.codex/worktrees/b9e0/lang/target/tmp-package-binders/cgx2-package-binders-282-7/src/main.cg", span: Some(Span { start: 85, end: 87 }), related: None }, PackageDiagnostic { code: "CGT003", message: "expected i64, found app.dep.T", file: "/home/john-riley/.codex/worktrees/b9e0/lang/target/tmp-package-binders/cgx2-package-binders-282-7/src/main.cg", span: Some(Span { start: 93, end: 100 }), related: None }]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- imported_variant_binder_shadows_same_named_local_variant stdout ----
+
+thread 'imported_variant_binder_shadows_same_named_local_variant' (289) panicked at crates/cgx2-package/tests/binders.rs:40:39:
+called `Result::unwrap()` on an `Err` value: [PackageDiagnostic { code: "CGT003", message: "expected app.dep.T, found i64", file: "/home/john-riley/.codex/worktrees/b9e0/lang/target/tmp-package-binders/cgx2-package-binders-282-6/src/main.cg", span: Some(Span { start: 92, end: 94 }), related: None }, PackageDiagnostic { code: "CGT003", message: "expected app.dep.T, found i64", file: "/home/john-riley/.codex/worktrees/b9e0/lang/target/tmp-package-binders/cgx2-package-binders-282-6/src/main.cg", span: Some(Span { start: 211, end: 212 }), related: None }, PackageDiagnostic { code: "CGT003", message: "expected i64, found app.dep.T", file: "/home/john-riley/.codex/worktrees/b9e0/lang/target/tmp-package-binders/cgx2-package-binders-282-6/src/main.cg", span: Some(Span { start: 100, end: 213 }), related: None }]
+
+---- changed_generic_dependency_invalidates_snapshot_and_effect_admission stdout ----
+
+thread 'changed_generic_dependency_invalidates_snapshot_and_effect_admission' (283) panicked at crates/cgx2-package/tests/binders.rs:40:39:
+called `Result::unwrap()` on an `Err` value: [PackageDiagnostic { code: "CGT003", message: "expected app.left.T, found i64", file: "/home/john-riley/.codex/worktrees/b9e0/lang/target/tmp-package-binders/cgx2-package-binders-282-1/src/main.cg", span: Some(Span { start: 107, end: 109 }), related: None }, PackageDiagnostic { code: "CGT003", message: "expected app.right.T, found app.left.T", file: "/home/john-riley/.codex/worktrees/b9e0/lang/target/tmp-package-binders/cgx2-package-binders-282-1/src/main.cg", span: Some(Span { start: 154, end: 164 }), related: None }, PackageDiagnostic { code: "CGT003", message: "expected Array<i64>, found Array<app.right.T>", file: "/home/john-riley/.codex/worktrees/b9e0/lang/target/tmp-package-binders/cgx2-package-binders-282-1/src/main.cg", span: Some(Span { start: 247, end: 265 }), related: None }, PackageDiagnostic { code: "CGT003", message: "expected app.left.T, found i64", file: "/home/john-riley/.codex/worktrees/b9e0/lang/target/tmp-package-binders/cgx2-package-binders-282-1/src/main.cg", span: Some(Span { start: 394, end: 398 }), related: None }, PackageDiagnostic { code: "CGT003", message: "expected i64, found app.left.T", file: "/home/john-riley/.codex/worktrees/b9e0/lang/target/tmp-package-binders/cgx2-package-binders-282-1/src/main.cg", span: Some(Span { start: 979, end: 1005 }), related: Some(RelatedLocation { file: "/home/john-riley/.codex/worktrees/b9e0/lang/target/tmp-package-binders/cgx2-package-binders-282-1/src/left.cg", span: Span { start: 319, end: 392 } }) }, PackageDiagnostic { code: "CGT003", message: "expected app.left.T, found i64", file: "/home/john-riley/.codex/worktrees/b9e0/lang/target/tmp-package-binders/cgx2-package-binders-282-1/src/main.cg", span: Some(Span { start: 979, end: 1005 }), related: Some(RelatedLocation { file: "/home/john-riley/.codex/worktrees/b9e0/lang/target/tmp-package-binders/cgx2-package-binders-282-1/src/left.cg", span: Span { start: 319, end: 392 } }) }, PackageDiagnostic { code: "CGT003", message: "expected i64, found app.left.T", file: "/home/john-riley/.codex/worktrees/b9e0/lang/target/tmp-package-binders/cgx2-package-binders-282-1/src/main.cg", span: Some(Span { start: 1055, end: 1065 }), related: None }]
+
+---- nested_binders_and_qualified_and_unshadowed_nominals_coexist stdout ----
+
+thread 'nested_binders_and_qualified_and_unshadowed_nominals_coexist' (290) panicked at crates/cgx2-package/tests/binders.rs:40:39:
+called `Result::unwrap()` on an `Err` value: [PackageDiagnostic { code: "CGT003", message: "expected app.left.T, found i64", file: "/home/john-riley/.codex/worktrees/b9e0/lang/target/tmp-package-binders/cgx2-package-binders-282-5/src/main.cg", span: Some(Span { start: 107, end: 109 }), related: None }, PackageDiagnostic { code: "CGT003", message: "expected app.right.T, found app.left.T", file: "/home/john-riley/.codex/worktrees/b9e0/lang/target/tmp-package-binders/cgx2-package-binders-282-5/src/main.cg", span: Some(Span { start: 154, end: 164 }), related: None }, PackageDiagnostic { code: "CGT003", message: "expected Array<i64>, found Array<app.right.T>", file: "/home/john-riley/.codex/worktrees/b9e0/lang/target/tmp-package-binders/cgx2-package-binders-282-5/src/main.cg", span: Some(Span { start: 247, end: 265 }), related: None }, PackageDiagnostic { code: "CGT003", message: "expected app.left.T, found i64", file: "/home/john-riley/.codex/worktrees/b9e0/lang/target/tmp-package-binders/cgx2-package-binders-282-5/src/main.cg", span: Some(Span { start: 394, end: 398 }), related: None }, PackageDiagnostic { code: "CGT003", message: "expected i64, found app.left.T", file: "/home/john-riley/.codex/worktrees/b9e0/lang/target/tmp-package-binders/cgx2-package-binders-282-5/src/main.cg", span: Some(Span { start: 979, end: 1005 }), related: Some(RelatedLocation { file: "/home/john-riley/.codex/worktrees/b9e0/lang/target/tmp-package-binders/cgx2-package-binders-282-5/src/left.cg", span: Span { start: 319, end: 392 } }) }, PackageDiagnostic { code: "CGT003", message: "expected app.left.T, found i64", file: "/home/john-riley/.codex/worktrees/b9e0/lang/target/tmp-package-binders/cgx2-package-binders-282-5/src/main.cg", span: Some(Span { start: 979, end: 1005 }), related: Some(RelatedLocation { file: "/home/john-riley/.codex/worktrees/b9e0/lang/target/tmp-package-binders/cgx2-package-binders-282-5/src/left.cg", span: Span { start: 319, end: 392 } }) }, PackageDiagnostic { code: "CGT003", message: "expected i64, found app.left.T", file: "/home/john-riley/.codex/worktrees/b9e0/lang/target/tmp-package-binders/cgx2-package-binders-282-5/src/main.cg", span: Some(Span { start: 1055, end: 1065 }), related: None }]
+
+
+failures:
+    changed_generic_dependency_invalidates_snapshot_and_effect_admission
+    imported_record_binder_shadows_same_named_local_record
+    imported_variant_binder_shadows_same_named_local_variant
+    nested_binders_and_qualified_and_unshadowed_nominals_coexist
+
+test result: FAILED. 4 passed; 4 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Compiling cgx2-package v0.1.0 (/home/john-riley/.codex/worktrees/b9e0/lang/crates/cgx2-package)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.26s
+     Running tests/binders.rs (target/release-package-binders/debug/deps/binders-df7f3b6798ed8dc6)
+error: test failed, to rerun pass `-p cgx2-package --test binders`
