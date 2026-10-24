@@ -502,8 +502,9 @@
     },
     {
       "id": "owned-runner-output",
-      "status": "failed",
-      "detail": "run.py checks 1MiB capture only after child wait; bound must be enforced during execution."
+      "status": "passed",
+      "detail": "run.py checks 1MiB capture only after child wait; bound must be enforced during execution.",
+      "acceptance": "runner-accepted/acceptance.json"
     }
   ],
   "ordinary_memory_complete": false,

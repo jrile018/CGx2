@@ -155,3 +155,7 @@ Common repair base3e5be4d4907debad1ae5fa8bdc836208255ddb4d matches both worktree
 | --- | --- | --- | --- |
 | symbol-compatibility | 01a16c7e-fe8a-7092-b805-8f546006a996 | /home/john-riley/.codex/worktrees/aa9e/lang | running |
 | runner-output | 01a16c7f-3d83-7110-9385-b75ff89b6ef7 | /home/john-riley/.codex/worktrees/6eb0/lang | running |
+
+## Runner repair reviewed; symbol repair remains running
+
+cc69d8d accepted/integrated3cdb63c: independent review plus coordinator10harness/584product checks pass. Cursor/status and exact evidence saved. Symbol repair remains active with195 new source/target checks reported; its original shadow-builtin negative encodes the old-name regression and will need transparent coordinator expectation reconciliation after delivered code review. No additional safe consumer dispatch or duplicate chats.

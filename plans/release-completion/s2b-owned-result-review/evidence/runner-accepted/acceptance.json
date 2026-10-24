@@ -1,0 +1,25 @@
+{
+  "status": "bounded-runner-repair-accepted",
+  "worker_commit": "cc69d8d2212529f5caf7fd2442bce317b6e880d0",
+  "integrated_commit": "3cdb63c6f65e79bf30a2e8b27cb9892fd9badd82",
+  "independent_review": "completion_consumers: no blockers;83 hashes/six raw logs authenticated",
+  "coordinator_selftests": 10,
+  "coordinator_product_checks": 584,
+  "worker_syntax_tests": 45,
+  "workspace_tests": "not repeated for Python-only repair; prior1229Rust/2707product historical evidence separate",
+  "remaining": "Symbol compatibility still running. Full memory/release incomplete.",
+  "files": {
+    "selftests.log.gz": {
+      "sha256": "35b03fb24618cf6bb578b6d47765a309f42168633dfa9582cf382460cab7ca2b",
+      "original_sha256": "abb0d81859993970a996b7711e42094d4d0a25f9c713074dc685fa0b7e36a222"
+    },
+    "product.log.gz": {
+      "sha256": "c198987a32eff801cffed15a8015250102fb4e3accc32078f03de0298e0ac0d8",
+      "original_sha256": "299903edb8247103f30434a7df01f56ff0bc7272ec326240cd6e55376bebc92c"
+    },
+    "product.json": {
+      "sha256": "d943a68e93796d63142de10185042855188b844b25379584f3771ba1493f0d11",
+      "original_sha256": "d943a68e93796d63142de10185042855188b844b25379584f3771ba1493f0d11"
+    }
+  }
+}

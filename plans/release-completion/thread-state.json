@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24T05:50:30.540Z",
+  "checked_at": "2026-10-24T06:10:30.537Z",
   "original_chats": [
     {
       "lane": "core",
@@ -399,7 +399,7 @@
       "worktree": "/home/john-riley/.codex/worktrees/aa9e/lang",
       "base": "3e5be4d4907debad1ae5fa8bdc836208255ddb4d",
       "status": "running",
-      "afterCursor": "f81947e8-549b-4254-a6c2-ae4b50a4f114:1"
+      "afterCursor": "f81947e8-549b-4254-a6c2-ae4b50a4f114:2"
     },
     {
       "lane": "runner-output",
@@ -409,8 +409,10 @@
       "hostId": "local",
       "worktree": "/home/john-riley/.codex/worktrees/6eb0/lang",
       "base": "3e5be4d4907debad1ae5fa8bdc836208255ddb4d",
-      "status": "running",
-      "afterCursor": "58e15982-3e8c-405d-a92f-c8ae4c8ad4d3:1"
+      "status": "reviewed-bounded-delivery",
+      "afterCursor": "58e15982-3e8c-405d-a92f-c8ae4c8ad4d3:2",
+      "commit": "cc69d8d2212529f5caf7fd2442bce317b6e880d0",
+      "integrated_commit": "3cdb63c6f65e79bf30a2e8b27cb9892fd9badd82"
     }
   ]
 }
