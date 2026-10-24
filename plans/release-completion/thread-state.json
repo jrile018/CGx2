@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24T15:57:01.522569+00:00",
+  "checked_at": "2026-10-24T16:06:17.164077+00:00",
   "original_chats": [
     {
       "lane": "core",
@@ -559,6 +559,47 @@
       "commit": "80bd0372773a9d44ba74d2a926cfe750e7ffd54c",
       "integrated_commit": "0acc3278a3ba6dbf9d36e39e7a6dffc553ab2632",
       "acceptance_note": "Truthful baseline staged;390 archives/4980 streams independently verified. Missing strict root fields/direct required rows and artifact/sentinel/missing-target selftests block harness acceptance. New hardened plan includes derived copy budget439/guard total455 versus obsolete375 expectation. Preserve902/75 original and new combined attempts separately."
+    }
+  ],
+  "s2b_ordinary_memory_followup_repairs": [
+    {
+      "lane": "borrow-nominal",
+      "title": "CGx2 ordinary borrow constructor repair",
+      "plan": "plans/release-completion/s2b-ordinary-memory-review/borrow-nominal/plan.md",
+      "base": "89464a76c9bd84a3b090ec58a14ca6be0043c6ea",
+      "clientThreadId": "client-new-thread:98864b96-83af-46fe-afe6-31199cba4a27",
+      "hostId": "local",
+      "threadId": "01a16ea8-819b-7261-a64a-9bf5a9bb1b8f",
+      "worktree": "/home/john-riley/.codex/worktrees/98b9/lang",
+      "status": "running",
+      "afterCursor": "a5321c40-bb99-42dd-a355-c88414e5b0ce:1",
+      "setup_verified": "Worktree HEAD equals89464a76c9bd84a3b090ec58a14ca6be0043c6ea; app read_thread and compact wait confirm active. list_threads omitted agent-created chats; exact read-only local metadata and app reads resolved identities. No duplicates."
+    },
+    {
+      "lane": "recovery-roots",
+      "title": "CGx2 ordinary recovery root repair",
+      "plan": "plans/release-completion/s2b-ordinary-memory-review/recovery-roots/plan.md",
+      "base": "89464a76c9bd84a3b090ec58a14ca6be0043c6ea",
+      "clientThreadId": "client-new-thread:cca503c0-204b-49da-af6f-c9b94cc37af7",
+      "hostId": "local",
+      "threadId": "01a16ea8-81b2-7323-a1ed-602c72630fe9",
+      "worktree": "/home/john-riley/.codex/worktrees/2b95/lang",
+      "status": "running",
+      "afterCursor": "6aeabcc6-9be3-4965-94f9-251878fe752c:1",
+      "setup_verified": "Worktree HEAD equals89464a76c9bd84a3b090ec58a14ca6be0043c6ea; app read_thread and compact wait confirm active. list_threads omitted agent-created chats; exact read-only local metadata and app reads resolved identities. No duplicates."
+    },
+    {
+      "lane": "harness-hardening",
+      "title": "CGx2 ordinary evidence harness hardening",
+      "plan": "plans/release-completion/s2b-ordinary-memory-review/harness-hardening/plan.md",
+      "base": "89464a76c9bd84a3b090ec58a14ca6be0043c6ea",
+      "clientThreadId": "client-new-thread:81d8fc2a-1e98-47e9-be98-75251cdb4a7a",
+      "hostId": "local",
+      "threadId": "01a16ea8-bbf7-7381-8599-5953d15d1757",
+      "worktree": "/home/john-riley/.codex/worktrees/97d1/lang",
+      "status": "running",
+      "afterCursor": "ea5db0ca-9d6e-48d2-845e-748bfe81768a:1",
+      "setup_verified": "Worktree HEAD equals89464a76c9bd84a3b090ec58a14ca6be0043c6ea; app read_thread and compact wait confirm active. list_threads omitted agent-created chats; exact read-only local metadata and app reads resolved identities. No duplicates."
     }
   ]
 }

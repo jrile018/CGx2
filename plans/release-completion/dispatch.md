@@ -226,3 +226,13 @@ OM08 delivery21452c2 accepted/integrated64a71e7 after independent source/evidenc
 ## Four ordinary-memory repairs reviewed; bounded follow-ups prepared
 
 API21452c2 and runtime f255dfe1 accepted for their assigned OM08/OM05–07 repairs. Core9330300 and harness80bd037 reviewed incomplete; staging commits and final stopped-chat cursors are saved in thread-state.json. Combined1360Rust and quality gates pass; first fake-solver failure and all setup attempts retained. Source nominal constructor, reserve10/11 recovery, and harness completeness are actionable independent repairs. Existing source/type/runtime public interfaces remain frozen. Three plans are reviewed with exclusive paths under s2b-ordinary-memory-review/{borrow-nominal,recovery-roots,harness-hardening}. Full release ledger remains required; no S3 consumers/main merge/publication. Final historical136/0, all18 regressions, package40/0 and review15/0 pass. Complete retained attempts and hash audit: s2b-ordinary-memory-review/evidence/combined-reviewed/. Actual creation outcomes follow.
+
+## Three ordinary-memory follow-up repair chats running
+
+Reviewed common base89464a76c9bd84a3b090ec58a14ca6be0043c6ea matches all three worktree HEADs. App read_thread and compact wait_threads confirm active work. list_threads omitted agent-created chats; exact read-only local metadata plus app reads resolved permanent IDs without duplicate creation. Queued client IDs and cursors are retained in thread-state.json. Full release requirements remain open; no S3 fanout, main merge or publication.
+
+| Lane | Chat | Worktree | Status |
+| --- | --- | --- | --- |
+| borrow-nominal | 01a16ea8-819b-7261-a64a-9bf5a9bb1b8f | /home/john-riley/.codex/worktrees/98b9/lang | running |
+| recovery-roots | 01a16ea8-81b2-7323-a1ed-602c72630fe9 | /home/john-riley/.codex/worktrees/2b95/lang | running |
+| harness-hardening | 01a16ea8-bbf7-7381-8599-5953d15d1757 | /home/john-riley/.codex/worktrees/97d1/lang | running |
