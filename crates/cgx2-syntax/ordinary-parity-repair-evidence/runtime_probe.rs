@@ -45,8 +45,10 @@ fn budget_cases() {
     }
     // One-node raw byte copy: temporary root + traversal vector + HashMap(3 buckets)
     // + owned encoded image(12+8+32) + staging vector + payload/slot + staging root.
+    // Source protection survives publication: a full replacement cap-2 root table
+    // adds 2*root, without refund. Operation=439; guard metadata=16, total=455.
     // Explicitly pinned to Rust 1.98.1's 3-bucket initial HashMap capacity.
-    let copy=4*root + 3*(size_of::<(Handle,u32)>()+1) + 12+8+32 + alloc;
+    let copy=6*root + 3*(size_of::<(Handle,u32)>()+1) + 12+8+32 + alloc;
     for (label,limit) in [("zero",0),("exact",copy),("one-under",copy-1)] {
         let mut s=Session::try_new().unwrap(); let source=s.default_region();
         let destination=s.create_region(M::Manual,4096).unwrap();

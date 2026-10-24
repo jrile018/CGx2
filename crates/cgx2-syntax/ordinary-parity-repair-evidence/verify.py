@@ -3,7 +3,9 @@
 import argparse
 import json
 import shutil
-from common import ROOT, Journal, digest, normal
+from common import ROOT, HERE, Journal, digest, normal
+from pathlib import Path
+from integrity import BINARIES, LIBRARIES, compiler_paths, freeze_inputs, harness_paths
 
 
 def main():
@@ -12,6 +14,10 @@ def main():
     p.add_argument('--prior-workspace-report', type=__import__('pathlib').Path)
     a = p.parse_args()
     j = Journal(a.output_dir)
+    j.required_commands = {'workspace-tests', 'clippy', 'fmt', 'build', 'toolchain-sysroot', 'toolchain-identity', 'cargo-identity'}
+    if a.prior_workspace_report:
+        j.required_commands.remove('workspace-tests')
+    j.required_checks = {'workspace-tests', 'clippy', 'fmt', 'build', 'toolchain-identities', 'frozen'}
     try:
         for name, cmd in [
             ('workspace-tests', ['cargo', 'test', '--workspace', '--all-features', '--offline', '--locked', '--no-fail-fast']),
@@ -28,13 +34,12 @@ def main():
             j.check(name, normal(row))
             if name == 'build' and not normal(row):
                 return j.finish()
-        source = ROOT / 'target/release-ordinary-evidence-parity/debug'
+        source = Path(j.env['CARGO_TARGET_DIR']) / 'debug'
         frozen = j.output / 'frozen'
         frozen.mkdir()
         manifest = {'schema_version': 1, 'source_directory': str(source), 'binary_directory': str(frozen),
                     'checks_after_cargo': True, 'binary_sha256': {}, 'probe_library_sha256': {}}
-        for name in ('cgx2', 'cgx2-native', 'cgx2c', 'cgx2-effect-index', 'cgx2-security', 'cgx2-verify', 'cgx2-notebook',
-                     'libcgx2_cli.rlib', 'libcgx2_sema.rlib', 'libcgx2_package.rlib', 'libcgx2_emit_rust.rlib', 'libcgx2_runtime.rlib'):
+        for name in BINARIES + LIBRARIES:
             before = digest(source / name)
             shutil.copy2(source / name, frozen / name)
             assert before == digest(frozen / name) == digest(source / name)
@@ -42,7 +47,22 @@ def main():
             manifest[key][name] = before
         (frozen / 'deps').symlink_to(source / 'deps', target_is_directory=True)
         (j.output / 'frozen.json').write_text(json.dumps(manifest, indent=2) + '\n')
-        paths = {ROOT / 'Cargo.toml', ROOT / 'Cargo.lock'}
+        sysroot = j.run('toolchain-sysroot', ['rustc', '--print', 'sysroot'])
+        identity = j.run('toolchain-identity', ['rustc', '--version', '--verbose'])
+        cargo_identity = j.run('cargo-identity', ['cargo', '--version', '--verbose'])
+        j.check('toolchain-identities', normal(sysroot) and normal(identity) and normal(cargo_identity) and 'rustc 1.98.1' in identity.get('stdout', ''))
+        toolroot = Path(sysroot['stdout'].strip())
+        toolchain = {toolroot/'bin/rustc', toolroot/'bin/cargo'}
+        toolchain.update((toolroot/'lib').glob('libLLVM*.so*'))
+        toolchain.update((toolroot/'lib').glob('librustc_driver*.so'))
+        toolchain.update(p for p in (toolroot/'lib/rustlib').glob('*/lib/*') if p.is_file())
+        inputs = freeze_inputs(frozen, toolchain)
+        (j.output/'inputs.json').write_text(json.dumps(inputs, indent=2)+'\n')
+        for path in harness_paths():
+            snapshot = j.output/'harness-snapshot'/path.relative_to(HERE)
+            snapshot.parent.mkdir(parents=True, exist_ok=True)
+            snapshot.write_bytes(path.read_bytes())
+        paths = compiler_paths()
         for pattern in ('*/Cargo.toml', '*/build.rs', '*/src/**/*.rs'):
             paths.update((ROOT / 'crates').glob(pattern))
         files = {str(p.relative_to(ROOT)): digest(p) for p in sorted(paths) if p.is_file()}

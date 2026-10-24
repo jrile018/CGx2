@@ -7,12 +7,18 @@ from pathlib import Path
 import sys
 from common import HERE, ROOT, Journal, digest, normal
 from run import frozen_hashes
+from integrity import audit
 
 p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('--verification-dir',type=Path,required=True)
 p.add_argument('--output-dir',type=Path,required=True)
+p.add_argument('--historical-inventory',type=Path,required=True)
 a=p.parse_args();j=Journal(a.output_dir)
 try:
+    audit(j, a.verification_dir/'frozen', 'final')
+    previous=json.loads(a.historical_inventory.read_text())
+    current={str(p.relative_to(HERE/'evidence')):digest(p) for p in (HERE/'evidence').rglob('*') if p.is_file()}
+    j.check('retained-historical-evidence-immutable',current==previous)
     helpers=[HERE.parent/'owned-result-runner-evidence/supervisor.py', HERE.parent/'ordinary-memory-evidence/run.py', HERE.parent/'ordinary-memory-evidence/test_run.py', ROOT/'plans/release-completion/s2b-ordinary-memory/regressions.json']
     j.report['read_only_helper_sha256']={str(p.relative_to(ROOT)):digest(p) for p in helpers}
     for name,argv in [('new-selftests',[sys.executable,HERE/'test_harness.py']),

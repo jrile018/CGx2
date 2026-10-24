@@ -6,6 +6,8 @@ from pathlib import Path
 import shutil
 from common import HERE, Journal, digest, normal, observed, stable
 from run import byte_span, primary, roots_ok, frozen_hashes
+from validation import package_inventory, sentinel_status
+from integrity import audit
 
 p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('--binary-dir',type=Path,required=True)
@@ -13,7 +15,9 @@ p.add_argument('--historical-product',type=Path,required=True)
 p.add_argument('--standalone-root',type=Path,required=True)
 p.add_argument('--output-dir',type=Path,required=True)
 a=p.parse_args();j=Journal(a.output_dir);b=a.binary_dir.resolve();before=frozen_hashes(b)
+j.required_commands, j.required_checks = package_inventory()
 try:
+    if not audit(j, b, 'before'):raise ValueError('frozen inputs changed')
     outside=a.standalone_root.resolve()/j.output.name;outside.mkdir(parents=True,exist_ok=False)
     row=j.run('outside-repository',['git','rev-parse','--is-inside-work-tree'],cwd=outside)
     j.check('outside-repository',normal(row,128))
@@ -48,14 +52,18 @@ try:
                 if mode=='standalone':
                     relocated=outside/tag;shutil.copy2(artifact,relocated);artifact=relocated
                 j.report.setdefault('artifacts',{})[tag]={'path':str(artifact),'sha256':digest(artifact)}
+                if mode=='standalone':j.report['artifacts'][tag].update(source=str(emitted),source_sha256=digest(emitted))
+                j.save()
                 actual=j.run(tag+'-run',[artifact],cwd=outside);verify(tag,actual)
         sentinel=j.output/(name+'.py');sentinel.write_bytes(b'prior artifact\n')
         row=j.run(name+'-python',[b/'cgx2c','emit-python','--package',source,'--out',sentinel,'--force'])
-        j.check(name+'-python-rejection',normal(row,1) and 'CGE006' in row.get('stderr',''))
-        j.check(name+'-python-preservation',sentinel.read_bytes()==b'prior artifact\n')
+        rejected, preserved = sentinel_status(row, sentinel, b'prior artifact\n', 'CGE006')
+        j.check(name+'-python-rejection', rejected)
+        j.check(name+'-python-preservation', preserved)
 except Exception:
     j.exception()
 finally:
+    audit(j, b, 'after')
     j.report['frozen_before']=before;j.report['frozen_after']=frozen_hashes(b)
     j.check('frozen-unchanged',j.report['frozen_before']==j.report['frozen_after'])
 raise SystemExit(j.finish())

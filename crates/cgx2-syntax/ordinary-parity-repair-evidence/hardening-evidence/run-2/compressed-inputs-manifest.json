@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "interpretation": "Exact already-compressed historical replay inputs/sources retained in addition to the standard exporter. These are fresh replay artifacts, not edits to historical evidence.",
+  "files": {
+    "retained-compressed/regressions/managed-product/managed-product/elements.cg.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/elements.cg.gz",
+      "bytes": 220,
+      "sha256": "915f06201d7d3281abd834c9ef93e444eaf22e23df8d739712902f2a1c088dfe"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/nodes.cg.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/nodes.cg.gz",
+      "bytes": 427,
+      "sha256": "384131bb12e4671ff299c2c141b773dcea69e1164d2c8084d0ccd7d54001e7e8"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/repair/runner.py.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/runner.py.gz",
+      "bytes": 6272,
+      "sha256": "a78e511ceda011a52f57d016d7192bc1adc8ff67d263e36c5af4b66bbe1f2da9"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/arg-negative.cg.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/arg-negative.cg.gz",
+      "bytes": 80,
+      "sha256": "09caee19974d7f26d0217ac479e526408d9bdea762b1f904807858d4c9e88fe3"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/arithmetic.cg.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/arithmetic.cg.gz",
+      "bytes": 100,
+      "sha256": "fd05317e954ecb9372ff1b047cac8c764dcbd7f3504d83501d5b65b952deb4df"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/collect-guard-reject.cg.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/collect-guard-reject.cg.gz",
+      "bytes": 129,
+      "sha256": "4f411d8179a6ddab53bd092c12e558a4db91b9e223bfd6e864bebdd5706cdabf"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/contract.cg.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/contract.cg.gz",
+      "bytes": 128,
+      "sha256": "3633524dfbdedb413f02bc22ecbb6a707cd936ca7633cec3edb2d16dd5bf07f6"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/dishonest-package/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/dishonest-package/cgx2.toml.gz",
+      "bytes": 106,
+      "sha256": "a6ca12241e088d137bfbe4e225c3b080ccdbb962625a8a97abe0ccbd9ce5dd77"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/dishonest-package/src/lib.cg.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/dishonest-package/src/lib.cg.gz",
+      "bytes": 102,
+      "sha256": "6bf39d48801f42a57ac1c81931070660e5ae71c961b7fad047160d9f3922820a"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/dishonest-package/src/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/dishonest-package/src/main.cg.gz",
+      "bytes": 180,
+      "sha256": "e981db433fc92ab38c1e5a2dcdcfc873199bc20f351daac63445068e6825648e"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/failed-arguments.cg.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/failed-arguments.cg.gz",
+      "bytes": 172,
+      "sha256": "9101a454d82598273218b0745251f663f149300a7c5d1dce8216affc59c6ec4b"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/fault_driver.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/fault_driver.rs.gz",
+      "bytes": 430,
+      "sha256": "3ffa4e12710eef2937d2fd6758d87c4362cd8bd990258a98a0dd8453a1eb9d04"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/ref-output-reject.cg.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/ref-output-reject.cg.gz",
+      "bytes": 79,
+      "sha256": "7a7e0fb1b6c6421d473d5ae6b8213a89b72da50ff51c4f9540a4985224f1df31"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/alloc-0.cg.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/alloc-0.cg.gz",
+      "bytes": 259,
+      "sha256": "4827e57ffb554b2416c7036b6654ff8d4d65f938d6be9f770800a5229d6670d4"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/alloc-225.cg.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/alloc-225.cg.gz",
+      "bytes": 261,
+      "sha256": "afc844fe6708ec1d30e7a103d17dfaef6de7c382995668c69e8b5ab8685f98a4"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/alloc-226.cg.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/alloc-226.cg.gz",
+      "bytes": 261,
+      "sha256": "46275a0e4a5e69c9f0d4924205d05e10a5d5189fa4606503d826c72f042f4623"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/fault-graph-root.cg.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/fault-graph-root.cg.gz",
+      "bytes": 230,
+      "sha256": "87a3b8b87a09db51731b40631cbf6a907b43a141bdf6e4bf6fcb0db14b41deec"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/fault-guard.cg.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/fault-guard.cg.gz",
+      "bytes": 250,
+      "sha256": "00c9f18758291ac6859838d69fea10d9d18e6e7e0742cb4589e90053025357bf"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-package/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-package/cgx2.toml.gz",
+      "bytes": 102,
+      "sha256": "c9cb1dd9089b5f1b1c6fb04ea58616391919b3d6cf2e6a3a2ff7a8c9cee0bcd2"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-package/src/lib.cg.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-package/src/lib.cg.gz",
+      "bytes": 86,
+      "sha256": "01bc27d06a8d5487a1b9976024f5ccf091637a60c401d5ae34a10360fd3eeaff"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-package/src/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-package/src/main.cg.gz",
+      "bytes": 263,
+      "sha256": "92e4fdec4167a100dc8b742a4323bea51438738dafcfba5f627a7bdc3e748ac9"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-scalar.cg.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-scalar.cg.gz",
+      "bytes": 272,
+      "sha256": "735cf87adabfc7a61ad364a9e3038a4d877527b59a8231ecc54cdb3240f48baa"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/nested-257.cg.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/nested-257.cg.gz",
+      "bytes": 268,
+      "sha256": "42f4471dcd5b24b04124e1bb66713ce4175327a98027805b1b71a10a04853ac5"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/nested-258.cg.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/nested-258.cg.gz",
+      "bytes": 268,
+      "sha256": "75cfd7b4ddd2902927e7daa792186f29bb61496f46a466cbb141cadb683860aa"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/nonrefund-451.cg.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/nonrefund-451.cg.gz",
+      "bytes": 266,
+      "sha256": "d37896e94b65fdd7e339c624aa96a8d7c94517d2d03356d77075df72bed4d51d"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/ref-output-utf8.cg.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/ref-output-utf8.cg.gz",
+      "bytes": 105,
+      "sha256": "50eb4b3170d8876d031ad212756228a2bca00c34d2cf3ca3ca321f076a1fcc73"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/roots-0.cg.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/roots-0.cg.gz",
+      "bytes": 128,
+      "sha256": "74ae1be5767268078fc3db4594c568026ab4cb10a4b6f4962fdf457985cc7049"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/roots-63.cg.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/roots-63.cg.gz",
+      "bytes": 129,
+      "sha256": "de9e1b69f8747982f04971ff806940af916338d436b6bfda6e5aff72c9317489"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/roots-64.cg.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/repair/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/roots-64.cg.gz",
+      "bytes": 129,
+      "sha256": "7c2d59cfea02c591a783b004a75349c9da57f450ef17a7187644d4c18630187b"
+    },
+    "retained-compressed/regressions/managed-product/managed-product/wide.cg.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16ea8-bbf7-7381-8599-5953d15d1757/ordinary-harness-hardening/replay-2/product/regressions/managed-product/managed-product/wide.cg.gz",
+      "bytes": 113,
+      "sha256": "1c7cab4affab6a3e3891e77298788829e76ac74ce3c330af308f0a83f40f8224"
+    }
+  }
+}
