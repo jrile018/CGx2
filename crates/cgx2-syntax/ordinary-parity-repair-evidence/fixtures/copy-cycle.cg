@@ -1,0 +1,35 @@
+record Node:
+    next: managed.Ref<Option<Node>>
+fn cycle() -> managed.Ref<Option<Node>> effects(ManagedAlloc, Mutate):
+    let cell: managed.Ref<Option<Node>> = managed.ref(Option<Node>.None())
+    let node = Node(next: cell)
+    managed.set(cell, Option.Some(node))
+    cell
+fn main() -> i64 effects(ManagedAlloc, Mutate, ReadManaged):
+    let source = cycle()
+    match memory.try_region(mode: memory.Mode.Manual, limit: 16384):
+        Result.Ok(r):
+            match memory.copy_to(borrow(r), source):
+                Result.Ok(copy):
+                    match managed.get(copy):
+                        Option.Some(node):
+                            match memory.try_in(borrow(r), Option<Node>.None()):
+                                Result.Ok(empty):
+                                    managed.set(node.next, empty)
+                                    match managed.get(copy):
+                                        Option.None:
+                                            match managed.get(source):
+                                                Option.Some(original):
+                                                    42
+                                                Option.None:
+                                                    -8
+                                        Option.Some(leftover):
+                                            -7
+                                Result.Err(error):
+                                    -6
+                        Option.None:
+                            -5
+                Result.Err(error):
+                    -2
+        Result.Err(error):
+            -1

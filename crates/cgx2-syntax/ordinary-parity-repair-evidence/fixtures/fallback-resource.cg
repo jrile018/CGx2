@@ -1,0 +1,10 @@
+# π λ
+fn fallback() -> i64 effects():
+    let r = memory.default_region()
+    7
+fn main() -> i64 effects(ManagedAlloc):
+    match memory.try_session():
+        Result.Ok(session):
+            42
+        Result.Err(error):
+            fallback()

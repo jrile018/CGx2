@@ -1,0 +1,11 @@
+fn main() -> i64 effects(ManagedAlloc):
+    let xs = [42]
+    match memory.try_region(mode: memory.Mode.Manual, limit: 4096):
+        Result.Ok(r):
+            match memory.try_in(borrow(r), xs):
+                Result.Ok(value):
+                    length(value)
+                Result.Err(error):
+                    -2
+        Result.Err(error):
+            -1

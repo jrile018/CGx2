@@ -1,0 +1,8 @@
+module app.main
+import app.lib
+fn main() -> i64 effects(ManagedAlloc):
+    match memory.try_region(mode: memory.Mode.Manual, limit: 4096):
+        Result.Ok(r):
+            app.lib.fail()
+        Result.Err(error):
+            -1

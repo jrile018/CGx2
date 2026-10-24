@@ -1,0 +1,3515 @@
+{
+  "schema_version": 1,
+  "files": {
+    "attempts/auto-1/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/auto-1/report.json",
+      "bytes": 24074,
+      "sha256": "92f5e1cc0e67d7348d3821934137545511f5f53468072656b820374457fa2433",
+      "gzip": {
+        "bytes": 3262,
+        "sha256": "a82d5ace90d8012b1f5a99ddfa3814c29c0e896a38d71c524957190b688555e9"
+      }
+    },
+    "attempts/auto-1/auto-guard.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/auto-1/auto-guard.cg",
+      "bytes": 1011,
+      "sha256": "7c7cc9a80e1fc8000d8f23f68477f6f4a5c639931001ff36e02d16a0b31fd9f6",
+      "gzip": {
+        "bytes": 268,
+        "sha256": "788092719ac12dba9c91ac939692fe22dba479d30c4cce8da467f4976d32d54c"
+      }
+    },
+    "standalone-source/auto-1/standalone-emit.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/auto-1/auto.rs",
+      "bytes": 246029,
+      "sha256": "61bfa4e4e7cb1cd52fa6dd4fa7938c9c3f838b32236a4394c88a4f2729b34265",
+      "gzip": {
+        "bytes": 42873,
+        "sha256": "e7e5bf1722b10630795f065a79cc2f18749c6cd64d449d5421bbe2e477fcea85"
+      }
+    },
+    "attempts/matrix-1/snapshot-audit.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/snapshot-audit.json",
+      "bytes": 854,
+      "sha256": "a0774a6389ebd228034528e46eea12ae382bb735a94ed62ffa7025dfc1bfce59",
+      "gzip": {
+        "bytes": 322,
+        "sha256": "cf426c99c1288c2f27408b2f201d54a0f33e462351677fc81772f25608c306c1"
+      }
+    },
+    "attempts/matrix-1/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/report.json",
+      "bytes": 1942854,
+      "sha256": "5c3d112edc8b25934dd5fa65e621d3eec5befb676c6e7006cdca23837fc62402",
+      "gzip": {
+        "bytes": 40780,
+        "sha256": "9418cde51f5ab71cc29c831d584ebe072e54f8bb40ca4dc1caec479ea2d23ad6"
+      }
+    },
+    "attempts/matrix-1/fixtures/cross-region-utf8.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/fixtures/cross-region-utf8.cg",
+      "bytes": 377,
+      "sha256": "891e1fb3331b89e77d4ecd8bcbc6c039a6fa692990ad2b91d904b3949a2bd998",
+      "gzip": {
+        "bytes": 215,
+        "sha256": "9a3e1d30a18eb93885d77f66b00f96a0d8df01fc1be31140f2d70f1696211fee"
+      }
+    },
+    "attempts/matrix-1/fixtures/arithmetic.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/fixtures/arithmetic.cg",
+      "bytes": 595,
+      "sha256": "441aa4e1622ce56c77d5e10cb89de4bcdfc57888ec7ad532896d27215ff9da07",
+      "gzip": {
+        "bytes": 281,
+        "sha256": "511457924744be093077f99d28abfb8661a66787611b720d3cf9195e5af50764"
+      }
+    },
+    "attempts/matrix-1/fixtures/contract.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/fixtures/contract.cg",
+      "bytes": 646,
+      "sha256": "f8b423277b241373ba19fc1192a8f821c3eb8295aa59dfb9125c2ae5d54b72a1",
+      "gzip": {
+        "bytes": 303,
+        "sha256": "d8d33fce51ee59bb56217d5d6ed85b5746907b89a1874034ee5449f25ffa7562"
+      }
+    },
+    "attempts/matrix-1/fixtures/failed-argument.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/fixtures/failed-argument.cg",
+      "bytes": 678,
+      "sha256": "d9ec3a20e21b163bd0741d25400e1dad1cfdb0ad6a28dc84cf67c22c1eb5a6f5",
+      "gzip": {
+        "bytes": 320,
+        "sha256": "318111b4810b1526f4a04bdfac96b0be1f88064a26e74b3199686df5c346b0d2"
+      }
+    },
+    "attempts/matrix-1/fixtures/nested-guards.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/fixtures/nested-guards.cg",
+      "bytes": 1305,
+      "sha256": "8c05226df1feba43565bf9bd5a0731897e599be705da58a7cfcb5bf3fdc449a8",
+      "gzip": {
+        "bytes": 283,
+        "sha256": "1bbd816898f497f570831c41770de7bfd68b9f80293ab0535f614e9863cc7a74"
+      }
+    },
+    "attempts/matrix-1/fixtures/guard.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/fixtures/guard.cg",
+      "bytes": 543,
+      "sha256": "5c8c238b7f94962230c0ba38ff53f3093b35e73a81afc988609dc4ea1ddc638b",
+      "gzip": {
+        "bytes": 222,
+        "sha256": "475f3d7d2f26f229b6928f7e82c88e9058d17b4050710bdef6ff9c200d42a219"
+      }
+    },
+    "attempts/matrix-1/fixtures/copy-cycle.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/fixtures/copy-cycle.cg",
+      "bytes": 1620,
+      "sha256": "86187fa24adbfed1ac27d2092b160545a705ecd4a7ba7674c68d4ebf9ef776d9",
+      "gzip": {
+        "bytes": 403,
+        "sha256": "b4503abc0f9d26c76e30fb7654c463ff705aabb3d0e077f8ee8649ee9c63f56e"
+      }
+    },
+    "attempts/matrix-1/fixtures/sweep.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/fixtures/sweep.cg",
+      "bytes": 1650,
+      "sha256": "7632d4051995eb368d9c587b7d5301d0046666253530df238ba9720346c524b4",
+      "gzip": {
+        "bytes": 363,
+        "sha256": "5195ee653927c1a4c27f8d458345aea2681fa25b4e7a1eb17a190fec6fc687f3"
+      }
+    },
+    "attempts/matrix-1/fixtures/region.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/fixtures/region.cg",
+      "bytes": 497,
+      "sha256": "c23bcd5d82cfe85d4233e4c1ac87a615b9e14977dd31f636855e0813719379d0",
+      "gzip": {
+        "bytes": 258,
+        "sha256": "cbe766a985bb51bc99ed362276678b1e94913590c2f71ad2b34afe3ac0126128"
+      }
+    },
+    "attempts/matrix-1/fixtures/return.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/fixtures/return.cg",
+      "bytes": 597,
+      "sha256": "c38b36a693bb72e4c6611e79ddaddd69c8f6269f04b9ee442a7fa99420091bde",
+      "gzip": {
+        "bytes": 279,
+        "sha256": "90b01998befc50052f05684f342975b7f0337d3e681d5c5dcbdd11012706e789"
+      }
+    },
+    "attempts/matrix-1/fixtures/session.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/fixtures/session.cg",
+      "bytes": 479,
+      "sha256": "7d85ab43f44852490cd52b226b515fa6484125346be5eb79659bc3ed7e409695",
+      "gzip": {
+        "bytes": 242,
+        "sha256": "faa7d643916528cd6af1b08aa09f0277caad1e9091a500b5698c9b1c0d657fa7"
+      }
+    },
+    "attempts/matrix-1/fixtures/cross-region.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/fixtures/cross-region.cg",
+      "bytes": 364,
+      "sha256": "a9f8f88e06b806555b7fd386f8493c89e3cc5c9639377daf8d8c499c49943544",
+      "gzip": {
+        "bytes": 195,
+        "sha256": "ef4f4e45347de1f7195d4ef67ebcecc5a63efcce8bf748a43497f2ee966ed202"
+      }
+    },
+    "attempts/matrix-1/fixtures/fallback-resource.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/fixtures/fallback-resource.cg",
+      "bytes": 247,
+      "sha256": "27128b34df603a62be7e9e5f6c6a510295ea28cb94b28a795dea763e3c8c0102",
+      "gzip": {
+        "bytes": 172,
+        "sha256": "b16fd02ba8e65ff5981334d6147071ee8f2d2ed4fb84289ea1392c67eb057ca3"
+      }
+    },
+    "attempts/matrix-1/fixtures/allocation.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/fixtures/allocation.cg",
+      "bytes": 772,
+      "sha256": "9f4e639395430306b18866e88c72624310bd92758a42629befbd57c283654d49",
+      "gzip": {
+        "bytes": 260,
+        "sha256": "5cdecdf934d63320350e74c802f53a85f4481dd3e2acd49c2ca2518a914f9fd5"
+      }
+    },
+    "attempts/matrix-1/fixtures/normal.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/fixtures/normal.cg",
+      "bytes": 590,
+      "sha256": "6cdd77e0d3ce8909b0acbc5f7f0759f04ab1c326f37fcf7fd81ca8193f31df56",
+      "gzip": {
+        "bytes": 275,
+        "sha256": "9ad8ded9f5cc5a5574028788c815d8763c15920bef367e42517d4e5f1363aacb"
+      }
+    },
+    "attempts/matrix-1/dependency-negative/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/dependency-negative/cgx2.toml",
+      "bytes": 87,
+      "sha256": "6aa11a318045e36091528184e29785cc744b0f49171a944145379cfdbd703390",
+      "gzip": {
+        "bytes": 93,
+        "sha256": "f0a3590102dc46783f86b949f1bc3eaab1759446ae3d829d764e280a3b3a6ab9"
+      }
+    },
+    "attempts/matrix-1/dependency-negative/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/dependency-negative/main.cg",
+      "bytes": 90,
+      "sha256": "ad875081c8b6154a0173607aeab1232134190fe29e3e326d39d3fa3a457c9bd7",
+      "gzip": {
+        "bytes": 98,
+        "sha256": "7cdddcbdda89e35f55cf9c18d68223463afcb4d8cb756c6b010bdd165e9c5cc2"
+      }
+    },
+    "attempts/matrix-1/dependency-negative/lib.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/dependency-negative/lib.cg",
+      "bytes": 396,
+      "sha256": "ff158e7979656fb8d4dd9d31c6d302fd8d48886589be4a9b60d1791053085572",
+      "gzip": {
+        "bytes": 233,
+        "sha256": "fd6a002ba04e6f44a9381487cd35565064bd72415e178109be50420a17c2edc6"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/verify.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/harness-snapshot/verify.py",
+      "bytes": 3080,
+      "sha256": "cb4857d32456583772c8cdc943056d728fe2ea3ea137538414051f995c44d28a",
+      "gzip": {
+        "bytes": 1216,
+        "sha256": "b9d178a112234552db1c00a9ab9bc42600bfab6de65964f105564ee1b22eaed3"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/source_probe.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/harness-snapshot/source_probe.rs",
+      "bytes": 677,
+      "sha256": "a0cd939a5a6d27799b206a211f4010908bb73ee54851bfe1c68eac879860cceb",
+      "gzip": {
+        "bytes": 400,
+        "sha256": "b87541ede2139d9a8df1eb97191a5a4362f91271df7e4c7964e99d45f3f2eb57"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/common.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/harness-snapshot/common.py",
+      "bytes": 4972,
+      "sha256": "a2ba4309bca271a703697458f13f01e4f38a026cd86d01f7463b14ec7c27149e",
+      "gzip": {
+        "bytes": 1927,
+        "sha256": "8be0a37d2c085aa8c78a42ee4f499f4f0a4b7eb62be6cc54821cf7572707316a"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/run.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/harness-snapshot/run.py",
+      "bytes": 13960,
+      "sha256": "941b00ed3fbad6fe318ab00d13b347489fc1ce27dbf6a720a307a782fb78c154",
+      "gzip": {
+        "bytes": 4756,
+        "sha256": "f8c16415e82891f9551aa2856cec8c39aadaed4cb64d680cb6a12a2a628eebea"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/runtime_probe.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/harness-snapshot/runtime_probe.rs",
+      "bytes": 8818,
+      "sha256": "f8830732b0ef00cc84de69f460afa6402aed7faa7ffa2aa4a623568f8e9048e5",
+      "gzip": {
+        "bytes": 2483,
+        "sha256": "c792b9bd4a4ba2b6c3d45fb7b92ac6ef3b2949cc9367199c662c53b7c6d3e1b9"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/cross-region-utf8.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/harness-snapshot/fixtures/cross-region-utf8.cg",
+      "bytes": 377,
+      "sha256": "891e1fb3331b89e77d4ecd8bcbc6c039a6fa692990ad2b91d904b3949a2bd998",
+      "gzip": {
+        "bytes": 215,
+        "sha256": "9a3e1d30a18eb93885d77f66b00f96a0d8df01fc1be31140f2d70f1696211fee"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/arithmetic.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/harness-snapshot/fixtures/arithmetic.cg",
+      "bytes": 595,
+      "sha256": "441aa4e1622ce56c77d5e10cb89de4bcdfc57888ec7ad532896d27215ff9da07",
+      "gzip": {
+        "bytes": 281,
+        "sha256": "511457924744be093077f99d28abfb8661a66787611b720d3cf9195e5af50764"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/contract.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/harness-snapshot/fixtures/contract.cg",
+      "bytes": 646,
+      "sha256": "f8b423277b241373ba19fc1192a8f821c3eb8295aa59dfb9125c2ae5d54b72a1",
+      "gzip": {
+        "bytes": 303,
+        "sha256": "d8d33fce51ee59bb56217d5d6ed85b5746907b89a1874034ee5449f25ffa7562"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/failed-argument.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/harness-snapshot/fixtures/failed-argument.cg",
+      "bytes": 678,
+      "sha256": "d9ec3a20e21b163bd0741d25400e1dad1cfdb0ad6a28dc84cf67c22c1eb5a6f5",
+      "gzip": {
+        "bytes": 320,
+        "sha256": "318111b4810b1526f4a04bdfac96b0be1f88064a26e74b3199686df5c346b0d2"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/nested-guards.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/harness-snapshot/fixtures/nested-guards.cg",
+      "bytes": 1305,
+      "sha256": "8c05226df1feba43565bf9bd5a0731897e599be705da58a7cfcb5bf3fdc449a8",
+      "gzip": {
+        "bytes": 283,
+        "sha256": "1bbd816898f497f570831c41770de7bfd68b9f80293ab0535f614e9863cc7a74"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/guard.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/harness-snapshot/fixtures/guard.cg",
+      "bytes": 543,
+      "sha256": "5c8c238b7f94962230c0ba38ff53f3093b35e73a81afc988609dc4ea1ddc638b",
+      "gzip": {
+        "bytes": 222,
+        "sha256": "475f3d7d2f26f229b6928f7e82c88e9058d17b4050710bdef6ff9c200d42a219"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/copy-cycle.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/harness-snapshot/fixtures/copy-cycle.cg",
+      "bytes": 1620,
+      "sha256": "86187fa24adbfed1ac27d2092b160545a705ecd4a7ba7674c68d4ebf9ef776d9",
+      "gzip": {
+        "bytes": 403,
+        "sha256": "b4503abc0f9d26c76e30fb7654c463ff705aabb3d0e077f8ee8649ee9c63f56e"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/sweep.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/harness-snapshot/fixtures/sweep.cg",
+      "bytes": 1650,
+      "sha256": "7632d4051995eb368d9c587b7d5301d0046666253530df238ba9720346c524b4",
+      "gzip": {
+        "bytes": 363,
+        "sha256": "5195ee653927c1a4c27f8d458345aea2681fa25b4e7a1eb17a190fec6fc687f3"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/region.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/harness-snapshot/fixtures/region.cg",
+      "bytes": 497,
+      "sha256": "c23bcd5d82cfe85d4233e4c1ac87a615b9e14977dd31f636855e0813719379d0",
+      "gzip": {
+        "bytes": 258,
+        "sha256": "cbe766a985bb51bc99ed362276678b1e94913590c2f71ad2b34afe3ac0126128"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/return.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/harness-snapshot/fixtures/return.cg",
+      "bytes": 597,
+      "sha256": "c38b36a693bb72e4c6611e79ddaddd69c8f6269f04b9ee442a7fa99420091bde",
+      "gzip": {
+        "bytes": 279,
+        "sha256": "90b01998befc50052f05684f342975b7f0337d3e681d5c5dcbdd11012706e789"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/session.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/harness-snapshot/fixtures/session.cg",
+      "bytes": 479,
+      "sha256": "7d85ab43f44852490cd52b226b515fa6484125346be5eb79659bc3ed7e409695",
+      "gzip": {
+        "bytes": 242,
+        "sha256": "faa7d643916528cd6af1b08aa09f0277caad1e9091a500b5698c9b1c0d657fa7"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/cross-region.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/harness-snapshot/fixtures/cross-region.cg",
+      "bytes": 364,
+      "sha256": "a9f8f88e06b806555b7fd386f8493c89e3cc5c9639377daf8d8c499c49943544",
+      "gzip": {
+        "bytes": 195,
+        "sha256": "ef4f4e45347de1f7195d4ef67ebcecc5a63efcce8bf748a43497f2ee966ed202"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/fallback-resource.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/harness-snapshot/fixtures/fallback-resource.cg",
+      "bytes": 247,
+      "sha256": "27128b34df603a62be7e9e5f6c6a510295ea28cb94b28a795dea763e3c8c0102",
+      "gzip": {
+        "bytes": 172,
+        "sha256": "b16fd02ba8e65ff5981334d6147071ee8f2d2ed4fb84289ea1392c67eb057ca3"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/allocation.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/harness-snapshot/fixtures/allocation.cg",
+      "bytes": 772,
+      "sha256": "9f4e639395430306b18866e88c72624310bd92758a42629befbd57c283654d49",
+      "gzip": {
+        "bytes": 260,
+        "sha256": "5cdecdf934d63320350e74c802f53a85f4481dd3e2acd49c2ca2518a914f9fd5"
+      }
+    },
+    "attempts/matrix-1/harness-snapshot/fixtures/normal.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-1/harness-snapshot/fixtures/normal.cg",
+      "bytes": 590,
+      "sha256": "6cdd77e0d3ce8909b0acbc5f7f0759f04ab1c326f37fcf7fd81ca8193f31df56",
+      "gzip": {
+        "bytes": 275,
+        "sha256": "9ad8ded9f5cc5a5574028788c815d8763c15920bef367e42517d4e5f1363aacb"
+      }
+    },
+    "standalone-source/matrix-1/normal-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/normal-standalone.rs",
+      "bytes": 241223,
+      "sha256": "bfa2f92a903bf16738abf5a7a73363cb7958b8cd13814dd0ae90b6f0c729402a",
+      "gzip": {
+        "bytes": 42498,
+        "sha256": "97a525ec60a14fde9ca39ddf4efe276769086ae16f34a2a69acd1f1426877e2e"
+      }
+    },
+    "standalone-source/matrix-1/return-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/return-standalone.rs",
+      "bytes": 241231,
+      "sha256": "3be44d45d56e31e6a95b0abe234cee6e7ac7477fddd0a538d23111b5ba9bdedf",
+      "gzip": {
+        "bytes": 42505,
+        "sha256": "caf4ef14c5372ac4eab7c5d62b84efeb13c1db5e413d1cdd86ca367a02be3f81"
+      }
+    },
+    "standalone-source/matrix-1/allocation-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/allocation-standalone.rs",
+      "bytes": 239864,
+      "sha256": "99d13cb12798eea0956d37e4f83b4bd039f12fdd1acbb994dae7b4c1afaa1fe9",
+      "gzip": {
+        "bytes": 42350,
+        "sha256": "4ef8f44c88ff8762c2bb0fa0eca44a02bac9c87d7bce61f044688b1fe88569d7"
+      }
+    },
+    "standalone-source/matrix-1/region-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/region-standalone.rs",
+      "bytes": 239654,
+      "sha256": "95c2245f859e719e6a16dea4400c1de6b786d729776577ea809a87648fbf3ce0",
+      "gzip": {
+        "bytes": 42326,
+        "sha256": "830d9f126136ea21ede0ca60d38c9712d696935488c7c05999a0fe17d56e1ffa"
+      }
+    },
+    "standalone-source/matrix-1/guard-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/guard-standalone.rs",
+      "bytes": 237251,
+      "sha256": "65252b2c380091a06974b8d6e1291de88a60be83f9a64d537736d4975c84df2d",
+      "gzip": {
+        "bytes": 42032,
+        "sha256": "c0ca21d0103af7a91190bce19d68cdb4464ab8e11f9741fbc5408f164ab77149"
+      }
+    },
+    "standalone-source/matrix-1/nested-guards-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/nested-guards-standalone.rs",
+      "bytes": 247721,
+      "sha256": "e37aa153027b1d1f2751cc5a09d77127e28c04511176465553281d01d973d763",
+      "gzip": {
+        "bytes": 42992,
+        "sha256": "92b2b5d5e1901fe1afeea4a94d4b5671c3a280ff754c6f3bb32bdb9fcc4d23d0"
+      }
+    },
+    "standalone-source/matrix-1/copy-cycle-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/copy-cycle-standalone.rs",
+      "bytes": 245867,
+      "sha256": "13a107a737ec427bd92adb77d5f08b7bdea8e13b534918b3749de32965dc8383",
+      "gzip": {
+        "bytes": 43052,
+        "sha256": "193f85fbd303305d1000cca9601d2be85e439172c14242c81c3e5b78c5a8c80d"
+      }
+    },
+    "standalone-source/matrix-1/session-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/session-standalone.rs",
+      "bytes": 238099,
+      "sha256": "250f544857cee33c0e35967eeab49a9a6fcac5a4420cb80a9f35a00f6201b7b2",
+      "gzip": {
+        "bytes": 42153,
+        "sha256": "c89a3503e75b6e9a52657f944f1bce192680969a37fcb50927416219d5960287"
+      }
+    },
+    "standalone-source/matrix-1/arithmetic-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/arithmetic-standalone.rs",
+      "bytes": 241573,
+      "sha256": "d57139c8986fad17a0aebe6efc3ad04de572b9142f7cd89175d0fc094511b959",
+      "gzip": {
+        "bytes": 42533,
+        "sha256": "533f7eef887e0fecb63ed11e05f91b67ff1a407e4499d84d96688d5c7f2e4294"
+      }
+    },
+    "standalone-source/matrix-1/contract-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/contract-standalone.rs",
+      "bytes": 241993,
+      "sha256": "af1b140e2d7bb66754a6e5b18946afc687b9ae00feca912e21a24a0271947cc0",
+      "gzip": {
+        "bytes": 42575,
+        "sha256": "5a672631d670d51dc2ea05974ef4f6ace9d4d0fa5a36898edc44e7e549fdadfd"
+      }
+    },
+    "standalone-source/matrix-1/failed-argument-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/failed-argument-standalone.rs",
+      "bytes": 243486,
+      "sha256": "ac214e999100af79c07689d5c8aab542bb7a7d4ee04b6b2006db6016a3e2592a",
+      "gzip": {
+        "bytes": 42694,
+        "sha256": "0dd1824e404b57bcdee012408f0a3d9c005622773cf3a5d62f950d2a03a81de6"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-1-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/source-fault-1-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-2-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/source-fault-2-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-3-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/source-fault-3-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-4-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/source-fault-4-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-5-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/source-fault-5-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-6-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/source-fault-6-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-7-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/source-fault-7-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-8-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/source-fault-8-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-9-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/source-fault-9-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-10-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/source-fault-10-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-11-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/source-fault-11-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-12-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/source-fault-12-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-13-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/source-fault-13-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-14-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/source-fault-14-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-15-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/source-fault-15-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-16-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/source-fault-16-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-17-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/source-fault-17-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-18-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/source-fault-18-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-19-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/source-fault-19-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-20-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/source-fault-20-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-21-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/source-fault-21-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-1/source-fault-22-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-1/source-fault-22-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "attempts/matrix-2/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/report.json",
+      "bytes": 1984378,
+      "sha256": "5ec68ea0ce9d9c21044ffe463435af30fec2d81cf1e9a2cf3b3ca6a07685617f",
+      "gzip": {
+        "bytes": 46953,
+        "sha256": "199eb79404a59a36fe2fd885326910ed1a314136f7e14711de0237604558024a"
+      }
+    },
+    "attempts/matrix-2/fixtures/cross-region-utf8.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/fixtures/cross-region-utf8.cg",
+      "bytes": 377,
+      "sha256": "891e1fb3331b89e77d4ecd8bcbc6c039a6fa692990ad2b91d904b3949a2bd998",
+      "gzip": {
+        "bytes": 215,
+        "sha256": "9a3e1d30a18eb93885d77f66b00f96a0d8df01fc1be31140f2d70f1696211fee"
+      }
+    },
+    "attempts/matrix-2/fixtures/arithmetic.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/fixtures/arithmetic.cg",
+      "bytes": 595,
+      "sha256": "441aa4e1622ce56c77d5e10cb89de4bcdfc57888ec7ad532896d27215ff9da07",
+      "gzip": {
+        "bytes": 281,
+        "sha256": "511457924744be093077f99d28abfb8661a66787611b720d3cf9195e5af50764"
+      }
+    },
+    "attempts/matrix-2/fixtures/contract.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/fixtures/contract.cg",
+      "bytes": 646,
+      "sha256": "f8b423277b241373ba19fc1192a8f821c3eb8295aa59dfb9125c2ae5d54b72a1",
+      "gzip": {
+        "bytes": 303,
+        "sha256": "d8d33fce51ee59bb56217d5d6ed85b5746907b89a1874034ee5449f25ffa7562"
+      }
+    },
+    "attempts/matrix-2/fixtures/failed-argument.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/fixtures/failed-argument.cg",
+      "bytes": 678,
+      "sha256": "d9ec3a20e21b163bd0741d25400e1dad1cfdb0ad6a28dc84cf67c22c1eb5a6f5",
+      "gzip": {
+        "bytes": 320,
+        "sha256": "318111b4810b1526f4a04bdfac96b0be1f88064a26e74b3199686df5c346b0d2"
+      }
+    },
+    "attempts/matrix-2/fixtures/nested-guards.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/fixtures/nested-guards.cg",
+      "bytes": 1305,
+      "sha256": "8c05226df1feba43565bf9bd5a0731897e599be705da58a7cfcb5bf3fdc449a8",
+      "gzip": {
+        "bytes": 283,
+        "sha256": "1bbd816898f497f570831c41770de7bfd68b9f80293ab0535f614e9863cc7a74"
+      }
+    },
+    "attempts/matrix-2/fixtures/guard.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/fixtures/guard.cg",
+      "bytes": 543,
+      "sha256": "5c8c238b7f94962230c0ba38ff53f3093b35e73a81afc988609dc4ea1ddc638b",
+      "gzip": {
+        "bytes": 222,
+        "sha256": "475f3d7d2f26f229b6928f7e82c88e9058d17b4050710bdef6ff9c200d42a219"
+      }
+    },
+    "attempts/matrix-2/fixtures/copy-cycle.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/fixtures/copy-cycle.cg",
+      "bytes": 1620,
+      "sha256": "86187fa24adbfed1ac27d2092b160545a705ecd4a7ba7674c68d4ebf9ef776d9",
+      "gzip": {
+        "bytes": 403,
+        "sha256": "b4503abc0f9d26c76e30fb7654c463ff705aabb3d0e077f8ee8649ee9c63f56e"
+      }
+    },
+    "attempts/matrix-2/fixtures/sweep.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/fixtures/sweep.cg",
+      "bytes": 1650,
+      "sha256": "7632d4051995eb368d9c587b7d5301d0046666253530df238ba9720346c524b4",
+      "gzip": {
+        "bytes": 363,
+        "sha256": "5195ee653927c1a4c27f8d458345aea2681fa25b4e7a1eb17a190fec6fc687f3"
+      }
+    },
+    "attempts/matrix-2/fixtures/region.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/fixtures/region.cg",
+      "bytes": 497,
+      "sha256": "c23bcd5d82cfe85d4233e4c1ac87a615b9e14977dd31f636855e0813719379d0",
+      "gzip": {
+        "bytes": 258,
+        "sha256": "cbe766a985bb51bc99ed362276678b1e94913590c2f71ad2b34afe3ac0126128"
+      }
+    },
+    "attempts/matrix-2/fixtures/return.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/fixtures/return.cg",
+      "bytes": 597,
+      "sha256": "c38b36a693bb72e4c6611e79ddaddd69c8f6269f04b9ee442a7fa99420091bde",
+      "gzip": {
+        "bytes": 279,
+        "sha256": "90b01998befc50052f05684f342975b7f0337d3e681d5c5dcbdd11012706e789"
+      }
+    },
+    "attempts/matrix-2/fixtures/session.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/fixtures/session.cg",
+      "bytes": 479,
+      "sha256": "7d85ab43f44852490cd52b226b515fa6484125346be5eb79659bc3ed7e409695",
+      "gzip": {
+        "bytes": 242,
+        "sha256": "faa7d643916528cd6af1b08aa09f0277caad1e9091a500b5698c9b1c0d657fa7"
+      }
+    },
+    "attempts/matrix-2/fixtures/cross-region.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/fixtures/cross-region.cg",
+      "bytes": 364,
+      "sha256": "a9f8f88e06b806555b7fd386f8493c89e3cc5c9639377daf8d8c499c49943544",
+      "gzip": {
+        "bytes": 195,
+        "sha256": "ef4f4e45347de1f7195d4ef67ebcecc5a63efcce8bf748a43497f2ee966ed202"
+      }
+    },
+    "attempts/matrix-2/fixtures/fallback-resource.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/fixtures/fallback-resource.cg",
+      "bytes": 247,
+      "sha256": "27128b34df603a62be7e9e5f6c6a510295ea28cb94b28a795dea763e3c8c0102",
+      "gzip": {
+        "bytes": 172,
+        "sha256": "b16fd02ba8e65ff5981334d6147071ee8f2d2ed4fb84289ea1392c67eb057ca3"
+      }
+    },
+    "attempts/matrix-2/fixtures/allocation.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/fixtures/allocation.cg",
+      "bytes": 772,
+      "sha256": "9f4e639395430306b18866e88c72624310bd92758a42629befbd57c283654d49",
+      "gzip": {
+        "bytes": 260,
+        "sha256": "5cdecdf934d63320350e74c802f53a85f4481dd3e2acd49c2ca2518a914f9fd5"
+      }
+    },
+    "attempts/matrix-2/fixtures/normal.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/fixtures/normal.cg",
+      "bytes": 590,
+      "sha256": "6cdd77e0d3ce8909b0acbc5f7f0759f04ab1c326f37fcf7fd81ca8193f31df56",
+      "gzip": {
+        "bytes": 275,
+        "sha256": "9ad8ded9f5cc5a5574028788c815d8763c15920bef367e42517d4e5f1363aacb"
+      }
+    },
+    "attempts/matrix-2/dependency-negative/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/dependency-negative/cgx2.toml",
+      "bytes": 87,
+      "sha256": "6aa11a318045e36091528184e29785cc744b0f49171a944145379cfdbd703390",
+      "gzip": {
+        "bytes": 93,
+        "sha256": "f0a3590102dc46783f86b949f1bc3eaab1759446ae3d829d764e280a3b3a6ab9"
+      }
+    },
+    "attempts/matrix-2/dependency-negative/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/dependency-negative/main.cg",
+      "bytes": 90,
+      "sha256": "ad875081c8b6154a0173607aeab1232134190fe29e3e326d39d3fa3a457c9bd7",
+      "gzip": {
+        "bytes": 98,
+        "sha256": "7cdddcbdda89e35f55cf9c18d68223463afcb4d8cb756c6b010bdd165e9c5cc2"
+      }
+    },
+    "attempts/matrix-2/dependency-negative/lib.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/dependency-negative/lib.cg",
+      "bytes": 396,
+      "sha256": "ff158e7979656fb8d4dd9d31c6d302fd8d48886589be4a9b60d1791053085572",
+      "gzip": {
+        "bytes": 233,
+        "sha256": "fd6a002ba04e6f44a9381487cd35565064bd72415e178109be50420a17c2edc6"
+      }
+    },
+    "attempts/matrix-2/harness-snapshot/test_harness.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/harness-snapshot/test_harness.py",
+      "bytes": 6955,
+      "sha256": "fd1d6bab02f005c2799258d3bd7c36adf47bb2437795ba087b727ac39411046f",
+      "gzip": {
+        "bytes": 1970,
+        "sha256": "4c6848850e5e54595086ba1d265cb4bd39cfefc1b92fff9b1dc281b710256936"
+      }
+    },
+    "attempts/matrix-2/harness-snapshot/verify.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/harness-snapshot/verify.py",
+      "bytes": 3080,
+      "sha256": "cb4857d32456583772c8cdc943056d728fe2ea3ea137538414051f995c44d28a",
+      "gzip": {
+        "bytes": 1216,
+        "sha256": "b9d178a112234552db1c00a9ab9bc42600bfab6de65964f105564ee1b22eaed3"
+      }
+    },
+    "attempts/matrix-2/harness-snapshot/source_probe.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/harness-snapshot/source_probe.rs",
+      "bytes": 677,
+      "sha256": "a0cd939a5a6d27799b206a211f4010908bb73ee54851bfe1c68eac879860cceb",
+      "gzip": {
+        "bytes": 400,
+        "sha256": "b87541ede2139d9a8df1eb97191a5a4362f91271df7e4c7964e99d45f3f2eb57"
+      }
+    },
+    "attempts/matrix-2/harness-snapshot/replay.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/harness-snapshot/replay.py",
+      "bytes": 1537,
+      "sha256": "803a11a495f81919723bb55cbb7bd7ff84375ad76c9f7fe96d1562ae3cfe9f31",
+      "gzip": {
+        "bytes": 742,
+        "sha256": "250464743352c4bfa2a1c1073db30929fe6393591a9ef09ef2ef37b8db5233f3"
+      }
+    },
+    "attempts/matrix-2/harness-snapshot/common.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/harness-snapshot/common.py",
+      "bytes": 5101,
+      "sha256": "89dff26226defcaebdea5eff2df4414d9d885bb08a7bb09993e721bbb610cfcb",
+      "gzip": {
+        "bytes": 1971,
+        "sha256": "175cba466d3664cdd18025f03a3aa14069ae1cf150d95a5e0dd7628baaf3a5f0"
+      }
+    },
+    "attempts/matrix-2/harness-snapshot/run.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/harness-snapshot/run.py",
+      "bytes": 15413,
+      "sha256": "c6d637fbffe3c4aca028c8034f757a7bb9116fbba26079418b3651649eb30fee",
+      "gzip": {
+        "bytes": 5117,
+        "sha256": "1707eaee98aeb09dbda2b369048665360ee11dd8c48654ae214eb6c1de190fec"
+      }
+    },
+    "attempts/matrix-2/harness-snapshot/runtime_probe.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/harness-snapshot/runtime_probe.rs",
+      "bytes": 9315,
+      "sha256": "cbf31cd646d0b3feef2c049fb1d27fb1333dcdbaf72dfcdbc5eca767f1903286",
+      "gzip": {
+        "bytes": 2577,
+        "sha256": "fb63e8d249daa73aa6a4b47fdfe0f08be05153fa2f35e9b78a24fe0c4df9a263"
+      }
+    },
+    "attempts/matrix-2/harness-snapshot/fixtures/cross-region-utf8.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/harness-snapshot/fixtures/cross-region-utf8.cg",
+      "bytes": 377,
+      "sha256": "891e1fb3331b89e77d4ecd8bcbc6c039a6fa692990ad2b91d904b3949a2bd998",
+      "gzip": {
+        "bytes": 215,
+        "sha256": "9a3e1d30a18eb93885d77f66b00f96a0d8df01fc1be31140f2d70f1696211fee"
+      }
+    },
+    "attempts/matrix-2/harness-snapshot/fixtures/arithmetic.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/harness-snapshot/fixtures/arithmetic.cg",
+      "bytes": 595,
+      "sha256": "441aa4e1622ce56c77d5e10cb89de4bcdfc57888ec7ad532896d27215ff9da07",
+      "gzip": {
+        "bytes": 281,
+        "sha256": "511457924744be093077f99d28abfb8661a66787611b720d3cf9195e5af50764"
+      }
+    },
+    "attempts/matrix-2/harness-snapshot/fixtures/contract.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/harness-snapshot/fixtures/contract.cg",
+      "bytes": 646,
+      "sha256": "f8b423277b241373ba19fc1192a8f821c3eb8295aa59dfb9125c2ae5d54b72a1",
+      "gzip": {
+        "bytes": 303,
+        "sha256": "d8d33fce51ee59bb56217d5d6ed85b5746907b89a1874034ee5449f25ffa7562"
+      }
+    },
+    "attempts/matrix-2/harness-snapshot/fixtures/failed-argument.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/harness-snapshot/fixtures/failed-argument.cg",
+      "bytes": 678,
+      "sha256": "d9ec3a20e21b163bd0741d25400e1dad1cfdb0ad6a28dc84cf67c22c1eb5a6f5",
+      "gzip": {
+        "bytes": 320,
+        "sha256": "318111b4810b1526f4a04bdfac96b0be1f88064a26e74b3199686df5c346b0d2"
+      }
+    },
+    "attempts/matrix-2/harness-snapshot/fixtures/nested-guards.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/harness-snapshot/fixtures/nested-guards.cg",
+      "bytes": 1305,
+      "sha256": "8c05226df1feba43565bf9bd5a0731897e599be705da58a7cfcb5bf3fdc449a8",
+      "gzip": {
+        "bytes": 283,
+        "sha256": "1bbd816898f497f570831c41770de7bfd68b9f80293ab0535f614e9863cc7a74"
+      }
+    },
+    "attempts/matrix-2/harness-snapshot/fixtures/guard.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/harness-snapshot/fixtures/guard.cg",
+      "bytes": 543,
+      "sha256": "5c8c238b7f94962230c0ba38ff53f3093b35e73a81afc988609dc4ea1ddc638b",
+      "gzip": {
+        "bytes": 222,
+        "sha256": "475f3d7d2f26f229b6928f7e82c88e9058d17b4050710bdef6ff9c200d42a219"
+      }
+    },
+    "attempts/matrix-2/harness-snapshot/fixtures/copy-cycle.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/harness-snapshot/fixtures/copy-cycle.cg",
+      "bytes": 1620,
+      "sha256": "86187fa24adbfed1ac27d2092b160545a705ecd4a7ba7674c68d4ebf9ef776d9",
+      "gzip": {
+        "bytes": 403,
+        "sha256": "b4503abc0f9d26c76e30fb7654c463ff705aabb3d0e077f8ee8649ee9c63f56e"
+      }
+    },
+    "attempts/matrix-2/harness-snapshot/fixtures/sweep.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/harness-snapshot/fixtures/sweep.cg",
+      "bytes": 1650,
+      "sha256": "7632d4051995eb368d9c587b7d5301d0046666253530df238ba9720346c524b4",
+      "gzip": {
+        "bytes": 363,
+        "sha256": "5195ee653927c1a4c27f8d458345aea2681fa25b4e7a1eb17a190fec6fc687f3"
+      }
+    },
+    "attempts/matrix-2/harness-snapshot/fixtures/region.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/harness-snapshot/fixtures/region.cg",
+      "bytes": 497,
+      "sha256": "c23bcd5d82cfe85d4233e4c1ac87a615b9e14977dd31f636855e0813719379d0",
+      "gzip": {
+        "bytes": 258,
+        "sha256": "cbe766a985bb51bc99ed362276678b1e94913590c2f71ad2b34afe3ac0126128"
+      }
+    },
+    "attempts/matrix-2/harness-snapshot/fixtures/return.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/harness-snapshot/fixtures/return.cg",
+      "bytes": 597,
+      "sha256": "c38b36a693bb72e4c6611e79ddaddd69c8f6269f04b9ee442a7fa99420091bde",
+      "gzip": {
+        "bytes": 279,
+        "sha256": "90b01998befc50052f05684f342975b7f0337d3e681d5c5dcbdd11012706e789"
+      }
+    },
+    "attempts/matrix-2/harness-snapshot/fixtures/session.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/harness-snapshot/fixtures/session.cg",
+      "bytes": 479,
+      "sha256": "7d85ab43f44852490cd52b226b515fa6484125346be5eb79659bc3ed7e409695",
+      "gzip": {
+        "bytes": 242,
+        "sha256": "faa7d643916528cd6af1b08aa09f0277caad1e9091a500b5698c9b1c0d657fa7"
+      }
+    },
+    "attempts/matrix-2/harness-snapshot/fixtures/cross-region.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/harness-snapshot/fixtures/cross-region.cg",
+      "bytes": 364,
+      "sha256": "a9f8f88e06b806555b7fd386f8493c89e3cc5c9639377daf8d8c499c49943544",
+      "gzip": {
+        "bytes": 195,
+        "sha256": "ef4f4e45347de1f7195d4ef67ebcecc5a63efcce8bf748a43497f2ee966ed202"
+      }
+    },
+    "attempts/matrix-2/harness-snapshot/fixtures/fallback-resource.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/harness-snapshot/fixtures/fallback-resource.cg",
+      "bytes": 247,
+      "sha256": "27128b34df603a62be7e9e5f6c6a510295ea28cb94b28a795dea763e3c8c0102",
+      "gzip": {
+        "bytes": 172,
+        "sha256": "b16fd02ba8e65ff5981334d6147071ee8f2d2ed4fb84289ea1392c67eb057ca3"
+      }
+    },
+    "attempts/matrix-2/harness-snapshot/fixtures/allocation.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/harness-snapshot/fixtures/allocation.cg",
+      "bytes": 772,
+      "sha256": "9f4e639395430306b18866e88c72624310bd92758a42629befbd57c283654d49",
+      "gzip": {
+        "bytes": 260,
+        "sha256": "5cdecdf934d63320350e74c802f53a85f4481dd3e2acd49c2ca2518a914f9fd5"
+      }
+    },
+    "attempts/matrix-2/harness-snapshot/fixtures/normal.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-2/harness-snapshot/fixtures/normal.cg",
+      "bytes": 590,
+      "sha256": "6cdd77e0d3ce8909b0acbc5f7f0759f04ab1c326f37fcf7fd81ca8193f31df56",
+      "gzip": {
+        "bytes": 275,
+        "sha256": "9ad8ded9f5cc5a5574028788c815d8763c15920bef367e42517d4e5f1363aacb"
+      }
+    },
+    "standalone-source/matrix-2/normal-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/normal-standalone.rs",
+      "bytes": 241223,
+      "sha256": "bfa2f92a903bf16738abf5a7a73363cb7958b8cd13814dd0ae90b6f0c729402a",
+      "gzip": {
+        "bytes": 42498,
+        "sha256": "97a525ec60a14fde9ca39ddf4efe276769086ae16f34a2a69acd1f1426877e2e"
+      }
+    },
+    "standalone-source/matrix-2/return-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/return-standalone.rs",
+      "bytes": 241231,
+      "sha256": "3be44d45d56e31e6a95b0abe234cee6e7ac7477fddd0a538d23111b5ba9bdedf",
+      "gzip": {
+        "bytes": 42505,
+        "sha256": "caf4ef14c5372ac4eab7c5d62b84efeb13c1db5e413d1cdd86ca367a02be3f81"
+      }
+    },
+    "standalone-source/matrix-2/allocation-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/allocation-standalone.rs",
+      "bytes": 239864,
+      "sha256": "99d13cb12798eea0956d37e4f83b4bd039f12fdd1acbb994dae7b4c1afaa1fe9",
+      "gzip": {
+        "bytes": 42350,
+        "sha256": "4ef8f44c88ff8762c2bb0fa0eca44a02bac9c87d7bce61f044688b1fe88569d7"
+      }
+    },
+    "standalone-source/matrix-2/region-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/region-standalone.rs",
+      "bytes": 239654,
+      "sha256": "95c2245f859e719e6a16dea4400c1de6b786d729776577ea809a87648fbf3ce0",
+      "gzip": {
+        "bytes": 42326,
+        "sha256": "830d9f126136ea21ede0ca60d38c9712d696935488c7c05999a0fe17d56e1ffa"
+      }
+    },
+    "standalone-source/matrix-2/guard-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/guard-standalone.rs",
+      "bytes": 237251,
+      "sha256": "65252b2c380091a06974b8d6e1291de88a60be83f9a64d537736d4975c84df2d",
+      "gzip": {
+        "bytes": 42032,
+        "sha256": "c0ca21d0103af7a91190bce19d68cdb4464ab8e11f9741fbc5408f164ab77149"
+      }
+    },
+    "standalone-source/matrix-2/nested-guards-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/nested-guards-standalone.rs",
+      "bytes": 247721,
+      "sha256": "e37aa153027b1d1f2751cc5a09d77127e28c04511176465553281d01d973d763",
+      "gzip": {
+        "bytes": 42992,
+        "sha256": "92b2b5d5e1901fe1afeea4a94d4b5671c3a280ff754c6f3bb32bdb9fcc4d23d0"
+      }
+    },
+    "standalone-source/matrix-2/copy-cycle-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/copy-cycle-standalone.rs",
+      "bytes": 245867,
+      "sha256": "13a107a737ec427bd92adb77d5f08b7bdea8e13b534918b3749de32965dc8383",
+      "gzip": {
+        "bytes": 43052,
+        "sha256": "193f85fbd303305d1000cca9601d2be85e439172c14242c81c3e5b78c5a8c80d"
+      }
+    },
+    "standalone-source/matrix-2/session-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/session-standalone.rs",
+      "bytes": 238099,
+      "sha256": "250f544857cee33c0e35967eeab49a9a6fcac5a4420cb80a9f35a00f6201b7b2",
+      "gzip": {
+        "bytes": 42153,
+        "sha256": "c89a3503e75b6e9a52657f944f1bce192680969a37fcb50927416219d5960287"
+      }
+    },
+    "standalone-source/matrix-2/arithmetic-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/arithmetic-standalone.rs",
+      "bytes": 241573,
+      "sha256": "d57139c8986fad17a0aebe6efc3ad04de572b9142f7cd89175d0fc094511b959",
+      "gzip": {
+        "bytes": 42533,
+        "sha256": "533f7eef887e0fecb63ed11e05f91b67ff1a407e4499d84d96688d5c7f2e4294"
+      }
+    },
+    "standalone-source/matrix-2/contract-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/contract-standalone.rs",
+      "bytes": 241993,
+      "sha256": "af1b140e2d7bb66754a6e5b18946afc687b9ae00feca912e21a24a0271947cc0",
+      "gzip": {
+        "bytes": 42575,
+        "sha256": "5a672631d670d51dc2ea05974ef4f6ace9d4d0fa5a36898edc44e7e549fdadfd"
+      }
+    },
+    "standalone-source/matrix-2/failed-argument-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/failed-argument-standalone.rs",
+      "bytes": 243486,
+      "sha256": "ac214e999100af79c07689d5c8aab542bb7a7d4ee04b6b2006db6016a3e2592a",
+      "gzip": {
+        "bytes": 42694,
+        "sha256": "0dd1824e404b57bcdee012408f0a3d9c005622773cf3a5d62f950d2a03a81de6"
+      }
+    },
+    "standalone-source/matrix-2/source-fault-1-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/source-fault-1-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-2/source-fault-2-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/source-fault-2-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-2/source-fault-3-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/source-fault-3-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-2/source-fault-4-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/source-fault-4-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-2/source-fault-5-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/source-fault-5-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-2/source-fault-6-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/source-fault-6-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-2/source-fault-7-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/source-fault-7-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-2/source-fault-8-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/source-fault-8-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-2/source-fault-9-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/source-fault-9-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-2/source-fault-10-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/source-fault-10-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-2/source-fault-11-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/source-fault-11-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-2/source-fault-12-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/source-fault-12-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-2/source-fault-13-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/source-fault-13-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-2/source-fault-14-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/source-fault-14-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-2/source-fault-15-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/source-fault-15-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-2/source-fault-16-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/source-fault-16-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-2/source-fault-17-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/source-fault-17-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-2/source-fault-18-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/source-fault-18-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-2/source-fault-19-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/source-fault-19-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-2/source-fault-20-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/source-fault-20-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-2/source-fault-21-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/source-fault-21-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-2/source-fault-22-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-2/source-fault-22-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "attempts/matrix-3/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/report.json",
+      "bytes": 1984614,
+      "sha256": "9fe8319f9645270af2de57a90cbbc6cde27b3b556d99641435fbe1b5a9b0cc4a",
+      "gzip": {
+        "bytes": 47027,
+        "sha256": "c3c67e62b42557bf3eb50b907f64d81e26b8ba886bdab21fbb9fed01ee0f3cc4"
+      }
+    },
+    "attempts/matrix-3/fixtures/cross-region-utf8.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/fixtures/cross-region-utf8.cg",
+      "bytes": 377,
+      "sha256": "891e1fb3331b89e77d4ecd8bcbc6c039a6fa692990ad2b91d904b3949a2bd998",
+      "gzip": {
+        "bytes": 215,
+        "sha256": "9a3e1d30a18eb93885d77f66b00f96a0d8df01fc1be31140f2d70f1696211fee"
+      }
+    },
+    "attempts/matrix-3/fixtures/arithmetic.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/fixtures/arithmetic.cg",
+      "bytes": 595,
+      "sha256": "441aa4e1622ce56c77d5e10cb89de4bcdfc57888ec7ad532896d27215ff9da07",
+      "gzip": {
+        "bytes": 281,
+        "sha256": "511457924744be093077f99d28abfb8661a66787611b720d3cf9195e5af50764"
+      }
+    },
+    "attempts/matrix-3/fixtures/contract.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/fixtures/contract.cg",
+      "bytes": 646,
+      "sha256": "f8b423277b241373ba19fc1192a8f821c3eb8295aa59dfb9125c2ae5d54b72a1",
+      "gzip": {
+        "bytes": 303,
+        "sha256": "d8d33fce51ee59bb56217d5d6ed85b5746907b89a1874034ee5449f25ffa7562"
+      }
+    },
+    "attempts/matrix-3/fixtures/failed-argument.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/fixtures/failed-argument.cg",
+      "bytes": 678,
+      "sha256": "d9ec3a20e21b163bd0741d25400e1dad1cfdb0ad6a28dc84cf67c22c1eb5a6f5",
+      "gzip": {
+        "bytes": 320,
+        "sha256": "318111b4810b1526f4a04bdfac96b0be1f88064a26e74b3199686df5c346b0d2"
+      }
+    },
+    "attempts/matrix-3/fixtures/nested-guards.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/fixtures/nested-guards.cg",
+      "bytes": 1305,
+      "sha256": "8c05226df1feba43565bf9bd5a0731897e599be705da58a7cfcb5bf3fdc449a8",
+      "gzip": {
+        "bytes": 283,
+        "sha256": "1bbd816898f497f570831c41770de7bfd68b9f80293ab0535f614e9863cc7a74"
+      }
+    },
+    "attempts/matrix-3/fixtures/guard.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/fixtures/guard.cg",
+      "bytes": 543,
+      "sha256": "5c8c238b7f94962230c0ba38ff53f3093b35e73a81afc988609dc4ea1ddc638b",
+      "gzip": {
+        "bytes": 222,
+        "sha256": "475f3d7d2f26f229b6928f7e82c88e9058d17b4050710bdef6ff9c200d42a219"
+      }
+    },
+    "attempts/matrix-3/fixtures/copy-cycle.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/fixtures/copy-cycle.cg",
+      "bytes": 1620,
+      "sha256": "86187fa24adbfed1ac27d2092b160545a705ecd4a7ba7674c68d4ebf9ef776d9",
+      "gzip": {
+        "bytes": 403,
+        "sha256": "b4503abc0f9d26c76e30fb7654c463ff705aabb3d0e077f8ee8649ee9c63f56e"
+      }
+    },
+    "attempts/matrix-3/fixtures/sweep.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/fixtures/sweep.cg",
+      "bytes": 1650,
+      "sha256": "7632d4051995eb368d9c587b7d5301d0046666253530df238ba9720346c524b4",
+      "gzip": {
+        "bytes": 363,
+        "sha256": "5195ee653927c1a4c27f8d458345aea2681fa25b4e7a1eb17a190fec6fc687f3"
+      }
+    },
+    "attempts/matrix-3/fixtures/region.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/fixtures/region.cg",
+      "bytes": 497,
+      "sha256": "c23bcd5d82cfe85d4233e4c1ac87a615b9e14977dd31f636855e0813719379d0",
+      "gzip": {
+        "bytes": 258,
+        "sha256": "cbe766a985bb51bc99ed362276678b1e94913590c2f71ad2b34afe3ac0126128"
+      }
+    },
+    "attempts/matrix-3/fixtures/return.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/fixtures/return.cg",
+      "bytes": 597,
+      "sha256": "c38b36a693bb72e4c6611e79ddaddd69c8f6269f04b9ee442a7fa99420091bde",
+      "gzip": {
+        "bytes": 279,
+        "sha256": "90b01998befc50052f05684f342975b7f0337d3e681d5c5dcbdd11012706e789"
+      }
+    },
+    "attempts/matrix-3/fixtures/session.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/fixtures/session.cg",
+      "bytes": 479,
+      "sha256": "7d85ab43f44852490cd52b226b515fa6484125346be5eb79659bc3ed7e409695",
+      "gzip": {
+        "bytes": 242,
+        "sha256": "faa7d643916528cd6af1b08aa09f0277caad1e9091a500b5698c9b1c0d657fa7"
+      }
+    },
+    "attempts/matrix-3/fixtures/cross-region.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/fixtures/cross-region.cg",
+      "bytes": 364,
+      "sha256": "a9f8f88e06b806555b7fd386f8493c89e3cc5c9639377daf8d8c499c49943544",
+      "gzip": {
+        "bytes": 195,
+        "sha256": "ef4f4e45347de1f7195d4ef67ebcecc5a63efcce8bf748a43497f2ee966ed202"
+      }
+    },
+    "attempts/matrix-3/fixtures/fallback-resource.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/fixtures/fallback-resource.cg",
+      "bytes": 247,
+      "sha256": "27128b34df603a62be7e9e5f6c6a510295ea28cb94b28a795dea763e3c8c0102",
+      "gzip": {
+        "bytes": 172,
+        "sha256": "b16fd02ba8e65ff5981334d6147071ee8f2d2ed4fb84289ea1392c67eb057ca3"
+      }
+    },
+    "attempts/matrix-3/fixtures/allocation.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/fixtures/allocation.cg",
+      "bytes": 772,
+      "sha256": "9f4e639395430306b18866e88c72624310bd92758a42629befbd57c283654d49",
+      "gzip": {
+        "bytes": 260,
+        "sha256": "5cdecdf934d63320350e74c802f53a85f4481dd3e2acd49c2ca2518a914f9fd5"
+      }
+    },
+    "attempts/matrix-3/fixtures/normal.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/fixtures/normal.cg",
+      "bytes": 590,
+      "sha256": "6cdd77e0d3ce8909b0acbc5f7f0759f04ab1c326f37fcf7fd81ca8193f31df56",
+      "gzip": {
+        "bytes": 275,
+        "sha256": "9ad8ded9f5cc5a5574028788c815d8763c15920bef367e42517d4e5f1363aacb"
+      }
+    },
+    "attempts/matrix-3/dependency-negative/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/dependency-negative/cgx2.toml",
+      "bytes": 87,
+      "sha256": "6aa11a318045e36091528184e29785cc744b0f49171a944145379cfdbd703390",
+      "gzip": {
+        "bytes": 93,
+        "sha256": "f0a3590102dc46783f86b949f1bc3eaab1759446ae3d829d764e280a3b3a6ab9"
+      }
+    },
+    "attempts/matrix-3/dependency-negative/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/dependency-negative/main.cg",
+      "bytes": 90,
+      "sha256": "ad875081c8b6154a0173607aeab1232134190fe29e3e326d39d3fa3a457c9bd7",
+      "gzip": {
+        "bytes": 98,
+        "sha256": "7cdddcbdda89e35f55cf9c18d68223463afcb4d8cb756c6b010bdd165e9c5cc2"
+      }
+    },
+    "attempts/matrix-3/dependency-negative/lib.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/dependency-negative/lib.cg",
+      "bytes": 396,
+      "sha256": "ff158e7979656fb8d4dd9d31c6d302fd8d48886589be4a9b60d1791053085572",
+      "gzip": {
+        "bytes": 233,
+        "sha256": "fd6a002ba04e6f44a9381487cd35565064bd72415e178109be50420a17c2edc6"
+      }
+    },
+    "attempts/matrix-3/harness-snapshot/export.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/harness-snapshot/export.py",
+      "bytes": 2683,
+      "sha256": "ea716cd6947d3a08c250cc23c5e2d69a2cd7abf0b449c5423d48db471f044ab7",
+      "gzip": {
+        "bytes": 1277,
+        "sha256": "9bb7eb42130f52e2d5edd5a610da49a299744170876131d17a3e2df63b7f02e8"
+      }
+    },
+    "attempts/matrix-3/harness-snapshot/test_harness.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/harness-snapshot/test_harness.py",
+      "bytes": 6955,
+      "sha256": "fd1d6bab02f005c2799258d3bd7c36adf47bb2437795ba087b727ac39411046f",
+      "gzip": {
+        "bytes": 1970,
+        "sha256": "4c6848850e5e54595086ba1d265cb4bd39cfefc1b92fff9b1dc281b710256936"
+      }
+    },
+    "attempts/matrix-3/harness-snapshot/verify.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/harness-snapshot/verify.py",
+      "bytes": 3080,
+      "sha256": "cb4857d32456583772c8cdc943056d728fe2ea3ea137538414051f995c44d28a",
+      "gzip": {
+        "bytes": 1216,
+        "sha256": "b9d178a112234552db1c00a9ab9bc42600bfab6de65964f105564ee1b22eaed3"
+      }
+    },
+    "attempts/matrix-3/harness-snapshot/package_parity.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/harness-snapshot/package_parity.py",
+      "bytes": 4026,
+      "sha256": "9d7b0a8af7744c673f079730ea9ce48cc799cf3db2fbc05ef8717f1e191a3546",
+      "gzip": {
+        "bytes": 1573,
+        "sha256": "de701c018a3ed56ceeedbb84da7b6c9eddbd22ced1ede6ffe09658670beffb26"
+      }
+    },
+    "attempts/matrix-3/harness-snapshot/source_probe.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/harness-snapshot/source_probe.rs",
+      "bytes": 677,
+      "sha256": "a0cd939a5a6d27799b206a211f4010908bb73ee54851bfe1c68eac879860cceb",
+      "gzip": {
+        "bytes": 400,
+        "sha256": "b87541ede2139d9a8df1eb97191a5a4362f91271df7e4c7964e99d45f3f2eb57"
+      }
+    },
+    "attempts/matrix-3/harness-snapshot/review.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/harness-snapshot/review.py",
+      "bytes": 2719,
+      "sha256": "5bb04b88ecf9e887a2cac29bbde5f538932a66a92afc2dd658271c0c21b6a3ad",
+      "gzip": {
+        "bytes": 1249,
+        "sha256": "e7253a337993d2b5bdb7ea373878f5a1256eef3ad92439921d85e493c1feaec6"
+      }
+    },
+    "attempts/matrix-3/harness-snapshot/replay.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/harness-snapshot/replay.py",
+      "bytes": 1537,
+      "sha256": "803a11a495f81919723bb55cbb7bd7ff84375ad76c9f7fe96d1562ae3cfe9f31",
+      "gzip": {
+        "bytes": 742,
+        "sha256": "250464743352c4bfa2a1c1073db30929fe6393591a9ef09ef2ef37b8db5233f3"
+      }
+    },
+    "attempts/matrix-3/harness-snapshot/common.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/harness-snapshot/common.py",
+      "bytes": 5101,
+      "sha256": "89dff26226defcaebdea5eff2df4414d9d885bb08a7bb09993e721bbb610cfcb",
+      "gzip": {
+        "bytes": 1971,
+        "sha256": "175cba466d3664cdd18025f03a3aa14069ae1cf150d95a5e0dd7628baaf3a5f0"
+      }
+    },
+    "attempts/matrix-3/harness-snapshot/run.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/harness-snapshot/run.py",
+      "bytes": 15419,
+      "sha256": "6938b0ecc8bb526dd159553d3c6212445ebaa0b9b1a4026f800e2311849ee2b6",
+      "gzip": {
+        "bytes": 5121,
+        "sha256": "e125bf1c9c91c484ff74588afdba6cfb9b34710305b7bf82effbad8fb727c6d6"
+      }
+    },
+    "attempts/matrix-3/harness-snapshot/runtime_probe.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/harness-snapshot/runtime_probe.rs",
+      "bytes": 9315,
+      "sha256": "cbf31cd646d0b3feef2c049fb1d27fb1333dcdbaf72dfcdbc5eca767f1903286",
+      "gzip": {
+        "bytes": 2577,
+        "sha256": "fb63e8d249daa73aa6a4b47fdfe0f08be05153fa2f35e9b78a24fe0c4df9a263"
+      }
+    },
+    "attempts/matrix-3/harness-snapshot/fixtures/cross-region-utf8.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/harness-snapshot/fixtures/cross-region-utf8.cg",
+      "bytes": 377,
+      "sha256": "891e1fb3331b89e77d4ecd8bcbc6c039a6fa692990ad2b91d904b3949a2bd998",
+      "gzip": {
+        "bytes": 215,
+        "sha256": "9a3e1d30a18eb93885d77f66b00f96a0d8df01fc1be31140f2d70f1696211fee"
+      }
+    },
+    "attempts/matrix-3/harness-snapshot/fixtures/arithmetic.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/harness-snapshot/fixtures/arithmetic.cg",
+      "bytes": 595,
+      "sha256": "441aa4e1622ce56c77d5e10cb89de4bcdfc57888ec7ad532896d27215ff9da07",
+      "gzip": {
+        "bytes": 281,
+        "sha256": "511457924744be093077f99d28abfb8661a66787611b720d3cf9195e5af50764"
+      }
+    },
+    "attempts/matrix-3/harness-snapshot/fixtures/contract.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/harness-snapshot/fixtures/contract.cg",
+      "bytes": 646,
+      "sha256": "f8b423277b241373ba19fc1192a8f821c3eb8295aa59dfb9125c2ae5d54b72a1",
+      "gzip": {
+        "bytes": 303,
+        "sha256": "d8d33fce51ee59bb56217d5d6ed85b5746907b89a1874034ee5449f25ffa7562"
+      }
+    },
+    "attempts/matrix-3/harness-snapshot/fixtures/failed-argument.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/harness-snapshot/fixtures/failed-argument.cg",
+      "bytes": 678,
+      "sha256": "d9ec3a20e21b163bd0741d25400e1dad1cfdb0ad6a28dc84cf67c22c1eb5a6f5",
+      "gzip": {
+        "bytes": 320,
+        "sha256": "318111b4810b1526f4a04bdfac96b0be1f88064a26e74b3199686df5c346b0d2"
+      }
+    },
+    "attempts/matrix-3/harness-snapshot/fixtures/nested-guards.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/harness-snapshot/fixtures/nested-guards.cg",
+      "bytes": 1305,
+      "sha256": "8c05226df1feba43565bf9bd5a0731897e599be705da58a7cfcb5bf3fdc449a8",
+      "gzip": {
+        "bytes": 283,
+        "sha256": "1bbd816898f497f570831c41770de7bfd68b9f80293ab0535f614e9863cc7a74"
+      }
+    },
+    "attempts/matrix-3/harness-snapshot/fixtures/guard.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/harness-snapshot/fixtures/guard.cg",
+      "bytes": 543,
+      "sha256": "5c8c238b7f94962230c0ba38ff53f3093b35e73a81afc988609dc4ea1ddc638b",
+      "gzip": {
+        "bytes": 222,
+        "sha256": "475f3d7d2f26f229b6928f7e82c88e9058d17b4050710bdef6ff9c200d42a219"
+      }
+    },
+    "attempts/matrix-3/harness-snapshot/fixtures/copy-cycle.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/harness-snapshot/fixtures/copy-cycle.cg",
+      "bytes": 1620,
+      "sha256": "86187fa24adbfed1ac27d2092b160545a705ecd4a7ba7674c68d4ebf9ef776d9",
+      "gzip": {
+        "bytes": 403,
+        "sha256": "b4503abc0f9d26c76e30fb7654c463ff705aabb3d0e077f8ee8649ee9c63f56e"
+      }
+    },
+    "attempts/matrix-3/harness-snapshot/fixtures/sweep.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/harness-snapshot/fixtures/sweep.cg",
+      "bytes": 1650,
+      "sha256": "7632d4051995eb368d9c587b7d5301d0046666253530df238ba9720346c524b4",
+      "gzip": {
+        "bytes": 363,
+        "sha256": "5195ee653927c1a4c27f8d458345aea2681fa25b4e7a1eb17a190fec6fc687f3"
+      }
+    },
+    "attempts/matrix-3/harness-snapshot/fixtures/region.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/harness-snapshot/fixtures/region.cg",
+      "bytes": 497,
+      "sha256": "c23bcd5d82cfe85d4233e4c1ac87a615b9e14977dd31f636855e0813719379d0",
+      "gzip": {
+        "bytes": 258,
+        "sha256": "cbe766a985bb51bc99ed362276678b1e94913590c2f71ad2b34afe3ac0126128"
+      }
+    },
+    "attempts/matrix-3/harness-snapshot/fixtures/return.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/harness-snapshot/fixtures/return.cg",
+      "bytes": 597,
+      "sha256": "c38b36a693bb72e4c6611e79ddaddd69c8f6269f04b9ee442a7fa99420091bde",
+      "gzip": {
+        "bytes": 279,
+        "sha256": "90b01998befc50052f05684f342975b7f0337d3e681d5c5dcbdd11012706e789"
+      }
+    },
+    "attempts/matrix-3/harness-snapshot/fixtures/session.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/harness-snapshot/fixtures/session.cg",
+      "bytes": 479,
+      "sha256": "7d85ab43f44852490cd52b226b515fa6484125346be5eb79659bc3ed7e409695",
+      "gzip": {
+        "bytes": 242,
+        "sha256": "faa7d643916528cd6af1b08aa09f0277caad1e9091a500b5698c9b1c0d657fa7"
+      }
+    },
+    "attempts/matrix-3/harness-snapshot/fixtures/cross-region.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/harness-snapshot/fixtures/cross-region.cg",
+      "bytes": 364,
+      "sha256": "a9f8f88e06b806555b7fd386f8493c89e3cc5c9639377daf8d8c499c49943544",
+      "gzip": {
+        "bytes": 195,
+        "sha256": "ef4f4e45347de1f7195d4ef67ebcecc5a63efcce8bf748a43497f2ee966ed202"
+      }
+    },
+    "attempts/matrix-3/harness-snapshot/fixtures/fallback-resource.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/harness-snapshot/fixtures/fallback-resource.cg",
+      "bytes": 247,
+      "sha256": "27128b34df603a62be7e9e5f6c6a510295ea28cb94b28a795dea763e3c8c0102",
+      "gzip": {
+        "bytes": 172,
+        "sha256": "b16fd02ba8e65ff5981334d6147071ee8f2d2ed4fb84289ea1392c67eb057ca3"
+      }
+    },
+    "attempts/matrix-3/harness-snapshot/fixtures/allocation.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/harness-snapshot/fixtures/allocation.cg",
+      "bytes": 772,
+      "sha256": "9f4e639395430306b18866e88c72624310bd92758a42629befbd57c283654d49",
+      "gzip": {
+        "bytes": 260,
+        "sha256": "5cdecdf934d63320350e74c802f53a85f4481dd3e2acd49c2ca2518a914f9fd5"
+      }
+    },
+    "attempts/matrix-3/harness-snapshot/fixtures/normal.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/harness-snapshot/fixtures/normal.cg",
+      "bytes": 590,
+      "sha256": "6cdd77e0d3ce8909b0acbc5f7f0759f04ab1c326f37fcf7fd81ca8193f31df56",
+      "gzip": {
+        "bytes": 275,
+        "sha256": "9ad8ded9f5cc5a5574028788c815d8763c15920bef367e42517d4e5f1363aacb"
+      }
+    },
+    "attempts/matrix-3/fixtures/packages/runtime-error/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/fixtures/packages/runtime-error/cgx2.toml",
+      "bytes": 91,
+      "sha256": "4edfc51922f79ad75b4ad8ac5c3de3129af0193a8bd11445ad9b80e0027340df",
+      "gzip": {
+        "bytes": 97,
+        "sha256": "111fd0834c53b0d2214fdbb926edadbc37e2aee6f58c38b6b88fa6f1240fc121"
+      }
+    },
+    "attempts/matrix-3/fixtures/packages/runtime-error/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/fixtures/packages/runtime-error/main.cg",
+      "bytes": 230,
+      "sha256": "1c08d3b237de6d0fd674932b315595106a754ae075d1bc9327d33262d8f53112",
+      "gzip": {
+        "bytes": 171,
+        "sha256": "e7f14399c0a8578fe52c637764aab99a3e15813732337f83f5a0fbc068ffd8e0"
+      }
+    },
+    "attempts/matrix-3/fixtures/packages/runtime-error/lib.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/matrix-3/fixtures/packages/runtime-error/lib.cg",
+      "bytes": 120,
+      "sha256": "357ede5c4affeb093be20fd5ade2a47ede0ae3dd696b5d530a0ca71332e9d60a",
+      "gzip": {
+        "bytes": 132,
+        "sha256": "8a784155dd9a53ce0a961dbbcd2447aa3fab5e6ed18edfa14edb633b5d29479b"
+      }
+    },
+    "standalone-source/matrix-3/normal-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/normal-standalone.rs",
+      "bytes": 241223,
+      "sha256": "bfa2f92a903bf16738abf5a7a73363cb7958b8cd13814dd0ae90b6f0c729402a",
+      "gzip": {
+        "bytes": 42498,
+        "sha256": "97a525ec60a14fde9ca39ddf4efe276769086ae16f34a2a69acd1f1426877e2e"
+      }
+    },
+    "standalone-source/matrix-3/return-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/return-standalone.rs",
+      "bytes": 241231,
+      "sha256": "3be44d45d56e31e6a95b0abe234cee6e7ac7477fddd0a538d23111b5ba9bdedf",
+      "gzip": {
+        "bytes": 42505,
+        "sha256": "caf4ef14c5372ac4eab7c5d62b84efeb13c1db5e413d1cdd86ca367a02be3f81"
+      }
+    },
+    "standalone-source/matrix-3/allocation-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/allocation-standalone.rs",
+      "bytes": 239864,
+      "sha256": "99d13cb12798eea0956d37e4f83b4bd039f12fdd1acbb994dae7b4c1afaa1fe9",
+      "gzip": {
+        "bytes": 42350,
+        "sha256": "4ef8f44c88ff8762c2bb0fa0eca44a02bac9c87d7bce61f044688b1fe88569d7"
+      }
+    },
+    "standalone-source/matrix-3/region-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/region-standalone.rs",
+      "bytes": 239654,
+      "sha256": "95c2245f859e719e6a16dea4400c1de6b786d729776577ea809a87648fbf3ce0",
+      "gzip": {
+        "bytes": 42326,
+        "sha256": "830d9f126136ea21ede0ca60d38c9712d696935488c7c05999a0fe17d56e1ffa"
+      }
+    },
+    "standalone-source/matrix-3/guard-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/guard-standalone.rs",
+      "bytes": 237251,
+      "sha256": "65252b2c380091a06974b8d6e1291de88a60be83f9a64d537736d4975c84df2d",
+      "gzip": {
+        "bytes": 42032,
+        "sha256": "c0ca21d0103af7a91190bce19d68cdb4464ab8e11f9741fbc5408f164ab77149"
+      }
+    },
+    "standalone-source/matrix-3/nested-guards-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/nested-guards-standalone.rs",
+      "bytes": 247721,
+      "sha256": "e37aa153027b1d1f2751cc5a09d77127e28c04511176465553281d01d973d763",
+      "gzip": {
+        "bytes": 42992,
+        "sha256": "92b2b5d5e1901fe1afeea4a94d4b5671c3a280ff754c6f3bb32bdb9fcc4d23d0"
+      }
+    },
+    "standalone-source/matrix-3/copy-cycle-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/copy-cycle-standalone.rs",
+      "bytes": 245867,
+      "sha256": "13a107a737ec427bd92adb77d5f08b7bdea8e13b534918b3749de32965dc8383",
+      "gzip": {
+        "bytes": 43052,
+        "sha256": "193f85fbd303305d1000cca9601d2be85e439172c14242c81c3e5b78c5a8c80d"
+      }
+    },
+    "standalone-source/matrix-3/session-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/session-standalone.rs",
+      "bytes": 238099,
+      "sha256": "250f544857cee33c0e35967eeab49a9a6fcac5a4420cb80a9f35a00f6201b7b2",
+      "gzip": {
+        "bytes": 42153,
+        "sha256": "c89a3503e75b6e9a52657f944f1bce192680969a37fcb50927416219d5960287"
+      }
+    },
+    "standalone-source/matrix-3/arithmetic-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/arithmetic-standalone.rs",
+      "bytes": 241573,
+      "sha256": "d57139c8986fad17a0aebe6efc3ad04de572b9142f7cd89175d0fc094511b959",
+      "gzip": {
+        "bytes": 42533,
+        "sha256": "533f7eef887e0fecb63ed11e05f91b67ff1a407e4499d84d96688d5c7f2e4294"
+      }
+    },
+    "standalone-source/matrix-3/contract-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/contract-standalone.rs",
+      "bytes": 241993,
+      "sha256": "af1b140e2d7bb66754a6e5b18946afc687b9ae00feca912e21a24a0271947cc0",
+      "gzip": {
+        "bytes": 42575,
+        "sha256": "5a672631d670d51dc2ea05974ef4f6ace9d4d0fa5a36898edc44e7e549fdadfd"
+      }
+    },
+    "standalone-source/matrix-3/failed-argument-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/failed-argument-standalone.rs",
+      "bytes": 243486,
+      "sha256": "ac214e999100af79c07689d5c8aab542bb7a7d4ee04b6b2006db6016a3e2592a",
+      "gzip": {
+        "bytes": 42694,
+        "sha256": "0dd1824e404b57bcdee012408f0a3d9c005622773cf3a5d62f950d2a03a81de6"
+      }
+    },
+    "standalone-source/matrix-3/source-fault-1-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/source-fault-1-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-3/source-fault-2-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/source-fault-2-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-3/source-fault-3-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/source-fault-3-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-3/source-fault-4-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/source-fault-4-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-3/source-fault-5-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/source-fault-5-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-3/source-fault-6-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/source-fault-6-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-3/source-fault-7-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/source-fault-7-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-3/source-fault-8-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/source-fault-8-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-3/source-fault-9-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/source-fault-9-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-3/source-fault-10-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/source-fault-10-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-3/source-fault-11-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/source-fault-11-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-3/source-fault-12-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/source-fault-12-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-3/source-fault-13-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/source-fault-13-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-3/source-fault-14-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/source-fault-14-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-3/source-fault-15-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/source-fault-15-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-3/source-fault-16-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/source-fault-16-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-3/source-fault-17-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/source-fault-17-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-3/source-fault-18-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/source-fault-18-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-3/source-fault-19-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/source-fault-19-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-3/source-fault-20-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/source-fault-20-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-3/source-fault-21-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/source-fault-21-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "standalone-source/matrix-3/source-fault-22-standalone.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/matrix-3/source-fault-22-standalone.rs",
+      "bytes": 250896,
+      "sha256": "2f7153177caaad8ac92670009420f46543a72c7849b3565def52e7e01d77c082",
+      "gzip": {
+        "bytes": 43316,
+        "sha256": "65f4db5c1faf955219b86b6e4d0715064e13ca6be28660ef4d5c3f628ddcfab8"
+      }
+    },
+    "attempts/package-1/package-value.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/package-1/package-value.py",
+      "bytes": 15,
+      "sha256": "d4aa2db9f91b000557b5868dc1a3fc4d9ceec662ae627e065f068d1ccfc5c36a",
+      "gzip": {
+        "bytes": 35,
+        "sha256": "2a4cb7c2aef0f40ff0dcf391ba250c7fb4570bc269bab0259a98e2a9d1748f91"
+      }
+    },
+    "attempts/package-1/package-error.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/package-1/package-error.py",
+      "bytes": 15,
+      "sha256": "d4aa2db9f91b000557b5868dc1a3fc4d9ceec662ae627e065f068d1ccfc5c36a",
+      "gzip": {
+        "bytes": 35,
+        "sha256": "2a4cb7c2aef0f40ff0dcf391ba250c7fb4570bc269bab0259a98e2a9d1748f91"
+      }
+    },
+    "attempts/package-1/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/package-1/report.json",
+      "bytes": 87426,
+      "sha256": "9bfca7fdbd8ec04b0d04f551e8a5039234aa079696fc86f3badcc404160cc8bd",
+      "gzip": {
+        "bytes": 5473,
+        "sha256": "804c76bcb480595e05f063af251c7dec3fe4dc2dede97a2ba336235b75f4b572"
+      }
+    },
+    "attempts/package-1/package-error/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/package-1/package-error/cgx2.toml",
+      "bytes": 91,
+      "sha256": "4edfc51922f79ad75b4ad8ac5c3de3129af0193a8bd11445ad9b80e0027340df",
+      "gzip": {
+        "bytes": 97,
+        "sha256": "111fd0834c53b0d2214fdbb926edadbc37e2aee6f58c38b6b88fa6f1240fc121"
+      }
+    },
+    "attempts/package-1/package-error/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/package-1/package-error/main.cg",
+      "bytes": 230,
+      "sha256": "1c08d3b237de6d0fd674932b315595106a754ae075d1bc9327d33262d8f53112",
+      "gzip": {
+        "bytes": 171,
+        "sha256": "e7f14399c0a8578fe52c637764aab99a3e15813732337f83f5a0fbc068ffd8e0"
+      }
+    },
+    "attempts/package-1/package-error/lib.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/package-1/package-error/lib.cg",
+      "bytes": 120,
+      "sha256": "357ede5c4affeb093be20fd5ade2a47ede0ae3dd696b5d530a0ca71332e9d60a",
+      "gzip": {
+        "bytes": 132,
+        "sha256": "8a784155dd9a53ce0a961dbbcd2447aa3fab5e6ed18edfa14edb633b5d29479b"
+      }
+    },
+    "attempts/package-1/package-value/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/package-1/package-value/cgx2.toml",
+      "bytes": 85,
+      "sha256": "1e17310fc9fc1cacf4a071f3852d62317d71c5c73edcb77496b33403b89b6199",
+      "gzip": {
+        "bytes": 90,
+        "sha256": "afe2b26cb596602d46ee6da5ac27f3fb14548b3bdaa3a35308154f901877ef20"
+      }
+    },
+    "attempts/package-1/package-value/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/package-1/package-value/main.cg",
+      "bytes": 394,
+      "sha256": "eb40f04f87a978fe733bf6f51649e88dbe1c4196245cb35dddd59fd9ced0be83",
+      "gzip": {
+        "bytes": 213,
+        "sha256": "66dcf25f11a117cc47f946a335e3b4a0fb3e271fe252615dfe5c8c1e98903273"
+      }
+    },
+    "attempts/package-1/package-value/lib.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/package-1/package-value/lib.cg",
+      "bytes": 215,
+      "sha256": "3d588ff7569450b492e4a7b947f3e0aeb4f922f39fdcbfaec8d73557faa20298",
+      "gzip": {
+        "bytes": 185,
+        "sha256": "e91b3b9ee830ded456be2b4f5af4544f088ada3e1e3c943c72827d901d72f49e"
+      }
+    },
+    "standalone-source/package-1/package-value-standalone-emit.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/package-1/package-value.rs",
+      "bytes": 240191,
+      "sha256": "c03525e454fa1e990123e3efcb9cad321a155cd1a4cd55b2518eccc185b56346",
+      "gzip": {
+        "bytes": 42324,
+        "sha256": "3bf15709a9e44b44043f46a987cddfee520126648978d941e11fe04d001249a6"
+      }
+    },
+    "standalone-source/package-1/package-error-standalone-emit.rs.gz": {
+      "original_path": "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-e179-79f0-bdff-73791dd80661/ordinary-parity-standalone/package-1/package-error.rs",
+      "bytes": 236822,
+      "sha256": "4d94e0d5a9ef8ec567278dd6b631f77de7d8b516b0916a53737bd64305b5ef87",
+      "gzip": {
+        "bytes": 41940,
+        "sha256": "87c1a7a0a78472b4932f3c8dc4d8bf67af7aeee459565c629c48c06f71d90b76"
+      }
+    },
+    "attempts/quality-1/export.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/quality-1/export.py",
+      "bytes": 2683,
+      "sha256": "ea716cd6947d3a08c250cc23c5e2d69a2cd7abf0b449c5423d48db471f044ab7",
+      "gzip": {
+        "bytes": 1277,
+        "sha256": "9bb7eb42130f52e2d5edd5a610da49a299744170876131d17a3e2df63b7f02e8"
+      }
+    },
+    "attempts/quality-1/test_harness.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/quality-1/test_harness.py",
+      "bytes": 6955,
+      "sha256": "fd1d6bab02f005c2799258d3bd7c36adf47bb2437795ba087b727ac39411046f",
+      "gzip": {
+        "bytes": 1970,
+        "sha256": "4c6848850e5e54595086ba1d265cb4bd39cfefc1b92fff9b1dc281b710256936"
+      }
+    },
+    "attempts/quality-1/verify.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/quality-1/verify.py",
+      "bytes": 3080,
+      "sha256": "cb4857d32456583772c8cdc943056d728fe2ea3ea137538414051f995c44d28a",
+      "gzip": {
+        "bytes": 1216,
+        "sha256": "b9d178a112234552db1c00a9ab9bc42600bfab6de65964f105564ee1b22eaed3"
+      }
+    },
+    "attempts/quality-1/package_parity.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/quality-1/package_parity.py",
+      "bytes": 4026,
+      "sha256": "9d7b0a8af7744c673f079730ea9ce48cc799cf3db2fbc05ef8717f1e191a3546",
+      "gzip": {
+        "bytes": 1573,
+        "sha256": "de701c018a3ed56ceeedbb84da7b6c9eddbd22ced1ede6ffe09658670beffb26"
+      }
+    },
+    "attempts/quality-1/source_probe.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/quality-1/source_probe.rs",
+      "bytes": 677,
+      "sha256": "a0cd939a5a6d27799b206a211f4010908bb73ee54851bfe1c68eac879860cceb",
+      "gzip": {
+        "bytes": 400,
+        "sha256": "b87541ede2139d9a8df1eb97191a5a4362f91271df7e4c7964e99d45f3f2eb57"
+      }
+    },
+    "attempts/quality-1/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/quality-1/report.json",
+      "bytes": 4934,
+      "sha256": "a02c358d649e65830bc0b9cc8bb677233b52f23dec8b19ee34c77b15c9b708fe",
+      "gzip": {
+        "bytes": 1773,
+        "sha256": "ba5a8ef5b081400152ad92a740f2486878a0d9c805ce62164e799a5e71281730"
+      }
+    },
+    "attempts/quality-1/review.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/quality-1/review.py",
+      "bytes": 2719,
+      "sha256": "5bb04b88ecf9e887a2cac29bbde5f538932a66a92afc2dd658271c0c21b6a3ad",
+      "gzip": {
+        "bytes": 1249,
+        "sha256": "e7253a337993d2b5bdb7ea373878f5a1256eef3ad92439921d85e493c1feaec6"
+      }
+    },
+    "attempts/quality-1/replay.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/quality-1/replay.py",
+      "bytes": 1537,
+      "sha256": "803a11a495f81919723bb55cbb7bd7ff84375ad76c9f7fe96d1562ae3cfe9f31",
+      "gzip": {
+        "bytes": 742,
+        "sha256": "250464743352c4bfa2a1c1073db30929fe6393591a9ef09ef2ef37b8db5233f3"
+      }
+    },
+    "attempts/quality-1/common.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/quality-1/common.py",
+      "bytes": 5101,
+      "sha256": "89dff26226defcaebdea5eff2df4414d9d885bb08a7bb09993e721bbb610cfcb",
+      "gzip": {
+        "bytes": 1971,
+        "sha256": "175cba466d3664cdd18025f03a3aa14069ae1cf150d95a5e0dd7628baaf3a5f0"
+      }
+    },
+    "attempts/quality-1/quality.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/quality-1/quality.py",
+      "bytes": 2038,
+      "sha256": "97e5d8ffdc017f827c582a44bbcf87b3aa36a62d5943e9af1d8fbc751b5d206d",
+      "gzip": {
+        "bytes": 940,
+        "sha256": "3f77b247b2dc00d3f41aa156f3bd5f79a3b16b1cd5e28276f68a7f388c9f3f2b"
+      }
+    },
+    "attempts/quality-1/run.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/quality-1/run.py",
+      "bytes": 15419,
+      "sha256": "6938b0ecc8bb526dd159553d3c6212445ebaa0b9b1a4026f800e2311849ee2b6",
+      "gzip": {
+        "bytes": 5121,
+        "sha256": "e125bf1c9c91c484ff74588afdba6cfb9b34710305b7bf82effbad8fb727c6d6"
+      }
+    },
+    "attempts/quality-1/runtime_probe.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/quality-1/runtime_probe.rs",
+      "bytes": 9315,
+      "sha256": "cbf31cd646d0b3feef2c049fb1d27fb1333dcdbaf72dfcdbc5eca767f1903286",
+      "gzip": {
+        "bytes": 2577,
+        "sha256": "fb63e8d249daa73aa6a4b47fdfe0f08be05153fa2f35e9b78a24fe0c4df9a263"
+      }
+    },
+    "attempts/quality-2/export.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/quality-2/export.py",
+      "bytes": 3114,
+      "sha256": "c0e0fd3a3619f76a2e8320e48350ae7fbcd9de856ed872cee80c074ebf034aed",
+      "gzip": {
+        "bytes": 1386,
+        "sha256": "7183dde713cfd0401e9890a56e0ab80e757048f0ac68f3748d9adc7db41f3442"
+      }
+    },
+    "attempts/quality-2/test_harness.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/quality-2/test_harness.py",
+      "bytes": 6955,
+      "sha256": "fd1d6bab02f005c2799258d3bd7c36adf47bb2437795ba087b727ac39411046f",
+      "gzip": {
+        "bytes": 1970,
+        "sha256": "4c6848850e5e54595086ba1d265cb4bd39cfefc1b92fff9b1dc281b710256936"
+      }
+    },
+    "attempts/quality-2/auto_probe.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/quality-2/auto_probe.rs",
+      "bytes": 1529,
+      "sha256": "32813e86d40a49a1e0ee228e83cba52b3328137bd64ceab4528b92d07c02f9cb",
+      "gzip": {
+        "bytes": 482,
+        "sha256": "8c050c5d675cfd90e3516db19bcfa7a0e31aac6944bede64873dfc7537b88275"
+      }
+    },
+    "attempts/quality-2/verify.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/quality-2/verify.py",
+      "bytes": 3080,
+      "sha256": "cb4857d32456583772c8cdc943056d728fe2ea3ea137538414051f995c44d28a",
+      "gzip": {
+        "bytes": 1216,
+        "sha256": "b9d178a112234552db1c00a9ab9bc42600bfab6de65964f105564ee1b22eaed3"
+      }
+    },
+    "attempts/quality-2/package_parity.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/quality-2/package_parity.py",
+      "bytes": 4026,
+      "sha256": "9d7b0a8af7744c673f079730ea9ce48cc799cf3db2fbc05ef8717f1e191a3546",
+      "gzip": {
+        "bytes": 1573,
+        "sha256": "de701c018a3ed56ceeedbb84da7b6c9eddbd22ced1ede6ffe09658670beffb26"
+      }
+    },
+    "attempts/quality-2/source_probe.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/quality-2/source_probe.rs",
+      "bytes": 677,
+      "sha256": "a0cd939a5a6d27799b206a211f4010908bb73ee54851bfe1c68eac879860cceb",
+      "gzip": {
+        "bytes": 400,
+        "sha256": "b87541ede2139d9a8df1eb97191a5a4362f91271df7e4c7964e99d45f3f2eb57"
+      }
+    },
+    "attempts/quality-2/auto.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/quality-2/auto.py",
+      "bytes": 3604,
+      "sha256": "9b1af0ba5259ab4c7add83e52143a06478fed73cf6edb33e4d689e903b005ff2",
+      "gzip": {
+        "bytes": 1445,
+        "sha256": "ed9e7f60fa9e463692998c539a35fff5d13230c3346735bec2440d687c999ebd"
+      }
+    },
+    "attempts/quality-2/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/quality-2/report.json",
+      "bytes": 4934,
+      "sha256": "486b0fc379efdda70a771f4c17b55dfd9fc6bba0ad73f46ed117d9420a17d38c",
+      "gzip": {
+        "bytes": 1773,
+        "sha256": "48d7363fb1003237a0fcc5920a0ebf3cb8d5da5281ec846f14a94d763ed4329a"
+      }
+    },
+    "attempts/quality-2/review.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/quality-2/review.py",
+      "bytes": 2719,
+      "sha256": "5bb04b88ecf9e887a2cac29bbde5f538932a66a92afc2dd658271c0c21b6a3ad",
+      "gzip": {
+        "bytes": 1249,
+        "sha256": "e7253a337993d2b5bdb7ea373878f5a1256eef3ad92439921d85e493c1feaec6"
+      }
+    },
+    "attempts/quality-2/replay.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/quality-2/replay.py",
+      "bytes": 1537,
+      "sha256": "803a11a495f81919723bb55cbb7bd7ff84375ad76c9f7fe96d1562ae3cfe9f31",
+      "gzip": {
+        "bytes": 742,
+        "sha256": "250464743352c4bfa2a1c1073db30929fe6393591a9ef09ef2ef37b8db5233f3"
+      }
+    },
+    "attempts/quality-2/common.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/quality-2/common.py",
+      "bytes": 5101,
+      "sha256": "89dff26226defcaebdea5eff2df4414d9d885bb08a7bb09993e721bbb610cfcb",
+      "gzip": {
+        "bytes": 1971,
+        "sha256": "175cba466d3664cdd18025f03a3aa14069ae1cf150d95a5e0dd7628baaf3a5f0"
+      }
+    },
+    "attempts/quality-2/quality.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/quality-2/quality.py",
+      "bytes": 2038,
+      "sha256": "97e5d8ffdc017f827c582a44bbcf87b3aa36a62d5943e9af1d8fbc751b5d206d",
+      "gzip": {
+        "bytes": 940,
+        "sha256": "3f77b247b2dc00d3f41aa156f3bd5f79a3b16b1cd5e28276f68a7f388c9f3f2b"
+      }
+    },
+    "attempts/quality-2/run.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/quality-2/run.py",
+      "bytes": 15419,
+      "sha256": "6938b0ecc8bb526dd159553d3c6212445ebaa0b9b1a4026f800e2311849ee2b6",
+      "gzip": {
+        "bytes": 5121,
+        "sha256": "e125bf1c9c91c484ff74588afdba6cfb9b34710305b7bf82effbad8fb727c6d6"
+      }
+    },
+    "attempts/quality-2/runtime_probe.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/quality-2/runtime_probe.rs",
+      "bytes": 9315,
+      "sha256": "cbf31cd646d0b3feef2c049fb1d27fb1333dcdbaf72dfcdbc5eca767f1903286",
+      "gzip": {
+        "bytes": 2577,
+        "sha256": "fb63e8d249daa73aa6a4b47fdfe0f08be05153fa2f35e9b78a24fe0c4df9a263"
+      }
+    },
+    "attempts/replay-1/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/report.json",
+      "bytes": 2257,
+      "sha256": "a3ed41ea3459b5001f42d7d94956c640196acf773e38de1b90de8cb1ebbe2031",
+      "gzip": {
+        "bytes": 961,
+        "sha256": "671272815bfd878242b26b3bc2d72b3c51b0d09632293fbfe503f7caf9d2dba9"
+      }
+    },
+    "attempts/replay-1/product/product.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/product.json",
+      "bytes": 158687,
+      "sha256": "4ae33b660a58e133835bfc1083d3f3f2eb32aad60bf763f68a12ecd37cee03b5",
+      "gzip": {
+        "bytes": 11962,
+        "sha256": "b15619dff8e9d4f25df927acb8bf7425b266ea9d59d46326f5f52e845ef1cead"
+      }
+    },
+    "attempts/replay-1/product/entry-probe.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/entry-probe.rs",
+      "bytes": 376,
+      "sha256": "629d7ffb34152f42faddade4c3a33ffc7361322cf67d71c62ac1b25aab3d49b6",
+      "gzip": {
+        "bytes": 256,
+        "sha256": "badae45cfaead9123de27d29d275a4c3781994070eebee18cb1f987fc73385cc"
+      }
+    },
+    "attempts/replay-1/product/region.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/region.py",
+      "bytes": 18,
+      "sha256": "f084e50f3d84cfc3a71cad0a4c2610fe42c87b5c78de5ff50bba3ac7c1b16ab8",
+      "gzip": {
+        "bytes": 38,
+        "sha256": "394a8fd5b468f2c1ae0cedf13fe94e941817d2af31c37b2aa77368573fb97841"
+      }
+    },
+    "attempts/replay-1/product/nested-guards.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/nested-guards.py",
+      "bytes": 18,
+      "sha256": "f084e50f3d84cfc3a71cad0a4c2610fe42c87b5c78de5ff50bba3ac7c1b16ab8",
+      "gzip": {
+        "bytes": 38,
+        "sha256": "394a8fd5b468f2c1ae0cedf13fe94e941817d2af31c37b2aa77368573fb97841"
+      }
+    },
+    "attempts/replay-1/product/session.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/session.py",
+      "bytes": 18,
+      "sha256": "f084e50f3d84cfc3a71cad0a4c2610fe42c87b5c78de5ff50bba3ac7c1b16ab8",
+      "gzip": {
+        "bytes": 38,
+        "sha256": "394a8fd5b468f2c1ae0cedf13fe94e941817d2af31c37b2aa77368573fb97841"
+      }
+    },
+    "attempts/replay-1/product/guard.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/guard.py",
+      "bytes": 18,
+      "sha256": "f084e50f3d84cfc3a71cad0a4c2610fe42c87b5c78de5ff50bba3ac7c1b16ab8",
+      "gzip": {
+        "bytes": 38,
+        "sha256": "394a8fd5b468f2c1ae0cedf13fe94e941817d2af31c37b2aa77368573fb97841"
+      }
+    },
+    "attempts/replay-1/product/runner-snapshot.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/runner-snapshot.py",
+      "bytes": 17241,
+      "sha256": "fa7206950b2672b4f67f05830272ea3cea039455c063b88d69b16d812d8b8ba2",
+      "gzip": {
+        "bytes": 5158,
+        "sha256": "f50548c28daf6a271570915338c529d4fd1db03c16cc13ad61ca21ac3e3ad533"
+      }
+    },
+    "attempts/replay-1/product/copy-cycle.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/copy-cycle.py",
+      "bytes": 18,
+      "sha256": "f084e50f3d84cfc3a71cad0a4c2610fe42c87b5c78de5ff50bba3ac7c1b16ab8",
+      "gzip": {
+        "bytes": 38,
+        "sha256": "394a8fd5b468f2c1ae0cedf13fe94e941817d2af31c37b2aa77368573fb97841"
+      }
+    },
+    "attempts/replay-1/product/fixtures-snapshot/nested-guards.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/fixtures-snapshot/nested-guards.cg",
+      "bytes": 1305,
+      "sha256": "8c05226df1feba43565bf9bd5a0731897e599be705da58a7cfcb5bf3fdc449a8",
+      "gzip": {
+        "bytes": 283,
+        "sha256": "1bbd816898f497f570831c41770de7bfd68b9f80293ab0535f614e9863cc7a74"
+      }
+    },
+    "attempts/replay-1/product/fixtures-snapshot/guard.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/fixtures-snapshot/guard.cg",
+      "bytes": 543,
+      "sha256": "5c8c238b7f94962230c0ba38ff53f3093b35e73a81afc988609dc4ea1ddc638b",
+      "gzip": {
+        "bytes": 222,
+        "sha256": "475f3d7d2f26f229b6928f7e82c88e9058d17b4050710bdef6ff9c200d42a219"
+      }
+    },
+    "attempts/replay-1/product/fixtures-snapshot/copy-cycle.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/fixtures-snapshot/copy-cycle.cg",
+      "bytes": 1620,
+      "sha256": "86187fa24adbfed1ac27d2092b160545a705ecd4a7ba7674c68d4ebf9ef776d9",
+      "gzip": {
+        "bytes": 403,
+        "sha256": "b4503abc0f9d26c76e30fb7654c463ff705aabb3d0e077f8ee8649ee9c63f56e"
+      }
+    },
+    "attempts/replay-1/product/fixtures-snapshot/region.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/fixtures-snapshot/region.cg",
+      "bytes": 497,
+      "sha256": "c23bcd5d82cfe85d4233e4c1ac87a615b9e14977dd31f636855e0813719379d0",
+      "gzip": {
+        "bytes": 258,
+        "sha256": "cbe766a985bb51bc99ed362276678b1e94913590c2f71ad2b34afe3ac0126128"
+      }
+    },
+    "attempts/replay-1/product/fixtures-snapshot/session.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/fixtures-snapshot/session.cg",
+      "bytes": 479,
+      "sha256": "7d85ab43f44852490cd52b226b515fa6484125346be5eb79659bc3ed7e409695",
+      "gzip": {
+        "bytes": 242,
+        "sha256": "faa7d643916528cd6af1b08aa09f0277caad1e9091a500b5698c9b1c0d657fa7"
+      }
+    },
+    "attempts/replay-1/product/fixtures-snapshot/cross-region.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/fixtures-snapshot/cross-region.cg",
+      "bytes": 364,
+      "sha256": "a9f8f88e06b806555b7fd386f8493c89e3cc5c9639377daf8d8c499c49943544",
+      "gzip": {
+        "bytes": 195,
+        "sha256": "ef4f4e45347de1f7195d4ef67ebcecc5a63efcce8bf748a43497f2ee966ed202"
+      }
+    },
+    "attempts/replay-1/product/fixtures-snapshot/fallback-resource.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/fixtures-snapshot/fallback-resource.cg",
+      "bytes": 247,
+      "sha256": "27128b34df603a62be7e9e5f6c6a510295ea28cb94b28a795dea763e3c8c0102",
+      "gzip": {
+        "bytes": 172,
+        "sha256": "b16fd02ba8e65ff5981334d6147071ee8f2d2ed4fb84289ea1392c67eb057ca3"
+      }
+    },
+    "attempts/replay-1/product/outside/region.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/outside/region.rs",
+      "bytes": 239654,
+      "sha256": "95c2245f859e719e6a16dea4400c1de6b786d729776577ea809a87648fbf3ce0",
+      "gzip": {
+        "bytes": 42326,
+        "sha256": "830d9f126136ea21ede0ca60d38c9712d696935488c7c05999a0fe17d56e1ffa"
+      }
+    },
+    "attempts/replay-1/product/outside/nested-guards.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/outside/nested-guards.rs",
+      "bytes": 247721,
+      "sha256": "e37aa153027b1d1f2751cc5a09d77127e28c04511176465553281d01d973d763",
+      "gzip": {
+        "bytes": 42992,
+        "sha256": "92b2b5d5e1901fe1afeea4a94d4b5671c3a280ff754c6f3bb32bdb9fcc4d23d0"
+      }
+    },
+    "attempts/replay-1/product/outside/package.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/outside/package.rs",
+      "bytes": 240191,
+      "sha256": "6ce32d24f6830fd4b3d1fdf2cc949f3daaf14cf0e055ddab2ad9701849967f72",
+      "gzip": {
+        "bytes": 42319,
+        "sha256": "1c04f7c32e628c390f536444e7bc725e18967eba19239e6af68b3248a80e10d5"
+      }
+    },
+    "attempts/replay-1/product/outside/guard.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/outside/guard.rs",
+      "bytes": 237251,
+      "sha256": "65252b2c380091a06974b8d6e1291de88a60be83f9a64d537736d4975c84df2d",
+      "gzip": {
+        "bytes": 42032,
+        "sha256": "c0ca21d0103af7a91190bce19d68cdb4464ab8e11f9741fbc5408f164ab77149"
+      }
+    },
+    "attempts/replay-1/product/outside/session.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/outside/session.rs",
+      "bytes": 238099,
+      "sha256": "250f544857cee33c0e35967eeab49a9a6fcac5a4420cb80a9f35a00f6201b7b2",
+      "gzip": {
+        "bytes": 42153,
+        "sha256": "c89a3503e75b6e9a52657f944f1bce192680969a37fcb50927416219d5960287"
+      }
+    },
+    "attempts/replay-1/product/outside/copy-cycle.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/outside/copy-cycle.rs",
+      "bytes": 245867,
+      "sha256": "13a107a737ec427bd92adb77d5f08b7bdea8e13b534918b3749de32965dc8383",
+      "gzip": {
+        "bytes": 43052,
+        "sha256": "193f85fbd303305d1000cca9601d2be85e439172c14242c81c3e5b78c5a8c80d"
+      }
+    },
+    "attempts/replay-1/product/package/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/package/cgx2.toml",
+      "bytes": 85,
+      "sha256": "1e17310fc9fc1cacf4a071f3852d62317d71c5c73edcb77496b33403b89b6199",
+      "gzip": {
+        "bytes": 90,
+        "sha256": "afe2b26cb596602d46ee6da5ac27f3fb14548b3bdaa3a35308154f901877ef20"
+      }
+    },
+    "attempts/replay-1/product/package/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/package/main.cg",
+      "bytes": 394,
+      "sha256": "eb40f04f87a978fe733bf6f51649e88dbe1c4196245cb35dddd59fd9ced0be83",
+      "gzip": {
+        "bytes": 213,
+        "sha256": "66dcf25f11a117cc47f946a335e3b4a0fb3e271fe252615dfe5c8c1e98903273"
+      }
+    },
+    "attempts/replay-1/product/package/lib.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/package/lib.cg",
+      "bytes": 215,
+      "sha256": "3d588ff7569450b492e4a7b947f3e0aeb4f922f39fdcbfaec8d73557faa20298",
+      "gzip": {
+        "bytes": 185,
+        "sha256": "e91b3b9ee830ded456be2b4f5af4544f088ada3e1e3c943c72827d901d72f49e"
+      }
+    },
+    "attempts/replay-1/product/package-snapshot/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/package-snapshot/cgx2.toml",
+      "bytes": 85,
+      "sha256": "1e17310fc9fc1cacf4a071f3852d62317d71c5c73edcb77496b33403b89b6199",
+      "gzip": {
+        "bytes": 90,
+        "sha256": "afe2b26cb596602d46ee6da5ac27f3fb14548b3bdaa3a35308154f901877ef20"
+      }
+    },
+    "attempts/replay-1/product/package-snapshot/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/package-snapshot/main.cg",
+      "bytes": 394,
+      "sha256": "eb40f04f87a978fe733bf6f51649e88dbe1c4196245cb35dddd59fd9ced0be83",
+      "gzip": {
+        "bytes": 213,
+        "sha256": "66dcf25f11a117cc47f946a335e3b4a0fb3e271fe252615dfe5c8c1e98903273"
+      }
+    },
+    "attempts/replay-1/product/package-snapshot/lib.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/package-snapshot/lib.cg",
+      "bytes": 188,
+      "sha256": "f82eb55a0a4d6d67788f339fecd6dbaae5f8ff1cc49166ddd3dd1994136204eb",
+      "gzip": {
+        "bytes": 169,
+        "sha256": "076f904bb53b50d28aa83524f2d1a6542d0fe712f4216621650dfc2621fe63f3"
+      }
+    },
+    "attempts/replay-1/product/regressions/core-product/product.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/core-product/product.json",
+      "bytes": 104791,
+      "sha256": "e10508f6d4d237305f5457bf820cc97319304a66dca04688b145b59b21369942",
+      "gzip": {
+        "bytes": 8401,
+        "sha256": "09f013d9cdc909fa853a0b692ce75ed9e4ba1472b31efad30801c50430bd5793"
+      }
+    },
+    "attempts/replay-1/product/regressions/equality-product/product.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/equality-product/product.json",
+      "bytes": 65964,
+      "sha256": "a59271501e89851076d05fd66ecd3085390d2c8b9a6a80c6a7f538cd4b4c821c",
+      "gzip": {
+        "bytes": 4678,
+        "sha256": "871c4383432d8b9e3d0466c2646f9bfab59d1b8508446f6682eed091ba2210eb"
+      }
+    },
+    "attempts/replay-1/product/regressions/guards518/guards518.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/guards518/guards518.json",
+      "bytes": 1094677,
+      "sha256": "8f6a592a9c0989494eef4b7baf662abc1a55bb37c832641f52220e944cadea29",
+      "gzip": {
+        "bytes": 26719,
+        "sha256": "cde10dc14fe1b4c225e495a2db8ff54155d6f246a834e67aaf30259d1b563996"
+      }
+    },
+    "attempts/replay-1/product/regressions/graph99/graph99.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/graph99/graph99.json",
+      "bytes": 102232,
+      "sha256": "acf3aa0bbe1d66658f8019768561d76a6ad7983678b0ecf413850d9a0d199c6a",
+      "gzip": {
+        "bytes": 5854,
+        "sha256": "9f8f210c5c7ac9da8c5f6e3574635103da91ed4f31d3ee1c2f5d76eee75accf3"
+      }
+    },
+    "attempts/replay-1/product/regressions/output/output.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/output/output.json",
+      "bytes": 22681,
+      "sha256": "37a62794d73fded32dde064b026f92d174977aa776a8e83e362fd4f6f5e1d0b7",
+      "gzip": {
+        "bytes": 1966,
+        "sha256": "f003ff8981dc7eb48156769a25fcb2cbba78b4af9386551e82e32bdea4920e10"
+      }
+    },
+    "attempts/replay-1/product/regressions/ordinary256/ordinary256.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/ordinary256/ordinary256.json",
+      "bytes": 126890,
+      "sha256": "9c516d58e6faa12e85383bb175166803cd81f686907fdf9cddf3011b8eee88e8",
+      "gzip": {
+        "bytes": 7698,
+        "sha256": "f5f9f13f65789bb95e67aaf4f51f5e777d40078862e383adcfff0a62b73bdf15"
+      }
+    },
+    "attempts/replay-1/product/regressions/owned-symbol195/owned-symbol195.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/owned-symbol195/owned-symbol195.json",
+      "bytes": 122563,
+      "sha256": "a270a1457b07351ffdabb5e566d978208e9dcbf386b1a4b30faff4b2f453e780",
+      "gzip": {
+        "bytes": 8661,
+        "sha256": "ba1f7b6a70d672cb62925865e9c8752556b722a028a6a20a941da65cd4729dfa"
+      }
+    },
+    "attempts/replay-1/product/regressions/foundation/foundation.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/foundation/foundation.json",
+      "bytes": 32622,
+      "sha256": "c94c68f7f37f78bb4efd525ac177418ef1766ace7bc807c9bd900a9a25447584",
+      "gzip": {
+        "bytes": 2703,
+        "sha256": "a148f75db7cc006d912a4b9297304e7d97f55ce56405be945bafdbb7faac29f0"
+      }
+    },
+    "attempts/replay-1/product/regressions/emitters/emitters.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/emitters/emitters.json",
+      "bytes": 56022,
+      "sha256": "454d1392ddb28f3bd7b2ed338c5b1f5cd52266321d044d0c9e4c6a3b00e2fd10",
+      "gzip": {
+        "bytes": 2679,
+        "sha256": "15483d131c131967299bff61dc3942ca3451eb8c3d98d335cc8d3dac522117c4"
+      }
+    },
+    "attempts/replay-1/product/regressions/owned-result-original/owned-result-original.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/owned-result-original/owned-result-original.json",
+      "bytes": 378110,
+      "sha256": "2e1171142ae4a03c96d209be516b5d4159aec9ef5865fbe4310a24ba1760860d",
+      "gzip": {
+        "bytes": 19004,
+        "sha256": "d8572d26ea78d40168f43a540702384259a1636e0d026fd3c6df8c0412c24693"
+      }
+    },
+    "attempts/replay-1/product/regressions/semantic/semantic.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/semantic/semantic.json",
+      "bytes": 157168,
+      "sha256": "191a8c5d92087017eb3fd971272eaabd445319bd7b99b15646d47761c0d7f132",
+      "gzip": {
+        "bytes": 5723,
+        "sha256": "5801b3d05bffc9aa56cdc872477bf7619a1a438104b4489eaf4d36e90a8f0d86"
+      }
+    },
+    "attempts/replay-1/product/regressions/reports265/reports265.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/reports265/reports265.json",
+      "bytes": 337524,
+      "sha256": "16d6d4276584ad526e8bea88e263dc57cf0f03610e5dbfe97da373c009ab2741",
+      "gzip": {
+        "bytes": 11692,
+        "sha256": "1a51cdd7de95206d31f63e83057ac307aefb433d71d34807ba5403d2b47ca878"
+      }
+    },
+    "attempts/replay-1/product/regressions/binders/binders.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/binders/binders.json",
+      "bytes": 57684,
+      "sha256": "10c5002b98b64357c5180d74b11c3827fbc6ceaedcd05f93c12ec94129420997",
+      "gzip": {
+        "bytes": 3439,
+        "sha256": "aeaeaba8afd5ba4fd62d0a91d9a217d7eb6041eeab76b52107e522e9f7fed7af"
+      }
+    },
+    "attempts/replay-1/product/regressions/owned-result-reconciled/reconciled/reconciled-product.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/owned-result-reconciled/reconciled/reconciled-product.json",
+      "bytes": 435849,
+      "sha256": "53b1e3b02ff7e85c2ce19a8f683be01c1f0dfd898e1d563b1d2bf91ecf0a03da",
+      "gzip": {
+        "bytes": 21828,
+        "sha256": "72830149d4772ab0006e6da25e8bcf66c6be8345bbd7aca5a47a63f98a03371a"
+      }
+    },
+    "attempts/replay-1/product/regressions/owned-result-reconciled/reconciled/restored-shadow.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/owned-result-reconciled/reconciled/restored-shadow.json",
+      "bytes": 13635,
+      "sha256": "e673e369ff7b3f17f00d8f0b610ac6d37d4afe3684f4f76c9ed189cbcb54e02b",
+      "gzip": {
+        "bytes": 1825,
+        "sha256": "03f8d6ba48fd13c1770948bbfc6ab42b55005b4324cc750fc00d4627b74cf613"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/public-values.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/public-values.py",
+      "bytes": 8676,
+      "sha256": "a8847fc861e3c199d52806298bbdddc8b366d2e3ec44da9429acbac157808086",
+      "gzip": {
+        "bytes": 2476,
+        "sha256": "c21f1ef5dc90ae8c2cecbdb4f4ebc28cb4f6628230a1846dd92efb26949dd154"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/qualified.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/qualified.rs",
+      "bytes": 233794,
+      "sha256": "1d72d0be73ce13f4483d4e7bce10f41d1901929efa91cd9ea92c951f72f00576",
+      "gzip": {
+        "bytes": 41604,
+        "sha256": "1041efc6115763b65ed422535ecb5f53a0088fe7fb0c83657a694152e94491e2"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/public-package.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/public-package.rs",
+      "bytes": 240436,
+      "sha256": "89b584fd5ad5b4be3b8d48f69a8ff5d135c109b9d0933715099fab1745e04560",
+      "gzip": {
+        "bytes": 42311,
+        "sha256": "1fcb6ecff439df74362fa659c76730841ece5f86f153fdb7903cd76925d2608d"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/public-source.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/public-source.py",
+      "bytes": 9405,
+      "sha256": "0c2bd5648f7d3cef70338f602c34dc1a0ad2fb7778694e99fc12134ad85a0010",
+      "gzip": {
+        "bytes": 2616,
+        "sha256": "a0fd8bc5dee21d03ed7ce1cbd3c396a5c73b289d645d42fd7691586d532226e3"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/public-interfaces.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/public-interfaces.py",
+      "bytes": 8187,
+      "sha256": "5f83d7e17d9cb3889467bf3797ef8f58ad881278ce3aea38b15a4cd3ecbf306a",
+      "gzip": {
+        "bytes": 2365,
+        "sha256": "faa770918996fae0a8c12d9cea14101c0dc71e9449b01900b2f77556a90ecdcd"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/public-function.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/public-function.cg",
+      "bytes": 83,
+      "sha256": "671fd9e0b1a3b62619f3d7b149bd0a1c3c59972e5590141f000e6b677e560f3c",
+      "gzip": {
+        "bytes": 81,
+        "sha256": "dd95a03ae256f95a2f1a2b07220c6d9058d2aa653a166fcbf56451dc48a29fad"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/package-private.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/package-private.rs",
+      "bytes": 241924,
+      "sha256": "04a2464618375ec796cde5a2cc18dba79fc0b882154063be71acfa478c347d95",
+      "gzip": {
+        "bytes": 42345,
+        "sha256": "43b93d2a6b19e758c32e58e1a5d55740df013fa09647a1122acc40c298a1e158"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/visibility-source.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/visibility-source.py",
+      "bytes": 12074,
+      "sha256": "3d46ab59a9bcc55693cc17e4070c857a07365ad0152e2fc861b6b4ca89a1cf4a",
+      "gzip": {
+        "bytes": 2931,
+        "sha256": "c95d276c84616187d505af428654a6732d5086d3fcc022ef83bd0ad4863bbc97"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/nested-private.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/nested-private.py",
+      "bytes": 8216,
+      "sha256": "ccbd93646841b983f4d787da1dc2cedbf81b3950d3bdc21743e97d3ec9629b32",
+      "gzip": {
+        "bytes": 2387,
+        "sha256": "ba6b2abe201dda062b44b08f65504795e4b508d9a273bc941e5fdc8677682e14"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/public-interfaces.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/public-interfaces.rs",
+      "bytes": 236920,
+      "sha256": "f2e3ea099e5e930657fd3fef5ca7268da20b3c49afdfbc97a185425b4b800723",
+      "gzip": {
+        "bytes": 41995,
+        "sha256": "10d5a889952722481daea8b7b727b8ecb8cb981c0ad44a3c8ab47002aec0bbb5"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/public-values.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/public-values.rs",
+      "bytes": 237862,
+      "sha256": "841a032b4a3fe9461ca105bfe43248f909581baa8cee8d658627fd6cb9163427",
+      "gzip": {
+        "bytes": 42067,
+        "sha256": "9a5d238b62135e53d9a0cb296f569151e895f618ac8a30fe281fca3c00ed0b6b"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/report.json",
+      "bytes": 159469,
+      "sha256": "8ac88bc500dded0f18e1da556bb0a1dfc42c51df7ef6cb1622573d9c9dfdcf26",
+      "gzip": {
+        "bytes": 7953,
+        "sha256": "a2ea7358e293d08a47bef00b93162f8065d1455bcbc8f5e868db44b7feafd370"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/nested-private.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/nested-private.rs",
+      "bytes": 236634,
+      "sha256": "2ba6f7476f339abce907b83cd70375c4ae3e145a2565852a3042ac5d3352686d",
+      "gzip": {
+        "bytes": 41964,
+        "sha256": "6026ee1ea21493e042308a5657b4d6ca06eba0e7058d96be2c528c771ad8ee42"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/visibility-source.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/visibility-source.rs",
+      "bytes": 246575,
+      "sha256": "afae05fd7c88ea9843fda7866a27cc697513cbc1c8dfa3bcfc34babc12292b1d",
+      "gzip": {
+        "bytes": 42884,
+        "sha256": "4735304bd32d9a8bed5ad022d8c831bf3653c3809bb1e86d833099cc71773660"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/public-record.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/public-record.cg",
+      "bytes": 68,
+      "sha256": "7bf5d373429f57dc8094fe5a37a2f2968daf449e1a25cc1685ffb6ddd34d7a0e",
+      "gzip": {
+        "bytes": 67,
+        "sha256": "eeba8005171229547f7117fb93bb1840f42b8590d2b1da5d42997bc6d48d708e"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/public-variant.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/public-variant.cg",
+      "bytes": 69,
+      "sha256": "8ba8aac907ca519a754fcd00c8c3e5f3f33e38a27b32cc96de481b07e048f0d8",
+      "gzip": {
+        "bytes": 76,
+        "sha256": "597162c33210b5fd737e6904027fb94078fb48284668fd0b71e29c2123700ef1"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/dishonest.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/dishonest.cg",
+      "bytes": 107,
+      "sha256": "a8f41ad1e58630838b4000c5ce8165a4ec4e8ec4de995ae89059d1abdf3a7273",
+      "gzip": {
+        "bytes": 104,
+        "sha256": "4212579780b8bfcba47d9a85db44318d0b27aa114d7dfcb554d57a39d5c28c6f"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/public-source.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/public-source.rs",
+      "bytes": 239518,
+      "sha256": "841411cbe8d5e9689f0a362187db8ef61a884c9e0a673c9d85945927729c6677",
+      "gzip": {
+        "bytes": 42280,
+        "sha256": "830c7f06c2f4a239f0829e6f4fe7baf65b5eeac73dc83efd8ef4e47d6ef3cdfa"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/collisions.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/collisions.rs",
+      "bytes": 235265,
+      "sha256": "62e6e30ba945ab93e0ddf55e2e1f565dc5d44eebf2a2a9eb32e9f34212399f03",
+      "gzip": {
+        "bytes": 41761,
+        "sha256": "f649b72f44be6cd1214fc7778563927ec70058233123a7bf08bd0d34761a4210"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/visibility-package.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/visibility-package.rs",
+      "bytes": 245431,
+      "sha256": "e4a04bec309db36a837e9e6bb6da7195b09be20c3bcd8aed6094f4ca86c4c30c",
+      "gzip": {
+        "bytes": 42744,
+        "sha256": "4a86c5243fe83475d3268bccf50dbe7e2a6896e1f58fd3262b42b594d7798afe"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/qualified.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/qualified.py",
+      "bytes": 7098,
+      "sha256": "5b9fc5ad6abc47c9078f124cd1ccc624deeda49240c9983e4ca27c54a7f0302a",
+      "gzip": {
+        "bytes": 2175,
+        "sha256": "c85a03b32148d17c41f3b2b0681a86fa02dc57684c8daebc3c175038fd543699"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/collisions.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/collisions.cg",
+      "bytes": 151,
+      "sha256": "d68b597eddf4063f468f1f356d5639a3047cf8f5dd30c5db831a248fd2d552a0",
+      "gzip": {
+        "bytes": 133,
+        "sha256": "5cb8730b632cf93684e6bdc483f26064ebe176edb18c464907715e0de48fa5a1"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/collisions.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/collisions.py",
+      "bytes": 7642,
+      "sha256": "b01d1d08d99a9273e9103e57095552532e63d9fd4abb96a8516fad566c4da6f6",
+      "gzip": {
+        "bytes": 2260,
+        "sha256": "fcd39fdd77af763418cecae6ca71f8e81b27ecc6be9628a3f32be6c5d80569db"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/import-unknown/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/import-unknown/cgx2.toml",
+      "bytes": 105,
+      "sha256": "5a148ec83693e95cf9f09a85ca50dc757f1ccdb8c71b1bb1741b793860fa92bb",
+      "gzip": {
+        "bytes": 101,
+        "sha256": "725c47abaafe683bf69189700028fd5cc2fce1354ea78b9da0f20046737c11da"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/import-private/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/import-private/cgx2.toml",
+      "bytes": 105,
+      "sha256": "5a148ec83693e95cf9f09a85ca50dc757f1ccdb8c71b1bb1741b793860fa92bb",
+      "gzip": {
+        "bytes": 101,
+        "sha256": "725c47abaafe683bf69189700028fd5cc2fce1354ea78b9da0f20046737c11da"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/dishonest-import/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/dishonest-import/cgx2.toml",
+      "bytes": 105,
+      "sha256": "5a148ec83693e95cf9f09a85ca50dc757f1ccdb8c71b1bb1741b793860fa92bb",
+      "gzip": {
+        "bytes": 101,
+        "sha256": "725c47abaafe683bf69189700028fd5cc2fce1354ea78b9da0f20046737c11da"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/dishonest-import/src/dep.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/dishonest-import/src/dep.cg",
+      "bytes": 496,
+      "sha256": "54b1be9d3d83104a92395b0a4eb5109b51059f5f898f21b1742e15d105205e0f",
+      "gzip": {
+        "bytes": 255,
+        "sha256": "fc629e46d668c79304709611741be35cefe78541d30118439ca54b12f492aeb7"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/dishonest-import/src/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/dishonest-import/src/main.cg",
+      "bytes": 355,
+      "sha256": "60e80564f338ccce0988d7a4d3057aef7e4332e3abd06cee9ac9f3371b9559ad",
+      "gzip": {
+        "bytes": 211,
+        "sha256": "2c321992492fde95ac44882a287f71732e77ac3aac85dea05e6f90e5a23f59a8"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/import-private/src/dep.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/import-private/src/dep.cg",
+      "bytes": 467,
+      "sha256": "d79c30bb9b272e494dbea7c0ab903c8916e47118b60c217132a56787a4bba33e",
+      "gzip": {
+        "bytes": 235,
+        "sha256": "a76620dca7066e291fb84441254d789ba5e12bfa5779bdb46fce667685d789e0"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/import-private/src/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/import-private/src/main.cg",
+      "bytes": 99,
+      "sha256": "a1edf7c21c2a4f3fbd873a6adb366fd3ae4ada58b0054329ab22148a6f15f621",
+      "gzip": {
+        "bytes": 96,
+        "sha256": "a2b55a6ebea6e9caf88bf73424fcc8e50e11220b38fd039d8f626422c484ac87"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/import-unknown/src/dep.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/import-unknown/src/dep.cg",
+      "bytes": 467,
+      "sha256": "d79c30bb9b272e494dbea7c0ab903c8916e47118b60c217132a56787a4bba33e",
+      "gzip": {
+        "bytes": 235,
+        "sha256": "a76620dca7066e291fb84441254d789ba5e12bfa5779bdb46fce667685d789e0"
+      }
+    },
+    "attempts/replay-1/product/regressions/specialization/specialization/import-unknown/src/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/specialization/specialization/import-unknown/src/main.cg",
+      "bytes": 99,
+      "sha256": "664a8b8cf79ce4bd9d49ed42ba663f25413aaf2f8fef68eab5a7228551ba9bf2",
+      "gzip": {
+        "bytes": 96,
+        "sha256": "9a26debcfb0affbc0ec90d4a9ecf78f11284e5226a4ccafd535af2e5b9f5148e"
+      }
+    },
+    "attempts/replay-1/product/regressions/managed-product/managed-product/product.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/managed-product/managed-product/product.json",
+      "bytes": 360995,
+      "sha256": "e095424cc48aec3aebbc8cc9364096315a56bc954b925f55aa47db392dda217e",
+      "gzip": {
+        "bytes": 22884,
+        "sha256": "d81f5d4be972427518236545a7e7a4aaca9dca67e408682698bffad068757c5a"
+      }
+    },
+    "attempts/replay-1/product/regressions/managed-product/managed-product/repair/repair.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/managed-product/managed-product/repair/repair.json",
+      "bytes": 2080733,
+      "sha256": "6c551046de9344bae1df91ce06a75b68cbe062c6623fac2d3300e51afe864138",
+      "gzip": {
+        "bytes": 51751,
+        "sha256": "7293523803e9c6ae0b1b5d3b39d17b9c0d3226f6b1a8ad1a15e59f202917a81f"
+      }
+    },
+    "attempts/replay-1/product/regressions/visibility/visibility/public-values.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/visibility/visibility/public-values.py",
+      "bytes": 8676,
+      "sha256": "a8847fc861e3c199d52806298bbdddc8b366d2e3ec44da9429acbac157808086",
+      "gzip": {
+        "bytes": 2476,
+        "sha256": "c21f1ef5dc90ae8c2cecbdb4f4ebc28cb4f6628230a1846dd92efb26949dd154"
+      }
+    },
+    "attempts/replay-1/product/regressions/visibility/visibility/public-package.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/visibility/visibility/public-package.rs",
+      "bytes": 240436,
+      "sha256": "89b584fd5ad5b4be3b8d48f69a8ff5d135c109b9d0933715099fab1745e04560",
+      "gzip": {
+        "bytes": 42311,
+        "sha256": "1fcb6ecff439df74362fa659c76730841ece5f86f153fdb7903cd76925d2608d"
+      }
+    },
+    "attempts/replay-1/product/regressions/visibility/visibility/public-source.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/visibility/visibility/public-source.py",
+      "bytes": 9405,
+      "sha256": "0c2bd5648f7d3cef70338f602c34dc1a0ad2fb7778694e99fc12134ad85a0010",
+      "gzip": {
+        "bytes": 2616,
+        "sha256": "a0fd8bc5dee21d03ed7ce1cbd3c396a5c73b289d645d42fd7691586d532226e3"
+      }
+    },
+    "attempts/replay-1/product/regressions/visibility/visibility/source.py.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/visibility/visibility/source.py",
+      "bytes": 12074,
+      "sha256": "3d46ab59a9bcc55693cc17e4070c857a07365ad0152e2fc861b6b4ca89a1cf4a",
+      "gzip": {
+        "bytes": 2931,
+        "sha256": "c95d276c84616187d505af428654a6732d5086d3fcc022ef83bd0ad4863bbc97"
+      }
+    },
+    "attempts/replay-1/product/regressions/visibility/visibility/source.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/visibility/visibility/source.rs",
+      "bytes": 246575,
+      "sha256": "afae05fd7c88ea9843fda7866a27cc697513cbc1c8dfa3bcfc34babc12292b1d",
+      "gzip": {
+        "bytes": 42884,
+        "sha256": "4735304bd32d9a8bed5ad022d8c831bf3653c3809bb1e86d833099cc71773660"
+      }
+    },
+    "attempts/replay-1/product/regressions/visibility/visibility/public-values.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/visibility/visibility/public-values.rs",
+      "bytes": 237862,
+      "sha256": "841a032b4a3fe9461ca105bfe43248f909581baa8cee8d658627fd6cb9163427",
+      "gzip": {
+        "bytes": 42067,
+        "sha256": "9a5d238b62135e53d9a0cb296f569151e895f618ac8a30fe281fca3c00ed0b6b"
+      }
+    },
+    "attempts/replay-1/product/regressions/visibility/visibility/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/visibility/visibility/report.json",
+      "bytes": 101132,
+      "sha256": "e553d7764a78a0a7637dfff2f4001dd0ccc29ef4138eec20cf8e386f34692863",
+      "gzip": {
+        "bytes": 5798,
+        "sha256": "bd5b34b1c380cd5fe4ba8d19b94dc8e6e5de40867fe9932351d662f2862a8885"
+      }
+    },
+    "attempts/replay-1/product/regressions/visibility/visibility/package.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/visibility/visibility/package.rs",
+      "bytes": 245431,
+      "sha256": "e4a04bec309db36a837e9e6bb6da7195b09be20c3bcd8aed6094f4ca86c4c30c",
+      "gzip": {
+        "bytes": 42744,
+        "sha256": "4a86c5243fe83475d3268bccf50dbe7e2a6896e1f58fd3262b42b594d7798afe"
+      }
+    },
+    "attempts/replay-1/product/regressions/visibility/visibility/public-source.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/visibility/visibility/public-source.rs",
+      "bytes": 239518,
+      "sha256": "841411cbe8d5e9689f0a362187db8ef61a884c9e0a673c9d85945927729c6677",
+      "gzip": {
+        "bytes": 42280,
+        "sha256": "830c7f06c2f4a239f0829e6f4fe7baf65b5eeac73dc83efd8ef4e47d6ef3cdfa"
+      }
+    },
+    "attempts/replay-1/product/regressions/visibility/visibility/private-callee/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/visibility/visibility/private-callee/cgx2.toml",
+      "bytes": 101,
+      "sha256": "0f2e30397aac6de87ed9401fadf1c9291d525184762782f645269741002cdc9f",
+      "gzip": {
+        "bytes": 99,
+        "sha256": "13e7162339a336300f4a59cc3512602b00cd4df13042f2ca9eab227db9855d5e"
+      }
+    },
+    "attempts/replay-1/product/regressions/visibility/visibility/private-type/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/visibility/visibility/private-type/cgx2.toml",
+      "bytes": 101,
+      "sha256": "0f2e30397aac6de87ed9401fadf1c9291d525184762782f645269741002cdc9f",
+      "gzip": {
+        "bytes": 99,
+        "sha256": "13e7162339a336300f4a59cc3512602b00cd4df13042f2ca9eab227db9855d5e"
+      }
+    },
+    "attempts/replay-1/product/regressions/visibility/visibility/private-type/src/dep.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/visibility/visibility/private-type/src/dep.cg",
+      "bytes": 398,
+      "sha256": "244c1262cd73a352775d5ca81d0ea9941367c008facbd6c2a97e7b3e6e062276",
+      "gzip": {
+        "bytes": 228,
+        "sha256": "0e350a4b74b47df5a90e324215d10c72886f3a01f5314328d6aad68b81eca53c"
+      }
+    },
+    "attempts/replay-1/product/regressions/visibility/visibility/private-type/src/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/visibility/visibility/private-type/src/main.cg",
+      "bytes": 115,
+      "sha256": "8eca106f771736c9442941c1684e7eb4d522e6a9924ab82695f1cc75d72fd965",
+      "gzip": {
+        "bytes": 114,
+        "sha256": "1979a2d1b9577ef956ff0eff6567944ed6b38ec3ecc72b43acaf37137fcfd575"
+      }
+    },
+    "attempts/replay-1/product/regressions/visibility/visibility/private-callee/src/dep.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/visibility/visibility/private-callee/src/dep.cg",
+      "bytes": 398,
+      "sha256": "244c1262cd73a352775d5ca81d0ea9941367c008facbd6c2a97e7b3e6e062276",
+      "gzip": {
+        "bytes": 228,
+        "sha256": "0e350a4b74b47df5a90e324215d10c72886f3a01f5314328d6aad68b81eca53c"
+      }
+    },
+    "attempts/replay-1/product/regressions/visibility/visibility/private-callee/src/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/replay-1/product/regressions/visibility/visibility/private-callee/src/main.cg",
+      "bytes": 91,
+      "sha256": "ed1b684e2433ffd1e66b048d6d6d141bbcb0fecaa74df4867588bbf36b4010ec",
+      "gzip": {
+        "bytes": 102,
+        "sha256": "1c8cc3856455412af19d9a7ee098ee3831f45e5da0542bbb67dc6f332c2e93bf"
+      }
+    },
+    "attempts/review-1/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/review-1/report.json",
+      "bytes": 39711,
+      "sha256": "fac063f5e672c05cdaace6f5f44dab8aa82e4be14f0f6f08647e8bdc9dbdcd75",
+      "gzip": {
+        "bytes": 3967,
+        "sha256": "8ece6f3d83e7add4ae79339dbb76460ef61d5cc47e77daa18032811bc01cb47a"
+      }
+    },
+    "attempts/review-1/repros/additional-reproductions.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/review-1/repros/additional-reproductions.json",
+      "bytes": 10129,
+      "sha256": "e3a347f0c5c9589d70287aee52695c4c25e14031770ae8577394c7e95c340118",
+      "gzip": {
+        "bytes": 2508,
+        "sha256": "b64571a10d6849905547874f2aba54f43e728dca424e98292f580f493ea5580c"
+      }
+    },
+    "attempts/review-1/repros/copy-root.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/review-1/repros/copy-root.rs",
+      "bytes": 599,
+      "sha256": "d8fb01287b0bd701ec17be92517807e7efc0598739cb0bfbbb729d20da8f382d",
+      "gzip": {
+        "bytes": 307,
+        "sha256": "83bfda22872d49bbf3bdc391b0ae8eda6a0e5cce6b318dedb88c0ab18bb6f9b2"
+      }
+    },
+    "attempts/review-1/repros/user-err-region-escape.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/review-1/repros/user-err-region-escape.cg",
+      "bytes": 581,
+      "sha256": "d929db1715a29b68d4d6beafacbb179d81432ac3bb6a2f4dd1f3a7a174f96e51",
+      "gzip": {
+        "bytes": 254,
+        "sha256": "7d438ed70d6e0b14b9931bbcfb0aaf712664cdfab1debd9307fb9a24b2c2bdc1"
+      }
+    },
+    "attempts/review-1/repros/outer-root-assignment.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/review-1/repros/outer-root-assignment.cg",
+      "bytes": 250,
+      "sha256": "3ae14d4cbfd538a3ea8ca417563bce6d24e900d5a35504fef47efc8d9ed5dfb6",
+      "gzip": {
+        "bytes": 179,
+        "sha256": "b7aaa272624351edb1e15b0ea4be4ab13af76591a859417f6cbcc29c9de34a15"
+      }
+    },
+    "attempts/review-1/repros/api-private.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/review-1/repros/api-private.cg",
+      "bytes": 269,
+      "sha256": "b8ecb78eedcfdb71efd29326ba76a9cebc633ade6615836b33080e93be27b46d",
+      "gzip": {
+        "bytes": 184,
+        "sha256": "0932e0971fa889f6d10bb22404922f816dbbe37d8369d37cd7234609db364468"
+      }
+    },
+    "attempts/review-1/repros/copy-root-reproduction.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/review-1/repros/copy-root-reproduction.json",
+      "bytes": 1019,
+      "sha256": "b10ff45325e9b6daa62984c416097b685defa36a42783786a770409167e96ef6",
+      "gzip": {
+        "bytes": 395,
+        "sha256": "24c651bfbaeb2a5dab18dcf1d24973e26318dcb0565a8345f91bebce19241d86"
+      }
+    },
+    "attempts/review-1/repros/reproductions.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/review-1/repros/reproductions.json",
+      "bytes": 7364,
+      "sha256": "6bfc857f66f38da5ea8ad0773d5ce8994b61c36f52b821488c95a5fcc68a2c0e",
+      "gzip": {
+        "bytes": 1365,
+        "sha256": "229fd2359dac62531b53a04324fe434e4b7990c5d15f4197584050fa5d294282"
+      }
+    },
+    "attempts/review-1/repros/legacy-guard-panic.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/review-1/repros/legacy-guard-panic.cg",
+      "bytes": 245,
+      "sha256": "40582a9cd0e65f295c1573c3b03e077618d8913a682e9f9cf989ac7c346f837f",
+      "gzip": {
+        "bytes": 171,
+        "sha256": "04e9116199f123197e16908140b536d343f7c4ddc41b9ba27364fa314a05c826"
+      }
+    },
+    "attempts/review-1/repros/user-borrow.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/review-1/repros/user-borrow.cg",
+      "bytes": 249,
+      "sha256": "235c6222b8028276a8c5966e5b8e456e50583785d6cd1696b9a226ba4c13f3c0",
+      "gzip": {
+        "bytes": 175,
+        "sha256": "52f6611c0c7055b98026e491985820589e30a31511e472b8eaf3e0c9c1128776"
+      }
+    },
+    "attempts/review-1/repros/shadow-collect/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/review-1/repros/shadow-collect/cgx2.toml",
+      "bytes": 93,
+      "sha256": "74fb9bc0ed767af1d9bf1980b7c07b49540edd16ac1b35fe1244c72b99b3aa17",
+      "gzip": {
+        "bytes": 99,
+        "sha256": "a6abac47c356718951055ffcb9e6cb459ec830ea185d090a1bd3ab42f81a3864"
+      }
+    },
+    "attempts/review-1/repros/shadow-collect/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/review-1/repros/shadow-collect/main.cg",
+      "bytes": 246,
+      "sha256": "804942c7b3480ecbe21701272d22d2887221b83b62c2d873cbddb80a537d5d16",
+      "gzip": {
+        "bytes": 177,
+        "sha256": "f8123ffc5bdbe468c91ed5ed72f213741192bcf291fe51261e63c1946204d0cc"
+      }
+    },
+    "attempts/review-1/repros/shadow-collect/lib.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/review-1/repros/shadow-collect/lib.cg",
+      "bytes": 113,
+      "sha256": "5bc25340be65dff0eca0bba53fbf98dc46ec1ed061bc76381e5ef71848faf4c0",
+      "gzip": {
+        "bytes": 102,
+        "sha256": "a84a5817080951ed06c1008c80da937e9c29630b2da4bc0b8c56167f516b1a1e"
+      }
+    },
+    "attempts/review-2/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/review-2/report.json",
+      "bytes": 39711,
+      "sha256": "3302777edcf8e8ae93bdcb9665d3ef9ccba8fcd0a038013393154ebcd6dab232",
+      "gzip": {
+        "bytes": 3966,
+        "sha256": "d47b72f7fa85eff2dc820fc79f977328bb21d91f13ee3e04bda91e4bfcc8b715"
+      }
+    },
+    "attempts/review-2/repros/additional-reproductions.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/review-2/repros/additional-reproductions.json",
+      "bytes": 10129,
+      "sha256": "e3a347f0c5c9589d70287aee52695c4c25e14031770ae8577394c7e95c340118",
+      "gzip": {
+        "bytes": 2508,
+        "sha256": "b64571a10d6849905547874f2aba54f43e728dca424e98292f580f493ea5580c"
+      }
+    },
+    "attempts/review-2/repros/copy-root.rs.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/review-2/repros/copy-root.rs",
+      "bytes": 599,
+      "sha256": "d8fb01287b0bd701ec17be92517807e7efc0598739cb0bfbbb729d20da8f382d",
+      "gzip": {
+        "bytes": 307,
+        "sha256": "83bfda22872d49bbf3bdc391b0ae8eda6a0e5cce6b318dedb88c0ab18bb6f9b2"
+      }
+    },
+    "attempts/review-2/repros/user-err-region-escape.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/review-2/repros/user-err-region-escape.cg",
+      "bytes": 581,
+      "sha256": "d929db1715a29b68d4d6beafacbb179d81432ac3bb6a2f4dd1f3a7a174f96e51",
+      "gzip": {
+        "bytes": 254,
+        "sha256": "7d438ed70d6e0b14b9931bbcfb0aaf712664cdfab1debd9307fb9a24b2c2bdc1"
+      }
+    },
+    "attempts/review-2/repros/outer-root-assignment.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/review-2/repros/outer-root-assignment.cg",
+      "bytes": 250,
+      "sha256": "3ae14d4cbfd538a3ea8ca417563bce6d24e900d5a35504fef47efc8d9ed5dfb6",
+      "gzip": {
+        "bytes": 179,
+        "sha256": "b7aaa272624351edb1e15b0ea4be4ab13af76591a859417f6cbcc29c9de34a15"
+      }
+    },
+    "attempts/review-2/repros/api-private.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/review-2/repros/api-private.cg",
+      "bytes": 269,
+      "sha256": "b8ecb78eedcfdb71efd29326ba76a9cebc633ade6615836b33080e93be27b46d",
+      "gzip": {
+        "bytes": 184,
+        "sha256": "0932e0971fa889f6d10bb22404922f816dbbe37d8369d37cd7234609db364468"
+      }
+    },
+    "attempts/review-2/repros/copy-root-reproduction.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/review-2/repros/copy-root-reproduction.json",
+      "bytes": 1019,
+      "sha256": "b10ff45325e9b6daa62984c416097b685defa36a42783786a770409167e96ef6",
+      "gzip": {
+        "bytes": 395,
+        "sha256": "24c651bfbaeb2a5dab18dcf1d24973e26318dcb0565a8345f91bebce19241d86"
+      }
+    },
+    "attempts/review-2/repros/reproductions.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/review-2/repros/reproductions.json",
+      "bytes": 7364,
+      "sha256": "6bfc857f66f38da5ea8ad0773d5ce8994b61c36f52b821488c95a5fcc68a2c0e",
+      "gzip": {
+        "bytes": 1365,
+        "sha256": "229fd2359dac62531b53a04324fe434e4b7990c5d15f4197584050fa5d294282"
+      }
+    },
+    "attempts/review-2/repros/legacy-guard-panic.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/review-2/repros/legacy-guard-panic.cg",
+      "bytes": 245,
+      "sha256": "40582a9cd0e65f295c1573c3b03e077618d8913a682e9f9cf989ac7c346f837f",
+      "gzip": {
+        "bytes": 171,
+        "sha256": "04e9116199f123197e16908140b536d343f7c4ddc41b9ba27364fa314a05c826"
+      }
+    },
+    "attempts/review-2/repros/user-borrow.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/review-2/repros/user-borrow.cg",
+      "bytes": 249,
+      "sha256": "235c6222b8028276a8c5966e5b8e456e50583785d6cd1696b9a226ba4c13f3c0",
+      "gzip": {
+        "bytes": 175,
+        "sha256": "52f6611c0c7055b98026e491985820589e30a31511e472b8eaf3e0c9c1128776"
+      }
+    },
+    "attempts/review-2/repros/shadow-collect/cgx2.toml.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/review-2/repros/shadow-collect/cgx2.toml",
+      "bytes": 93,
+      "sha256": "74fb9bc0ed767af1d9bf1980b7c07b49540edd16ac1b35fe1244c72b99b3aa17",
+      "gzip": {
+        "bytes": 99,
+        "sha256": "a6abac47c356718951055ffcb9e6cb459ec830ea185d090a1bd3ab42f81a3864"
+      }
+    },
+    "attempts/review-2/repros/shadow-collect/main.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/review-2/repros/shadow-collect/main.cg",
+      "bytes": 246,
+      "sha256": "804942c7b3480ecbe21701272d22d2887221b83b62c2d873cbddb80a537d5d16",
+      "gzip": {
+        "bytes": 177,
+        "sha256": "f8123ffc5bdbe468c91ed5ed72f213741192bcf291fe51261e63c1946204d0cc"
+      }
+    },
+    "attempts/review-2/repros/shadow-collect/lib.cg.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/review-2/repros/shadow-collect/lib.cg",
+      "bytes": 113,
+      "sha256": "5bc25340be65dff0eca0bba53fbf98dc46ec1ed061bc76381e5ef71848faf4c0",
+      "gzip": {
+        "bytes": 102,
+        "sha256": "a84a5817080951ed06c1008c80da937e9c29630b2da4bc0b8c56167f516b1a1e"
+      }
+    },
+    "attempts/smoke-1/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/smoke-1/report.json",
+      "bytes": 28369,
+      "sha256": "77ab34f23af08f16bb0da1b7d6694a7134ac78dad0586e29b19827ba2ba9b4e5",
+      "gzip": {
+        "bytes": 2703,
+        "sha256": "5e941e486e857d3f1969df97720f66d8f6b82d3ced3ddce3358a1fa3025dbb88"
+      }
+    },
+    "attempts/verification-1/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/verification-1/report.json",
+      "bytes": 176744,
+      "sha256": "8ef2ef43c6e381914d2961f592abd3bdd77b2dab4e0662b92967e80e5b003988",
+      "gzip": {
+        "bytes": 34972,
+        "sha256": "ffad06ba34b1153ca8559d56e5f9f4cae761f58966cb6ad4920f31d376187ce1"
+      }
+    },
+    "attempts/verification-2/report.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/verification-2/report.json",
+      "bytes": 182952,
+      "sha256": "81fecca30644aa85c8f22fb0216739e74be90f26c281a7f62d9443f36e2aaf1d",
+      "gzip": {
+        "bytes": 35801,
+        "sha256": "2ff36bace14407bd27f0d252ed7674d7f836df3c99e9537c39105b908ab8a3d7"
+      }
+    },
+    "attempts/verification-2/source.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/verification-2/source.json",
+      "bytes": 22622,
+      "sha256": "ace847213e05c079e35bb65adc361f0921d4cb5f06426ea12facd45deafcec1d",
+      "gzip": {
+        "bytes": 9583,
+        "sha256": "50bc92fb5496ba698cdf1efa9f11d710f72574049f0ba5eb0ea785f52828c5d7"
+      }
+    },
+    "attempts/verification-2/frozen.json.gz": {
+      "original_path": "/home/john-riley/.codex/worktrees/e7e8/lang/target/tmp-ordinary-evidence-parity/verification-2/frozen.json",
+      "bytes": 1436,
+      "sha256": "67209eec5820ebb4effd93aa5af6da563df5456a6796102b7b515825725dbf06",
+      "gzip": {
+        "bytes": 795,
+        "sha256": "bc55c835f8f950d36962f64fb11b223e9fc3b0d1d7b8b7d307aa1041b50dab40"
+      }
+    }
+  }
+}

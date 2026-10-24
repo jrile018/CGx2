@@ -1,0 +1,22 @@
+fn main() -> i64 effects(ManagedAlloc):
+    match memory.try_no_gc(budget: 8192):
+        Result.Ok(outer):
+            match memory.try_no_gc(budget: 4096):
+                Result.Ok(inner):
+                    match memory.try_region(mode: memory.Mode.Auto, trigger: 1, limit: 4096):
+                        Result.Ok(r):
+                            match memory.try_in(borrow(r), [20, 22]):
+                                Result.Ok(xs):
+                                    match memory.try_in(borrow(r), [1]):
+                                        Result.Ok(ys):
+                                            length(xs) + length(ys) + 39
+                                        Result.Err(error):
+                                            -4
+                                Result.Err(error):
+                                    -3
+                        Result.Err(error):
+                            -2
+                Result.Err(error):
+                    -1
+        Result.Err(error):
+            0
