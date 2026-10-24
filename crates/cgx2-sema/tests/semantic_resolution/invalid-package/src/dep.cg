@@ -1,0 +1,6 @@
+module dep
+record T:
+    value: i64
+pub fn f<T>(x: T) -> i64 effects() caps():
+    let broken = T(value: 1)
+    42
