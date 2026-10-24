@@ -146,3 +146,12 @@ Reviewed base 4113edee943b9ac389c5037904a016d7dba7f73c. Chat 01a16c01-762e-7df1-
 ## Recoverable allocation reviewed; two disjoint repairs ready
 
 Worker d88b57a staged as d825343. Three independent reviews and coordinator1229Rust/2707product checks completed; full existing matrix passes. Four reproduced schema1 symbol regressions and live evidence-runner output-bound gap keep acceptance failed. See s2b-owned-result-review/README.md. Symbol repair owns sema/admission/contracts/new tests; runner repair owns two Python scripts/new harness evidence. No new language consumer dispatch. Actual chat setup outcomes follow.
+
+## Two owned Result repair chats running
+
+Common repair base3e5be4d4907debad1ae5fa8bdc836208255ddb4d matches both worktree HEADs. read_thread and compact wait_threads confirm both active. list_threads omitted these agent-created chats; read-only local metadata resolved permanent IDs and app reads verified exact titles/paths. Queued client IDs and initial cursors are saved in thread-state.json. No duplicates; no consumer fan-out.
+
+| Lane | Chat | Worktree | Status |
+| --- | --- | --- | --- |
+| symbol-compatibility | 01a16c7e-fe8a-7092-b805-8f546006a996 | /home/john-riley/.codex/worktrees/aa9e/lang | running |
+| runner-output | 01a16c7f-3d83-7110-9385-b75ff89b6ef7 | /home/john-riley/.codex/worktrees/6eb0/lang | running |

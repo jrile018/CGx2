@@ -388,5 +388,29 @@
       "commit": "fe9714e018b2561850eaaebfaf5463b90ad0de65",
       "integrated_commit": "2994ebfbeb80960d83fa25f0e707abdae8f64964"
     }
+  ],
+  "s2b_owned_result_repairs": [
+    {
+      "lane": "symbol-compatibility",
+      "title": "CGx2 owned symbol compatibility repair",
+      "threadId": "01a16c7e-fe8a-7092-b805-8f546006a996",
+      "clientThreadId": "client-new-thread:f1a33386-e6a5-47a9-a836-098990a7eb44",
+      "hostId": "local",
+      "worktree": "/home/john-riley/.codex/worktrees/aa9e/lang",
+      "base": "3e5be4d4907debad1ae5fa8bdc836208255ddb4d",
+      "status": "running",
+      "afterCursor": "f81947e8-549b-4254-a6c2-ae4b50a4f114:1"
+    },
+    {
+      "lane": "runner-output",
+      "title": "CGx2 evidence runner output bounds repair",
+      "threadId": "01a16c7f-3d83-7110-9385-b75ff89b6ef7",
+      "clientThreadId": "client-new-thread:1a021eb1-1022-44f4-a081-819ba5b00598",
+      "hostId": "local",
+      "worktree": "/home/john-riley/.codex/worktrees/6eb0/lang",
+      "base": "3e5be4d4907debad1ae5fa8bdc836208255ddb4d",
+      "status": "running",
+      "afterCursor": "58e15982-3e8c-405d-a92f-c8ae4c8ad4d3:1"
+    }
   ]
 }
