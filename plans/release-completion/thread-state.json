@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24T11:15:19.988789+00:00",
+  "checked_at": "2026-10-24T11:16:46.229954+00:00",
   "original_chats": [
     {
       "lane": "core",
@@ -225,6 +225,19 @@
       "commit": "bc4ba95e710eaed3816291fdc67de1478e0456f5",
       "staged_commit": "7643899037c6fd9522534c7b9125b054aab6088c",
       "accepted_code_commit": "0949d5c8f5fabb804bdfb6d37331adbdd5f414bc"
+    },
+    {
+      "lane": "s2b-ordinary-memory",
+      "title": "CGx2 ordinary ownership regions and\u2026",
+      "threadId": "01a16da0-0923-75c3-9e49-0d0383043782",
+      "clientThreadId": "client-new-thread:4fe31f5c-6a38-4f88-a1ab-6269ceb6e405",
+      "hostId": "local",
+      "worktree": "/home/john-riley/.codex/worktrees/4836/lang",
+      "base": "0d321d3d1b0341121b8363a5a87eeaf674c20eec",
+      "status": "running",
+      "afterCursor": "9a64eb13-4087-480b-808c-6ba54eb87c2d:1",
+      "plan": "plans/release-completion/s2b-ordinary-memory/plan.md",
+      "setup_verified": "worktree HEAD equals reviewed base; read_thread and wait_threads active; list_threads omitted agent-created chat, exact read-only local metadata resolved without duplication"
     }
   ],
   "s2a_repairs": [

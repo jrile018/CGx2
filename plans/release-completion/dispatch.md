@@ -199,3 +199,7 @@ Runtime53d37c1 accepted/integratedc287985 after independent review plus coordina
 Core a095a13 accepted/integrated91d1bc3, caller migration b0f1ccc independently reviewed. Combined1290Rust tests/quality/current regressions pass. Harness setup failure retained and fixed0949d5c; full frozen-artifact678repair/369managed/116core/87equality checks and16selftests pass. All8 earlier core-span failures closed. Evidence: s2b-default-managed-review/evidence/combined-accepted/acceptance.json.
 
 Next sole dependency-ready producer: s2b-ordinary-memory/plan.md and exact18-command regressions.json. Generative region/default normalization and bootstrap-main contract holes resolved in independent review. No unreviewed interface consumers or release/main merge. Creation outcomes follow after reviewed-base commit.
+
+## Ordinary aggregate ownership, regions and entry producer running
+
+Reviewed common base0d321d3d1b0341121b8363a5a87eeaf674c20eec. Chat01a16da0-0923-75c3-9e49-0d0383043782 (CGx2 ordinary ownership regions and…) in /home/john-riley/.codex/worktrees/4836/lang is active via read_thread and compact wait_threads; worktree HEAD matches base. Queued client-new-thread:4fe31f5c-6a38-4f88-a1ab-6269ceb6e405 resolved through exact read-only local metadata after list_threads omitted it. Saved cursor in thread-state.json; no duplicate chat. Sole producer owns the connected source/runtime interface frontier; later consumers remain gated. Full ordinary-memory and release acceptance remain open.
