@@ -140,6 +140,41 @@ pub fn check_module_with_imports(
     module: &Module,
     imported: &ImportedSignatures,
 ) -> Result<TypedModule, Vec<TypeDiagnostic>> {
+    let memory_span = std::cell::Cell::new(None);
+    for body in std::iter::once(&module.statements).chain(module.functions.iter().map(|f| &f.body))
+    {
+        cgx2_syntax::visit_stmts(body, &mut |_| {}, &mut |e| {
+            if let ExprKind::Call { callee, .. } = &e.kind {
+                if let ExprKind::Name(path) = &callee.kind {
+                    let name = path.segments.join(".");
+                    let imported_function = imported.public_functions.contains_key(&name)
+                        || imported.private_functions.contains(&name);
+                    let imported_nominal = imported
+                        .public_records
+                        .keys()
+                        .chain(imported.public_variants.keys())
+                        .chain(&imported.private_records)
+                        .chain(&imported.private_variants)
+                        .any(|n| name == *n || name.starts_with(&format!("{n}.")));
+                    if name != "memory.collect"
+                        && cgx2_syntax::ordinary_memory_builtin(module, &name)
+                        && !imported_function
+                        && !imported_nominal
+                        && memory_span.get().is_none()
+                    {
+                        memory_span.set(Some(e.span));
+                    }
+                }
+            }
+        });
+    }
+    if let Some(span) = memory_span.get() {
+        return Err(vec![TypeDiagnostic::new(
+            "CGT095",
+            "ordinary-memory semantics require the authenticated MemoryProgramV1 producer".into(),
+            span,
+        )]);
+    }
     if let Some(span) = cgx2_syntax::ordinary_owned_span(module)
         .filter(|_| !crate::default_managed::explicit(module))
     {
@@ -1895,7 +1930,10 @@ impl Checker {
     fn imported_signature(&mut self, path: &Path) -> Option<DraftSignature> {
         let module = path.segments[..path.segments.len() - 1].join(".");
         let name = path.segments.join(".");
-        if module == "memory" {
+        if module == "memory"
+            && !self.imported.public_functions.contains_key(&name)
+            && !self.imported.private_functions.contains(&name)
+        {
             self.report(
                 "CGM001",
                 "memory intrinsics cannot be called through an import",

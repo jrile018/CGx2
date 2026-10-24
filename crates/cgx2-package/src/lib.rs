@@ -11,6 +11,8 @@ use cgx2_syntax::{parse_module, Expr, ExprKind, Module, Span, Stmt, StmtKind};
 use sha2::{Digest, Sha256};
 #[cfg(test)]
 mod managed_provenance_tests;
+mod ordinary_memory;
+pub use ordinary_memory::{try_load_checked_memory_package_v1, CheckedMemoryPackageV1};
 
 pub const MAX_MANIFEST_BYTES: usize = 64 * 1024;
 pub const MAX_SOURCE_BYTES: usize = 1024 * 1024;
@@ -190,6 +192,7 @@ struct Manifest {
     binding_lock: Option<PathBuf>,
 }
 
+#[derive(Clone, Debug)]
 struct ParsedSource {
     source: PathBuf,
     listed: PathBuf,
@@ -364,188 +367,14 @@ pub fn load_package(root: &Path) -> Result<PackageIndex, Vec<PackageDiagnostic>>
 
 /// Load and statically check a package, retaining the exact checked source bytes.
 pub fn load_checked_package(root: &Path) -> Result<CheckedPackage, Vec<PackageDiagnostic>> {
-    let canonical_root = fs::canonicalize(root).map_err(|error| {
-        vec![PackageDiagnostic::new(
-            "CGP005",
-            format!("cannot access package root {}: {error}", root.display()),
-            root,
-            None,
-        )]
-    })?;
-    let manifest_path = root.join("cgx2.toml");
-    let canonical_manifest =
-        canonicalize_contained(&manifest_path, &canonical_root).map_err(|d| vec![d])?;
-    let manifest_bytes = read_limited(&canonical_manifest, &manifest_path, MAX_MANIFEST_BYTES)?;
-    let manifest_sha256 = digest(&manifest_bytes);
-    let manifest_text = std::str::from_utf8(&manifest_bytes).map_err(|error| {
-        vec![PackageDiagnostic::new(
-            "CGP004",
-            format!("{} is not UTF-8: {error}", manifest_path.display()),
-            &manifest_path,
-            Some(Span {
-                start: error.valid_up_to(),
-                end: (error.valid_up_to() + error.error_len().unwrap_or(1))
-                    .min(manifest_bytes.len()),
-            }),
-        )]
-    })?;
-    let manifest = parse_manifest(manifest_text, &manifest_path)?;
-
+    let LoadedSources {
+        canonical_root,
+        canonical_manifest,
+        manifest_sha256,
+        manifest,
+        mut parsed_sources,
+    } = read_sources(root)?;
     let mut errors = Vec::new();
-    if !manifest
-        .sources
-        .iter()
-        .any(|source| source.value == manifest.entry.value)
-    {
-        errors.push(PackageDiagnostic::new(
-            "CGP008",
-            format!("entry {} is not listed in sources", manifest.entry.value),
-            &manifest_path,
-            Some(manifest.entry.span),
-        ));
-    }
-    let mut seen_listed = BTreeSet::new();
-    let mut seen_paths = BTreeSet::new();
-    let mut validated = Vec::new();
-    for source in &manifest.sources {
-        if !seen_listed.insert(source.value.as_str()) {
-            errors.push(PackageDiagnostic::new(
-                "CGP007",
-                format!("duplicate source path: {}", source.value),
-                &manifest_path,
-                Some(source.span),
-            ));
-            continue;
-        }
-        let relative = PathBuf::from(&source.value);
-        if !valid_source_path(&relative, &source.value) {
-            errors.push(PackageDiagnostic::new(
-                "CGP011",
-                format!(
-                    "source path must be a relative .cg path without traversal: {}",
-                    source.value
-                ),
-                &manifest_path,
-                Some(source.span),
-            ));
-            continue;
-        }
-        let listed = root.join(&relative);
-        let canonical = match canonicalize_contained(&listed, &canonical_root) {
-            Ok(path) => path,
-            Err(error) => {
-                errors.push(error);
-                continue;
-            }
-        };
-        if !seen_paths.insert(canonical.clone()) {
-            errors.push(PackageDiagnostic::new(
-                "CGP007",
-                format!(
-                    "duplicate source path after canonicalization: {}",
-                    source.value
-                ),
-                &manifest_path,
-                Some(source.span),
-            ));
-            continue;
-        }
-        validated.push((relative, listed, canonical));
-    }
-    if !errors.is_empty() {
-        return Err(errors);
-    }
-
-    let mut parsed_sources = Vec::new();
-    let mut seen_modules: BTreeMap<String, PathBuf> = BTreeMap::new();
-    for (relative, listed, canonical) in validated {
-        let bytes = match read_limited(&canonical, &listed, MAX_SOURCE_BYTES) {
-            Ok(bytes) => bytes,
-            Err(mut diagnostics) => {
-                errors.append(&mut diagnostics);
-                continue;
-            }
-        };
-        let source = match std::str::from_utf8(&bytes) {
-            Ok(source) => source,
-            Err(error) => {
-                errors.push(PackageDiagnostic::new(
-                    "CGP004",
-                    format!("{} is not UTF-8: {error}", listed.display()),
-                    &listed,
-                    Some(Span {
-                        start: error.valid_up_to(),
-                        end: (error.valid_up_to() + error.error_len().unwrap_or(1))
-                            .min(bytes.len()),
-                    }),
-                ));
-                continue;
-            }
-        };
-        let parsed = match parse_module(source) {
-            Ok(module) => module,
-            Err(diagnostics) => {
-                errors.extend(
-                    diagnostics
-                        .into_iter()
-                        .map(|d| PackageDiagnostic::new(d.code, d.message, &listed, Some(d.span))),
-                );
-                continue;
-            }
-        };
-        if manifest.binding_lock.is_none() {
-            for function in &parsed.functions {
-                if function
-                    .foreign
-                    .as_ref()
-                    .is_some_and(|binding| binding.route == "native")
-                {
-                    errors.push(PackageDiagnostic::new(
-                        "CGP019",
-                        "native foreign declaration requires schema 2 binding_lock",
-                        &listed,
-                        Some(function.span),
-                    ));
-                }
-            }
-        }
-        let name = parsed.name.as_ref().map(|path| path.segments.join("."));
-        if let Some(ref name) = name {
-            if let Some(first) = seen_modules.insert(name.clone(), listed.clone()) {
-                errors.push(PackageDiagnostic::new(
-                    "CGP010",
-                    format!(
-                        "duplicate module {name}; first declared in {}",
-                        first.display()
-                    ),
-                    &listed,
-                    parsed.name.as_ref().map(|path| path.span),
-                ));
-                continue;
-            }
-        } else if manifest.sources.len() > 1 {
-            errors.push(PackageDiagnostic::new(
-                "CGP009",
-                "multi-file package source lacks a module declaration",
-                &listed,
-                Some(Span { start: 0, end: 0 }),
-            ));
-            continue;
-        }
-        parsed_sources.push(ParsedSource {
-            source: relative,
-            listed,
-            canonical,
-            text: source.to_owned(),
-            sha256: digest(&bytes),
-            module: parsed,
-            name,
-        });
-    }
-    if !errors.is_empty() {
-        return Err(errors);
-    }
-
     let named: BTreeMap<String, usize> = parsed_sources
         .iter()
         .enumerate()
@@ -1340,4 +1169,204 @@ fn parse_array(input: &str) -> Option<Vec<String>> {
             return None;
         }
     }
+}
+
+struct LoadedSources {
+    canonical_root: PathBuf,
+    canonical_manifest: PathBuf,
+    manifest_sha256: String,
+    manifest: Manifest,
+    parsed_sources: Vec<ParsedSource>,
+}
+
+fn read_sources(root: &Path) -> Result<LoadedSources, Vec<PackageDiagnostic>> {
+    let canonical_root = fs::canonicalize(root).map_err(|error| {
+        vec![PackageDiagnostic::new(
+            "CGP005",
+            format!("cannot access package root {}: {error}", root.display()),
+            root,
+            None,
+        )]
+    })?;
+    let manifest_path = root.join("cgx2.toml");
+    let canonical_manifest =
+        canonicalize_contained(&manifest_path, &canonical_root).map_err(|d| vec![d])?;
+    let manifest_bytes = read_limited(&canonical_manifest, &manifest_path, MAX_MANIFEST_BYTES)?;
+    let manifest_sha256 = digest(&manifest_bytes);
+    let manifest_text = std::str::from_utf8(&manifest_bytes).map_err(|error| {
+        vec![PackageDiagnostic::new(
+            "CGP004",
+            format!("{} is not UTF-8: {error}", manifest_path.display()),
+            &manifest_path,
+            Some(Span {
+                start: error.valid_up_to(),
+                end: (error.valid_up_to() + error.error_len().unwrap_or(1))
+                    .min(manifest_bytes.len()),
+            }),
+        )]
+    })?;
+    let manifest = parse_manifest(manifest_text, &manifest_path)?;
+
+    let mut errors = Vec::new();
+    if !manifest
+        .sources
+        .iter()
+        .any(|source| source.value == manifest.entry.value)
+    {
+        errors.push(PackageDiagnostic::new(
+            "CGP008",
+            format!("entry {} is not listed in sources", manifest.entry.value),
+            &manifest_path,
+            Some(manifest.entry.span),
+        ));
+    }
+    let mut seen_listed = BTreeSet::new();
+    let mut seen_paths = BTreeSet::new();
+    let mut validated = Vec::new();
+    for source in &manifest.sources {
+        if !seen_listed.insert(source.value.as_str()) {
+            errors.push(PackageDiagnostic::new(
+                "CGP007",
+                format!("duplicate source path: {}", source.value),
+                &manifest_path,
+                Some(source.span),
+            ));
+            continue;
+        }
+        let relative = PathBuf::from(&source.value);
+        if !valid_source_path(&relative, &source.value) {
+            errors.push(PackageDiagnostic::new(
+                "CGP011",
+                format!(
+                    "source path must be a relative .cg path without traversal: {}",
+                    source.value
+                ),
+                &manifest_path,
+                Some(source.span),
+            ));
+            continue;
+        }
+        let listed = root.join(&relative);
+        let canonical = match canonicalize_contained(&listed, &canonical_root) {
+            Ok(path) => path,
+            Err(error) => {
+                errors.push(error);
+                continue;
+            }
+        };
+        if !seen_paths.insert(canonical.clone()) {
+            errors.push(PackageDiagnostic::new(
+                "CGP007",
+                format!(
+                    "duplicate source path after canonicalization: {}",
+                    source.value
+                ),
+                &manifest_path,
+                Some(source.span),
+            ));
+            continue;
+        }
+        validated.push((relative, listed, canonical));
+    }
+    if !errors.is_empty() {
+        return Err(errors);
+    }
+
+    let mut parsed_sources = Vec::new();
+    let mut seen_modules: BTreeMap<String, PathBuf> = BTreeMap::new();
+    for (relative, listed, canonical) in validated {
+        let bytes = match read_limited(&canonical, &listed, MAX_SOURCE_BYTES) {
+            Ok(bytes) => bytes,
+            Err(mut diagnostics) => {
+                errors.append(&mut diagnostics);
+                continue;
+            }
+        };
+        let source = match std::str::from_utf8(&bytes) {
+            Ok(source) => source,
+            Err(error) => {
+                errors.push(PackageDiagnostic::new(
+                    "CGP004",
+                    format!("{} is not UTF-8: {error}", listed.display()),
+                    &listed,
+                    Some(Span {
+                        start: error.valid_up_to(),
+                        end: (error.valid_up_to() + error.error_len().unwrap_or(1))
+                            .min(bytes.len()),
+                    }),
+                ));
+                continue;
+            }
+        };
+        let parsed = match parse_module(source) {
+            Ok(module) => module,
+            Err(diagnostics) => {
+                errors.extend(
+                    diagnostics
+                        .into_iter()
+                        .map(|d| PackageDiagnostic::new(d.code, d.message, &listed, Some(d.span))),
+                );
+                continue;
+            }
+        };
+        if manifest.binding_lock.is_none() {
+            for function in &parsed.functions {
+                if function
+                    .foreign
+                    .as_ref()
+                    .is_some_and(|binding| binding.route == "native")
+                {
+                    errors.push(PackageDiagnostic::new(
+                        "CGP019",
+                        "native foreign declaration requires schema 2 binding_lock",
+                        &listed,
+                        Some(function.span),
+                    ));
+                }
+            }
+        }
+        let name = parsed.name.as_ref().map(|path| path.segments.join("."));
+        if let Some(ref name) = name {
+            if let Some(first) = seen_modules.insert(name.clone(), listed.clone()) {
+                errors.push(PackageDiagnostic::new(
+                    "CGP010",
+                    format!(
+                        "duplicate module {name}; first declared in {}",
+                        first.display()
+                    ),
+                    &listed,
+                    parsed.name.as_ref().map(|path| path.span),
+                ));
+                continue;
+            }
+        } else if manifest.sources.len() > 1 {
+            errors.push(PackageDiagnostic::new(
+                "CGP009",
+                "multi-file package source lacks a module declaration",
+                &listed,
+                Some(Span { start: 0, end: 0 }),
+            ));
+            continue;
+        }
+        parsed_sources.push(ParsedSource {
+            source: relative,
+            listed,
+            canonical,
+            text: source.to_owned(),
+            sha256: digest(&bytes),
+            module: parsed,
+            name,
+        });
+    }
+    if !errors.is_empty() {
+        return Err(errors);
+    }
+
+    Ok(LoadedSources {
+        canonical_root,
+        canonical_manifest,
+        manifest_sha256,
+        manifest,
+        parsed_sources,
+    })
 }

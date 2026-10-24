@@ -65,6 +65,10 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
     let command = parse_args(args).map_err(|error| vec![error])?;
     if let Command::MemoryEffects { path } = &command {
         let program = if Path::new(path).is_dir() {
+            if let Some(index) = memory_package_index(path)? {
+                println!("{}", index.render_json());
+                return Ok(());
+            }
             let package = cgx2_package::load_checked_package(Path::new(path)).map_err(|ds| {
                 ds.into_iter()
                     .map(|d| CliDiagnostic::new(d.code, d.message, path.clone(), d.span))
@@ -96,6 +100,25 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
                     None,
                 )]
             })?;
+            if cgx2_syntax::parse_module(&text)
+                .is_ok_and(|m| cgx2_sema::ordinary_memory::profile(&m))
+            {
+                let program = cgx2_sema::ordinary_memory::compile_source(&text).map_err(|ds| {
+                    ds.into_iter()
+                        .map(|d| CliDiagnostic::new(d.code, d.message, path.clone(), Some(d.span)))
+                        .collect::<Vec<_>>()
+                })?;
+                let index = cgx2_api_index::build_memory_index_v2(&program).map_err(|e| {
+                    vec![CliDiagnostic::new(
+                        "CGC001",
+                        e.to_string(),
+                        path.clone(),
+                        None,
+                    )]
+                })?;
+                println!("{}", index.render_json());
+                return Ok(());
+            }
             cgx2_sema::default_managed::compile_source(&text)
         }
         .map_err(|ds| {
@@ -140,6 +163,14 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
                     path.clone(),
                     None,
                 )]);
+            }
+            if let Some(index) = memory_package_index(path)? {
+                if *json {
+                    println!("{}", index.render_json());
+                } else {
+                    print!("{}", index.render_text());
+                }
+                return Ok(());
             }
             let root = Path::new(path);
             let package = cgx2_package::load_checked_package(root).map_err(|errors| {
@@ -278,6 +309,27 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
                 }
                 return Ok(());
             }
+            if parse_module(&source).is_ok_and(|m| cgx2_sema::ordinary_memory::profile(&m)) {
+                let p = cgx2_sema::ordinary_memory::compile_source(&source).map_err(|ds| {
+                    ds.into_iter()
+                        .map(|d| CliDiagnostic::new(d.code, d.message, path.clone(), Some(d.span)))
+                        .collect::<Vec<_>>()
+                })?;
+                let index = cgx2_api_index::build_memory_index_v2(&p).map_err(|e| {
+                    vec![CliDiagnostic::new(
+                        "CGC001",
+                        e.to_string(),
+                        path.clone(),
+                        None,
+                    )]
+                })?;
+                if json {
+                    println!("{}", index.render_json());
+                } else {
+                    print!("{}", index.render_text());
+                }
+                return Ok(());
+            }
             let typed = check_source(&source).map_err(|errors| {
                 errors
                     .into_iter()
@@ -409,6 +461,38 @@ fn execute(args: Vec<String>) -> Result<(), Vec<CliDiagnostic>> {
         }
     }
     Ok(())
+}
+
+fn memory_package_index(
+    path: &str,
+) -> Result<Option<cgx2_api_index::ApiMemoryIndexV2>, Vec<CliDiagnostic>> {
+    let convert = |ds: Vec<cgx2_package::PackageDiagnostic>| {
+        ds.into_iter()
+            .map(|d| {
+                CliDiagnostic::new(
+                    d.code,
+                    d.message,
+                    d.file.to_string_lossy().into_owned(),
+                    d.span,
+                )
+            })
+            .collect::<Vec<_>>()
+    };
+    let Some(package) =
+        cgx2_package::try_load_checked_memory_package_v1(Path::new(path)).map_err(convert)?
+    else {
+        return Ok(None);
+    };
+    let p = package.memory_program_v1().map_err(convert)?;
+    let index = cgx2_api_index::build_memory_index_v2(&p).map_err(|e| {
+        vec![CliDiagnostic::new(
+            "CGC001",
+            e.to_string(),
+            path.into(),
+            None,
+        )]
+    })?;
+    Ok(Some(index))
 }
 
 fn parse_args(args: Vec<String>) -> Result<Command, CliDiagnostic> {

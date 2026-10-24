@@ -1,5 +1,7 @@
 //! Readable, standalone Rust output for checked CGx2 scalar programs.
 
+mod ordinary_memory;
+pub use ordinary_memory::emit_memory_rust;
 mod data;
 mod default_managed;
 mod hybrid;

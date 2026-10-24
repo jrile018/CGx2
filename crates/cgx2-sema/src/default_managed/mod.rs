@@ -1,11 +1,12 @@
 //! Sole source producer for ordinary managed graphs, independent of affine v1/v2.
 pub mod hybrid;
-mod lower;
+pub(crate) mod lower;
 mod provenance;
 use crate::{Type, TypeDiagnostic, TypedModule};
 pub use cgx2_runtime::default_managed::model;
 use cgx2_runtime::default_managed::{model::Program, Execution};
 use cgx2_syntax::{Module, Span};
+pub(crate) use provenance::source_bundle_module;
 pub use provenance::{compile_source_bundle_v1, ManagedProvenanceV1};
 use sha2::{Digest, Sha256};
 

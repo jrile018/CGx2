@@ -346,7 +346,7 @@ fn decode(raw: &str) -> Option<String> {
     }
     Some(s)
 }
-pub(super) fn lower(module: &Module, typed: &TypedModule) -> Result<(Program, Vec<Type>)> {
+pub(crate) fn lower(module: &Module, typed: &TypedModule) -> Result<(Program, Vec<Type>)> {
     let mut l = Lower {
         module,
         p: Program {
