@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24T18:40:56.642408+00:00",
+  "checked_at": "2026-10-24T18:44:00.529406+00:00",
   "original_chats": [
     {
       "lane": "core",
@@ -634,9 +634,19 @@
     {
       "lane": "general-ownership-A",
       "plan": "plans/release-completion/s2b-general-ownership/plan.md",
-      "status": "planned",
+      "status": "running",
       "prerequisite_acceptance": "7a62376df37a753635e0a02d19773589eb52fba8",
-      "acceptance_note": "Sole source producer: executable aggregate ownership, projected loans/moves, authenticated body/SCC summaries and precise dependency source locations. Explicit existing source grammar, additive v4/aggregate_v1 and accountable owner storage frozen. B source conversions and S3 consumers gated on A review. No dispatch yet."
+      "acceptance_note": "Sole source producer: executable aggregate ownership, projected loans/moves, authenticated body/SCC summaries and precise dependency source locations. Explicit existing source grammar, additive v4/aggregate_v1 and accountable owner storage frozen. B source conversions and S3 consumers gated on A review. Producer active; implementation not yet reviewed.",
+      "base": "e50bc3bf28b8aebf7faf8e12564372599feda06b",
+      "clientThreadId": "client-new-thread:7f1a8c3b-3fec-4167-af46-789394e3072d",
+      "hostId": "local",
+      "requested_title": "CGx2 general aggregate ownership producer",
+      "threadId": "01a16f37-9f67-77d0-b65d-10ba64931de2",
+      "title": "CGx2 general aggregate ownership producer",
+      "worktree": "/home/john-riley/.codex/worktrees/5185/lang",
+      "afterCursor": "571b4d18-2e1c-48ac-a948-4723f45af451:1",
+      "setup_verified": "Worktree HEAD matches e50bc3bf28b8aebf7faf8e12564372599feda06b; only generated .serena metadata untracked. App read_thread and compact wait confirm active. list_threads omitted it and SQLite first_user_message/title were initially empty; exact cwd/base local metadata resolved candidate ID then app read confirmed requested title and assignment. No duplicate.",
+      "setup_limitations": "Initial sandbox mount quota failure retained; subsequent read commands active. Worker-local graph initially empty; committed plan and acceptance ledger are supplied continuity."
     }
   ]
 }
