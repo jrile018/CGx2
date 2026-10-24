@@ -272,8 +272,9 @@ pub fn emit_package_rust(package: &CheckedPackage) -> Result<String, Vec<Package
             .expect("checked named module")
             .segments
             .join(".");
-        let records = source
-            .syntax()
+        // Use the same checked canonical references as variants and functions,
+        // including nominal identities nested inside Option/Result arguments.
+        let records = canonical[source.source()]
             .records
             .iter()
             .cloned()
