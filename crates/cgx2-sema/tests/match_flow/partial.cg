@@ -1,0 +1,15 @@
+variant V:
+    A
+    B
+fn choose(flag: Bool):
+    match V.A():
+        V.A:
+            if flag:
+                return 42
+            else:
+                0
+            2
+        V.B:
+            return 3
+fn main() -> i64:
+    choose(true)

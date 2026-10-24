@@ -1,0 +1,9 @@
+variant V:
+    A
+fn main() -> i64:
+    let mut n = 0
+    for i in range(0, 2):
+        match V.A():
+            V.A:
+                n += 21
+    n

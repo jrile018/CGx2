@@ -1,0 +1,28 @@
+variant V:
+    A
+    B
+fn no_value():
+    match V.A():
+        _:
+            return
+fn unused():
+    match V.B():
+        V.A:
+            return 10
+        V.B:
+            return 20
+fn choose(flag: Bool):
+    match V.A():
+        V.A:
+            if flag:
+                return 42
+            else:
+                match V.B():
+                    V.A:
+                        return 1
+                    V.B:
+                        return 2
+        V.B:
+            return 3
+fn main() -> i64:
+    choose(true)
