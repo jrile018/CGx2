@@ -1,0 +1,75 @@
+{
+  "delivery": "4c4f07eb9d69a41ef0ba2d68d116274c59b79d28",
+  "integrated_commit": "1e283aa972c49ef0cd9d087f7807f3d61402c691",
+  "bounded_harness_accepted": true,
+  "ordinary_memory_accepted": false,
+  "release_accepted": false,
+  "compiler_build_commit": "ded3768480c745ce544d33c56aea44d4fc0bfa5a",
+  "compiler_snapshot_sha256": "b20762f59667ba168f4d1dddd4b06d8c9fd045668bfe994fe7ecf744ddf57d6c",
+  "harness_snapshot_sha256": "fb6abc3d6a75b5de83f01b1f5ebd11af868c78259a57a7b38d8ba90586863e66",
+  "independent_review": {
+    "selftests": 77,
+    "additional_production_probes": 11,
+    "evidence_audit_checks": 46,
+    "delivery_blockers": []
+  },
+  "coordinator_fresh": {
+    "verification": {
+      "passed": 6,
+      "failed": 0,
+      "complete": true,
+      "coverage_errors": [],
+      "exceptions": []
+    },
+    "auto": {
+      "passed": 34,
+      "failed": 0,
+      "complete": true,
+      "coverage_errors": [],
+      "exceptions": []
+    },
+    "package": {
+      "passed": 45,
+      "failed": 0,
+      "complete": true,
+      "coverage_errors": [],
+      "exceptions": []
+    },
+    "review": {
+      "passed": 21,
+      "failed": 0,
+      "complete": true,
+      "coverage_errors": [],
+      "exceptions": []
+    }
+  },
+  "coordinator_command_count": 47,
+  "coordinator_artifact_observations": 9,
+  "coordinator_integrity_errors": [],
+  "archive_count": 759,
+  "audited_worker_results": {
+    "main": "964/1, exact dependency filename remains failed",
+    "historical": "135/1; all18 commands executed; managed670/8 raw; original owned-result523/1 expected negative separate",
+    "auto": "34/0",
+    "package": "45/0",
+    "review": "21/0",
+    "quality": "11/0",
+    "prior_evidence_files_unchanged": 766,
+    "finalization_archive_files": 2068
+  },
+  "reused_exact_compiler_evidence": {
+    "workspace": "1383 passed,0 failed,6 ignored",
+    "quality": "all-target/all-feature Clippy -D warnings, fmt and build pass",
+    "recovery": "515/0",
+    "nominal": "243/0",
+    "admission": "196/0",
+    "separate_legacy_reconciliation": "133/0",
+    "original_failed_recovery": "463 checks then exception/nonzero, preserved"
+  },
+  "limitations": [
+    "Static dependency filename remains failed; historical stale reserve expectations remain red with separate reconciliation.",
+    "Exporter limitation on deliberately malformed synthetic rows remains documented; opaque archive preserves reviewer and malformed inputs.",
+    "Reviewer script setup/schema/symlink failures preserved, corrected and distinguished from delivery defects.",
+    "Full source aggregates, conversions, authenticated transfer summaries, S3/S4 and all R01-R15 remain required. No rebuild, performance measurement, main merge or release."
+  ]
+}

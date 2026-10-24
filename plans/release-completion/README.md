@@ -1,5 +1,5 @@
 # CGx2 finite completion plan
-Status: ordinary-memory API, admission including nominal constructor resolution, and bounded runtime-root repairs reviewed. Runtime allocation recovery and evidence-harness hardening chats remain active. Prior combined1360Rust and quality gates pass; full integration of these follow-ups awaits their deliveries. Full ordinary ownership/transfer/v3, foreign/execution/commands, S3/S4 and real acceptance gates remain open. Main unmerged. See [current review](s2b-ordinary-memory-review/README.md).
+Status: ordinary-memory bounded API, admission/nominal, runtime recovery and evidence finalization repairs reviewed and integrated. Fresh coordinator Auto/package/review checks pass on the exact verified compiler. General aggregate ownership and exact dependency source attribution are the next source producer; source conversions and complete transfer authentication follow its accepted interfaces. Full R01–R15, S3/S4 and external acceptance remain open. Main unmerged. See [current review](s2b-ordinary-memory-review/README.md).
 
 ## Answer to “how many more waves?”
 
@@ -171,3 +171,7 @@ Runtime0503ed9/ded3768 passes independent bounded source/evidence review. Harnes
 ### Combined recovery checkpoint reviewed; harness finalization next
 
 Combined1383Rust/0failed/6ignored and quality gates pass; source recovery515/0, nominal243/0, admission196/0, Auto32/0, package43/0 and review19/0 pass. Main962/1 retains the known dependency filename failure. Historical135/1 and nested670/8 are preserved with separate133/0 reserve reconciliation. The harness remains unaccepted for exact diagnostic validation, abnormal-command completion and source identity. See the reviewed harness-finalization plan and536 archived evidence files. All R01–R15 and remaining capabilities stay open.
+
+### Harness finalization reviewed
+
+Harness4c4f07e accepted/integrated1e283aa after independent77selftests/11production probes/46evidence checks and coordinator fresh Auto34/0, package45/0, review21/0, freeze6/0. All inventories, command streams and source/artifact identities pass. Exact ded3768 compiler reused; prior1383Rust/0failed/6ignored and quality, recovery515/0, nominal243/0, admission196/0 evidence remains attributable to that build. Fresh worker main964/1 and historical135/1+nested670/8 remain red; separate133/0 reserve reconciliation remains separate. All766prior evidence files unchanged and2068new worker archive files verified. Reviewer failed attempts preserved. See evidence/finalization-accepted/acceptance.json and its hash-verified archives. Full ordinary-memory, source conversions, authenticated transfer summaries, S3/S4 and R01-R15 stay required; no main merge/release.

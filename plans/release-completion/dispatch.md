@@ -252,3 +252,9 @@ Combined1383Rust/0failed/6ignored and quality gates pass. Main962/1 retains stat
 ## Evidence finalization successor running
 
 Common reviewed base9f0804feac1a3c549ed879a8738e0152b370ed4a matches the new worktree HEAD. Chat01a16ef0-b7c6-7e22-a98c-2cbe9ddf98b5 (client-new-thread:57eab7df-68c4-4f30-8967-60480c4591de) is active in /home/john-riley/.codex/worktrees/9929/lang, confirmed by app read_thread and compact wait. list_threads omitted it; exact read-only metadata resolved permanent identity without duplication. Cursor saved in thread-state.json. One ready lane only: exact diagnostics, abnormal completion and provenance under harness-finalization/plan.md. No new language consumers or main/release action.
+
+## Harness finalization reviewed and integrated
+
+Harness4c4f07e accepted/integrated1e283aa after independent77selftests/11production probes/46evidence checks and coordinator fresh Auto34/0, package45/0, review21/0, freeze6/0. All inventories, command streams and source/artifact identities pass. Exact ded3768 compiler reused; prior1383Rust/0failed/6ignored and quality, recovery515/0, nominal243/0, admission196/0 evidence remains attributable to that build. Fresh worker main964/1 and historical135/1+nested670/8 remain red; separate133/0 reserve reconciliation remains separate. All766prior evidence files unchanged and2068new worker archive files verified. Reviewer failed attempts preserved. See evidence/finalization-accepted/acceptance.json and its hash-verified archives. Full ordinary-memory, source conversions, authenticated transfer summaries, S3/S4 and R01-R15 stay required; no main merge/release.
+
+The next sole source frontier is aggregate ownership A; conversions B and all consumers wait for accepted source/storage/summary interfaces. The concrete reviewed plan and dispatch outcome follow before any new chat is counted running.
