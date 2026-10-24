@@ -1,0 +1,820 @@
+{
+  "reviewed_base": "7bb7a480119826693db67ed503caaf7f23f6abb2",
+  "ordinary_memory_accepted": false,
+  "quality": {
+    "build-delivery": {
+      "exit": 0,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 900,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "cargo",
+        "build",
+        "--workspace",
+        "--all-features",
+        "--offline",
+        "--locked"
+      ]
+    },
+    "clippy-delivery": {
+      "exit": 0,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 900,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "cargo",
+        "clippy",
+        "-p",
+        "cgx2-runtime",
+        "-p",
+        "cgx2-sema",
+        "-p",
+        "cgx2-memory-conformance",
+        "--all-targets",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--",
+        "-D",
+        "warnings"
+      ]
+    },
+    "clippy-final": {
+      "exit": 0,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 900,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "cargo",
+        "clippy",
+        "-p",
+        "cgx2-runtime",
+        "-p",
+        "cgx2-sema",
+        "-p",
+        "cgx2-memory-conformance",
+        "--all-targets",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--",
+        "-D",
+        "warnings"
+      ]
+    },
+    "clippy": {
+      "exit": 0,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 900,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "cargo",
+        "clippy",
+        "-p",
+        "cgx2-runtime",
+        "-p",
+        "cgx2-sema",
+        "-p",
+        "cgx2-memory-conformance",
+        "--all-targets",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--",
+        "-D",
+        "warnings"
+      ]
+    },
+    "diff-final": {
+      "exit": 0,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 900,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ]
+    },
+    "expanded-focused": {
+      "exit": 0,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 900,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "cargo",
+        "test",
+        "-p",
+        "cgx2-runtime",
+        "-p",
+        "cgx2-sema",
+        "--test",
+        "ordinary_roots_repair",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--",
+        "--nocapture"
+      ],
+      "rust_tests": {
+        "passed": 9,
+        "failed": 0,
+        "ignored": 0
+      }
+    },
+    "extra-budget-and-lifetime": {
+      "exit": 0,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 900,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "cargo",
+        "test",
+        "-p",
+        "cgx2-runtime",
+        "-p",
+        "cgx2-sema",
+        "--test",
+        "ordinary_roots_repair",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--",
+        "--nocapture"
+      ],
+      "rust_tests": {
+        "passed": 12,
+        "failed": 0,
+        "ignored": 0
+      }
+    },
+    "final-build": {
+      "exit": 0,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 900,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "cargo",
+        "build",
+        "--workspace",
+        "--all-features",
+        "--offline",
+        "--locked"
+      ]
+    },
+    "final-diff": {
+      "exit": 0,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 2400,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ]
+    },
+    "fmt-delivery": {
+      "exit": 0,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 900,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--check"
+      ]
+    },
+    "fmt-final": {
+      "exit": 0,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 900,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--check"
+      ]
+    },
+    "fmt-initial": {
+      "exit": 1,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 900,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--check"
+      ]
+    },
+    "fmt-owned-2": {
+      "exit": 0,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 900,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "rustfmt",
+        "--edition",
+        "2021",
+        "crates/cgx2-runtime/tests/ordinary_roots_repair.rs",
+        "crates/cgx2-sema/tests/ordinary_roots_repair.rs"
+      ]
+    },
+    "fmt-owned-3": {
+      "exit": 0,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 900,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "rustfmt",
+        "--edition",
+        "2021",
+        "crates/cgx2-runtime/tests/ordinary_roots_repair.rs",
+        "crates/cgx2-sema/tests/ordinary_roots_repair.rs"
+      ]
+    },
+    "fmt-owned": {
+      "exit": 0,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 900,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "rustfmt",
+        "--edition",
+        "2021",
+        "crates/cgx2-runtime/src/graph.rs",
+        "crates/cgx2-runtime/src/scope.rs",
+        "crates/cgx2-runtime/tests/ordinary_roots_repair.rs",
+        "crates/cgx2-sema/tests/ordinary_roots_repair.rs"
+      ]
+    },
+    "freeze": {
+      "exit": 0,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 900,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "python3",
+        "crates/cgx2-syntax/ordinary-roots-repair-evidence/freeze.py"
+      ]
+    },
+    "harness-selftests": {
+      "exit": 0,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 900,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "python3",
+        "crates/cgx2-syntax/ordinary-memory-evidence/test_run.py"
+      ]
+    },
+    "package-tests-delivery": {
+      "exit": 0,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 900,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "cargo",
+        "test",
+        "-p",
+        "cgx2-runtime",
+        "-p",
+        "cgx2-sema",
+        "-p",
+        "cgx2-memory-conformance",
+        "--all-features",
+        "--offline",
+        "--locked"
+      ],
+      "rust_tests": {
+        "passed": 357,
+        "failed": 0,
+        "ignored": 0
+      }
+    },
+    "package-tests-final": {
+      "exit": 0,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 900,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "cargo",
+        "test",
+        "-p",
+        "cgx2-runtime",
+        "-p",
+        "cgx2-sema",
+        "-p",
+        "cgx2-memory-conformance",
+        "--all-features",
+        "--offline",
+        "--locked"
+      ],
+      "rust_tests": {
+        "passed": 355,
+        "failed": 0,
+        "ignored": 0
+      }
+    },
+    "package-tests": {
+      "exit": 0,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 900,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "cargo",
+        "test",
+        "-p",
+        "cgx2-runtime",
+        "-p",
+        "cgx2-sema",
+        "-p",
+        "cgx2-memory-conformance",
+        "--all-features",
+        "--offline",
+        "--locked"
+      ],
+      "rust_tests": {
+        "passed": 353,
+        "failed": 0,
+        "ignored": 0
+      }
+    },
+    "parity": {
+      "exit": 0,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 900,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "python3",
+        "crates/cgx2-syntax/ordinary-roots-repair-evidence/parity.py",
+        "--binary-dir",
+        "target/tmp-ordinary-runtime-roots/verification/frozen",
+        "--output-dir",
+        "target/tmp-ordinary-runtime-roots/parity",
+        "--outside-dir",
+        "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-b9bf-76c3-8096-5a9f6fbac892/ordinary-roots-standalone"
+      ]
+    },
+    "product-retry": {
+      "exit": 0,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 2400,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "python3",
+        "crates/cgx2-syntax/ordinary-memory-evidence/run.py",
+        "--binary-dir",
+        "target/tmp-ordinary-runtime-roots/verification/frozen",
+        "--output-dir",
+        "target/tmp-ordinary-runtime-roots/product-retry",
+        "--regressions"
+      ]
+    },
+    "product": {
+      "exit": 1,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 900,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "python3",
+        "crates/cgx2-syntax/ordinary-memory-evidence/run.py",
+        "--binary-dir",
+        "target/tmp-ordinary-runtime-roots/verification/frozen",
+        "--output-dir",
+        "target/tmp-ordinary-runtime-roots/product",
+        "--regressions"
+      ]
+    },
+    "red-runtime-2": {
+      "exit": 101,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 900,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "cargo",
+        "test",
+        "-p",
+        "cgx2-runtime",
+        "--test",
+        "ordinary_roots_repair",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--",
+        "--nocapture"
+      ],
+      "rust_tests": {
+        "passed": 1,
+        "failed": 2,
+        "ignored": 0
+      }
+    },
+    "red-runtime": {
+      "exit": 101,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 900,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "cargo",
+        "test",
+        "-p",
+        "cgx2-runtime",
+        "--test",
+        "ordinary_roots_repair",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--",
+        "--nocapture"
+      ]
+    },
+    "red-sema": {
+      "exit": 101,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 900,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "cargo",
+        "test",
+        "-p",
+        "cgx2-sema",
+        "--test",
+        "ordinary_roots_repair",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--",
+        "--nocapture"
+      ],
+      "rust_tests": {
+        "passed": 1,
+        "failed": 4,
+        "ignored": 0
+      }
+    },
+    "repaired-focused": {
+      "exit": 0,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 900,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "cargo",
+        "test",
+        "-p",
+        "cgx2-runtime",
+        "-p",
+        "cgx2-sema",
+        "--test",
+        "ordinary_roots_repair",
+        "--all-features",
+        "--offline",
+        "--locked",
+        "--",
+        "--nocapture"
+      ],
+      "rust_tests": {
+        "passed": 8,
+        "failed": 0,
+        "ignored": 0
+      }
+    },
+    "root-lock-unchanged": {
+      "exit": 0,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 2400,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "git",
+        "diff",
+        "--exit-code",
+        "7bb7a480119826693db67ed503caaf7f23f6abb2",
+        "--",
+        "Cargo.toml",
+        "Cargo.lock"
+      ]
+    },
+    "standalone": {
+      "exit": 0,
+      "signal": null,
+      "reason": "exit",
+      "limits": {
+        "wall_seconds": 1200,
+        "cpu_seconds_per_process": 2400,
+        "address_bytes_per_process": 8589934592,
+        "file_bytes": 536870912,
+        "retained_bytes_per_stream": 131072
+      },
+      "argv": [
+        "python3",
+        "crates/cgx2-syntax/ordinary-roots-repair-evidence/standalone_private.py",
+        "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-b9bf-76c3-8096-5a9f6fbac892/ordinary-roots-helper",
+        "--product-dir",
+        "target/tmp-ordinary-runtime-roots/product",
+        "--output-dir",
+        "target/tmp-ordinary-runtime-roots/standalone"
+      ]
+    }
+  },
+  "first_product": {
+    "passed": 117,
+    "failed": 19
+  },
+  "product": {
+    "passed": 136,
+    "failed": 0
+  },
+  "focused_parity": {
+    "passed": 80,
+    "failed": 0
+  },
+  "standalone": {
+    "passed": 22,
+    "failed": 0
+  },
+  "other_lane_failures": [
+    {
+      "id": "OM01",
+      "status": "failed",
+      "command": "OM01-unrepaired",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null
+    },
+    {
+      "id": "OM02",
+      "status": "failed",
+      "command": "OM02-unrepaired",
+      "exit": 101,
+      "reason": "exit",
+      "signal": null
+    },
+    {
+      "id": "OM03",
+      "status": "failed",
+      "command": "OM03-unrepaired",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null
+    },
+    {
+      "id": "OM04",
+      "status": "failed",
+      "command": "OM04-unrepaired",
+      "exit": 1,
+      "reason": "exit",
+      "signal": null
+    },
+    {
+      "id": "OM08",
+      "status": "failed",
+      "command": "OM08-unrepaired",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null
+    }
+  ],
+  "final_frozen_hashes": {
+    "cgx2": "b3757833cf9376a5467b40c5498f5d1a849d9a104dbbcf819eef9074673b87f6",
+    "cgx2-native": "5d5de92a40b51f0d639818b22fe198bd1c04542c13e55a97930cd86ab7f9fce2",
+    "cgx2c": "ac2c3fc8c31b64bd29c85074423718a06828b73e6d4011f3e324090697536b6d",
+    "cgx2-effect-index": "ecb398f6f07506341b3c56e20244da85c81e70c224cb20dce4f3fc12a12ee05f",
+    "cgx2-security": "dd788c0fbb5abd1db594958f089475c6003cce5b5e15f9f5e9b4d4eec6997606",
+    "cgx2-verify": "bcde3ef4734b5e0e61c160a12e4c1061cb174b5b809e699c97a2fde959d59666",
+    "cgx2-notebook": "9eaccac334a1f3f6a927757709fc81ce5b30d36139106e2c6c8413f8d29468d0",
+    "libcgx2_cli.rlib": "a68ad341b367ee5d2595c761163873445dcfd89c8df149bd0e7f0c8c03b0f7ae",
+    "libcgx2_sema.rlib": "988ed4dc9398f112dbc8c58072446cc960cf7264527cba1707146715f7334322",
+    "libcgx2_package.rlib": "370c26fe45307218e930c687278988a31ad7450be2bf541d3f209a3a36d76a4b",
+    "libcgx2_emit_rust.rlib": "5608a8712c0b216cb8916262fbeb703f6804f76a3ccce7af6b12608bc74fd7b2",
+    "libcgx2_runtime.rlib": "956d7cbd31a9b48fb8e315226729bfa3b5b9d6b9c35fa68204238cb7d8385063"
+  },
+  "compiler_sources_unchanged_since_freeze": true,
+  "owned_file_sha256": {
+    "crates/cgx2-runtime/src/graph.rs": "3c13912ac8dd1d209d7752e1d1ffd19d5af39e8258a0c0baa973eeb61d254cf9",
+    "crates/cgx2-runtime/src/scope.rs": "6aba364ae3e8e806bd127c24ec116d5b9590644b08f9d5b61513ac3f7efef601",
+    "crates/cgx2-runtime/tests/ordinary_roots_repair.rs": "37ff0137b725c6c7cb7515624616d4f914fb2f549209d3f6a5753b7db71f43f1",
+    "crates/cgx2-sema/tests/ordinary_roots_repair.rs": "58498135ea34b943b19efbd039e2c0d1e51aaf2637188661827c4285897b0131",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/check.py": "ca2f86195edbf972e9203f16e34dca55acfbac00b2b98dccb5df3d2ddb68f740",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/build-delivery.json": "7fc7632aec144d8f84f13f9cf876c5a6ced4108ae99356160401cd79a30ef803",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/clippy-delivery.json": "d26f4af3368bf7d2f19a4bc473a313530fb748f76bf5fa0acd9ff9a5d8b373db",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/clippy-final.json": "9e2a4f776b0183b443be32ce29bbb18fcb2c7202f610f10980ea4c9148af437f",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/clippy.json": "bc39b19dcd06e4f1a9789a932dc6b325d784872ab9464ab7089ce0e1287483e5",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/diff-final.json": "b13ed177192707a844c5b02ad19f848c96fb80cd0f35605a37e4c5bfb65cbffb",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/expanded-focused.json": "4dde903fd8e2e7606b5b02a5339cc0cbf5e0a4dd66f55a6a82182c43b40fd209",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/extra-budget-and-lifetime.json": "6a2dbb4ad6e89637d0c0fb33892cb90dd621881b465dd74b53fa803619e6dd2a",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/final-build.json": "8a7baff39306fb520542892a147f2770d97a576aa820950c535781a1daed1334",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/final-diff.json": "7e2e9e08857dc60101f1101cb2d6ab336c4b0d118b7b426454e95dc7a77c07a0",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/fmt-delivery.json": "bbaf6da8a7c2007f9e1aac553d87132537c55035774e47a79e60b9c94025c891",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/fmt-final.json": "e4f818a363cb6dab77bae8c20e03714b045a0b6183639f795f39e47e4357e9ca",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/fmt-initial.json": "0df175d87e8749c7c361a99eabf3f0a016d3195dbcf7f78404d0cfd275001105",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/fmt-owned-2.json": "175b7cf65c164312468cdb5b74aaf0d81fd026e4f93cfe7b74ed5ad59587938a",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/fmt-owned-3.json": "9b30e60bbd44723855f0a786705675a5e649006e87bacd22df722efb8ea10e19",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/fmt-owned.json": "9306f14e5ae310be613d0c677c5a4f173b782b5f817137c750d471bb9b08d2e7",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/freeze.json": "fc26a0968b6237f2768cf3857ff1467743678deb7e6a6a1f829642f67b77d5ce",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/harness-selftests.json": "0daff5624fd4bb26fd35557264637390b52524cc4462d8f8ad3c34311d983219",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/package-tests-delivery.json": "2a667387c118a043b671983751c8c2add6792da950c53099fcc2571bbbe528e6",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/package-tests-final.json": "5e368b40696b45719114c3b8d1e25ca74556800266c953c23e40b052500f0ad1",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/package-tests.json": "da215e078b9bf1106772c973af07ff6dfb2eb2421c7254b4b4ef9ab6dff8198f",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/parity.json": "c7b52eb2cfc0e7933e2e19912f653ff6a72efcc53e638d5a2962239f5ac751fa",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/product-retry.json": "b4d149a769e135a1fd5412f320d630fda66a6bb86e183026093009894208e7b3",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/product.json": "560a20607735dfd9cbfc12eaa61919e490544782e9303f08724677a156be29d0",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/red-runtime-2.json": "1882b6b69f8c287938c586fa89fbc402e45757c77ba0466f573cb1ced42897f2",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/red-runtime.json": "f6e425bef4f45cf63193a7dd8289d26771babc39a9dd251622d5c16b5750dae7",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/red-sema.json": "1c8855123999f2bb054c13c26243649a7bdf1e3e0d0bb03f3bbc4de151612548",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/repaired-focused.json": "74114c15f94011dbcdd263f4f913f6ec9ed03e9b456b44393209da33eb772f69",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/root-lock-unchanged.json": "cc7f4d396862b6b2baf569d07edd17cef99b32ad01fb42234536bbc9b850cce6",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/checks/standalone.json": "46cd8c74b25286ffd77e06d0fe5912176e9ddc6df75665b373d6ee61aee47d39",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/export.py": "431a7a58bc2c4b3b074048692a116ab9c52d97caedb122af85cda93dc3b7eb87",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/fixtures/nested-assignment.cg": "3df31c62f8f407fc62fd03f322d998f8cf2f606b27db64a380514f5811ec281a",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/freeze.py": "ad73a2b4b7de694b98d9ab4a1b3f4cc0adfabe032505a4386092c55172a75a5b",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/parity.py": "0f0954d73ef2637f13b40dd3ba195c013d79f177b25f472edc1973ef95266939",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/standalone_private.py": "392d9d3760946a799c4662f587758d79a62199aae57ea4dbf2173c02a6782185"
+  },
+  "unrun": [
+    "external leak-enabled assurance",
+    "independent safety audit",
+    "full workspace test suite",
+    "release performance measurements"
+  ],
+  "remaining": [
+    "OM01",
+    "OM02",
+    "OM03",
+    "OM04",
+    "OM08",
+    "general aggregate ownership",
+    "source copy_owned/promote failed-owner continuation",
+    "complete authenticated ownership v3",
+    "static dependency-file attribution"
+  ]
+}

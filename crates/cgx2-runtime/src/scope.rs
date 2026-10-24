@@ -105,6 +105,34 @@ impl ScopedRoots<'_> {
         Ok(())
     }
 
+    /// End the registrations dependent on one lexical region, preserving roots
+    /// of outer bindings even when those bindings were replaced inside the arm.
+    /// The table is shared with the arm so an assignment releases its actual
+    /// registration owner. Cleanup never allocates or collects.
+    pub(crate) fn cleanup_region_v1(&mut self, region: crate::RegionId) -> CleanupReport {
+        let mut report = CleanupReport::default();
+        for index in (0..self.roots.len()).rev() {
+            if self.roots[index].region() != region {
+                continue;
+            }
+            let handle = self.roots.swap_remove(index);
+            match self.session.object_mut(handle).and_then(|object| {
+                if object.scoped_roots == 0 || object.roots == 0 {
+                    return Err(MemoryError::NotRooted);
+                }
+                object.scoped_roots -= 1;
+                object.roots -= 1;
+                Ok(())
+            }) {
+                Ok(()) => report.released_roots += 1,
+                Err(error) => {
+                    report.first_error.get_or_insert(error);
+                }
+            }
+        }
+        report
+    }
+
     /// Runs a lexical guard with the same protected registration table and Session.
     /// Moving the table performs no allocation. Nested scopes still clean up on unwind.
     pub fn with_no_gc<T>(

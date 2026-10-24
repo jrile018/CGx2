@@ -1,0 +1,40 @@
+{
+  "argv": [
+    "python3",
+    "crates/cgx2-syntax/ordinary-roots-repair-evidence/parity.py",
+    "--binary-dir",
+    "target/tmp-ordinary-runtime-roots/verification/frozen",
+    "--output-dir",
+    "target/tmp-ordinary-runtime-roots/parity",
+    "--outside-dir",
+    "/home/john-riley/.codex/visualizations/2026/10/24/01a16e6c-b9bf-76c3-8096-5a9f6fbac892/ordinary-roots-standalone"
+  ],
+  "cwd": "/home/john-riley/.codex/worktrees/c0c1/lang",
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_INCREMENTAL": "0",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/c0c1/lang/target/release-ordinary-runtime-roots",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/c0c1/lang/target/tmp-ordinary-runtime-roots",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "limits": {
+    "wall_seconds": 1200,
+    "cpu_seconds_per_process": 900,
+    "address_bytes_per_process": 8589934592,
+    "file_bytes": 536870912,
+    "retained_bytes_per_stream": 131072
+  },
+  "exit": 0,
+  "reason": "exit",
+  "signal": null,
+  "overflow_stream": null,
+  "duration_seconds": 24.594,
+  "stdout_bytes": 607,
+  "stdout_sha256": "76a90f32f404cd95acd78890ba60b9126ace6ce5bddff86c89794920f139d445",
+  "stdout": "{\"passed\": 80, \"failed\": 0, \"known_unrepaired\": [{\"id\": \"OM01\", \"status\": \"failed\", \"command\": \"OM01-unrepaired\", \"exit\": 0, \"reason\": \"exit\", \"signal\": null}, {\"id\": \"OM02\", \"status\": \"failed\", \"command\": \"OM02-unrepaired\", \"exit\": 101, \"reason\": \"exit\", \"signal\": null}, {\"id\": \"OM03\", \"status\": \"failed\", \"command\": \"OM03-unrepaired\", \"exit\": 0, \"reason\": \"exit\", \"signal\": null}, {\"id\": \"OM04\", \"status\": \"failed\", \"command\": \"OM04-unrepaired\", \"exit\": 1, \"reason\": \"exit\", \"signal\": null}, {\"id\": \"OM08\", \"status\": \"failed\", \"command\": \"OM08-unrepaired\", \"exit\": 0, \"reason\": \"exit\", \"signal\": null}]}\n",
+  "stderr_bytes": 0,
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr": ""
+}

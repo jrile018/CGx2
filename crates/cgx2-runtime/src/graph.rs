@@ -1888,9 +1888,14 @@ pub mod default_managed {
                         let destination = self.memory_region(*region, env, roots)?;
                         let value = self.expr(*value, env, roots)?;
                         let copied = if let Some(handle) = value.handle() {
-                            roots.copy_graph_to_v1(destination, handle).map(|h| Value {
-                                atom: Atom::Heap(h),
-                                ..value
+                            roots.copy_graph_to_v1(destination, handle).map(|h| {
+                                // copy_graph_to_v1 publishes one registration into
+                                // this table; expression cleanup already sees it.
+                                self.evidence.roots_registered += 1;
+                                Value {
+                                    atom: Atom::Heap(h),
+                                    ..value
+                                }
                             })
                         } else {
                             Ok(value)
@@ -2027,21 +2032,17 @@ pub mod default_managed {
                         match result {
                             Err(error) => self.memory_arm(1, failure(error), arms, env, roots),
                             Ok(region) => {
-                                let result = {
-                                    let mut dependent = roots.scoped_roots();
-                                    let result = self.memory_arm(
-                                        0,
-                                        Value::new(ok_ty, Atom::Region(region)),
-                                        arms,
-                                        env,
-                                        &mut dependent,
-                                    );
-                                    let report = dependent.cleanup();
-                                    cleanup(&mut self.evidence, report);
-                                    result
-                                };
-                                // No allocation or safepoint between releasing inner
-                                // registrations and preserving a surviving outer result.
+                                // Bindings and their registration table must have
+                                // the same lifetime. In particular, assignment to
+                                // an outer cell must release its old registration
+                                // and leave the replacement alive after this arm.
+                                let result = self.memory_arm(
+                                    0,
+                                    Value::new(ok_ty, Atom::Region(region)),
+                                    arms,
+                                    env,
+                                    roots,
+                                );
                                 let result = result.and_then(|(v, returned)| {
                                     if v.handle().is_some_and(|h| h.region() == region)
                                         || matches!(v.atom, Atom::Region(r) if r == region)
@@ -2050,9 +2051,10 @@ pub mod default_managed {
                                             "named region result escaped its scope",
                                         ));
                                     }
-                                    root(roots, v, &mut self.evidence)?;
                                     Ok((v, returned))
                                 });
+                                let report = roots.cleanup_region_v1(region);
+                                cleanup(&mut self.evidence, report);
                                 let closed = roots.close_region(region);
                                 match result {
                                     Err(error) => {
@@ -3834,8 +3836,21 @@ pub mod ordinary_memory {
             destination: RegionId,
             source: Handle,
         ) -> Result<Handle, GraphError> {
-            let image = self.copy_owned_graph_v1(source)?;
-            self.publish_graph_v1(destination, &image)
+            let checkpoint = self.checkpoint();
+            self.root(source)?;
+            // The snapshot owns its bytes but does not keep the input handle
+            // alive. Destination allocation can collect the source region too.
+            let result = (|| {
+                let image = self.graph_image_v1(source)?;
+                self.publish_graph_v1(destination, &image)
+            })();
+            let retained = result.as_ref().ok().copied();
+            let cleanup = self.finish_since(checkpoint, retained);
+            match (result, cleanup.first_error) {
+                (Err(error), _) => Err(error),
+                (Ok(_), Some(error)) => Err(error.into()),
+                (Ok(handle), None) => Ok(handle),
+            }
         }
         /// Failure returns the single original owner, including failures in
         /// root-table reservation after earlier graph preparation/charges.
