@@ -107,7 +107,10 @@ impl Evaluator<'_> {
         }
         let first = args.remove(0);
         let value = match (n, first) {
-            ("show", v) => Value::String(v.to_string()),
+            ("show", v) => {
+                check_output_bound(&v, span)?;
+                Value::String(v.to_string())
+            }
             ("length", Value::Sequence { values, .. }) => Value::I64(values.len() as i64),
             ("length", Value::String(s)) => Value::I64(s.chars().count() as i64),
             ("get", xs) => {
