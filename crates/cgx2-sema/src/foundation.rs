@@ -479,8 +479,16 @@ impl Lower<'_> {
                         segments: vec![key],
                         span: callee.span,
                     });
-                } else if arguments.iter().any(|a| a.name.is_some()) {
-                    if let Some(t @ (Type::Record(_) | Type::AppliedRecord { .. })) = resolved {
+                } else if let Some(t @ (Type::Record(_) | Type::AppliedRecord { .. })) = resolved {
+                    let name = match &t {
+                        Type::Record(name) | Type::AppliedRecord { name, .. } => name,
+                        _ => unreachable!(),
+                    };
+                    // Use the checked nominal identity rather than payload naming.
+                    // A function returning a record is still a call.
+                    if matches!(&callee.kind, ExprKind::Name(path)
+                        if crate::nominal::identity(self.module, &path.segments.join(".")) == *name)
+                    {
                         let t = self.concrete(&t);
                         callee.kind = ExprKind::Name(Path {
                             segments: vec![t.to_string()],

@@ -1,0 +1,12 @@
+record T:
+    value: i64
+fn f<T>(x: T) -> i64:
+    if true:
+        let broken = T(value: 1)
+    else:
+        let fine = 1
+    42
+fn wrapper<U>(x: U) -> i64:
+    f<U>(x)
+fn main() -> i64:
+    wrapper(1)

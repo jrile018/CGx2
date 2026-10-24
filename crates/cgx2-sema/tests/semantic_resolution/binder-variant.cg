@@ -1,0 +1,7 @@
+variant T:
+    Value(i64)
+fn f<T>(x: T) -> i64:
+    let broken = T.Value(1)
+    42
+fn main() -> i64:
+    f(1)

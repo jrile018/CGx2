@@ -1,0 +1,4 @@
+module app
+import dep
+fn main() -> i64 effects() caps():
+    dep.f(1)

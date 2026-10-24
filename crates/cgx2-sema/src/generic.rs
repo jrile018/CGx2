@@ -208,6 +208,16 @@ impl Checker {
         span: Span,
     ) -> Option<Type> {
         let n = syntax.path.segments.join(".");
+        // Type binders shadow nominal names in annotations and constructor heads.
+        // A parameter has no statically known fields or variant cases.
+        if self.binders.contains_key(&n) {
+            self.report(
+                "CGT002",
+                format!("type parameter `{n}` cannot be used as a constructor"),
+                syntax.path.span,
+            );
+            return None;
+        }
         let own = crate::nominal::identity(&self.module, &n);
         let record = self
             .module
@@ -250,27 +260,57 @@ impl Checker {
             .collect();
         let mut scoped = self.binders.clone();
         scoped.extend(scope.clone());
-        let template = crate::nominal::scoped(
-            &template_syntax,
-            &self.module,
-            &self.imported,
-            &scoped,
-            &mut self.diagnostics,
-        )?;
+        // Resolve the nominal head separately from its declaration's binders:
+        // in `record T<T>`, the argument T must not replace the record head.
+        let template = if let Some(record) = &record {
+            let name = crate::nominal::identity(&self.module, &record.name);
+            if params.is_empty() {
+                Type::Record(name)
+            } else {
+                Type::AppliedRecord {
+                    name,
+                    arguments: params.clone(),
+                }
+            }
+        } else if let Some(variant) = &variant {
+            Type::Variant {
+                name: crate::nominal::identity(&self.module, &variant.name),
+                arguments: params.clone(),
+            }
+        } else {
+            crate::nominal::scoped(
+                &template_syntax,
+                &self.module,
+                &self.imported,
+                &scoped,
+                &mut self.diagnostics,
+            )?
+        };
+        let diagnostic_count = self.diagnostics.len();
         let fields = if case.is_none() {
             crate::nominal::members(
                 &template,
                 &self.module,
                 &self.imported,
                 &mut self.diagnostics,
-            )?
+            )
         } else {
             let cases = crate::nominal::cases(
                 &template,
                 &self.module,
                 &self.imported,
                 &mut self.diagnostics,
-            )?;
+            );
+            let Some(cases) = cases else {
+                if self.diagnostics.len() == diagnostic_count {
+                    self.report(
+                        "CGT002",
+                        "constructor requires a nominal variant",
+                        syntax.path.span,
+                    );
+                }
+                return None;
+            };
             let Some((_, payloads)) = cases.into_iter().find(|(c, _)| Some(c.as_str()) == case)
             else {
                 self.report(
@@ -280,11 +320,23 @@ impl Checker {
                 );
                 return None;
             };
-            payloads
-                .into_iter()
-                .enumerate()
-                .map(|(i, t)| (i.to_string(), t))
-                .collect()
+            Some(
+                payloads
+                    .into_iter()
+                    .enumerate()
+                    .map(|(i, t)| (i.to_string(), t))
+                    .collect(),
+            )
+        };
+        let Some(fields) = fields else {
+            if self.diagnostics.len() == diagnostic_count {
+                self.report(
+                    "CGT002",
+                    "constructor requires a nominal record",
+                    syntax.path.span,
+                );
+            }
+            return None;
         };
         let mut substitutions = BTreeMap::new();
         if !syntax.arguments.is_empty() && syntax.arguments.len() != params.len() {
@@ -478,7 +530,7 @@ impl Checker {
                     }
                     return Some(Some(Type::Bool));
                 }
-                if !self.functions.contains_key(&n) {
+                if !self.functions.contains_key(&n) && !self.record_constructor(path) {
                     if let Some(result) = self.data_call(&n, arguments, hint, expr.span) {
                         return Some(result);
                     }
@@ -487,6 +539,16 @@ impl Checker {
             }
             _ => None,
         }
+    }
+    fn record_constructor(&self, path: &Path) -> bool {
+        let name = path.segments.join(".");
+        let own = crate::nominal::identity(&self.module, &name);
+        self.module
+            .records
+            .iter()
+            .any(|r| crate::nominal::identity(&self.module, &r.name) == own)
+            || self.imported.public_records.contains_key(&name)
+            || self.imported.private_records.contains(&name)
     }
     fn foundation_call(
         &mut self,
@@ -530,15 +592,7 @@ impl Checker {
                 );
             }
         }
-        let own = crate::nominal::identity(&self.module, &name);
-        if self
-            .module
-            .records
-            .iter()
-            .any(|r| crate::nominal::identity(&self.module, &r.name) == own)
-            || self.imported.public_records.contains_key(&name)
-            || self.imported.private_records.contains(&name)
-        {
+        if self.record_constructor(path) {
             return self.infer_aggregate(
                 &cgx2_syntax::TypeSyntax {
                     path: path.clone(),

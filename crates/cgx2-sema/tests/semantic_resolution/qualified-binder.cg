@@ -1,0 +1,8 @@
+module model
+record T:
+    value: i64
+fn f<T>(x: T) -> i64:
+    let valid = model.T(value: 42)
+    valid.value
+fn main() -> i64:
+    f(1)
