@@ -17,11 +17,16 @@ a=p.parse_args();j=Journal(a.output_dir)
 try:
     audit(j, a.verification_dir/'frozen', 'final')
     previous=json.loads(a.historical_inventory.read_text())
-    current={str(p.relative_to(HERE/'evidence')):digest(p) for p in (HERE/'evidence').rglob('*') if p.is_file()}
+    from finalization_audit import retained_inventory
+    current=retained_inventory()
     j.check('retained-historical-evidence-immutable',current==previous)
     helpers=[HERE.parent/'owned-result-runner-evidence/supervisor.py', HERE.parent/'ordinary-memory-evidence/run.py', HERE.parent/'ordinary-memory-evidence/test_run.py', ROOT/'plans/release-completion/s2b-ordinary-memory/regressions.json']
     j.report['read_only_helper_sha256']={str(p.relative_to(ROOT)):digest(p) for p in helpers}
-    for name,argv in [('new-selftests',[sys.executable,HERE/'test_harness.py']),
+    j.required_commands={'primary-selftests','supplemental-selftests','adversarial-selftests','historical-selftests','diff'}
+    j.required_checks.update(j.required_commands)
+    for name,argv in [('primary-selftests',[sys.executable,HERE/'test_harness.py']),
+                      ('supplemental-selftests',[sys.executable,HERE/'hardening-evidence/explicit_scenarios.py']),
+                      ('adversarial-selftests',[sys.executable,HERE/'test_finalization.py']),
                       ('historical-selftests',[sys.executable,HERE.parent/'ordinary-memory-evidence/test_run.py']),
                       ('diff',['git','diff','--check'])]:
         row=j.run(name,argv);j.check(name,normal(row))

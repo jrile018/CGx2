@@ -19,7 +19,7 @@ def digest(path):
 
 
 def normal(row, expected=0):
-    return (row.get('reason') == 'exit' and type(row.get('exit')) is int
+    return (type(row) is dict and row.get('reason') == 'exit' and type(row.get('exit')) is int
             and row['exit'] == expected and row.get('signal') is None)
 
 
@@ -79,31 +79,49 @@ class Journal:
                         CGX2_MEMORY_EVIDENCE='1')
         self.required_commands = set()
         self.required_checks = set()
-        self.report = {'schema_version': 2, 'reviewed_base': '89464a76c9bd84a3b090ec58a14ca6be0043c6ea',
+        self.required_success_commands = set()
+        self.dispatched_names = set()
+        self.report = {'schema_version': 3,
                        'commands': [], 'checks': [], 'exceptions': [], 'complete': False,
                        'ordinary_memory_accepted': False, 'environment': {k: self.env[k] for k in
                        ('RUSTUP_TOOLCHAIN', 'CARGO_BUILD_JOBS', 'CARGO_TARGET_DIR', 'TMPDIR', 'LIBRARY_PATH')}}
+        self.report['environment'].update({k: self.env[k] for k in
+            ('CARGO_INCREMENTAL', 'CARGO_PROFILE_DEV_DEBUG', 'CARGO_PROFILE_TEST_DEBUG') if k in self.env})
+        try:
+            from provenance import checkout_identity
+            self.report['source_identity'] = checkout_identity()
+            from integrity import harness_paths
+            for path in harness_paths():
+                destination = self.output / 'harness-snapshot' / path.relative_to(HERE)
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                destination.write_bytes(path.read_bytes())
+        except Exception:
+            self.report['identity_error'] = traceback.format_exc()
         self.save()
 
     def save(self):
-        self.report['passed'] = sum(r.get('passed') is True for r in self.report['checks'])
-        self.report['failed'] = sum(r.get('passed') is not True for r in self.report['checks'])
+        rows = self.report['checks'] if type(self.report.get('checks')) is list else []
+        self.report['passed'] = sum(type(r) is dict and r.get('passed') is True for r in rows)
+        self.report['failed'] = sum(type(r) is not dict or r.get('passed') is not True for r in rows)
         temporary = self.output / 'report.pending'
         temporary.write_text(json.dumps(self.report, indent=2) + '\n')
         temporary.replace(self.output / 'report.json')
 
     def run(self, name, argv, *, cwd=ROOT, extra=None, suite=False):
-        if any(row['name'] == name for row in self.report['commands']):
+        if any(type(row) is dict and row.get('name') == name for row in self.report['commands']):
             raise ValueError('duplicate command identity: ' + name)
         command = [str(s) for s in argv]
+        self.dispatched_names.add(name)
+        self.report['command_record_schema'] = 1
         # Persist invocation before spawning: quota/spawn exceptions remain evidence.
         row = {'name': name, 'argv': command, 'cwd': str(cwd), 'extra_env': extra or {}, 'reason': 'pending'}
-        executable = shutil.which(command[0], path=self.env.get('PATH'))
-        if executable and Path(executable).is_file():
-            row['executable_input'] = {'path': executable, 'resolved': str(Path(executable).resolve()), 'sha256': digest(executable)}
         self.report['commands'].append(row)
         self.save()
         try:
+            executable = shutil.which(command[0], path=self.env.get('PATH')) if command else None
+            if executable and Path(executable).is_file():
+                row['executable_input'] = {'path': executable, 'resolved': str(Path(executable).resolve()), 'sha256': digest(executable)}
+            self.save()
             result = supervise(command, cwd=str(cwd), env=dict(self.env, **(extra or {})),
                                limits=suite_limits if suite else process_limits,
                                cap=2 * 1024**2, timeout=3600 if suite else 180)
@@ -122,7 +140,7 @@ class Journal:
         return row
 
     def check(self, name, condition, **details):
-        if any(row['name'] == name for row in self.report['checks']):
+        if any(type(row) is dict and row.get('name') == name for row in self.report['checks']):
             raise ValueError('duplicate check identity: ' + name)
         self.report['checks'].append(dict(name=name, passed=bool(condition), **details))
         self.save()
@@ -131,9 +149,40 @@ class Journal:
         self.report['exceptions'].append(traceback.format_exc())
         self.save()
 
+    def toolchain(self, *, cwd=ROOT):
+        self.required_commands.update(('rustc-identity', 'rustc-sysroot'))
+        self.required_checks.update(('rustc-identity', 'rustc-sysroot'))
+        self.required_success_commands.update(('rustc-identity', 'rustc-sysroot'))
+        identity = self.run('rustc-identity', ['rustc', '--version', '--verbose'], cwd=cwd)
+        sysroot = self.run('rustc-sysroot', ['rustc', '--print', 'sysroot'], cwd=cwd)
+        # Match the release field too; do not depend on a locally built hash/date.
+        valid_identity = normal(identity) and identity.get('stdout', '').startswith('rustc 1.98.1 ') and '\nrelease: 1.98.1\n' in identity.get('stdout', '')
+        path = sysroot.get('stdout', '').strip()
+        valid_sysroot = normal(sysroot) and bool(path) and Path(path).is_absolute() and (Path(path) / 'bin/rustc').is_file()
+        self.check('rustc-identity', valid_identity)
+        self.check('rustc-sysroot', valid_sysroot)
+        if not valid_identity or not valid_sysroot:
+            self.report.setdefault('prerequisite_failures', []).append('required Rust1.98.1 identity/sysroot')
+            self.save()
+            raise ValueError('required Rust1.98.1 identity/sysroot failed')
+        return Path(path)
+
     def finish(self):
         from validation import inventory_errors
+        from provenance import identity_errors
+        self.required_commands.update(self.dispatched_names)
+        if self.dispatched_names:
+            self.report['command_record_schema'] = 1
         errors = inventory_errors(self.report, self.required_commands, self.required_checks)
+        errors.extend(identity_errors(self.report.get('source_identity')))
+        if self.report.get('identity_error'):
+            errors.append('checkout identity/snapshot observation failed')
+        for name in sorted(self.required_success_commands):
+            rows = [r for r in self.report['commands'] if type(r) is dict and r.get('name') == name]
+            if len(rows) != 1 or not normal(rows[0]):
+                errors.append('failed required prerequisite: ' + name)
+        if self.report.get('prerequisite_failures'):
+            errors.append('failed required setup: ' + repr(self.report['prerequisite_failures']))
         self.report['required_inventory'] = {'commands': sorted(self.required_commands), 'checks': sorted(self.required_checks)}
         self.report['coverage_errors'] = errors
         self.check('required-evidence-coverage', not errors, errors=errors)

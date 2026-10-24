@@ -33,6 +33,9 @@ def main():
                 shutil.copyfileobj(incoming,zipped)
         files[key]={'original_path':str(source),**fingerprint(source),'gzip':fingerprint(target)}
         exported.add(key)
+    for source in sorted(scratch.iterdir()):
+        if source.is_file() and source.suffix in ('.json','.txt','.log'):
+            export(source,Path('driver')/source.name)
     for attempt in sorted(scratch.iterdir()):
         if not attempt.is_dir() or not (attempt/'report.json').exists():continue
         report=json.loads((attempt/'report.json').read_text())
@@ -50,7 +53,8 @@ def main():
                     if source.suffix=='.rs' and source.is_file():
                         export(source,Path('standalone-source')/attempt.name/(command['name']+'.rs'))
     (out/'manifest.json').write_text(json.dumps({'schema_version':1,'files':files},indent=2)+'\n')
-    (out/'summary.json').write_text(json.dumps({'schema_version':1,'reviewed_base':'89464a76c9bd84a3b090ec58a14ca6be0043c6ea',
+    from provenance import checkout_identity
+    (out/'summary.json').write_text(json.dumps({'schema_version':2,'exporting_checkout':checkout_identity(),
         'attempts':summaries,'ordinary_memory_accepted':False,'release_accepted':False,
         'interpretation':'Semantic failures remain failed. Timing fields supervise bounded commands only. Review report distinguishes source/library/unrun gates.'},indent=2)+'\n')
     print(json.dumps({'exported_files':len(files),'attempts':summaries}))

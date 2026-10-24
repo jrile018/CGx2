@@ -22,6 +22,7 @@ try:
     row=j.run('outside-repository',['git','rev-parse','--is-inside-work-tree'],cwd=outside)
     j.check('outside-repository',normal(row,128))
     if not normal(row,128):raise ValueError('Standalone path is inside a repository')
+    j.toolchain(cwd=outside)
     wrapper=j.output/'rustc-two-threads';wrapper.write_text('#!/bin/sh\nexec rustc -C link-arg=-Wl,--threads=2 "$@"\n');wrapper.chmod(0o700)
     for name,original in [('package-value',a.historical_product/'package'),('package-error',HERE/'fixtures/packages/runtime-error')]:
         source=j.output/name;shutil.copytree(original,source)

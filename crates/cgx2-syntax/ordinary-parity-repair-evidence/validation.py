@@ -72,7 +72,16 @@ def validate_direct(stdout):
 
 def sentinel_status(row, path, expected, code):
     from common import normal
-    rejected = normal(row, 1) and re.search(r'(?<![A-Z0-9])' + re.escape(code) + r'(?![A-Z0-9])', row.get('stderr', '')) is not None
+    # cgx2c build/emit use one complete human diagnostic on stderr, not the
+    # JSON format of a separate cgx2 check command. Consume the entire result.
+    if type(row) is not dict:
+        row = {}
+    stderr, stdout = row.get('stderr'), row.get('stdout', '')
+    match = (re.fullmatch(r'(CG[A-Z]+[0-9]{3}): [^\r\n]+\n?', stderr)
+             if type(stderr) is str else None)
+    rejected = (normal(row, 1) and type(stdout) is str and stdout == ''
+                and match is not None and match[1] == code
+                and not command_errors(row))
     try:
         preserved = Path(path).read_bytes() == expected
     except OSError:
@@ -80,20 +89,87 @@ def sentinel_status(row, path, expected, code):
     return rejected, preserved
 
 
+def stream_errors(row):
+    """Validate retained bytes when supervision metadata is present."""
+    import base64
+    import hashlib
+    errors = []
+    for name in ('stdout', 'stderr'):
+        if name not in row:
+            if 'argv' in row:
+                errors.append('missing ' + name)
+            continue
+        if type(row[name]) is not str:
+            errors.append('invalid ' + name)
+            continue
+        data = row[name].encode('utf-8')
+        if name + '_base64' in row:
+            try:
+                data = base64.b64decode(row[name + '_base64'], validate=True)
+                if data.decode('utf-8', errors='replace') != row[name]:
+                    errors.append('inconsistent ' + name)
+                # Diagnostic parsing cannot accept a lossy UTF-8 observation.
+                data.decode('utf-8')
+            except (ValueError, TypeError, UnicodeError):
+                errors.append('invalid UTF-8/base64 ' + name)
+        if 'argv' in row or name + '_bytes' in row or name + '_sha256' in row:
+            if type(row.get(name + '_bytes')) is not int or row[name + '_bytes'] != len(data):
+                errors.append('invalid byte count ' + name)
+            if row.get(name + '_sha256') != hashlib.sha256(data).hexdigest():
+                errors.append('invalid hash ' + name)
+    return errors
+
+
+def command_errors(row, strict=False):
+    errors = []
+    if strict:
+        required = {'name', 'argv', 'cwd', 'reason', 'exit', 'signal', 'stdout', 'stderr',
+                    'stdout_bytes', 'stderr_bytes', 'stdout_sha256', 'stderr_sha256',
+                    'executable_input', 'executable_unchanged'}
+        if not required <= row.keys():
+            errors.append('missing completed command fields: ' + repr(sorted(required - row.keys())))
+        executable = row.get('executable_input')
+        if (type(executable) is not dict or type(executable.get('path')) is not str
+                or type(executable.get('resolved')) is not str
+                or not re.fullmatch('[0-9a-f]{64}', str(executable.get('sha256', '')))
+                or row.get('executable_unchanged') is not True):
+            errors.append('missing/invalid executable observation')
+    if (row.get('reason') != 'exit' or type(row.get('exit')) is not int
+            or not 0 <= row['exit'] <= 255 or 'signal' not in row or row['signal'] is not None
+            or row.get('overflow_stream') is not None or row.get('error') is not None
+            or row.get('traceback') is not None):
+        errors.append('abnormal/incomplete termination')
+    if 'argv' in row:
+        if (type(row['argv']) is not list or not row['argv']
+                or any(type(s) is not str or not s for s in row['argv'])
+                or type(row.get('cwd')) is not str or not Path(row['cwd']).is_absolute()):
+            errors.append('invalid invocation')
+    errors.extend(stream_errors(row))
+    if row.get('executable_unchanged') is False:
+        errors.append('changed executable')
+    return errors
+
+
 def inventory_errors(report, commands, checks):
     errors = []
     for key, required in (('commands', commands), ('checks', checks)):
         rows = report.get(key, [])
+        if type(rows) is not list:
+            errors.append('invalid ' + key); continue
+        if any(type(r) is not dict or type(r.get('name')) is not str or not r['name'] for r in rows):
+            errors.append('invalid ' + key + ' row/name')
+            rows = [r for r in rows if type(r) is dict and type(r.get('name')) is str and r['name']]
         counts = Counter(r.get('name') for r in rows)
         errors += [f'duplicate {key}: {n}' for n, count in counts.items() if count != 1]
         errors += [f'missing {key}: {n}' for n in sorted(set(required) - counts.keys())]
         for row in rows:
             if key == 'checks' and type(row.get('passed')) is not bool:
                 errors.append(f'invalid passed type: {row.get("name")}')
-            if key == 'commands' and row.get('reason') in (None, 'pending', 'exception'):
-                errors.append(f'unfinished command: {row.get("name")}')
-            if key == 'commands' and row.get('executable_unchanged') is False:
-                errors.append(f'changed executable: {row.get("name")}')
+            if key == 'commands':
+                errors += [f'{row["name"]}: {error}' for error in command_errors(row, report.get('command_record_schema') == 1)]
+                if row['name'] in {'rustc-identity', 'rustc-sysroot', 'toolchain-identity',
+                                    'toolchain-sysroot', 'cargo-identity'} and row.get('exit') != 0:
+                    errors.append('failed required toolchain command: ' + row['name'])
     return errors
 
 

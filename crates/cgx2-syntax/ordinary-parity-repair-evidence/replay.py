@@ -25,6 +25,7 @@ try:
     row=j.run('outside-repository', ['git','rev-parse','--is-inside-work-tree'], cwd=outside)
     j.check('outside-repository', normal(row,128))
     if not normal(row,128):raise ValueError('historical standalone cwd is inside repository')
+    j.toolchain(cwd=outside)
     runner=HERE.parent/'ordinary-memory-evidence/run.py'
     j.report['historical_runner_sha256']=digest(runner)
     row=j.run('unchanged-ordinary-memory-117-and-18-regressions',
