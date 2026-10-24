@@ -1,0 +1,13 @@
+module dep
+
+pub record Value:
+    number: i64
+
+pub variant Choice<T>:
+    Value(T)
+
+pub fn id<T: Eq + Show>(x: T) -> T effects() caps():
+    x
+
+pub fn value() -> i64 effects() caps():
+    id<i64>(7)

@@ -1,0 +1,19 @@
+module app
+import dep
+
+record AppSecret:
+    number: i64
+
+pub fn wrap<U: Eq + Show>(x: Array<U>) -> Array<U> effects() caps():
+    dep.id<Array<U>>(x)
+
+fn app_hidden() -> i64:
+    dep.id<i64>(1)
+
+pub fn main() -> i64:
+    let visible = dep.id<dep.Choice<dep.Value>>(dep.Choice<dep.Value>.Value(dep.Value(number: 3)))
+    let hidden = dep.id<Option<AppSecret>>(Option.None())
+    let nested: Option<Result<List<Array<dep.Value>>, Bool>> = Option.None()
+    let complete = dep.id(nested)
+    let generic = wrap<i64>(array([4, 5]))
+    dep.id<i64>(dep.value())

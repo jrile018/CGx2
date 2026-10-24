@@ -1,0 +1,12 @@
+module app
+import dep
+
+pub fn wrap<U: Eq + Show>(x: Array<U>) -> Array<U> effects() caps():
+    dep.id<Array<U>>(x)
+
+pub fn main() -> i64:
+    let visible = dep.id<dep.Choice<dep.Value>>(dep.Choice<dep.Value>.Value(dep.Value(number: 3)))
+    let nested: Option<Result<List<Array<dep.Value>>, Bool>> = Option.None()
+    let complete = dep.id(nested)
+    let generic = wrap<i64>(array([4, 5]))
+    dep.id<i64>(dep.value())

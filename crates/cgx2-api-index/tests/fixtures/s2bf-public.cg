@@ -1,0 +1,20 @@
+module public_api
+
+pub record Value:
+    number: i64
+
+pub variant Choice<T>:
+    Value(T)
+
+pub fn id<T: Eq + Show>(x: T) -> T effects() caps():
+    x
+
+pub fn nested<U: Eq + Show>(x: List<U>) -> List<U> effects() caps():
+    id<List<U>>(x)
+
+pub fn main() -> i64:
+    let visible = id<Choice<Value>>(Choice<Value>.Value(Value(number: 3)))
+    let complete: Option<Result<List<Array<Value>>, Bool>> = Option.None()
+    let checked = id(complete)
+    let values = nested<i64>([4, 5])
+    id<i64>(7)
