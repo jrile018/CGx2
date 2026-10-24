@@ -1,0 +1,29 @@
+module app.generic
+
+pub record Box<T: Eq + Show, U>:
+    value: Option<Result<T, U>>
+
+pub variant Wrap<T: Eq + Show>:
+    Empty
+    Value(Option<Result<T, Bool>>, Box<T, Bool>, external.api.Item)
+
+record HiddenRecord<T>:
+    secret: T
+
+variant HiddenVariant<T>:
+    Secret(T)
+
+fn hidden<T>(x: T) -> T:
+    x
+
+pub fn identity<T: Eq + Show>(x: Box<T, Bool>) -> Box<T, Bool> effects() caps():
+    requires true
+    ensures true
+    x
+
+pub fn sample<T: Eq + Show>(values: Array<T>) -> T:
+    for i in range(0, 1):
+        invariant i >= 0
+        decreases 1 - i
+        values[i]
+    values[0]

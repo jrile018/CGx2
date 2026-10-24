@@ -1,0 +1,380 @@
+{
+  "evidence_kind": "local fixture conformance, not external acceptance",
+  "binary_sha256": "1dba65e85f9e6cd6db8e7d328c8b4b85b057aa83936fb2ae2a0be6e51eabf2b6",
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/8386/lang/target/tmp-s2a-REPAIR",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "results": [
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-checked.cg"
+      ],
+      "exit": 0,
+      "stdout": "module app.checked [checked]\nvariant app.checked.Reply [50, 124)\n    Empty()\n    Value(cgx2.core.Option<cgx2.core.Result<i64, Bool>>, app.checked.Point)\nrecord app.checked.Point [20, 49)\n    x: i64\npub fn identity(p: app.checked.Point) -> app.checked.Point effects() [explicit] caps() [explicit] [224, 284)\npub fn make() -> app.checked.Reply effects() [inferred] caps() [inferred] [284, 326)\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-checked.cg"
+      ],
+      "exit": 0,
+      "stdout": "module app.checked [checked]\nvariant app.checked.Reply [50, 124)\n    Empty()\n    Value(cgx2.core.Option<cgx2.core.Result<i64, Bool>>, app.checked.Point)\nrecord app.checked.Point [20, 49)\n    x: i64\npub fn identity(p: app.checked.Point) -> app.checked.Point effects() [explicit] caps() [explicit] [224, 284)\npub fn make() -> app.checked.Reply effects() [inferred] caps() [inferred] [284, 326)\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-checked.cg",
+        "--json"
+      ],
+      "exit": 0,
+      "stdout": "{\"schema_version\":6,\"module\":\"app.checked\",\"functions\":[{\"name\":\"identity\",\"parameters\":[{\"name\":\"p\",\"ty\":\"app.checked.Point\"}],\"return_type\":\"app.checked.Point\",\"span\":{\"start\":224,\"end\":284},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"app.checked.Point\",\"arguments\":[],\"span\":{\"start\":243,\"end\":248}}],\"result_type\":{\"identity\":\"app.checked.Point\",\"arguments\":[],\"span\":{\"start\":253,\"end\":258}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"make\",\"parameters\":[],\"return_type\":\"app.checked.Reply\",\"span\":{\"start\":284,\"end\":326},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"app.checked.Reply\",\"arguments\":[],\"span\":{\"start\":301,\"end\":306}},\"effects\":[],\"effects_status\":\"inferred\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[{\"name\":\"Point\",\"identity\":\"app.checked.Point\",\"type_parameters\":[],\"field_types\":[{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":45,\"end\":48}}],\"fields\":[{\"name\":\"x\",\"ty\":\"i64\"}],\"span\":{\"start\":20,\"end\":49}}],\"semantics_status\":\"checked\",\"variants\":[{\"name\":\"Reply\",\"identity\":\"app.checked.Reply\",\"type_parameters\":[],\"span\":{\"start\":50,\"end\":124},\"cases\":[{\"name\":\"Empty\",\"span\":{\"start\":73,\"end\":79},\"payloads\":[]},{\"name\":\"Value\",\"span\":{\"start\":83,\"end\":123},\"payloads\":[{\"identity\":\"cgx2.core.Option\",\"arguments\":[{\"identity\":\"cgx2.core.Result\",\"arguments\":[{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":103,\"end\":106}},{\"identity\":\"Bool\",\"arguments\":[],\"span\":{\"start\":108,\"end\":112}}],\"span\":{\"start\":96,\"end\":113}}],\"span\":{\"start\":89,\"end\":114}},{\"identity\":\"app.checked.Point\",\"arguments\":[],\"span\":{\"start\":116,\"end\":121}}]}]}]}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-checked.cg",
+        "--json"
+      ],
+      "exit": 0,
+      "stdout": "{\"schema_version\":6,\"module\":\"app.checked\",\"functions\":[{\"name\":\"identity\",\"parameters\":[{\"name\":\"p\",\"ty\":\"app.checked.Point\"}],\"return_type\":\"app.checked.Point\",\"span\":{\"start\":224,\"end\":284},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"app.checked.Point\",\"arguments\":[],\"span\":{\"start\":243,\"end\":248}}],\"result_type\":{\"identity\":\"app.checked.Point\",\"arguments\":[],\"span\":{\"start\":253,\"end\":258}},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[],\"ensures\":[],\"foreign\":null},{\"name\":\"make\",\"parameters\":[],\"return_type\":\"app.checked.Reply\",\"span\":{\"start\":284,\"end\":326},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[],\"result_type\":{\"identity\":\"app.checked.Reply\",\"arguments\":[],\"span\":{\"start\":301,\"end\":306}},\"effects\":[],\"effects_status\":\"inferred\",\"capabilities\":[],\"capabilities_status\":\"inferred\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[{\"name\":\"Point\",\"identity\":\"app.checked.Point\",\"type_parameters\":[],\"field_types\":[{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":45,\"end\":48}}],\"fields\":[{\"name\":\"x\",\"ty\":\"i64\"}],\"span\":{\"start\":20,\"end\":49}}],\"semantics_status\":\"checked\",\"variants\":[{\"name\":\"Reply\",\"identity\":\"app.checked.Reply\",\"type_parameters\":[],\"span\":{\"start\":50,\"end\":124},\"cases\":[{\"name\":\"Empty\",\"span\":{\"start\":73,\"end\":79},\"payloads\":[]},{\"name\":\"Value\",\"span\":{\"start\":83,\"end\":123},\"payloads\":[{\"identity\":\"cgx2.core.Option\",\"arguments\":[{\"identity\":\"cgx2.core.Result\",\"arguments\":[{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":103,\"end\":106}},{\"identity\":\"Bool\",\"arguments\":[],\"span\":{\"start\":108,\"end\":112}}],\"span\":{\"start\":96,\"end\":113}}],\"span\":{\"start\":89,\"end\":114}},{\"identity\":\"app.checked.Point\",\"arguments\":[],\"span\":{\"start\":116,\"end\":121}}]}]}]}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "api",
+        "--syntax-only",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg"
+      ],
+      "exit": 0,
+      "stdout": "module app.generic [syntax-only]\nvariant app.generic.Wrap<T: Eq + Show> [86, 197)\n    Empty()\n    Value(cgx2.core.Option<cgx2.core.Result<T, Bool>>, app.generic.Box<T, Bool>, external.api.Item)\nrecord app.generic.Box<T: Eq + Show, U> [20, 85)\n    value: cgx2.core.Option<cgx2.core.Result<T, U>>\npub fn identity<T: Eq + Show>(x: app.generic.Box<T, Bool>) -> app.generic.Box<T, Bool> effects() [unchecked] caps() [unchecked] [309, 432)\n    requires true [unchecked]\n    ensures true [unchecked]\npub fn sample<T: Eq + Show>(values: Array<T>) -> T effects() [unchecked] caps() [unchecked] [432, 591)\n    invariant i >= 0 [unchecked] [518, 535)\n    decreases 1 - i [unchecked] [543, 559)\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "api",
+        "--syntax-only",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg"
+      ],
+      "exit": 0,
+      "stdout": "module app.generic [syntax-only]\nvariant app.generic.Wrap<T: Eq + Show> [86, 197)\n    Empty()\n    Value(cgx2.core.Option<cgx2.core.Result<T, Bool>>, app.generic.Box<T, Bool>, external.api.Item)\nrecord app.generic.Box<T: Eq + Show, U> [20, 85)\n    value: cgx2.core.Option<cgx2.core.Result<T, U>>\npub fn identity<T: Eq + Show>(x: app.generic.Box<T, Bool>) -> app.generic.Box<T, Bool> effects() [unchecked] caps() [unchecked] [309, 432)\n    requires true [unchecked]\n    ensures true [unchecked]\npub fn sample<T: Eq + Show>(values: Array<T>) -> T effects() [unchecked] caps() [unchecked] [432, 591)\n    invariant i >= 0 [unchecked] [518, 535)\n    decreases 1 - i [unchecked] [543, 559)\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "api",
+        "--syntax-only",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg",
+        "--json"
+      ],
+      "exit": 0,
+      "stdout": "{\"schema_version\":6,\"module\":\"app.generic\",\"functions\":[{\"name\":\"identity\",\"parameters\":[{\"name\":\"x\",\"ty\":\"Box<T, Bool>\"}],\"return_type\":\"Box<T, Bool>\",\"span\":{\"start\":309,\"end\":432},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":325,\"end\":337}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"app.generic.Box\",\"arguments\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":346,\"end\":347}},{\"identity\":\"Bool\",\"arguments\":[],\"span\":{\"start\":349,\"end\":353}}],\"span\":{\"start\":342,\"end\":354}}],\"result_type\":{\"identity\":\"app.generic.Box\",\"arguments\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":363,\"end\":364}},{\"identity\":\"Bool\",\"arguments\":[],\"span\":{\"start\":366,\"end\":370}}],\"span\":{\"start\":359,\"end\":371}},\"effects\":[],\"effects_status\":\"unchecked\",\"capabilities\":[],\"capabilities_status\":\"unchecked\",\"requires\":[{\"expression\":\"true\",\"status\":\"unchecked\",\"span\":{\"start\":403,\"end\":407}}],\"ensures\":[{\"expression\":\"true\",\"status\":\"unchecked\",\"span\":{\"start\":420,\"end\":424}}],\"foreign\":null},{\"name\":\"sample\",\"parameters\":[{\"name\":\"values\",\"ty\":\"Array<T>\"}],\"return_type\":\"T\",\"span\":{\"start\":432,\"end\":591},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":446,\"end\":458}}],\"loop_contracts\":[{\"kind\":\"invariant\",\"expression\":\"i >= 0\",\"status\":\"unchecked\",\"span\":{\"start\":518,\"end\":535}},{\"kind\":\"decreases\",\"expression\":\"1 - i\",\"status\":\"unchecked\",\"span\":{\"start\":543,\"end\":559}}],\"parameter_types\":[{\"identity\":\"Array\",\"arguments\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":474,\"end\":475}}],\"span\":{\"start\":468,\"end\":476}}],\"result_type\":{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":481,\"end\":482}},\"effects\":[],\"effects_status\":\"unchecked\",\"capabilities\":[],\"capabilities_status\":\"unchecked\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[{\"name\":\"Box\",\"identity\":\"app.generic.Box\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":35,\"end\":47}},{\"name\":\"U\",\"constraints\":[],\"span\":{\"start\":49,\"end\":50}}],\"field_types\":[{\"identity\":\"cgx2.core.Option\",\"arguments\":[{\"identity\":\"cgx2.core.Result\",\"arguments\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":78,\"end\":79}},{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":81,\"end\":82}}],\"span\":{\"start\":71,\"end\":83}}],\"span\":{\"start\":64,\"end\":84}}],\"fields\":[{\"name\":\"value\",\"ty\":\"Option<Result<T, U>>\"}],\"span\":{\"start\":20,\"end\":85}}],\"semantics_status\":\"syntax-only\",\"variants\":[{\"name\":\"Wrap\",\"identity\":\"app.generic.Wrap\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":103,\"end\":115}}],\"span\":{\"start\":86,\"end\":197},\"cases\":[{\"name\":\"Empty\",\"span\":{\"start\":122,\"end\":128},\"payloads\":[]},{\"name\":\"Value\",\"span\":{\"start\":132,\"end\":196},\"payloads\":[{\"identity\":\"cgx2.core.Option\",\"arguments\":[{\"identity\":\"cgx2.core.Result\",\"arguments\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":152,\"end\":153}},{\"identity\":\"Bool\",\"arguments\":[],\"span\":{\"start\":155,\"end\":159}}],\"span\":{\"start\":145,\"end\":160}}],\"span\":{\"start\":138,\"end\":161}},{\"identity\":\"app.generic.Box\",\"arguments\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":167,\"end\":168}},{\"identity\":\"Bool\",\"arguments\":[],\"span\":{\"start\":170,\"end\":174}}],\"span\":{\"start\":163,\"end\":175}},{\"identity\":\"external.api.Item\",\"arguments\":[],\"span\":{\"start\":177,\"end\":194}}]}]}]}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "api",
+        "--syntax-only",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg",
+        "--json"
+      ],
+      "exit": 0,
+      "stdout": "{\"schema_version\":6,\"module\":\"app.generic\",\"functions\":[{\"name\":\"identity\",\"parameters\":[{\"name\":\"x\",\"ty\":\"Box<T, Bool>\"}],\"return_type\":\"Box<T, Bool>\",\"span\":{\"start\":309,\"end\":432},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":325,\"end\":337}}],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"app.generic.Box\",\"arguments\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":346,\"end\":347}},{\"identity\":\"Bool\",\"arguments\":[],\"span\":{\"start\":349,\"end\":353}}],\"span\":{\"start\":342,\"end\":354}}],\"result_type\":{\"identity\":\"app.generic.Box\",\"arguments\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":363,\"end\":364}},{\"identity\":\"Bool\",\"arguments\":[],\"span\":{\"start\":366,\"end\":370}}],\"span\":{\"start\":359,\"end\":371}},\"effects\":[],\"effects_status\":\"unchecked\",\"capabilities\":[],\"capabilities_status\":\"unchecked\",\"requires\":[{\"expression\":\"true\",\"status\":\"unchecked\",\"span\":{\"start\":403,\"end\":407}}],\"ensures\":[{\"expression\":\"true\",\"status\":\"unchecked\",\"span\":{\"start\":420,\"end\":424}}],\"foreign\":null},{\"name\":\"sample\",\"parameters\":[{\"name\":\"values\",\"ty\":\"Array<T>\"}],\"return_type\":\"T\",\"span\":{\"start\":432,\"end\":591},\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":446,\"end\":458}}],\"loop_contracts\":[{\"kind\":\"invariant\",\"expression\":\"i >= 0\",\"status\":\"unchecked\",\"span\":{\"start\":518,\"end\":535}},{\"kind\":\"decreases\",\"expression\":\"1 - i\",\"status\":\"unchecked\",\"span\":{\"start\":543,\"end\":559}}],\"parameter_types\":[{\"identity\":\"Array\",\"arguments\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":474,\"end\":475}}],\"span\":{\"start\":468,\"end\":476}}],\"result_type\":{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":481,\"end\":482}},\"effects\":[],\"effects_status\":\"unchecked\",\"capabilities\":[],\"capabilities_status\":\"unchecked\",\"requires\":[],\"ensures\":[],\"foreign\":null}],\"records\":[{\"name\":\"Box\",\"identity\":\"app.generic.Box\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":35,\"end\":47}},{\"name\":\"U\",\"constraints\":[],\"span\":{\"start\":49,\"end\":50}}],\"field_types\":[{\"identity\":\"cgx2.core.Option\",\"arguments\":[{\"identity\":\"cgx2.core.Result\",\"arguments\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":78,\"end\":79}},{\"identity\":\"U\",\"arguments\":[],\"span\":{\"start\":81,\"end\":82}}],\"span\":{\"start\":71,\"end\":83}}],\"span\":{\"start\":64,\"end\":84}}],\"fields\":[{\"name\":\"value\",\"ty\":\"Option<Result<T, U>>\"}],\"span\":{\"start\":20,\"end\":85}}],\"semantics_status\":\"syntax-only\",\"variants\":[{\"name\":\"Wrap\",\"identity\":\"app.generic.Wrap\",\"type_parameters\":[{\"name\":\"T\",\"constraints\":[\"Eq\",\"Show\"],\"span\":{\"start\":103,\"end\":115}}],\"span\":{\"start\":86,\"end\":197},\"cases\":[{\"name\":\"Empty\",\"span\":{\"start\":122,\"end\":128},\"payloads\":[]},{\"name\":\"Value\",\"span\":{\"start\":132,\"end\":196},\"payloads\":[{\"identity\":\"cgx2.core.Option\",\"arguments\":[{\"identity\":\"cgx2.core.Result\",\"arguments\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":152,\"end\":153}},{\"identity\":\"Bool\",\"arguments\":[],\"span\":{\"start\":155,\"end\":159}}],\"span\":{\"start\":145,\"end\":160}}],\"span\":{\"start\":138,\"end\":161}},{\"identity\":\"app.generic.Box\",\"arguments\":[{\"identity\":\"T\",\"arguments\":[],\"span\":{\"start\":167,\"end\":168}},{\"identity\":\"Bool\",\"arguments\":[],\"span\":{\"start\":170,\"end\":174}}],\"span\":{\"start\":163,\"end\":175}},{\"identity\":\"external.api.Item\",\"arguments\":[],\"span\":{\"start\":177,\"end\":194}}]}]}]}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-contracts.cg"
+      ],
+      "exit": 0,
+      "stdout": "module <unnamed> [checked]\npub fn identity(x: i64) -> i64 effects() [explicit] caps() [explicit] [0, 99)\n    requires x >= 0 [runtime-checked]\n    ensures result >= x [runtime-checked]\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-contracts.cg"
+      ],
+      "exit": 0,
+      "stdout": "module <unnamed> [checked]\npub fn identity(x: i64) -> i64 effects() [explicit] caps() [explicit] [0, 99)\n    requires x >= 0 [runtime-checked]\n    ensures result >= x [runtime-checked]\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-contracts.cg",
+        "--json"
+      ],
+      "exit": 0,
+      "stdout": "{\"schema_version\":2,\"module\":null,\"functions\":[{\"name\":\"identity\",\"parameters\":[{\"name\":\"x\",\"ty\":\"i64\"}],\"return_type\":\"i64\",\"span\":{\"start\":0,\"end\":99},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[{\"expression\":\"x >= 0\",\"status\":\"runtime-checked\",\"span\":{\"start\":62,\"end\":68}}],\"ensures\":[{\"expression\":\"result >= x\",\"status\":\"runtime-checked\",\"span\":{\"start\":81,\"end\":92}}]}]}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-contracts.cg",
+        "--json"
+      ],
+      "exit": 0,
+      "stdout": "{\"schema_version\":2,\"module\":null,\"functions\":[{\"name\":\"identity\",\"parameters\":[{\"name\":\"x\",\"ty\":\"i64\"}],\"return_type\":\"i64\",\"span\":{\"start\":0,\"end\":99},\"effects\":[],\"effects_status\":\"explicit\",\"capabilities\":[],\"capabilities_status\":\"explicit\",\"requires\":[{\"expression\":\"x >= 0\",\"status\":\"runtime-checked\",\"span\":{\"start\":62,\"end\":68}}],\"ensures\":[{\"expression\":\"result >= x\",\"status\":\"runtime-checked\",\"span\":{\"start\":81,\"end\":92}}]}]}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "api",
+        "--syntax-only",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-contracts.cg"
+      ],
+      "exit": 0,
+      "stdout": "module <unnamed> [syntax-only]\npub fn identity(x: i64) -> i64 effects() [unchecked] caps() [unchecked] [0, 99)\n    requires x >= 0 [unchecked]\n    ensures result >= x [unchecked]\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "api",
+        "--syntax-only",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-contracts.cg"
+      ],
+      "exit": 0,
+      "stdout": "module <unnamed> [syntax-only]\npub fn identity(x: i64) -> i64 effects() [unchecked] caps() [unchecked] [0, 99)\n    requires x >= 0 [unchecked]\n    ensures result >= x [unchecked]\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "api",
+        "--syntax-only",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-contracts.cg",
+        "--json"
+      ],
+      "exit": 0,
+      "stdout": "{\"schema_version\":6,\"module\":null,\"functions\":[{\"name\":\"identity\",\"parameters\":[{\"name\":\"x\",\"ty\":\"i64\"}],\"return_type\":\"i64\",\"span\":{\"start\":0,\"end\":99},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":19,\"end\":22}}],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":27,\"end\":30}},\"effects\":[],\"effects_status\":\"unchecked\",\"capabilities\":[],\"capabilities_status\":\"unchecked\",\"requires\":[{\"expression\":\"x >= 0\",\"status\":\"unchecked\",\"span\":{\"start\":62,\"end\":68}}],\"ensures\":[{\"expression\":\"result >= x\",\"status\":\"unchecked\",\"span\":{\"start\":81,\"end\":92}}],\"foreign\":null}],\"records\":[],\"semantics_status\":\"syntax-only\",\"variants\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "api",
+        "--syntax-only",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-contracts.cg",
+        "--json"
+      ],
+      "exit": 0,
+      "stdout": "{\"schema_version\":6,\"module\":null,\"functions\":[{\"name\":\"identity\",\"parameters\":[{\"name\":\"x\",\"ty\":\"i64\"}],\"return_type\":\"i64\",\"span\":{\"start\":0,\"end\":99},\"type_parameters\":[],\"loop_contracts\":[],\"parameter_types\":[{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":19,\"end\":22}}],\"result_type\":{\"identity\":\"i64\",\"arguments\":[],\"span\":{\"start\":27,\"end\":30}},\"effects\":[],\"effects_status\":\"unchecked\",\"capabilities\":[],\"capabilities_status\":\"unchecked\",\"requires\":[{\"expression\":\"x >= 0\",\"status\":\"unchecked\",\"span\":{\"start\":62,\"end\":68}}],\"ensures\":[{\"expression\":\"result >= x\",\"status\":\"unchecked\",\"span\":{\"start\":81,\"end\":92}}],\"foreign\":null}],\"records\":[],\"semantics_status\":\"syntax-only\",\"variants\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-checked.cg"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-runnable.cg"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-runnable.cg"
+      ],
+      "exit": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-runnable.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/cli-conformance-1/positive-native"
+      ],
+      "exit": 0,
+      "stdout": "cgx2c build metadata: source_sha256=ece9c76ec786206bd7df0b6e65c7fa64e729cf52d2681d439d3ee4f7f9d28e69 rustc=rustc toolchain=rustc 1.98.1 (48a229cea 2026-09-01) target=x86_64-unknown-linux-gnu profile=debug runtime_sha256=none output=/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/cli-conformance-1/positive-native\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/cli-conformance-1/positive-native"
+      ],
+      "exit": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-runnable.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/cli-conformance-1/positive.rs"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "rustc",
+        "--edition=2021",
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/cli-conformance-1/positive.rs",
+        "-o",
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/cli-conformance-1/positive-rust"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "warning: unused variable: `args`\n  --> /home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/cli-conformance-1/positive.rs:45:44\n   |\n45 | fn cgx2_user_4_main(ctx: &mut Cgx2Context, args: &[String]) -> Result<i64, String> {\n   |                                            ^^^^ help: if this is intentional, prefix it with an underscore: `_args`\n   |\n   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default\n\nwarning: function `cgx2_at` is never used\n  --> /home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/cli-conformance-1/positive.rs:20:4\n   |\n20 | fn cgx2_at(error: String, start: usize, end: usize) -> String {\n   |    ^^^^^^^\n   |\n   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default\n\nwarning: function `cgx2_add` is never used\n  --> /home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/cli-conformance-1/positive.rs:24:4\n   |\n24 | fn cgx2_add(left: i64, right: i64) -> Result<i64, String> {\n   |    ^^^^^^^^\n\nwarning: function `cgx2_sub` is never used\n  --> /home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/cli-conformance-1/positive.rs:27:4\n   |\n27 | fn cgx2_sub(left: i64, right: i64) -> Result<i64, String> {\n   |    ^^^^^^^^\n\nwarning: function `cgx2_mul` is never used\n  --> /home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/cli-conformance-1/positive.rs:30:4\n   |\n30 | fn cgx2_mul(left: i64, right: i64) -> Result<i64, String> {\n   |    ^^^^^^^^\n\nwarning: function `cgx2_div` is never used\n  --> /home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/cli-conformance-1/positive.rs:33:4\n   |\n33 | fn cgx2_div(left: i64, right: i64) -> Result<i64, String> {\n   |    ^^^^^^^^\n\nwarning: function `cgx2_arg_count` is never used\n  --> /home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/cli-conformance-1/positive.rs:37:4\n   |\n37 | fn cgx2_arg_count(args: &[String]) -> Result<i64, String> {\n   |    ^^^^^^^^^^^^^^\n\nwarning: function `cgx2_arg` is never used\n  --> /home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/cli-conformance-1/positive.rs:40:4\n   |\n40 | fn cgx2_arg(args: &[String], index: i64) -> Result<String, String> {\n   |    ^^^^^^^^\n\nwarning: 8 warnings emitted\n\n"
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/cli-conformance-1/positive-rust"
+      ],
+      "exit": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-runnable.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/cli-conformance-1/positive.py"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/cli-conformance-1/positive.py"
+      ],
+      "exit": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:35..47: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:49..50: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:217..218: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:103..115: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:258..259: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:287..288: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:325..337: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:446..458: user generic declarations and named constraint semantics are deferred to S2b\n"
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "check",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:35..47: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:49..50: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:217..218: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:103..115: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:258..259: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:287..288: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:325..337: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:446..458: user generic declarations and named constraint semantics are deferred to S2b\n"
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "run",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:35..47: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:49..50: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:217..218: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:103..115: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:258..259: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:287..288: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:325..337: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:446..458: user generic declarations and named constraint semantics are deferred to S2b\n"
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "api",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg",
+        "--json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:35..47: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:49..50: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:217..218: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:103..115: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:258..259: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:287..288: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:325..337: user generic declarations and named constraint semantics are deferred to S2b\nCGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:446..458: user generic declarations and named constraint semantics are deferred to S2b\n"
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg",
+        "--target",
+        "rust",
+        "--out",
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/cli-conformance-1/rejected-rust"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:35..47: user generic declarations and named constraint semantics are deferred to S2b\n"
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "emit",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg",
+        "--target",
+        "python",
+        "--out",
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/cli-conformance-1/rejected-python"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:35..47: user generic declarations and named constraint semantics are deferred to S2b\n"
+    },
+    {
+      "command": [
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/debug/cgx2",
+        "build",
+        "/home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg",
+        "--out",
+        "/home/john-riley/.codex/worktrees/8386/lang/target/release-s2a-REPAIR/cli-conformance-1/rejected-native"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CGT032: /home/john-riley/.codex/worktrees/8386/lang/crates/cgx2-api-index/tests/fixtures/text-syntax-only.cg:35..47: user generic declarations and named constraint semantics are deferred to S2b\n"
+    }
+  ],
+  "source_base_commit": "8902cbd92533b81e801bf2c5bea725f5508fe3e2",
+  "checks_passed": 33,
+  "status": "passed"
+}
