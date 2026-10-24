@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-10-24T17:23:08.727428+00:00",
+  "checked_at": "2026-10-24T17:25:17.779283+00:00",
   "original_chats": [
     {
       "lane": "core",
@@ -614,11 +614,18 @@
   "s2b_ordinary_memory_finalization": [
     {
       "lane": "harness-finalization",
-      "title": "CGx2 ordinary evidence finalization repair",
+      "title": "CGx2 ordinary evidence finalization\u2026",
       "plan": "plans/release-completion/s2b-ordinary-memory-review/harness-finalization/plan.md",
-      "status": "planned",
+      "status": "running",
       "compiler_candidate": "ded3768480c745ce544d33c56aea44d4fc0bfa5a",
-      "acceptance_note": "Bounded exact-diagnostic, abnormal-finalization and candidate-provenance repair. Reviewed plan;536 combined archives; shared compiler/interfaces unchanged. No dispatch yet."
+      "acceptance_note": "Running bounded finalization repair; prior truthful harness remains unaccepted. Compiler candidateded3768 and536 archived combined files available for exact audited reuse.",
+      "base": "9f0804feac1a3c549ed879a8738e0152b370ed4a",
+      "clientThreadId": "client-new-thread:57eab7df-68c4-4f30-8967-60480c4591de",
+      "hostId": "local",
+      "threadId": "01a16ef0-b7c6-7e22-a98c-2cbe9ddf98b5",
+      "worktree": "/home/john-riley/.codex/worktrees/9929/lang",
+      "afterCursor": "3432b942-dd7e-4416-9037-bc13a42be060:1",
+      "setup_verified": "Worktree HEAD exactly9f0804feac1a3c549ed879a8738e0152b370ed4a; app read_thread and compact wait confirm active. list_threads omitted newly created chat; exact read-only metadata plus app read resolved identity. Only generated .serena metadata is untracked. No duplicate creation."
     }
   ]
 }
