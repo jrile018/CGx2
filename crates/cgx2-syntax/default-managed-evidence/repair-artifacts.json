@@ -1,0 +1,1047 @@
+{
+  "schema_version": 1,
+  "scope": "new repair files only; inventory excludes itself",
+  "files": [
+    {
+      "path": "REPAIR.md",
+      "bytes": 9032,
+      "sha256": "899027d19d414c0da3eaef7418a49197bd1d3eaea4bc567482e518669e6171c0"
+    },
+    {
+      "path": "fault_driver.rs",
+      "bytes": 897,
+      "sha256": "35d480adf977387abb36ea05b2fc8daa03f1fa7b183ca349eff55d69bf60b6a1"
+    },
+    {
+      "path": "repair-attempts/final-budget-format/repair.json.gz",
+      "bytes": 17077,
+      "sha256": "3ec3235166942d15ed7b09c6e694ddd2b46e058a05c582914dc4fb58dfc9aa09",
+      "decompressed_bytes": 520935,
+      "decompressed_sha256": "87d6340c37034ed42f5de40786bceae355d5ce8e7a242a0527c898cec5854297"
+    },
+    {
+      "path": "repair-attempts/final-budget-format/runner.py.gz",
+      "bytes": 6158,
+      "sha256": "a251fcbcc9b12de1062019c7b9385a96648a06f43ecb1dfe1dd7efef767546b6",
+      "decompressed_bytes": 21695,
+      "decompressed_sha256": "faa303b6f292b69095d8379e409b563f692cc9de246e63f61db8f8d4b0bc579c"
+    },
+    {
+      "path": "repair-attempts/final-budget-format/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/alloc-0.cg.gz",
+      "bytes": 259,
+      "sha256": "4827e57ffb554b2416c7036b6654ff8d4d65f938d6be9f770800a5229d6670d4",
+      "decompressed_bytes": 753,
+      "decompressed_sha256": "dfb22b83d1dd2b43771426adb023413f36772c72d6c58159ec6baccfc7d385f2"
+    },
+    {
+      "path": "repair-attempts/final-budget-format/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/alloc-225.cg.gz",
+      "bytes": 261,
+      "sha256": "afc844fe6708ec1d30e7a103d17dfaef6de7c382995668c69e8b5ab8685f98a4",
+      "decompressed_bytes": 755,
+      "decompressed_sha256": "3f12d152ea6d44f21bcf6e5f6ef98bd342ef9a0a23cd5fdffbef0fb37915c513"
+    },
+    {
+      "path": "repair-attempts/final-budget-format/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/alloc-226.cg.gz",
+      "bytes": 261,
+      "sha256": "46275a0e4a5e69c9f0d4924205d05e10a5d5189fa4606503d826c72f042f4623",
+      "decompressed_bytes": 755,
+      "decompressed_sha256": "b56d0e0cdad156e40ef1b52e794ce458296524769cb5b4d609c2587fa9cbf305"
+    },
+    {
+      "path": "repair-attempts/final-budget-format/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-package/cgx2.toml.gz",
+      "bytes": 102,
+      "sha256": "c9cb1dd9089b5f1b1c6fb04ea58616391919b3d6cf2e6a3a2ff7a8c9cee0bcd2",
+      "decompressed_bytes": 104,
+      "decompressed_sha256": "97f1034a1a03002be880fa2fa0758bfd0b8d7552851646669de99f2a28d0c4a6"
+    },
+    {
+      "path": "repair-attempts/final-budget-format/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-package/src/lib.cg.gz",
+      "bytes": 86,
+      "sha256": "01bc27d06a8d5487a1b9976024f5ccf091637a60c401d5ae34a10360fd3eeaff",
+      "decompressed_bytes": 77,
+      "decompressed_sha256": "13ef93a54b0c60e9cab262c540a9c70507862adcb68bd048b1d2f2bde502a7cb"
+    },
+    {
+      "path": "repair-attempts/final-budget-format/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-package/src/main.cg.gz",
+      "bytes": 263,
+      "sha256": "92e4fdec4167a100dc8b742a4323bea51438738dafcfba5f627a7bdc3e748ac9",
+      "decompressed_bytes": 703,
+      "decompressed_sha256": "77242b93561d88887e4849a8a3d1ec729f7913d33f1e170bdf9f0f1af2c4a132"
+    },
+    {
+      "path": "repair-attempts/final-budget-format/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-scalar.cg.gz",
+      "bytes": 272,
+      "sha256": "735cf87adabfc7a61ad364a9e3038a4d877527b59a8231ecc54cdb3240f48baa",
+      "decompressed_bytes": 738,
+      "decompressed_sha256": "12481e163d166f23bbee1c2b41f855621dc1ca099d6188b7c39527fc3813f547"
+    },
+    {
+      "path": "repair-attempts/final-budget-format/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/nested-257.cg.gz",
+      "bytes": 268,
+      "sha256": "42f4471dcd5b24b04124e1bb66713ce4175327a98027805b1b71a10a04853ac5",
+      "decompressed_bytes": 847,
+      "decompressed_sha256": "0b4f6c5e83b3f5b509cfdf6cb950a158735a7892b764a050ef556c8f7195b400"
+    },
+    {
+      "path": "repair-attempts/final-budget-format/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/nested-258.cg.gz",
+      "bytes": 268,
+      "sha256": "75cfd7b4ddd2902927e7daa792186f29bb61496f46a466cbb141cadb683860aa",
+      "decompressed_bytes": 847,
+      "decompressed_sha256": "8ff3710701979769f8fa3e7d1781c2f5b3ff93f2daf52f32338b00af6790cd20"
+    },
+    {
+      "path": "repair-attempts/final-budget-format/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/nonrefund-451.cg.gz",
+      "bytes": 266,
+      "sha256": "d37896e94b65fdd7e339c624aa96a8d7c94517d2d03356d77075df72bed4d51d",
+      "decompressed_bytes": 797,
+      "decompressed_sha256": "0493d5ac1a25f511be525baa94ae8b7a81f2e7799334839bf8cac9aacad476fb"
+    },
+    {
+      "path": "repair-attempts/final-budget-format/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/roots-0.cg.gz",
+      "bytes": 128,
+      "sha256": "74ae1be5767268078fc3db4594c568026ab4cb10a4b6f4962fdf457985cc7049",
+      "decompressed_bytes": 145,
+      "decompressed_sha256": "fdb42f91e6000e1d29a28387fa428b37b96034fd8f0b65148d109a784108bd1a"
+    },
+    {
+      "path": "repair-attempts/final-budget-format/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/roots-63.cg.gz",
+      "bytes": 129,
+      "sha256": "de9e1b69f8747982f04971ff806940af916338d436b6bfda6e5aff72c9317489",
+      "decompressed_bytes": 146,
+      "decompressed_sha256": "97509217dbc75a8da92381470228af0cc4e809ed1dae0e34b17304e1613da056"
+    },
+    {
+      "path": "repair-attempts/final-budget-format/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/roots-64.cg.gz",
+      "bytes": 129,
+      "sha256": "7c2d59cfea02c591a783b004a75349c9da57f450ef17a7187644d4c18630187b",
+      "decompressed_bytes": 146,
+      "decompressed_sha256": "1edf995c05282cfb74abac7a614b1e47f27abc15152208db157a96db7c76c4b3"
+    },
+    {
+      "path": "repair-attempts/final-formatted-driver/repair.json.gz",
+      "bytes": 4492,
+      "sha256": "d3729187e6f3ab015219f51806b4e4df9c83468f8ce92be63811428036537520",
+      "decompressed_bytes": 46546,
+      "decompressed_sha256": "88d88af0dd257573b71c03f5b785fa399ba4bd780b4c743c3222500df0075879"
+    },
+    {
+      "path": "repair-attempts/final-formatted-driver/runner.py.gz",
+      "bytes": 6158,
+      "sha256": "a251fcbcc9b12de1062019c7b9385a96648a06f43ecb1dfe1dd7efef767546b6",
+      "decompressed_bytes": 21695,
+      "decompressed_sha256": "faa303b6f292b69095d8379e409b563f692cc9de246e63f61db8f8d4b0bc579c"
+    },
+    {
+      "path": "repair-attempts/final-formatted-driver/sources/crates/cgx2-syntax/default-managed-evidence/fault_driver.rs.gz",
+      "bytes": 430,
+      "sha256": "3ffa4e12710eef2937d2fd6758d87c4362cd8bd990258a98a0dd8453a1eb9d04",
+      "decompressed_bytes": 897,
+      "decompressed_sha256": "35d480adf977387abb36ea05b2fc8daa03f1fa7b183ca349eff55d69bf60b6a1"
+    },
+    {
+      "path": "repair-attempts/final-formatted-driver/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/fault-graph-root.cg.gz",
+      "bytes": 230,
+      "sha256": "87a3b8b87a09db51731b40631cbf6a907b43a141bdf6e4bf6fcb0db14b41deec",
+      "decompressed_bytes": 592,
+      "decompressed_sha256": "6722ea9ff8d50bb2d9ddf1531ec4179c34638d70e697e75f7758f8820d9a7106"
+    },
+    {
+      "path": "repair-attempts/final-formatted-driver/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/fault-guard.cg.gz",
+      "bytes": 250,
+      "sha256": "00c9f18758291ac6859838d69fea10d9d18e6e7e0742cb4589e90053025357bf",
+      "decompressed_bytes": 687,
+      "decompressed_sha256": "d969c6c206beb43edfb5deb2f118080bb6d7a9ae50f61fb3cfc4a41a82a5d449"
+    },
+    {
+      "path": "repair-attempts/final-quality/build.log.gz",
+      "bytes": 91,
+      "sha256": "5d57a939ab84570377481b9bd1f7637428c23f8c72279a5f084433d57281e842",
+      "decompressed_bytes": 72,
+      "decompressed_sha256": "a13905646e2aed93ec6ea9ed6ac91490a4e01f91af0215c3965279a910612149"
+    },
+    {
+      "path": "repair-attempts/final-quality/diff.log.gz",
+      "bytes": 20,
+      "sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
+      "decompressed_bytes": 0,
+      "decompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "repair-attempts/final-quality/python-syntax.log.gz",
+      "bytes": 20,
+      "sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
+      "decompressed_bytes": 0,
+      "decompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "repair-attempts/final-quality/repair-selftests.log.gz",
+      "bytes": 55,
+      "sha256": "1debac94e931efd77f25e9945a65ff021b2d9ee248a22c6110a89ac7874f0634",
+      "decompressed_bytes": 113,
+      "decompressed_sha256": "c238e138384d4be690a4ea8c6d8462d70df525b549214677ace53213f0643a53"
+    },
+    {
+      "path": "repair-attempts/final-quality/rustfmt-driver.log.gz",
+      "bytes": 20,
+      "sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
+      "decompressed_bytes": 0,
+      "decompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "repair-attempts/final-quality/verification.json",
+      "bytes": 5830,
+      "sha256": "08b626101c0029d5a36d4329ea2317992b04d79b43e6b21e31676619d6703533"
+    },
+    {
+      "path": "repair-attempts/final-quality-v2/build.log.gz",
+      "bytes": 91,
+      "sha256": "5d57a939ab84570377481b9bd1f7637428c23f8c72279a5f084433d57281e842",
+      "decompressed_bytes": 72,
+      "decompressed_sha256": "a13905646e2aed93ec6ea9ed6ac91490a4e01f91af0215c3965279a910612149"
+    },
+    {
+      "path": "repair-attempts/final-quality-v2/diff.log.gz",
+      "bytes": 20,
+      "sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
+      "decompressed_bytes": 0,
+      "decompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "repair-attempts/final-quality-v2/python-syntax.log.gz",
+      "bytes": 20,
+      "sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
+      "decompressed_bytes": 0,
+      "decompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "repair-attempts/final-quality-v2/repair-selftests.log.gz",
+      "bytes": 55,
+      "sha256": "ef44f27aef34f13fc6b41ae55a11d267bfe0715a456af5a0a1f983377c957d33",
+      "decompressed_bytes": 113,
+      "decompressed_sha256": "8fcd998b157584310cfdcd088a0cc239b4f12ab44f015e728d58a5119b41ae72"
+    },
+    {
+      "path": "repair-attempts/final-quality-v2/rustfmt-driver.log.gz",
+      "bytes": 20,
+      "sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
+      "decompressed_bytes": 0,
+      "decompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "repair-attempts/final-quality-v2/verification.json",
+      "bytes": 5832,
+      "sha256": "724d05b014521c8ec33dec5f6fc824a99889b739787892d832dbb643fd819a71"
+    },
+    {
+      "path": "repair-attempts/final-verification/build.log.gz",
+      "bytes": 91,
+      "sha256": "5d57a939ab84570377481b9bd1f7637428c23f8c72279a5f084433d57281e842",
+      "decompressed_bytes": 72,
+      "decompressed_sha256": "a13905646e2aed93ec6ea9ed6ac91490a4e01f91af0215c3965279a910612149"
+    },
+    {
+      "path": "repair-attempts/final-verification/diff.log.gz",
+      "bytes": 20,
+      "sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
+      "decompressed_bytes": 0,
+      "decompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "repair-attempts/final-verification/managed-product/repair.json.gz",
+      "bytes": 6078,
+      "sha256": "9061c76d3bdcf16a66feca04afaf0b5b78e4db4a8aa26cbbc55d22fbecced00c",
+      "decompressed_bytes": 111402,
+      "decompressed_sha256": "9328b8e13beb482bd771ed83b4616ffcfe1483242a6f335d7a990df25e9818fa"
+    },
+    {
+      "path": "repair-attempts/final-verification/managed-product/runner.py.gz",
+      "bytes": 6140,
+      "sha256": "c195979829e2ef847b1756217faa9f471284100f196bc447dbdb5aac68366bb9",
+      "decompressed_bytes": 21704,
+      "decompressed_sha256": "4332adbecb9a79dea0db1c920bf44b952d529faced10fe536db85c60b6a900b9"
+    },
+    {
+      "path": "repair-attempts/final-verification/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/arg-negative.cg.gz",
+      "bytes": 80,
+      "sha256": "09caee19974d7f26d0217ac479e526408d9bdea762b1f904807858d4c9e88fe3",
+      "decompressed_bytes": 66,
+      "decompressed_sha256": "f88bf8d060a01f39c19c732d4715510e8d8d24abf868c7245cff12115400cf91"
+    },
+    {
+      "path": "repair-attempts/final-verification/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/arithmetic.cg.gz",
+      "bytes": 100,
+      "sha256": "fd05317e954ecb9372ff1b047cac8c764dcbd7f3504d83501d5b65b952deb4df",
+      "decompressed_bytes": 92,
+      "decompressed_sha256": "6bb01648fb74c2d6b4bd138d43b05e02a83540c2cc1e9b6acb5cb817ffbaa961"
+    },
+    {
+      "path": "repair-attempts/final-verification/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/collect-guard-reject.cg.gz",
+      "bytes": 129,
+      "sha256": "4f411d8179a6ddab53bd092c12e558a4db91b9e223bfd6e864bebdd5706cdabf",
+      "decompressed_bytes": 184,
+      "decompressed_sha256": "85a1f6c3ed3079f5b3fb3c9da79ac46d2828fba6798cbb4de2bfd792d8a885ba"
+    },
+    {
+      "path": "repair-attempts/final-verification/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/contract.cg.gz",
+      "bytes": 128,
+      "sha256": "3633524dfbdedb413f02bc22ecbb6a707cd936ca7633cec3edb2d16dd5bf07f6",
+      "decompressed_bytes": 145,
+      "decompressed_sha256": "ff80cc14e3fdf6b256592c57746e3a79102331fb00930becedef71d3226888af"
+    },
+    {
+      "path": "repair-attempts/final-verification/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/dishonest-package/cgx2.toml.gz",
+      "bytes": 106,
+      "sha256": "a6ca12241e088d137bfbe4e225c3b080ccdbb962625a8a97abe0ccbd9ce5dd77",
+      "decompressed_bytes": 108,
+      "decompressed_sha256": "36380a176ca9b9a8ae9edeb56affa3581cf6cbe668d461647389e4d8283596b6"
+    },
+    {
+      "path": "repair-attempts/final-verification/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/dishonest-package/src/lib.cg.gz",
+      "bytes": 102,
+      "sha256": "6bf39d48801f42a57ac1c81931070660e5ae71c961b7fad047160d9f3922820a",
+      "decompressed_bytes": 93,
+      "decompressed_sha256": "77a944146fa7137ddad11228e0756ee6bfb5f1532449ba7355f9f00559d3eca4"
+    },
+    {
+      "path": "repair-attempts/final-verification/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/dishonest-package/src/main.cg.gz",
+      "bytes": 180,
+      "sha256": "e981db433fc92ab38c1e5a2dcdcfc873199bc20f351daac63445068e6825648e",
+      "decompressed_bytes": 276,
+      "decompressed_sha256": "93187b5c3ec1ef9df83c53df633482f91f0b3d4bc18ed0521e7dae3a636206fe"
+    },
+    {
+      "path": "repair-attempts/final-verification/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/failed-arguments.cg.gz",
+      "bytes": 172,
+      "sha256": "9101a454d82598273218b0745251f663f149300a7c5d1dce8216affc59c6ec4b",
+      "decompressed_bytes": 233,
+      "decompressed_sha256": "b04accb558b5ea0ac27243179d0eaab319710306a231f09f71de071a326e9ccd"
+    },
+    {
+      "path": "repair-attempts/final-verification/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/fault_driver.rs.gz",
+      "bytes": 412,
+      "sha256": "5498d4c0437c6084bacf70b5b10247c3b9d061b2a37ed524e5cc4ace59020bef",
+      "decompressed_bytes": 827,
+      "decompressed_sha256": "be09310c2d33c05a6ed8e08d6c1087b415cff314c2586bdf7eee5adba3f7aa45"
+    },
+    {
+      "path": "repair-attempts/final-verification/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/ref-output-reject.cg.gz",
+      "bytes": 79,
+      "sha256": "7a7e0fb1b6c6421d473d5ae6b8213a89b72da50ff51c4f9540a4985224f1df31",
+      "decompressed_bytes": 72,
+      "decompressed_sha256": "e6d4b05164961b6a6775ec4d722e00e7dc8a11fc31e9ec37f0443872eac5a33b"
+    },
+    {
+      "path": "repair-attempts/final-verification/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/alloc-0.cg.gz",
+      "bytes": 259,
+      "sha256": "4827e57ffb554b2416c7036b6654ff8d4d65f938d6be9f770800a5229d6670d4",
+      "decompressed_bytes": 753,
+      "decompressed_sha256": "dfb22b83d1dd2b43771426adb023413f36772c72d6c58159ec6baccfc7d385f2"
+    },
+    {
+      "path": "repair-attempts/final-verification/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/alloc-225.cg.gz",
+      "bytes": 261,
+      "sha256": "afc844fe6708ec1d30e7a103d17dfaef6de7c382995668c69e8b5ab8685f98a4",
+      "decompressed_bytes": 755,
+      "decompressed_sha256": "3f12d152ea6d44f21bcf6e5f6ef98bd342ef9a0a23cd5fdffbef0fb37915c513"
+    },
+    {
+      "path": "repair-attempts/final-verification/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/alloc-226.cg.gz",
+      "bytes": 261,
+      "sha256": "46275a0e4a5e69c9f0d4924205d05e10a5d5189fa4606503d826c72f042f4623",
+      "decompressed_bytes": 755,
+      "decompressed_sha256": "b56d0e0cdad156e40ef1b52e794ce458296524769cb5b4d609c2587fa9cbf305"
+    },
+    {
+      "path": "repair-attempts/final-verification/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-package/cgx2.toml.gz",
+      "bytes": 102,
+      "sha256": "c9cb1dd9089b5f1b1c6fb04ea58616391919b3d6cf2e6a3a2ff7a8c9cee0bcd2",
+      "decompressed_bytes": 104,
+      "decompressed_sha256": "97f1034a1a03002be880fa2fa0758bfd0b8d7552851646669de99f2a28d0c4a6"
+    },
+    {
+      "path": "repair-attempts/final-verification/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-package/src/lib.cg.gz",
+      "bytes": 87,
+      "sha256": "c3388fa8ffc29546e396d966310ba6642481939cab989cf7bcd2240388137329",
+      "decompressed_bytes": 78,
+      "decompressed_sha256": "cb75c4d975b19d3af9e09449e8e1d2b681ca9c3218ae47062eb14f385fb87015"
+    },
+    {
+      "path": "repair-attempts/final-verification/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-package/src/main.cg.gz",
+      "bytes": 263,
+      "sha256": "92e4fdec4167a100dc8b742a4323bea51438738dafcfba5f627a7bdc3e748ac9",
+      "decompressed_bytes": 703,
+      "decompressed_sha256": "77242b93561d88887e4849a8a3d1ec729f7913d33f1e170bdf9f0f1af2c4a132"
+    },
+    {
+      "path": "repair-attempts/final-verification/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-scalar.cg.gz",
+      "bytes": 272,
+      "sha256": "735cf87adabfc7a61ad364a9e3038a4d877527b59a8231ecc54cdb3240f48baa",
+      "decompressed_bytes": 738,
+      "decompressed_sha256": "12481e163d166f23bbee1c2b41f855621dc1ca099d6188b7c39527fc3813f547"
+    },
+    {
+      "path": "repair-attempts/final-verification/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/nested-257.cg.gz",
+      "bytes": 268,
+      "sha256": "42f4471dcd5b24b04124e1bb66713ce4175327a98027805b1b71a10a04853ac5",
+      "decompressed_bytes": 847,
+      "decompressed_sha256": "0b4f6c5e83b3f5b509cfdf6cb950a158735a7892b764a050ef556c8f7195b400"
+    },
+    {
+      "path": "repair-attempts/final-verification/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/nested-258.cg.gz",
+      "bytes": 268,
+      "sha256": "75cfd7b4ddd2902927e7daa792186f29bb61496f46a466cbb141cadb683860aa",
+      "decompressed_bytes": 847,
+      "decompressed_sha256": "8ff3710701979769f8fa3e7d1781c2f5b3ff93f2daf52f32338b00af6790cd20"
+    },
+    {
+      "path": "repair-attempts/final-verification/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/nonrefund-451.cg.gz",
+      "bytes": 266,
+      "sha256": "d37896e94b65fdd7e339c624aa96a8d7c94517d2d03356d77075df72bed4d51d",
+      "decompressed_bytes": 797,
+      "decompressed_sha256": "0493d5ac1a25f511be525baa94ae8b7a81f2e7799334839bf8cac9aacad476fb"
+    },
+    {
+      "path": "repair-attempts/final-verification/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/ref-output-utf8.cg.gz",
+      "bytes": 105,
+      "sha256": "50eb4b3170d8876d031ad212756228a2bca00c34d2cf3ca3ca321f076a1fcc73",
+      "decompressed_bytes": 98,
+      "decompressed_sha256": "d1799e7865f83d357268f4ba96966fb5d888bda8097952910da187ac31c35b9e"
+    },
+    {
+      "path": "repair-attempts/final-verification/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/roots-0.cg.gz",
+      "bytes": 128,
+      "sha256": "74ae1be5767268078fc3db4594c568026ab4cb10a4b6f4962fdf457985cc7049",
+      "decompressed_bytes": 145,
+      "decompressed_sha256": "fdb42f91e6000e1d29a28387fa428b37b96034fd8f0b65148d109a784108bd1a"
+    },
+    {
+      "path": "repair-attempts/final-verification/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/roots-63.cg.gz",
+      "bytes": 129,
+      "sha256": "de9e1b69f8747982f04971ff806940af916338d436b6bfda6e5aff72c9317489",
+      "decompressed_bytes": 146,
+      "decompressed_sha256": "97509217dbc75a8da92381470228af0cc4e809ed1dae0e34b17304e1613da056"
+    },
+    {
+      "path": "repair-attempts/final-verification/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/roots-64.cg.gz",
+      "bytes": 129,
+      "sha256": "7c2d59cfea02c591a783b004a75349c9da57f450ef17a7187644d4c18630187b",
+      "decompressed_bytes": 146,
+      "decompressed_sha256": "1edf995c05282cfb74abac7a614b1e47f27abc15152208db157a96db7c76c4b3"
+    },
+    {
+      "path": "repair-attempts/final-verification/managed-product.log.gz",
+      "bytes": 766,
+      "sha256": "1c70562a0a8dc62f79eb2d1beedd2240227b5251a820b41f887ca19e571a592a",
+      "decompressed_bytes": 4639,
+      "decompressed_sha256": "5e297c60f201350b0c725de7f92d294bc0caa859477c346c5773223618f00bc0"
+    },
+    {
+      "path": "repair-attempts/final-verification/python-syntax.log.gz",
+      "bytes": 20,
+      "sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
+      "decompressed_bytes": 0,
+      "decompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "repair-attempts/final-verification/repair-selftests.log.gz",
+      "bytes": 584,
+      "sha256": "6f5da04d88641ac15f065826f966509aa1e0232103ceb76754f3423516deab44",
+      "decompressed_bytes": 2742,
+      "decompressed_sha256": "d64bb5a261c26396d8b14f2eff76b4cca964436dacda19e2cd49fb6b9b3cf6c6"
+    },
+    {
+      "path": "repair-attempts/final-verification/verification.json",
+      "bytes": 5990,
+      "sha256": "7dfcdd5a7f10eccf5f57d015c5b9c11859f6ee7823cd681279f7a20051ccb732"
+    },
+    {
+      "path": "repair-attempts/final-verification-v2/build.log.gz",
+      "bytes": 91,
+      "sha256": "5d57a939ab84570377481b9bd1f7637428c23f8c72279a5f084433d57281e842",
+      "decompressed_bytes": 72,
+      "decompressed_sha256": "a13905646e2aed93ec6ea9ed6ac91490a4e01f91af0215c3965279a910612149"
+    },
+    {
+      "path": "repair-attempts/final-verification-v2/diff.log.gz",
+      "bytes": 20,
+      "sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
+      "decompressed_bytes": 0,
+      "decompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "repair-attempts/final-verification-v2/managed-product.log.gz",
+      "bytes": 413,
+      "sha256": "3029df631c6176b8411bb908ce87389aa7e7a2a5d35147faf383169a600724a4",
+      "decompressed_bytes": 1059,
+      "decompressed_sha256": "3387a2fb13a75b84d758b3f88af9f1c357a03ced0ef48f2f405c0ac7f959024b"
+    },
+    {
+      "path": "repair-attempts/final-verification-v2/python-syntax.log.gz",
+      "bytes": 20,
+      "sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
+      "decompressed_bytes": 0,
+      "decompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "repair-attempts/final-verification-v2/repair-selftests.log.gz",
+      "bytes": 55,
+      "sha256": "46073730fe6076d19d50ecddce8fbed6041b61f19695cdf3a55c877561931d1a",
+      "decompressed_bytes": 113,
+      "decompressed_sha256": "2728d3c0dbf4bb039f9253a5ce16dc9f75f3cd6908fac8922f3347af1f192a1c"
+    },
+    {
+      "path": "repair-attempts/final-verification-v2/verification.json",
+      "bytes": 5993,
+      "sha256": "b562a5fddde5413b3004c2ed5224ac27f85a10df5ad9a44ba5a87b95ec117855"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/build.log.gz",
+      "bytes": 91,
+      "sha256": "5d57a939ab84570377481b9bd1f7637428c23f8c72279a5f084433d57281e842",
+      "decompressed_bytes": 72,
+      "decompressed_sha256": "a13905646e2aed93ec6ea9ed6ac91490a4e01f91af0215c3965279a910612149"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/diff.log.gz",
+      "bytes": 20,
+      "sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
+      "decompressed_bytes": 0,
+      "decompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/repair.json.gz",
+      "bytes": 51797,
+      "sha256": "19c75915de2da3aa4037d614c260705a437e32c49dacd63473fb2848a83a19cc",
+      "decompressed_bytes": 2077609,
+      "decompressed_sha256": "d2d06f0683087d1648f3db0807d9ee29c45457a652ad4e8a01f680ecfaab39c9"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/runner.py.gz",
+      "bytes": 6158,
+      "sha256": "a251fcbcc9b12de1062019c7b9385a96648a06f43ecb1dfe1dd7efef767546b6",
+      "decompressed_bytes": 21695,
+      "decompressed_sha256": "faa303b6f292b69095d8379e409b563f692cc9de246e63f61db8f8d4b0bc579c"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/arg-negative.cg.gz",
+      "bytes": 80,
+      "sha256": "09caee19974d7f26d0217ac479e526408d9bdea762b1f904807858d4c9e88fe3",
+      "decompressed_bytes": 66,
+      "decompressed_sha256": "f88bf8d060a01f39c19c732d4715510e8d8d24abf868c7245cff12115400cf91"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/arithmetic.cg.gz",
+      "bytes": 100,
+      "sha256": "fd05317e954ecb9372ff1b047cac8c764dcbd7f3504d83501d5b65b952deb4df",
+      "decompressed_bytes": 92,
+      "decompressed_sha256": "6bb01648fb74c2d6b4bd138d43b05e02a83540c2cc1e9b6acb5cb817ffbaa961"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/collect-guard-reject.cg.gz",
+      "bytes": 129,
+      "sha256": "4f411d8179a6ddab53bd092c12e558a4db91b9e223bfd6e864bebdd5706cdabf",
+      "decompressed_bytes": 184,
+      "decompressed_sha256": "85a1f6c3ed3079f5b3fb3c9da79ac46d2828fba6798cbb4de2bfd792d8a885ba"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/contract.cg.gz",
+      "bytes": 128,
+      "sha256": "3633524dfbdedb413f02bc22ecbb6a707cd936ca7633cec3edb2d16dd5bf07f6",
+      "decompressed_bytes": 145,
+      "decompressed_sha256": "ff80cc14e3fdf6b256592c57746e3a79102331fb00930becedef71d3226888af"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/dishonest-package/cgx2.toml.gz",
+      "bytes": 106,
+      "sha256": "a6ca12241e088d137bfbe4e225c3b080ccdbb962625a8a97abe0ccbd9ce5dd77",
+      "decompressed_bytes": 108,
+      "decompressed_sha256": "36380a176ca9b9a8ae9edeb56affa3581cf6cbe668d461647389e4d8283596b6"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/dishonest-package/src/lib.cg.gz",
+      "bytes": 102,
+      "sha256": "6bf39d48801f42a57ac1c81931070660e5ae71c961b7fad047160d9f3922820a",
+      "decompressed_bytes": 93,
+      "decompressed_sha256": "77a944146fa7137ddad11228e0756ee6bfb5f1532449ba7355f9f00559d3eca4"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/dishonest-package/src/main.cg.gz",
+      "bytes": 180,
+      "sha256": "e981db433fc92ab38c1e5a2dcdcfc873199bc20f351daac63445068e6825648e",
+      "decompressed_bytes": 276,
+      "decompressed_sha256": "93187b5c3ec1ef9df83c53df633482f91f0b3d4bc18ed0521e7dae3a636206fe"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/failed-arguments.cg.gz",
+      "bytes": 172,
+      "sha256": "9101a454d82598273218b0745251f663f149300a7c5d1dce8216affc59c6ec4b",
+      "decompressed_bytes": 233,
+      "decompressed_sha256": "b04accb558b5ea0ac27243179d0eaab319710306a231f09f71de071a326e9ccd"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/fault_driver.rs.gz",
+      "bytes": 412,
+      "sha256": "5498d4c0437c6084bacf70b5b10247c3b9d061b2a37ed524e5cc4ace59020bef",
+      "decompressed_bytes": 827,
+      "decompressed_sha256": "be09310c2d33c05a6ed8e08d6c1087b415cff314c2586bdf7eee5adba3f7aa45"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/ref-output-reject.cg.gz",
+      "bytes": 79,
+      "sha256": "7a7e0fb1b6c6421d473d5ae6b8213a89b72da50ff51c4f9540a4985224f1df31",
+      "decompressed_bytes": 72,
+      "decompressed_sha256": "e6d4b05164961b6a6775ec4d722e00e7dc8a11fc31e9ec37f0443872eac5a33b"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/alloc-0.cg.gz",
+      "bytes": 259,
+      "sha256": "4827e57ffb554b2416c7036b6654ff8d4d65f938d6be9f770800a5229d6670d4",
+      "decompressed_bytes": 753,
+      "decompressed_sha256": "dfb22b83d1dd2b43771426adb023413f36772c72d6c58159ec6baccfc7d385f2"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/alloc-225.cg.gz",
+      "bytes": 261,
+      "sha256": "afc844fe6708ec1d30e7a103d17dfaef6de7c382995668c69e8b5ab8685f98a4",
+      "decompressed_bytes": 755,
+      "decompressed_sha256": "3f12d152ea6d44f21bcf6e5f6ef98bd342ef9a0a23cd5fdffbef0fb37915c513"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/alloc-226.cg.gz",
+      "bytes": 261,
+      "sha256": "46275a0e4a5e69c9f0d4924205d05e10a5d5189fa4606503d826c72f042f4623",
+      "decompressed_bytes": 755,
+      "decompressed_sha256": "b56d0e0cdad156e40ef1b52e794ce458296524769cb5b4d609c2587fa9cbf305"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/fault-graph-root.cg.gz",
+      "bytes": 230,
+      "sha256": "87a3b8b87a09db51731b40631cbf6a907b43a141bdf6e4bf6fcb0db14b41deec",
+      "decompressed_bytes": 592,
+      "decompressed_sha256": "6722ea9ff8d50bb2d9ddf1531ec4179c34638d70e697e75f7758f8820d9a7106"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/fault-guard.cg.gz",
+      "bytes": 250,
+      "sha256": "00c9f18758291ac6859838d69fea10d9d18e6e7e0742cb4589e90053025357bf",
+      "decompressed_bytes": 687,
+      "decompressed_sha256": "d969c6c206beb43edfb5deb2f118080bb6d7a9ae50f61fb3cfc4a41a82a5d449"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-package/cgx2.toml.gz",
+      "bytes": 102,
+      "sha256": "c9cb1dd9089b5f1b1c6fb04ea58616391919b3d6cf2e6a3a2ff7a8c9cee0bcd2",
+      "decompressed_bytes": 104,
+      "decompressed_sha256": "97f1034a1a03002be880fa2fa0758bfd0b8d7552851646669de99f2a28d0c4a6"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-package/src/lib.cg.gz",
+      "bytes": 87,
+      "sha256": "c3388fa8ffc29546e396d966310ba6642481939cab989cf7bcd2240388137329",
+      "decompressed_bytes": 78,
+      "decompressed_sha256": "cb75c4d975b19d3af9e09449e8e1d2b681ca9c3218ae47062eb14f385fb87015"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-package/src/main.cg.gz",
+      "bytes": 263,
+      "sha256": "92e4fdec4167a100dc8b742a4323bea51438738dafcfba5f627a7bdc3e748ac9",
+      "decompressed_bytes": 703,
+      "decompressed_sha256": "77242b93561d88887e4849a8a3d1ec729f7913d33f1e170bdf9f0f1af2c4a132"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-scalar.cg.gz",
+      "bytes": 272,
+      "sha256": "735cf87adabfc7a61ad364a9e3038a4d877527b59a8231ecc54cdb3240f48baa",
+      "decompressed_bytes": 738,
+      "decompressed_sha256": "12481e163d166f23bbee1c2b41f855621dc1ca099d6188b7c39527fc3813f547"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/nested-257.cg.gz",
+      "bytes": 268,
+      "sha256": "42f4471dcd5b24b04124e1bb66713ce4175327a98027805b1b71a10a04853ac5",
+      "decompressed_bytes": 847,
+      "decompressed_sha256": "0b4f6c5e83b3f5b509cfdf6cb950a158735a7892b764a050ef556c8f7195b400"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/nested-258.cg.gz",
+      "bytes": 268,
+      "sha256": "75cfd7b4ddd2902927e7daa792186f29bb61496f46a466cbb141cadb683860aa",
+      "decompressed_bytes": 847,
+      "decompressed_sha256": "8ff3710701979769f8fa3e7d1781c2f5b3ff93f2daf52f32338b00af6790cd20"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/nonrefund-451.cg.gz",
+      "bytes": 266,
+      "sha256": "d37896e94b65fdd7e339c624aa96a8d7c94517d2d03356d77075df72bed4d51d",
+      "decompressed_bytes": 797,
+      "decompressed_sha256": "0493d5ac1a25f511be525baa94ae8b7a81f2e7799334839bf8cac9aacad476fb"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/ref-output-utf8.cg.gz",
+      "bytes": 105,
+      "sha256": "50eb4b3170d8876d031ad212756228a2bca00c34d2cf3ca3ca321f076a1fcc73",
+      "decompressed_bytes": 98,
+      "decompressed_sha256": "d1799e7865f83d357268f4ba96966fb5d888bda8097952910da187ac31c35b9e"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/roots-0.cg.gz",
+      "bytes": 128,
+      "sha256": "74ae1be5767268078fc3db4594c568026ab4cb10a4b6f4962fdf457985cc7049",
+      "decompressed_bytes": 145,
+      "decompressed_sha256": "fdb42f91e6000e1d29a28387fa428b37b96034fd8f0b65148d109a784108bd1a"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/roots-63.cg.gz",
+      "bytes": 129,
+      "sha256": "de9e1b69f8747982f04971ff806940af916338d436b6bfda6e5aff72c9317489",
+      "decompressed_bytes": 146,
+      "decompressed_sha256": "97509217dbc75a8da92381470228af0cc4e809ed1dae0e34b17304e1613da056"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/roots-64.cg.gz",
+      "bytes": 129,
+      "sha256": "7c2d59cfea02c591a783b004a75349c9da57f450ef17a7187644d4c18630187b",
+      "decompressed_bytes": 146,
+      "decompressed_sha256": "1edf995c05282cfb74abac7a614b1e47f27abc15152208db157a96db7c76c4b3"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/managed-product.log.gz",
+      "bytes": 393,
+      "sha256": "1bd4db89d4c0070a54c75c8908008ea5b9a9b8d91b0ccb09fa947b682a96891c",
+      "decompressed_bytes": 1670,
+      "decompressed_sha256": "12b849aa7ae98d810fd0a363c0bd8e84f570bffd95995db0aa09567ede85f8b0"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/python-syntax.log.gz",
+      "bytes": 20,
+      "sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
+      "decompressed_bytes": 0,
+      "decompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/repair-selftests.log.gz",
+      "bytes": 55,
+      "sha256": "ef44f27aef34f13fc6b41ae55a11d267bfe0715a456af5a0a1f983377c957d33",
+      "decompressed_bytes": 113,
+      "decompressed_sha256": "8fcd998b157584310cfdcd088a0cc239b4f12ab44f015e728d58a5119b41ae72"
+    },
+    {
+      "path": "repair-attempts/final-verification-v3/verification.json",
+      "bytes": 5993,
+      "sha256": "eee1200867dcf0e581915226e505787452cbda819ddeb76ccf2dd569ac0f9785"
+    },
+    {
+      "path": "repair-attempts/initial-budgets-rejections/repair.json.gz",
+      "bytes": 24817,
+      "sha256": "6ae14b41976f58afc039ea4878dd3dbf0de6c7144f0be2ceb1760e45cd2f70f1",
+      "decompressed_bytes": 715279,
+      "decompressed_sha256": "360eceb6817b07bdcb841e46a3477ef9069a1c6f9f9353c00842049dc3c0d900"
+    },
+    {
+      "path": "repair-attempts/initial-budgets-rejections/sources/crates/cgx2-syntax/default-managed-evidence/arg-negative.cg.gz",
+      "bytes": 80,
+      "sha256": "09caee19974d7f26d0217ac479e526408d9bdea762b1f904807858d4c9e88fe3",
+      "decompressed_bytes": 66,
+      "decompressed_sha256": "f88bf8d060a01f39c19c732d4715510e8d8d24abf868c7245cff12115400cf91"
+    },
+    {
+      "path": "repair-attempts/initial-budgets-rejections/sources/crates/cgx2-syntax/default-managed-evidence/arithmetic.cg.gz",
+      "bytes": 100,
+      "sha256": "fd05317e954ecb9372ff1b047cac8c764dcbd7f3504d83501d5b65b952deb4df",
+      "decompressed_bytes": 92,
+      "decompressed_sha256": "6bb01648fb74c2d6b4bd138d43b05e02a83540c2cc1e9b6acb5cb817ffbaa961"
+    },
+    {
+      "path": "repair-attempts/initial-budgets-rejections/sources/crates/cgx2-syntax/default-managed-evidence/collect-guard-reject.cg.gz",
+      "bytes": 129,
+      "sha256": "4f411d8179a6ddab53bd092c12e558a4db91b9e223bfd6e864bebdd5706cdabf",
+      "decompressed_bytes": 184,
+      "decompressed_sha256": "85a1f6c3ed3079f5b3fb3c9da79ac46d2828fba6798cbb4de2bfd792d8a885ba"
+    },
+    {
+      "path": "repair-attempts/initial-budgets-rejections/sources/crates/cgx2-syntax/default-managed-evidence/contract.cg.gz",
+      "bytes": 128,
+      "sha256": "3633524dfbdedb413f02bc22ecbb6a707cd936ca7633cec3edb2d16dd5bf07f6",
+      "decompressed_bytes": 145,
+      "decompressed_sha256": "ff80cc14e3fdf6b256592c57746e3a79102331fb00930becedef71d3226888af"
+    },
+    {
+      "path": "repair-attempts/initial-budgets-rejections/sources/crates/cgx2-syntax/default-managed-evidence/dishonest-package/cgx2.toml.gz",
+      "bytes": 106,
+      "sha256": "a6ca12241e088d137bfbe4e225c3b080ccdbb962625a8a97abe0ccbd9ce5dd77",
+      "decompressed_bytes": 108,
+      "decompressed_sha256": "36380a176ca9b9a8ae9edeb56affa3581cf6cbe668d461647389e4d8283596b6"
+    },
+    {
+      "path": "repair-attempts/initial-budgets-rejections/sources/crates/cgx2-syntax/default-managed-evidence/dishonest-package/src/lib.cg.gz",
+      "bytes": 102,
+      "sha256": "6bf39d48801f42a57ac1c81931070660e5ae71c961b7fad047160d9f3922820a",
+      "decompressed_bytes": 93,
+      "decompressed_sha256": "77a944146fa7137ddad11228e0756ee6bfb5f1532449ba7355f9f00559d3eca4"
+    },
+    {
+      "path": "repair-attempts/initial-budgets-rejections/sources/crates/cgx2-syntax/default-managed-evidence/dishonest-package/src/main.cg.gz",
+      "bytes": 180,
+      "sha256": "e981db433fc92ab38c1e5a2dcdcfc873199bc20f351daac63445068e6825648e",
+      "decompressed_bytes": 276,
+      "decompressed_sha256": "93187b5c3ec1ef9df83c53df633482f91f0b3d4bc18ed0521e7dae3a636206fe"
+    },
+    {
+      "path": "repair-attempts/initial-budgets-rejections/sources/crates/cgx2-syntax/default-managed-evidence/failed-arguments.cg.gz",
+      "bytes": 172,
+      "sha256": "9101a454d82598273218b0745251f663f149300a7c5d1dce8216affc59c6ec4b",
+      "decompressed_bytes": 233,
+      "decompressed_sha256": "b04accb558b5ea0ac27243179d0eaab319710306a231f09f71de071a326e9ccd"
+    },
+    {
+      "path": "repair-attempts/initial-budgets-rejections/sources/crates/cgx2-syntax/default-managed-evidence/ref-output-reject.cg.gz",
+      "bytes": 79,
+      "sha256": "7a7e0fb1b6c6421d473d5ae6b8213a89b72da50ff51c4f9540a4985224f1df31",
+      "decompressed_bytes": 72,
+      "decompressed_sha256": "e6d4b05164961b6a6775ec4d722e00e7dc8a11fc31e9ec37f0443872eac5a33b"
+    },
+    {
+      "path": "repair-attempts/initial-budgets-rejections/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/alloc-0.cg.gz",
+      "bytes": 259,
+      "sha256": "4827e57ffb554b2416c7036b6654ff8d4d65f938d6be9f770800a5229d6670d4",
+      "decompressed_bytes": 753,
+      "decompressed_sha256": "dfb22b83d1dd2b43771426adb023413f36772c72d6c58159ec6baccfc7d385f2"
+    },
+    {
+      "path": "repair-attempts/initial-budgets-rejections/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/alloc-225.cg.gz",
+      "bytes": 261,
+      "sha256": "afc844fe6708ec1d30e7a103d17dfaef6de7c382995668c69e8b5ab8685f98a4",
+      "decompressed_bytes": 755,
+      "decompressed_sha256": "3f12d152ea6d44f21bcf6e5f6ef98bd342ef9a0a23cd5fdffbef0fb37915c513"
+    },
+    {
+      "path": "repair-attempts/initial-budgets-rejections/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/alloc-226.cg.gz",
+      "bytes": 261,
+      "sha256": "46275a0e4a5e69c9f0d4924205d05e10a5d5189fa4606503d826c72f042f4623",
+      "decompressed_bytes": 755,
+      "decompressed_sha256": "b56d0e0cdad156e40ef1b52e794ce458296524769cb5b4d609c2587fa9cbf305"
+    },
+    {
+      "path": "repair-attempts/initial-budgets-rejections/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-package/cgx2.toml.gz",
+      "bytes": 102,
+      "sha256": "c9cb1dd9089b5f1b1c6fb04ea58616391919b3d6cf2e6a3a2ff7a8c9cee0bcd2",
+      "decompressed_bytes": 104,
+      "decompressed_sha256": "97f1034a1a03002be880fa2fa0758bfd0b8d7552851646669de99f2a28d0c4a6"
+    },
+    {
+      "path": "repair-attempts/initial-budgets-rejections/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-package/src/lib.cg.gz",
+      "bytes": 87,
+      "sha256": "c3388fa8ffc29546e396d966310ba6642481939cab989cf7bcd2240388137329",
+      "decompressed_bytes": 78,
+      "decompressed_sha256": "cb75c4d975b19d3af9e09449e8e1d2b681ca9c3218ae47062eb14f385fb87015"
+    },
+    {
+      "path": "repair-attempts/initial-budgets-rejections/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-package/src/main.cg.gz",
+      "bytes": 263,
+      "sha256": "92e4fdec4167a100dc8b742a4323bea51438738dafcfba5f627a7bdc3e748ac9",
+      "decompressed_bytes": 703,
+      "decompressed_sha256": "77242b93561d88887e4849a8a3d1ec729f7913d33f1e170bdf9f0f1af2c4a132"
+    },
+    {
+      "path": "repair-attempts/initial-budgets-rejections/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/hidden-scalar.cg.gz",
+      "bytes": 272,
+      "sha256": "735cf87adabfc7a61ad364a9e3038a4d877527b59a8231ecc54cdb3240f48baa",
+      "decompressed_bytes": 738,
+      "decompressed_sha256": "12481e163d166f23bbee1c2b41f855621dc1ca099d6188b7c39527fc3813f547"
+    },
+    {
+      "path": "repair-attempts/initial-budgets-rejections/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/nested-257.cg.gz",
+      "bytes": 268,
+      "sha256": "42f4471dcd5b24b04124e1bb66713ce4175327a98027805b1b71a10a04853ac5",
+      "decompressed_bytes": 847,
+      "decompressed_sha256": "0b4f6c5e83b3f5b509cfdf6cb950a158735a7892b764a050ef556c8f7195b400"
+    },
+    {
+      "path": "repair-attempts/initial-budgets-rejections/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/nested-258.cg.gz",
+      "bytes": 268,
+      "sha256": "75cfd7b4ddd2902927e7daa792186f29bb61496f46a466cbb141cadb683860aa",
+      "decompressed_bytes": 847,
+      "decompressed_sha256": "8ff3710701979769f8fa3e7d1781c2f5b3ff93f2daf52f32338b00af6790cd20"
+    },
+    {
+      "path": "repair-attempts/initial-budgets-rejections/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/nonrefund-451.cg.gz",
+      "bytes": 266,
+      "sha256": "d37896e94b65fdd7e339c624aa96a8d7c94517d2d03356d77075df72bed4d51d",
+      "decompressed_bytes": 797,
+      "decompressed_sha256": "0493d5ac1a25f511be525baa94ae8b7a81f2e7799334839bf8cac9aacad476fb"
+    },
+    {
+      "path": "repair-attempts/initial-budgets-rejections/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/ref-output-utf8.cg.gz",
+      "bytes": 105,
+      "sha256": "50eb4b3170d8876d031ad212756228a2bca00c34d2cf3ca3ca321f076a1fcc73",
+      "decompressed_bytes": 98,
+      "decompressed_sha256": "d1799e7865f83d357268f4ba96966fb5d888bda8097952910da187ac31c35b9e"
+    },
+    {
+      "path": "repair-attempts/initial-budgets-rejections/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/roots-0.cg.gz",
+      "bytes": 254,
+      "sha256": "9802dd2bc84a20fd3547f148a1fef0cfcca35d46410039d10acdec088a1bd316",
+      "decompressed_bytes": 704,
+      "decompressed_sha256": "e9649a19ee437b98b5c03e8abc70629a18ec7fa14a9fe2980cf985ef7c68fc61"
+    },
+    {
+      "path": "repair-attempts/initial-budgets-rejections/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/roots-63.cg.gz",
+      "bytes": 255,
+      "sha256": "b6f6387a25bd1450bf0b6d3b59e928e9b272293d295085aa55f052473d114f4d",
+      "decompressed_bytes": 705,
+      "decompressed_sha256": "de00d271f5e05ff7c78539a17b841b4f6c59f6c4e1822572253c9394fb7ccad7"
+    },
+    {
+      "path": "repair-attempts/initial-budgets-rejections/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/roots-64.cg.gz",
+      "bytes": 255,
+      "sha256": "8725fa03a58d1c0d25279d1c685abb0fe2dbca360f7b110d43b0422c07520f51",
+      "decompressed_bytes": 705,
+      "decompressed_sha256": "986df49064d0dd3578caec6628e29c5942abad64e09ccee2a82daf78c04010ed"
+    },
+    {
+      "path": "repair-attempts/initial-faults/repair.json.gz",
+      "bytes": 27289,
+      "sha256": "0f1794f485ab0686fd78631ec97945d92993bbb4ae4ec217573b144bcc99d21b",
+      "decompressed_bytes": 1323850,
+      "decompressed_sha256": "b4f81251c8b5686b207923d6e0a1ee79427ff7110c745d7f634aff1114fcd8fd"
+    },
+    {
+      "path": "repair-attempts/initial-faults/runner.py.gz",
+      "bytes": 5965,
+      "sha256": "07918e524d9ac6a5ca1c1de24cfbadceebe88d2515d0ac180031e58f2f26e5d4",
+      "decompressed_bytes": 20925,
+      "decompressed_sha256": "ccc660dd5b13f217fc2ab8d91699b3d934fae67dbc342f48e69d107b7e7931af"
+    },
+    {
+      "path": "repair-attempts/initial-faults/sources/crates/cgx2-syntax/default-managed-evidence/fault_driver.rs.gz",
+      "bytes": 412,
+      "sha256": "5498d4c0437c6084bacf70b5b10247c3b9d061b2a37ed524e5cc4ace59020bef",
+      "decompressed_bytes": 827,
+      "decompressed_sha256": "be09310c2d33c05a6ed8e08d6c1087b415cff314c2586bdf7eee5adba3f7aa45"
+    },
+    {
+      "path": "repair-attempts/initial-faults/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/fault-graph-root.cg.gz",
+      "bytes": 230,
+      "sha256": "87a3b8b87a09db51731b40631cbf6a907b43a141bdf6e4bf6fcb0db14b41deec",
+      "decompressed_bytes": 592,
+      "decompressed_sha256": "6722ea9ff8d50bb2d9ddf1531ec4179c34638d70e697e75f7758f8820d9a7106"
+    },
+    {
+      "path": "repair-attempts/initial-faults/sources/crates/cgx2-syntax/default-managed-evidence/repair-fixtures/fault-guard.cg.gz",
+      "bytes": 250,
+      "sha256": "00c9f18758291ac6859838d69fea10d9d18e6e7e0742cb4589e90053025357bf",
+      "decompressed_bytes": 687,
+      "decompressed_sha256": "d969c6c206beb43edfb5deb2f118080bb6d7a9ae50f61fb3cfc4a41a82a5d449"
+    },
+    {
+      "path": "repair-attempts/staged-whitespace-first.log",
+      "bytes": 112,
+      "sha256": "62eb9bcd4c2e4e0090daccb2bdddc33dd4a0e1bd6788f4b7bd7dd28633bae997"
+    },
+    {
+      "path": "repair-fixtures/alloc-0.cg",
+      "bytes": 753,
+      "sha256": "dfb22b83d1dd2b43771426adb023413f36772c72d6c58159ec6baccfc7d385f2"
+    },
+    {
+      "path": "repair-fixtures/alloc-225.cg",
+      "bytes": 755,
+      "sha256": "3f12d152ea6d44f21bcf6e5f6ef98bd342ef9a0a23cd5fdffbef0fb37915c513"
+    },
+    {
+      "path": "repair-fixtures/alloc-226.cg",
+      "bytes": 755,
+      "sha256": "b56d0e0cdad156e40ef1b52e794ce458296524769cb5b4d609c2587fa9cbf305"
+    },
+    {
+      "path": "repair-fixtures/fault-graph-root.cg",
+      "bytes": 592,
+      "sha256": "6722ea9ff8d50bb2d9ddf1531ec4179c34638d70e697e75f7758f8820d9a7106"
+    },
+    {
+      "path": "repair-fixtures/fault-guard.cg",
+      "bytes": 687,
+      "sha256": "d969c6c206beb43edfb5deb2f118080bb6d7a9ae50f61fb3cfc4a41a82a5d449"
+    },
+    {
+      "path": "repair-fixtures/hidden-package/cgx2.toml",
+      "bytes": 104,
+      "sha256": "97f1034a1a03002be880fa2fa0758bfd0b8d7552851646669de99f2a28d0c4a6"
+    },
+    {
+      "path": "repair-fixtures/hidden-package/src/lib.cg",
+      "bytes": 77,
+      "sha256": "13ef93a54b0c60e9cab262c540a9c70507862adcb68bd048b1d2f2bde502a7cb"
+    },
+    {
+      "path": "repair-fixtures/hidden-package/src/main.cg",
+      "bytes": 703,
+      "sha256": "77242b93561d88887e4849a8a3d1ec729f7913d33f1e170bdf9f0f1af2c4a132"
+    },
+    {
+      "path": "repair-fixtures/hidden-scalar.cg",
+      "bytes": 738,
+      "sha256": "12481e163d166f23bbee1c2b41f855621dc1ca099d6188b7c39527fc3813f547"
+    },
+    {
+      "path": "repair-fixtures/nested-257.cg",
+      "bytes": 847,
+      "sha256": "0b4f6c5e83b3f5b509cfdf6cb950a158735a7892b764a050ef556c8f7195b400"
+    },
+    {
+      "path": "repair-fixtures/nested-258.cg",
+      "bytes": 847,
+      "sha256": "8ff3710701979769f8fa3e7d1781c2f5b3ff93f2daf52f32338b00af6790cd20"
+    },
+    {
+      "path": "repair-fixtures/nonrefund-451.cg",
+      "bytes": 797,
+      "sha256": "0493d5ac1a25f511be525baa94ae8b7a81f2e7799334839bf8cac9aacad476fb"
+    },
+    {
+      "path": "repair-fixtures/ref-output-utf8.cg",
+      "bytes": 98,
+      "sha256": "d1799e7865f83d357268f4ba96966fb5d888bda8097952910da187ac31c35b9e"
+    },
+    {
+      "path": "repair-fixtures/roots-0.cg",
+      "bytes": 145,
+      "sha256": "fdb42f91e6000e1d29a28387fa428b37b96034fd8f0b65148d109a784108bd1a"
+    },
+    {
+      "path": "repair-fixtures/roots-63.cg",
+      "bytes": 146,
+      "sha256": "97509217dbc75a8da92381470228af0cc4e809ed1dae0e34b17304e1613da056"
+    },
+    {
+      "path": "repair-fixtures/roots-64.cg",
+      "bytes": 146,
+      "sha256": "1edf995c05282cfb74abac7a614b1e47f27abc15152208db157a96db7c76c4b3"
+    },
+    {
+      "path": "repair-summary.json",
+      "bytes": 1850,
+      "sha256": "74ab91690ce339f12fbcf8136c77772f7d59fc166f3438ff4fb44201991240cf"
+    },
+    {
+      "path": "repair_runner.py",
+      "bytes": 21695,
+      "sha256": "faa303b6f292b69095d8379e409b563f692cc9de246e63f61db8f8d4b0bc579c"
+    },
+    {
+      "path": "run.py",
+      "bytes": 14366,
+      "sha256": "daf29ba711bfb2d143d62f590067c0b92bce4bcae32aa670c05564ef3049898a"
+    },
+    {
+      "path": "test_repair_runner.py",
+      "bytes": 5325,
+      "sha256": "56f977b287844aaafc279f8bb7a8a2d092b6cad5b8ccac3ffd945b57f34e8bc3"
+    },
+    {
+      "path": "verify.py",
+      "bytes": 7353,
+      "sha256": "53f62b5eab8c12863b6f6cf6fcfb4d9be400dbe75bfb437dedb189bdbc8be9f6"
+    }
+  ]
+}

@@ -1,0 +1,160 @@
+{
+  "schema_version": 2,
+  "base": "3c1cfe2aeba2f7135e4069709bf633c082d2aab0",
+  "checks": [
+    {
+      "name": "build",
+      "command": [
+        "cargo",
+        "build",
+        "-p",
+        "cgx2-cli",
+        "-p",
+        "cgx2c",
+        "--features",
+        "cgx2-cli/failure-injection-test",
+        "--offline",
+        "--locked"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/00f8/lang",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.031,
+      "stdout_bytes": 72,
+      "stdout_sha256": "a13905646e2aed93ec6ea9ed6ac91490a4e01f91af0215c3965279a910612149",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "build.log.gz",
+      "log_sha256": "a13905646e2aed93ec6ea9ed6ac91490a4e01f91af0215c3965279a910612149",
+      "passed": true,
+      "status": "passed"
+    },
+    {
+      "name": "repair-selftests",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "/home/john-riley/.codex/worktrees/00f8/lang/crates/cgx2-syntax/default-managed-evidence",
+        "-p",
+        "test_repair_runner.py"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/00f8/lang",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.168,
+      "stdout_bytes": 113,
+      "stdout_sha256": "2728d3c0dbf4bb039f9253a5ce16dc9f75f3cd6908fac8922f3347af1f192a1c",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "repair-selftests.log.gz",
+      "log_sha256": "2728d3c0dbf4bb039f9253a5ce16dc9f75f3cd6908fac8922f3347af1f192a1c",
+      "passed": true,
+      "status": "passed"
+    },
+    {
+      "name": "managed-product",
+      "command": [
+        "/usr/bin/python3",
+        "/home/john-riley/.codex/worktrees/00f8/lang/crates/cgx2-syntax/default-managed-evidence/run.py",
+        "--binary-dir",
+        "/home/john-riley/.codex/worktrees/00f8/lang/target/release-managed-evidence-repair/debug",
+        "--output-dir",
+        "/home/john-riley/.codex/worktrees/00f8/lang/crates/cgx2-syntax/default-managed-evidence/repair-attempts/final-verification-v2/managed-product",
+        "--repair-only"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/00f8/lang",
+      "exit": 1,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.065,
+      "stdout_bytes": 1059,
+      "stdout_sha256": "3387a2fb13a75b84d758b3f88af9f1c357a03ced0ef48f2f405c0ac7f959024b",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "managed-product.log.gz",
+      "log_sha256": "3387a2fb13a75b84d758b3f88af9f1c357a03ced0ef48f2f405c0ac7f959024b",
+      "passed": false,
+      "status": "failed"
+    },
+    {
+      "name": "python-syntax",
+      "command": [
+        "/usr/bin/python3",
+        "-c",
+        "import ast,sys; [ast.parse(open(p).read(),filename=p) for p in sys.argv[1:]]",
+        "/home/john-riley/.codex/worktrees/00f8/lang/crates/cgx2-syntax/default-managed-evidence/run.py",
+        "/home/john-riley/.codex/worktrees/00f8/lang/crates/cgx2-syntax/default-managed-evidence/verify.py",
+        "/home/john-riley/.codex/worktrees/00f8/lang/crates/cgx2-syntax/default-managed-evidence/repair_runner.py",
+        "/home/john-riley/.codex/worktrees/00f8/lang/crates/cgx2-syntax/default-managed-evidence/test_repair_runner.py"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/00f8/lang",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.013,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "python-syntax.log.gz",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "passed": true,
+      "status": "passed"
+    },
+    {
+      "name": "diff",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/home/john-riley/.codex/worktrees/00f8/lang",
+      "exit": 0,
+      "reason": "exit",
+      "signal": null,
+      "overflow_stream": null,
+      "duration_seconds": 0.075,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "diff.log.gz",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "passed": true,
+      "status": "passed"
+    }
+  ],
+  "checkpoint_complete": false,
+  "release_complete": false,
+  "environment": {
+    "RUSTUP_TOOLCHAIN": "1.98.1",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/home/john-riley/.codex/worktrees/00f8/lang/target/release-managed-evidence-repair",
+    "TMPDIR": "/home/john-riley/.codex/worktrees/00f8/lang/target/tmp-managed-evidence-repair",
+    "LIBRARY_PATH": "/tmp/cgx2-wave22-lib"
+  },
+  "bounds": {
+    "wall_seconds": 900,
+    "cpu_seconds_per_process": 900,
+    "address_space_bytes_per_process": 4294967296,
+    "file_size_bytes_per_process": 536870912,
+    "retained_combined_bytes": 8388608,
+    "aggregate_cgroup_isolation": false
+  },
+  "root_manifests_sha256": {
+    "Cargo.toml": "9400b7dfbc400f91b3d648265dbd18001ec96157eb202fe88e3b95a312c9ffd7",
+    "Cargo.lock": "ea7678242cb40c8425c2b9875215f7024071c684cab59399d1d8a74a96750e3a"
+  },
+  "runner_sha256": "10228c19ab3b9b8d9a73672efd45cc8cb1a6568d4f8622f7d61cc0dc1fb9bbc7",
+  "leak_negative_control": "historical host block remains open; not rerun",
+  "external_audit_performance": "unrun"
+}

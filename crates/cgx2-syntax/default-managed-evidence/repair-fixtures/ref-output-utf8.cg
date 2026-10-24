@@ -1,0 +1,3 @@
+# λ🙂 UTF-8 byte spans
+fn main() -> managed.Ref<i64> effects(ManagedAlloc):
+    managed.ref(1)
