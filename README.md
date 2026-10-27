@@ -2,11 +2,21 @@
 
 CGx2 is a proposed programming language and toolchain for memory-safe native programs, short human-readable source, and fast LLM-assisted development. It combines automatically managed memory with explicit owned values and programmer-controlled collection regions. It also aims to make program structure, effects, contracts, and compiler feedback easy for both people and coding agents to inspect.
 
-**Status: runnable preview, incomplete language.** The `cgx2` CLI checks and interprets a scalar `.cg` subset and a bounded memory script profile, including owned/managed conversions, through the memory runtime. `cgx2c` builds supported scalar source and checked local scalar packages into native binaries. A memory report, deterministic source corpora, a 1,000-seed direct-runtime state machine, scalar Rust/Python source emitters, a pure-scalar `.cgnb` notebook UI with selected-cell rerun, a local package graph, an advisory security policy, a bounded Python bridge, a locally calibrated CPU map policy, a native scalar pilot, and a finite-domain verification command exist. There is no general native memory compiler, real PyTorch verification on this host, `.cg` Python calls, source contracts/effect enforcement, GPU backend, or measured CGx2 LLM/runtime benchmark win yet. CGx2 uses `.cg` source files and `.cgnb` notebooks.
+**Status: runnable preview, incomplete language.** The [first-release guide](docs/first-release/README.md) documents supported commands, profiles, and limitations. The [release completion ledger](plans/release-completion/README.md) records accepted work and remaining gates. General aggregate ownership is still in progress; publishing the existing branch history does not complete that work or qualify a release.
 
-Read the [language design](docs/language-design.md), [validation plan](docs/validation-plan.md), and [implementation roadmap](docs/superpowers/plans/2026-10-22-first-compiler.md).
+## Start here
 
-The [delivery roadmap](plans/roadmap.md) defines the repeated review-and-integration loop. [Wave 8](plans/wave8/README.md) records the latest integrated components, the [Wave 9 ledger](plans/wave9/README.md) assigns independent coding chats, and the [progress estimate](plans/progress.md) records the release gaps. Each chat uses a separate Git worktree and stops for user review after its bounded deliverable.
+| Purpose | Document |
+| --- | --- |
+| Build, run, and inspect supported features | [First-release guide](docs/first-release/README.md) |
+| Current status and remaining acceptance gates | [Release completion ledger](plans/release-completion/README.md) |
+| Active aggregate ownership delivery | [S2b-A plan](plans/release-completion/s2b-general-ownership/plan.md) |
+| Language and memory model | [Language design](docs/language-design.md) |
+| Correctness and benchmark requirements | [Validation plan](docs/validation-plan.md) |
+| Historical implementation and review sequence | [Delivery roadmap](plans/roadmap.md) |
+| Branch history consolidation and inventory | [Main integration record](docs/branch-integration.md) |
+
+Development plans, reviews, and evidence remain in their original `plans/` locations so existing links stay usable. Historical wave plans describe their state at the time; use the release completion ledger for current coordination.
 
 ## What the first usable release must do
 

@@ -1,5 +1,7 @@
 # CGx2 coordinator handoff: review Wave 21, then plan Wave 22
 
+> Historical Wave 21 snapshot. Its branch and dispatch instructions are retained for provenance. For current work, start with the [release completion ledger](plans/release-completion/README.md) and [main integration record](docs/branch-integration.md).
+
 This is a snapshot for the next coordinator chat. It is **not** evidence that Wave 21 is complete. Start Wave 22 only after the user says the Wave 21 workers are done. Refresh branch, worktree, chat, test, and knowledge-graph state before acting.
 
 ## Project and current state

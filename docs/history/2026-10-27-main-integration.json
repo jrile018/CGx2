@@ -1,0 +1,571 @@
+{
+  "date": "2026-10-27",
+  "repository": "https://github.com/jrile018/CGx2",
+  "reviewed_source_baseline": "96ca9be98df6b0a037c83877487e1d48ef319dce",
+  "github_main_before": "b6e4f1d0d6fd11407066d5b2d7e111337c595271",
+  "original_branch_count": 93,
+  "original_branch_history_commit_count": 357,
+  "distinct_plan_paths": 2533,
+  "branches": [
+    {
+      "branch": "main",
+      "commit": "ce708328a06e5a48182107a0d0e4ffe77eef7d5d",
+      "uploaded_branch": "riley/local-main",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "riley/managed-core-auth-repair",
+      "commit": "a095a136c789ccaed6777cae8ea70e58f7e2b856",
+      "uploaded_branch": "riley/managed-core-auth-repair",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/managed-evidence-parity-repair",
+      "commit": "23b050fad0f49ad7ccfcf1f6404ec5015e6a0f9f",
+      "uploaded_branch": "riley/managed-evidence-parity-repair",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/managed-result-equality-repair",
+      "commit": "53d37c1d668fe5e928fe396df5b9715bc102786e",
+      "uploaded_branch": "riley/managed-result-equality-repair",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/native-constructors",
+      "commit": "ce7880dbc8b7f7c368e4a32433d5c24e940e3540",
+      "uploaded_branch": "riley/native-constructors",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/ordinary-api-visibility-repair",
+      "commit": "21452c20bcbef9efec1b33bcd84f1f8d218c8bea",
+      "uploaded_branch": "riley/ordinary-api-visibility-repair",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/ordinary-borrow-nominal-repair",
+      "commit": "35a8618996c2f89fadd3b89fa8f4a123765688e6",
+      "uploaded_branch": "riley/ordinary-borrow-nominal-repair",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/ordinary-core-admission-repair",
+      "commit": "93303003ceececb2705b929265ea585415710380",
+      "uploaded_branch": "riley/ordinary-core-admission-repair",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/ordinary-harness-finalization",
+      "commit": "4c4f07eb9d69a41ef0ba2d68d116274c59b79d28",
+      "uploaded_branch": "riley/ordinary-harness-finalization",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/ordinary-harness-hardening",
+      "commit": "d43eb9fa43da6c19385f2c54195de506193e143d",
+      "uploaded_branch": "riley/ordinary-harness-hardening",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/ordinary-parity-repair",
+      "commit": "80bd0372773a9d44ba74d2a926cfe750e7ffd54c",
+      "uploaded_branch": "riley/ordinary-parity-repair",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/ordinary-recovery-roots",
+      "commit": "0503ed95691a7411fb0d8615acd20cb69e3ffd3c",
+      "uploaded_branch": "riley/ordinary-recovery-roots",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/ordinary-roots-repair",
+      "commit": "f255dfe1c9ebdd4444b581a0083af4c002a751f8",
+      "uploaded_branch": "riley/ordinary-roots-repair",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/owned-result",
+      "commit": "d88b57acd14cd299b029a46b197259bb2ec32079",
+      "uploaded_branch": "riley/owned-result",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/owned-result-runner-bounds",
+      "commit": "cc69d8d2212529f5caf7fd2442bce317b6e880d0",
+      "uploaded_branch": "riley/owned-result-runner-bounds",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/owned-symbol-compatibility",
+      "commit": "03e35bf809e6a068f1280d59257a0d5145057f32",
+      "uploaded_branch": "riley/owned-symbol-compatibility",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/package-effect-security-analysis",
+      "commit": "59446db918b0ed11340604bedb1d7cd4100c89e5",
+      "uploaded_branch": "riley/package-effect-security-analysis",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/pinned-python-runtime",
+      "commit": "1d812319fdb93590baa209104a32e0ecf648d86f",
+      "uploaded_branch": "riley/pinned-python-runtime",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/release-completion-plan",
+      "commit": "96ca9be98df6b0a037c83877487e1d48ef319dce",
+      "uploaded_branch": "riley/release-completion-plan",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "riley/release-core",
+      "commit": "8fdbd786ae6b40afcf61e46a8903a1ed5a4b9844",
+      "uploaded_branch": "riley/release-core",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/release-docs",
+      "commit": "9e96ac41db227eac3fa69a37b78bf98f1a1bc850",
+      "uploaded_branch": "riley/release-docs",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/release-evidence",
+      "commit": "d224bf11fee9a0c6ad9589069c2ae5b9c3cb1c30",
+      "uploaded_branch": "riley/release-evidence",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/release-execution",
+      "commit": "b597342a8aab3699cb0a785a8f25d115bc9cde9f",
+      "uploaded_branch": "riley/release-execution",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/release-memory",
+      "commit": "26f654bcf25f7f79860806aa055452f8badafecd",
+      "uploaded_branch": "riley/release-memory",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/release-native-sdk",
+      "commit": "4bc27a9c7c73bc94bb9416518031f5dbd941a593",
+      "uploaded_branch": "riley/release-native-sdk",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/release-notebook-contracts",
+      "commit": "ff3e715e11f8d035a063717b1aa97f3126bd0463",
+      "uploaded_branch": "riley/release-notebook-contracts",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/release-ownership",
+      "commit": "f6fd925ebb5c702a7dd61916f693070869756a1e",
+      "uploaded_branch": "riley/release-ownership",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/release-s2a",
+      "commit": "16028e7d4c78f3974c9e4a2f24878debeec56612",
+      "uploaded_branch": "riley/release-s2a",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/release-verification",
+      "commit": "eab9acddabbea0bf04741986cc9db5676d674f29",
+      "uploaded_branch": "riley/release-verification",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/release-worker",
+      "commit": "055adc66717dd7cae2eb513f95435d145f4c5f84",
+      "uploaded_branch": "riley/release-worker",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/repair-analysis-contracts",
+      "commit": "987529cd08fd0bc672869ce6b65bb3f2482ec379",
+      "uploaded_branch": "riley/repair-analysis-contracts",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/repair-verifier-size",
+      "commit": "0b3d0f8cb91aa3de4f3ce759b9341b4a2631e8e1",
+      "uploaded_branch": "riley/repair-verifier-size",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/s1-review-docs-current",
+      "commit": "b080f231f1bd150ee6d202c0aaeaf76c8c6d1f15",
+      "uploaded_branch": "riley/s1-review-docs-current",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/s2a-api-text-repair",
+      "commit": "7015726f6310f61c6a466b55bf1fc6227d3313a4",
+      "uploaded_branch": "riley/s2a-api-text-repair",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/s2a-match-flow-repair",
+      "commit": "03f760761d473b3783a827d97ac4cb90d486a111",
+      "uploaded_branch": "riley/s2a-match-flow-repair",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/s2a-native-record-repair",
+      "commit": "d4e61ba127ad103985ee112ea954ee9f78fd07fb",
+      "uploaded_branch": "riley/s2a-native-record-repair",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/s2b-default-managed",
+      "commit": "bc4ba95e710eaed3816291fdc67de1478e0456f5",
+      "uploaded_branch": "riley/s2b-default-managed",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/s2b-emitted-targets-repair",
+      "commit": "c0dabf519243a6db243f44fa77fd2c4b392714f8",
+      "uploaded_branch": "riley/s2b-emitted-targets-repair",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/s2b-foundation",
+      "commit": "414c71f0cae8c66c822f0b6fb2be83219c1f4c95",
+      "uploaded_branch": "riley/s2b-foundation",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/s2b-interpreter-output",
+      "commit": "65a94484f4f33a6095a32453aba6bd102d695667",
+      "uploaded_branch": "riley/s2b-interpreter-output",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/s2b-memory",
+      "commit": "74cfa2bd371f87fe22f79b0c38bfc4aa8785c862",
+      "uploaded_branch": "riley/s2b-memory",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/s2b-native-guards",
+      "commit": "fe9714e018b2561850eaaebfaf5463b90ad0de65",
+      "uploaded_branch": "riley/s2b-native-guards",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/s2b-ordinary-memory",
+      "commit": "a3b98d7374de8aea90a610a73c99b04deb8857a1",
+      "uploaded_branch": "riley/s2b-ordinary-memory",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/s2b-ordinary-owned",
+      "commit": "006d267d414acb93959f66b63e8ed953167219b6",
+      "uploaded_branch": "riley/s2b-ordinary-owned",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/s2b-package-binders",
+      "commit": "24129749260670c12de741cf6db058568f113eba",
+      "uploaded_branch": "riley/s2b-package-binders",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/s2b-report-layout",
+      "commit": "d0a6055435bb2c2e2182f347f2478cd9e30febd2",
+      "uploaded_branch": "riley/s2b-report-layout",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/s2b-semantic-resolution",
+      "commit": "559c390c9c53c15cf2c456572b64cc3c91e342d1",
+      "uploaded_branch": "riley/s2b-semantic-resolution",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/s2ba-general-ownership",
+      "commit": "e50bc3bf28b8aebf7faf8e12564372599feda06b",
+      "uploaded_branch": "riley/s2ba-general-ownership",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "riley/s2bf-api-visibility",
+      "commit": "762d9ccb43d8b5b22ffa38532abbaf7ac88a3819",
+      "uploaded_branch": "riley/s2bf-api-visibility",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/source-specialization",
+      "commit": "74d1116b36a80a44d3d97e3d5a331a1c3026fe94",
+      "uploaded_branch": "riley/source-specialization",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/wave11-solver-proof",
+      "commit": "d27b8745216be78043a38ed6127a5bc3ca510cba",
+      "uploaded_branch": "riley/wave11-solver-proof",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/wave18-blinded-llm-pilot",
+      "commit": "170ff5c000d4130981b91b1b46965c6db3985db4",
+      "uploaded_branch": "riley/wave18-blinded-llm-pilot",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/wave18-notebook-function-lifecycle",
+      "commit": "469e193a2c7ad8395967a3e8427dff271fb1769a",
+      "uploaded_branch": "riley/wave18-notebook-function-lifecycle",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/wave18-pinned-libtorch",
+      "commit": "2aa4f3a14559b20f37a8766627cc9db58515c328",
+      "uploaded_branch": "riley/wave18-pinned-libtorch",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/wave18-runtime-root-parity",
+      "commit": "8521fd96577d27e07b4a1396383d924ef82f04db",
+      "uploaded_branch": "riley/wave18-runtime-root-parity",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/wave19-checked-range-loops",
+      "commit": "b4de0d4cd966b411bb03df5d15e85d2264449598",
+      "uploaded_branch": "riley/wave19-checked-range-loops",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/wave19-direct-cpu-matrix",
+      "commit": "d38dbacadfda65a206335feda6ae3234b8038d3b",
+      "uploaded_branch": "riley/wave19-direct-cpu-matrix",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/wave20-parallel-map-reliability",
+      "commit": "f347524667d690bc0605d14192dc7726f2209c1b",
+      "uploaded_branch": "riley/wave20-parallel-map-reliability",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/wave21-direct-f32-matrix",
+      "commit": "7f50b49aa4d562593a9f2b07007f5677a0655a30",
+      "uploaded_branch": "riley/wave21-direct-f32-matrix",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/wave21-matrix-runtime-baselines",
+      "commit": "0b280a58460c4f5a1faba09a8923c96ff6b5b3ae",
+      "uploaded_branch": "riley/wave21-matrix-runtime-baselines",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/wave21-nominal-scalar-records",
+      "commit": "849e15c336cea8e1fa46eaa575b1f8ad887233e8",
+      "uploaded_branch": "riley/wave21-nominal-scalar-records",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/wave21-notebook-pure-imports",
+      "commit": "e81109ee830ad10157ff06f3d2809c22d003316d",
+      "uploaded_branch": "riley/wave21-notebook-pure-imports",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/wave21-python-numeric-arrays",
+      "commit": "59d50bbb718ac54b8dc07f5740245030f755d826",
+      "uploaded_branch": "riley/wave21-python-numeric-arrays",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/wave21-region-transfer-assurance",
+      "commit": "b835fad2d83d9a9da1551eefc88acbb98443c4ec",
+      "uploaded_branch": "riley/wave21-region-transfer-assurance",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/wave21-review",
+      "commit": "5815b4b1f12f51aa506664fdd946cec74ae7e41d",
+      "uploaded_branch": "riley/wave21-review",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "riley/wave22-review",
+      "commit": "9b8f6f5610e697429b364528fa32a6b716aa288a",
+      "uploaded_branch": "riley/wave22-review",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "riley/wave23-review",
+      "commit": "425cb0a5467d98b2cf9565be19067b2f39f23fff",
+      "uploaded_branch": "riley/wave23-review",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "riley/wave24-review",
+      "commit": "7f4c4525c61da165a4b628f34eb095521a14b349",
+      "uploaded_branch": "riley/wave24-review",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "riley/wave25-review",
+      "commit": "a574cea65d801c284e86c057bbab3fdd7ebb4549",
+      "uploaded_branch": "riley/wave25-review",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "riley/wave26-notebook-public-records",
+      "commit": "5a0720bd4da4d294ec65ebc00bc73ed8ea432fe1",
+      "uploaded_branch": "riley/wave26-notebook-public-records",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "riley/wave26-review",
+      "commit": "e3a01dffee423ab93d9cc8cd6d69c0f910c667f4",
+      "uploaded_branch": "riley/wave26-review",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "riley/wave27-review",
+      "commit": "d82aa8583a922d83f92a95cbe8462ef890e44c1e",
+      "uploaded_branch": "riley/wave27-review",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "riley/wave28-notebook-local-loops",
+      "commit": "a4a71be2a98c04bd60e53b0be548856273801a77",
+      "uploaded_branch": "riley/wave28-notebook-local-loops",
+      "integration": "patch-equivalent-history-merge"
+    },
+    {
+      "branch": "wave10/integration",
+      "commit": "da7ee0692dc3ff193f2ef22ee1aed926a3388261",
+      "uploaded_branch": "wave10/integration",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "wave11/integration",
+      "commit": "eec0e99b719f0e6d9583d22d79f34d0404048337",
+      "uploaded_branch": "wave11/integration",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "wave12/integration",
+      "commit": "a2a35ba0ac1a44e425cbb39c457cebd0ee980b2f",
+      "uploaded_branch": "wave12/integration",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "wave13/integration",
+      "commit": "994c09e08d9d0d6d4cfe93f65f6482ca9f9deec9",
+      "uploaded_branch": "wave13/integration",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "wave14/integration",
+      "commit": "8a06f4de25c8434eb744d2a926f204a610da75dc",
+      "uploaded_branch": "wave14/integration",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "wave15/integration",
+      "commit": "4b928c7b2e35a43d119ecfaa59cc5b2ea204f7a4",
+      "uploaded_branch": "wave15/integration",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "wave16/integration",
+      "commit": "ef9ba4ccdf6b93a575870bf7e34140c4b40c8b2b",
+      "uploaded_branch": "wave16/integration",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "wave17/integration",
+      "commit": "fb543d340ddd39a08f90b295c0c7788f26f678af",
+      "uploaded_branch": "wave17/integration",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "wave18/integration",
+      "commit": "b573e6e586ff8ef667bf79033bb509ca3a7f96ff",
+      "uploaded_branch": "wave18/integration",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "wave19/integration",
+      "commit": "98ced2845db39fc953d7aae110273ee9c516bc11",
+      "uploaded_branch": "wave19/integration",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "wave2/integration",
+      "commit": "4a7b6a402ffe3376fa2ae029a74395bb43317bb9",
+      "uploaded_branch": "wave2/integration",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "wave20/integration",
+      "commit": "3478da258e080c1cc1067786a4913a346f49b0c9",
+      "uploaded_branch": "wave20/integration",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "wave21/integration",
+      "commit": "a689bae48dec5b263a8f2ec169c2f9caef8b2412",
+      "uploaded_branch": "wave21/integration",
+      "integration": "historical-document-merge"
+    },
+    {
+      "branch": "wave3/integration",
+      "commit": "9a8d4e15f100c4eac941624afec6a76d56fc76af",
+      "uploaded_branch": "wave3/integration",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "wave4/integration",
+      "commit": "3476cad0d4e116802465688c14540065206cc815",
+      "uploaded_branch": "wave4/integration",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "wave5/integration",
+      "commit": "9f8c7b147d39e896deaad3c78772235b05ff690f",
+      "uploaded_branch": "wave5/integration",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "wave6/integration",
+      "commit": "6d3453a735b83af67fe509317899982c0817dcd7",
+      "uploaded_branch": "wave6/integration",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "wave7/integration",
+      "commit": "6d8927dd16120248bf29eb19bc50657fccdf6197",
+      "uploaded_branch": "wave7/integration",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "wave8/integration",
+      "commit": "f79cdedc06dd868e66c469a5be0476a0b054a2ba",
+      "uploaded_branch": "wave8/integration",
+      "integration": "already-ancestor"
+    },
+    {
+      "branch": "wave9/integration",
+      "commit": "9126e3afd6f50612f9392f94f894d8ef265aeab5",
+      "uploaded_branch": "wave9/integration",
+      "integration": "already-ancestor"
+    }
+  ],
+  "uncommitted_work": "Not included; left unchanged in its existing worktrees.",
+  "internal_codex_snapshot_refs": "Not part of the uploaded development branch inventory."
+}
