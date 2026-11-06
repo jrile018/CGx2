@@ -1,0 +1,24 @@
+{
+  "lean": "Lean (version 4.19.0, x86_64-unknown-linux-gnu, commit 6caaee842e94, Release)",
+  "source": "NoGc.lean",
+  "source_sha256": "312858be2d2a5a06f03fc2652c7a9a5f4d2e7c05fc51c0aa38db1fbcb7e57496",
+  "theorem_count": 13,
+  "boundary_examples": 5,
+  "proof_check": "passed",
+  "warnings_as_errors": true,
+  "axiom_audit": [
+    "'CGx2.MemoryGuarantees.execute_valid' depends on axioms: [propext, Quot.sound]",
+    "'CGx2.MemoryGuarantees.execute_limits' depends on axioms: [propext, Quot.sound]",
+    "'CGx2.MemoryGuarantees.execute_no_gc' depends on axioms: [propext]",
+    "'CGx2.MemoryGuarantees.rejected_allocation_unchanged' depends on axioms: [propext, Quot.sound]",
+    "'CGx2.MemoryGuarantees.budget_separation' depends on axioms: [propext, Quot.sound]",
+    "'CGx2.MemoryGuarantees.gc_separation' does not depend on any axioms"
+  ],
+  "negative_policy_checks": {
+    "ignore_all_budgets": "rejected",
+    "allow_collection_inside_guard": "rejected",
+    "ignore_inner_budgets": "rejected",
+    "commit_bytes_on_failure": "rejected"
+  },
+  "scope": "Reference model only; no implementation refinement or language-wide dominance proof."
+}
