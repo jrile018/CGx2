@@ -1,0 +1,16 @@
+{
+  "block_id": "REPLACE_WITH_BLOCK_ID",
+  "attempt": 1,
+  "status": "NEEDS_CONTEXT",
+  "base_commit": "REPLACE_WITH_FULL_BASE_SHA",
+  "dependency_commits": {},
+  "scope": "Replace with the exact bounded claim/deliverable.",
+  "changed_paths": [],
+  "artifacts": [],
+  "checks": [],
+  "claims": [],
+  "blockers": [
+    "Template only; no work or checks have run."
+  ],
+  "decisions_used": []
+}

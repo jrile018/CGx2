@@ -1,0 +1,1013 @@
+{
+  "schema_version": 1,
+  "checkpoint_commit": "09447b4343b6cf49a0fc55be4f9c9e733edc3e72",
+  "max_workers": 3,
+  "integration_branch": "riley/lean-architecture-review-execution",
+  "source_plan": "plans/lean-architecture-review/plan.md",
+  "historical_ledger": "plans/lean-architecture-review/execution.md",
+  "result_root": "research/architecture-review/next/",
+  "coordinator_owns": [
+    "plans/lean-architecture-review/",
+    "research/architecture-review/next/integration/"
+  ],
+  "global_non_goals": [
+    "Do not modify the original5185 worktree, published main, or frozen checkpoint evidence.",
+    "Root Cargo.toml/Cargo.lock and shared design documents require coordinator ownership and a serialized change request.",
+    "No new paid services, driver/security changes, or silent CPU fallback."
+  ],
+  "gates": {
+    "proof_scope": {
+      "owner": "coordinator",
+      "requires": [
+        "P0"
+      ],
+      "meaning": "Record the exact proof route and write set after P0. Existing authorization covers semantics-preserving work; obtain a user choice only for a concrete substantive change to guarantees, semantics, or accepted evidence strength."
+    },
+    "ownership_scope": {
+      "owner": "coordinator",
+      "requires": [
+        "O0"
+      ],
+      "meaning": "Record the bounded source slice within the already approved intended design. Ask the user only for an actual semantic/design tradeoff; do not reconfirm routine implementation sequencing."
+    },
+    "gpu_resources": {
+      "owner": "coordinator",
+      "requires": [
+        "E0"
+      ],
+      "meaning": "Resolved closure fits the authorized storage/environment scope. Ask user only for an actual scope increase or system change; do not install drivers here."
+    },
+    "optimization_choice": {
+      "owner": "user",
+      "requires": [
+        "D0"
+      ],
+      "meaning": "One concrete candidate and exact source write set chosen after tradeoffs are explained."
+    },
+    "candidate_baseline": {
+      "owner": "coordinator",
+      "requires": [
+        "MC"
+      ],
+      "meaning": "Exact matching baseline available; if the selected candidate affects GPU, add MG to V0 dependencies before dispatch."
+    }
+  },
+  "blocks": [
+    {
+      "id": "P0",
+      "title": "Choose an exact runtime proof boundary",
+      "wave": 1,
+      "depends_on": [],
+      "owns": [
+        "research/architecture-review/next/P0/"
+      ],
+      "resource_locks": [
+        "proof_toolchain"
+      ],
+      "gates": [],
+      "estimate": "M",
+      "coordination_risk": "low",
+      "goal": "Produce a source-connected proof contract and concrete translation/refactor alternatives before changing runtime semantics.",
+      "consumes": [
+        "checkpoint 09447b4 and its pinned evidence"
+      ],
+      "produces": [
+        "research/architecture-review/next/P0/report.md",
+        "research/architecture-review/next/P0/result.json",
+        "research/architecture-review/next/P0/verify.py",
+        "research/architecture-review/next/P0/proof-contract.json"
+      ],
+      "steps": [
+        "Reproduce the six-lemma checkpoint and inspect the full-runtime and guard translation failures.",
+        "Define full-Session projection, Vec iteration, same-stack/same-bytes admission/charge, diagnostic observations, counter overflow and RAII obligations.",
+        "Compare keeping source unchanged, a small shared verification kernel, and another extraction route; identify exact affected files and migration effects.",
+        "Write proof-contract.json with observables, invariants, trusted stages, candidate write set and required positive/negative traces."
+      ],
+      "acceptance": [
+        "Every gap has an explicit obligation and source anchor.",
+        "Recommended route has a bounded feasibility example; alternatives and substantive decisions are visible.",
+        "No conditional body lemma is relabeled as full-loop or guard correctness."
+      ],
+      "verification": [
+        "python3 research/architecture-review/proof/verify.py --evidence-only",
+        "python3 research/architecture-review/next/P0/verify.py"
+      ],
+      "non_goals": [
+        "No main merge, historical-evidence edits, new paid services, shared-ledger changes, or unassigned source changes.",
+        "Do not claim a complete runtime/compiler/language comparison from a narrower deliverable."
+      ]
+    },
+    {
+      "id": "O0",
+      "title": "Define the ownership source slice and pass contracts",
+      "wave": 1,
+      "depends_on": [],
+      "owns": [
+        "research/architecture-review/next/O0/"
+      ],
+      "resource_locks": [],
+      "gates": [],
+      "estimate": "M",
+      "coordination_risk": "low",
+      "goal": "Freeze the first end-to-end ownership slice and its compiler observations against the intended complete design.",
+      "consumes": [
+        "checkpoint 09447b4 and its pinned evidence"
+      ],
+      "produces": [
+        "research/architecture-review/next/O0/report.md",
+        "research/architecture-review/next/O0/result.json",
+        "research/architecture-review/next/O0/verify.py",
+        "research/architecture-review/next/O0/source-contract.json"
+      ],
+      "steps": [
+        "Validate frozen overlay availability and hashes; preserve original WIP.",
+        "Map source admission, specialization, ownership analysis, interpretation and Rust emission for owned buffer/tree cases.",
+        "Write source-contract.json specifying mandatory .cg positives, negatives, moves/loans, partial initialization/drop, regions, source spans and errors.",
+        "Assign every remaining intended feature to a later obligation; provide a precise proposed production write set."
+      ],
+      "acceptance": [
+        "Library/analyzer-only support is distinct from accepted source.",
+        "Required positives cannot be counted as expected rejection.",
+        "Contract includes interpreter/emitter parity and authentication-versus-preservation distinction."
+      ],
+      "verification": [
+        "python3 research/architecture-review/architecture/verify.py",
+        "python3 research/architecture-review/next/O0/verify.py"
+      ],
+      "non_goals": [
+        "No main merge, historical-evidence edits, new paid services, shared-ledger changes, or unassigned source changes.",
+        "Do not claim a complete runtime/compiler/language comparison from a narrower deliverable."
+      ]
+    },
+    {
+      "id": "F0",
+      "title": "Freeze common fixture interfaces and independent oracles",
+      "wave": 1,
+      "depends_on": [],
+      "owns": [
+        "research/architecture-review/next/F0/"
+      ],
+      "resource_locks": [],
+      "gates": [],
+      "estimate": "L",
+      "coordination_risk": "low",
+      "goal": "Turn the ten-case comparison protocol into a versioned correctness harness usable by disjoint language fixture workers.",
+      "consumes": [
+        "checkpoint 09447b4 and its pinned evidence"
+      ],
+      "produces": [
+        "research/architecture-review/next/F0/report.md",
+        "research/architecture-review/next/F0/result.json",
+        "research/architecture-review/next/F0/verify.py",
+        "research/architecture-review/next/F0/contract.json",
+        "research/architecture-review/next/F0/result.schema.json",
+        "research/architecture-review/next/F0/runner.py",
+        "research/architecture-review/next/F0/oracles/"
+      ],
+      "steps": [
+        "Implement contract.json and a runner accepting case_id, language, policy, target, input and output paths; use pinned typed JSON traces.",
+        "Implement independent value/error/failure/side-effect oracles for N01-N03, M01-M04 and G01-G03.",
+        "Define result.schema.json including correctness, status, native/logical/device charges, elapsed samples and source/backend hashes.",
+        "Mutation-test the oracle with wrong values, wrong boundary admission, hidden copies, missed synchronization and dropped errors."
+      ],
+      "acceptance": [
+        "All ten cases retain exact dtype/input/error contracts and applicability.",
+        "Idiomatic/equipped policies and logical/native/RSS/device accounting remain separate.",
+        "Blocked, failed, unrun and inapplicable rows cannot become passes.",
+        "No implementation owns or can rewrite its own acceptance oracle."
+      ],
+      "verification": [
+        "python3 research/architecture-review/next/F0/verify.py"
+      ],
+      "non_goals": [
+        "No main merge, historical-evidence edits, new paid services, shared-ledger changes, or unassigned source changes.",
+        "Do not claim a complete runtime/compiler/language comparison from a narrower deliverable."
+      ]
+    },
+    {
+      "id": "E0",
+      "title": "Resolve the GPU package closure and storage bounds",
+      "wave": 1,
+      "depends_on": [],
+      "owns": [
+        "research/architecture-review/next/E0/"
+      ],
+      "resource_locks": [
+        "package_metadata"
+      ],
+      "gates": [],
+      "estimate": "M",
+      "coordination_risk": "low",
+      "goal": "Produce an exact isolated GPU installation recipe and bounded footprint proposal using the existing driver.",
+      "consumes": [
+        "checkpoint 09447b4 and its pinned evidence"
+      ],
+      "produces": [
+        "research/architecture-review/next/E0/report.md",
+        "research/architecture-review/next/E0/result.json",
+        "research/architecture-review/next/E0/verify.py",
+        "research/architecture-review/next/E0/environment-contract.json"
+      ],
+      "steps": [
+        "Read the version-specific ROCm remedy evidence; distinguish observed compatibility from official support.",
+        "Resolve exact CPython/Torch/ROCm dependencies, artifact hashes, unpacked/staging bounds and available disk using metadata where possible.",
+        "Write environment-contract.json with package pins, per-attempt scratch paths, storage cap and expected device checks.",
+        "If metadata cannot establish the closure or cap, return the precise blocker and concrete alternatives."
+      ],
+      "acceptance": [
+        "The four-artifact compressed sum is not treated as the full installed footprint.",
+        "Driver replacement is not assumed; no system mutation or wheel installation occurs in this block.",
+        "Current and legacy ROCm stacks are not mixed."
+      ],
+      "verification": [
+        "python3 research/architecture-review/next/E0/verify.py"
+      ],
+      "non_goals": [
+        "No main merge, historical-evidence edits, new paid services, shared-ledger changes, or unassigned source changes.",
+        "Do not claim a complete runtime/compiler/language comparison from a narrower deliverable."
+      ]
+    },
+    {
+      "id": "E1",
+      "title": "Validate CGx2 native CPU package integration",
+      "wave": 1,
+      "depends_on": [],
+      "owns": [
+        "research/architecture-review/next/E1/",
+        "crates/cgx2-libtorch/",
+        "crates/cgx2-ffi-native/"
+      ],
+      "resource_locks": [
+        "native_sdk_writer",
+        "build_host"
+      ],
+      "gates": [],
+      "estimate": "L",
+      "coordination_risk": "moderate",
+      "goal": "Demonstrate the actual emitted CGx2 executable and native CPU library closure, or isolate a reproducible integration defect.",
+      "consumes": [
+        "checkpoint 09447b4 and its pinned evidence"
+      ],
+      "produces": [
+        "research/architecture-review/next/E1/report.md",
+        "research/architecture-review/next/E1/result.json",
+        "research/architecture-review/next/E1/verify.py"
+      ],
+      "steps": [
+        "Construct an isolated SDK/package fixture pinned to the CPU environment.",
+        "Define a local SDK smoke-test contract and compile/run CGx2 through its actual emitted/native path; the cross-language comparison contract is separately owned by F0.",
+        "Record transitive dependency resolution and exercised loaded libraries, including libpython presence/absence.",
+        "Fix only assigned native-facade defects; submit a change request for shared compiler/manifests instead of editing them."
+      ],
+      "acceptance": [
+        "Standalone ATen results are not inherited as CGx2 results.",
+        "Actual emitted executable has positive/negative shape/dtype/layout/error cases.",
+        "Dependency closure and process maps are recorded with source/build hashes."
+      ],
+      "verification": [
+        "python3 research/architecture-review/next/E1/verify.py"
+      ],
+      "non_goals": [
+        "No main merge, historical-evidence edits, new paid services, shared-ledger changes, or unassigned source changes.",
+        "Do not claim a complete runtime/compiler/language comparison from a narrower deliverable."
+      ]
+    },
+    {
+      "id": "P1",
+      "title": "Close the selected runtime proof obligations",
+      "wave": 2,
+      "depends_on": [
+        "P0"
+      ],
+      "owns": [
+        "research/architecture-review/next/P1/",
+        "crates/cgx2-runtime/"
+      ],
+      "resource_locks": [
+        "runtime_writer",
+        "proof_toolchain",
+        "build_host"
+      ],
+      "gates": [
+        "proof_scope"
+      ],
+      "estimate": "L",
+      "coordination_risk": "moderate",
+      "goal": "Implement the approved small source/proof change and verify its stated full-Session, iteration and guard contracts.",
+      "consumes": [
+        "checkpoint 09447b4 and its pinned evidence",
+        "verified integrated outputs from P0"
+      ],
+      "produces": [
+        "research/architecture-review/next/P1/report.md",
+        "research/architecture-review/next/P1/result.json",
+        "research/architecture-review/next/P1/verify.py"
+      ],
+      "steps": [
+        "Use the accepted proof-contract.json and exact approved edit set; add boundary/fault/unwind traces before the change.",
+        "Connect actual source to Lean and prove reachable-state preservation, complete admitted stack traversal and no-overflow charging for the chosen subset.",
+        "Cover try_no_gc entry/exit, normal/error/unwind cleanup and compatibility no_gc separately; preserve diagnostics and temporary-reserve observations.",
+        "Run debug/release conformance, extraction, Lean axiom audit and source mutation controls; document remaining boundaries."
+      ],
+      "acceptance": [
+        "No unreported sorry/custom axioms or hand-copy substitution.",
+        "Every proof obligation selected by the accepted P0 contract, including its full-Session relation and loop/guard scope, is established before integration; failed selected obligations block this deliverable. Unselected obligations remain explicitly incomplete.",
+        "Counter overflow, fault injection and host allocation failure cannot disappear from the observation model."
+      ],
+      "verification": [
+        "cargo test -p cgx2-runtime",
+        "cargo test -p cgx2-runtime --release",
+        "python3 research/architecture-review/next/P1/verify.py"
+      ],
+      "non_goals": [
+        "No main merge, historical-evidence edits, new paid services, shared-ledger changes, or unassigned source changes.",
+        "Do not claim a complete runtime/compiler/language comparison from a narrower deliverable."
+      ]
+    },
+    {
+      "id": "O1",
+      "title": "Connect the chosen ownership slice to source execution",
+      "wave": 2,
+      "depends_on": [
+        "O0",
+        "P1"
+      ],
+      "owns": [
+        "research/architecture-review/next/O1/",
+        "crates/cgx2-ownership/",
+        "crates/cgx2-sema/",
+        "crates/cgx2-syntax/",
+        "crates/cgx2-runtime/",
+        "crates/cgx2-emit-rust/",
+        "crates/cgx2c/"
+      ],
+      "resource_locks": [
+        "runtime_writer",
+        "compiler_writer",
+        "build_host"
+      ],
+      "gates": [
+        "ownership_scope"
+      ],
+      "estimate": "L",
+      "coordination_risk": "moderate",
+      "goal": "Implement the approved ownership slice end-to-end, including interpretation, emission and failure cleanup.",
+      "consumes": [
+        "checkpoint 09447b4 and its pinned evidence",
+        "verified integrated outputs from O0",
+        "verified integrated outputs from P1"
+      ],
+      "produces": [
+        "research/architecture-review/next/O1/report.md",
+        "research/architecture-review/next/O1/result.json",
+        "research/architecture-review/next/O1/verify.py"
+      ],
+      "steps": [
+        "Import only manifest-identified WIP needed by source-contract.json; retain its provenance.",
+        "Make every mandatory positive .cg fixture enter the intended source route; retain precise negative diagnostics.",
+        "Implement move/loan/region/partial-drop and branch/loop behavior required by the chosen slice.",
+        "Verify source attribution, interpreter/emitter outputs, faults and exactly-once cleanup; publish migration notes."
+      ],
+      "acceptance": [
+        "Actual accepted source exercises the claimed feature.",
+        "All contract positives, negatives and parity checks pass.",
+        "Unfinished features outside the slice stay explicit and do not gain acceptance credit."
+      ],
+      "verification": [
+        "cargo test -p cgx2-ownership -p cgx2-sema -p cgx2-syntax -p cgx2-runtime -p cgx2-emit-rust",
+        "python3 research/architecture-review/next/O1/verify.py"
+      ],
+      "non_goals": [
+        "No main merge, historical-evidence edits, new paid services, shared-ledger changes, or unassigned source changes.",
+        "Do not claim a complete runtime/compiler/language comparison from a narrower deliverable."
+      ]
+    },
+    {
+      "id": "C1",
+      "title": "Check the selected compiler preservation relations",
+      "wave": 3,
+      "depends_on": [
+        "O1"
+      ],
+      "owns": [
+        "research/architecture-review/next/C1/"
+      ],
+      "resource_locks": [
+        "proof_toolchain"
+      ],
+      "gates": [],
+      "estimate": "L",
+      "coordination_risk": "low",
+      "goal": "Establish scoped semantic relations across the chosen ownership source route using actual implementation connections.",
+      "consumes": [
+        "checkpoint 09447b4 and its pinned evidence",
+        "verified integrated outputs from O1"
+      ],
+      "produces": [
+        "research/architecture-review/next/C1/report.md",
+        "research/architecture-review/next/C1/result.json",
+        "research/architecture-review/next/C1/verify.py"
+      ],
+      "steps": [
+        "Instantiate each O0 pass relation with O1 source/IR/runtime observations.",
+        "Prove supported pass obligations and connect extraction to the exact candidate sources.",
+        "Run differential traces and mutation controls for values, errors, effects, ownership and source spans.",
+        "List every trust assumption and unsupported pass separately from tested agreement."
+      ],
+      "acceptance": [
+        "Authentication/recompilation is not presented as semantic preservation.",
+        "Every theorem names its program subset and source hash.",
+        "Tests remain evidence on traces, not universal equivalence.",
+        "All preservation relations selected by the accepted source contract are proved before integration; a failed selected relation remains blocked, not satisfied by a diagnostic report."
+      ],
+      "verification": [
+        "python3 research/architecture-review/next/C1/verify.py"
+      ],
+      "non_goals": [
+        "No main merge, historical-evidence edits, new paid services, shared-ledger changes, or unassigned source changes.",
+        "Do not claim a complete runtime/compiler/language comparison from a narrower deliverable."
+      ]
+    },
+    {
+      "id": "E2",
+      "title": "Validate isolated GPU and CGx2 backend integration",
+      "wave": 2,
+      "depends_on": [
+        "E0",
+        "E1"
+      ],
+      "owns": [
+        "research/architecture-review/next/E2/",
+        "crates/cgx2-libtorch/",
+        "crates/cgx2-ffi-native/"
+      ],
+      "resource_locks": [
+        "native_sdk_writer",
+        "gpu_device",
+        "build_host"
+      ],
+      "gates": [
+        "gpu_resources"
+      ],
+      "estimate": "L",
+      "coordination_risk": "moderate",
+      "goal": "Install the accepted bounded user-space stack and exercise actual GPU compute through the CGx2 package/backend path.",
+      "consumes": [
+        "checkpoint 09447b4 and its pinned evidence",
+        "verified integrated outputs from E0",
+        "verified integrated outputs from E1"
+      ],
+      "produces": [
+        "research/architecture-review/next/E2/report.md",
+        "research/architecture-review/next/E2/result.json",
+        "research/architecture-review/next/E2/verify.py"
+      ],
+      "steps": [
+        "Use environment-contract.json in a new per-attempt environment; preserve the CPU environment and driver.",
+        "Verify exact RX9070XT/gfx1201, device allocations, integer/float kernels, explicit completion and readback.",
+        "Validate CGx2 binding/package closure and asynchronous buffer lifetime/error handling.",
+        "Retain loader/HSA/device failures exactly; any driver/security change becomes a concrete separate user decision."
+      ],
+      "acceptance": [
+        "Import/install alone does not pass.",
+        "No CPU fallback, implicit dtype conversion or unsynchronized timing.",
+        "Matched CPU/GPU backend versions and complete package pins are available for fair comparisons."
+      ],
+      "verification": [
+        "python3 research/architecture-review/next/E2/verify.py"
+      ],
+      "non_goals": [
+        "No main merge, historical-evidence edits, new paid services, shared-ledger changes, or unassigned source changes.",
+        "Do not claim a complete runtime/compiler/language comparison from a narrower deliverable."
+      ]
+    },
+    {
+      "id": "FN",
+      "title": "Implement native comparison fixtures",
+      "wave": 3,
+      "depends_on": [
+        "F0",
+        "O1"
+      ],
+      "owns": [
+        "research/architecture-review/next/FN/"
+      ],
+      "resource_locks": [],
+      "gates": [],
+      "estimate": "L",
+      "coordination_risk": "low",
+      "goal": "Deliver N01-N03 in all four languages and both policies with independent functional/failure acceptance.",
+      "consumes": [
+        "checkpoint 09447b4 and its pinned evidence",
+        "verified integrated outputs from F0",
+        "verified integrated outputs from O1"
+      ],
+      "produces": [
+        "research/architecture-review/next/FN/report.md",
+        "research/architecture-review/next/FN/result.json",
+        "research/architecture-review/next/FN/verify.py"
+      ],
+      "steps": [
+        "Implement disjoint CGx2/Rust/OCaml/Python directories against F0 contracts.",
+        "Include wrapper/arena/collector effort and all charges; match logical policy without pretending native byte admission is equal.",
+        "Exercise owned buffers, rooted cyclic/reverse graphs and protected allocation-heavy sections.",
+        "Run F0 oracles and retain rejected/unsupported routes explicitly."
+      ],
+      "acceptance": [
+        "Each compared route passes the common positive and negative contract before timing.",
+        "Rust without tracing GC receives no fictitious collection cost.",
+        "Workload definitions and oracles remain unchanged."
+      ],
+      "verification": [
+        "python3 research/architecture-review/next/FN/verify.py"
+      ],
+      "non_goals": [
+        "No main merge, historical-evidence edits, new paid services, shared-ledger changes, or unassigned source changes.",
+        "Do not claim a complete runtime/compiler/language comparison from a narrower deliverable."
+      ]
+    },
+    {
+      "id": "FM",
+      "title": "Implement CPU data/ML comparison fixtures",
+      "wave": 3,
+      "depends_on": [
+        "F0",
+        "E1"
+      ],
+      "owns": [
+        "research/architecture-review/next/FM/"
+      ],
+      "resource_locks": [],
+      "gates": [],
+      "estimate": "L",
+      "coordination_risk": "low",
+      "goal": "Deliver CPU M01-M03 using matched backend graphs, copies, lifetime behavior and notebook effects.",
+      "consumes": [
+        "checkpoint 09447b4 and its pinned evidence",
+        "verified integrated outputs from F0",
+        "verified integrated outputs from E1"
+      ],
+      "produces": [
+        "research/architecture-review/next/FM/report.md",
+        "research/architecture-review/next/FM/result.json",
+        "research/architecture-review/next/FM/verify.py"
+      ],
+      "steps": [
+        "Implement four-language idiomatic/equipped CPU routes with equivalent ATen/kernel graphs.",
+        "Include startup, load, adaptation, copy/release costs and native/Python boundaries.",
+        "Exercise persistent notebook rerun/invalidation/restart and exact side-effect traces.",
+        "Run independent oracles; preserve missing binding/source capabilities as blocked rows."
+      ],
+      "acceptance": [
+        "Backend/kernel/dtype/layout and error behavior match.",
+        "CGx2 deployment claims use its actual package receipt.",
+        "Copies and foreign allocation policies are counted explicitly."
+      ],
+      "verification": [
+        "python3 research/architecture-review/next/FM/verify.py"
+      ],
+      "non_goals": [
+        "No main merge, historical-evidence edits, new paid services, shared-ledger changes, or unassigned source changes.",
+        "Do not claim a complete runtime/compiler/language comparison from a narrower deliverable."
+      ]
+    },
+    {
+      "id": "FG",
+      "title": "Implement GPU comparison fixtures",
+      "wave": 3,
+      "depends_on": [
+        "F0",
+        "E1",
+        "E2"
+      ],
+      "owns": [
+        "research/architecture-review/next/FG/"
+      ],
+      "resource_locks": [
+        "gpu_device"
+      ],
+      "gates": [],
+      "estimate": "L",
+      "coordination_risk": "low",
+      "goal": "Deliver meaningful GPU M01/M02/M04 routes with matched kernels and actual-device lifetime checks.",
+      "consumes": [
+        "checkpoint 09447b4 and its pinned evidence",
+        "verified integrated outputs from F0",
+        "verified integrated outputs from E1",
+        "verified integrated outputs from E2"
+      ],
+      "produces": [
+        "research/architecture-review/next/FG/report.md",
+        "research/architecture-review/next/FG/result.json",
+        "research/architecture-review/next/FG/verify.py"
+      ],
+      "steps": [
+        "Build all admitted language/policy routes with matched backend versions and exact numerical contracts.",
+        "Record buffers, aliasing, upload/download bytes, streams/queues and release after completion.",
+        "Test completion, errors, readback and explicit CPU-fallback rejection.",
+        "Keep Vulkan shader results distinct from tensor backend results."
+      ],
+      "acceptance": [
+        "Correctness runs identify the actual discrete device.",
+        "Unsupported bindings are not invented or scored as language inferiority.",
+        "All compared routes pass independent device/value/failure checks."
+      ],
+      "verification": [
+        "python3 research/architecture-review/next/FG/verify.py"
+      ],
+      "non_goals": [
+        "No main merge, historical-evidence edits, new paid services, shared-ledger changes, or unassigned source changes.",
+        "Do not claim a complete runtime/compiler/language comparison from a narrower deliverable."
+      ]
+    },
+    {
+      "id": "FA",
+      "title": "Implement general application fixtures",
+      "wave": 3,
+      "depends_on": [
+        "F0",
+        "O1"
+      ],
+      "owns": [
+        "research/architecture-review/next/FA/"
+      ],
+      "resource_locks": [],
+      "gates": [],
+      "estimate": "L",
+      "coordination_risk": "low",
+      "goal": "Deliver G01-G03 reference applications and acceptance harnesses with matched module/API/error contracts.",
+      "consumes": [
+        "checkpoint 09447b4 and its pinned evidence",
+        "verified integrated outputs from F0",
+        "verified integrated outputs from O1"
+      ],
+      "produces": [
+        "research/architecture-review/next/FA/report.md",
+        "research/architecture-review/next/FA/result.json",
+        "research/architecture-review/next/FA/verify.py"
+      ],
+      "steps": [
+        "Implement the four-module parser/domain/transform/CLI and bug/refactor reference versions.",
+        "Freeze equivalent public APIs, checked sums and first-error ordering across four languages/policies.",
+        "Test valid/invalid input, module boundaries and behavior-preserving refactors using independent oracles.",
+        "Record diagnostics, source size and implementation effort without claiming authoring productivity."
+      ],
+      "acceptance": [
+        "Functional equivalence precedes compactness or ergonomics claims.",
+        "Required positives cannot be downgraded to rejection.",
+        "Fixture authors do not disclose holdout solutions to future study workers."
+      ],
+      "verification": [
+        "python3 research/architecture-review/next/FA/verify.py"
+      ],
+      "non_goals": [
+        "No main merge, historical-evidence edits, new paid services, shared-ledger changes, or unassigned source changes.",
+        "Do not claim a complete runtime/compiler/language comparison from a narrower deliverable."
+      ]
+    },
+    {
+      "id": "S0",
+      "title": "Prepare the no-spend authoring study",
+      "wave": 4,
+      "depends_on": [
+        "FA"
+      ],
+      "owns": [
+        "research/architecture-review/next/S0/"
+      ],
+      "resource_locks": [],
+      "gates": [],
+      "estimate": "M",
+      "coordination_risk": "low",
+      "goal": "Package blinded tasks, scoring and a costed trial proposal without running paid or fabricated model trials.",
+      "consumes": [
+        "checkpoint 09447b4 and its pinned evidence",
+        "verified integrated outputs from FA"
+      ],
+      "produces": [
+        "research/architecture-review/next/S0/report.md",
+        "research/architecture-review/next/S0/result.json",
+        "research/architecture-review/next/S0/verify.py"
+      ],
+      "steps": [
+        "Build isolated task/solution/test bundles with no future history or sibling solution leakage.",
+        "Freeze model-family/version slots, paired/randomized order, task strata and pilot/holdout separation.",
+        "Implement failure-inclusive correct-completion, token/time/repair/intervention scoring.",
+        "Provide resource/cost options and the later trial decision separately from study preparation."
+      ],
+      "acceptance": [
+        "Scoring includes failed attempts and all tokens/time.",
+        "No actual productivity outcome is inferred from preparation.",
+        "No new paid service or external trial is started."
+      ],
+      "verification": [
+        "python3 research/architecture-review/next/S0/verify.py"
+      ],
+      "non_goals": [
+        "No main merge, historical-evidence edits, new paid services, shared-ledger changes, or unassigned source changes.",
+        "Do not claim a complete runtime/compiler/language comparison from a narrower deliverable."
+      ]
+    },
+    {
+      "id": "MC",
+      "title": "Run CPU comparisons",
+      "wave": 4,
+      "depends_on": [
+        "FN",
+        "FM",
+        "FA"
+      ],
+      "owns": [
+        "research/architecture-review/next/MC/"
+      ],
+      "resource_locks": [
+        "measurement_host"
+      ],
+      "gates": [],
+      "estimate": "L",
+      "coordination_risk": "low",
+      "goal": "Measure only contract-compatible CPU routes on a quiet pinned machine and produce case-specific scorecards.",
+      "consumes": [
+        "checkpoint 09447b4 and its pinned evidence",
+        "verified integrated outputs from FN",
+        "verified integrated outputs from FM",
+        "verified integrated outputs from FA"
+      ],
+      "produces": [
+        "research/architecture-review/next/MC/report.md",
+        "research/architecture-review/next/MC/result.json",
+        "research/architecture-review/next/MC/verify.py"
+      ],
+      "steps": [
+        "Acquire exclusive measurement_host; stop concurrent builds, installs, proof compilation and device work on the host.",
+        "Run correctness pilots, estimate noise/effect sizes and preregister practical thresholds before holdout measurements.",
+        "Measure cold/warm end-to-end costs, distributions, RSS/allocator/logical counters and implementation effort.",
+        "Retain all failures, raw samples and uncertainty; explain unfavorable/mixed/inconclusive findings."
+      ],
+      "acceptance": [
+        "Correctness and semantic equivalence are prerequisite.",
+        "Thresholds and exclusions precede holdout data.",
+        "No whole-language claim from microbenchmarks or tiny p99 samples."
+      ],
+      "verification": [
+        "python3 research/architecture-review/next/MC/verify.py"
+      ],
+      "non_goals": [
+        "No main merge, historical-evidence edits, new paid services, shared-ledger changes, or unassigned source changes.",
+        "Do not claim a complete runtime/compiler/language comparison from a narrower deliverable."
+      ]
+    },
+    {
+      "id": "MG",
+      "title": "Run GPU comparisons",
+      "wave": 4,
+      "depends_on": [
+        "FG"
+      ],
+      "owns": [
+        "research/architecture-review/next/MG/"
+      ],
+      "resource_locks": [
+        "measurement_host",
+        "gpu_device"
+      ],
+      "gates": [],
+      "estimate": "L",
+      "coordination_risk": "low",
+      "goal": "Measure actual synchronized GPU workloads, including host/device orchestration, with case-specific uncertainty.",
+      "consumes": [
+        "checkpoint 09447b4 and its pinned evidence",
+        "verified integrated outputs from FG"
+      ],
+      "produces": [
+        "research/architecture-review/next/MG/report.md",
+        "research/architecture-review/next/MG/result.json",
+        "research/architecture-review/next/MG/verify.py"
+      ],
+      "steps": [
+        "Acquire exclusive measurement_host and gpu_device; record actual device/driver/backend state.",
+        "Preregister thresholds after correctness pilots, before holdout timing.",
+        "Measure kernel and end-to-end costs separately with copies, synchronization and device-memory metrics.",
+        "Retain driver caveats, blocked bindings and unfavorable results."
+      ],
+      "acceptance": [
+        "CPU fallback and unsynchronized timing are failures.",
+        "Matched kernels/precision and numerical contracts remain fixed.",
+        "GPU observations do not inherit host-memory proof guarantees."
+      ],
+      "verification": [
+        "python3 research/architecture-review/next/MG/verify.py"
+      ],
+      "non_goals": [
+        "No main merge, historical-evidence edits, new paid services, shared-ledger changes, or unassigned source changes.",
+        "Do not claim a complete runtime/compiler/language comparison from a narrower deliverable."
+      ]
+    },
+    {
+      "id": "D0",
+      "title": "Present one evidence-based optimization choice",
+      "wave": 5,
+      "depends_on": [
+        "P1",
+        "C1",
+        "MC"
+      ],
+      "owns": [
+        "research/architecture-review/next/D0/"
+      ],
+      "resource_locks": [],
+      "gates": [],
+      "estimate": "M",
+      "coordination_risk": "low",
+      "goal": "Turn a measured CPU/runtime/compiler problem into one concrete candidate decision with proof and migration obligations.",
+      "consumes": [
+        "checkpoint 09447b4 and its pinned evidence",
+        "verified integrated outputs from P1",
+        "verified integrated outputs from C1",
+        "verified integrated outputs from MC"
+      ],
+      "produces": [
+        "research/architecture-review/next/D0/report.md",
+        "research/architecture-review/next/D0/result.json",
+        "research/architecture-review/next/D0/verify.py"
+      ],
+      "steps": [
+        "Use completed CPU scorecards and source obligations; include GPU findings if available without blocking CPU work.",
+        "Compare keeping current behavior with bounded candidates such as worklist marking, scratch retention or metadata changes.",
+        "Specify mechanism, exact write set, expected time/space/error effects, invariants and required before/after cases.",
+        "Record the user choice and rationale separately; do not infer consent from a favorable recommendation."
+      ],
+      "acceptance": [
+        "The current collector cost includes slot initialization/sweep and scratch admission.",
+        "Substantive tradeoffs are explained case by case.",
+        "GPU-specific candidates require the matching MG baseline before selection."
+      ],
+      "verification": [
+        "python3 research/architecture-review/next/D0/verify.py"
+      ],
+      "non_goals": [
+        "No main merge, historical-evidence edits, new paid services, shared-ledger changes, or unassigned source changes.",
+        "Do not claim a complete runtime/compiler/language comparison from a narrower deliverable."
+      ]
+    },
+    {
+      "id": "X0",
+      "title": "Implement one selected optimization",
+      "wave": 5,
+      "depends_on": [
+        "D0"
+      ],
+      "owns": [
+        "research/architecture-review/next/X0/",
+        "crates/cgx2-runtime/"
+      ],
+      "resource_locks": [
+        "runtime_writer",
+        "proof_toolchain",
+        "build_host"
+      ],
+      "gates": [
+        "optimization_choice"
+      ],
+      "estimate": "L",
+      "coordination_risk": "moderate",
+      "goal": "Implement exactly the selected candidate on an isolated branch with proof, conformance and migration evidence.",
+      "consumes": [
+        "checkpoint 09447b4 and its pinned evidence",
+        "verified integrated outputs from D0"
+      ],
+      "produces": [
+        "research/architecture-review/next/X0/report.md",
+        "research/architecture-review/next/X0/result.json",
+        "research/architecture-review/next/X0/verify.py"
+      ],
+      "steps": [
+        "Require the recorded user choice and exact approved write set; expand this block before dispatch if the selected mechanism needs another component.",
+        "Add the candidate invariant/boundary/fault checks, then implement the smallest approved change.",
+        "Prove its relevant source-connected obligations and run equivalent before/after functional contracts.",
+        "Publish migration notes and all regressions; do not silently retain a losing tradeoff."
+      ],
+      "acceptance": [
+        "Candidate matches the selected decision and baseline cases.",
+        "Success/error/ownership/guard observations are preserved or explicitly migrated.",
+        "A faster collector does not hide extra memory or changed admission."
+      ],
+      "verification": [
+        "cargo test -p cgx2-runtime",
+        "cargo test -p cgx2-runtime --release",
+        "python3 research/architecture-review/next/X0/verify.py"
+      ],
+      "non_goals": [
+        "No main merge, historical-evidence edits, new paid services, shared-ledger changes, or unassigned source changes.",
+        "Do not claim a complete runtime/compiler/language comparison from a narrower deliverable."
+      ]
+    },
+    {
+      "id": "V0",
+      "title": "Recheck and remeasure the selected candidate",
+      "wave": 6,
+      "depends_on": [
+        "X0",
+        "MC"
+      ],
+      "owns": [
+        "research/architecture-review/next/V0/"
+      ],
+      "resource_locks": [
+        "measurement_host",
+        "gpu_device"
+      ],
+      "gates": [
+        "candidate_baseline"
+      ],
+      "estimate": "L",
+      "coordination_risk": "moderate",
+      "goal": "Independently compare the selected candidate with its pinned predecessor and produce a retain/reject recommendation.",
+      "consumes": [
+        "checkpoint 09447b4 and its pinned evidence",
+        "verified integrated outputs from X0",
+        "verified integrated outputs from MC"
+      ],
+      "produces": [
+        "research/architecture-review/next/V0/report.md",
+        "research/architecture-review/next/V0/result.json",
+        "research/architecture-review/next/V0/verify.py"
+      ],
+      "steps": [
+        "Use the same accepted cases, inputs, policies, backend versions and preregistered thresholds.",
+        "Acquire measurement_host; rerun correctness, relevant proofs and paired resource/performance measurements.",
+        "Report practical effects, uncertainty, changed guarantees and migration burden.",
+        "Present unfavorable/mixed results to the user for the final candidate decision."
+      ],
+      "acceptance": [
+        "Historical evidence remains immutable.",
+        "Comparison uses exact predecessor/candidate SHAs.",
+        "No automatic retention or merge to main."
+      ],
+      "verification": [
+        "python3 research/architecture-review/next/V0/verify.py"
+      ],
+      "non_goals": [
+        "No main merge, historical-evidence edits, new paid services, shared-ledger changes, or unassigned source changes.",
+        "Do not claim a complete runtime/compiler/language comparison from a narrower deliverable."
+      ]
+    },
+    {
+      "id": "Z0",
+      "title": "Integrate the verified review and final claim ledger",
+      "wave": 6,
+      "depends_on": [
+        "P1",
+        "O1",
+        "C1",
+        "S0",
+        "MC",
+        "MG",
+        "V0"
+      ],
+      "owns": [
+        "research/architecture-review/next/Z0/"
+      ],
+      "resource_locks": [
+        "integration_writer"
+      ],
+      "gates": [],
+      "estimate": "L",
+      "coordination_risk": "low",
+      "goal": "Produce a reproducible combined review distinguishing established claims, rejected candidates and still-open objectives.",
+      "consumes": [
+        "checkpoint 09447b4 and its pinned evidence",
+        "verified integrated outputs from P1",
+        "verified integrated outputs from O1",
+        "verified integrated outputs from C1",
+        "verified integrated outputs from S0",
+        "verified integrated outputs from MC",
+        "verified integrated outputs from MG",
+        "verified integrated outputs from V0"
+      ],
+      "produces": [
+        "research/architecture-review/next/Z0/report.md",
+        "research/architecture-review/next/Z0/result.json",
+        "research/architecture-review/next/Z0/verify.py"
+      ],
+      "steps": [
+        "Inspect exact integrated commits, source/manifests, all block receipts and accepted scope.",
+        "Rerun the affected combined acceptance/proof/package checks against the integrated tree.",
+        "Publish per-track language comparisons, theorem/axiom inventory, user decisions, candidate disposition and outstanding work.",
+        "Commit the bounded final review and return its exact SHA for coordinator review/publication; stop without pushing, merging or starting successor work."
+      ],
+      "acceptance": [
+        "Block acceptance, established claims and overall objective completion are separate.",
+        "No missing GPU, ownership, proof or authoring evidence becomes a success by omission.",
+        "Final report identifies all exact source/tool/environment identities and reproducible commands."
+      ],
+      "verification": [
+        "python3 research/architecture-review/next/Z0/verify.py"
+      ],
+      "non_goals": [
+        "No main merge, historical-evidence edits, new paid services, shared-ledger changes, or unassigned source changes.",
+        "Do not claim a complete runtime/compiler/language comparison from a narrower deliverable."
+      ]
+    }
+  ]
+}

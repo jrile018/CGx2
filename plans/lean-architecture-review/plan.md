@@ -1,6 +1,6 @@
 # CGx2 implementation architecture, Lean assurance, and comparative evaluation
 
-Date: 2026-11-13. Status: confirmed by the user and authorized for parallel execution. See [execution DAG](execution.md). This document authorizes no claim of superiority or completed implementation proof.
+Date: 2026-11-13. Status: confirmed by the user and authorized for parallel execution. The [parallel block plan and coordinator runbook](parallel/README.md) govern remaining work; [execution.md](execution.md) preserves the completed first-checkpoint ledger. This document authorizes no claim of superiority or completed implementation proof.
 
 ## 1. Decisions settled through the grilling interview
 
@@ -176,3 +176,11 @@ The initial phase is complete only when its promised evidence or a concrete, exp
 - CPU/GPU results identify actual execution paths; missing devices, dependencies or bindings are explicit. No unsupported CPU fallback is counted as GPU success.
 - Comparative correctness precedes timing; raw outcomes, variance and failed attempts are retained. No whole-language conclusion is inferred from a narrow microbenchmark.
 - Original unfinished work, main, historical logs and source attribution remain intact. New work is committed by coherent milestone on isolated branches for review.
+
+## 6. Delegated execution and integration
+
+The remaining scope is mapped to 20 bounded blocks in [parallel/blocks.json](parallel/blocks.json). Use [the runbook](parallel/README.md) and its read-only board to dispatch the ready frontier, hand a self-contained packet to a worker chat or subagent, and verify returned commits. [parallel/state.json](parallel/state.json) is the coordinator-owned handoff ledger.
+
+Every writer gets an isolated worktree, exact base/dependency SHAs, exclusive paths, checks and a result receipt. Workers commit one bounded deliverable and stop. The coordinator verifies and cherry-picks accepted blocks in dependency order onto the isolated review branch, then tests the combined result. Waves organize the plan; unrelated work does not wait at a global barrier. Runtime/compiler and native-facade overlaps are serialized, and timed CPU/GPU runs reserve the host exclusively.
+
+The first checkpoint remains historical evidence; its partial proof/readiness results do not satisfy the successor proof, source-acceptance or comparison blocks. Substantive choices continue to follow the case-by-case agreement above. This plan update creates no new worker chats or implementation runs by itself.
