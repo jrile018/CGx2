@@ -1,0 +1,5 @@
+$ c++ -std=c++17 -O0 -D_GLIBCXX_USE_CXX11_ABI=1 -I/tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/include -I/tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/include/torch/csrc/api/include /home/john-riley/.codex/worktrees/github-main-consolidation/lang/research/architecture-review/environment/native.cpp -L/tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/lib -Wl,-rpath,/tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/lib -ltorch_cpu -ltorch -lc10 -o /tmp/cgx2-arch-review-environment/coordinator-replay/build/native-libtorch
+exit_code=0
+STDOUT
+
+STDERR

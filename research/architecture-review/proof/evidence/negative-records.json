@@ -1,0 +1,68 @@
+[
+  {
+    "id": "negative_boundary_charon",
+    "command": [
+      "/tmp/cgx2-arch-review-proof/charon",
+      "rustc",
+      "--preset",
+      "aeneas",
+      "--dest",
+      "/tmp/cgx2-arch-review-proof/negative",
+      "--",
+      "--crate-name",
+      "budget_kernel",
+      "--crate-type",
+      "lib",
+      "--edition=2021",
+      "-C",
+      "overflow-checks=yes",
+      "--target",
+      "x86_64-unknown-linux-gnu",
+      "/tmp/cgx2-arch-review-proof/negative/kernel-projection.rs"
+    ],
+    "exit_code": 0,
+    "evidence_file": "/tmp/cgx2-arch-review-proof/negative/charon.log"
+  },
+  {
+    "id": "negative_boundary_aeneas",
+    "command": [
+      "/tmp/cgx2-arch-review-proof/aeneas",
+      "-backend",
+      "lean",
+      "-dest",
+      "/tmp/cgx2-arch-review-proof/negative",
+      "/tmp/cgx2-arch-review-proof/negative/budget_kernel.llbc"
+    ],
+    "exit_code": 0,
+    "evidence_file": "/tmp/cgx2-arch-review-proof/negative/aeneas.log"
+  },
+  {
+    "id": "negative_boundary_lean",
+    "command": [
+      "/tmp/cgx2-arch-review-proof/lean/bin/lake",
+      "env",
+      "lean",
+      "-R",
+      "/tmp/cgx2-arch-review-proof/negative",
+      "-o",
+      "/tmp/cgx2-arch-review-proof/negative/BudgetKernel.olean",
+      "/tmp/cgx2-arch-review-proof/negative/BudgetKernel.lean"
+    ],
+    "exit_code": 0,
+    "evidence_file": "/tmp/cgx2-arch-review-proof/negative/lean.log"
+  },
+  {
+    "id": "negative_boundary_proof",
+    "command": [
+      "/tmp/cgx2-arch-review-proof/lean/bin/lake",
+      "env",
+      "lean",
+      "-DwarningAsError=true",
+      "-R",
+      "/tmp/cgx2-arch-review-proof/negative",
+      "/tmp/cgx2-arch-review-proof/negative/Admission.lean"
+    ],
+    "exit_code": 1,
+    "evidence_file": "/tmp/cgx2-arch-review-proof/negative/proof.log"
+  }
+]

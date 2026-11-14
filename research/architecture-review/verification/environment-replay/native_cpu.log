@@ -1,0 +1,6 @@
+$ /tmp/cgx2-arch-review-environment/coordinator-replay/build/native-libtorch
+exit_code=0
+STDOUT
+PASS native_ATen_CPU int32 values=[3,-3,7,9] sum=16 failure_unchanged=true mapped_libpython=false
+
+STDERR

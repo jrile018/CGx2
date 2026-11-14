@@ -1,0 +1,3859 @@
+{
+  "schema_version": 1,
+  "status": "specified_not_executed",
+  "languages": [
+    "CGx2",
+    "Rust",
+    "OCaml",
+    "Python"
+  ],
+  "policies": [
+    "idiomatic",
+    "equipped"
+  ],
+  "targets": [
+    "cpu",
+    "gpu"
+  ],
+  "tracks": [
+    "native",
+    "data_ml",
+    "general_llm"
+  ],
+  "scope": "Ten case contracts, full language/policy/target route matrix and no-spend paired authoring-study specification; no implementations, benchmarks or trials claimed.",
+  "input_refs": [
+    {
+      "path": "research/architecture-review/input-manifest.json",
+      "sha256": "007a2fce70f0dbe7b6f8a3d5fd8eb753ab853e34084261ca429855dac2f6c417"
+    },
+    {
+      "path": "research/architecture-review/architecture/report.md",
+      "sha256": "a167b895f3ef7685be4915a964e81d5849989b282e6aaa961b4b8913e971912d"
+    },
+    {
+      "path": "research/architecture-review/architecture/claims.json",
+      "sha256": "adfb047942636a2f5c2ae4a5b9dfd21f0a68c0434c13bd65ed79794bb42cc01e"
+    },
+    {
+      "path": "research/architecture-review/architecture/result.json",
+      "sha256": "7d395e0cf10e7fe41827367dbe0aa7e8d6a5a19438dc3f76fa4225b97c0b6963"
+    },
+    {
+      "path": "research/architecture-review/environment/report.md",
+      "sha256": "d3fc10d09dbfd5b0f2ac3443c235faa2c6031926646b51c4c2c8c070ca6ade46"
+    },
+    {
+      "path": "research/architecture-review/environment/result.json",
+      "sha256": "05a3d396672ea8e23d0ac03173d6665e3ddc3e03ad73fe2b20d5a16dd039cd96"
+    }
+  ],
+  "blocker_definitions": {
+    "cgx2_source_ownership": "Complete intended source ownership acceptance, not a claim of language inferiority.",
+    "cgx2_package_integration": "T3 standalone native CPU ATen is ready, but authenticated CGx2 SDK/source/executable closure is unproven.",
+    "cgx2_notebook_effects": "Complete persistent external-effect notebook integration remains unaccepted.",
+    "torch_gpu_backend": "Installed Torch2.11.0+cpu has no HIP/CUDA backend; native LibTorch GPU and tensor device routes are blocked despite Vulkan smoke.",
+    "native_ml_binding": "Rust/OCaml bindings to the pinned equivalent ATen facade/closure have not been supplied/validated for this suite.",
+    "gpu_binding": "Language-specific binding to the common pinned Vulkan shader/ownership/completion contract has not been supplied/validated.",
+    "study_execution": "No model/human trials, task starter/test freezing or external spend authorization for trials at this checkpoint."
+  },
+  "policy_definitions": {
+    "functional-v1": "Exact common outputs/errors/effect/lifetime requirements per case; idiomatic allocator/collector behavior observed without granting equivalent guarded-memory policy.",
+    "logical-policy-v1": "Equipped modes add the same explicitly scoped logical policy heap/credit ledger, roots/handle validity, failure trace and foreign-call boundary. Logical credits are representation-independent experimental policy units, not native allocation bytes or RSS. Native CGx2 no_gc charges and each host runtime allocator/GC remain separately observed; equal native-byte policy requires additional reviewed equivalence, never per-language normalization after results.",
+    "idiomatic": "Ordinary libraries/runtime with common functional behavior; report policy-specific negative tests inapplicable rather than crediting a guard guarantee.",
+    "equipped": "All policy adapter/arena/collector/root/error/foreign-wrapper implementation and execution costs included. Rust without tracing GC already avoids tracing pauses. OCaml/Python may use preallocated/offheap/explicit policy heaps where justified; suppressing one collector alone does not prove no allocation, refcount activity or global pause freedom."
+  },
+  "execution_gates": [
+    "Freeze candidate/toolchain/backend/task/test/source hashes.",
+    "Independently accept common functional+failure contract for each comparable pair.",
+    "Audit equipped-policy scope and logical/native accounting; incompatible contracts stay blocked.",
+    "Pin hardware/dependencies/threads/device/dtype/copies/synchronization and reject fallback.",
+    "Run pilots on quiet host after setup; preregister practical thresholds before holdout.",
+    "Only then run immutable holdout; preserve errors, failures and uncertainty."
+  ],
+  "cases": [
+    {
+      "id": "N01",
+      "track": "native",
+      "name": "Owned-buffer pipeline",
+      "behavior": {
+        "algorithm": "Allocate fresh u8 buffer x[i]=(17*i+3)%256; move it into stage; replace each byte with (3*x[i]+1)%256; return sum as checked i64 and first/last byte (null when empty).",
+        "observables": "One logical owner after move, no implicit whole-buffer copy; returned view must not outlive owner.",
+        "example": {
+          "n": 4,
+          "input": [
+            3,
+            20,
+            37,
+            54
+          ],
+          "output_bytes": [
+            10,
+            61,
+            112,
+            163
+          ],
+          "checksum": 346
+        }
+      },
+      "inputs": {
+        "n": [
+          0,
+          1,
+          4,
+          4096,
+          65536
+        ],
+        "invalid_n": [
+          -1,
+          65537
+        ]
+      },
+      "errors": [
+        {
+          "id": "size",
+          "condition": "n outside 0..65536",
+          "expected": "InputError, no payload allocation"
+        },
+        {
+          "id": "allocation",
+          "condition": "injected declared payload establishment failure",
+          "expected": "AllocationError, no published owner; release prior temporaries once"
+        }
+      ],
+      "dtype": {
+        "storage": "signed i64 unless bytes explicitly u8",
+        "arithmetic": "checked i64; overflow is ArithmeticError before publishing that operation",
+        "tolerance": "exact values/bytes/event order"
+      },
+      "cost_boundary": "Include allocate/fill/move/transform/checksum/drop; instrument copied payload bytes and actual capacities. Exclude source build from warm run; report build and cold launch separately.",
+      "aliasing_lifetime": "Source owner moves exactly once; backing identity preserved across stage; no required physical pointer equality across languages.",
+      "acceptance_tests": [
+        "Independent byte/checksum oracle for every n.",
+        "Use-after-move and escaping-view source/API negatives; runtime languages need equivalent checked wrapper in equipped mode.",
+        "Injected construction failure cleanup; no signal/timeout accepted as expected failure."
+      ],
+      "applicability": {
+        "cpu": {
+          "applicable": true,
+          "reason": "Host implementation required."
+        },
+        "gpu": {
+          "applicable": false,
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04."
+        }
+      },
+      "policy_contracts": {
+        "idiomatic": "functional-v1",
+        "equipped": "functional-v1+logical-policy-v1"
+      },
+      "metrics": [
+        "correctness",
+        "error_and_effect_trace",
+        "implementation_and_adapter_effort",
+        "cold_start",
+        "warm_end_to_end_latency",
+        "throughput",
+        "host_peak_rss",
+        "logical_charge_trace",
+        "native_runtime_charge_trace",
+        "cleanup_and_alias_trace"
+      ],
+      "routes": [
+        {
+          "id": "N01:CGx2:idiomatic:cpu",
+          "language": "CGx2",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "A18: complete ordinary owned List/Array/function-move source acceptance is unfinished; library OwnedBytes/tree smoke is insufficient.",
+          "blocker_ids": [
+            "cgx2_source_ownership"
+          ],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N01:CGx2:idiomatic:gpu",
+          "language": "CGx2",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N01:CGx2:equipped:cpu",
+          "language": "CGx2",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "A18: complete ordinary owned List/Array/function-move source acceptance is unfinished; library OwnedBytes/tree smoke is insufficient.",
+          "blocker_ids": [
+            "cgx2_source_ownership"
+          ],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N01:CGx2:equipped:gpu",
+          "language": "CGx2",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N01:Rust:idiomatic:cpu",
+          "language": "Rust",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Rust",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N01:Rust:idiomatic:gpu",
+          "language": "Rust",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Rust",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N01:Rust:equipped:cpu",
+          "language": "Rust",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Rust plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N01:Rust:equipped:gpu",
+          "language": "Rust",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Rust plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N01:OCaml:idiomatic:cpu",
+          "language": "OCaml",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic OCaml",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N01:OCaml:idiomatic:gpu",
+          "language": "OCaml",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic OCaml",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N01:OCaml:equipped:cpu",
+          "language": "OCaml",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "OCaml plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N01:OCaml:equipped:gpu",
+          "language": "OCaml",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "OCaml plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N01:Python:idiomatic:cpu",
+          "language": "Python",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Python",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N01:Python:idiomatic:gpu",
+          "language": "Python",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Python",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N01:Python:equipped:cpu",
+          "language": "Python",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Python plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N01:Python:equipped:gpu",
+          "language": "Python",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Python plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        }
+      ]
+    },
+    {
+      "id": "N02",
+      "track": "native",
+      "name": "Managed object graph with cycles and roots",
+      "behavior": {
+        "algorithm": "Create nodes 0..n-1 with value=i. For i<n-1 link i->i+1; link n-1->0; add roots at 0 and n//2. Trace/checksum all reachable nodes once. Remove both roots and explicitly collect.",
+        "observables": "Before unroot: n live nodes and checksum n*(n-1)/2; after collect: zero live policy-heap nodes; old handles invalid.",
+        "additional": "A second fixture is reverse slot-order chain with a root at the highest slot; preserve same reachable set."
+      },
+      "inputs": {
+        "n": [
+          1,
+          16,
+          256,
+          4096
+        ],
+        "shapes": [
+          "cycle",
+          "reverse_chain"
+        ],
+        "slot_history": [
+          "fresh",
+          "allocate_and_collect_2n_then_reuse"
+        ]
+      },
+      "errors": [
+        {
+          "id": "stale",
+          "condition": "read handle after reclaim/reuse",
+          "expected": "InvalidHandle"
+        },
+        {
+          "id": "cross_region",
+          "condition": "link object in region A to B",
+          "expected": "CrossRegionEdge, graph unchanged"
+        },
+        {
+          "id": "limit",
+          "condition": "injected reserve/region failure before node publication",
+          "expected": "AllocationError; previous graph and roots preserved; diagnostics may change"
+        }
+      ],
+      "dtype": {
+        "storage": "signed i64 unless bytes explicitly u8",
+        "arithmetic": "checked i64; overflow is ArithmeticError before publishing that operation",
+        "tolerance": "exact values/bytes/event order"
+      },
+      "cost_boundary": "Include graph build/root registration/traversal/unroot/collection and retain separate phase metrics. Count S physical slots, V reachable nodes, E stored edge positions, passes, inspected slots/edges and sweep work. Include equivalent root/collector implementation effort.",
+      "aliasing_lifetime": "Cycles/aliases preserved; checksum visits identities once, not paths; handles validated by generation/occupancy; policy heap scope explicit.",
+      "acceptance_tests": [
+        "Known reachable/unreachable graph oracle.",
+        "Stale handle, duplicate roots, cross-region and fault traces.",
+        "S/V/E conservation and exactly-once node cleanup; no timing credit from changing graph shape."
+      ],
+      "applicability": {
+        "cpu": {
+          "applicable": true,
+          "reason": "Host implementation required."
+        },
+        "gpu": {
+          "applicable": false,
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04."
+        }
+      },
+      "policy_contracts": {
+        "idiomatic": "functional-v1",
+        "equipped": "functional-v1+logical-policy-v1"
+      },
+      "metrics": [
+        "correctness",
+        "error_and_effect_trace",
+        "implementation_and_adapter_effort",
+        "cold_start",
+        "warm_end_to_end_latency",
+        "throughput",
+        "host_peak_rss",
+        "logical_charge_trace",
+        "native_runtime_charge_trace",
+        "cleanup_and_alias_trace"
+      ],
+      "routes": [
+        {
+          "id": "N02:CGx2:idiomatic:cpu",
+          "language": "CGx2",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "A18/A11: end-to-end ordinary source graph/aggregate/lifetime acceptance must be established; this is not a direct-runtime-library comparison.",
+          "blocker_ids": [
+            "cgx2_source_ownership"
+          ],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N02:CGx2:idiomatic:gpu",
+          "language": "CGx2",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N02:CGx2:equipped:cpu",
+          "language": "CGx2",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "A18/A11: end-to-end ordinary source graph/aggregate/lifetime acceptance must be established; this is not a direct-runtime-library comparison.",
+          "blocker_ids": [
+            "cgx2_source_ownership"
+          ],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N02:CGx2:equipped:gpu",
+          "language": "CGx2",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N02:Rust:idiomatic:cpu",
+          "language": "Rust",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Rust",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N02:Rust:idiomatic:gpu",
+          "language": "Rust",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Rust",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N02:Rust:equipped:cpu",
+          "language": "Rust",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Rust plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N02:Rust:equipped:gpu",
+          "language": "Rust",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Rust plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N02:OCaml:idiomatic:cpu",
+          "language": "OCaml",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic OCaml",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N02:OCaml:idiomatic:gpu",
+          "language": "OCaml",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic OCaml",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N02:OCaml:equipped:cpu",
+          "language": "OCaml",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "OCaml plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N02:OCaml:equipped:gpu",
+          "language": "OCaml",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "OCaml plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N02:Python:idiomatic:cpu",
+          "language": "Python",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Python",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N02:Python:idiomatic:gpu",
+          "language": "Python",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Python",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N02:Python:equipped:cpu",
+          "language": "Python",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Python plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N02:Python:equipped:gpu",
+          "language": "Python",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Python plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        }
+      ]
+    },
+    {
+      "id": "N03",
+      "track": "native",
+      "name": "Guarded mixed lifecycle and nested budget failure",
+      "behavior": {
+        "algorithm": "In logical-policy-v1 ledger: outer budget256; establish object A charge16; inner budget64; establish B charge32; request C charge40 (reject); request collect in either region (reject); leave inner; establish D charge24; leave outer; explicitly collect unreachable nodes.",
+        "observables": "Successful cumulative outer spend72 and inner spend32; C absent; prior A/B payloads unchanged; no collection event while guarded; one rejected allocation plus one forbidden-collection event; rooted survivors remain valid.",
+        "native_accounting": "These numbers are logical payload credits, never substituted for CGx2 native guard-byte values. Record native capacity/metadata charges independently; native byte-contract equality requires separately reviewed mapping."
+      },
+      "inputs": {
+        "logical_budgets": {
+          "outer": 256,
+          "inner": 64
+        },
+        "requests": [
+          16,
+          32,
+          40,
+          24
+        ],
+        "boundary_variants": [
+          "zero",
+          "exact accepted cumulative charge",
+          "one under exact"
+        ],
+        "sessions": 1,
+        "execution_threads": 1
+      },
+      "errors": [
+        {
+          "id": "budget",
+          "condition": "40 after inner spend32 exceeds64",
+          "expected": "BudgetExceeded without C/charge commit; allowed diagnostics recorded"
+        },
+        {
+          "id": "collect",
+          "condition": "collect in either region under guard",
+          "expected": "CollectionForbidden"
+        },
+        {
+          "id": "fault",
+          "condition": "guard-bookkeeping or root reservation fault",
+          "expected": "GuardEntryError/AllocationError; existing guards/roots preserved; prior successful charges not refunded"
+        }
+      ],
+      "dtype": {
+        "storage": "signed i64 unless bytes explicitly u8",
+        "arithmetic": "checked i64; overflow is ArithmeticError before publishing that operation",
+        "tolerance": "exact values/bytes/event order"
+      },
+      "cost_boundary": "Include policy wrappers, guard/root bookkeeping, allocation preflight, failed attempts, cleanup and collection after exit. Report logical credits and actual runtime charges in separate columns; include language runtime pauses in wall time.",
+      "aliasing_lifetime": "A/B survive rejected C; owner/root transfer and lexical cleanup audited. No requirement of whole-state equality: diagnostics/fault observations may change.",
+      "acceptance_tests": [
+        "Exact logical admission/event trace.",
+        "Native guard entry/exit/failure trace with derived target-specific capacity charges.",
+        "Unknown foreign call inside strict guard rejects; no foreign work is timed inside it.",
+        "Normal/error/unwind cleanup; cancellation separately admitted or blocked."
+      ],
+      "applicability": {
+        "cpu": {
+          "applicable": true,
+          "reason": "Host implementation required."
+        },
+        "gpu": {
+          "applicable": false,
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04."
+        }
+      },
+      "policy_contracts": {
+        "idiomatic": "functional-v1",
+        "equipped": "functional-v1+logical-policy-v1"
+      },
+      "metrics": [
+        "correctness",
+        "error_and_effect_trace",
+        "implementation_and_adapter_effort",
+        "cold_start",
+        "warm_end_to_end_latency",
+        "throughput",
+        "host_peak_rss",
+        "logical_charge_trace",
+        "native_runtime_charge_trace",
+        "cleanup_and_alias_trace"
+      ],
+      "routes": [
+        {
+          "id": "N03:CGx2:idiomatic:cpu",
+          "language": "CGx2",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "A06-A08/A18: source-wide mixed ownership/guard/failure acceptance remains incomplete; compatibility no_gc and try_no_gc require separate coverage.",
+          "blocker_ids": [
+            "cgx2_source_ownership"
+          ],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N03:CGx2:idiomatic:gpu",
+          "language": "CGx2",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N03:CGx2:equipped:cpu",
+          "language": "CGx2",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "A06-A08/A18: source-wide mixed ownership/guard/failure acceptance remains incomplete; compatibility no_gc and try_no_gc require separate coverage.",
+          "blocker_ids": [
+            "cgx2_source_ownership"
+          ],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N03:CGx2:equipped:gpu",
+          "language": "CGx2",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N03:Rust:idiomatic:cpu",
+          "language": "Rust",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Rust",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N03:Rust:idiomatic:gpu",
+          "language": "Rust",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Rust",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N03:Rust:equipped:cpu",
+          "language": "Rust",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Rust plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N03:Rust:equipped:gpu",
+          "language": "Rust",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Rust plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N03:OCaml:idiomatic:cpu",
+          "language": "OCaml",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic OCaml",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N03:OCaml:idiomatic:gpu",
+          "language": "OCaml",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic OCaml",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N03:OCaml:equipped:cpu",
+          "language": "OCaml",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "OCaml plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N03:OCaml:equipped:gpu",
+          "language": "OCaml",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "OCaml plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N03:Python:idiomatic:cpu",
+          "language": "Python",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Python",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N03:Python:idiomatic:gpu",
+          "language": "Python",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Python",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N03:Python:equipped:cpu",
+          "language": "Python",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Python plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "N03:Python:equipped:gpu",
+          "language": "Python",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Python plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        }
+      ]
+    },
+    {
+      "id": "M01",
+      "track": "data_ml",
+      "name": "Float32 inference with preprocessing",
+      "behavior": {
+        "algorithm": "x[r,c]=((7*r+3*c)%17)-8; preprocess z=float32(x)/8; y=relu(z@W+b); W=[[1,0,-1],[0.5,1,0],[0,-0.5,1],[1,1,0.5]], b=[0.25,-0.5,1].",
+        "outputs": "N by3 contiguous float32 y; exact model parameters frozen; independent float64 oracle and declared tolerance.",
+        "backend": "Same Torch2.11.0-compatible ATen operation graph for native facade and Python; GPU requires a new supported pinned GPU closure, not current CPU wheel."
+      },
+      "inputs": {
+        "shape": {
+          "x": [
+            "N",
+            4
+          ],
+          "W": [
+            4,
+            3
+          ],
+          "y": [
+            "N",
+            3
+          ]
+        },
+        "N": [
+          1,
+          16,
+          256,
+          4096
+        ],
+        "dtype": "float32",
+        "seed": "formula, no downloaded data"
+      },
+      "errors": [
+        {
+          "id": "shape",
+          "condition": "x second dimension !=4",
+          "expected": "ShapeError before kernel/output publication"
+        },
+        {
+          "id": "dtype",
+          "condition": "int32/f64 input offered to f32-only signature",
+          "expected": "DTypeError, no implicit cast"
+        },
+        {
+          "id": "device",
+          "condition": "explicit GPU request without matching supported backend/device",
+          "expected": "UnsupportedDevice; no CPU fallback counted as GPU"
+        }
+      ],
+      "dtype": {
+        "storage": "IEEE-754 binary32",
+        "arithmetic": "float32 multiply/add; fixed backend/threads/device; no autocast or TF32; float64 independent oracle",
+        "tolerance": {
+          "absolute": 1e-05,
+          "relative": 1e-05,
+          "nan": "reject input",
+          "infinity": "reject input"
+        }
+      },
+      "cost_boundary": "End-to-end includes launch/import/load/model setup for cold; warm includes input creation/preprocess, facade/Python call overhead, required copies, kernel, synchronization and result readback. Report kernel-only separately without replacing end-to-end result.",
+      "aliasing_lifetime": "No input mutation; output owns storage; input/model/output release after synchronous completion. Device async buffers cannot be released before completion.",
+      "acceptance_tests": [
+        "Float64 oracle at every size with exact shape/dtype checks.",
+        "Same loaded backend closure and numerical flags.",
+        "Device allocation, synchronized result/readback and actual discrete adapter identity; reject fallback."
+      ],
+      "applicability": {
+        "cpu": {
+          "applicable": true,
+          "reason": "Host implementation required."
+        },
+        "gpu": {
+          "applicable": true,
+          "reason": "Real device work; GPU rows cannot be retired after CPU fallback."
+        }
+      },
+      "policy_contracts": {
+        "idiomatic": "functional-v1",
+        "equipped": "functional-v1+logical-policy-v1"
+      },
+      "metrics": [
+        "correctness",
+        "error_and_effect_trace",
+        "implementation_and_adapter_effort",
+        "cold_start",
+        "warm_end_to_end_latency",
+        "throughput",
+        "host_peak_rss",
+        "logical_charge_trace",
+        "native_runtime_charge_trace",
+        "cleanup_and_alias_trace",
+        "device_allocated_reserved_bytes",
+        "host_device_copy_bytes",
+        "synchronization",
+        "actual_device_identity"
+      ],
+      "routes": [
+        {
+          "id": "M01:CGx2:idiomatic:cpu",
+          "language": "CGx2",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "T3 cgx2_dependency_integration: native SDK/package closure and source acceptance unproven.",
+          "blocker_ids": [
+            "cgx2_package_integration"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M01:CGx2:idiomatic:gpu",
+          "language": "CGx2",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Installed Torch2.11.0+cpu has no HIP/CUDA backend; native LibTorch GPU and tensor device routes are blocked despite Vulkan smoke.",
+          "blocker_ids": [
+            "torch_gpu_backend",
+            "cgx2_package_integration"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M01:CGx2:equipped:cpu",
+          "language": "CGx2",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "T3 cgx2_dependency_integration: native SDK/package closure and source acceptance unproven.",
+          "blocker_ids": [
+            "cgx2_package_integration"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M01:CGx2:equipped:gpu",
+          "language": "CGx2",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Installed Torch2.11.0+cpu has no HIP/CUDA backend; native LibTorch GPU and tensor device routes are blocked despite Vulkan smoke.",
+          "blocker_ids": [
+            "torch_gpu_backend",
+            "cgx2_package_integration"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M01:Rust:idiomatic:cpu",
+          "language": "Rust",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Rust/OCaml bindings to the pinned equivalent ATen facade/closure have not been supplied/validated for this suite.",
+          "blocker_ids": [
+            "native_ml_binding"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "idiomatic Rust",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M01:Rust:idiomatic:gpu",
+          "language": "Rust",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Installed Torch2.11.0+cpu has no HIP/CUDA backend; native LibTorch GPU and tensor device routes are blocked despite Vulkan smoke.",
+          "blocker_ids": [
+            "torch_gpu_backend",
+            "native_ml_binding"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "idiomatic Rust",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M01:Rust:equipped:cpu",
+          "language": "Rust",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Rust/OCaml bindings to the pinned equivalent ATen facade/closure have not been supplied/validated for this suite.",
+          "blocker_ids": [
+            "native_ml_binding"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "Rust plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M01:Rust:equipped:gpu",
+          "language": "Rust",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Installed Torch2.11.0+cpu has no HIP/CUDA backend; native LibTorch GPU and tensor device routes are blocked despite Vulkan smoke.",
+          "blocker_ids": [
+            "torch_gpu_backend",
+            "native_ml_binding"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "Rust plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M01:OCaml:idiomatic:cpu",
+          "language": "OCaml",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Rust/OCaml bindings to the pinned equivalent ATen facade/closure have not been supplied/validated for this suite.",
+          "blocker_ids": [
+            "native_ml_binding"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "idiomatic OCaml",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M01:OCaml:idiomatic:gpu",
+          "language": "OCaml",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Installed Torch2.11.0+cpu has no HIP/CUDA backend; native LibTorch GPU and tensor device routes are blocked despite Vulkan smoke.",
+          "blocker_ids": [
+            "torch_gpu_backend",
+            "native_ml_binding"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "idiomatic OCaml",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M01:OCaml:equipped:cpu",
+          "language": "OCaml",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Rust/OCaml bindings to the pinned equivalent ATen facade/closure have not been supplied/validated for this suite.",
+          "blocker_ids": [
+            "native_ml_binding"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "OCaml plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M01:OCaml:equipped:gpu",
+          "language": "OCaml",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Installed Torch2.11.0+cpu has no HIP/CUDA backend; native LibTorch GPU and tensor device routes are blocked despite Vulkan smoke.",
+          "blocker_ids": [
+            "torch_gpu_backend",
+            "native_ml_binding"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "OCaml plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M01:Python:idiomatic:cpu",
+          "language": "Python",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "idiomatic Python",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M01:Python:idiomatic:gpu",
+          "language": "Python",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Installed Torch2.11.0+cpu has no HIP/CUDA backend; native LibTorch GPU and tensor device routes are blocked despite Vulkan smoke.",
+          "blocker_ids": [
+            "torch_gpu_backend"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "idiomatic Python",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M01:Python:equipped:cpu",
+          "language": "Python",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "Python plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M01:Python:equipped:gpu",
+          "language": "Python",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Installed Torch2.11.0+cpu has no HIP/CUDA backend; native LibTorch GPU and tensor device routes are blocked despite Vulkan smoke.",
+          "blocker_ids": [
+            "torch_gpu_backend"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "Python plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        }
+      ]
+    },
+    {
+      "id": "M02",
+      "track": "data_ml",
+      "name": "Foreign copy/transfer and alias lifetime",
+      "behavior": {
+        "algorithm": "Input contiguous f32 [1,-2,3,4] repeated k times. Foreign operation returns a fresh contiguous output equal to input*2; source remains unchanged. Returned borrowed view aliases output until output release.",
+        "example": {
+          "k": 1,
+          "output": [
+            2,
+            -4,
+            6,
+            8
+          ]
+        },
+        "transfers": "CPU path measures CGx2/host-to-ATen copies. GPU path additionally includes host-to-device and device-to-host copies and completion; no zero-copy claim without alias/lifetime observation."
+      },
+      "inputs": {
+        "k": [
+          1,
+          256,
+          16384
+        ],
+        "dtype": "float32",
+        "layout": "contiguous one-dimensional",
+        "wrong_layout": "stride2 view",
+        "strict_guard": "foreign call excluded unless separately justified explicit contract"
+      },
+      "errors": [
+        {
+          "id": "dtype_layout",
+          "condition": "wrong dtype/noncontiguous input",
+          "expected": "DTypeError/LayoutError before foreign invocation; no silent copy"
+        },
+        {
+          "id": "allocation",
+          "condition": "injected facade-side output reserve failure",
+          "expected": "AllocationError, input unchanged, no output handle leak"
+        },
+        {
+          "id": "view",
+          "condition": "use view after owner release",
+          "expected": "checked wrapper InvalidHandle, not undefined native access"
+        }
+      ],
+      "dtype": {
+        "storage": "IEEE-754 binary32",
+        "arithmetic": "float32 multiply/add; fixed backend/threads/device; no autocast or TF32; float64 independent oracle",
+        "tolerance": {
+          "absolute": 1e-05,
+          "relative": 1e-05,
+          "nan": "reject input",
+          "infinity": "reject input"
+        }
+      },
+      "cost_boundary": "Include facade loading/amortization, binding/validation, all host/device copies, output ownership/view tracking, completion and releases. Report copied bytes and allocated/reserved host/device bytes separately from logical credits.",
+      "aliasing_lifetime": "Output storage is independent of input; view aliases output only; release ordering and exact once handle destruction observed. Kernel asynchronous lifetime separate from host Session.",
+      "acceptance_tests": [
+        "Input immutability, output alias/view changes and cleanup oracle.",
+        "Wrong-type/layout failures, injected reserve failure and stale-view wrapper error.",
+        "Actual backend+copy count+sync trace; no foreign call admitted under strict guard solely by annotation."
+      ],
+      "applicability": {
+        "cpu": {
+          "applicable": true,
+          "reason": "Host implementation required."
+        },
+        "gpu": {
+          "applicable": true,
+          "reason": "Real device work; GPU rows cannot be retired after CPU fallback."
+        }
+      },
+      "policy_contracts": {
+        "idiomatic": "functional-v1",
+        "equipped": "functional-v1+logical-policy-v1"
+      },
+      "metrics": [
+        "correctness",
+        "error_and_effect_trace",
+        "implementation_and_adapter_effort",
+        "cold_start",
+        "warm_end_to_end_latency",
+        "throughput",
+        "host_peak_rss",
+        "logical_charge_trace",
+        "native_runtime_charge_trace",
+        "cleanup_and_alias_trace",
+        "device_allocated_reserved_bytes",
+        "host_device_copy_bytes",
+        "synchronization",
+        "actual_device_identity"
+      ],
+      "routes": [
+        {
+          "id": "M02:CGx2:idiomatic:cpu",
+          "language": "CGx2",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "T3 cgx2_dependency_integration plus A15: reviewed typed facade/source lifetime contract and authenticated package closure are absent.",
+          "blocker_ids": [
+            "cgx2_package_integration"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M02:CGx2:idiomatic:gpu",
+          "language": "CGx2",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Installed Torch2.11.0+cpu has no HIP/CUDA backend; native LibTorch GPU and tensor device routes are blocked despite Vulkan smoke.",
+          "blocker_ids": [
+            "torch_gpu_backend",
+            "cgx2_package_integration"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M02:CGx2:equipped:cpu",
+          "language": "CGx2",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "T3 cgx2_dependency_integration plus A15: reviewed typed facade/source lifetime contract and authenticated package closure are absent.",
+          "blocker_ids": [
+            "cgx2_package_integration"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M02:CGx2:equipped:gpu",
+          "language": "CGx2",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Installed Torch2.11.0+cpu has no HIP/CUDA backend; native LibTorch GPU and tensor device routes are blocked despite Vulkan smoke.",
+          "blocker_ids": [
+            "torch_gpu_backend",
+            "cgx2_package_integration"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M02:Rust:idiomatic:cpu",
+          "language": "Rust",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Rust/OCaml bindings to the pinned equivalent ATen facade/closure have not been supplied/validated for this suite.",
+          "blocker_ids": [
+            "native_ml_binding"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "idiomatic Rust",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M02:Rust:idiomatic:gpu",
+          "language": "Rust",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Installed Torch2.11.0+cpu has no HIP/CUDA backend; native LibTorch GPU and tensor device routes are blocked despite Vulkan smoke.",
+          "blocker_ids": [
+            "torch_gpu_backend",
+            "native_ml_binding"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "idiomatic Rust",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M02:Rust:equipped:cpu",
+          "language": "Rust",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Rust/OCaml bindings to the pinned equivalent ATen facade/closure have not been supplied/validated for this suite.",
+          "blocker_ids": [
+            "native_ml_binding"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "Rust plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M02:Rust:equipped:gpu",
+          "language": "Rust",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Installed Torch2.11.0+cpu has no HIP/CUDA backend; native LibTorch GPU and tensor device routes are blocked despite Vulkan smoke.",
+          "blocker_ids": [
+            "torch_gpu_backend",
+            "native_ml_binding"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "Rust plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M02:OCaml:idiomatic:cpu",
+          "language": "OCaml",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Rust/OCaml bindings to the pinned equivalent ATen facade/closure have not been supplied/validated for this suite.",
+          "blocker_ids": [
+            "native_ml_binding"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "idiomatic OCaml",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M02:OCaml:idiomatic:gpu",
+          "language": "OCaml",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Installed Torch2.11.0+cpu has no HIP/CUDA backend; native LibTorch GPU and tensor device routes are blocked despite Vulkan smoke.",
+          "blocker_ids": [
+            "torch_gpu_backend",
+            "native_ml_binding"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "idiomatic OCaml",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M02:OCaml:equipped:cpu",
+          "language": "OCaml",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Rust/OCaml bindings to the pinned equivalent ATen facade/closure have not been supplied/validated for this suite.",
+          "blocker_ids": [
+            "native_ml_binding"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "OCaml plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M02:OCaml:equipped:gpu",
+          "language": "OCaml",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Installed Torch2.11.0+cpu has no HIP/CUDA backend; native LibTorch GPU and tensor device routes are blocked despite Vulkan smoke.",
+          "blocker_ids": [
+            "torch_gpu_backend",
+            "native_ml_binding"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "OCaml plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M02:Python:idiomatic:cpu",
+          "language": "Python",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "idiomatic Python",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M02:Python:idiomatic:gpu",
+          "language": "Python",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Installed Torch2.11.0+cpu has no HIP/CUDA backend; native LibTorch GPU and tensor device routes are blocked despite Vulkan smoke.",
+          "blocker_ids": [
+            "torch_gpu_backend"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "idiomatic Python",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M02:Python:equipped:cpu",
+          "language": "Python",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "Python plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M02:Python:equipped:gpu",
+          "language": "Python",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Installed Torch2.11.0+cpu has no HIP/CUDA backend; native LibTorch GPU and tensor device routes are blocked despite Vulkan smoke.",
+          "blocker_ids": [
+            "torch_gpu_backend"
+          ],
+          "backend": "ATen/Torch common operation graph",
+          "implementation_profile": "Python plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        }
+      ]
+    },
+    {
+      "id": "M03",
+      "track": "data_ml",
+      "name": "Persistent notebook data workflow without replay",
+      "behavior": {
+        "cells": {
+          "C1": "read input [1,2,3] once and set x",
+          "C2": "set y=[2*v+1 for v in x]; no external write",
+          "C3": "append sum(y) to an external event file and display it"
+        },
+        "workflow": "Fresh file: RunAll -> events[15]; rerun C3 only ->[15,15] with C1 read count still1. Edit C2 multiplier2->3: C3 becomes stale without execution/write. Run C2 then C3 ->[15,15,21]. Restart resets session without replaying writes. Fresh file+clean RunAll of edited cells ->[21].",
+        "representation": "Common cell/workflow driver in Rust/OCaml/Python; native .cgnb route for CGx2. Driver implementation cost is reported."
+      },
+      "inputs": {
+        "x": [
+          1,
+          2,
+          3
+        ],
+        "initial_events": [],
+        "cell_ids": [
+          "C1",
+          "C2",
+          "C3"
+        ],
+        "external_file": "private per-attempt scratch; never shared trial logs"
+      },
+      "errors": [
+        {
+          "id": "uncertain",
+          "condition": "worker interrupted after append before acknowledgment",
+          "expected": "UnknownOutcome; do not retry automatically or count once without event reconciliation"
+        },
+        {
+          "id": "dependency",
+          "condition": "C2 edited",
+          "expected": "C3 stale, no implicit rerun"
+        },
+        {
+          "id": "file_error",
+          "condition": "append denied",
+          "expected": "IOError with original cell identity; no fabricated output"
+        }
+      ],
+      "dtype": {
+        "storage": "signed i64 unless bytes explicitly u8",
+        "arithmetic": "checked i64; overflow is ArithmeticError before publishing that operation",
+        "tolerance": "exact values/bytes/event order"
+      },
+      "cost_boundary": "Include driver/kernel startup, retained state, dependency invalidation, file I/O, worker/IPC and output serialization. Report cold clean RunAll versus warm selected reruns; saved outputs never count as fresh execution.",
+      "aliasing_lifetime": "Retained x/y lifetime and restart cleanup explicit; external writes persist across restart. Session remains single-threaded; state replay is observable.",
+      "acceptance_tests": [
+        "Exact event sequence and input-read count.",
+        "Selected rerun does not execute earlier cells.",
+        "Interrupt/uncertain outcome and clean-restart provenance tests."
+      ],
+      "applicability": {
+        "cpu": {
+          "applicable": true,
+          "reason": "Host implementation required."
+        },
+        "gpu": {
+          "applicable": false,
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04."
+        }
+      },
+      "policy_contracts": {
+        "idiomatic": "functional-v1",
+        "equipped": "functional-v1+logical-policy-v1"
+      },
+      "metrics": [
+        "correctness",
+        "error_and_effect_trace",
+        "implementation_and_adapter_effort",
+        "cold_start",
+        "warm_end_to_end_latency",
+        "throughput",
+        "host_peak_rss",
+        "logical_charge_trace",
+        "native_runtime_charge_trace",
+        "cleanup_and_alias_trace"
+      ],
+      "routes": [
+        {
+          "id": "M03:CGx2:idiomatic:cpu",
+          "language": "CGx2",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "A22: current bounded pure notebook kernel rejects unknown/effectful cells; persistent external effect workflow is not accepted.",
+          "blocker_ids": [
+            "cgx2_notebook_effects"
+          ],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M03:CGx2:idiomatic:gpu",
+          "language": "CGx2",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M03:CGx2:equipped:cpu",
+          "language": "CGx2",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "A22: current bounded pure notebook kernel rejects unknown/effectful cells; persistent external effect workflow is not accepted.",
+          "blocker_ids": [
+            "cgx2_notebook_effects"
+          ],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M03:CGx2:equipped:gpu",
+          "language": "CGx2",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M03:Rust:idiomatic:cpu",
+          "language": "Rust",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Rust",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M03:Rust:idiomatic:gpu",
+          "language": "Rust",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Rust",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M03:Rust:equipped:cpu",
+          "language": "Rust",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Rust plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M03:Rust:equipped:gpu",
+          "language": "Rust",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Rust plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M03:OCaml:idiomatic:cpu",
+          "language": "OCaml",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic OCaml",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M03:OCaml:idiomatic:gpu",
+          "language": "OCaml",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic OCaml",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M03:OCaml:equipped:cpu",
+          "language": "OCaml",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "OCaml plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M03:OCaml:equipped:gpu",
+          "language": "OCaml",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "OCaml plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M03:Python:idiomatic:cpu",
+          "language": "Python",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Python",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M03:Python:idiomatic:gpu",
+          "language": "Python",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Python",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M03:Python:equipped:cpu",
+          "language": "Python",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Python plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M03:Python:equipped:gpu",
+          "language": "Python",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Python plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        }
+      ]
+    },
+    {
+      "id": "G01",
+      "track": "general_llm",
+      "name": "Multi-module records variants collections and errors",
+      "behavior": {
+        "modules": [
+          "domain",
+          "parse",
+          "transform",
+          "main"
+        ],
+        "input_format": "UTF-8 lines id,kind,value; kind add|skip; no whitespace/quoting; id=[a-z]{1,8}; value signed decimal i64.",
+        "algorithm": "Parse records into Add(id,value)|Skip(id). Reject duplicate ids before transformation. Keep Add records in input order; checked sum values; output exact JSON object {ids:[...],total:i64,skipped:u64} with keys ordered ids,total,skipped.",
+        "example": {
+          "input": "a,add,2\nb,skip,0\nc,add,-1\n",
+          "output": "{\"ids\":[\"a\",\"c\"],\"total\":1,\"skipped\":1}"
+        }
+      },
+      "inputs": {
+        "rows": [
+          0,
+          1,
+          16,
+          1024
+        ],
+        "id_domain": "first1024 lexicographic lowercase base26 IDs of width3",
+        "values": "(7*i)%31-15",
+        "line_endings": "LF; one optional terminal LF; no empty internal lines"
+      },
+      "errors": [
+        {
+          "id": "parse",
+          "condition": "invalid UTF-8/field count/kind/decimal",
+          "expected": "ParseError(line1based,field); first error in input order"
+        },
+        {
+          "id": "duplicate",
+          "condition": "repeated id",
+          "expected": "DuplicateId(line1based,id), no final JSON"
+        },
+        {
+          "id": "overflow",
+          "condition": "checked total exceeds i64",
+          "expected": "ArithmeticError at offending Add line; no final JSON"
+        }
+      ],
+      "dtype": {
+        "storage": "signed i64 unless bytes explicitly u8",
+        "arithmetic": "checked i64; overflow is ArithmeticError before publishing that operation",
+        "tolerance": "exact values/bytes/event order"
+      },
+      "cost_boundary": "Include parse/validate/construct/transform/error formatting/serialization and all module/package startup; same dependency budget and standard-library policy; build/API/documentation effort separate.",
+      "aliasing_lifetime": "Immutable records/variants/collections with no required affine source feature; output order fixed; partial parse cleanup measured when equipped.",
+      "acceptance_tests": [
+        "Independent language-neutral oracle over valid/invalid lines.",
+        "Boundary i64 values, duplicate IDs, Unicode/invalid UTF-8 and first-error tests.",
+        "Cross-module API/visibility and explicit unsupported profile failures retained."
+      ],
+      "applicability": {
+        "cpu": {
+          "applicable": true,
+          "reason": "Host implementation required."
+        },
+        "gpu": {
+          "applicable": false,
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04."
+        }
+      },
+      "policy_contracts": {
+        "idiomatic": "functional-v1",
+        "equipped": "functional-v1+logical-policy-v1"
+      },
+      "metrics": [
+        "correctness",
+        "error_and_effect_trace",
+        "implementation_and_adapter_effort",
+        "cold_start",
+        "warm_end_to_end_latency",
+        "throughput",
+        "host_peak_rss",
+        "logical_charge_trace",
+        "native_runtime_charge_trace",
+        "cleanup_and_alias_trace"
+      ],
+      "routes": [
+        {
+          "id": "G01:CGx2:idiomatic:cpu",
+          "language": "CGx2",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G01:CGx2:idiomatic:gpu",
+          "language": "CGx2",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G01:CGx2:equipped:cpu",
+          "language": "CGx2",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G01:CGx2:equipped:gpu",
+          "language": "CGx2",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G01:Rust:idiomatic:cpu",
+          "language": "Rust",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Rust",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G01:Rust:idiomatic:gpu",
+          "language": "Rust",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Rust",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G01:Rust:equipped:cpu",
+          "language": "Rust",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Rust plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G01:Rust:equipped:gpu",
+          "language": "Rust",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Rust plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G01:OCaml:idiomatic:cpu",
+          "language": "OCaml",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic OCaml",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G01:OCaml:idiomatic:gpu",
+          "language": "OCaml",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic OCaml",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G01:OCaml:equipped:cpu",
+          "language": "OCaml",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "OCaml plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G01:OCaml:equipped:gpu",
+          "language": "OCaml",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "OCaml plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G01:Python:idiomatic:cpu",
+          "language": "Python",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Python",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G01:Python:idiomatic:gpu",
+          "language": "Python",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Python",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G01:Python:equipped:cpu",
+          "language": "Python",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Python plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G01:Python:equipped:gpu",
+          "language": "Python",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Python plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        }
+      ]
+    },
+    {
+      "id": "G02",
+      "track": "general_llm",
+      "name": "Blinded bug-fix task family",
+      "behavior": {
+        "task": "Correct a seeded signed-i64 checked-sum boundary bug in the G01 transform module; freeze one defective starter per language and policy with equivalent defect and APIs.",
+        "success": "All independently authored public+hidden G01 tests plus overflow/empty/error-order regressions pass; valid starter API unchanged.",
+        "constraints": "One bounded repair attempt may include multiple model turns inside the fixed whole-attempt budget; no access to reference solution/future history."
+      },
+      "inputs": {
+        "tasks": "12 pilot and36 holdout task slots split equally across bugfix/refactor/author families; concrete starter hashes must be frozen before trials",
+        "per_attempt_budget": {
+          "input_tokens": 60000,
+          "output_tokens": 12000,
+          "wall_minutes": 45,
+          "tool_minutes_included": true
+        }
+      },
+      "errors": [
+        {
+          "id": "budget",
+          "condition": "timeout/token cap/unresolved tests",
+          "expected": "unsuccessful attempt; charge entire assigned failure budget, retain actual tokens and logs"
+        },
+        {
+          "id": "invalid_change",
+          "condition": "API/test deletion or bypass",
+          "expected": "incorrect regardless of shorter source"
+        }
+      ],
+      "dtype": {
+        "storage": "signed i64 unless bytes explicitly u8",
+        "arithmetic": "checked i64; overflow is ArithmeticError before publishing that operation",
+        "tolerance": "exact values/bytes/event order"
+      },
+      "cost_boundary": "Score correct completion first; count all input/output/tool payload tokens, model/tool wall time, repair turns, compiler errors and human interventions. Generated source bytes/tokens are secondary.",
+      "aliasing_lifetime": "Same G01 value semantics and checked errors; equipped variant includes equivalent ledger/lifetime guard tasks and wrapper code in docs/context/cost.",
+      "acceptance_tests": [
+        "Independent acceptance test identities sealed before randomization.",
+        "Public feedback policy equal across languages; hidden tests revealed only after final attempt.",
+        "All failed attempts retained; no selection of only successful pairs."
+      ],
+      "applicability": {
+        "cpu": {
+          "applicable": true,
+          "reason": "Host implementation required."
+        },
+        "gpu": {
+          "applicable": false,
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04."
+        }
+      },
+      "policy_contracts": {
+        "idiomatic": "functional-v1",
+        "equipped": "functional-v1+logical-policy-v1"
+      },
+      "metrics": [
+        "correctness",
+        "error_and_effect_trace",
+        "implementation_and_adapter_effort",
+        "cold_start",
+        "warm_end_to_end_latency",
+        "throughput",
+        "host_peak_rss",
+        "logical_charge_trace",
+        "native_runtime_charge_trace",
+        "cleanup_and_alias_trace"
+      ],
+      "routes": [
+        {
+          "id": "G02:CGx2:idiomatic:cpu",
+          "language": "CGx2",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G02:CGx2:idiomatic:gpu",
+          "language": "CGx2",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G02:CGx2:equipped:cpu",
+          "language": "CGx2",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G02:CGx2:equipped:gpu",
+          "language": "CGx2",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G02:Rust:idiomatic:cpu",
+          "language": "Rust",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Rust",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G02:Rust:idiomatic:gpu",
+          "language": "Rust",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Rust",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G02:Rust:equipped:cpu",
+          "language": "Rust",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Rust plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G02:Rust:equipped:gpu",
+          "language": "Rust",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Rust plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G02:OCaml:idiomatic:cpu",
+          "language": "OCaml",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic OCaml",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G02:OCaml:idiomatic:gpu",
+          "language": "OCaml",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic OCaml",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G02:OCaml:equipped:cpu",
+          "language": "OCaml",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "OCaml plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G02:OCaml:equipped:gpu",
+          "language": "OCaml",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "OCaml plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G02:Python:idiomatic:cpu",
+          "language": "Python",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Python",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G02:Python:idiomatic:gpu",
+          "language": "Python",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Python",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G02:Python:equipped:cpu",
+          "language": "Python",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Python plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G02:Python:equipped:gpu",
+          "language": "Python",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Python plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        }
+      ]
+    },
+    {
+      "id": "G03",
+      "track": "general_llm",
+      "name": "Blinded refactor task family",
+      "behavior": {
+        "task": "Extract G01 parsing/validation into a reusable module and introduce a named record for output summary without changing public CLI behavior, first-error order or side effects.",
+        "success": "Independent behavior-preservation corpus and API/module constraints pass; no skipped tests or new ambient capabilities.",
+        "authoring_companion": "Third study family adds a specified filter option to G01 with independently frozen examples/tests; it uses the same blinded protocol and costs."
+      },
+      "inputs": {
+        "cases": "Same input domain as G01, plus unchanged serialized output and public import tests",
+        "per_attempt_budget": {
+          "input_tokens": 60000,
+          "output_tokens": 12000,
+          "wall_minutes": 45,
+          "tool_minutes_included": true
+        }
+      },
+      "errors": [
+        {
+          "id": "regression",
+          "condition": "changed error/order/checked arithmetic/CLI output",
+          "expected": "incorrect even if tests supplied by model pass"
+        },
+        {
+          "id": "budget",
+          "condition": "timeout or token cap",
+          "expected": "unsuccessful; full assigned failure budget charged"
+        }
+      ],
+      "dtype": {
+        "storage": "signed i64 unless bytes explicitly u8",
+        "arithmetic": "checked i64; overflow is ArithmeticError before publishing that operation",
+        "tolerance": "exact values/bytes/event order"
+      },
+      "cost_boundary": "Include navigation/context/tool tokens, actual build/test/debug time, repairs and intervention. Record final source compactness separately from cost-to-success.",
+      "aliasing_lifetime": "No change to ownership/region/foreign semantics; equivalent API surface and documentation budget, no language gets future reference hints.",
+      "acceptance_tests": [
+        "Hidden preservation tests and API/module shape checks.",
+        "Counterbalanced task order and randomized pseudonyms.",
+        "Independent human review of maintainability; no self-rated correctness as result."
+      ],
+      "applicability": {
+        "cpu": {
+          "applicable": true,
+          "reason": "Host implementation required."
+        },
+        "gpu": {
+          "applicable": false,
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04."
+        }
+      },
+      "policy_contracts": {
+        "idiomatic": "functional-v1",
+        "equipped": "functional-v1+logical-policy-v1"
+      },
+      "metrics": [
+        "correctness",
+        "error_and_effect_trace",
+        "implementation_and_adapter_effort",
+        "cold_start",
+        "warm_end_to_end_latency",
+        "throughput",
+        "host_peak_rss",
+        "logical_charge_trace",
+        "native_runtime_charge_trace",
+        "cleanup_and_alias_trace"
+      ],
+      "routes": [
+        {
+          "id": "G03:CGx2:idiomatic:cpu",
+          "language": "CGx2",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G03:CGx2:idiomatic:gpu",
+          "language": "CGx2",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G03:CGx2:equipped:cpu",
+          "language": "CGx2",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G03:CGx2:equipped:gpu",
+          "language": "CGx2",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G03:Rust:idiomatic:cpu",
+          "language": "Rust",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Rust",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G03:Rust:idiomatic:gpu",
+          "language": "Rust",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Rust",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G03:Rust:equipped:cpu",
+          "language": "Rust",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Rust plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G03:Rust:equipped:gpu",
+          "language": "Rust",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Rust plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G03:OCaml:idiomatic:cpu",
+          "language": "OCaml",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic OCaml",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G03:OCaml:idiomatic:gpu",
+          "language": "OCaml",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic OCaml",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G03:OCaml:equipped:cpu",
+          "language": "OCaml",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "OCaml plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G03:OCaml:equipped:gpu",
+          "language": "OCaml",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "OCaml plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G03:Python:idiomatic:cpu",
+          "language": "Python",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Python",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G03:Python:idiomatic:gpu",
+          "language": "Python",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "idiomatic Python",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G03:Python:equipped:cpu",
+          "language": "Python",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Python plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "G03:Python:equipped:gpu",
+          "language": "Python",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": false,
+          "status": "not_applicable",
+          "reason": "This case tests host semantics/control flow or authoring; no meaningful device kernel. Device ML/compute is covered by M01/M02/M04.",
+          "blocker_ids": [],
+          "backend": "host native/runtime",
+          "implementation_profile": "Python plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        }
+      ]
+    },
+    {
+      "id": "M04",
+      "track": "data_ml",
+      "name": "Explicit device affine kernel with synchronized readback",
+      "behavior": {
+        "algorithm": "Two separate kernels: i32 y=2*x+1 for x[i]=(i%17)-8; f32 y=2*x for x[i]=((i%17)-8)/8. Workgroup64; dispatch ceil(n/64); bounds guard i<n.",
+        "outputs": "Exact i32/f32 dyadic results; n=0 skips dispatch and returns empty.",
+        "backend": "Pin one WGSL/Vulkan compute implementation/adapter for every admitted language binding; never compare a Vulkan shader to a different tensor kernel as a language effect."
+      },
+      "inputs": {
+        "n": [
+          0,
+          4,
+          64,
+          4096,
+          1048576
+        ],
+        "dtype": [
+          "int32",
+          "float32"
+        ],
+        "adapter": "AMD discrete PCI1002:7550 RX9070XT, Vulkan; reject iGPU/llvmpipe/CPU fallback"
+      },
+      "errors": [
+        {
+          "id": "unsupported",
+          "condition": "requested adapter/backend unavailable",
+          "expected": "UnsupportedDevice, no fallback success"
+        },
+        {
+          "id": "length",
+          "condition": "negative n or n>1048576",
+          "expected": "InputError before device allocation"
+        },
+        {
+          "id": "allocation",
+          "condition": "device allocation/submit failure",
+          "expected": "DeviceError with owned-resource cleanup; unknown submission outcome retained"
+        }
+      ],
+      "dtype": {
+        "storage": "separate i32 and f32 arrays",
+        "arithmetic": "i32 domain cannot overflow; f32 dyadic multiplication exact",
+        "tolerance": "exact; reject NaN/infinity; same shader bytes"
+      },
+      "cost_boundary": "Include host allocation/fill, upload, shader/pipeline cold compile, dispatch, queue completion, readback and buffer release; kernel-only timing optional separate. Pin Mesa26.2.4 testing/non-conformant warning and actual adapter; do not call production-ready.",
+      "aliasing_lifetime": "Host/device buffer owners remain alive through completion; copied transfer counts explicit; no host Session theorem for asynchronous GPU memory.",
+      "acceptance_tests": [
+        "Every element checked independently after explicit synchronization/readback.",
+        "Adapter/vendor/device/API and shader hash recorded.",
+        "Buffer lifetime/failure cases separate from environment smoke and no timing during setup."
+      ],
+      "applicability": {
+        "cpu": {
+          "applicable": true,
+          "reason": "Host implementation required."
+        },
+        "gpu": {
+          "applicable": true,
+          "reason": "Real device work; GPU rows cannot be retired after CPU fallback."
+        }
+      },
+      "policy_contracts": {
+        "idiomatic": "functional-v1",
+        "equipped": "functional-v1+logical-policy-v1"
+      },
+      "metrics": [
+        "correctness",
+        "error_and_effect_trace",
+        "implementation_and_adapter_effort",
+        "cold_start",
+        "warm_end_to_end_latency",
+        "throughput",
+        "host_peak_rss",
+        "logical_charge_trace",
+        "native_runtime_charge_trace",
+        "cleanup_and_alias_trace",
+        "device_allocated_reserved_bytes",
+        "host_device_copy_bytes",
+        "synchronization",
+        "actual_device_identity"
+      ],
+      "routes": [
+        {
+          "id": "M04:CGx2:idiomatic:cpu",
+          "language": "CGx2",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Required source i32/f32 buffer/reference profile has not been admitted for this fixture; Vulkan source integration is a separate GPU blocker.",
+          "blocker_ids": [
+            "cgx2_source_ownership"
+          ],
+          "backend": "host CPU reference for same i32/f32 array formulas",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M04:CGx2:idiomatic:gpu",
+          "language": "CGx2",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "A22/T3: no accepted CGx2 Vulkan source binding/backend; a working Python wgpu smoke does not establish it.",
+          "blocker_ids": [
+            "gpu_binding"
+          ],
+          "backend": "Vulkan/WGSL common shader",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M04:CGx2:equipped:cpu",
+          "language": "CGx2",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Required source i32/f32 buffer/reference profile has not been admitted for this fixture; Vulkan source integration is a separate GPU blocker.",
+          "blocker_ids": [
+            "cgx2_source_ownership"
+          ],
+          "backend": "host CPU reference for same i32/f32 array formulas",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M04:CGx2:equipped:gpu",
+          "language": "CGx2",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "A22/T3: no accepted CGx2 Vulkan source binding/backend; a working Python wgpu smoke does not establish it.",
+          "blocker_ids": [
+            "gpu_binding"
+          ],
+          "backend": "Vulkan/WGSL common shader",
+          "implementation_profile": "intended complete CGx2 source; explicit feature admission required",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M04:Rust:idiomatic:cpu",
+          "language": "Rust",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host CPU reference for same i32/f32 array formulas",
+          "implementation_profile": "idiomatic Rust",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M04:Rust:idiomatic:gpu",
+          "language": "Rust",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Language-specific binding to the common pinned Vulkan shader/ownership/completion contract has not been supplied/validated.",
+          "blocker_ids": [
+            "gpu_binding"
+          ],
+          "backend": "Vulkan/WGSL common shader",
+          "implementation_profile": "idiomatic Rust",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M04:Rust:equipped:cpu",
+          "language": "Rust",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host CPU reference for same i32/f32 array formulas",
+          "implementation_profile": "Rust plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M04:Rust:equipped:gpu",
+          "language": "Rust",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Language-specific binding to the common pinned Vulkan shader/ownership/completion contract has not been supplied/validated.",
+          "blocker_ids": [
+            "gpu_binding"
+          ],
+          "backend": "Vulkan/WGSL common shader",
+          "implementation_profile": "Rust plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M04:OCaml:idiomatic:cpu",
+          "language": "OCaml",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host CPU reference for same i32/f32 array formulas",
+          "implementation_profile": "idiomatic OCaml",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M04:OCaml:idiomatic:gpu",
+          "language": "OCaml",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Language-specific binding to the common pinned Vulkan shader/ownership/completion contract has not been supplied/validated.",
+          "blocker_ids": [
+            "gpu_binding"
+          ],
+          "backend": "Vulkan/WGSL common shader",
+          "implementation_profile": "idiomatic OCaml",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M04:OCaml:equipped:cpu",
+          "language": "OCaml",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host CPU reference for same i32/f32 array formulas",
+          "implementation_profile": "OCaml plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M04:OCaml:equipped:gpu",
+          "language": "OCaml",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": true,
+          "status": "blocked",
+          "reason": "Language-specific binding to the common pinned Vulkan shader/ownership/completion contract has not been supplied/validated.",
+          "blocker_ids": [
+            "gpu_binding"
+          ],
+          "backend": "Vulkan/WGSL common shader",
+          "implementation_profile": "OCaml plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M04:Python:idiomatic:cpu",
+          "language": "Python",
+          "policy": "idiomatic",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host CPU reference for same i32/f32 array formulas",
+          "implementation_profile": "idiomatic Python",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M04:Python:idiomatic:gpu",
+          "language": "Python",
+          "policy": "idiomatic",
+          "target": "gpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "Vulkan/WGSL common shader",
+          "implementation_profile": "idiomatic Python",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "not_applicable",
+          "comparability_stratum": "idiomatic; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M04:Python:equipped:cpu",
+          "language": "Python",
+          "policy": "equipped",
+          "target": "cpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "host CPU reference for same i32/f32 array formulas",
+          "implementation_profile": "Python plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        },
+        {
+          "id": "M04:Python:equipped:gpu",
+          "language": "Python",
+          "policy": "equipped",
+          "target": "gpu",
+          "applicable": true,
+          "status": "not_run",
+          "reason": "Specification only: implement/freeze fixture and pass independent correctness/failure tests before any timing or trial.",
+          "blocker_ids": [],
+          "backend": "Vulkan/WGSL common shader",
+          "implementation_profile": "Python plus reviewed equivalent policy/lifetime/foreign adapters",
+          "evidence": [],
+          "measurements": null,
+          "readiness_is_comparison_evidence": false,
+          "policy_negative_tests": "required",
+          "comparability_stratum": "equipped; common functional contract first; no cross-stratum guard-guarantee inference"
+        }
+      ]
+    }
+  ],
+  "study": {
+    "status": "not_run",
+    "spending": "none authorized or incurred by this protocol",
+    "families": [
+      "bugfix",
+      "refactor",
+      "author"
+    ],
+    "languages": [
+      "CGx2",
+      "Rust",
+      "OCaml",
+      "Python"
+    ],
+    "policies": [
+      "idiomatic",
+      "equipped"
+    ],
+    "model_families_minimum": 2,
+    "pilot": {
+      "task_slots": 12,
+      "policy_split": "6 idiomatic,6 equipped; each family4 with2 per policy",
+      "languages_per_task": 4,
+      "model_families": 2,
+      "repetitions": 2,
+      "attempts": 192
+    },
+    "holdout": {
+      "task_slots": 36,
+      "policy_split": "18 idiomatic,18 equipped; each family12 with6 per policy",
+      "languages_per_task": 4,
+      "model_families": 2,
+      "repetitions": 3,
+      "attempts": 864
+    },
+    "attempt_budget": {
+      "input_tokens": 60000,
+      "output_tokens": 12000,
+      "wall_minutes": 45,
+      "tool_tokens_in_input_budget": true
+    },
+    "outcomes": [
+      "correct_completion_first",
+      "all_attempt_cost_to_success",
+      "total_input_output_tool_tokens",
+      "wall_time_including_tools",
+      "repair_turns",
+      "compiler_test_failures",
+      "human_intervention",
+      "source_compactness_secondary"
+    ],
+    "failure_scoring": "Charge unsuccessful attempt its full assigned token/time budget in all-task cost-to-success; retain actual observed usage separately; never fabricate actual consumption.",
+    "design": "Paired same task/model family/replicate across languages; block by family/policy/difficulty, randomize language order with frozen seed and counterbalance presentation. Independent assessors receive pseudonymous submissions and sealed tests; honest language blinding is partial because syntax is recognizable.",
+    "leakage": "Separate task authors, reference solutions and hidden tests from trial workspaces. No future git history, sibling-language solutions, held-out failures, private grading source or cross-attempt conversation. Equal public docs/tool/dependency/context budgets. Publish retired tasks only after evaluation.",
+    "thresholds": "No numerical superiority gate selected here. Pilots inform noise/effect size/power and practical thresholds; preregister before holdout and report uncertainty with task-clustered paired analysis. Historical design targets remain proposed, not met or silently reused as calibrated thresholds.",
+    "cost_proposal": {
+      "status": "conditional_planning_ceiling_not_vendor_quote",
+      "attempts": 1056,
+      "per_attempt_token_ceiling": {
+        "input": 60000,
+        "output": 12000
+      },
+      "options": [
+        {
+          "id": "economy_ceiling",
+          "input_usd_per_million": 1,
+          "output_usd_per_million": 4,
+          "pilot_usd": 20.736,
+          "holdout_usd": 93.312,
+          "full_usd": 114.048,
+          "reserve_fraction": 0.25,
+          "budget_ceiling_usd": 142.56
+        },
+        {
+          "id": "higher_rate_ceiling",
+          "input_usd_per_million": 10,
+          "output_usd_per_million": 40,
+          "pilot_usd": 207.36,
+          "holdout_usd": 933.12,
+          "full_usd": 1140.48,
+          "reserve_fraction": 0.25,
+          "budget_ceiling_usd": 1425.6
+        }
+      ],
+      "formula": "attempts*(0.060*input_rate_per_million+0.012*output_rate_per_million); multiply by1.25 reserve. Rates are assumed procurement ceilings; require current written quotes/frozen model versions and explicit spend choice before trials.",
+      "exclusions": [
+        "human task authoring/review compensation",
+        "external GPU/cloud rental",
+        "paid tools",
+        "taxes/currency conversion",
+        "model rate higher than assumed ceiling"
+      ],
+      "resources": "Local CPU tests initially; GPU trials blocked until pinned backend acceptance. Models from at least2 families fitting selected ceiling; no model IDs/prices asserted current. Independent human panel and acceptance review need separate availability/cost proposal."
+    }
+  },
+  "input_refresh": {
+    "reason": "Environment lane completed metadata follow-up: absent user-space GPU runtime does not establish driver replacement is necessary. Coordinator confirmed refreshed environment checks; readiness and comparison blockers remain unchanged.",
+    "changes": [
+      {
+        "path": "research/architecture-review/environment/report.md",
+        "previous_sha256": "c888a78197dc2e05c3676586cba6be330c5269b84f12e378c585431e2122bb9c",
+        "current_sha256": "d3fc10d09dbfd5b0f2ac3443c235faa2c6031926646b51c4c2c8c070ca6ade46"
+      },
+      {
+        "path": "research/architecture-review/environment/result.json",
+        "previous_sha256": "be543a7e20206450fd90c391194c7f69bfda12209828bd0690d25b1482ccee05",
+        "current_sha256": "05a3d396672ea8e23d0ac03173d6665e3ddc3e03ad73fe2b20d5a16dd039cd96"
+      }
+    ]
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "status": "complete",
+  "scope": "T1 frozen-source architecture and intended ownership-semantics review only; report and 22 scoped claims. No production edits, builds, Lean checking, benchmark or fresh product acceptance.",
+  "checks": [
+    {
+      "id": "frozen-inputs-claims-anchors",
+      "status": "pass",
+      "command": "python3 research/architecture-review/architecture/verify.py",
+      "exit_code": 0,
+      "evidence_file": "verification.log",
+      "scope": "518 baseline files, 15 WIP files, 22 claim schemas, 60 exact source anchors and all owned-artifact whitespace; no safety inference"
+    },
+    {
+      "id": "whitespace",
+      "status": "pass",
+      "command": "git diff --check -- research/architecture-review/architecture",
+      "exit_code": 0,
+      "evidence_file": "diff-check.log",
+      "scope": "Tracked architecture diff only; offline verifier additionally checks every owned artifact for trailing whitespace"
+    },
+    {
+      "id": "runtime-acceptance",
+      "status": "not_run",
+      "command": null,
+      "exit_code": null,
+      "evidence_file": "report.md",
+      "scope": "No Rust/compiler/product tests were required or run for this read-only architecture mapping task; historical reports remain historical"
+    },
+    {
+      "id": "formal-acceptance",
+      "status": "not_run",
+      "command": null,
+      "exit_code": null,
+      "evidence_file": "report.md",
+      "scope": "Existing fixed-guard Nat model and separate proof-lane translation feasibility are not checked or claimed here"
+    }
+  ],
+  "blockers": [
+    {
+      "id": "connected-source-ownership",
+      "description": "Stronger source memory claims remain blocked by unaccepted aggregate ownership/source attribution and dependent source copy_owned/promote acceptance; this does not block the mapping deliverable.",
+      "remedies": [
+        "Complete and independently accept A source adapter/evaluator/interpreter/native/standalone evidence against the active plan.",
+        "Only then deliver B conversion contracts and retain raw historical failures/reconciliations."
+      ]
+    },
+    {
+      "id": "semantic-preservation-and-runtime-proof",
+      "description": "Authentication and source anchors do not prove lowering, arithmetic/guard/cleanup behavior or full failure atomicity.",
+      "remedies": [
+        "State per-pass observational refinement and machine arithmetic/counter/guard obligations.",
+        "Use the separate actual-source verification feasibility result; preserve reference-model versus implementation-connected evidence levels."
+      ]
+    },
+    {
+      "id": "foreign-device-assumptions",
+      "description": "Library identity and grants do not verify foreign behavior; host sessions do not model foreign heaps, threads or asynchronous device lifetimes.",
+      "remedies": [
+        "Keep strict unknown/Foreign/Collect protected-call rejection.",
+        "Audit explicit lifetime/effect/callback/thread/error/device contracts and execute applicable pinned external acceptance later."
+      ]
+    }
+  ],
+  "outputs": [
+    "report.md",
+    "claims.json",
+    "verify.py",
+    "verification.log",
+    "diff-check.log",
+    "result.json"
+  ],
+  "baseline_commit": "4ed17189867b11e2a3c8280f02a05e3017f3ae5a",
+  "source_mutations": false,
+  "commits": []
+}

@@ -1,0 +1,164 @@
+{
+  "status": "partial",
+  "scope": "T3 CPU/GPU environment readiness only, no performance measurement or CGx2 implementation proof",
+  "created_utc": "2026-11-14T02:40:04.836730+00:00",
+  "input_freeze": {
+    "path": "../input-manifest.json",
+    "sha256": "007a2fce70f0dbe7b6f8a3d5fd8eb753ab853e34084261ca429855dac2f6c417",
+    "baseline_commit": "4ed17189867b11e2a3c8280f02a05e3017f3ae5a"
+  },
+  "checks": [
+    {
+      "id": "inventory",
+      "status": "pass",
+      "command": "/usr/bin/python3 /home/john-riley/.codex/worktrees/github-main-consolidation/lang/research/architecture-review/environment/inventory.py",
+      "exit_code": 0,
+      "evidence_file": "raw/inventory.log",
+      "scope": "actual host devices, permissions, runtimes, versions"
+    },
+    {
+      "id": "rust_compile",
+      "status": "pass",
+      "command": "rustc --edition=2021 /tmp/cgx2-arch-review-environment/evidence/build/fixture.rs -o /tmp/cgx2-arch-review-environment/evidence/build/rust-fixture",
+      "exit_code": 0,
+      "evidence_file": "raw/rust_compile.log",
+      "scope": "standalone Rust CPU compile"
+    },
+    {
+      "id": "rust_cpu",
+      "status": "pass",
+      "command": "/tmp/cgx2-arch-review-environment/evidence/build/rust-fixture",
+      "exit_code": 0,
+      "evidence_file": "raw/rust_cpu.log",
+      "scope": "Rust buffer/failure fixture"
+    },
+    {
+      "id": "ocaml_compile",
+      "status": "pass",
+      "command": "/home/john-riley/.opam/serena-ocaml/bin/ocamlopt -o /tmp/cgx2-arch-review-environment/evidence/build/ocaml-fixture /tmp/cgx2-arch-review-environment/evidence/build/fixture.ml",
+      "exit_code": 0,
+      "evidence_file": "raw/ocaml_compile.log",
+      "scope": "OCaml native CPU compile"
+    },
+    {
+      "id": "ocaml_cpu",
+      "status": "pass",
+      "command": "/tmp/cgx2-arch-review-environment/evidence/build/ocaml-fixture",
+      "exit_code": 0,
+      "evidence_file": "raw/ocaml_cpu.log",
+      "scope": "OCaml alias/data/failure fixture"
+    },
+    {
+      "id": "python_cpu",
+      "status": "pass",
+      "command": "/tmp/cgx2-arch-review-environment/venv/bin/python /home/john-riley/.codex/worktrees/github-main-consolidation/lang/research/architecture-review/environment/fixture.py",
+      "exit_code": 0,
+      "evidence_file": "raw/python_cpu.log",
+      "scope": "coherent isolated Python CPU fixture"
+    },
+    {
+      "id": "torch_cpu",
+      "status": "pass",
+      "command": "/tmp/cgx2-arch-review-environment/venv/bin/python /home/john-riley/.codex/worktrees/github-main-consolidation/lang/research/architecture-review/environment/torch_probe.py",
+      "exit_code": 0,
+      "evidence_file": "raw/torch_cpu.log",
+      "scope": "Python Torch CPU alias/failure/inference fixture"
+    },
+    {
+      "id": "python_pins",
+      "status": "pass",
+      "command": "uv pip freeze --python /tmp/cgx2-arch-review-environment/venv/bin/python",
+      "exit_code": 0,
+      "evidence_file": "raw/python_pins.log",
+      "scope": "installed isolated Python package pins"
+    },
+    {
+      "id": "torch_location",
+      "status": "pass",
+      "command": "/tmp/cgx2-arch-review-environment/venv/bin/python -c 'import pathlib,torch; print(pathlib.Path(torch.__file__).parent)'",
+      "exit_code": 0,
+      "evidence_file": "raw/torch_location.log",
+      "scope": "native LibTorch wheel root"
+    },
+    {
+      "id": "native_compile",
+      "status": "pass",
+      "command": "c++ -std=c++17 -O0 -D_GLIBCXX_USE_CXX11_ABI=1 -I/tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/include -I/tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/include/torch/csrc/api/include /home/john-riley/.codex/worktrees/github-main-consolidation/lang/research/architecture-review/environment/native.cpp -L/tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/lib -Wl,-rpath,/tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/lib -ltorch_cpu -ltorch -lc10 -o /tmp/cgx2-arch-review-environment/evidence/build/native-libtorch",
+      "exit_code": 0,
+      "evidence_file": "raw/native_compile.log",
+      "scope": "native ATen CPU link using same isolated Torch2.11.0 closure"
+    },
+    {
+      "id": "native_cpu",
+      "status": "pass",
+      "command": "/tmp/cgx2-arch-review-environment/evidence/build/native-libtorch",
+      "exit_code": 0,
+      "evidence_file": "raw/native_cpu.log",
+      "scope": "native LibTorch CPU fixture and mapped-libpython exclusion"
+    },
+    {
+      "id": "native_ldd",
+      "status": "pass",
+      "command": "ldd /tmp/cgx2-arch-review-environment/evidence/build/native-libtorch",
+      "exit_code": 0,
+      "evidence_file": "raw/native_ldd.log",
+      "scope": "resolved transitive ELF dependencies; inspect not-found and libpython"
+    },
+    {
+      "id": "torch_gpu_attempt",
+      "status": "blocked",
+      "command": "/tmp/cgx2-arch-review-environment/venv/bin/python -c 'import torch; print('\"'\"'torch='\"'\"',torch.__version__,'\"'\"'hip='\"'\"',torch.version.hip,'\"'\"'cuda='\"'\"',torch.version.cuda,flush=True); print(torch.ones(4,device='\"'\"'cuda'\"'\"'))'",
+      "exit_code": 1,
+      "evidence_file": "raw/torch_gpu_attempt.log",
+      "scope": "attempt PyTorch GPU allocation; CPU fallback forbidden"
+    },
+    {
+      "id": "gpu_vulkan",
+      "status": "pass",
+      "command": "/tmp/cgx2-arch-review-environment/venv/bin/python /home/john-riley/.codex/worktrees/github-main-consolidation/lang/research/architecture-review/environment/wgpu_probe.py",
+      "exit_code": 0,
+      "evidence_file": "raw/gpu_vulkan.log",
+      "scope": "real selected AMD RX9070XT Vulkan i32/f32 compute, synchronization/readback"
+    }
+  ],
+  "blockers": [
+    {
+      "id": "torch_gpu_backend",
+      "description": "Actual torch.ones(4,device=cuda) fails in Torch2.11.0+cpu; torch.version.hip/cuda are null. No HIP/HSA runtime found. Vulkan compute success does not supply a PyTorch/LibTorch GPU backend.",
+      "remedies": [
+        "A missing user-space HIP/HSA stack is established; a kernel-driver replacement is NOT_ESTABLISHED. The current ROCm10.1 matrix and targeted gfx1201 Python wheels provide an isolated user-space option using the existing driver, with driver-family compatibility and storage fit still unverified. See gpu-remedies.md/gpu-remedies.json before selecting a separate isolated installation.",
+        "Alternatively implement and validate a Vulkan tensor backend with equivalent operations and numerical contracts; present it as a different backend and retain unsupported language bindings."
+      ]
+    },
+    {
+      "id": "cgx2_dependency_integration",
+      "description": "Standalone Python/native ATen paths work, but CGx2 managed SDK packaging, authenticated dependency closure and emitted native runtime were not built in this frozen-source readiness lane; CGx2 no-libpython claim is NOT_PROVEN.",
+      "remedies": [
+        "Use this pinned native library root to construct an explicit isolated CGx2 SDK/package closure and run the existing native integration acceptance checks in a separately owned implementation task.",
+        "Verify its own executable dependency closure and runtime maps; do not infer whole-package Python independence from the standalone ATen smoke."
+      ]
+    },
+    {
+      "id": "opencl_platform",
+      "description": "clGetPlatformIDs returns CL_PLATFORM_NOT_FOUND_KHR(-1001), zero platforms and no /etc/OpenCL/vendors ICDs. OpenCL loader existence is insufficient.",
+      "remedies": [
+        "If an OpenCL comparison is needed, select a GPU-supported Mesa Rusticl or ROCm OpenCL implementation and configure its ICD under an approved separate setup; rerun device identity and compute checks. Vulkan route already works."
+      ]
+    },
+    {
+      "id": "vulkan_driver_acceptance",
+      "description": "Mesa26.2.4 RADV executes the smoke, but emits non-conformant/testing-use warning; hardware readiness alone does not establish production driver or CGx2 backend acceptance.",
+      "remedies": [
+        "Keep this warning in comparisons and pin the driver. For production claims use a validated/conformant GPU driver release in a separately approved environment and rerun the smoke and workload correctness."
+      ]
+    }
+  ],
+  "claims": {
+    "standalone_native_process_no_libpython": "PASS for exercised native ATen process only; ldd and /proc/self/maps checked",
+    "cgx2_native_closure_no_libpython": "NOT_PROVEN",
+    "whole_wheel_no_libpython": "NOT_PROVEN (wheel includes Python-facing components)",
+    "pytorch_gpu": "BLOCKED",
+    "standalone_vulkan_discrete_gpu": "PASS",
+    "performance": "NOT_MEASURED"
+  }
+}

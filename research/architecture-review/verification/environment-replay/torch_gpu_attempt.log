@@ -1,0 +1,11 @@
+$ /tmp/cgx2-arch-review-environment/venv/bin/python -c 'import torch; print('"'"'torch='"'"',torch.__version__,'"'"'hip='"'"',torch.version.hip,'"'"'cuda='"'"',torch.version.cuda,flush=True); print(torch.ones(4,device='"'"'cuda'"'"'))'
+exit_code=1
+STDOUT
+torch= 2.11.0+cpu hip= None cuda= None
+
+STDERR
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/cuda/__init__.py", line 471, in _lazy_init
+    raise AssertionError("Torch not compiled with CUDA enabled")
+AssertionError: Torch not compiled with CUDA enabled

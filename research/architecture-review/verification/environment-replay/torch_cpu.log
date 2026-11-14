@@ -1,0 +1,6 @@
+$ /tmp/cgx2-arch-review-environment/venv/bin/python /home/john-riley/.codex/worktrees/github-main-consolidation/lang/research/architecture-review/environment/torch_probe.py
+exit_code=0
+STDOUT
+{"status": "PASS", "python": "3.12.15 (main, Oct  3 2026, 01:03:07) [Clang 22.1.3 ]", "executable": "/tmp/cgx2-arch-review-environment/venv/bin/python", "torch": "2.11.0+cpu", "torch_file": "/tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/__init__.py", "cpu_device": "cpu", "buffer_dtype": "torch.int32", "inference_dtype": "torch.float32", "cxx11_abi": true, "hip": null, "cuda": null, "gpu_available": false, "values": [3, -3, 7, 9], "sum": 16, "failure_unchanged": true}
+
+STDERR

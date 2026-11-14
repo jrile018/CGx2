@@ -1,0 +1,56 @@
+[
+  {
+    "index_url": "https://stable.repo.amd.com/rocm/whl-next/rocm-sdk-core/",
+    "package": "rocm-sdk-core",
+    "selected": [
+      {
+        "href": "rocm_sdk_core-10.1.0-py3-none-linux_x86_64.whl"
+      }
+    ],
+    "wheels": [
+      {
+        "url": "https://stable.repo.amd.com/rocm/whl-next/rocm-sdk-core/rocm_sdk_core-10.1.0-py3-none-linux_x86_64.whl",
+        "status": 200,
+        "content_length": "419364838",
+        "tag": "rocm_sdk_core-10.1.0-py3-none-linux_x86_64.whl",
+        "metadata_attribute": null
+      }
+    ]
+  },
+  {
+    "index_url": "https://stable.repo.amd.com/rocm/whl-next/rocm-sdk-libraries/",
+    "package": "rocm-sdk-libraries",
+    "selected": [
+      {
+        "href": "rocm_sdk_libraries-10.1.0-py3-none-linux_x86_64.whl"
+      }
+    ],
+    "wheels": [
+      {
+        "url": "https://stable.repo.amd.com/rocm/whl-next/rocm-sdk-libraries/rocm_sdk_libraries-10.1.0-py3-none-linux_x86_64.whl",
+        "status": 200,
+        "content_length": "260814462",
+        "tag": "rocm_sdk_libraries-10.1.0-py3-none-linux_x86_64.whl",
+        "metadata_attribute": null
+      }
+    ]
+  },
+  {
+    "index_url": "https://stable.repo.amd.com/rocm/whl-next/rocm-sdk-device-gfx1201/",
+    "package": "rocm-sdk-device-gfx1201",
+    "selected": [
+      {
+        "href": "rocm_sdk_device_gfx1201-10.1.0-py3-none-linux_x86_64.whl"
+      }
+    ],
+    "wheels": [
+      {
+        "url": "https://stable.repo.amd.com/rocm/whl-next/rocm-sdk-device-gfx1201/rocm_sdk_device_gfx1201-10.1.0-py3-none-linux_x86_64.whl",
+        "status": 200,
+        "content_length": "343467033",
+        "tag": "rocm_sdk_device_gfx1201-10.1.0-py3-none-linux_x86_64.whl",
+        "metadata_attribute": null
+      }
+    ]
+  }
+]

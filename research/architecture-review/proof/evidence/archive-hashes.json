@@ -1,0 +1,14 @@
+{
+  "lean-4.36.0-rc2-linux.tar.zst": {
+    "bytes": 608393640,
+    "sha256": "0a0a3208617e9eab92f1041efa83ad94d405e69d172fb654a62dbfa9fbc5313b"
+  },
+  "lean-build-aeneas-x86_64-unknown-linux-gnu.tar.gz": {
+    "bytes": 68760858,
+    "sha256": "51c0b64f30dcb96d6db4508142f6752006dac06b2ea03b75804a4377873ee11f"
+  },
+  "aeneas-linux-x86_64.tar.gz": {
+    "bytes": 159772804,
+    "sha256": "39c2565790310acdfb8fe4d12a1a4d637e85c7a1672e7d4586cb7c4d9bfe446e"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "torch": {
+    "url": "https://stable.repo.amd.com/rocm/whl-next/torch/",
+    "status": 200,
+    "count": 64,
+    "selected": [
+      {
+        "href": "torch-2.13.0%2Brocm10.0.0-cp312-cp312-linux_x86_64.whl"
+      },
+      {
+        "href": "torch-2.13.0%2Brocm10.0.0-cp312-cp312-win_amd64.whl"
+      },
+      {
+        "href": "torch-2.13.0%2Brocm10.1.0-cp312-cp312-linux_x86_64.whl"
+      },
+      {
+        "href": "torch-2.13.0%2Brocm10.1.0-cp312-cp312-win_amd64.whl"
+      }
+    ]
+  },
+  "rocm": {
+    "url": "https://stable.repo.amd.com/rocm/whl-next/rocm/",
+    "status": 200,
+    "count": 2,
+    "selected": [
+      {
+        "href": "rocm-10.0.0.tar.gz"
+      },
+      {
+        "href": "rocm-10.1.0.tar.gz"
+      }
+    ]
+  },
+  "rocm-sdk": {
+    "url": "https://stable.repo.amd.com/rocm/whl-next/rocm-sdk/",
+    "error": "HTTP Error 404: Not Found"
+  }
+}

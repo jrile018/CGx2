@@ -1,0 +1,17 @@
+$ ldd /tmp/cgx2-arch-review-environment/coordinator-replay/build/native-libtorch
+exit_code=0
+STDOUT
+	linux-vdso.so.1 (0x00007f2caa877000)
+	libtorch_cpu.so => /tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/lib/libtorch_cpu.so (0x00007f2c95623000)
+	libc10.so => /tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/lib/libc10.so (0x00007f2c9550a000)
+	libstdc++.so.6 => /usr/lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007f2c95200000)
+	libgcc_s.so.1 => /usr/lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f2c954bd000)
+	libc.so.6 => /usr/lib/x86_64-linux-gnu/libc.so.6 (0x00007f2c94e00000)
+	librt.so.1 => /usr/lib/x86_64-linux-gnu/librt.so.1 (0x00007f2c954b6000)
+	libdl.so.2 => /usr/lib/x86_64-linux-gnu/libdl.so.2 (0x00007f2c954b1000)
+	libpthread.so.0 => /usr/lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f2c954ac000)
+	libm.so.6 => /usr/lib/x86_64-linux-gnu/libm.so.6 (0x00007f2c950da000)
+	libgomp.so.1 => /tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/lib/libgomp.so.1 (0x00007f2c94a00000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007f2caa879000)
+
+STDERR

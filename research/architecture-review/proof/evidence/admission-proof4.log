@@ -1,0 +1,12 @@
+/tmp/cgx2-arch-review-proof/kernel-lean/Admission.lean:51:58: error: Tactic `decide` failed to reduce
+  @decide (System.Platform.numBits = 64) (instDecidableEqNat System.Platform.numBits 64)
+to `true` or `false`.
+
+After unfolding the instances `instDecidableEqNat` and `Nat.decEq`, reduction got stuck at
+  System.Platform.numBits.beq 64
+'SourceBudgetProof.saturating_sub_value' depends on axioms: [propext]
+'SourceBudgetProof.admission_equivalence' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SourceBudgetProof.generated_admission' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SourceBudgetProof.admitted_addition' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SourceBudgetProof.target_width' depends on axioms: [sorryAx]
+'SourceBudgetProof.generated_charge_no_overflow' depends on axioms: [propext, Classical.choice, Quot.sound]

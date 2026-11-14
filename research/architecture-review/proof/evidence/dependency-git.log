@@ -1,0 +1,18 @@
+From https://github.com/leanprover-community/mathlib4
+ * branch            9d581dfff2e41de989072ea63abf3daf69311520 -> FETCH_HEAD
+From https://github.com/leanprover-community/plausible
+ * branch            129d1ba9a16bc0660f46c79e9fb041ef5d5d80de -> FETCH_HEAD
+From https://github.com/leanprover-community/LeanSearchClient
+ * branch            c61286b7b63cbfd563b28e11e81d0a18233a044a -> FETCH_HEAD
+From https://github.com/leanprover-community/import-graph
+ * branch            b8cc5dd0a36233b88a6ed5a7dbf1207d09338c60 -> FETCH_HEAD
+From https://github.com/leanprover-community/ProofWidgets4
+ * branch            16259c0d07d61ee37d999d05b5cf96338b8daa11 -> FETCH_HEAD
+From https://github.com/leanprover-community/aesop
+ * branch            7d11bfa88558f8d3d90afdf6bd877ed70001498d -> FETCH_HEAD
+From https://github.com/leanprover-community/quote4
+ * branch            b0256621cb88178e9ad932a53633077b3029e621 -> FETCH_HEAD
+From https://github.com/leanprover-community/batteries
+ * branch            d4c39b228d4a06f3b00748c2c445a7b9f056a6e3 -> FETCH_HEAD
+From https://github.com/leanprover/lean4-cli
+ * branch            c09cb1e4f1e6e1c231a1175a12b681b075054a1b -> FETCH_HEAD

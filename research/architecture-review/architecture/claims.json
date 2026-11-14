@@ -1,0 +1,888 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "4ed17189867b11e2a3c8280f02a05e3017f3ae5a",
+  "manifest_sha256": "007a2fce70f0dbe7b6f8a3d5fd8eb753ab853e34084261ca429855dac2f6c417",
+  "evidence_policy": "Statuses describe precisely scoped evidence; static anchor checks are not architecture safety, fresh test acceptance or implementation proof.",
+  "claims": [
+    {
+      "id": "A01",
+      "name": "Complete intended memory and compiler contract",
+      "status": "intended",
+      "scope": "First usable release includes managed/owned regions, session-wide no_gc and common typed/effect/ownership semantics; these are requirements, not complete implementation credit.",
+      "source_refs": [
+        {
+          "path": "docs/language-design.md",
+          "line_start": 32,
+          "line_end": 60,
+          "variant": "baseline",
+          "sha256": "2b1b24fdc366db7de9c9fb4b1a418845e2f7ba89b98a2e8b67b8233e3af06fbf",
+          "anchor_sha256": "b95ce75a9a87b705155b90a11b7eb565b5d7f3e9f4e2fc6f885aeaf90ed8c8fd"
+        },
+        {
+          "path": "docs/language-design.md",
+          "line_start": 75,
+          "line_end": 95,
+          "variant": "baseline",
+          "sha256": "2b1b24fdc366db7de9c9fb4b1a418845e2f7ba89b98a2e8b67b8233e3af06fbf",
+          "anchor_sha256": "c605996934bde52497ec4eb8320bfc2b52aee3105327b69bb43a96c0068e9753"
+        }
+      ],
+      "assumptions": [
+        "The frozen design describes intended complete semantics and can exceed accepted previews."
+      ],
+      "obligations": [
+        "Specify an observation relation for values, errors, effects, ownership, source spans and memory events across every admitted route.",
+        "Close all release gates independently of this source review."
+      ],
+      "evidence": [
+        "Static source inspection of the frozen variant; verification.log checks identity and anchors only. No executable or formal acceptance was run in this lane."
+      ]
+    },
+    {
+      "id": "A02",
+      "name": "Execution dispatch is profile-specific",
+      "status": "implemented",
+      "scope": "Standalone interpreter and native compiler select ordinary-memory, hybrid/default-managed and other scalar/memory routes; route recognition is part of admission semantics.",
+      "source_refs": [
+        {
+          "path": "crates/cgx2-cli/src/lib.rs",
+          "line_start": 186,
+          "line_end": 270,
+          "variant": "baseline",
+          "sha256": "d410e1604a6fc9a63ab194e2b1f462016716e9b9360e173509e67cacbd1e10e4",
+          "anchor_sha256": "bdc0b270cd22bcef0e269fef4da68d74f6082853d003075901be1651cd782e02"
+        },
+        {
+          "path": "crates/cgx2c/src/lib.rs",
+          "line_start": 151,
+          "line_end": 225,
+          "variant": "baseline",
+          "sha256": "34d0a2298f8bba8e2299ee8944d67d73b2e55de7d7430e9ebc772adb69cd19ca",
+          "anchor_sha256": "09b05adfa3322c5c91956f3a5f7c42335a6ce9af4d0e83b4e371c176d18de8c0"
+        }
+      ],
+      "assumptions": [
+        "This is a static dispatch map of baseline source, not full route parity."
+      ],
+      "obligations": [
+        "Test ambiguous profile boundaries and consistent rejection.",
+        "State preservation separately for every dispatch/lowering path and package entry."
+      ],
+      "evidence": [
+        "Static source inspection of the frozen variant; verification.log checks identity and anchors only. No executable or formal acceptance was run in this lane."
+      ]
+    },
+    {
+      "id": "A03",
+      "name": "Specialization rechecks its typed input but is not a preservation proof",
+      "status": "implemented",
+      "scope": "foundation::lower_module rechecks unchanged body-checked input and bounds specialization; this authenticates admission inputs without proving substituted output behavior.",
+      "source_refs": [
+        {
+          "path": "crates/cgx2-sema/src/foundation.rs",
+          "line_start": 194,
+          "line_end": 237,
+          "variant": "baseline",
+          "sha256": "4d362e9ea1335d80a5704ac42f4dac56b4664698e42463d976b6f763174e60ec",
+          "anchor_sha256": "f40cacc399e279d985f30ca0e00954ad0b0cc548fa92fd40219c94088152cb8a"
+        }
+      ],
+      "assumptions": [
+        "The checker, canonicalizer and substitution implementation remain trusted."
+      ],
+      "obligations": [
+        "Relate generic calls, nominal identity, argument order, effects/contracts and checked arithmetic before/after concrete specialization.",
+        "Retain declaration checking for unused/private generic bodies."
+      ],
+      "evidence": [
+        "Static source inspection of the frozen variant; verification.log checks identity and anchors only. No executable or formal acceptance was run in this lane."
+      ]
+    },
+    {
+      "id": "A04",
+      "name": "Producer reconstruction authenticates model identity",
+      "status": "implemented",
+      "scope": "MemoryProgramV1::authenticate reconstructs from source, AST-only or source bundle and compares original/runtime/typed/types/signatures/effects/provenance/digest; managed producers similarly reconstruct.",
+      "source_refs": [
+        {
+          "path": "crates/cgx2-sema/src/ordinary_memory/mod.rs",
+          "line_start": 138,
+          "line_end": 171,
+          "variant": "baseline",
+          "sha256": "a82280a1bcc6222a529b5327aba5ca3afdfe382475439e68237d62ddde4ec554",
+          "anchor_sha256": "e94092723af199dce97d7fb2b9062cf88187a5c47dc24eabf0712de831a70abe"
+        },
+        {
+          "path": "crates/cgx2-sema/src/default_managed/mod.rs",
+          "line_start": 203,
+          "line_end": 237,
+          "variant": "baseline",
+          "sha256": "401ce1b88e638ff3885b65a8abba55f5227f6ba9034cf97ca9d85da1bffe6ede",
+          "anchor_sha256": "991455cecdbfec593b49a75a392fe4418f360bd8b65fd416f1f71e04e8cc54af"
+        }
+      ],
+      "assumptions": [
+        "Reconstruction uses the same trusted compiler implementation. AST-only provenance does not certify original source bytes.",
+        "Hash collision resistance is an additional assumption where digests establish identity."
+      ],
+      "obligations": [
+        "Prove source-to-model semantic preservation separately from equality with a recomputed model.",
+        "Preserve exact dependency identity and UTF-8 spans through rewriting and merging."
+      ],
+      "evidence": [
+        "Static source inspection of the frozen variant; verification.log checks identity and anchors only. No executable or formal acceptance was run in this lane."
+      ]
+    },
+    {
+      "id": "A05",
+      "name": "Shared components coexist with multiple models",
+      "status": "implemented",
+      "scope": "The default-managed Program includes layouts/expressions/functions/root maps; ordinary_memory wraps that Program with MemoryOpV1 and entry policy. Other typed/scalar and legacy script routes remain separate.",
+      "source_refs": [
+        {
+          "path": "crates/cgx2-runtime/src/graph.rs",
+          "line_start": 413,
+          "line_end": 535,
+          "variant": "baseline",
+          "sha256": "7efa3d84e574388d2c8d46b5bbf63b5c73f32b8c00800f44be4e71c44ca74206",
+          "anchor_sha256": "9ba927e36617fb31341c18dc3f2a95043d15189419b5800d5b6d751f838fe410"
+        },
+        {
+          "path": "crates/cgx2-runtime/src/graph.rs",
+          "line_start": 3394,
+          "line_end": 3452,
+          "variant": "baseline",
+          "sha256": "7efa3d84e574388d2c8d46b5bbf63b5c73f32b8c00800f44be4e71c44ca74206",
+          "anchor_sha256": "ace4dfe8964290b92e1359f474736bb9c6747cd3bb143e54f80a5113461acbea"
+        },
+        {
+          "path": "crates/cgx2-emit-rust/src/lib.rs",
+          "line_start": 1,
+          "line_end": 20,
+          "variant": "baseline",
+          "sha256": "64b4780844a6eb61f0a26384ce0f31ebf991e5fb4e4b4f718be4f24e4afe149b",
+          "anchor_sha256": "33bb002a32a701c6993cac45de95a5765ac2e7b363c3111f5eac0c015a15b4c7"
+        }
+      ],
+      "assumptions": [
+        "A common model component is not evidence that all frontend profiles have identical semantics."
+      ],
+      "obligations": [
+        "Inventory each model invariant and consumer.",
+        "Evaluate common checked core versus retaining separate profiles with explicit refinement relations; do not silently change compatibility."
+      ],
+      "evidence": [
+        "Static source inspection of the frozen variant; verification.log checks identity and anchors only. No executable or formal acceptance was run in this lane."
+      ]
+    },
+    {
+      "id": "A06",
+      "name": "Fallible guard entry differs from compatibility entry",
+      "status": "implemented",
+      "scope": "Session::no_gc directly pushes historical budget bookkeeping; try_no_gc preflights/reserves/rechecks capacity and charges outer guards before pushing a zero-spend guard. ScopedRoots uses the fallible route.",
+      "source_refs": [
+        {
+          "path": "crates/cgx2-runtime/src/lib.rs",
+          "line_start": 190,
+          "line_end": 233,
+          "variant": "baseline",
+          "sha256": "7c2664a8ba342233a4c06b36b05d43546b80f23c436a651e1e0d22d2e48d82df",
+          "anchor_sha256": "672710ca41a0a38ff841368f3f76c229595651ff110be75b40607892ded234bd"
+        },
+        {
+          "path": "crates/cgx2-runtime/src/scope.rs",
+          "line_start": 138,
+          "line_end": 164,
+          "variant": "baseline",
+          "sha256": "6aba364ae3e8e806bd127c24ec116d5b9590644b08f9d5b61513ac3f7efef601",
+          "anchor_sha256": "e717a69e0df598b6e423ffafba358d1cbc06d6b5193f6fea2d6b116295ae0934"
+        },
+        {
+          "path": "crates/cgx2-runtime/src/budget.rs",
+          "line_start": 31,
+          "line_end": 53,
+          "variant": "baseline",
+          "sha256": "7bd562dae680c6102598a68d139042fba758ae3b3cb8c0d937778c0f0f13e0e4",
+          "anchor_sha256": "f70d5b216de26e4a723106e2896ddc532dd42b26c7861fe409d7dc71f57f9c4a"
+        }
+      ],
+      "assumptions": [
+        "Single-threaded Session and well-nested Rust mutable borrows/RAII; exact Rust unwind behavior is part of the trusted execution environment."
+      ],
+      "obligations": [
+        "Prove guard entry/exit and overflow obligations for each entry point.",
+        "Do not extend a try_no_gc theorem to compatibility no_gc.",
+        "Model charged capacity growth, diagnostics and unwind separately from fixed-guard arithmetic."
+      ],
+      "evidence": [
+        "Static source inspection of the frozen variant; verification.log checks identity and anchors only. No executable or formal acceptance was run in this lane."
+      ]
+    },
+    {
+      "id": "A07",
+      "name": "Allocation accounting includes actual capacity and logical slot charge",
+      "status": "implemented",
+      "scope": "alloc_bytes checks requested len+64, region limits and active budgets; reserves, then rechecks actual Vec capacity+64 before publication/charge. Logical accounting is distinct from allocator overhead and RSS.",
+      "source_refs": [
+        {
+          "path": "crates/cgx2-runtime/src/lib.rs",
+          "line_start": 336,
+          "line_end": 438,
+          "variant": "baseline",
+          "sha256": "7c2664a8ba342233a4c06b36b05d43546b80f23c436a651e1e0d22d2e48d82df",
+          "anchor_sha256": "36770f20a72407500251b5f6149813f2b839e2c1aee51236fae5c48a60a35f7a"
+        },
+        {
+          "path": "crates/cgx2-runtime/src/region.rs",
+          "line_start": 1,
+          "line_end": 12,
+          "variant": "baseline",
+          "sha256": "50362a5df6c4469bfb5f03e9a93a3a351853a97d6fc505a322ce6bc5bb9f6077",
+          "anchor_sha256": "e3f5ac1beca3d0595a27251598e0a55cf29c270a78684cfea5abdd1af67feb4b"
+        }
+      ],
+      "assumptions": [
+        "Host Vec reservation and allocator behavior are trusted; a transient reserve may exist before a later rejection.",
+        "Reachable valid guards must satisfy spent <= limit for subsequent ordinary additions to be justified."
+      ],
+      "obligations": [
+        "Connect machine checked/saturating arithmetic and actual capacities to the mathematical admission relation.",
+        "Prove no uninitialized/premature handle publication and appropriate rollback of payload publication, not host RSS equality."
+      ],
+      "evidence": [
+        "Static source inspection of the frozen variant; verification.log checks identity and anchors only. No executable or formal acceptance was run in this lane."
+      ]
+    },
+    {
+      "id": "A08",
+      "name": "Rejected allocation may change diagnostics",
+      "status": "implemented",
+      "scope": "alloc_bytes rejection branches increment allocation_failures; protected failure cannot be described as equality of the entire runtime state.",
+      "source_refs": [
+        {
+          "path": "crates/cgx2-runtime/src/lib.rs",
+          "line_start": 336,
+          "line_end": 374,
+          "variant": "baseline",
+          "sha256": "7c2664a8ba342233a4c06b36b05d43546b80f23c436a651e1e0d22d2e48d82df",
+          "anchor_sha256": "e726e497914a74fa3e92065bc62c39429f33ca7f938cd14a11702d397bf9617f"
+        },
+        {
+          "path": "crates/cgx2-runtime/src/budget.rs",
+          "line_start": 38,
+          "line_end": 53,
+          "variant": "baseline",
+          "sha256": "7bd562dae680c6102598a68d139042fba758ae3b3cb8c0d937778c0f0f13e0e4",
+          "anchor_sha256": "9aed0688a326049c538a5869bac0272dda71bfb06ddde1f7e52d70358b05d9ea"
+        }
+      ],
+      "assumptions": [
+        "Counter reachability/overflow has not been proved. Some diagnostic updates use += rather than saturating addition."
+      ],
+      "obligations": [
+        "Define projected payload/handle/successful-charge atomicity while permitting specified diagnostic events.",
+        "Prove counter bounds or safe updates; excluding telemetry from an observation does not justify ignoring overflow that affects control flow."
+      ],
+      "evidence": [
+        "Static source inspection of the frozen variant; verification.log checks identity and anchors only. No executable or formal acceptance was run in this lane."
+      ]
+    },
+    {
+      "id": "A09",
+      "name": "Collector marking repeatedly scans slots and reachable edges",
+      "status": "implemented",
+      "scope": "collect rejects any active guard, initializes marks from roots, repeatedly scans physical slots and marked-object edges/reference slots until stable, then sweeps all slots.",
+      "source_refs": [
+        {
+          "path": "crates/cgx2-runtime/src/lib.rs",
+          "line_start": 860,
+          "line_end": 925,
+          "variant": "baseline",
+          "sha256": "7c2664a8ba342233a4c06b36b05d43546b80f23c436a651e1e0d22d2e48d82df",
+          "anchor_sha256": "0f9d2b8e86264f25fe4bc45d0b0f82573de581977f2aa75d5f55015f7fcbecc8"
+        }
+      ],
+      "assumptions": [
+        "S denotes physical slot-vector length, V occupied reachable objects, E reachable edge/reference positions examined. No timing or empirical scaling was measured."
+      ],
+      "obligations": [
+        "Count pass-dependent work as O(P*(S+E)+S), with P at most V+1 and unfavorable reverse slot-order chains requiring many passes.",
+        "A worklist candidate has O(V+E) marking plus O(S) root initialization/sweep; account for O(V) scratch or intrusive metadata, reservations, failure policy and region/budget effects."
+      ],
+      "evidence": [
+        "Static source inspection of the frozen variant; verification.log checks identity and anchors only. No executable or formal acceptance was run in this lane."
+      ]
+    },
+    {
+      "id": "A10",
+      "name": "Handle validation and saturated-generation reuse policy",
+      "status": "implemented",
+      "scope": "Handles carry region/session and generation; read validates generation and occupancy. Sweep advances generation saturatingly and vacant_slot excludes exhausted generations from reuse.",
+      "source_refs": [
+        {
+          "path": "crates/cgx2-runtime/src/region.rs",
+          "line_start": 20,
+          "line_end": 46,
+          "variant": "baseline",
+          "sha256": "50362a5df6c4469bfb5f03e9a93a3a351853a97d6fc505a322ce6bc5bb9f6077",
+          "anchor_sha256": "75ffd7da011daedeb8716f7477db55af5b423b207c5e99f13609f9bb50be08a0"
+        },
+        {
+          "path": "crates/cgx2-runtime/src/lib.rs",
+          "line_start": 258,
+          "line_end": 276,
+          "variant": "baseline",
+          "sha256": "7c2664a8ba342233a4c06b36b05d43546b80f23c436a651e1e0d22d2e48d82df",
+          "anchor_sha256": "c4964b1415695b5f989d6e1bc41348d3ad6a57c1c1a3629c542ce22c73f733d6"
+        },
+        {
+          "path": "crates/cgx2-runtime/src/lib.rs",
+          "line_start": 632,
+          "line_end": 658,
+          "variant": "baseline",
+          "sha256": "7c2664a8ba342233a4c06b36b05d43546b80f23c436a651e1e0d22d2e48d82df",
+          "anchor_sha256": "c6af9ffdd072aa2147c64456a54e9828ff3e454fa21ca11f49738ede910ee4c8"
+        },
+        {
+          "path": "crates/cgx2-runtime/src/lib.rs",
+          "line_start": 911,
+          "line_end": 925,
+          "variant": "baseline",
+          "sha256": "7c2664a8ba342233a4c06b36b05d43546b80f23c436a651e1e0d22d2e48d82df",
+          "anchor_sha256": "304ee139f482bcc74d013760256d2cd6984b5898b39e2e8358f1f343f26fc559"
+        },
+        {
+          "path": "crates/cgx2-runtime/src/heap.rs",
+          "line_start": 42,
+          "line_end": 56,
+          "variant": "baseline",
+          "sha256": "f167f13b46866d9999aa3c8f4329f3a7ad5e59e534d9f5b7b789208296351a8f",
+          "anchor_sha256": "8d99d4b268cfa650bafc580ab6ebe16818318d542c564c953ad80816bb0d00bb"
+        }
+      ],
+      "assumptions": [
+        "All safe consumers use validating accessors; no raw foreign pointer is justified by these handles."
+      ],
+      "obligations": [
+        "Establish no stale-handle resurrection, region identity exhaustion and root census consistency across all APIs.",
+        "Do not equate nonmoving stable handles with a complete source lifetime proof."
+      ],
+      "evidence": [
+        "Static source inspection of the frozen variant; verification.log checks identity and anchors only. No executable or formal acceptance was run in this lane."
+      ]
+    },
+    {
+      "id": "A11",
+      "name": "Region closure and graph edges have separate dynamic gates",
+      "status": "implemented",
+      "scope": "close_region refuses rooted objects then discards region storage; safe link/set_reference reject cross-region edges. Source generative brands/escape checking must justify lexical closure.",
+      "source_refs": [
+        {
+          "path": "crates/cgx2-runtime/src/lib.rs",
+          "line_start": 733,
+          "line_end": 758,
+          "variant": "baseline",
+          "sha256": "7c2664a8ba342233a4c06b36b05d43546b80f23c436a651e1e0d22d2e48d82df",
+          "anchor_sha256": "efee85f80f57f79e939dcfd9828784b1cd7579c72af664261158a79b9e8d6c86"
+        },
+        {
+          "path": "crates/cgx2-runtime/src/lib.rs",
+          "line_start": 845,
+          "line_end": 858,
+          "variant": "baseline",
+          "sha256": "7c2664a8ba342233a4c06b36b05d43546b80f23c436a651e1e0d22d2e48d82df",
+          "anchor_sha256": "c6f79e75da8dfa8abb05e14ca5e59f46934c0851032993b9f6ef02eb27a841a6"
+        }
+      ],
+      "assumptions": [
+        "An unrooted raw runtime handle does not itself prevent closure; the source root/lifetime discipline is essential."
+      ],
+      "obligations": [
+        "Prove escaping handles/borrows cannot outlive lexical regions through aggregates, calls, error arms and packages.",
+        "Distinguish deterministic close from collection and explicit graph copy from sharing."
+      ],
+      "evidence": [
+        "Static source inspection of the frozen variant; verification.log checks identity and anchors only. No executable or formal acceptance was run in this lane."
+      ]
+    },
+    {
+      "id": "A12",
+      "name": "Scoped roots own registrations and coordinate guard lifetime",
+      "status": "implemented",
+      "scope": "ScopedRoots stores owned registrations/checkpoints, releases remainders and enters no_gc via try_no_gc; evaluator SGuard delegates through this boundary.",
+      "source_refs": [
+        {
+          "path": "crates/cgx2-runtime/src/scope.rs",
+          "line_start": 19,
+          "line_end": 85,
+          "variant": "baseline",
+          "sha256": "6aba364ae3e8e806bd127c24ec116d5b9590644b08f9d5b61513ac3f7efef601",
+          "anchor_sha256": "f6e8bfea0b0c135d09035e6df11bbc145328596d1c2a97d654f9c55bb9bff655"
+        },
+        {
+          "path": "crates/cgx2-runtime/src/scope.rs",
+          "line_start": 138,
+          "line_end": 164,
+          "variant": "baseline",
+          "sha256": "6aba364ae3e8e806bd127c24ec116d5b9590644b08f9d5b61513ac3f7efef601",
+          "anchor_sha256": "e717a69e0df598b6e423ffafba358d1cbc06d6b5193f6fea2d6b116295ae0934"
+        },
+        {
+          "path": "crates/cgx2-runtime/src/scope.rs",
+          "line_start": 281,
+          "line_end": 285,
+          "variant": "baseline",
+          "sha256": "6aba364ae3e8e806bd127c24ec116d5b9590644b08f9d5b61513ac3f7efef601",
+          "anchor_sha256": "5b13ff1dfa8af0e2c5f060df4b7981268b850aeb82da1da889e725e7a78194d1"
+        },
+        {
+          "path": "crates/cgx2-runtime/src/graph.rs",
+          "line_start": 2391,
+          "line_end": 2419,
+          "variant": "baseline",
+          "sha256": "7efa3d84e574388d2c8d46b5bbf63b5c73f32b8c00800f44be4e71c44ca74206",
+          "anchor_sha256": "c07795b70ec4b684976e140ed69e2ba8b83c50cef5efa35e39a31083e36ff1b9"
+        }
+      ],
+      "assumptions": [
+        "Correct root maps/evaluation order and cancellation/unwind conventions remain compiler/runtime obligations."
+      ],
+      "obligations": [
+        "Demonstrate temporary/argument/return roots before safepoints and exactly-once cleanup on error/unwind/cancellation.",
+        "Retain primary errors while recording cleanup failures; guard telemetry alone does not prove successful unwind cleanup."
+      ],
+      "evidence": [
+        "Static source inspection of the frozen variant; verification.log checks identity and anchors only. No executable or formal acceptance was run in this lane."
+      ]
+    },
+    {
+      "id": "A13",
+      "name": "Library graph transfers are not completed source conversions",
+      "status": "implemented",
+      "scope": "copy_owned_graph_v1/copy_graph_to_v1 root sources and clean checkpoints; destination publication reserves root capacity first; promote_graph_v1 returns the original owner on failure. These are library APIs.",
+      "source_refs": [
+        {
+          "path": "crates/cgx2-runtime/src/graph.rs",
+          "line_start": 3831,
+          "line_end": 3897,
+          "variant": "baseline",
+          "sha256": "7efa3d84e574388d2c8d46b5bbf63b5c73f32b8c00800f44be4e71c44ca74206",
+          "anchor_sha256": "5bda5f62d317c2bd43ffae7a2353570283bfb6a266116b431115bf98ec0995b8"
+        },
+        {
+          "path": "plans/release-completion/s2b-general-ownership/plan.md",
+          "line_start": 203,
+          "line_end": 207,
+          "variant": "baseline",
+          "sha256": "e8cb427c2694dd77297775653e50b28ed71f6f432f201fce1cdff9bace18f50e",
+          "anchor_sha256": "a78615bac12891f9111c6c01075b7653d51734789dc4341b04dde248024849de"
+        }
+      ],
+      "assumptions": [
+        "Raw graph alias/cycle-preserving copy and future DAG-to-owned-tree conversion have different topology contracts."
+      ],
+      "obligations": [
+        "Implement and accept source copy_owned/promote only after accepted A representation.",
+        "Prove partial publication is absent and original owner identity/extraction is preserved on each failure; successful prior charges are not refunded."
+      ],
+      "evidence": [
+        "Static source inspection of the frozen variant; verification.log checks identity and anchors only. No executable or formal acceptance was run in this lane."
+      ]
+    },
+    {
+      "id": "A14",
+      "name": "Strict protected foreign boundary is conservative in source checking",
+      "status": "implemented",
+      "scope": "no_gc call-site checking rejects transitive Collect/Unknown/Foreign and unresolved callees, while the intended design requires explicit foreign memory contracts and excludes foreign heaps from CGx2 collection guarantees.",
+      "source_refs": [
+        {
+          "path": "crates/cgx2-sema/src/effects.rs",
+          "line_start": 516,
+          "line_end": 559,
+          "variant": "baseline",
+          "sha256": "c569e0ffef1ac2df044ddc2eeb9e524efe22503e34c10336319498f7489024e0",
+          "anchor_sha256": "2e3d9a5f358fe22e23fccf6aa485f59a0ff3b39716a84ccbdcd5e3082b2dfa4c"
+        },
+        {
+          "path": "docs/language-design.md",
+          "line_start": 44,
+          "line_end": 60,
+          "variant": "baseline",
+          "sha256": "2b1b24fdc366db7de9c9fb4b1a418845e2f7ba89b98a2e8b67b8233e3af06fbf",
+          "anchor_sha256": "e6d01050d5e63e7da56835ee5d1ad154900edd34b883e190e80c21d9594634f1"
+        }
+      ],
+      "assumptions": [
+        "Effect inference/import verification is trusted. Foreign annotation or capability grant is not a proof of implementation behavior."
+      ],
+      "obligations": [
+        "Audit every source/profile and execution entry so foreign calls cannot bypass strict checking.",
+        "Any future allowance needs a justified contract for allocation, collection, callbacks, aliasing, threading, exceptions and synchronization."
+      ],
+      "evidence": [
+        "Static source inspection of the frozen variant; verification.log checks identity and anchors only. No executable or formal acceptance was run in this lane."
+      ]
+    },
+    {
+      "id": "A15",
+      "name": "Foreign loading and environment pins remain explicit trust boundaries",
+      "status": "implemented",
+      "scope": "Native dlopen/bind/symbol entry is unsafe and checks declared identities; Python lock loading requires caller authentication and invoke checks environment/call grant. These checks authenticate artifacts, not foreign semantic promises.",
+      "source_refs": [
+        {
+          "path": "crates/cgx2-ffi-native/src/lib.rs",
+          "line_start": 234,
+          "line_end": 274,
+          "variant": "baseline",
+          "sha256": "464a8981cda29a94c18352f504a20159d1464d5c7780298f2ee5fcda4ee4fd6f",
+          "anchor_sha256": "45ede39aabed517f0cda6da288103c69f26a397bb8c41ff59c7a41cb0da70f17"
+        },
+        {
+          "path": "crates/cgx2-ffi-native/src/lib.rs",
+          "line_start": 291,
+          "line_end": 319,
+          "variant": "baseline",
+          "sha256": "464a8981cda29a94c18352f504a20159d1464d5c7780298f2ee5fcda4ee4fd6f",
+          "anchor_sha256": "d03d0af2960c32d9f6c40b3f35e025bedb2012fa72e750ada7e513a5fa01ffab"
+        },
+        {
+          "path": "crates/cgx2-foreign/src/package_v1.rs",
+          "line_start": 178,
+          "line_end": 209,
+          "variant": "baseline",
+          "sha256": "01d948527e2917425e424e75bb58ee9a71af2f1e91b16d9c7c42d8c119d9ecd3",
+          "anchor_sha256": "9523a99446fc19fa577ec3630dae5efae73e9e7d8f8a1ed970176c8b08b9f65f"
+        },
+        {
+          "path": "crates/cgx2-foreign/src/package_v1.rs",
+          "line_start": 298,
+          "line_end": 322,
+          "variant": "baseline",
+          "sha256": "01d948527e2917425e424e75bb58ee9a71af2f1e91b16d9c7c42d8c119d9ecd3",
+          "anchor_sha256": "f5841ffeef500032a52fbec03e6cd070a30e35d1e749a48bf17ee4e130824fdf"
+        },
+        {
+          "path": "docs/language-design.md",
+          "line_start": 100,
+          "line_end": 106,
+          "variant": "baseline",
+          "sha256": "2b1b24fdc366db7de9c9fb4b1a418845e2f7ba89b98a2e8b67b8233e3af06fbf",
+          "anchor_sha256": "8c524355afbe239b5527cca08e0ce21072862f2d1f6a1180966b811310b3f8e2"
+        }
+      ],
+      "assumptions": [
+        "Trusted ABI implementations, dependency closure, loader/OS, Python/LibTorch runtimes and audited contracts. No fresh external environment execution in this lane."
+      ],
+      "obligations": [
+        "Track foreign lifetime/release, exception/panic containment, callbacks and loaded-library provenance.",
+        "Separate direct LibTorch, explicit Python-only calls and emitted Python; report device buffers/streams outside host Session semantics."
+      ],
+      "evidence": [
+        "Static source inspection of the frozen variant; verification.log checks identity and anchors only. No executable or formal acceptance was run in this lane."
+      ]
+    },
+    {
+      "id": "A16",
+      "name": "WIP v4 provides structural CFG/program ownership analysis",
+      "status": "implemented_unaccepted",
+      "scope": "Frozen overlay adds SourceId/Location, layout/place modes, claimed summaries, bounded AnalysisReport; SCC body inference starts independently and compares claimed summaries after analysis. This does not authenticate an AST adapter.",
+      "source_refs": [
+        {
+          "path": "crates/cgx2-ownership/src/v4/mod.rs",
+          "line_start": 8,
+          "line_end": 115,
+          "variant": "wip-overlay",
+          "sha256": "4202e027d356c754bc954f7d7fd76d6948a0d8ab5f3879facebf0e01483b5f4d",
+          "anchor_sha256": "1d8837820f3f7889555a3da7437870cad00f2d69372aeaf98aec455ca824e715"
+        },
+        {
+          "path": "crates/cgx2-ownership/src/v4/analysis.rs",
+          "line_start": 214,
+          "line_end": 256,
+          "variant": "wip-overlay",
+          "sha256": "8f1ef465a8119c7da1f2dd3ab3b3b00db1d15f5c071680c196247b6bd29c81a0",
+          "anchor_sha256": "1cf811f8df6a6794a1f0a32f7419a5b3f95c9cf41426f1e580011a142a5af329"
+        },
+        {
+          "path": "crates/cgx2-ownership/src/v4/flow.rs",
+          "line_start": 33,
+          "line_end": 47,
+          "variant": "wip-overlay",
+          "sha256": "4cc246aeac181cf3f1d4d569248af024f110e0099550867e5fcf06605a0dc021",
+          "anchor_sha256": "9fccfd31c28e9ac4b808af504ded6033e1bb6b8ff527c7d6b0c21e8579ad568f"
+        },
+        {
+          "path": "crates/cgx2-ownership/src/v4/flow.rs",
+          "line_start": 171,
+          "line_end": 183,
+          "variant": "wip-overlay",
+          "sha256": "4cc246aeac181cf3f1d4d569248af024f110e0099550867e5fcf06605a0dc021",
+          "anchor_sha256": "b663e35b090ccd390d036f8e2509eb92165702ce29c861d907f30d4f4fa396e9"
+        }
+      ],
+      "assumptions": [
+        "The v4 source is unaccepted WIP, not rebuilt or tested here. Model locations validate UTF-8 structure but cannot by themselves prove origin in the real AST."
+      ],
+      "obligations": [
+        "Connect ordinary source, concrete layouts, branches/loops/reborrows, generic substitutions, package closure and exact source identities.",
+        "Validate unused/private/unreachable bodies and sound joins/partial initialization; complete=false is not acceptance."
+      ],
+      "evidence": [
+        "Static source inspection of the frozen variant; verification.log checks identity and anchors only. No executable or formal acceptance was run in this lane."
+      ]
+    },
+    {
+      "id": "A17",
+      "name": "WIP owned tree supplies authoritative storage, not an evaluator",
+      "status": "implemented_unaccepted",
+      "scope": "OwnedTreeV1 stores actual OwnedBytes and Vec<Option<OwnedTreeV1>>, releases children in explicit ascending order and fallibly charges child capacity/payload/node metadata through Session.",
+      "source_refs": [
+        {
+          "path": "crates/cgx2-runtime/src/owned_tree_v1.rs",
+          "line_start": 38,
+          "line_end": 80,
+          "variant": "wip-overlay",
+          "sha256": "22536394712ae9049215d3c6357ed16a35c3c314550b58a6414bf9d2e1965974",
+          "anchor_sha256": "3977e8931e1ba3a4b7297787707809edc79f3405292c5b3aa089c4788e650af8"
+        },
+        {
+          "path": "crates/cgx2-runtime/src/owned_tree_v1.rs",
+          "line_start": 125,
+          "line_end": 196,
+          "variant": "wip-overlay",
+          "sha256": "22536394712ae9049215d3c6357ed16a35c3c314550b58a6414bf9d2e1965974",
+          "anchor_sha256": "6c8a451cf30396477a8eae4db820015db149a2556ba195be3c341e9aac4d882b"
+        },
+        {
+          "path": "crates/cgx2-syntax/S2B-GENERAL-OWNERSHIP.md",
+          "line_start": 7,
+          "line_end": 100,
+          "variant": "wip-overlay",
+          "sha256": "04c15a63daf2d1969f078a5c406fad04bce5fda670e764b049dc9d0437f92a21",
+          "anchor_sha256": "5ae7712675381992591827e92d74deac5742c43a0ec32513167828d28d76a93d"
+        }
+      ],
+      "assumptions": [
+        "Non-Clone Rust ownership and bounded trees are implementation mechanisms; no accepted source integration is inferred."
+      ],
+      "obligations": [
+        "Authenticate layout/active variant and ensure no duplicate authoritative host ownership/payload map.",
+        "Prove detach/ancestor metadata, initialization/drop, exact accounting and failure cleanup from real source temporaries/argument/frame slots."
+      ],
+      "evidence": [
+        "Static source inspection of the frozen variant; verification.log checks identity and anchors only. No executable or formal acceptance was run in this lane."
+      ]
+    },
+    {
+      "id": "A18",
+      "name": "General ownership remains a mandatory connected-source gap",
+      "status": "blocked",
+      "scope": "A requires executable general aggregate construction/moves/projections/reborrows/control flow/recursive summaries/generics/package source attribution across interpreter/native/standalone; overlay contract explicitly remains WIP. B follows accepted A.",
+      "source_refs": [
+        {
+          "path": "plans/release-completion/s2b-general-ownership/plan.md",
+          "line_start": 39,
+          "line_end": 50,
+          "variant": "baseline",
+          "sha256": "e8cb427c2694dd77297775653e50b28ed71f6f432f201fce1cdff9bace18f50e",
+          "anchor_sha256": "0ff8ea917d7791e8bba9f2fcb06aa795e78ef1007289ac1449529b5250cdd4a8"
+        },
+        {
+          "path": "plans/release-completion/s2b-general-ownership/plan.md",
+          "line_start": 157,
+          "line_end": 183,
+          "variant": "baseline",
+          "sha256": "e8cb427c2694dd77297775653e50b28ed71f6f432f201fce1cdff9bace18f50e",
+          "anchor_sha256": "c17f3095961fa3b665121bd79d594cfe0b4f17915f262f8d62a9aa390c3fa075"
+        },
+        {
+          "path": "plans/release-completion/s2b-general-ownership/plan.md",
+          "line_start": 203,
+          "line_end": 207,
+          "variant": "baseline",
+          "sha256": "e8cb427c2694dd77297775653e50b28ed71f6f432f201fce1cdff9bace18f50e",
+          "anchor_sha256": "a78615bac12891f9111c6c01075b7653d51734789dc4341b04dde248024849de"
+        },
+        {
+          "path": "crates/cgx2-syntax/S2B-GENERAL-OWNERSHIP.md",
+          "line_start": 1,
+          "line_end": 5,
+          "variant": "wip-overlay",
+          "sha256": "04c15a63daf2d1969f078a5c406fad04bce5fda670e764b049dc9d0437f92a21",
+          "anchor_sha256": "de44e6af150312f00dedc8cd6c9cc4fb1a0aaf60c751b37175cf94a4d90e4fd6"
+        },
+        {
+          "path": "crates/cgx2-syntax/S2B-GENERAL-OWNERSHIP.md",
+          "line_start": 160,
+          "line_end": 176,
+          "variant": "wip-overlay",
+          "sha256": "04c15a63daf2d1969f078a5c406fad04bce5fda670e764b049dc9d0437f92a21",
+          "anchor_sha256": "3844faf0795946f72777f2dc16e9dc0895e67f3092abe2303f2ddec214d3dff1"
+        }
+      ],
+      "assumptions": [
+        "Blocked means acceptance/evidence is unavailable at the frozen checkpoint, not that the design is impossible."
+      ],
+      "obligations": [
+        "Complete A source adapter/evaluator/targets and exact diagnostics with preserved historical failures.",
+        "Then deliver B separately; library-only tests cannot close positive source acceptance."
+      ],
+      "evidence": [
+        "Static source inspection of the frozen variant; verification.log checks identity and anchors only. No executable or formal acceptance was run in this lane."
+      ]
+    },
+    {
+      "id": "A19",
+      "name": "Existing Lean model is fixed-guard Nat semantics",
+      "status": "implemented",
+      "scope": "NoGc.lean defines a standalone fixed-list guard model with Nat costs, allocate/collect attempts and thirteen theorem declarations. Guard entry/exit, usize arithmetic, host reservations and diagnostics are absent.",
+      "source_refs": [
+        {
+          "path": "formal/memory-guarantees/NoGc.lean",
+          "line_start": 1,
+          "line_end": 58,
+          "variant": "baseline",
+          "sha256": "312858be2d2a5a06f03fc2652c7a9a5f4d2e7c05fc51c0aa38db1fbcb7e57496",
+          "anchor_sha256": "8b94ab267b9aa7ac0e85246d169e9419879ba0daa4b386678d9afadf70e6c2d3"
+        },
+        {
+          "path": "formal/memory-guarantees/NoGc.lean",
+          "line_start": 60,
+          "line_end": 153,
+          "variant": "baseline",
+          "sha256": "312858be2d2a5a06f03fc2652c7a9a5f4d2e7c05fc51c0aa38db1fbcb7e57496",
+          "anchor_sha256": "58b7a62b7db38a98effc899646ea1457a9105f43ef7faddde24d85b4b3e8e7e2"
+        },
+        {
+          "path": "formal/memory-guarantees/NoGc.lean",
+          "line_start": 157,
+          "line_end": 196,
+          "variant": "baseline",
+          "sha256": "312858be2d2a5a06f03fc2652c7a9a5f4d2e7c05fc51c0aa38db1fbcb7e57496",
+          "anchor_sha256": "004176fcc48e933ed49753f5982a1f9b3af55b180d647b62cc726e4b89fdd490"
+        }
+      ],
+      "assumptions": [
+        "Historical kernel checking is reported by the confirmed review plan; this lane did not invoke Lean or audit its current executable dependency closure."
+      ],
+      "obligations": [
+        "Do not promote theorem statements or prior model checking to Rust/compiler correctness.",
+        "Connect actual source with explicit translator/compiler/environment trust and a projected failure observation relation."
+      ],
+      "evidence": [
+        "Static source inspection of the frozen variant; verification.log checks identity and anchors only. No executable or formal acceptance was run in this lane."
+      ]
+    },
+    {
+      "id": "A20",
+      "name": "Python output has an explicit portable subset",
+      "status": "implemented",
+      "scope": "Python emission rejects ordinary-memory syntax and explicit managed observables instead of silently dropping them; the intended target contract excludes explicit regions/no_gc/owned borrows and unsupported effects.",
+      "source_refs": [
+        {
+          "path": "crates/cgx2-emit-python/src/lib.rs",
+          "line_start": 13,
+          "line_end": 54,
+          "variant": "baseline",
+          "sha256": "3f8756848225f6e7c6b40f37a39e4fa39d9ef726456212b6997565f296bac7de",
+          "anchor_sha256": "af72740aeb07e55689f5c5c5eedf68af564e352a2105688a9153cffcd25514cc"
+        },
+        {
+          "path": "docs/language-design.md",
+          "line_start": 104,
+          "line_end": 106,
+          "variant": "baseline",
+          "sha256": "2b1b24fdc366db7de9c9fb4b1a418845e2f7ba89b98a2e8b67b8233e3af06fbf",
+          "anchor_sha256": "446f895fe905751388f865ef8bcf47fc81d946c4da8346245452eb4e964157e7"
+        }
+      ],
+      "assumptions": [
+        "Target-specific admission and checked arithmetic compatibility code remain trusted; no full cross-target parity execution here."
+      ],
+      "obligations": [
+        "Maintain per-feature target support and equivalent values/errors/effects/contracts within the admitted subset.",
+        "Do not compare a rejected Python target with arbitrary CGx2 native semantics as if equivalent."
+      ],
+      "evidence": [
+        "Static source inspection of the frozen variant; verification.log checks identity and anchors only. No executable or formal acceptance was run in this lane."
+      ]
+    },
+    {
+      "id": "A21",
+      "name": "Historical bounded recovery acceptance is not broad memory completion",
+      "status": "historically_tested",
+      "scope": "Frozen release ledger reports harness finalization acceptance and prior 1383 Rust tests, but fresh worker main964/1 remains red, with broad ownership/transfer and all R01-R15 still required.",
+      "source_refs": [
+        {
+          "path": "plans/release-completion/README.md",
+          "line_start": 169,
+          "line_end": 177,
+          "variant": "baseline",
+          "sha256": "a4a998b875f3b6688d28fb282278072a71fb03e162082508b4f861a30dac20da",
+          "anchor_sha256": "d519832ff170fe8a2f16674d0e18d6db490642d0da7b8048fcf0afd59b89efdb"
+        }
+      ],
+      "assumptions": [
+        "This is a historical ledger attribution only; archived raw runs were not independently replayed in this lane.",
+        "Counts are not current-branch acceptance or an assurance theorem."
+      ],
+      "obligations": [
+        "Retain raw failing/reconciled outcomes separately and validate exact candidate/source/build provenance before future credit."
+      ],
+      "evidence": [
+        "Frozen plans/release-completion/README.md historical narrative; source hash and exact lines checked in verification.log. No fresh tests."
+      ]
+    },
+    {
+      "id": "A22",
+      "name": "Notebook, verifier and planner require independent preservation boundaries",
+      "status": "intended",
+      "scope": "Complete design requires replay-safe persistent notebooks, bounded proved/disproved/unknown verification and safe Auto CPU/parallel/GPU choices; current notebook pure-sweep admission and verifier APIs are narrower components.",
+      "source_refs": [
+        {
+          "path": "docs/language-design.md",
+          "line_start": 61,
+          "line_end": 73,
+          "variant": "baseline",
+          "sha256": "2b1b24fdc366db7de9c9fb4b1a418845e2f7ba89b98a2e8b67b8233e3af06fbf",
+          "anchor_sha256": "322184652a086b2e9de7d3caf1da4a201b508e00a5413c8f527da95ffc698b0c"
+        },
+        {
+          "path": "docs/language-design.md",
+          "line_start": 93,
+          "line_end": 98,
+          "variant": "baseline",
+          "sha256": "2b1b24fdc366db7de9c9fb4b1a418845e2f7ba89b98a2e8b67b8233e3af06fbf",
+          "anchor_sha256": "44f86004c7cfc12ee7a88c50523aa26d7407601d2f97eb92b0e5021b379e4540"
+        },
+        {
+          "path": "crates/cgx2-notebook-kernel/src/lib.rs",
+          "line_start": 235,
+          "line_end": 260,
+          "variant": "baseline",
+          "sha256": "be03aee92371512f7c75e4bdb3ce859753efb9356897e74c7a8a4fe6b0fbb587",
+          "anchor_sha256": "ef08981ff4724f6096ef9483a702c72748b4a2765abac4d016f1da8213b51974"
+        },
+        {
+          "path": "crates/cgx2-verify-core/src/lib.rs",
+          "line_start": 14,
+          "line_end": 27,
+          "variant": "baseline",
+          "sha256": "aad7724dba42b1c4662bcc64e46e0ffa422b13a567e16d869c05442d96e99502",
+          "anchor_sha256": "b2af94c33fd6dd3f674b0ab62319d7be72a81e16de6fab3aa0e358d5e4f1b650"
+        }
+      ],
+      "assumptions": [
+        "Source-independent execution policies and saved notebook outputs do not establish complete source/device execution."
+      ],
+      "obligations": [
+        "Preserve state/effect order and cancellation/unknown outcomes across selected-cell execution and workers.",
+        "Reject unsupported proof constructs; separate assumptions, runtime tests and solver proofs.",
+        "Audit owned worker transfer and device lifetimes before concurrency claims."
+      ],
+      "evidence": [
+        "Static source inspection of the frozen variant; verification.log checks identity and anchors only. No executable or formal acceptance was run in this lane."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+exit_code=0
+PASS: 32 pinned files, 14 actual command receipts; discrete Vulkan compute confirmed; ML GPU blocker retained; no performance claims.

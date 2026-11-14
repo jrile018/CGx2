@@ -1,0 +1,1 @@
+/tmp/cgx2-arch-review-proof/projection-lean/BudgetProjection.lean:3:0: error: object file '/tmp/cgx2-arch-review-proof/backends/lean/.lake/packages/batteries/.lake/build/lib/lean/Batteries/Data/BitVec/Lemmas.olean' of module Batteries.Data.BitVec.Lemmas does not exist

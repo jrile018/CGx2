@@ -1,0 +1,8 @@
+info: plausible: materializing new dependency
+info: plausible: fetching revision '129d1ba9a16bc0660f46c79e9fb041ef5d5d80de' from https://github.com/leanprover-community/plausible
+info: stderr:
+fatal: unable to access 'https://github.com/leanprover-community/plausible/': Could not resolve host: github.com
+error: plausible: failed to fetch the package revision
+  129d1ba9a16bc0660f46c79e9fb041ef5d5d80de
+from the Git repository at
+  https://github.com/leanprover-community/plausible

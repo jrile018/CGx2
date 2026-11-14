@@ -1,0 +1,166 @@
+{
+  "algorithm": "sha256",
+  "scope": "durable environment sources, report, receipt and raw logs; excludes this manifest",
+  "files": [
+    {
+      "path": "check.py",
+      "bytes": 2327,
+      "sha256": "13dd01e3f3ff702b6351ba749cbf5c5443eb82727c3672ebb16238a6d00affd8"
+    },
+    {
+      "path": "fixture.ml",
+      "bytes": 602,
+      "sha256": "e6ed589ac3f554cbf569489bde40e95761f1c08fa75b7fe759c46a6a59063d1f"
+    },
+    {
+      "path": "fixture.py",
+      "bytes": 611,
+      "sha256": "9634b5385acef9e9f12555df8d49d6ede46b90fedcea029c4d22260ff4766b18"
+    },
+    {
+      "path": "fixture.rs",
+      "bytes": 678,
+      "sha256": "17608d28aa7181dfae8243de3b47dd32eb5e9fc36b7a531b7d7c8231ef7d4db2"
+    },
+    {
+      "path": "inventory.py",
+      "bytes": 2026,
+      "sha256": "bd3f2243c0c7ed62242c2f7d648d42d7f65ecce481481076f7a4f9560037c963"
+    },
+    {
+      "path": "native.cpp",
+      "bytes": 961,
+      "sha256": "d245e1456c7c4fe77a28ae98a40f3365ddba10dd781a5afbda6003e18d3184db"
+    },
+    {
+      "path": "probe.py",
+      "bytes": 4216,
+      "sha256": "d65ffbc97f13e48453e8db7cf27e87ceb8e04be1461ef5fd44c0217baea37655"
+    },
+    {
+      "path": "raw/checks.json",
+      "bytes": 5020,
+      "sha256": "0489eea5c2200df5a4d26cfb58dbadf38f257089995b25873028ad074d8e19ab"
+    },
+    {
+      "path": "raw/gpu_vulkan.log",
+      "bytes": 2169,
+      "sha256": "99ad46a3d939aebb4b56625f388bac0216ff4d5e1fab7cc32f7a0bc6c7e19e35"
+    },
+    {
+      "path": "raw/inventory.log",
+      "bytes": 4188,
+      "sha256": "3b01ebfd242f5eaf84acdf11aab9c964e7734e5253f75594607ca80e10897b56"
+    },
+    {
+      "path": "raw/libtorch-libraries.json",
+      "bytes": 2445,
+      "sha256": "f76dedf8a7c95d91bb90d86292a892b92b842134938adf165bae9de62e36f46f"
+    },
+    {
+      "path": "raw/native-closure.json",
+      "bytes": 2821,
+      "sha256": "9d2c720b4983ec639aa77dcda633f07f7126710fc88336ed2bee5f3eb6aafffc"
+    },
+    {
+      "path": "raw/native_compile.log",
+      "bytes": 646,
+      "sha256": "0d4016d332aa8c3e60e7833e2e6a5c8868dbf1226072495a2308f4fa5d4492ab"
+    },
+    {
+      "path": "raw/native_compile_initial_failure.log",
+      "bytes": 1037,
+      "sha256": "55eee693765d39ae2fce5043dd0cef590edf07ae4024875715e089645b2a15c0"
+    },
+    {
+      "path": "raw/native_cpu.log",
+      "bytes": 192,
+      "sha256": "82c79533944268bd7d4c76079ca588299f02abd3a183774efabd2bd7d45c6fe2"
+    },
+    {
+      "path": "raw/native_ldd.log",
+      "bytes": 1104,
+      "sha256": "39d2a2abfb663160b1039609b33d63b9bc55664e52892f4f166b260832a10991"
+    },
+    {
+      "path": "raw/ocaml_compile.log",
+      "bytes": 204,
+      "sha256": "783111d3f7e1681e6b2cbf12c6cf517a7f32004efba725f175ba37f86df06f2b"
+    },
+    {
+      "path": "raw/ocaml_cpu.log",
+      "bytes": 183,
+      "sha256": "8c8528e4b1739567ffee10391458ae27b5e14dd388cc0cd6fdb7bedfc6d2450f"
+    },
+    {
+      "path": "raw/python_cpu.log",
+      "bytes": 422,
+      "sha256": "dee44c9980b06e16c99b2acc31c0198d87ca094b4948bd86214c4eb645ffa200"
+    },
+    {
+      "path": "raw/python_pins.log",
+      "bytes": 422,
+      "sha256": "4cb3bcdac8962a2f0ac67cf3c2783d9f1b707813450ced113d7c880ab7471adc"
+    },
+    {
+      "path": "raw/rust_compile.log",
+      "bytes": 175,
+      "sha256": "55d8aea24642ec69d19b29fc71fef917f0e840665e0f1a5524b920eb809d14f9"
+    },
+    {
+      "path": "raw/rust_cpu.log",
+      "bytes": 182,
+      "sha256": "42e8b4485560f389cd54f582bccb07cc46032765fde871c94251b611a825452d"
+    },
+    {
+      "path": "raw/sandbox-inventory.json",
+      "bytes": 3442,
+      "sha256": "8f2a02e5a74083dd5d5eb612a649224d2fa2fae796f9bf7472321cfdde5faebc"
+    },
+    {
+      "path": "raw/torch_cpu.log",
+      "bytes": 700,
+      "sha256": "86535d6327ab62a814bb22e0275319b514f0fdaec0bf1cefe9c2e5f109eb1c06"
+    },
+    {
+      "path": "raw/torch_gpu_attempt.log",
+      "bytes": 619,
+      "sha256": "b1f6699f9b262a13907902776455ba6a7e96305ee0da494007c3930aac00b45c"
+    },
+    {
+      "path": "raw/torch_location.log",
+      "bytes": 223,
+      "sha256": "9a7fe1eb64644f51eacbfd94ef477682889119599801613f9ba66ca39fb7af01"
+    },
+    {
+      "path": "report.md",
+      "bytes": 8380,
+      "sha256": "d3fc10d09dbfd5b0f2ac3443c235faa2c6031926646b51c4c2c8c070ca6ade46"
+    },
+    {
+      "path": "requirements.lock.txt",
+      "bytes": 244,
+      "sha256": "ea6235b4df38d3686a27a1be8216082579b7216b39b7bce108ca422ed9066d2d"
+    },
+    {
+      "path": "result.json",
+      "bytes": 8676,
+      "sha256": "05a3d396672ea8e23d0ac03173d6665e3ddc3e03ad73fe2b20d5a16dd039cd96"
+    },
+    {
+      "path": "setup.json",
+      "bytes": 1147,
+      "sha256": "634004eef99736db82d6c0d0b4ce4ea241709042ec832a2fdcb6c5d93a29ea5a"
+    },
+    {
+      "path": "torch_probe.py",
+      "bytes": 1107,
+      "sha256": "59f99168b5a52f94366f2273481097fbb367fdc3e5d87c75fbc8a7ca60f7383f"
+    },
+    {
+      "path": "wgpu_probe.py",
+      "bytes": 2038,
+      "sha256": "a03eff853c23fe19b9985e6709e0df9c1b9d2a1e777ed2b6dd65ff241b0d8c7c"
+    }
+  ]
+}

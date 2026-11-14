@@ -1,0 +1,15 @@
+/tmp/cgx2-arch-review-proof/negative/Admission.lean:31:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  a ≥ 0
+  a + c ≥ 0
+where
+ a := ↑↑b.spent
+ c := ↑(↑b.limit - ↑b.spent)
+64
+'SourceBudgetProof.saturating_sub_value' depends on axioms: [propext]
+'SourceBudgetProof.admission_equivalence' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SourceBudgetProof.generated_admission' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'SourceBudgetProof.admitted_addition' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SourceBudgetProof.target_max' depends on axioms: [propext]
+'SourceBudgetProof.generated_charge_no_overflow' depends on axioms: [propext, Classical.choice, Quot.sound]

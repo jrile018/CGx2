@@ -1,0 +1,135 @@
+{
+  "status": "partial",
+  "scope": "T2 bounded actual-source-to-Lean feasibility: selected actual budget kernel translates and checks; six conditional machine-arithmetic/generated-one-step lemmas; whole runtime/guard/container contextual proof remains blocked.",
+  "checks": [
+    {
+      "id": "official_versions",
+      "status": "pass",
+      "command": "/tmp/cgx2-arch-review-proof/charon version; /tmp/cgx2-arch-review-proof/lean/bin/lean --version; /tmp/cgx2-arch-review-proof/rustup/toolchains/nightly-2026-09-17-x86_64-unknown-linux-gnu/bin/rustc --version",
+      "exit_code": 0,
+      "evidence_file": "evidence/versions.log",
+      "scope": "Pinned installed open-source compiler/translator versions and target layout"
+    },
+    {
+      "id": "full_runtime_charon",
+      "status": "pass",
+      "command": "RUSTUP_HOME=/tmp/cgx2-arch-review-proof/rustup CARGO_HOME=/tmp/cgx2-arch-review-proof/cargo /tmp/cgx2-arch-review-proof/charon rustc --preset aeneas --dest /tmp/cgx2-arch-review-proof/full -- --crate-name cgx2_runtime --crate-type lib --edition=2021 -C overflow-checks=yes --target x86_64-unknown-linux-gnu /home/john-riley/.codex/worktrees/github-main-consolidation/lang/crates/cgx2-runtime/src/lib.rs",
+      "exit_code": 0,
+      "evidence_file": "evidence/full-extraction.log",
+      "scope": "Unchanged runtime source to LLBC only; no whole-runtime Lean proof"
+    },
+    {
+      "id": "full_runtime_aeneas",
+      "status": "fail",
+      "command": "/tmp/cgx2-arch-review-proof/aeneas -backend lean -dest /tmp/cgx2-arch-review-proof/full-lean /tmp/cgx2-arch-review-proof/full/cgx2_runtime.llbc",
+      "exit_code": 2,
+      "evidence_file": "evidence/full-aeneas.log",
+      "scope": "Actual unsupported graph control flow and Iterator signature sanity failure"
+    },
+    {
+      "id": "whole_budget_charon",
+      "status": "pass",
+      "command": "RUSTUP_HOME=/tmp/cgx2-arch-review-proof/rustup CARGO_HOME=/tmp/cgx2-arch-review-proof/cargo /tmp/cgx2-arch-review-proof/charon rustc --preset aeneas --dest /tmp/cgx2-arch-review-proof/projection-llbc -- --crate-name budget_projection --crate-type lib --edition=2021 -C overflow-checks=yes --target x86_64-unknown-linux-gnu /tmp/cgx2-arch-review-proof/projection.rs",
+      "exit_code": 0,
+      "evidence_file": "evidence/projection-charon.log",
+      "scope": "Unchanged complete budget.rs with simplified Session/error context"
+    },
+    {
+      "id": "whole_budget_aeneas",
+      "status": "pass",
+      "command": "/tmp/cgx2-arch-review-proof/aeneas -backend lean -dest /tmp/cgx2-arch-review-proof/projection-lean /tmp/cgx2-arch-review-proof/projection-llbc/budget_projection.llbc",
+      "exit_code": 0,
+      "evidence_file": "evidence/projection-aeneas.log",
+      "scope": "Generated Lean; compilation checked separately"
+    },
+    {
+      "id": "whole_budget_lean",
+      "status": "fail",
+      "command": "/tmp/cgx2-arch-review-proof/lean/bin/lake env lean -R /tmp/cgx2-arch-review-proof/projection-lean -o /tmp/cgx2-arch-review-proof/projection-lean/BudgetProjection.olean /tmp/cgx2-arch-review-proof/projection-lean/BudgetProjection.lean",
+      "exit_code": 1,
+      "evidence_file": "evidence/generated-lean3.log",
+      "scope": "Concrete DerefMut/Drop backward-closure signature mismatch"
+    },
+    {
+      "id": "selected_kernel_charon",
+      "status": "pass",
+      "command": "RUSTUP_HOME=/tmp/cgx2-arch-review-proof/rustup CARGO_HOME=/tmp/cgx2-arch-review-proof/cargo /tmp/cgx2-arch-review-proof/charon rustc --preset aeneas --dest /tmp/cgx2-arch-review-proof/kernel-llbc -- --crate-name budget_kernel --crate-type lib --edition=2021 -C overflow-checks=yes --target x86_64-unknown-linux-gnu /tmp/cgx2-arch-review-proof/kernel-projection.rs",
+      "exit_code": 0,
+      "evidence_file": "evidence/kernel-charon.log",
+      "scope": "Mechanically selected byte-exact Budget + Session methods"
+    },
+    {
+      "id": "selected_kernel_aeneas",
+      "status": "pass",
+      "command": "/tmp/cgx2-arch-review-proof/aeneas -backend lean -dest /tmp/cgx2-arch-review-proof/kernel-lean /tmp/cgx2-arch-review-proof/kernel-llbc/budget_kernel.llbc",
+      "exit_code": 0,
+      "evidence_file": "evidence/kernel-aeneas.log",
+      "scope": "Generated file; two explicit opaque Vec IntoIterator axioms"
+    },
+    {
+      "id": "selected_kernel_lean",
+      "status": "pass",
+      "command": "/tmp/cgx2-arch-review-proof/lean/bin/lake env lean -R /tmp/cgx2-arch-review-proof/kernel-lean -o /tmp/cgx2-arch-review-proof/kernel-lean/BudgetKernel.olean /tmp/cgx2-arch-review-proof/kernel-lean/BudgetKernel.lean",
+      "exit_code": 0,
+      "evidence_file": "evidence/kernel-lean.log",
+      "scope": "Generated kernel accepted by Lean; no Vec/context correctness theorem inferred"
+    },
+    {
+      "id": "six_source_lemmas",
+      "status": "pass",
+      "command": "LEAN_NUM_THREADS=2 LEAN_PATH=/tmp/cgx2-arch-review-proof/kernel-lean /tmp/cgx2-arch-review-proof/lean/bin/lake env lean -DwarningAsError=true -R /tmp/cgx2-arch-review-proof/kernel-lean /tmp/cgx2-arch-review-proof/kernel-lean/Admission.lean",
+      "exit_code": 0,
+      "evidence_file": "evidence/admission-proof5.log",
+      "scope": "Six checked lemmas, actual generated one-step admission/charge bodies under explicit iterator/guard/bytes assumptions; width correspondence explicit"
+    },
+    {
+      "id": "source_mutation_control",
+      "status": "pass",
+      "command": "python3 /tmp/cgx2-arch-review-proof/negative_check.py",
+      "exit_code": 0,
+      "evidence_file": "evidence/negative-proof.log",
+      "scope": "Actual source predicate >\u2192>=; extraction/Lean compile succeed, unchanged admission theorem must fail (inner proof exit1)"
+    },
+    {
+      "id": "offline_replay",
+      "status": "pass",
+      "command": "python3 research/architecture-review/proof/verify.py --report /tmp/proof-replay.json",
+      "exit_code": 0,
+      "evidence_file": "evidence/offline-replay.json",
+      "scope": "Fresh offline source/hash binding, actual Charon/Aeneas extraction, byte-identical generated Lean, Lean compilation, six lemma axioms,64-bit runtime observation, source mutation rejection; does not close recorded whole-runtime/container blockers."
+    }
+  ],
+  "blockers": [
+    {
+      "id": "whole_runtime_translation",
+      "description": "Aeneas rejects actual graph early/outer/nested-loop control flow and hits Iterator signature sanity check after full runtime LLBC extraction.",
+      "remedies": [
+        "Upstream/repair supported control-flow translation and signature handling; rerun unchanged crate.",
+        "Narrow a reviewed proof boundary with a contextual refinement argument."
+      ]
+    },
+    {
+      "id": "guard_trait_translation",
+      "description": "Whole unchanged budget file generated DerefMut/Drop signatures contain extra backwards closures incompatible with bundled trait models.",
+      "remedies": [
+        "Repair/upstream translator/library trait signatures with a regression fixture.",
+        "Keep guard lifecycle outside this bounded kernel and prove it in a subsequent source-connected stage."
+      ]
+    },
+    {
+      "id": "vec_context_refinement",
+      "description": "Two Vec IntoIterator operations remain opaque axioms in selected generated module. Six theorems avoid these axioms using explicit next observations, but whole traversal, same-guard/bytes invariant, reachable-state induction and Session projection are not proved.",
+      "remedies": [
+        "Supply audited allocator-aware Vec models and prove full-loop/observation/context refinement.",
+        "Consider a reviewed pure or slice-based budget kernel, preserving runtime semantics with integration proof."
+      ]
+    },
+    {
+      "id": "guard_entry_exit_and_failures",
+      "description": "try_no_gc reserve/capacity/outer-charge/failure/RAII behavior and compatibility no_gc are outside the selected theorem scope. Telemetry expression compiles but no full telemetry relation is proved. Counter projection is not general failure atomicity or RSS guarantee.",
+      "remedies": [
+        "Extend proofs to guard entry/exit and each charge/failure call site with counter-overflow control-flow obligations."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+Note: curl 8.18 runs parallel downloads without retries.
+Current branch: master
+Using cache from origin: (some leanprover-community/mathlib4)
+Attempting to download 4 file(s) from leanprover-community/mathlib4 cache at https://cache.mathlib.org/mathlib4-master
+Downloaded: 1 file(s) [attempted 1/4 = 25%, 22 KB/s][KDownloaded: 4 file(s) [attempted 4/4 = 100%, 22 KB/s][K
+Still decompressing downloaded files...
+Decompressed 4 file(s)
+Already decompressed 1498 file(s)

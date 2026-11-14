@@ -1,0 +1,6 @@
+$ /tmp/cgx2-arch-review-environment/evidence/build/rust-fixture
+exit_code=0
+STDOUT
+PASS values=[3,-3,7,9] sum=16 rejected_budget=15 accepted_budget=16 failure_unchanged=true
+
+STDERR

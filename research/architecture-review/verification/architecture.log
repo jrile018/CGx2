@@ -1,0 +1,16 @@
+exit_code=0
+{
+  "status": "pass",
+  "baseline_files": 518,
+  "wip_files": 15,
+  "claims": 22,
+  "source_anchors": 60,
+  "artifact_whitespace": "pass",
+  "scope": "offline input identity, claim schema, exact source anchors and artifact whitespace only",
+  "not_established": [
+    "architecture safety",
+    "compiler semantic preservation",
+    "fresh Rust/Lean acceptance",
+    "performance or language superiority"
+  ]
+}

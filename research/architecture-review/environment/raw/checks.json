@@ -1,0 +1,114 @@
+[
+  {
+    "id": "inventory",
+    "status": "pass",
+    "command": "/usr/bin/python3 /home/john-riley/.codex/worktrees/github-main-consolidation/lang/research/architecture-review/environment/inventory.py",
+    "exit_code": 0,
+    "evidence_file": "inventory.log",
+    "scope": "actual host devices, permissions, runtimes, versions"
+  },
+  {
+    "id": "rust_compile",
+    "status": "pass",
+    "command": "rustc --edition=2021 /tmp/cgx2-arch-review-environment/evidence/build/fixture.rs -o /tmp/cgx2-arch-review-environment/evidence/build/rust-fixture",
+    "exit_code": 0,
+    "evidence_file": "rust_compile.log",
+    "scope": "standalone Rust CPU compile"
+  },
+  {
+    "id": "rust_cpu",
+    "status": "pass",
+    "command": "/tmp/cgx2-arch-review-environment/evidence/build/rust-fixture",
+    "exit_code": 0,
+    "evidence_file": "rust_cpu.log",
+    "scope": "Rust buffer/failure fixture"
+  },
+  {
+    "id": "ocaml_compile",
+    "status": "pass",
+    "command": "/home/john-riley/.opam/serena-ocaml/bin/ocamlopt -o /tmp/cgx2-arch-review-environment/evidence/build/ocaml-fixture /tmp/cgx2-arch-review-environment/evidence/build/fixture.ml",
+    "exit_code": 0,
+    "evidence_file": "ocaml_compile.log",
+    "scope": "OCaml native CPU compile"
+  },
+  {
+    "id": "ocaml_cpu",
+    "status": "pass",
+    "command": "/tmp/cgx2-arch-review-environment/evidence/build/ocaml-fixture",
+    "exit_code": 0,
+    "evidence_file": "ocaml_cpu.log",
+    "scope": "OCaml alias/data/failure fixture"
+  },
+  {
+    "id": "python_cpu",
+    "status": "pass",
+    "command": "/tmp/cgx2-arch-review-environment/venv/bin/python /home/john-riley/.codex/worktrees/github-main-consolidation/lang/research/architecture-review/environment/fixture.py",
+    "exit_code": 0,
+    "evidence_file": "python_cpu.log",
+    "scope": "coherent isolated Python CPU fixture"
+  },
+  {
+    "id": "torch_cpu",
+    "status": "pass",
+    "command": "/tmp/cgx2-arch-review-environment/venv/bin/python /home/john-riley/.codex/worktrees/github-main-consolidation/lang/research/architecture-review/environment/torch_probe.py",
+    "exit_code": 0,
+    "evidence_file": "torch_cpu.log",
+    "scope": "Python Torch CPU alias/failure/inference fixture"
+  },
+  {
+    "id": "python_pins",
+    "status": "pass",
+    "command": "uv pip freeze --python /tmp/cgx2-arch-review-environment/venv/bin/python",
+    "exit_code": 0,
+    "evidence_file": "python_pins.log",
+    "scope": "installed isolated Python package pins"
+  },
+  {
+    "id": "torch_location",
+    "status": "pass",
+    "command": "/tmp/cgx2-arch-review-environment/venv/bin/python -c 'import pathlib,torch; print(pathlib.Path(torch.__file__).parent)'",
+    "exit_code": 0,
+    "evidence_file": "torch_location.log",
+    "scope": "native LibTorch wheel root"
+  },
+  {
+    "id": "native_compile",
+    "status": "pass",
+    "command": "c++ -std=c++17 -O0 -D_GLIBCXX_USE_CXX11_ABI=1 -I/tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/include -I/tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/include/torch/csrc/api/include /home/john-riley/.codex/worktrees/github-main-consolidation/lang/research/architecture-review/environment/native.cpp -L/tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/lib -Wl,-rpath,/tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/lib -ltorch_cpu -ltorch -lc10 -o /tmp/cgx2-arch-review-environment/evidence/build/native-libtorch",
+    "exit_code": 0,
+    "evidence_file": "native_compile.log",
+    "scope": "native ATen CPU link using same isolated Torch2.11.0 closure"
+  },
+  {
+    "id": "native_cpu",
+    "status": "pass",
+    "command": "/tmp/cgx2-arch-review-environment/evidence/build/native-libtorch",
+    "exit_code": 0,
+    "evidence_file": "native_cpu.log",
+    "scope": "native LibTorch CPU fixture and mapped-libpython exclusion"
+  },
+  {
+    "id": "native_ldd",
+    "status": "pass",
+    "command": "ldd /tmp/cgx2-arch-review-environment/evidence/build/native-libtorch",
+    "exit_code": 0,
+    "evidence_file": "native_ldd.log",
+    "scope": "resolved transitive ELF dependencies; inspect not-found and libpython"
+  },
+  {
+    "id": "torch_gpu_attempt",
+    "status": "blocked",
+    "command": "/tmp/cgx2-arch-review-environment/venv/bin/python -c 'import torch; print('\"'\"'torch='\"'\"',torch.__version__,'\"'\"'hip='\"'\"',torch.version.hip,'\"'\"'cuda='\"'\"',torch.version.cuda,flush=True); print(torch.ones(4,device='\"'\"'cuda'\"'\"'))'",
+    "exit_code": 1,
+    "evidence_file": "torch_gpu_attempt.log",
+    "scope": "attempt PyTorch GPU allocation; CPU fallback forbidden"
+  },
+  {
+    "id": "gpu_vulkan",
+    "status": "pass",
+    "command": "/tmp/cgx2-arch-review-environment/venv/bin/python /home/john-riley/.codex/worktrees/github-main-consolidation/lang/research/architecture-review/environment/wgpu_probe.py",
+    "exit_code": 0,
+    "evidence_file": "gpu_vulkan.log",
+    "scope": "real selected AMD RX9070XT Vulkan i32/f32 compute, synchronization/readback"
+  }
+]

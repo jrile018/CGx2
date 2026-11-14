@@ -1,0 +1,21 @@
+/tmp/cgx2-arch-review-proof/kernel-lean/Admission.lean:28:77: error: unsolved goals
+b : budget.Budget
+bytes : Usize
+iter iter1 : core.slice.iter.Iter budget.Budget
+next : core.slice.iter.IteratorSliceIter.next iter = ok (some b, iter1)
+reachable : ↑b.spent ≤ ↑b.limit
+admitted : ↑b.spent + ↑bytes ≤ ↑b.limit
+h : ¬bytes > core.num.Usize.saturating_sub b.limit b.spent
+⊢ ↑bytes ≤ ↑(core.num.Usize.saturating_sub b.limit b.spent)
+/tmp/cgx2-arch-review-proof/kernel-lean/Admission.lean:30:71: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [budget.Session.check_budgets_loop.body, next, Aeneas.Std.lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/cgx2-arch-review-proof/kernel-lean/Admission.lean:44:15: error(lean.unknownIdentifier): Unknown identifier `spec_ok`
+'SourceBudgetProof.saturating_sub_value' depends on axioms: [propext]
+'SourceBudgetProof.admission_equivalence' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SourceBudgetProof.generated_admission' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'SourceBudgetProof.admitted_addition' depends on axioms: [propext, Classical.choice, Quot.sound]

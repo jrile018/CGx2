@@ -1,0 +1,84 @@
+{
+  "status": "complete",
+  "scope": "T5 comparative fixture contracts and no-spend authoring-study specification only:10 cases and160 explicit language/policy/CPU/GPU route rows. No comparison programs, benchmark timings, model/human trials, purchases or production changes.",
+  "checks": [
+    {
+      "id": "protocol-matrix-validation",
+      "status": "pass",
+      "command": "python3 research/architecture-review/comparisons/verify.py",
+      "exit_code": 0,
+      "evidence_file": "verification.log",
+      "scope": "Pinned input hashes, full Cartesian dimensions/IDs/applicability, required case contracts, explicit blockers, no unrun pass/measurement, study/cost arithmetic and artifact whitespace"
+    },
+    {
+      "id": "comparison-execution",
+      "status": "not_run",
+      "command": null,
+      "exit_code": null,
+      "evidence_file": "matrix.json",
+      "scope": "All160 workload routes are specified not_run/blocked/not_applicable; environment probes confer no comparison passes"
+    },
+    {
+      "id": "authoring-trials",
+      "status": "not_run",
+      "command": null,
+      "exit_code": null,
+      "evidence_file": "protocol.md",
+      "scope": "No paid or unpaid model/human observations; future frozen tasks/tests/models and explicit resource/spend choice required"
+    }
+  ],
+  "blockers": [
+    {
+      "id": "cgx2_source_and_package",
+      "description": "CGx2 intended aggregate ownership, effectful persistent notebooks, source/backend/binding integration and authenticated native package closure remain incomplete or unaccepted.",
+      "remedies": [
+        "Implement and independently accept named source/profile/package fixtures before correctness or timing credit.",
+        "Keep intended support separate from accepted source behavior and language inferiority."
+      ]
+    },
+    {
+      "id": "gpu_and_bindings",
+      "description": "Current Torch2.11.0+cpu lacks GPU backend; Vulkan smoke does not provide tensor GPU support or missing CGx2/Rust/OCaml common bindings.",
+      "remedies": [
+        "Select a supported pinned GPU tensor closure through a separate reviewed environment change, then run real workload correctness/device checks.",
+        "Deliver same-backend bindings and preserve Mesa testing/non-conformant caveat; no CPU fallback credit."
+      ]
+    },
+    {
+      "id": "equivalent_policy_and_independent_acceptance",
+      "description": "Common logical-policy credits do not establish equivalent native byte/RSS/whole-runtime guarantees; independent fixture implementations/tests and policy audits have not run.",
+      "remedies": [
+        "Audit observable functional/failure/alias/lifetime and strict foreign boundaries first.",
+        "Report native charges, physical memory, host collectors, wrappers and effort separately; retain incompatible contracts as blocked rather than normalizing budgets."
+      ]
+    },
+    {
+      "id": "study_prerequisites",
+      "description": "Blinded starters/hidden tests, frozen model versions, current price quotes, independent reviewers and pilot-informed preregistration are pending; no trials are funded by this specification.",
+      "remedies": [
+        "Prepare sealed independent tasks and clean paired/randomized workspaces.",
+        "Use pilots to fix practical thresholds/power before holdout; obtain explicit later spend/resource selection against a current costed quote."
+      ]
+    }
+  ],
+  "outputs": [
+    "protocol.md",
+    "matrix.json",
+    "verify.py",
+    "verification.log",
+    "result.json",
+    "verification-attempt1.log"
+  ],
+  "source_mutations": false,
+  "comparison_runs": 0,
+  "model_trials": 0,
+  "commits": [],
+  "verification_attempts": [
+    {
+      "command": "python3 research/architecture-review/comparisons/verify.py",
+      "exit_code": 1,
+      "evidence_file": "verification-attempt1.log",
+      "reason": "Correctly rejected environment report/result metadata drift; refreshed only after inspecting the evidence-only GPU remedy clarification."
+    }
+  ]
+}

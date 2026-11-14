@@ -1,0 +1,81 @@
+{
+  "machine": "x86_64",
+  "kernel": "7.0.0-42-generic",
+  "cpu": "AMD Ryzen 7 9800X3D 8-Core Processor",
+  "logical_cpus": 16,
+  "devices": {},
+  "pci": {
+    "/sys/class/drm/card1/device/uevent": {
+      "DRIVER": "amdgpu",
+      "PCI_ID": "1002:7550",
+      "PCI_SLOT_NAME": "0000:03:00.0"
+    },
+    "/sys/class/drm/card0/device/uevent": {
+      "DRIVER": "amdgpu",
+      "PCI_ID": "1002:13C0",
+      "PCI_SLOT_NAME": "0000:76:00.0"
+    }
+  },
+  "compute_libraries": [
+    "libvulkan_virtio.so (libc6,x86-64) => /usr/lib/x86_64-linux-gnu/libvulkan_virtio.so",
+    "libvulkan_virtio.so (libc6) => /usr/lib/i386-linux-gnu/libvulkan_virtio.so",
+    "libvulkan_radeon.so (libc6,x86-64) => /usr/lib/x86_64-linux-gnu/libvulkan_radeon.so",
+    "libvulkan_radeon.so (libc6) => /usr/lib/i386-linux-gnu/libvulkan_radeon.so",
+    "libvulkan_nouveau.so (libc6,x86-64) => /usr/lib/x86_64-linux-gnu/libvulkan_nouveau.so",
+    "libvulkan_lvp.so (libc6,x86-64) => /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+    "libvulkan_lvp.so (libc6) => /usr/lib/i386-linux-gnu/libvulkan_lvp.so",
+    "libvulkan_intel_hasvk.so (libc6,x86-64) => /usr/lib/x86_64-linux-gnu/libvulkan_intel_hasvk.so",
+    "libvulkan_intel_hasvk.so (libc6) => /usr/lib/i386-linux-gnu/libvulkan_intel_hasvk.so",
+    "libvulkan_intel.so (libc6,x86-64) => /usr/lib/x86_64-linux-gnu/libvulkan_intel.so",
+    "libvulkan_intel.so (libc6) => /usr/lib/i386-linux-gnu/libvulkan_intel.so",
+    "libvulkan_gfxstream.so (libc6,x86-64) => /usr/lib/x86_64-linux-gnu/libvulkan_gfxstream.so",
+    "libvulkan_freedreno.so (libc6,x86-64) => /usr/lib/x86_64-linux-gnu/libvulkan_freedreno.so",
+    "libvulkan_freedreno.so (libc6) => /usr/lib/i386-linux-gnu/libvulkan_freedreno.so",
+    "libvulkan_dzn.so (libc6,x86-64) => /usr/lib/x86_64-linux-gnu/libvulkan_dzn.so",
+    "libvulkan_asahi.so (libc6,x86-64) => /usr/lib/x86_64-linux-gnu/libvulkan_asahi.so",
+    "libvulkan_asahi.so (libc6) => /usr/lib/i386-linux-gnu/libvulkan_asahi.so",
+    "libvulkan.so.1 (libc6,x86-64) => /usr/lib/x86_64-linux-gnu/libvulkan.so.1",
+    "libvulkan.so.1 (libc6) => /usr/lib/i386-linux-gnu/libvulkan.so.1",
+    "libvulkan.so (libc6,x86-64) => /usr/lib/x86_64-linux-gnu/libvulkan.so",
+    "libOpenCL.so.1 (libc6,x86-64) => /usr/lib/x86_64-linux-gnu/libOpenCL.so.1"
+  ],
+  "opencl": {
+    "clGetPlatformIDs_return": -1001,
+    "platform_count": 0,
+    "ICD_files": []
+  },
+  "tools": {
+    "rustc": "/home/john-riley/.cargo/bin/rustc",
+    "cargo": "/home/john-riley/.cargo/bin/cargo",
+    "python3": "/usr/bin/python3",
+    "uv": "/home/john-riley/.local/bin/uv",
+    "c++": "/usr/bin/c++",
+    "cmake": "/usr/bin/cmake",
+    "hipcc": null,
+    "rocminfo": null,
+    "clinfo": "/usr/bin/clinfo",
+    "vulkaninfo": "/usr/bin/vulkaninfo"
+  },
+  "versions": {
+    "rustc": {
+      "exit_code": 0,
+      "output": "rustc 1.98.1 (48a229cea 2026-09-01)\n"
+    },
+    "cargo": {
+      "exit_code": 0,
+      "output": "cargo 1.98.1 (797e8a9bc 2026-08-05)\n"
+    },
+    "system_python": {
+      "exit_code": 0,
+      "output": "Python 3.14.4\n"
+    },
+    "ocamlopt": {
+      "exit_code": 0,
+      "output": "5.5.1\n"
+    },
+    "c++": {
+      "exit_code": 0,
+      "output": "c++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
+    }
+  }
+}

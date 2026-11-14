@@ -1,0 +1,6 @@
+$ /tmp/cgx2-arch-review-environment/venv/bin/python -c 'import pathlib,torch; print(pathlib.Path(torch.__file__).parent)'
+exit_code=0
+STDOUT
+/tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch
+
+STDERR

@@ -1,0 +1,265 @@
+{
+  "status": "complete",
+  "scope": "metadata-only safe-remedy discovery; no GPU wheel payload or runtime installation; no GPU ML success claim",
+  "created_utc": "2026-11-14T02:50:56.188493+00:00",
+  "supersedes": "Original T3 suggestion that a driver/runtime change is required: user-space runtime is missing, but a kernel driver replacement is NOT_ESTABLISHED. Existing T3 pass/blocked outcomes are unchanged.",
+  "host": {
+    "os": "Ubuntu26.04.1 LTS",
+    "kernel": "7.0.0-42-generic",
+    "glibc": [
+      "glibc",
+      "2.43"
+    ],
+    "gpu": "AMD Radeon RX9070XT gfx1201 PCI1002:7550",
+    "kernel_driver": "amdgpu in-tree (modinfo intreeY), no version field",
+    "amdgpu_dkms_package": "not installed",
+    "official_driver_family_compliance": "NOT_PROVEN; matrix lists31.60.0/31.50.0, neither identified from host module",
+    "device_access": "Existing T3 actual render nodes and KFD open_RDWR pass; no permissions changed"
+  },
+  "matrix_distinction": {
+    "current": "ROCm10.1.0 unified matrix: RX9070XT gfx1201; Radeon Ubuntu26.04.1 GA7.0; Ubuntu24.04.5 HWE7.0. Host OS/kernel row matches. Driver/binary/runtime integration still unverified.",
+    "legacy": "Radeon/Ryzen page explicitly covers through7.2.1; Ubuntu24.04.4 HWE6.17 /22.04.5 HWE6.8. It does not establish current host support.",
+    "pytorch_org": "Official previous-versions page points PyTorch2.11 to ROCm7.2, a distinct software stack from AMD ROCm10.1 wheels."
+  },
+  "artifacts": [
+    {
+      "package": "torch",
+      "version": "2.13.0+rocm10.1.0",
+      "url": "https://stable.repo.amd.com/rocm/whl-next/torch/torch-2.13.0%2Brocm10.1.0-cp312-cp312-linux_x86_64.whl",
+      "compressed_bytes": 202600338,
+      "wheel_tag": "cp312-cp312-linux_x86_64",
+      "metadata_status": "standalone .metadata endpoint404; dependency closure not downloaded"
+    },
+    {
+      "package": "rocm-sdk-core",
+      "version": "10.1.0",
+      "url": "https://stable.repo.amd.com/rocm/whl-next/rocm-sdk-core/rocm_sdk_core-10.1.0-py3-none-linux_x86_64.whl",
+      "compressed_bytes": 419364838,
+      "wheel_tag": "py3-none-linux_x86_64",
+      "metadata_status": "HEAD only"
+    },
+    {
+      "package": "rocm-sdk-libraries",
+      "version": "10.1.0",
+      "url": "https://stable.repo.amd.com/rocm/whl-next/rocm-sdk-libraries/rocm_sdk_libraries-10.1.0-py3-none-linux_x86_64.whl",
+      "compressed_bytes": 260814462,
+      "wheel_tag": "py3-none-linux_x86_64",
+      "metadata_status": "HEAD only"
+    },
+    {
+      "package": "rocm-sdk-device-gfx1201",
+      "version": "10.1.0",
+      "url": "https://stable.repo.amd.com/rocm/whl-next/rocm-sdk-device-gfx1201/rocm_sdk_device_gfx1201-10.1.0-py3-none-linux_x86_64.whl",
+      "compressed_bytes": 343467033,
+      "wheel_tag": "py3-none-linux_x86_64",
+      "metadata_status": "HEAD only"
+    }
+  ],
+  "footprint": {
+    "selected_four_artifacts_compressed_bytes": 1226246671,
+    "selected_four_artifacts_compressed_gib": 1.1420312067493796,
+    "complete_dependency_closure": "NOT_PROVEN: torch METADATA not available without wheel retrieval; rocm metapackage identifies core,libraries,device-gfx1201 extras",
+    "unpacked_and_peak_bytes": "NOT_PROVEN; HEAD does not report decompressed size",
+    "under_3gib_lane_cap": "NOT_PROVEN; do not install under existing cap without a bounded storage decision",
+    "legacy_pytorch_211_rocm72_wheel_compressed_bytes": 6221326904,
+    "legacy_under_cap": false,
+    "disk_snapshot": "raw/gpu-remedies-host.json; /tmp tmpfs7.71GB free and root24.52GB free at observation; shared setup may change this"
+  },
+  "choices": [
+    {
+      "id": "isolated_current_userspace",
+      "recommendation": "Preferred next experiment if its storage allowance is approved; preserves current working driver and CPU venv",
+      "stack": "CPython3.12.15; torch[device-gfx1201]==2.13.0+rocm10.1.0 from AMD whl-next; rocm libraries/device-gfx1201 10.1.0 if not already pulled by Torch extras",
+      "system_changes": "none; new isolated venv only; no dkms/driver/security/global LD_LIBRARY_PATH changes",
+      "install_status": "NOT_RUN",
+      "support_status": "OS/kernel/GPU rows match, official31.50/31.60 driver match not established; experiment is not a claim of official support",
+      "future_gate": "Resolve/pin full package metadata and unpacked/peak storage before accepting3GiB fit; then actual HIP allocation/kernel/device-name+gfx1201/synchronization test. If it fails, retain precise loader/HSA error before considering driver changes."
+    },
+    {
+      "id": "legacy_matching_torch_211",
+      "recommendation": "Do not choose under existing cap",
+      "stack": "torch2.11.0+rocm7.2 cp312 manylinux_2_28_x86_64 official PyTorch wheel",
+      "reason": "Single compressed wheel6.221GB already exceeds3GiB cap; Radeon7.2.1 host OS row also differs. Python/platform tag existence does not establish supported host integration."
+    },
+    {
+      "id": "retain_vulkan",
+      "recommendation": "Available now for explicitly scoped GPU compute fixtures",
+      "stack": "Existing isolated wgpu0.31.1 + VulkanRADV",
+      "reason": "T3 genuine compute succeeds; preserve driver conformance warning. Tensor ML/CGx2 GPU binding still requires implementation and validation."
+    },
+    {
+      "id": "supported_driver_environment",
+      "recommendation": "Separate future choice only if official production support is required or isolated experiment identifies a driver incompatibility",
+      "reason": "Use AMD documented31.50/31.60 plus complete release stack; would require separate system/environment authorization and is not necessary merely because HIP libraries are missing."
+    }
+  ],
+  "sources": [
+    {
+      "id": "generic",
+      "url": "https://rocm.docs.amd.com/en/latest/compatibility/compatibility-matrix.html?fam=radeon&gfx=gfx1201&gpu=amd-radeon-rx-9070-xt&i=tar&os=ubuntu",
+      "final_url": "https://rocm.docs.amd.com/en/latest/compatibility/compatibility-matrix.html?fam=radeon&gfx=gfx1201&gpu=amd-radeon-rx-9070-xt&i=tar&os=ubuntu",
+      "status": 200,
+      "body_sha256": "a738fb634f2202f2665be41847d02b324c325d22263e02d8302d267f1fab0e2e"
+    },
+    {
+      "id": "radeon",
+      "url": "https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/docs/compatibility/compatibilityrad/native_linux/native_linux_compatibility.html",
+      "final_url": "https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/docs/compatibility/compatibilityrad/native_linux/native_linux_compatibility.html",
+      "status": 200,
+      "body_sha256": "8d1242821c0423d02c5f500a3e0eab9bb0f75cfea0851aba6b082c8b4a8bcdbf"
+    },
+    {
+      "id": "torch_versions",
+      "url": "https://pytorch.org/get-started/previous-versions/",
+      "final_url": "https://pytorch.org/get-started/previous-versions/",
+      "status": 200,
+      "body_sha256": "64704a8acae1c32b9ad699f11b97ff6610b4fa96fe821d7241bf46b75c7c8f78"
+    },
+    {
+      "id": "pytorch_install",
+      "url": "https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/frameworks/pytorch/install.html",
+      "final_url": "https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/frameworks/pytorch/install.html",
+      "status": 200,
+      "body_sha256": "b8aad81d5582bbad02b81d8337931d6573e35bceb3de0c579a12f112c56dfc21"
+    },
+    {
+      "id": "transition",
+      "url": "https://rocm.docs.amd.com/en/latest/about/transition-guide-TheRock.html",
+      "final_url": "https://rocm.docs.amd.com/en/latest/about/transition-guide-TheRock.html",
+      "status": 200,
+      "body_sha256": "a0eff66921b26679c359462bb58b5731ef0e39e4119d9a7fcaf5fb732719b8a2"
+    },
+    {
+      "id": "sdk_install",
+      "url": "https://rocm.docs.amd.com/en/latest/install/rocm.html",
+      "final_url": "https://rocm.docs.amd.com/en/latest/install/rocm.html",
+      "status": 200,
+      "body_sha256": "36b3f97a4bd12d8951fc673206e79a54d91667340f0aa57deb182a8ba32cda26"
+    },
+    {
+      "id": "radeon_install",
+      "url": "https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/docs/install/installrad/native_linux/install-pytorch.html",
+      "final_url": "https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/docs/install/installrad/native_linux/install-pytorch.html",
+      "status": 200,
+      "body_sha256": "83b1b374a5037bb8aeff12b0bfd3be3d87bc9e7ac18e40331698ccf072ce0283"
+    },
+    {
+      "id": "generic_versioned",
+      "url": "https://rocm.docs.amd.com/en/docs-10.1.0/compatibility/compatibility-matrix.html?fam=radeon&gfx=gfx1201&gpu=amd-radeon-rx-9070-xt&i=pip&os=ubuntu",
+      "final_url": "https://rocm.docs.amd.com/en/docs-10.1.0/compatibility/compatibility-matrix.html?fam=radeon&gfx=gfx1201&gpu=amd-radeon-rx-9070-xt&i=pip&os=ubuntu",
+      "status": 200,
+      "body_sha256": "9ae019f0128f8ffed880ff60326564b95b98bb9e188c301b9ed83d08b55462d4"
+    },
+    {
+      "id": "sdk_versioned",
+      "url": "https://rocm.docs.amd.com/en/docs-10.1.0/install/rocm.html?fam=radeon&gfx=gfx1201&gpu=amd-radeon-rx-9070-xt&i=pip&os=ubuntu&ubuntu_ver=26.04.1",
+      "final_url": "https://rocm.docs.amd.com/en/docs-10.1.0/install/rocm.html?fam=radeon&gfx=gfx1201&gpu=amd-radeon-rx-9070-xt&i=pip&os=ubuntu&ubuntu_ver=26.04.1",
+      "status": 200,
+      "body_sha256": "2bcbab04ac0cdea743f07dfa23dc3b2c48de1e0acd3d1b5a89e72a046cc75530"
+    }
+  ],
+  "executed_discovery": {
+    "host_commands": [
+      {
+        "argv": [
+          "modinfo",
+          "-F",
+          "filename",
+          "amdgpu"
+        ],
+        "exit_code": 0,
+        "stdout": "/lib/modules/7.0.0-42-generic/kernel/drivers/gpu/drm/amd/amdgpu/amdgpu.ko.zst\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "modinfo",
+          "-F",
+          "intree",
+          "amdgpu"
+        ],
+        "exit_code": 0,
+        "stdout": "Y\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "modinfo",
+          "-F",
+          "version",
+          "amdgpu"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "dpkg-query",
+          "-W",
+          "-f=${Package} ${Version} ${Status}\\n",
+          "amdgpu-dkms",
+          "amdgpu",
+          "rocm-core",
+          "linux-image-7.0.0-42-generic"
+        ],
+        "exit_code": 1,
+        "stdout": "linux-image-7.0.0-42-generic 7.0.0-42.42 install ok installed\n",
+        "stderr": "dpkg-query: no packages found matching amdgpu-dkms\ndpkg-query: no packages found matching amdgpu\ndpkg-query: no packages found matching rocm-core\n"
+      },
+      {
+        "argv": [
+          "df",
+          "-B1",
+          "/tmp",
+          "/home/john-riley"
+        ],
+        "exit_code": 0,
+        "stdout": "Filesystem         1B-blocks          Used   Available Use% Mounted on\ntmpfs            16085258240    8376373248  7708884992  53% /tmp\n/dev/nvme0n1p2 1966736678912 1842236542976 24519884800  99% /\n",
+        "stderr": ""
+      }
+    ],
+    "network": "Official AMD/PyTorch documentation GET, package indexes GET, wheel HEAD, attempted .metadata GET404; only27,536-byte ROCm metapackage source read in memory to inspect PKG-INFO. No GPU wheel body downloaded.",
+    "failed_metadata": [
+      "AMD rocm-sdk index404",
+      "torch/rocm standalone.metadata404"
+    ],
+    "evidence_files": [
+      {
+        "path": "raw/gpu-remedies-documents.json",
+        "bytes": 730383,
+        "sha256": "24e37d62d2346080376ab654d3a4a9ed7ee7b86ff19cca274a1c04f128ea3ea3"
+      },
+      {
+        "path": "raw/gpu-remedies-host.json",
+        "bytes": 2184,
+        "sha256": "de1dabf0d729a4a0b8e8646f2d5575e2ab2352d6707bfe767437c96a9416ec3c"
+      },
+      {
+        "path": "raw/gpu-remedies-indexes.json",
+        "bytes": 869,
+        "sha256": "1c5d0ad37e45d6bc0c2471844e3df7e0cd2ed1b74afc9fb71c660cd7b762b819"
+      },
+      {
+        "path": "raw/gpu-remedies-pytorch-legacy-head.json",
+        "bytes": 1392,
+        "sha256": "9245897de20ee3c881006916559dc14c0bc0e46520be8cfddbe8a4d15a99f735"
+      },
+      {
+        "path": "raw/gpu-remedies-rocm-metadata.json",
+        "bytes": 10887,
+        "sha256": "f9208c59f896bf75ced569da4f376e0a3813f929712afb6350de53ae8acffd97"
+      },
+      {
+        "path": "raw/gpu-remedies-runtime-heads.json",
+        "bytes": 1727,
+        "sha256": "47faafa88f2bd5b69c32c1500a15910a0aec3095c7b99a92e13158ef78a686dc"
+      },
+      {
+        "path": "raw/gpu-remedies-wheel-head.json",
+        "bytes": 2241,
+        "sha256": "e6eebcdde599728f09d6b3f46b71e2dd43afd4460bf2c407607cfdcbf71a253e"
+      }
+    ]
+  }
+}

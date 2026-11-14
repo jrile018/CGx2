@@ -1,0 +1,23 @@
+$ python3 research/architecture-review/comparisons/verify.py
+{
+  "status": "pass",
+  "input_hashes": 6,
+  "cases": 10,
+  "tracks": {
+    "native": 3,
+    "data_ml": 4,
+    "general_llm": 3
+  },
+  "route_rows": 160,
+  "route_states": {
+    "blocked": 44,
+    "not_applicable": 56,
+    "not_run": 60
+  },
+  "study_attempts_specified": 1056,
+  "executed_comparisons": 0,
+  "executed_model_trials": 0,
+  "cost_arithmetic": "pass; assumed ceilings, not vendor quotes",
+  "scope": "specification/schema/input provenance only; no workload acceptance, performance, proof or authoring outcomes"
+}
+exit_code=0

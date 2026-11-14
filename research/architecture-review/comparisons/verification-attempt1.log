@@ -1,0 +1,12 @@
+$ python3 research/architecture-review/comparisons/verify.py
+Traceback (most recent call last):
+  File "/home/john-riley/.codex/worktrees/github-main-consolidation/lang/research/architecture-review/comparisons/verify.py", line 88, in <module>
+    main()
+    ~~~~^^
+  File "/home/john-riley/.codex/worktrees/github-main-consolidation/lang/research/architecture-review/comparisons/verify.py", line 28, in main
+    require(hashlib.sha256((ROOT/path).read_bytes()).hexdigest()==ref['sha256'],f'input drift: {path}')
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/john-riley/.codex/worktrees/github-main-consolidation/lang/research/architecture-review/comparisons/verify.py", line 15, in require
+    raise ValueError(message)
+ValueError: input drift: research/architecture-review/environment/report.md
+exit_code=1

@@ -1,0 +1,57 @@
+[
+  {
+    "path": "/tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/lib/libaoti_custom_ops.so",
+    "bytes": 339472,
+    "sha256": "2d9f6421b137b0341fa9d78a8b9bde0293173632669cc5a1aaab4526768a3ef0"
+  },
+  {
+    "path": "/tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/lib/libbackend_with_compiler.so",
+    "bytes": 259096,
+    "sha256": "84e34f1851711b8c19e7391b83e5d0d0621edf1301162526d6530ec43bcfa48d"
+  },
+  {
+    "path": "/tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/lib/libc10.so",
+    "bytes": 1412808,
+    "sha256": "e8ad028c6a3b3f787b619f35d3c772485476c029c2e9faca659a56212ae7c00a"
+  },
+  {
+    "path": "/tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/lib/libgomp.so.1",
+    "bytes": 253849,
+    "sha256": "78511033caddec6ccae8f4d62b94d56135f377c4cee33120e6d7df2ef499f69f"
+  },
+  {
+    "path": "/tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/lib/libjitbackend_test.so",
+    "bytes": 215824,
+    "sha256": "a3286a5d3c4dc0b2221f9bfae180004b274469f419b051c8b5024d6712b1deae"
+  },
+  {
+    "path": "/tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/lib/libshm.so",
+    "bytes": 41880,
+    "sha256": "600c8862ca10b85d02542395094d931fdac921d2bb74f4ac1c906c4f10018fbe"
+  },
+  {
+    "path": "/tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/lib/libtorch.so",
+    "bytes": 8032,
+    "sha256": "59a95807d56ca89993351a173839f160ca9c2c6ec6f6b89a5e691d8f1392d3ff"
+  },
+  {
+    "path": "/tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/lib/libtorch_cpu.so",
+    "bytes": 446534944,
+    "sha256": "ad0bcc0225bf260968e0464982b78c2f25358400769720ce63c209ffc9929313"
+  },
+  {
+    "path": "/tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/lib/libtorch_global_deps.so",
+    "bytes": 8264,
+    "sha256": "2e5d497259a62960d95f4a7719abaeb24745429b49ffdf58e67672140205eb99"
+  },
+  {
+    "path": "/tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/lib/libtorch_python.so",
+    "bytes": 30977976,
+    "sha256": "130c8ae271e33b5f87150ea680fa7c89f89fdad702959f41c4956d3b06ef7a5b"
+  },
+  {
+    "path": "/tmp/cgx2-arch-review-environment/venv/lib/python3.12/site-packages/torch/lib/libtorchbind_test.so",
+    "bytes": 915504,
+    "sha256": "60ec7807eb14a82ba0f241f9219f7a1133d383842e1f713a19242d9e8c044ce9"
+  }
+]

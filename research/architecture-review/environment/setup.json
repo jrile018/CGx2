@@ -1,0 +1,23 @@
+{
+  "scope": "isolated open-source local readiness tooling; no shared Python/opam mutations",
+  "python_base": "/home/john-riley/.local/share/uv/python/cpython-3.12.15-linux-x86_64-gnu/bin/python3.12",
+  "venv": "/tmp/cgx2-arch-review-environment/venv",
+  "commands": [
+    {
+      "command": "uv venv --python /home/john-riley/.local/share/uv/python/cpython-3.12.15-linux-x86_64-gnu/bin/python3.12 /tmp/cgx2-arch-review-environment/venv",
+      "exit_code": 0
+    },
+    {
+      "command": "uv pip install --python /tmp/cgx2-arch-review-environment/venv/bin/python --no-cache wgpu==0.31.1",
+      "exit_code": 0,
+      "download_report": "wgpu3.2MiB; numpy16MiB; five packages installed"
+    },
+    {
+      "command": "uv pip install --python /tmp/cgx2-arch-review-environment/venv/bin/python --no-cache torch==2.11.0+cpu --index-url https://download.pytorch.org/whl/cpu",
+      "exit_code": 0
+    }
+  ],
+  "bytes_installed_approx": 877658112,
+  "pin_file": "requirements.lock.txt",
+  "notes": "Commands transcribed from actual successful setup calls; authoritative executable outcomes are raw probe logs. No ROCm multi-GB download attempted."
+}

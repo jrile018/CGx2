@@ -1,0 +1,12 @@
+/tmp/cgx2-arch-review-proof/projection-lean/BudgetProjection.lean:128:15: error: Type mismatch
+  CoreOpsDerefDerefMutSession.deref_mut
+has type
+  NoGcGuard → Result (Session × (Session → NoGcGuard) × (NoGcGuard → NoGcGuard))
+but is expected to have type
+  NoGcGuard → Result (Session × (Session → NoGcGuard))
+/tmp/cgx2-arch-review-proof/projection-lean/BudgetProjection.lean:146:10: error: Type mismatch
+  CoreOpsDropDrop.drop
+has type
+  NoGcGuard → Result (NoGcGuard × (NoGcGuard → NoGcGuard))
+but is expected to have type
+  NoGcGuard → Result NoGcGuard

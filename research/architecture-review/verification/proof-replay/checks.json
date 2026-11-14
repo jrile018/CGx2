@@ -1,0 +1,598 @@
+{
+  "status": "pass",
+  "evidence_only": false,
+  "checks": [
+    {
+      "id": "artifact:setup.py",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:verify.py",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:docs/charon-pin",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:docs/aeneas-README.md",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:source/external-roots.txt",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:source/Admission.lean",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:source/whole-file-projection.rs",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:source/kernel-source-map.json",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:source/kernel-projection.rs",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:source/kernel-source.rs",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:generated/budget_kernel.llbc",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:generated/BudgetProjection.failed.lean",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:generated/BudgetKernel.lean",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/versions.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/target.json",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/negative-records.json",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/negative-proof.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/negative-lean.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/negative-aeneas.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/negative-charon.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/full-extraction.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/full-aeneas.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/narrow-extraction.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/narrow2-extraction.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/projection-charon.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/projection-aeneas.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/dependency-git.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/cache-build.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/cache-build2.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/cache-build3.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/cache-get.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/cache-executable.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/cache-get2.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/generated-lean.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/generated-lean2.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/cache-get3.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/cache-get4.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/generated-lean3.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/kernel-charon.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/kernel-aeneas.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/kernel-lean.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/admission-proof.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/admission-proof2.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/admission-proof3.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/admission-proof4.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/admission-proof5.log",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/rust-toolchain.toml",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/aeneas-lake-manifest.json",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/selected-release.json",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "artifact:evidence/archive-hashes.json",
+      "status": "pass",
+      "scope": "archived artifact integrity only"
+    },
+    {
+      "id": "source_binding",
+      "status": "pass",
+      "scope": "actual committed budget.rs matches frozen baseline manifest"
+    },
+    {
+      "id": "byte_exact_selection",
+      "status": "pass",
+      "scope": "Budget + impl Session are concatenated unchanged source byte spans; guard impls omitted"
+    },
+    {
+      "id": "span:34",
+      "status": "pass",
+      "scope": "source span hash"
+    },
+    {
+      "id": "span:74",
+      "status": "pass",
+      "scope": "source span hash"
+    },
+    {
+      "id": "span:724",
+      "status": "pass",
+      "scope": "source span hash"
+    },
+    {
+      "id": "historical_model_identity",
+      "status": "pass",
+      "scope": "existing 13-theorem Nat model provenance; NOT a fresh Lean4.19 check or implementation proof"
+    },
+    {
+      "id": "receipt:official_versions",
+      "status": "pass",
+      "scope": "saved command evidence exists"
+    },
+    {
+      "id": "receipt:full_runtime_charon",
+      "status": "pass",
+      "scope": "saved command evidence exists"
+    },
+    {
+      "id": "receipt:full_runtime_aeneas",
+      "status": "pass",
+      "scope": "saved command evidence exists"
+    },
+    {
+      "id": "receipt:whole_budget_charon",
+      "status": "pass",
+      "scope": "saved command evidence exists"
+    },
+    {
+      "id": "receipt:whole_budget_aeneas",
+      "status": "pass",
+      "scope": "saved command evidence exists"
+    },
+    {
+      "id": "receipt:whole_budget_lean",
+      "status": "pass",
+      "scope": "saved command evidence exists"
+    },
+    {
+      "id": "receipt:selected_kernel_charon",
+      "status": "pass",
+      "scope": "saved command evidence exists"
+    },
+    {
+      "id": "receipt:selected_kernel_aeneas",
+      "status": "pass",
+      "scope": "saved command evidence exists"
+    },
+    {
+      "id": "receipt:selected_kernel_lean",
+      "status": "pass",
+      "scope": "saved command evidence exists"
+    },
+    {
+      "id": "receipt:six_source_lemmas",
+      "status": "pass",
+      "scope": "saved command evidence exists"
+    },
+    {
+      "id": "receipt:source_mutation_control",
+      "status": "pass",
+      "scope": "saved command evidence exists"
+    },
+    {
+      "id": "fixed_replay_root",
+      "status": "pass",
+      "scope": "exact generated source comments require the pinned /tmp paths"
+    },
+    {
+      "id": "tool:aeneas",
+      "status": "pass",
+      "scope": "isolated pinned compiler/translator executable integrity"
+    },
+    {
+      "id": "tool:charon",
+      "status": "pass",
+      "scope": "isolated pinned compiler/translator executable integrity"
+    },
+    {
+      "id": "tool:charon-driver",
+      "status": "pass",
+      "scope": "isolated pinned compiler/translator executable integrity"
+    },
+    {
+      "id": "tool:lean/bin/lean",
+      "status": "pass",
+      "scope": "isolated pinned compiler/translator executable integrity"
+    },
+    {
+      "id": "tool:lean/bin/lake",
+      "status": "pass",
+      "scope": "isolated pinned compiler/translator executable integrity"
+    },
+    {
+      "id": "tool:rustup/toolchains/nightly-2026-09-17-x86_64-unknown-linux-gnu/bin/rustc",
+      "status": "pass",
+      "scope": "isolated pinned compiler/translator executable integrity"
+    },
+    {
+      "id": "charon",
+      "status": "pass",
+      "scope": "fresh execution; charon",
+      "command": [
+        "/tmp/cgx2-arch-review-proof/charon",
+        "rustc",
+        "--preset",
+        "aeneas",
+        "--dest",
+        "/tmp/cgx2-arch-review-proof/offline-replay",
+        "--",
+        "--crate-name",
+        "budget_kernel",
+        "--crate-type",
+        "lib",
+        "--edition=2021",
+        "-C",
+        "overflow-checks=yes",
+        "--target",
+        "x86_64-unknown-linux-gnu",
+        "/tmp/cgx2-arch-review-proof/kernel-projection.rs"
+      ],
+      "exit_code": 0,
+      "evidence_file": "charon.log",
+      "original_evidence_file": "/tmp/cgx2-arch-review-proof/offline-replay/charon.log"
+    },
+    {
+      "id": "machine_target",
+      "status": "pass",
+      "scope": "x86_64 little-endian 64-bit usize, Rust overflow checks enabled"
+    },
+    {
+      "id": "generated_llbc_identity",
+      "status": "pass",
+      "scope": "fresh extraction matches archived LLBC after removing destination-directory metadata only"
+    },
+    {
+      "id": "aeneas",
+      "status": "pass",
+      "scope": "fresh execution; aeneas",
+      "command": [
+        "/tmp/cgx2-arch-review-proof/aeneas",
+        "-backend",
+        "lean",
+        "-dest",
+        "/tmp/cgx2-arch-review-proof/offline-replay",
+        "/tmp/cgx2-arch-review-proof/offline-replay/budget_kernel.llbc"
+      ],
+      "exit_code": 0,
+      "evidence_file": "aeneas.log",
+      "original_evidence_file": "/tmp/cgx2-arch-review-proof/offline-replay/aeneas.log"
+    },
+    {
+      "id": "generated_lean_identity",
+      "status": "pass",
+      "scope": "fresh translator output byte-identical; generated artifact was not edited"
+    },
+    {
+      "id": "lean_generated_kernel",
+      "status": "pass",
+      "scope": "fresh execution; lean_generated_kernel",
+      "command": [
+        "/tmp/cgx2-arch-review-proof/lean/bin/lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "-R",
+        "/tmp/cgx2-arch-review-proof/offline-replay",
+        "-o",
+        "/tmp/cgx2-arch-review-proof/offline-replay/BudgetKernel.olean",
+        "/tmp/cgx2-arch-review-proof/offline-replay/BudgetKernel.lean"
+      ],
+      "exit_code": 0,
+      "evidence_file": "lean_generated_kernel.log",
+      "original_evidence_file": "/tmp/cgx2-arch-review-proof/offline-replay/generated-lean.log"
+    },
+    {
+      "id": "lean_source_connected_lemmas",
+      "status": "pass",
+      "scope": "fresh execution; lean_source_connected_lemmas",
+      "command": [
+        "/tmp/cgx2-arch-review-proof/lean/bin/lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "-R",
+        "/tmp/cgx2-arch-review-proof/offline-replay",
+        "/tmp/cgx2-arch-review-proof/offline-replay/Admission.lean"
+      ],
+      "exit_code": 0,
+      "evidence_file": "lean_source_connected_lemmas.log",
+      "original_evidence_file": "/tmp/cgx2-arch-review-proof/offline-replay/proof.log"
+    },
+    {
+      "id": "axiom_audit",
+      "status": "pass",
+      "scope": "six theorem audits; only propext, Classical.choice and Quot.sound permitted"
+    },
+    {
+      "id": "allowed_axioms",
+      "status": "pass",
+      "scope": "propext"
+    },
+    {
+      "id": "allowed_axioms",
+      "status": "pass",
+      "scope": "propext, Classical.choice, Quot.sound"
+    },
+    {
+      "id": "allowed_axioms",
+      "status": "pass",
+      "scope": "propext, Classical.choice, Quot.sound"
+    },
+    {
+      "id": "allowed_axioms",
+      "status": "pass",
+      "scope": "propext, Classical.choice, Quot.sound"
+    },
+    {
+      "id": "allowed_axioms",
+      "status": "pass",
+      "scope": "propext"
+    },
+    {
+      "id": "allowed_axioms",
+      "status": "pass",
+      "scope": "propext, Classical.choice, Quot.sound"
+    },
+    {
+      "id": "lean_runtime_width",
+      "status": "pass",
+      "scope": "Lean executable evaluates opaque System.Platform.numBits to64; correspondence remains explicit assumption"
+    },
+    {
+      "id": "negative_charon",
+      "status": "pass",
+      "scope": "fresh execution; negative_charon",
+      "command": [
+        "/tmp/cgx2-arch-review-proof/charon",
+        "rustc",
+        "--preset",
+        "aeneas",
+        "--dest",
+        "/tmp/cgx2-arch-review-proof/offline-replay/negative",
+        "--",
+        "--crate-name",
+        "budget_kernel",
+        "--crate-type",
+        "lib",
+        "--edition=2021",
+        "-C",
+        "overflow-checks=yes",
+        "--target",
+        "x86_64-unknown-linux-gnu",
+        "/tmp/cgx2-arch-review-proof/offline-replay/negative/kernel-projection.rs"
+      ],
+      "exit_code": 0,
+      "evidence_file": "negative_charon.log",
+      "original_evidence_file": "/tmp/cgx2-arch-review-proof/offline-replay/negative/charon.log"
+    },
+    {
+      "id": "negative_aeneas",
+      "status": "pass",
+      "scope": "fresh execution; negative_aeneas",
+      "command": [
+        "/tmp/cgx2-arch-review-proof/aeneas",
+        "-backend",
+        "lean",
+        "-dest",
+        "/tmp/cgx2-arch-review-proof/offline-replay/negative",
+        "/tmp/cgx2-arch-review-proof/offline-replay/negative/budget_kernel.llbc"
+      ],
+      "exit_code": 0,
+      "evidence_file": "negative_aeneas.log",
+      "original_evidence_file": "/tmp/cgx2-arch-review-proof/offline-replay/negative/aeneas.log"
+    },
+    {
+      "id": "negative_generated_compiles",
+      "status": "pass",
+      "scope": "fresh execution; negative_generated_compiles",
+      "command": [
+        "/tmp/cgx2-arch-review-proof/lean/bin/lake",
+        "env",
+        "lean",
+        "-R",
+        "/tmp/cgx2-arch-review-proof/offline-replay/negative",
+        "-o",
+        "/tmp/cgx2-arch-review-proof/offline-replay/negative/BudgetKernel.olean",
+        "/tmp/cgx2-arch-review-proof/offline-replay/negative/BudgetKernel.lean"
+      ],
+      "exit_code": 0,
+      "evidence_file": "negative_generated_compiles.log",
+      "original_evidence_file": "/tmp/cgx2-arch-review-proof/offline-replay/negative/generated.log"
+    },
+    {
+      "id": "negative_proof_rejected",
+      "status": "pass",
+      "scope": "fresh execution; negative_proof_rejected",
+      "command": [
+        "/tmp/cgx2-arch-review-proof/lean/bin/lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "-R",
+        "/tmp/cgx2-arch-review-proof/offline-replay/negative",
+        "/tmp/cgx2-arch-review-proof/offline-replay/negative/Admission.lean"
+      ],
+      "exit_code": 1,
+      "evidence_file": "negative_proof_rejected.log",
+      "original_evidence_file": "/tmp/cgx2-arch-review-proof/offline-replay/negative/proof.log"
+    },
+    {
+      "id": "source_mutation_sensitivity",
+      "status": "pass",
+      "scope": "changing actual source > to >= produces compiling translation but breaks generated admission theorem"
+    },
+    {
+      "id": "coverage_limit",
+      "status": "blocked",
+      "scope": "whole Vec traversal, reachable-state induction, Session context/guard entry/RAII remain unproved"
+    }
+  ]
+}

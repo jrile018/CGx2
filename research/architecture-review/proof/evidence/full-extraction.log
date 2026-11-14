@@ -1,0 +1,31 @@
+warning: `--dest` is deprecated, use `--dest-file` instead
+
+warning: `cargo miri setup` failed for target `x86_64-unknown-linux-gnu`; falling back to rustc's default sysroot: error: 'cargo-miri' is not installed for the toolchain 'nightly-2026-09-17-x86_64-unknown-linux-gnu'.
+help: run `rustup component add miri` to install it
+warning: use of deprecated method `std::sync::atomic::Atomic::<u64>::fetch_update`: renamed to `try_update` for consistency
+  --> /home/john-riley/.codex/worktrees/github-main-consolidation/lang/crates/cgx2-runtime/src/lib.rs:87:14
+   |
+87 |             .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |n| n.checked_add(1))
+   |              ^^^^^^^^^^^^
+   |
+   = note: `#[warn(deprecated)]` on by default
+help: replace the use of the deprecated method
+   |
+87 -             .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |n| n.checked_add(1))
+87 +             .try_update(Ordering::Relaxed, Ordering::Relaxed, |n| n.checked_add(1))
+   |
+
+warning: use of deprecated method `std::sync::atomic::Atomic::<u64>::fetch_update`: renamed to `try_update` for consistency
+  --> /home/john-riley/.codex/worktrees/github-main-consolidation/lang/crates/cgx2-runtime/src/lib.rs:47:10
+   |
+47 |         .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |n| n.checked_add(1))
+   |          ^^^^^^^^^^^^
+   |
+help: replace the use of the deprecated method
+   |
+47 -         .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |n| n.checked_add(1))
+47 +         .try_update(Ordering::Relaxed, Ordering::Relaxed, |n| n.checked_add(1))
+   |
+
+warning: 2 warnings emitted
+

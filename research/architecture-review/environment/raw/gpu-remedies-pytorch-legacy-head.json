@@ -1,0 +1,25 @@
+{
+  "index_url": "https://download.pytorch.org/whl/rocm7.2/torch/",
+  "selected": {
+    "href": "https://download-r2.pytorch.org/whl/rocm7.2/torch-2.11.0%2Brocm7.2-cp312-cp312-manylinux_2_28_x86_64.whl#sha256=8f02a36213288ab5921e277e13f5954cc62afe7cfa899b79d739d4ef2be6510b",
+    "data-upload-time": "2026-04-28T19:44:39Z"
+  },
+  "wheel_url": "https://download-r2.pytorch.org/whl/rocm7.2/torch-2.11.0%2Brocm7.2-cp312-cp312-manylinux_2_28_x86_64.whl#sha256=8f02a36213288ab5921e277e13f5954cc62afe7cfa899b79d739d4ef2be6510b",
+  "head": {
+    "status": 200,
+    "headers": {
+      "Date": "Sat, 14 Nov 2026 02:49:28 GMT",
+      "Content-Type": "binary/octet-stream",
+      "Content-Length": "6221326904",
+      "Connection": "close",
+      "ETag": "\"256222bcab59029b6be2a3459de3ee38-30\"",
+      "Last-Modified": "Mon, 06 Apr 2026 14:54:48 GMT",
+      "Accept-Ranges": "bytes",
+      "Server": "cloudflare",
+      "cf-cache-status": "DYNAMIC",
+      "set-cookie": "__cf_bm=JSgNi6pt6ZqqUqC8Onbx3rmsfwrj4CBKRVr0qSqaLyc-1794624568.4618955-1.0.1.1-M9zvrPz29cPn9V8jLNMtQel213syogbZKIRZSPFkZHeZF5go__ZT16yZKXhF6FxmLN4Ft2e0Ze7Vxn8loB8INhc5DWXKaD86aW_1SBZ6a_ltqKN4wgd0lgGZspifH96p; HttpOnly; SameSite=None; Partitioned; Secure; Path=/; Domain=pytorch.org; Expires=Sat, 14 Nov 2026 03:19:28 GMT",
+      "Server-Timing": "cfCacheStatus;desc=\"DYNAMIC\"",
+      "CF-RAY": "a5a2b400ef2269f4-ATL"
+    }
+  }
+}

@@ -1,0 +1,47 @@
+warning: `--dest` is deprecated, use `--dest-file` instead
+
+warning: `cargo miri setup` failed for target `x86_64-unknown-linux-gnu`; falling back to rustc's default sysroot: error: 'cargo-miri' is not installed for the toolchain 'nightly-2026-09-17-x86_64-unknown-linux-gnu'.
+help: run `rustup component add miri` to install it
+warning: fields `budgets` and `charged_bytes_v2` are never read
+ --> /tmp/cgx2-arch-review-proof/projection.rs:5:5
+  |
+4 | pub struct Session {
+  |            ------- fields in this struct
+5 |     budgets: Vec<budget::Budget>,
+  |     ^^^^^^^
+6 |     charged_bytes_v2: u128,
+  |     ^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: fields `limit` and `spent` are never read
+ --> /home/john-riley/.codex/worktrees/github-main-consolidation/lang/crates/cgx2-runtime/src/budget.rs:7:9
+  |
+6 | pub(crate) struct Budget {
+  |                   ------ fields in this struct
+7 |     pub limit: usize,
+  |         ^^^^^
+8 |     pub spent: usize,
+  |         ^^^^^
+  |
+  = note: `Budget` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: struct `NoGcGuard` is never constructed
+  --> /home/john-riley/.codex/worktrees/github-main-consolidation/lang/crates/cgx2-runtime/src/budget.rs:13:12
+   |
+13 | pub struct NoGcGuard<'a> {
+   |            ^^^^^^^^^
+
+warning: methods `check_budgets` and `charge_budgets` are never used
+  --> /home/john-riley/.codex/worktrees/github-main-consolidation/lang/crates/cgx2-runtime/src/budget.rs:38:19
+   |
+37 | impl Session {
+   | ------------ methods in this implementation
+38 |     pub(crate) fn check_budgets(&self, bytes: usize) -> Result<(), AllocationError> {
+   |                   ^^^^^^^^^^^^^
+...
+47 |     pub(crate) fn charge_budgets(&mut self, bytes: usize) {
+   |                   ^^^^^^^^^^^^^^
+
+warning: 4 warnings emitted
+

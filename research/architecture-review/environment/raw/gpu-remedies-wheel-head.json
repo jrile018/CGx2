@@ -1,0 +1,52 @@
+{
+  "torch": {
+    "url": "https://stable.repo.amd.com/rocm/whl-next/torch/torch-2.13.0%2Brocm10.1.0-cp312-cp312-linux_x86_64.whl",
+    "head": {
+      "status": 200,
+      "headers": {
+        "Content-Type": "binary/octet-stream",
+        "Content-Length": "202600338",
+        "Connection": "close",
+        "Server": "AmazonS3",
+        "Last-Modified": "Mon, 05 Oct 2026 09:23:40 GMT",
+        "x-amz-server-side-encryption": "AES256",
+        "x-amz-meta-therock-promotion-source-etag": "d53e197f03a0b8b564ab2f0b0b06c18b-25",
+        "x-amz-meta-therock-promotion-source-version-id": "xkgXhACmtKogZCRsQgTH9t_S9UtBkPaO",
+        "x-amz-version-id": "LiSLNWLiET7bdcVeMq2D8KwBuDLH6RdZ",
+        "x-amz-meta-therock-promotion-source-checksum-type": "COMPOSITE",
+        "x-amz-meta-therock-promotion-source-checksums": "{\"ChecksumCRC32\":\"caOb5Q==-25\"}",
+        "Accept-Ranges": "bytes",
+        "Date": "Sat, 14 Nov 2026 02:46:52 GMT",
+        "ETag": "\"7922356e9cdfd5de2f97f6292f50d0e3-2\"",
+        "X-Cache": "RefreshHit from cloudfront",
+        "Via": "1.1 800cba2437ee092ab9e4755c65d34a72.cloudfront.net (CloudFront)",
+        "X-Amz-Cf-Pop": "DFW57-P1",
+        "X-Amz-Cf-Id": "puteIPf_p9-3yv3zf3Co3XVdvopFluZYSOKhlzK7frCwXSWTtTiWWA=="
+      }
+    },
+    "metadata_error": "HTTP Error 404: Not Found"
+  },
+  "rocm": {
+    "url": "https://stable.repo.amd.com/rocm/whl-next/rocm/rocm-10.1.0.tar.gz",
+    "head": {
+      "status": 200,
+      "headers": {
+        "Content-Type": "binary/octet-stream",
+        "Content-Length": "27536",
+        "Connection": "close",
+        "Accept-Ranges": "bytes",
+        "Server": "AmazonS3",
+        "Last-Modified": "Mon, 05 Oct 2026 09:19:46 GMT",
+        "x-amz-version-id": "o91ESl6YndtaBmgylg1uCCkwVabIBAg9",
+        "x-amz-server-side-encryption": "AES256",
+        "Date": "Sat, 14 Nov 2026 02:46:53 GMT",
+        "ETag": "\"dfd0ccdb1c487371d0bc11ceec530374\"",
+        "X-Cache": "RefreshHit from cloudfront",
+        "Via": "1.1 1918cab433d8a05c792c3cff85897f3c.cloudfront.net (CloudFront)",
+        "X-Amz-Cf-Pop": "DFW57-P1",
+        "X-Amz-Cf-Id": "e5Etx6NpfDWrObHgDH6i8s_VfiU0gXLNTDxXSGsxdr9CiKC9FGtEIA=="
+      }
+    },
+    "metadata_error": "HTTP Error 404: Not Found"
+  }
+}

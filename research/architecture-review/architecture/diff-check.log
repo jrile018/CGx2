@@ -1,0 +1,4 @@
+Earlier diagnostic probe: git diff --no-index --check -- /dev/null research/architecture-review/architecture/report.md returned 1 with empty stdout/stderr because the new file differs from /dev/null. It was not counted as a passed check. Complete owned-artifact whitespace is checked by verify.py.
+
+$ git diff --check -- research/architecture-review/architecture
+exit_code=0

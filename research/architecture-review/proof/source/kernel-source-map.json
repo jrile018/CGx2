@@ -1,0 +1,22 @@
+{
+  "source": "crates/cgx2-runtime/src/budget.rs",
+  "sha256": "7bd562dae680c6102598a68d139042fba758ae3b3cb8c0d937778c0f0f13e0e4",
+  "spans": [
+    {
+      "start_byte": 34,
+      "end_byte_exclusive": 74,
+      "sha256": "76ee7f1fc2ddb431ebcf7b081df0ffb3353fb60c3aa5c9fd019becf07287c653"
+    },
+    {
+      "start_byte": 74,
+      "end_byte_exclusive": 171,
+      "sha256": "1197d4b2201d02c7ece618a99dc04becd33bb2d206187ffd3f56dcf5a84ccc99"
+    },
+    {
+      "start_byte": 724,
+      "end_byte_exclusive": 1277,
+      "sha256": "e5e82353aee98e5a6212c59510d9e7162d2c3aa587312d1f5da204e9bf0201ed"
+    }
+  ],
+  "selection": "source-order exact concatenation; no added or altered bytes in selected spans"
+}

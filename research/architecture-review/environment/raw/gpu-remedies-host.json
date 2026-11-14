@@ -1,0 +1,83 @@
+{
+  "timestamp_utc": "2026-11-14T02:48:13.309533+00:00",
+  "os_release": {
+    "PRETTY_NAME": "\"Ubuntu 26.04.1 LTS\"",
+    "NAME": "\"Ubuntu\"",
+    "VERSION_ID": "\"26.04\"",
+    "VERSION": "\"26.04.1 LTS (Resolute Raccoon)\"",
+    "VERSION_CODENAME": "resolute",
+    "ID": "ubuntu",
+    "ID_LIKE": "debian",
+    "HOME_URL": "\"https://www.ubuntu.com/\"",
+    "SUPPORT_URL": "\"https://help.ubuntu.com/\"",
+    "BUG_REPORT_URL": "\"https://bugs.launchpad.net/ubuntu/\"",
+    "PRIVACY_POLICY_URL": "\"https://www.ubuntu.com/legal/terms-and-policies/privacy-policy\"",
+    "UBUNTU_CODENAME": "resolute",
+    "LOGO": "ubuntu-logo"
+  },
+  "kernel": "7.0.0-42-generic",
+  "glibc": [
+    "glibc",
+    "2.43"
+  ],
+  "commands": [
+    {
+      "argv": [
+        "modinfo",
+        "-F",
+        "filename",
+        "amdgpu"
+      ],
+      "exit_code": 0,
+      "stdout": "/lib/modules/7.0.0-42-generic/kernel/drivers/gpu/drm/amd/amdgpu/amdgpu.ko.zst\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "modinfo",
+        "-F",
+        "intree",
+        "amdgpu"
+      ],
+      "exit_code": 0,
+      "stdout": "Y\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "modinfo",
+        "-F",
+        "version",
+        "amdgpu"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "dpkg-query",
+        "-W",
+        "-f=${Package} ${Version} ${Status}\\n",
+        "amdgpu-dkms",
+        "amdgpu",
+        "rocm-core",
+        "linux-image-7.0.0-42-generic"
+      ],
+      "exit_code": 1,
+      "stdout": "linux-image-7.0.0-42-generic 7.0.0-42.42 install ok installed\n",
+      "stderr": "dpkg-query: no packages found matching amdgpu-dkms\ndpkg-query: no packages found matching amdgpu\ndpkg-query: no packages found matching rocm-core\n"
+    },
+    {
+      "argv": [
+        "df",
+        "-B1",
+        "/tmp",
+        "/home/john-riley"
+      ],
+      "exit_code": 0,
+      "stdout": "Filesystem         1B-blocks          Used   Available Use% Mounted on\ntmpfs            16085258240    8376373248  7708884992  53% /tmp\n/dev/nvme0n1p2 1966736678912 1842236542976 24519884800  99% /\n",
+      "stderr": ""
+    }
+  ]
+}

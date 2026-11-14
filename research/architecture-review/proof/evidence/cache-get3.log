@@ -1,0 +1,33 @@
+uncaught exception: unknown module prefix 'all'
+
+No directory 'all' or file 'all.lean' in the search path entries:
+.lake/packages/Cli
+.lake/packages/Cli
+.lake/packages/batteries
+.lake/packages/batteries
+.lake/packages/Qq
+.lake/packages/Qq
+.lake/packages/aesop
+.lake/packages/aesop
+.lake/packages/proofwidgets
+.lake/packages/proofwidgets
+.lake/packages/proofwidgets
+.lake/packages/importGraph
+.lake/packages/importGraph
+.lake/packages/importGraph
+.lake/packages/LeanSearchClient
+.lake/packages/LeanSearchClient
+.lake/packages/plausible
+.lake/packages/plausible
+.lake/packages/mathlib
+.lake/packages/mathlib
+.lake/packages/mathlib
+.lake/packages/mathlib
+.lake/packages/mathlib
+.lake/packages/mathlib
+.lake/packages/mathlib
+.
+.
+/tmp/cgx2-arch-review-proof/lean/src/lean/lake
+.lake/packages/mathlib/.lake/build/bin/../src/lean/lake
+.lake/packages/mathlib/.lake/build/bin/../src/lean

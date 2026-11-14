@@ -1,0 +1,2 @@
+Could not find native implementation of external declaration 'Cache.Cli.parseFlagOpt' (symbols 'lp_mathlib_Cache_Cli_parseFlagOpt___boxed' or 'lp_mathlib_Cache_Cli_parseFlagOpt').
+For declarations from `Init`, `Std`, or `Lean`, you need to set `supportInterpreter := true` in the relevant `lean_exe` statement in your `lakefile.lean`.

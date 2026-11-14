@@ -1,0 +1,45 @@
+exit_code=0
+{
+  "baseline_files": 518,
+  "wip_files": 15,
+  "source_integrity": "passed",
+  "gpu_remedies": "metadata verified; installation and driver compatibility not established",
+  "coordinator_environment_replay": {
+    "pass": 13,
+    "blocked": 1
+  },
+  "coordinator_proof_replay": "fresh source extraction, six bounded lemmas, expected-failure source mutation; receipts retained",
+  "comparison_cases": 10,
+  "lane_receipts": {
+    "architecture": {
+      "receipt": "complete",
+      "checks": {
+        "pass": 2,
+        "not_run": 2
+      }
+    },
+    "proof": {
+      "receipt": "partial",
+      "checks": {
+        "pass": 10,
+        "fail": 2
+      }
+    },
+    "environment": {
+      "receipt": "partial",
+      "checks": {
+        "pass": 13,
+        "blocked": 1
+      }
+    },
+    "comparisons": {
+      "receipt": "complete",
+      "checks": {
+        "pass": 1,
+        "not_run": 2
+      }
+    }
+  },
+  "scoped_claims": 22,
+  "interpretation": "Artifact/source-integrity checks, not runtime or compiler correctness."
+}

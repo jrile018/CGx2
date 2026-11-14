@@ -1,0 +1,5 @@
+$ rustc --edition=2021 /tmp/cgx2-arch-review-environment/coordinator-replay/build/fixture.rs -o /tmp/cgx2-arch-review-environment/coordinator-replay/build/rust-fixture
+exit_code=0
+STDOUT
+
+STDERR

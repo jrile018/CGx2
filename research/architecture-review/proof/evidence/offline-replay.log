@@ -1,0 +1,96 @@
+PASS artifact:setup.py: archived artifact integrity only
+PASS artifact:verify.py: archived artifact integrity only
+PASS artifact:docs/charon-pin: archived artifact integrity only
+PASS artifact:docs/aeneas-README.md: archived artifact integrity only
+PASS artifact:source/external-roots.txt: archived artifact integrity only
+PASS artifact:source/Admission.lean: archived artifact integrity only
+PASS artifact:source/whole-file-projection.rs: archived artifact integrity only
+PASS artifact:source/kernel-source-map.json: archived artifact integrity only
+PASS artifact:source/kernel-projection.rs: archived artifact integrity only
+PASS artifact:source/kernel-source.rs: archived artifact integrity only
+PASS artifact:generated/budget_kernel.llbc: archived artifact integrity only
+PASS artifact:generated/BudgetProjection.failed.lean: archived artifact integrity only
+PASS artifact:generated/BudgetKernel.lean: archived artifact integrity only
+PASS artifact:evidence/versions.log: archived artifact integrity only
+PASS artifact:evidence/target.json: archived artifact integrity only
+PASS artifact:evidence/negative-records.json: archived artifact integrity only
+PASS artifact:evidence/negative-proof.log: archived artifact integrity only
+PASS artifact:evidence/negative-lean.log: archived artifact integrity only
+PASS artifact:evidence/negative-aeneas.log: archived artifact integrity only
+PASS artifact:evidence/negative-charon.log: archived artifact integrity only
+PASS artifact:evidence/full-extraction.log: archived artifact integrity only
+PASS artifact:evidence/full-aeneas.log: archived artifact integrity only
+PASS artifact:evidence/narrow-extraction.log: archived artifact integrity only
+PASS artifact:evidence/narrow2-extraction.log: archived artifact integrity only
+PASS artifact:evidence/projection-charon.log: archived artifact integrity only
+PASS artifact:evidence/projection-aeneas.log: archived artifact integrity only
+PASS artifact:evidence/dependency-git.log: archived artifact integrity only
+PASS artifact:evidence/cache-build.log: archived artifact integrity only
+PASS artifact:evidence/cache-build2.log: archived artifact integrity only
+PASS artifact:evidence/cache-build3.log: archived artifact integrity only
+PASS artifact:evidence/cache-get.log: archived artifact integrity only
+PASS artifact:evidence/cache-executable.log: archived artifact integrity only
+PASS artifact:evidence/cache-get2.log: archived artifact integrity only
+PASS artifact:evidence/generated-lean.log: archived artifact integrity only
+PASS artifact:evidence/generated-lean2.log: archived artifact integrity only
+PASS artifact:evidence/cache-get3.log: archived artifact integrity only
+PASS artifact:evidence/cache-get4.log: archived artifact integrity only
+PASS artifact:evidence/generated-lean3.log: archived artifact integrity only
+PASS artifact:evidence/kernel-charon.log: archived artifact integrity only
+PASS artifact:evidence/kernel-aeneas.log: archived artifact integrity only
+PASS artifact:evidence/kernel-lean.log: archived artifact integrity only
+PASS artifact:evidence/admission-proof.log: archived artifact integrity only
+PASS artifact:evidence/admission-proof2.log: archived artifact integrity only
+PASS artifact:evidence/admission-proof3.log: archived artifact integrity only
+PASS artifact:evidence/admission-proof4.log: archived artifact integrity only
+PASS artifact:evidence/admission-proof5.log: archived artifact integrity only
+PASS artifact:evidence/rust-toolchain.toml: archived artifact integrity only
+PASS artifact:evidence/aeneas-lake-manifest.json: archived artifact integrity only
+PASS artifact:evidence/selected-release.json: archived artifact integrity only
+PASS artifact:evidence/archive-hashes.json: archived artifact integrity only
+PASS source_binding: actual committed budget.rs matches frozen baseline manifest
+PASS byte_exact_selection: Budget + impl Session are concatenated unchanged source byte spans; guard impls omitted
+PASS span:34: source span hash
+PASS span:74: source span hash
+PASS span:724: source span hash
+PASS historical_model_identity: existing 13-theorem Nat model provenance; NOT a fresh Lean4.19 check or implementation proof
+PASS receipt:official_versions: saved command evidence exists
+PASS receipt:full_runtime_charon: saved command evidence exists
+PASS receipt:full_runtime_aeneas: saved command evidence exists
+PASS receipt:whole_budget_charon: saved command evidence exists
+PASS receipt:whole_budget_aeneas: saved command evidence exists
+PASS receipt:whole_budget_lean: saved command evidence exists
+PASS receipt:selected_kernel_charon: saved command evidence exists
+PASS receipt:selected_kernel_aeneas: saved command evidence exists
+PASS receipt:selected_kernel_lean: saved command evidence exists
+PASS receipt:six_source_lemmas: saved command evidence exists
+PASS receipt:source_mutation_control: saved command evidence exists
+PASS fixed_replay_root: exact generated source comments require the pinned /tmp paths
+PASS tool:aeneas: isolated pinned compiler/translator executable integrity
+PASS tool:charon: isolated pinned compiler/translator executable integrity
+PASS tool:charon-driver: isolated pinned compiler/translator executable integrity
+PASS tool:lean/bin/lean: isolated pinned compiler/translator executable integrity
+PASS tool:lean/bin/lake: isolated pinned compiler/translator executable integrity
+PASS tool:rustup/toolchains/nightly-2026-09-17-x86_64-unknown-linux-gnu/bin/rustc: isolated pinned compiler/translator executable integrity
+PASS charon: fresh execution; charon
+PASS machine_target: x86_64 little-endian 64-bit usize, Rust overflow checks enabled
+PASS generated_llbc_identity: fresh extraction matches archived LLBC after removing destination-directory metadata only
+PASS aeneas: fresh execution; aeneas
+PASS generated_lean_identity: fresh translator output byte-identical; generated artifact was not edited
+PASS lean_generated_kernel: fresh execution; lean_generated_kernel
+PASS lean_source_connected_lemmas: fresh execution; lean_source_connected_lemmas
+PASS axiom_audit: six theorem audits; only propext, Classical.choice and Quot.sound permitted
+PASS allowed_axioms: propext
+PASS allowed_axioms: propext, Classical.choice, Quot.sound
+PASS allowed_axioms: propext, Classical.choice, Quot.sound
+PASS allowed_axioms: propext, Classical.choice, Quot.sound
+PASS allowed_axioms: propext
+PASS allowed_axioms: propext, Classical.choice, Quot.sound
+PASS lean_runtime_width: Lean executable evaluates opaque System.Platform.numBits to64; correspondence remains explicit assumption
+PASS negative_charon: fresh execution; negative_charon
+PASS negative_aeneas: fresh execution; negative_aeneas
+PASS negative_generated_compiles: fresh execution; negative_generated_compiles
+PASS negative_proof_rejected: fresh execution; negative_proof_rejected
+PASS source_mutation_sensitivity: changing actual source > to >= produces compiling translation but breaks generated admission theorem
+BLOCKED coverage_limit: whole Vec traversal, reachable-state induction, Session context/guard entry/RAII remain unproved
+Scope: source-selected generated loop bodies + conditional machine arithmetic; historical model and full runtime stay separate.

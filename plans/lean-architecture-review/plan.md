@@ -1,6 +1,6 @@
 # CGx2 implementation architecture, Lean assurance, and comparative evaluation
 
-Date: 2026-11-13. Status: proposed execution plan, awaiting final confirmation of shared understanding. This document authorizes no claim of superiority or completed implementation proof.
+Date: 2026-11-13. Status: confirmed by the user and authorized for parallel execution. See [execution DAG](execution.md). This document authorizes no claim of superiority or completed implementation proof.
 
 ## 1. Decisions settled through the grilling interview
 

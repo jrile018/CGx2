@@ -1,0 +1,5 @@
+$ /home/john-riley/.opam/serena-ocaml/bin/ocamlopt -o /tmp/cgx2-arch-review-environment/coordinator-replay/build/ocaml-fixture /tmp/cgx2-arch-review-environment/coordinator-replay/build/fixture.ml
+exit_code=0
+STDOUT
+
+STDERR
